@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup, find_packages
 import os
 import sys
 
@@ -26,7 +26,6 @@ if sys.argv[-1] == 'pyuic':
 
 setup(name="FastGr",
       version="0.0.1",
-#      cmdclass=versioneer.get_cmdclass(),
       description = "Need a description",
       author = "Dan Olds",
       author_email = "notsure@ornl.gov",
@@ -34,7 +33,8 @@ setup(name="FastGr",
       long_description = """Should have a longer description""",
       license = "The MIT License (MIT)",
       scripts=["scripts/fastgr"],
-      packages=["fastgr"],
+      packages=find_packages(),
       package_dir={},
-#      data_files=[('/etc/bash_completion.d/', ['gui_fgr3.ui'])]
+      install_requires=['numpy','matplotlib'],
+      setup_requires=[],
 )
