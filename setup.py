@@ -24,7 +24,7 @@ if sys.argv[-1] == 'pyuic':
         print("Did not convert any '.ui' files")
     sys.exit(0)
 
-setup(name="FastGr",
+setup(name="fastgr",
       version="0.0.1",
       description = "Need a description",
       author = "Dan Olds",
