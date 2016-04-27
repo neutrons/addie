@@ -1,6 +1,7 @@
 from setuptools import setup, find_packages
 import os
 import sys
+import versioneer  # https://github.com/warner/python-versioneer
 
 if sys.argv[-1] == 'pyuic':
     indir = 'designer'
@@ -25,7 +26,8 @@ if sys.argv[-1] == 'pyuic':
     sys.exit(0)
 
 setup(name="fastgr",
-      version="0.0.1",
+      version=versioneer.get_version(),
+      cmdclass=versioneer.get_cmdclass(),
       description = "Need a description",
       author = "Dan Olds",
       author_email = "notsure@ornl.gov",
