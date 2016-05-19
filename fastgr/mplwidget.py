@@ -5,13 +5,17 @@ from PyQt4 import QtCore, QtGui
 import matplotlib.cm
 import matplotlib.colors
 #from . import icons_rc #@UnusedImport
-from RefRed.config import plotting
 
 # set the default backend to be compatible with Qt in case someone uses pylab from IPython console
 
 def _set_default_rc():
-  matplotlib.rc('font', **plotting.font)
-  matplotlib.rc('savefig', **plotting.savefig)
+  matplotlib.rc('font', **{'family' : 'serif',
+                         #  'weight' : 'normal',
+                         #  'variant': 'DejaVuSerif',
+                         'size': 7,
+                 })
+  matplotlib.rc('savefig', **{'dpi': 600})
+
 _set_default_rc()
 
 cmap=matplotlib.colors.LinearSegmentedColormap.from_list('default',
@@ -36,10 +40,10 @@ class NavigationToolbar(NavigationToolbar2QT):
   logtog = QtCore.pyqtSignal(str)
   homeClicked = QtCore.pyqtSignal()
   exportClicked = QtCore.pyqtSignal()
-  
+
   isPanActivated = False
   isZoomActivated = False
-  
+
   home_settings = None
 
   def __init__(self, canvas, parent, coordinates=False):
@@ -91,7 +95,7 @@ class NavigationToolbar(NavigationToolbar2QT):
     icon.addPixmap(QtGui.QPixmap(":/MPL Toolbar/document-print.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
     a=self.addAction(icon, 'Print', self.print_figure)
     a.setToolTip('Print the figure with the default printer')
-    
+
     self.buttons={}
 
     # Add the x,y location widget at the right side of the toolbar
@@ -113,7 +117,7 @@ class NavigationToolbar(NavigationToolbar2QT):
     self.adj_window=None
 
   def activate_widget(self, widget_name, activateIt):
-    
+
     if widget_name == 'pan':
       if activateIt:
         self.isPanActivated = True
@@ -126,11 +130,11 @@ class NavigationToolbar(NavigationToolbar2QT):
         self.isPanActivated = False
       else:
         self.isZoomActivated = False
-        
+
   def home(self, *args):
     NavigationToolbar2QT.home(self,*args)
     self.homeClicked.emit()
-        
+
   def pan(self, *args):
     NavigationToolbar2QT.pan(self, *args)
     self.activate_widget('pan', not self.isPanActivated)
@@ -296,10 +300,10 @@ class NavigationToolbar(NavigationToolbar2QT):
     self.canvas.draw()
 
 class MplCanvas(FigureCanvas):
-  
+
   trigger_click = QtCore.pyqtSignal()
   trigger_figure_left = QtCore.pyqtSignal()
-  
+
   def __init__(self, parent=None, width=3, height=3, dpi=100, sharex=None, sharey=None, adjust={}):
     self.fig=Figure(figsize=(width, height), dpi=dpi, facecolor='#FFFFFF')
     self.ax=self.fig.add_subplot(111, sharex=sharex, sharey=sharey)
@@ -318,7 +322,7 @@ class MplCanvas(FigureCanvas):
                               QtGui.QSizePolicy.Expanding,
                               QtGui.QSizePolicy.Expanding)
     FigureCanvas.updateGeometry(self)
-    
+
     self.fig.canvas.mpl_connect('button_press_event', self.button_pressed)
     self.fig.canvas.mpl_connect('figure_leave_event', self.figure_leave)
 
@@ -327,7 +331,7 @@ class MplCanvas(FigureCanvas):
 
   def figure_leave(self, event):
     self.trigger_figure_left.emit()
-    
+
   def format_labels(self):
     self.ax.set_title(self.PlotTitle)
 #    self.ax.title.set_fontsize(10)
@@ -379,11 +383,11 @@ class MPLWidget(QtGui.QWidget):
     self.setLayout(self.vbox)
     self.canvas.trigger_click.connect(self._singleClick)
     self.canvas.trigger_figure_left.connect(self._leaveFigure)
-    
+
   def _singleClick(self):
     status = self.toolbar.isPanActivated or self.toolbar.isZoomActivated
     self.singleClick.emit(status)
-    
+
   def _leaveFigure(self):
     self.leaveFigure.emit()
 
