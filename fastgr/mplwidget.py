@@ -11,10 +11,10 @@ import matplotlib.pyplot
 
 def _set_default_rc():
   #matplotlib.pyplot.xkcd()
-  matplotlib.rc('font', **{'family' : 'serif',
+  matplotlib.rc('font', **{'family' : ['xkcd', 'Humor Sans', 'Comic Sans MS', 'serif'],
                          #  'weight' : 'normal',
                          #  'variant': 'DejaVuSerif',
-                         'size': 7,
+                         'size': 9,
                  })
   matplotlib.rc('savefig', **{'dpi': 600})
 
