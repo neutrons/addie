@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>751</width>
+    <width>664</width>
     <height>554</height>
    </rect>
   </property>
@@ -32,16 +32,16 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btnPlotQSQ">
+       <widget class="QPushButton" name="btnPlotSQ">
         <property name="text">
-         <string>Plot Q S(Q)</string>
+         <string>Plot S(Q)</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btnPlotSQ">
+       <widget class="QPushButton" name="btnPlotQSQ">
         <property name="text">
-         <string>Plot SQ</string>
+         <string>Plot Q x S(Q)</string>
         </property>
        </widget>
       </item>
@@ -98,13 +98,6 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <widget class="QPushButton" name="btnSaveGR">
-        <property name="text">
-         <string>Save GR</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="btnGenerateGR">
         <property name="text">
          <string>Generate GR</string>
@@ -114,7 +107,14 @@
       <item>
        <widget class="QPushButton" name="btnPlotGR">
         <property name="text">
-         <string>Plot GR</string>
+         <string>Plot G(r)</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnSaveGR">
+        <property name="text">
+         <string>Save G(r)</string>
         </property>
        </widget>
       </item>
