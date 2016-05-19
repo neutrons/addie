@@ -4,11 +4,13 @@ import tempfile
 from PyQt4 import QtCore, QtGui
 import matplotlib.cm
 import matplotlib.colors
+import matplotlib.pyplot
 #from . import icons_rc #@UnusedImport
 
 # set the default backend to be compatible with Qt in case someone uses pylab from IPython console
 
 def _set_default_rc():
+  #matplotlib.pyplot.xkcd()
   matplotlib.rc('font', **{'family' : 'serif',
                          #  'weight' : 'normal',
                          #  'variant': 'DejaVuSerif',
