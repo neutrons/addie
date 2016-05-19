@@ -26,7 +26,9 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.loaded_once = False
 
         self.top_plot.set_xlabel('Q ($\\AA^{-1}$)')
+        self.top_plot.canvas.ax.figure.tight_layout()
         self.bottom_plot.set_xlabel('r ($\\AA$)')
+        self.top_plot.canvas.ax.figure.tight_layout()
 
         #setup variables
         self.Q = []
@@ -37,7 +39,9 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     def read_SQ_file(self):
         # clear out the current plots
         self.top_plot.canvas.ax.clear()
+        self.top_plot.canvas.ax.figure.tight_layout()
         self.bottom_plot.canvas.ax.clear()
+        self.bottom_plot.canvas.ax.figure.tight_layout()
 
         self.Q = []
         self.SQ = []
@@ -148,6 +152,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.top_plot.canvas.ax.clear()
         self.top_plot.canvas.ax.plot(self.Q, self.SQ)
         self.top_plot.set_xlabel('Q ($\\AA^{-1}$)')
+        self.top_plot.canvas.ax.set_xbound(self.Q[0], self.Q[-1])
         self.top_plot.set_ylabel('S(Q)')
         self.top_plot.canvas.ax.figure.tight_layout()
         self.top_plot.canvas.draw()
@@ -156,6 +161,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.bottom_plot.canvas.ax.clear()
         self.bottom_plot.canvas.ax.plot(self.r, self.GR)
         self.bottom_plot.set_xlabel('r ($\\AA$)')
+        self.bottom_plot.canvas.ax.set_xbound(self.r[0], self.r[-1])
         self.bottom_plot.set_ylabel('G(r) ($\\AA^{-2}$)')
         self.bottom_plot.canvas.ax.figure.tight_layout()
         self.bottom_plot.canvas.draw()
