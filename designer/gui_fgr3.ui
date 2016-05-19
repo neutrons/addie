@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>664</width>
+    <width>751</width>
     <height>554</height>
    </rect>
   </property>
@@ -32,16 +32,22 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btnPlotSQ">
+       <widget class="QPushButton" name="btnPlotQSQ">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="text">
-         <string>Plot S(Q)</string>
+         <string>Plot S(Q) x Q</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btnPlotQSQ">
+       <widget class="QPushButton" name="btnPlotSQ">
         <property name="text">
-         <string>Plot Q x S(Q)</string>
+         <string>Plot SQ</string>
         </property>
        </widget>
       </item>
@@ -98,6 +104,13 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
+       <widget class="QPushButton" name="btnSaveGR">
+        <property name="text">
+         <string>Save GR</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="btnGenerateGR">
         <property name="text">
          <string>Generate GR</string>
@@ -107,14 +120,7 @@
       <item>
        <widget class="QPushButton" name="btnPlotGR">
         <property name="text">
-         <string>Plot G(r)</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnSaveGR">
-        <property name="text">
-         <string>Save G(r)</string>
+         <string>Plot GR</string>
         </property>
        </widget>
       </item>
@@ -233,6 +239,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../icons/icons.qrc"/>
+ </resources>
  <connections/>
 </ui>

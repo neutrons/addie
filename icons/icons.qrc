@@ -1,0 +1,12 @@
+<RCC>
+  <qresource prefix="MPL Toolbar">
+    <file>go-home.png</file>
+    <file>zoom-previous.png</file>
+    <file>zoom-next.png</file>
+    <file>transform-move.png</file>
+    <file>zoom-select.png</file>
+    <file>edit-guides.png</file>
+    <file>document-save.png</file>
+    <file>document-print.png</file>
+  </qresource>
+</RCC>

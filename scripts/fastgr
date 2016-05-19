@@ -156,6 +156,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.bottom_plot.set_xlabel('r ($\\AA$)')
         self.bottom_plot.set_ylabel('G(r) ($\\AA^{-2}$)')
         self.bottom_plot.canvas.draw()
+        #self.bottom_plot.canvas.tight_layout()
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
