@@ -24,8 +24,6 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.btnSaveGR.setEnabled(False)
         self.btnPlotQSQ.setEnabled(False)
 
-        self.btnPlotQSQ.setMinimumSize(200, 50)
-
         self.loaded_once = False
 
         #setup variables
