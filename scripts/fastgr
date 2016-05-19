@@ -154,7 +154,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.bottom_plot.canvas.ax.clear()
         self.bottom_plot.canvas.ax.plot(self.r, self.GR)
         self.bottom_plot.set_xlabel('r ($\\AA$)')
-        self.bottom_plot.set_ylabel('G(r) ($\\AA^{-2})')
+        self.bottom_plot.set_ylabel('G(r) ($\\AA^{-2}$)')
         self.bottom_plot.canvas.draw()
 
 if __name__ == "__main__":
