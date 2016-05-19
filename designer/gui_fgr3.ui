@@ -33,14 +33,8 @@
       </item>
       <item>
        <widget class="QPushButton" name="btnPlotQSQ">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="text">
-         <string>Plot S(Q) x Q</string>
+         <string>Plot Q S(Q)</string>
         </property>
        </widget>
       </item>
