@@ -2,7 +2,6 @@
 import sys
 import numpy as np
 from PyQt4 import QtCore, QtGui, uic
-import matplotlib.pyplot as plt
 from fastgr import Ui_MainWindow
 
 class MyApp(QtGui.QMainWindow, Ui_MainWindow):
@@ -25,6 +24,9 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.btnPlotQSQ.setEnabled(False)
 
         self.loaded_once = False
+
+        self.top_plot.set_xlabel('Q ($\\AA^{-1}$)')
+        self.bottom_plot.set_xlabel('r ($\\AA$)')
 
         #setup variables
         self.Q = []
@@ -137,21 +139,23 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         self.top_plot.canvas.ax.clear()
         self.top_plot.canvas.ax.plot(self.Q, qsq)
+        self.top_plot.set_xlabel('Q ($\\AA^{-1}$)')
+        self.top_plot.set_ylabel('Q S(Q) ($\\AA^{-1}$)')
         self.top_plot.canvas.draw()
 
     def plot_SQ(self):
         self.top_plot.canvas.ax.clear()
         self.top_plot.canvas.ax.plot(self.Q, self.SQ)
+        self.top_plot.set_xlabel('Q ($\\AA^{-1}$)')
+        self.top_plot.set_ylabel('S(Q)')
         self.top_plot.canvas.draw()
 
     def plot_GR(self):
         self.bottom_plot.canvas.ax.clear()
         self.bottom_plot.canvas.ax.plot(self.r, self.GR)
+        self.bottom_plot.set_xlabel('r ($\\AA$)')
+        self.bottom_plot.set_ylabel('G(r)')
         self.bottom_plot.canvas.draw()
-
-    def say_hello(self):
-
-        print "sup"
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
