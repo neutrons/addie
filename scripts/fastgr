@@ -35,12 +35,9 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.GR = []
 
     def read_SQ_file(self):
-
-        x_axis = np.arange(1,10)
-        y_axis = np.arange(11,20)
-        self.top_plot.canvas.ax.plot(x_axis, y_axis)
-        self.top_plot.canvas.draw()
-        return #REMOVEME
+        # clear out the current plots
+        self.top_plot.canvas.ax.clear()
+        self.bottom_plot.canvas.ax.clear()
 
         self.Q = []
         self.SQ = []
@@ -94,6 +91,9 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             self.doubleSpinBoxQmax.setSingleStep(delq)
             self.loaded_once = True
 
+        self.top_plot.canvas.ax.plot(self.Q, self.SQ)
+        self.top_plot.canvas.draw()
+
         self.btnPlotSQ.setEnabled(True)
         self.btnGenerateGR.setEnabled(True)
         self.btnPlotQSQ.setEnabled(True)
@@ -128,6 +128,10 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.GR = self.GR / (16.0 * np.pi)
         self.btnPlotGR.setEnabled(True)
         self.btnSaveGR.setEnabled(True)
+
+        self.bottom_plot.canvas.ax.clear()
+        self.bottom_plot.canvas.ax.plot(self.r, self.GR)
+        self.bottom_plot.canvas.draw()
 
         print "my length for r is: "+str(len(self.r))
 
