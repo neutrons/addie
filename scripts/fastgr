@@ -1,10 +1,13 @@
-#!/usr/bin/env python
+#!/usr/bin/env mantidpythonnightly
 import sys
 import numpy as np
 from PyQt4 import QtCore, QtGui, uic
 from fastgr import Ui_MainWindow
+from mantid.simpleapi import CreateWorkspace, SavePDFGui
 
 class MyApp(QtGui.QMainWindow, Ui_MainWindow):
+    GR = None
+
     def __init__(self):
         QtGui.QApplication.setStyle(QtGui.QStyleFactory.create("Cleanlooks"))
         QtGui.QMainWindow.__init__(self)
@@ -33,8 +36,6 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #setup variables
         self.Q = []
         self.SQ = []
-        self.r = []
-        self.GR = []
 
     def read_SQ_file(self):
         # clear out the current plots
@@ -105,11 +106,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #name = QtGui.QFileDialog.getSaveFileName(self, 'Makey-Saves')
         maybe_name = "myGR_Qmin"+str(self.doubleSpinBoxQmin.value())+"_Qmax"+str(self.doubleSpinBoxQmax.value())+".gr"
         name = QtGui.QFileDialog.getSaveFileName(self, ('Makey-Saves'),maybe_name)
-        outfile = open(name, 'w')
-        for i in range(len(self.r)):
-            outbit = str(self.r[i]) + " " + str(self.GR[i])+"\n"
-            outfile.write(outbit)
-        outfile.close()
+
+        SavePDFGui(InputWorkspace=self.GR, Filename=str(name))
 
     def calculateGR(self):
         rmax = float(self.doubleSpinBoxRmax.value())
@@ -117,18 +115,35 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         delr = float(self.doubleSpinBoxDelR.value())
         qmin = float(self.doubleSpinBoxQmin.value())
         qmax = float(self.doubleSpinBoxQmax.value())
+        if qmin >= qmax:
+            raise RuntimeError("Qmin must be less than Qmax (%f >= %f)"
+                               % (qmin, qmax))
 
-        self.r = []
-        self.GR = []
-        self.r=np.arange(rmin,rmax+delr,delr)
-        self.GR=np.zeros(len(self.r))
-        for ri in range(len(self.r)):
-            completed_per = 100.0 * self.r[ri] / self.r[len(self.r)-1]
+        rArray = np.arange(rmin,rmax+delr,delr)
+        GrArray = np.zeros(len(rArray))
+
+        for ri in range(len(rArray)):
+            completed_per = 100.0 * rArray[ri] / rArray[len(rArray)-1]
             self.progressBar.setValue(completed_per)
             for qi in range(len(self.Q)):
                 if self.Q[qi] >= qmin and self.Q[qi] <= qmax:
-                    self.GR[ri] = self.GR[ri] + self.Q[qi]*(self.SQ[qi])*np.sin(self.r[ri]*self.Q[qi])
-        self.GR = self.GR / (16.0 * np.pi)
+                    GrArray[ri] = GrArray[ri] \
+                                  + self.Q[qi]*(self.SQ[qi])*np.sin(rArray[ri]*self.Q[qi])
+
+        self.GR = CreateWorkspace(OutputWorkspace='Gr',
+                                  UnitX='Label',
+                                  YUnitLabel='PDF',
+                                  DataX=rArray, DataY=GrArray)
+        # set units for SavePDFGui
+        self.GR.getAxis(0).getUnit().setLabel('AtomicDistance', 'Angstrom')
+        # add Q-range
+        self.GR.mutableRun().addProperty("Qmin", qmin,
+                                         "Angstroms^-1", True);
+        self.GR.mutableRun().addProperty("Qmax", qmax,
+                                         "Angstroms^-1", True);
+
+        self.GR /= (16.0 * np.pi)  # TODO wonky factor should go away
+
         self.btnPlotGR.setEnabled(True)
         self.btnSaveGR.setEnabled(True)
 
@@ -157,9 +172,10 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
     def plot_GR(self):
         self.bottom_plot.canvas.ax.clear()
-        self.bottom_plot.canvas.ax.plot(self.r, self.GR)
+        self.bottom_plot.canvas.ax.plot(self.GR.readX(0), self.GR.readY(0))
         self.bottom_plot.set_xlabel('r ($\\AA$)')
-        self.bottom_plot.canvas.ax.set_xbound(self.r[0], self.r[-1])
+        self.bottom_plot.canvas.ax.set_xbound(self.GR.readX(0)[0],
+                                              self.GR.readX(0)[-1])
         self.bottom_plot.set_ylabel('G(r) ($\\AA^{-2}$)')
         self.bottom_plot.canvas.ax.figure.tight_layout()
         self.bottom_plot.canvas.draw()
