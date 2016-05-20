@@ -2,6 +2,7 @@
 python setup.py bdist_rpm --spec-only
 patch dist/fastgr.spec fastgr.spec.patch
 
+python setup.py pyuic
 python setup.py sdist
 mkdir -p ~/rpmbuild/SOURCES/
 cp dist/fastgr-*.tar.gz ~/rpmbuild/SOURCES/
