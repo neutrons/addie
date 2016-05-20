@@ -4,7 +4,7 @@
 > Release: %{release}%{?dist}
 17a18,20
 > %if 0%{?rhel}
-> Requires: python numpy python-matplotlib PyQt4
+> Requires: python numpy python-matplotlib PyQt4 mantidnightly
 > %else
 18a22
 > %endif
