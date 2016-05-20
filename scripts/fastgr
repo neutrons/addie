@@ -122,13 +122,16 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         rArray = np.arange(rmin,rmax+delr,delr)
         GrArray = np.zeros(len(rArray))
 
-        for ri in range(len(rArray)):
-            completed_per = 100.0 * rArray[ri] / rArray[len(rArray)-1]
-            self.progressBar.setValue(completed_per)
-            for qi in range(len(self.Q)):
-                if self.Q[qi] >= qmin and self.Q[qi] <= qmax:
-                    GrArray[ri] = GrArray[ri] \
-                                  + self.Q[qi]*(self.SQ[qi])*np.sin(rArray[ri]*self.Q[qi])
+        progress_per = 0.
+        progress_delta = 100.0 / float(rArray.size)
+
+        for (rIndex, r) in enumerate(rArray):
+            progress_per += progress_delta
+            self.progressBar.setValue(progress_per)
+            for (qIndex, q) in enumerate(self.Q):
+                if q >= qmin and q <= qmax:
+                    GrArray[rIndex] = GrArray[rIndex] \
+                                      + q*(self.SQ[qIndex])*np.sin(r*q)
 
         self.GR = CreateWorkspace(OutputWorkspace='Gr',
                                   UnitX='Label',
