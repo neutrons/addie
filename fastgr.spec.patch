@@ -1,0 +1,10 @@
+10c10
+< Release: %{release}
+---
+> Release: %{release}%{?dist}
+17a18,20
+> %if 0%{?rhel}
+> Requires: python numpy python-matplotlib PyQt4
+> %else
+18a22
+> %endif

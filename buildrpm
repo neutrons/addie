@@ -1,0 +1,11 @@
+#!/bin/sh
+python setup.py bdist_rpm --spec-only
+patch dist/fastgr.spec fastgr.spec.patch
+
+python setup.py sdist
+mkdir -p ~/rpmbuild/SOURCES/
+cp dist/fastgr-*.tar.gz ~/rpmbuild/SOURCES/
+
+rpmbuild -ba dist/fastgr.spec
+cp ~/rpmbuild/SRPMS/fastgr-*.src.rpm dist/
+cp ~/rpmbuild/RPMS/noarch/fastgr-*.noarch.rpm dist/
