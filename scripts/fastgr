@@ -3,10 +3,11 @@ import sys
 import numpy as np
 from PyQt4 import QtCore, QtGui, uic
 from fastgr import Ui_MainWindow
-from mantid.simpleapi import CreateWorkspace, SavePDFGui
+from mantid.simpleapi import CreateWorkspace, PDFFourierTransform, SavePDFGui
 
 class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     GR = None
+    SQ = None
 
     def __init__(self):
         QtGui.QApplication.setStyle(QtGui.QStyleFactory.create("Cleanlooks"))
@@ -38,10 +39,6 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.bottom_plot.set_xlabel('r ($\\AA$)')
         self.top_plot.canvas.ax.figure.tight_layout()
 
-        #setup variables
-        self.Q = []
-        self.SQ = []
-
     def read_SQ_file(self):
         # clear out the current plots
         self.top_plot.canvas.ax.clear()
@@ -49,8 +46,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.bottom_plot.canvas.ax.clear()
         self.bottom_plot.canvas.ax.figure.tight_layout()
 
-        self.Q = []
-        self.SQ = []
+        qArray = []
+        SqArray = []
 
         name = QtGui.QFileDialog.getOpenFileName(self, 'Opener File Thinger')
         print "opening file: "+str(name)
@@ -86,17 +83,23 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #print "starting at start "+str(start)
 
         for i in range(0,len(data)-start):
-            self.Q.append(float(data[i+start].split()[0]))
-            self.SQ.append(float(data[i+start].split()[1]))
+            qArray.append(float(data[i+start].split()[0]))
+            SqArray.append(float(data[i+start].split()[1]))
+
+        # for PDFFourierTransform the options 'S(Q)', 'S(Q)-1', 'Q[S(Q)-1]'
+        self.SQ = CreateWorkspace(OutputWorkspace='SQ',
+                                  UnitX='MomentumTransfer',
+                                  YUnitLabel='S(Q)-1',
+                                  DataX=qArray, DataY=SqArray)
 
         #configure Spin Boxes based on data (assume linearly spaced)
         if self.loaded_once == False:
-            self.doubleSpinBoxQmin.setValue(self.Q[0])
-            self.doubleSpinBoxQmax.setValue(self.Q[len(self.Q)-1])
-            self.doubleSpinBoxQmin.setMinimum(self.Q[0])
-            self.doubleSpinBoxQmin.setMaximum(self.Q[len(self.Q)-2])
-            self.doubleSpinBoxQmax.setMaximum(self.Q[len(self.Q)-1])
-            delq = self.Q[1]-self.Q[0]
+            self.doubleSpinBoxQmin.setValue(qArray[0])
+            self.doubleSpinBoxQmax.setValue(qArray[-1])
+            self.doubleSpinBoxQmin.setMinimum(qArray[0])
+            self.doubleSpinBoxQmin.setMaximum(qArray[-2])
+            self.doubleSpinBoxQmax.setMaximum(qArray[-1])
+            delq = qArray[1] - qArray[0]
             self.doubleSpinBoxQmin.setSingleStep(delq)
             self.doubleSpinBoxQmax.setSingleStep(delq)
             self.loaded_once = True
@@ -124,33 +127,14 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             raise RuntimeError("Qmin must be less than Qmax (%f >= %f)"
                                % (qmin, qmax))
 
-        rArray = np.arange(rmin,rmax+delr,delr)
-        GrArray = np.zeros(len(rArray))
+        self.GR = PDFFourierTransform(InputWorkspace=self.SQ,
+                                      OutputWorkspace='Gr',
+                                      InputSofQType=self.SQ.YUnitLabel(),
+                                      Qmin=qmin, Qmax=qmax,
+                                      PDFType='G(r)', DeltaR=delr,
+                                      Rmax=rmax)
 
-        progress_per = 0.
-        progress_delta = 100.0 / float(rArray.size)
-
-        for (rIndex, r) in enumerate(rArray):
-            progress_per += progress_delta
-            self.progressBar.setValue(progress_per)
-            for (qIndex, q) in enumerate(self.Q):
-                if q >= qmin and q <= qmax:
-                    GrArray[rIndex] = GrArray[rIndex] \
-                                      + q*(self.SQ[qIndex])*np.sin(r*q)
-
-        self.GR = CreateWorkspace(OutputWorkspace='Gr',
-                                  UnitX='Label',
-                                  YUnitLabel='PDF',
-                                  DataX=rArray, DataY=GrArray)
-        # set units for SavePDFGui
-        self.GR.getAxis(0).getUnit().setLabel('AtomicDistance', 'Angstrom')
-        # add Q-range
-        self.GR.mutableRun().addProperty("Qmin", qmin,
-                                         "Angstroms^-1", True);
-        self.GR.mutableRun().addProperty("Qmax", qmax,
-                                         "Angstroms^-1", True);
-
-        self.GR /= (16.0 * np.pi)  # TODO wonky factor should go away
+        self.GR *= (np.pi / 2.)  # TODO wonky factor should go away
 
         self.btnPlotGR.setEnabled(True)
         self.btnSaveGR.setEnabled(True)
@@ -158,12 +142,12 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.plot_GR()
 
     def plot_QSQ(self):
-        qsq = np.copy(self.SQ)
-        for i in range(len(qsq)):
-            qsq[i] = qsq[i] * self.Q[i]
+        qsq = np.copy(self.SQ.readY(0)) * self.SQ.readX(0)
 
         self.top_plot.canvas.ax.clear()
-        self.top_plot.canvas.ax.plot(self.Q, qsq)
+        self.top_plot.canvas.ax.plot(self.SQ.readX(0), qsq)
+        self.top_plot.canvas.ax.set_xbound(self.SQ.readX(0)[0],
+                                           self.SQ.readX(0)[-1])
         self.top_plot.set_xlabel('Q ($\\AA^{-1}$)')
         self.top_plot.set_ylabel('Q S(Q) ($\\AA^{-1}$)')
         self.top_plot.canvas.ax.figure.tight_layout()
@@ -171,9 +155,10 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
     def plot_SQ(self):
         self.top_plot.canvas.ax.clear()
-        self.top_plot.canvas.ax.plot(self.Q, self.SQ)
+        self.top_plot.canvas.ax.plot(self.SQ.readX(0), self.SQ.readY(0))
         self.top_plot.set_xlabel('Q ($\\AA^{-1}$)')
-        self.top_plot.canvas.ax.set_xbound(self.Q[0], self.Q[-1])
+        self.top_plot.canvas.ax.set_xbound(self.SQ.readX(0)[0],
+                                           self.SQ.readX(0)[-1])
         self.top_plot.set_ylabel('S(Q)')
         self.top_plot.canvas.ax.figure.tight_layout()
         self.top_plot.canvas.draw()
