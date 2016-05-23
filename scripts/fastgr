@@ -26,6 +26,11 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.btnSaveGR.setEnabled(False)
         self.btnPlotQSQ.setEnabled(False)
 
+        self.doubleSpinBoxDelR.setMinimum(0.01)
+        self.doubleSpinBoxDelR.setMaximum(1.0)
+        self.doubleSpinBoxDelR.setSingleStep(.01)
+        self.doubleSpinBoxDelR.setValue(0.02)
+
         self.loaded_once = False
 
         self.top_plot.set_xlabel('Q ($\\AA^{-1}$)')
