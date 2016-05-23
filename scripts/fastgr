@@ -1,9 +1,11 @@
 #!/usr/bin/env mantidpythonnightly
-import sys
-import numpy as np
-from PyQt4 import QtCore, QtGui, uic
 from fastgr import Ui_MainWindow
-from mantid.simpleapi import CreateWorkspace, PDFFourierTransform, SavePDFGui
+from mantid.simpleapi import CreateWorkspace, LoadAscii, PDFFourierTransform, \
+    SavePDFGui
+import numpy as np
+import os
+from PyQt4 import QtCore, QtGui, uic
+import sys
 
 class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     GR = None
@@ -44,6 +46,12 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         #configure Spin Boxes based on data (assume linearly spaced)
         qArray = self.SQ.readX(0)
+        SqEArray = self.SQ.readE(0)
+        filter = np.invert(np.isnan(SqEArray))
+        orig_size = qArray.size
+        qArray = qArray[filter]
+        if orig_size != qArray.size:
+            print 'WARNING: found NaN in uncertainties'
         qmin = np.min(qArray)
         qmax = np.max(qArray)
         qdel = (qmax-qmin)/float(qArray.size)
@@ -58,22 +66,13 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.doubleSpinBoxQmax.setSingleStep(qdel)
         self.doubleSpinBoxQmax.setValue(qmax)
 
-    def read_SQ_file(self):
-        # clear out the current plots
-        self.top_plot.canvas.ax.clear()
-        self.top_plot.canvas.ax.figure.tight_layout()
-        self.bottom_plot.canvas.ax.clear()
-        self.bottom_plot.canvas.ax.figure.tight_layout()
-
+    def read_SQ_file_custom(self, filename):
         qArray = []
         SqArray = []
 
-        name = QtGui.QFileDialog.getOpenFileName(self, 'Opener File Thinger')
-        print "opening file: "+str(name)
-        with open(name, 'r') as myfile:
+        with open(filename, 'r') as myfile:
             data = myfile.readlines()
 
-        #print "file length was "+str(len(data))
         #determine length of junk at start of file
         for i in range(len(data)):
             if(len(data[i].strip()) > 0): #check that not a blank line
@@ -97,10 +96,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             if is_good:
                 start = i
                 break
-            #override
-            #start = 5
-            #print "starting at start "+str(start)
 
+        # read in the data
         for i in range(0,len(data)-start):
             qArray.append(float(data[i+start].split()[0]))
             SqArray.append(float(data[i+start].split()[1]))
@@ -110,7 +107,35 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                                   UnitX='MomentumTransfer',
                                   YUnitLabel='S(Q)-1',
                                   DataX=qArray, DataY=SqArray)
+
+    def read_SQ_file(self):
+        # clear out the current plots
+        self.top_plot.canvas.ax.clear()
+        self.top_plot.canvas.ax.figure.tight_layout()
+        self.bottom_plot.canvas.ax.clear()
+        self.bottom_plot.canvas.ax.figure.tight_layout()
+
         self.SQmodified = None
+
+        filename = QtGui.QFileDialog.getOpenFileName(self,
+                                                     'Opener File Thinger')
+        if not os.path.exists(filename):
+            raise RuntimeError("Cannot open non-existent file '%s'" % filename)
+        filename = str(filename)
+        print "opening file: '%s'" % filename
+
+        type = 'IDL'  # TODO should get from customization of file dialog
+
+        if type == 'IDL':
+            self.SQ = LoadAscii(Filename=filename,
+                                OutputWorkspace='SQ',
+                                Unit='MomentumTransfer')
+            self.SQ.setYUnitLabel('S(Q)-1')
+        elif type == 'PDFgetN':
+            self.SQ = LoadPDFgetN(Filename=filename,
+                                  OutputWorkspace='SQ')
+        else:  # default back to flexible parser
+            self.read_SQ_file_custom(filename)
 
         self.set_Q_gui_elements()
         self.plot_SQ()
@@ -178,7 +203,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                                           InputSofQType=inputsofqtype,
                                           **kwargs)
 
-        self.GR *= (np.pi / 2.)  # TODO wonky factor should go away
+        #self.GR *= (np.pi / 2.)  # wonky factor should not be here
 
         self.btnSaveGR.setEnabled(True)
 
