@@ -32,6 +32,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="btnPlotSQ">
+        <property name="text">
+         <string>Plot S(Q)-1</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="btnPlotQSQ">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -40,14 +47,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Plot S(Q) x Q</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnPlotSQ">
-        <property name="text">
-         <string>Plot SQ</string>
+         <string>Plot Q[S(Q)-1]</string>
         </property>
        </widget>
       </item>
@@ -104,13 +104,6 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <widget class="QPushButton" name="btnSaveGR">
-        <property name="text">
-         <string>Save GR</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="btnGenerateGR">
         <property name="text">
          <string>Generate GR</string>
@@ -118,9 +111,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btnPlotGR">
+       <widget class="QPushButton" name="btnSaveGR">
         <property name="text">
-         <string>Plot GR</string>
+         <string>Save GR</string>
         </property>
        </widget>
       </item>

@@ -17,20 +17,18 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #btn commands
         self.btnGenerateGR.clicked.connect(self.calculateGR)
         self.btnLoadSQ.clicked.connect(self.read_SQ_file)
-        self.btnPlotGR.clicked.connect(self.plot_GR)
         self.btnPlotSQ.clicked.connect(self.plot_SQ)
         self.btnSaveGR.clicked.connect(self.save_GR_file)
         self.btnPlotQSQ.clicked.connect(self.plot_QSQ)
         self.btnPlotSQ.setEnabled(False)
-        self.btnPlotGR.setEnabled(False)
         self.btnGenerateGR.setEnabled(False)
         self.btnSaveGR.setEnabled(False)
         self.btnPlotQSQ.setEnabled(False)
 
         self.doubleSpinBoxDelR.setMinimum(0.01)
-        self.doubleSpinBoxDelR.setMaximum(1.0)
-        self.doubleSpinBoxDelR.setSingleStep(.01)
-        self.doubleSpinBoxDelR.setValue(0.02)
+        self.doubleSpinBoxDelR.setMaximum(1.00)
+        self.doubleSpinBoxDelR.setSingleStep(0.01)
+        self.doubleSpinBoxDelR.setValue(0.01)
 
         self.loaded_once = False
 
@@ -38,6 +36,26 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.top_plot.canvas.ax.figure.tight_layout()
         self.bottom_plot.set_xlabel('r ($\\AA$)')
         self.top_plot.canvas.ax.figure.tight_layout()
+
+    def set_Q_gui_elements(self):
+        if self.SQ is None:
+            return
+
+        #configure Spin Boxes based on data (assume linearly spaced)
+        qArray = self.SQ.readX(0)
+        qmin = np.min(qArray)
+        qmax = np.max(qArray)
+        qdel = (qmax-qmin)/float(qArray.size)
+
+        self.doubleSpinBoxQmin.setMinimum(qmin)
+        self.doubleSpinBoxQmin.setMaximum(qmax-qdel)
+        self.doubleSpinBoxQmin.setSingleStep(qdel)
+        self.doubleSpinBoxQmin.setValue(qmin)
+
+        self.doubleSpinBoxQmax.setMinimum(qmin+qdel)
+        self.doubleSpinBoxQmax.setMaximum(qmax)
+        self.doubleSpinBoxQmax.setSingleStep(qdel)
+        self.doubleSpinBoxQmax.setValue(qmax)
 
     def read_SQ_file(self):
         # clear out the current plots
@@ -92,18 +110,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                                   YUnitLabel='S(Q)-1',
                                   DataX=qArray, DataY=SqArray)
 
-        #configure Spin Boxes based on data (assume linearly spaced)
-        if self.loaded_once == False:
-            self.doubleSpinBoxQmin.setValue(qArray[0])
-            self.doubleSpinBoxQmax.setValue(qArray[-1])
-            self.doubleSpinBoxQmin.setMinimum(qArray[0])
-            self.doubleSpinBoxQmin.setMaximum(qArray[-2])
-            self.doubleSpinBoxQmax.setMaximum(qArray[-1])
-            delq = qArray[1] - qArray[0]
-            self.doubleSpinBoxQmin.setSingleStep(delq)
-            self.doubleSpinBoxQmax.setSingleStep(delq)
-            self.loaded_once = True
 
+        self.set_Q_gui_elements()
         self.plot_SQ()
 
         self.btnPlotSQ.setEnabled(True)
@@ -136,7 +144,6 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         self.GR *= (np.pi / 2.)  # TODO wonky factor should go away
 
-        self.btnPlotGR.setEnabled(True)
         self.btnSaveGR.setEnabled(True)
 
         self.plot_GR()
