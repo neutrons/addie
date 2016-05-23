@@ -114,8 +114,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #name = QtGui.QFileDialog.getSaveFileName(self, 'Makey-Saves')
         maybe_name = "myGR_Qmin"+str(self.doubleSpinBoxQmin.value())+"_Qmax"+str(self.doubleSpinBoxQmax.value())+".gr"
         name = QtGui.QFileDialog.getSaveFileName(self, ('Makey-Saves'),maybe_name)
-
-        SavePDFGui(InputWorkspace=self.GR, Filename=str(name))
+        if len(name) > 0:  # verify a name was specified
+            SavePDFGui(InputWorkspace=self.GR, Filename=str(name))
 
     def calculateGR(self):
         rmax = float(self.doubleSpinBoxRmax.value())
