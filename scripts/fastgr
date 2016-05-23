@@ -8,6 +8,7 @@ from mantid.simpleapi import CreateWorkspace, PDFFourierTransform, SavePDFGui
 class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     GR = None
     SQ = None
+    SQmodified = None
 
     def __init__(self):
         QtGui.QApplication.setStyle(QtGui.QStyleFactory.create("Cleanlooks"))
@@ -109,7 +110,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                                   UnitX='MomentumTransfer',
                                   YUnitLabel='S(Q)-1',
                                   DataX=qArray, DataY=SqArray)
-
+        self.SQmodified = None
 
         self.set_Q_gui_elements()
         self.plot_SQ()
@@ -118,6 +119,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.btnGenerateGR.setEnabled(True)
         self.btnPlotQSQ.setEnabled(True)
 
+        self.calculateGR()
+
     def save_GR_file(self):
         #name = QtGui.QFileDialog.getSaveFileName(self, 'Makey-Saves')
         maybe_name = "myGR_Qmin"+str(self.doubleSpinBoxQmin.value())+"_Qmax"+str(self.doubleSpinBoxQmax.value())+".gr"
@@ -125,22 +128,55 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         if len(name) > 0:  # verify a name was specified
             SavePDFGui(InputWorkspace=self.GR, Filename=str(name))
 
+    def modifySQ(self):
+        qArray = self.SQ.readX(0)
+        SqArray = self.SQ.readY(0)
+        SqEArray = self.SQ.readE(0)
+
+        # TODO all the funny things that you want to do
+
+        self.SQmodified = CreateWorkspace(OutputWorkspace='SQ',
+                                          UnitX='MomentumTransfer',
+                                          YUnitLabel='S(Q)-1',
+                                          DataX=qArray, DataY=SqArray,
+                                          DataE=SqEArray)
+        self.calculateGR()
+
+
     def calculateGR(self):
-        rmax = float(self.doubleSpinBoxRmax.value())
-        rmin = float(self.doubleSpinBoxRmin.value())
-        delr = float(self.doubleSpinBoxDelR.value())
+        rmax   = float(self.doubleSpinBoxRmax.value())
+        rmin   = float(self.doubleSpinBoxRmin.value())
+        rdelta = float(self.doubleSpinBoxDelR.value())
+        if rmin >= rmax:
+            raise RuntimeError("Rmin must be less than Rmax (%f >= %f)"
+                               % (rmin, rmax))
+        if rdelta >= (rmax-rmin):
+            raise RuntimeError("Must have more than one bin in G(r) (%f >= %f)"
+                               % (rdelta, (rmax-rmin)))
+
         qmin = float(self.doubleSpinBoxQmin.value())
         qmax = float(self.doubleSpinBoxQmax.value())
         if qmin >= qmax:
             raise RuntimeError("Qmin must be less than Qmax (%f >= %f)"
                                % (qmin, qmax))
 
-        self.GR = PDFFourierTransform(InputWorkspace=self.SQ,
-                                      OutputWorkspace='Gr',
-                                      InputSofQType=self.SQ.YUnitLabel(),
-                                      Qmin=qmin, Qmax=qmax,
-                                      PDFType='G(r)', DeltaR=delr,
-                                      Rmax=rmax)
+        kwargs = {'OutputWorkspace':'Gr',
+                  'Qmin':qmin,
+                  'Qmax':qmax,
+                  'PDFType':'G(r)',
+                  'DeltaR':rdelta,
+                  'Rmax':rmax}
+
+        if self.SQmodified is None:
+            inputsofqtype = self.SQ.YUnitLabel()
+            self.GR = PDFFourierTransform(InputWorkspace=self.SQ,
+                                          InputSofQType=inputsofqtype,
+                                          **kwargs)
+        else:
+            inputsofqtype = self.SQmodified.YUnitLabel()
+            self.GR = PDFFourierTransform(InputWorkspace=self.SQmodified,
+                                          InputSofQType=inputsofqtype,
+                                          **kwargs)
 
         self.GR *= (np.pi / 2.)  # TODO wonky factor should go away
 
@@ -153,6 +189,12 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         self.top_plot.canvas.ax.clear()
         self.top_plot.canvas.ax.plot(self.SQ.readX(0), qsq)
+        if self.SQmodified is not None:
+            qsqmodified = np.copy(self.SQmodified.readY(0)) \
+                          * self.SQmodified.readX(0)
+            self.top_plot.canvas.ax.plot(self.SQmodified.readX(0),
+                                         qsqmodified)
+
         self.top_plot.canvas.ax.set_xbound(self.SQ.readX(0)[0],
                                            self.SQ.readX(0)[-1])
         self.top_plot.set_xlabel('Q ($\\AA^{-1}$)')
@@ -163,6 +205,10 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     def plot_SQ(self):
         self.top_plot.canvas.ax.clear()
         self.top_plot.canvas.ax.plot(self.SQ.readX(0), self.SQ.readY(0))
+        if self.SQmodified is not None:
+            self.top_plot.canvas.ax.plot(self.SQmodified.readX(0),
+                                         self.SQmodified.readY(0))
+
         self.top_plot.set_xlabel('Q ($\\AA^{-1}$)')
         self.top_plot.canvas.ax.set_xbound(self.SQ.readX(0)[0],
                                            self.SQ.readX(0)[-1])
