@@ -209,6 +209,32 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         self.plot_GR()
 
+    def plot_SQ_asymptotic(self, inputsofqtype):
+        qArray = self.SQ.readX(0)
+        qArrayLow  = [qArray[0], qArray[int(qArray.size/4.)]]
+        qArrayHigh = [qArray[int(-1*(qArray.size/4))], qArray[-1]]
+
+        # for PDFFourierTransform the options 'S(Q)', 'S(Q)-1', 'Q[S(Q)-1]'
+        if inputsofqtype == 'S(Q)':
+            yArrayHigh = [1., 1.]
+        elif inputsofqtype == 'S(Q)-1':
+            yArrayHigh = [0., 0.]
+        elif inputsofqtype == 'Q[S(Q)-1]':
+            yArrayHigh = [0., 0.]
+
+        self.top_plot.canvas.ax.plot(qArrayHigh, yArrayHigh,
+                                     color='k', linestyle='--')
+
+
+    def plot_GR_asymptotic(self):
+        rArray = self.GR.readX(0)
+        rArrayLow  = [rArray[0], rArray[int(rArray.size/4.)]]
+        rArrayHigh = [rArray[int(-1*(rArray.size/4))], rArray[-1]]
+
+        self.bottom_plot.canvas.ax.plot(rArrayHigh, [0., 0.],
+                                        color='k', linestyle='--')
+
+
     def plot_QSQ(self):
         qsq = np.copy(self.SQ.readY(0)) * self.SQ.readX(0)
 
@@ -219,31 +245,36 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                           * self.SQmodified.readX(0)
             self.top_plot.canvas.ax.plot(self.SQmodified.readX(0),
                                          qsqmodified)
+        self.plot_SQ_asymptotic('Q[S(Q)-1]')
 
         self.top_plot.canvas.ax.set_xbound(self.SQ.readX(0)[0],
                                            self.SQ.readX(0)[-1])
         self.top_plot.set_xlabel('Q ($\\AA^{-1}$)')
-        self.top_plot.set_ylabel('Q S(Q) ($\\AA^{-1}$)')
+        self.top_plot.set_ylabel('Q[S(Q)-1] ($\\AA^{-1}$)')
         self.top_plot.canvas.ax.figure.tight_layout()
         self.top_plot.canvas.draw()
 
     def plot_SQ(self):
+
         self.top_plot.canvas.ax.clear()
         self.top_plot.canvas.ax.plot(self.SQ.readX(0), self.SQ.readY(0))
         if self.SQmodified is not None:
             self.top_plot.canvas.ax.plot(self.SQmodified.readX(0),
                                          self.SQmodified.readY(0))
+        self.plot_SQ_asymptotic(self.SQ.YUnitLabel())
 
         self.top_plot.set_xlabel('Q ($\\AA^{-1}$)')
         self.top_plot.canvas.ax.set_xbound(self.SQ.readX(0)[0],
                                            self.SQ.readX(0)[-1])
-        self.top_plot.set_ylabel('S(Q)')
+        self.top_plot.set_ylabel('S(Q)-1')
         self.top_plot.canvas.ax.figure.tight_layout()
         self.top_plot.canvas.draw()
 
     def plot_GR(self):
         self.bottom_plot.canvas.ax.clear()
         self.bottom_plot.canvas.ax.plot(self.GR.readX(0), self.GR.readY(0))
+        self.plot_GR_asymptotic()
+
         self.bottom_plot.set_xlabel('r ($\\AA$)')
         self.bottom_plot.canvas.ax.set_xbound(self.GR.readX(0)[0],
                                               self.GR.readX(0)[-1])
