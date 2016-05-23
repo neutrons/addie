@@ -170,7 +170,7 @@
         <item>
          <widget class="QLabel" name="labeldelR">
           <property name="text">
-           <string>delR</string>
+           <string>deltaR</string>
           </property>
          </widget>
         </item>
