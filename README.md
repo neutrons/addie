@@ -21,7 +21,7 @@ a command line argument
 $ fastgrdevel.sh /opt/mantid37/bin/mantidpython
 ```
 
-Similarly, there is a script for windows
+Similarly, there is a script for windows (experimental)
 ```
 fastgrdevel.bat
 ```
