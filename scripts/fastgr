@@ -50,7 +50,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.top_plot.canvas.ax.figure.tight_layout()
 
     def set_Q_gui_elements(self):
-        if self.SQ is None:
+        if self.SQ is None or self.loaded_once:
             return
 
         #configure Spin Boxes based on data (assume linearly spaced)
@@ -74,6 +74,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.doubleSpinBoxQmax.setMaximum(qmax)
         self.doubleSpinBoxQmax.setSingleStep(qdel)
         self.doubleSpinBoxQmax.setValue(qmax)
+
+        self.loaded_once = True
 
     def read_SQ_file_custom(self, filename):
         qArray = []
