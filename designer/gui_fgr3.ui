@@ -32,23 +32,25 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btnPlotSQ">
-        <property name="text">
-         <string>Plot S(Q)-1</string>
+       <widget class="QComboBox" name="comboRecipType">
+        <property name="currentIndex">
+         <number>1</number>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnPlotQSQ">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Plot Q[S(Q)-1]</string>
-        </property>
+        <item>
+         <property name="text">
+          <string>Plot S(Q)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Plot S(Q)-1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Plot Q[S(Q)-1]</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>

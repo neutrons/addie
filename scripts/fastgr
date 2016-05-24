@@ -7,6 +7,18 @@ import os
 from PyQt4 import QtCore, QtGui, uic
 import sys
 
+# for PDFFourierTransform the options 'S(Q)', 'S(Q)-1', 'Q[S(Q)-1]'
+SOFQ_TYPE_SQ = 'S(Q)'
+SOFQ_TYPE_SQMINUSONE = 'S(Q)-1'
+SOFQ_TYPE_QSQMINUSONE = 'Q[S(Q)-1]'
+
+YLABEL_UNITS = {SOFQ_TYPE_SQ:'',
+                SOFQ_TYPE_SQMINUSONE:'',
+                SOFQ_TYPE_QSQMINUSONE:' ($\\AA^{-1}$)'}
+
+
+
+
 class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     GR = None
     SQ = None
@@ -20,13 +32,10 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #btn commands
         self.btnGenerateGR.clicked.connect(self.calculateGR)
         self.btnLoadSQ.clicked.connect(self.read_SQ_file)
-        self.btnPlotSQ.clicked.connect(self.plot_SQ)
+        self.comboRecipType.activated.connect(self.plot_SQ)
         self.btnSaveGR.clicked.connect(self.save_GR_file)
-        self.btnPlotQSQ.clicked.connect(self.plot_QSQ)
-        self.btnPlotSQ.setEnabled(False)
         self.btnGenerateGR.setEnabled(False)
         self.btnSaveGR.setEnabled(False)
-        self.btnPlotQSQ.setEnabled(False)
 
         self.doubleSpinBoxDelR.setMinimum(0.01)
         self.doubleSpinBoxDelR.setMaximum(1.00)
@@ -105,8 +114,9 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         # for PDFFourierTransform the options 'S(Q)', 'S(Q)-1', 'Q[S(Q)-1]'
         self.SQ = CreateWorkspace(OutputWorkspace='SQ',
                                   UnitX='MomentumTransfer',
-                                  YUnitLabel='S(Q)-1',
+                                  YUnitLabel=SOFQ_TYPE_SQ,
                                   DataX=qArray, DataY=SqArray)
+        self.SQ += 1.
 
     def read_SQ_file(self):
         # clear out the current plots
@@ -130,7 +140,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             self.SQ = LoadAscii(Filename=filename,
                                 OutputWorkspace='SQ',
                                 Unit='MomentumTransfer')
-            self.SQ.setYUnitLabel('S(Q)-1')
+            self.SQ += 1.  # IDL produces S(Q)-1
+            self.SQ.setYUnitLabel(SOFQ_TYPE_SQ)
         elif type == 'PDFgetN':
             self.SQ = LoadPDFgetN(Filename=filename,
                                   OutputWorkspace='SQ')
@@ -140,9 +151,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.set_Q_gui_elements()
         self.plot_SQ()
 
-        self.btnPlotSQ.setEnabled(True)
         self.btnGenerateGR.setEnabled(True)
-        self.btnPlotQSQ.setEnabled(True)
 
         self.calculateGR()
 
@@ -162,9 +171,10 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         self.SQmodified = CreateWorkspace(OutputWorkspace='SQ',
                                           UnitX='MomentumTransfer',
-                                          YUnitLabel='S(Q)-1',
+                                          YUnitLabel=SOFQ_TYPE_SQMINUSONE,
                                           DataX=qArray, DataY=SqArray,
                                           DataE=SqEArray)
+        self.plot_SQ()
         self.calculateGR()
 
 
@@ -214,12 +224,11 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         qArrayLow  = [qArray[0], qArray[int(qArray.size/4.)]]
         qArrayHigh = [qArray[int(-1*(qArray.size/4))], qArray[-1]]
 
-        # for PDFFourierTransform the options 'S(Q)', 'S(Q)-1', 'Q[S(Q)-1]'
-        if inputsofqtype == 'S(Q)':
+        if inputsofqtype == SOFQ_TYPE_SQ:
             yArrayHigh = [1., 1.]
-        elif inputsofqtype == 'S(Q)-1':
+        elif inputsofqtype == SOFQ_TYPE_SQMINUSONE:
             yArrayHigh = [0., 0.]
-        elif inputsofqtype == 'Q[S(Q)-1]':
+        elif inputsofqtype == SOFQ_TYPE_QSQMINUSONE:
             yArrayHigh = [0., 0.]
 
         self.top_plot.canvas.ax.plot(qArrayHigh, yArrayHigh,
@@ -235,43 +244,47 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                                         color='k', linestyle='--')
 
 
-    def plot_QSQ(self):
-        qsq = np.copy(self.SQ.readY(0)) * self.SQ.readX(0)
-
-        self.top_plot.canvas.ax.clear()
-        self.top_plot.canvas.ax.plot(self.SQ.readX(0), qsq)
-        if self.SQmodified is not None:
-            qsqmodified = np.copy(self.SQmodified.readY(0)) \
-                          * self.SQmodified.readX(0)
-            self.top_plot.canvas.ax.plot(self.SQmodified.readX(0),
-                                         qsqmodified)
-        self.plot_SQ_asymptotic('Q[S(Q)-1]')
-
-        self.top_plot.canvas.ax.set_xbound(self.SQ.readX(0)[0],
-                                           self.SQ.readX(0)[-1])
-        self.top_plot.set_xlabel('Q ($\\AA^{-1}$)')
-        self.top_plot.set_ylabel('Q[S(Q)-1] ($\\AA^{-1}$)')
-        self.top_plot.canvas.ax.figure.tight_layout()
-        self.top_plot.canvas.draw()
-
     def plot_SQ(self):
-
         self.top_plot.canvas.ax.clear()
-        self.top_plot.canvas.ax.plot(self.SQ.readX(0), self.SQ.readY(0))
-        if self.SQmodified is not None:
-            self.top_plot.canvas.ax.plot(self.SQmodified.readX(0),
-                                         self.SQmodified.readY(0))
-        self.plot_SQ_asymptotic(self.SQ.YUnitLabel())
+        if self.SQ is None:
+            return
+
+        sofqtype = str(self.comboRecipType.currentText())
+        sofqtype = sofqtype.strip().split()[-1].strip()
+
+        if sofqtype == SOFQ_TYPE_SQ:
+            self.top_plot.canvas.ax.plot(self.SQ.readX(0), self.SQ.readY(0))
+            if self.SQmodified is not None:
+                self.top_plot.canvas.ax.plot(self.SQmodified.readX(0),
+                                             self.SQmodified.readY(0))
+        elif sofqtype == SOFQ_TYPE_SQMINUSONE:
+            sqm1 = np.copy(self.SQ.readY(0)) - 1.
+            self.top_plot.canvas.ax.plot(self.SQ.readX(0), sqm1)
+            if self.SQmodified is not None:
+                sqm1modified = np.copy(self.SQ.readY(0)) - 1.
+                self.top_plot.canvas.ax.plot(self.SQmodified.readX(0),
+                                             sqm1modified)
+        elif sofqtype == SOFQ_TYPE_QSQMINUSONE:
+            qsqm1 = (np.copy(self.SQ.readY(0)) - 1.) * self.SQ.readX(0)
+            self.top_plot.canvas.ax.plot(self.SQ.readX(0), qsqm1)
+            if self.SQmodified is not None:
+                qsqm1modified = (np.copy(self.SQmodified.readY(0)) - 1.) \
+                              * self.SQmodified.readX(0)
+                self.top_plot.canvas.ax.plot(self.SQmodified.readX(0),
+                                             qsqm1modified)
+
+        self.plot_SQ_asymptotic(sofqtype)
 
         self.top_plot.set_xlabel('Q ($\\AA^{-1}$)')
         self.top_plot.canvas.ax.set_xbound(self.SQ.readX(0)[0],
                                            self.SQ.readX(0)[-1])
-        self.top_plot.set_ylabel('S(Q)-1')
+        self.top_plot.set_ylabel(sofqtype + YLABEL_UNITS[sofqtype])
         self.top_plot.canvas.ax.figure.tight_layout()
         self.top_plot.canvas.draw()
 
     def plot_GR(self):
         self.bottom_plot.canvas.ax.clear()
+
         self.bottom_plot.canvas.ax.plot(self.GR.readX(0), self.GR.readY(0))
         self.plot_GR_asymptotic()
 
