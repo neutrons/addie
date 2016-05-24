@@ -1,7 +1,7 @@
 #!/usr/bin/env mantidpythonnightly
 from fastgr import Ui_MainWindow
-from mantid.simpleapi import CreateWorkspace, LoadAscii, PDFFourierTransform, \
-    SavePDFGui
+from mantid.simpleapi import CloneWorkspace, CreateWorkspace, LoadAscii, \
+    PDFFourierTransform, SavePDFGui
 import numpy as np
 import os
 from PyQt4 import QtCore, QtGui, uic
@@ -163,17 +163,19 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             SavePDFGui(InputWorkspace=self.GR, Filename=str(name))
 
     def modifySQ(self):
-        qArray = self.SQ.readX(0)
-        SqArray = self.SQ.readY(0)
-        SqEArray = self.SQ.readE(0)
+        self.SQmodified = CloneWorkspace(InputWorkspace=self.SQ,
+                                         OutputWorkspace='SQmodified')
+
+        qArray = self.SQmodified.readX(0)
+        SqArray = self.SQmodified.readY(0)
+        SqEArray = self.SQmodified.readE(0)
 
         # TODO all the funny things that you want to do
 
-        self.SQmodified = CreateWorkspace(OutputWorkspace='SQ',
-                                          UnitX='MomentumTransfer',
-                                          YUnitLabel=SOFQ_TYPE_SQMINUSONE,
-                                          DataX=qArray, DataY=SqArray,
-                                          DataE=SqEArray)
+        self.SQmodified.setX(0, qArray)
+        self.SQmodified.setY(0, SqArray)
+        self.SQmodified.setE(0, SqEArray)
+
         self.plot_SQ()
         self.calculateGR()
 
