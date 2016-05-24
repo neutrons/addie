@@ -221,9 +221,20 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         self.btnSaveGR.setEnabled(True)
 
+        self.plot_SQ()
         self.plot_GR()
 
-    def plot_SQ_asymptotic(self, inputsofqtype):
+    def plot_SQ_annotations(self, inputsofqtype):
+        qmin = float(self.doubleSpinBoxQmin.value())
+        qmax = float(self.doubleSpinBoxQmax.value())
+
+        self.top_plot.canvas.ax.plot([qmin,qmin],
+                                     self.top_plot.canvas.ax.get_ybound(),
+                                     color='k', linestyle='--')
+        self.top_plot.canvas.ax.plot([qmax,qmax],
+                                     self.top_plot.canvas.ax.get_ybound(),
+                                     color='k', linestyle='--')
+
         qArray = self.SQ.readX(0)
         qArrayLow  = [qArray[0], qArray[int(qArray.size/4.)]]
         qArrayHigh = [qArray[int(-1*(qArray.size/4))], qArray[-1]]
@@ -239,13 +250,14 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                                      color='k', linestyle='--')
 
 
-    def plot_GR_asymptotic(self):
+    def plot_GR_annotations(self):
         rArray = self.GR.readX(0)
         rArrayLow  = [rArray[0], rArray[int(rArray.size/4.)]]
         rArrayHigh = [rArray[int(-1*(rArray.size/4))], rArray[-1]]
 
-        self.bottom_plot.canvas.ax.plot(rArrayHigh, [0., 0.],
-                                        color='k', linestyle='--')
+        if rArray[-1] > 60:
+            self.bottom_plot.canvas.ax.plot(rArrayHigh, [0., 0.],
+                                            color='k', linestyle='--')
 
 
     def plot_SQ(self):
@@ -277,7 +289,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                 self.top_plot.canvas.ax.plot(self.SQmodified.readX(0),
                                              qsqm1modified)
 
-        self.plot_SQ_asymptotic(sofqtype)
+        self.plot_SQ_annotations(sofqtype)
 
         self.top_plot.set_xlabel('Q ($\\AA^{-1}$)')
         self.top_plot.canvas.ax.set_xbound(self.SQ.readX(0)[0],
@@ -290,7 +302,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.bottom_plot.canvas.ax.clear()
 
         self.bottom_plot.canvas.ax.plot(self.GR.readX(0), self.GR.readY(0))
-        self.plot_GR_asymptotic()
+        self.plot_GR_annotations()
 
         self.bottom_plot.set_xlabel('r ($\\AA$)')
         self.bottom_plot.canvas.ax.set_xbound(self.GR.readX(0)[0],
