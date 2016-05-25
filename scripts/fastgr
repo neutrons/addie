@@ -29,6 +29,18 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         QtGui.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
+        
+        self.x_position_indicator=QtGui.QLabel(u" x=%g"%0.)
+        self.x_position_indicator.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Preferred)
+        self.x_position_indicator.setMaximumWidth(100)
+        self.x_position_indicator.setMinimumWidth(100)
+        self.statusbar.addWidget(self.x_position_indicator)
+        self.y_position_indicator=QtGui.QLabel(u" y=%g"%0.)
+        self.y_position_indicator.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Preferred)
+        self.y_position_indicator.setMaximumWidth(100)
+        self.y_position_indicator.setMinimumWidth(100)
+        self.statusbar.addWidget(self.y_position_indicator)        
+        
         #btn commands
         self.btnGenerateGR.clicked.connect(self.calculateGR)
         self.btnLoadSQ.clicked.connect(self.read_SQ_file)
@@ -75,7 +87,21 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.doubleSpinBoxQmax.setSingleStep(qdel)
         self.doubleSpinBoxQmax.setValue(qmax)
 
+        self.top_plot.canvas.mpl_connect('motion_notify_event', self.plot_mouse_event)
+        self.bottom_plot.canvas.mpl_connect('motion_notify_event', self.plot_mouse_event)
+
         self.loaded_once = True
+
+    def plot_mouse_event(self,  event):
+        if event.inaxes is None:
+            _x = 0
+            _y = 0
+        else:
+            _x = event.xdata
+            _y = event.ydata
+        
+        self.x_position_indicator.setText(u" x=%g" % _x)
+        self.y_position_indicator.setText(u" x=%g" % _y)
 
     def read_SQ_file_custom(self, filename):
         qArray = []
