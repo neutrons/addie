@@ -35,8 +35,8 @@ generate one that is run `buildrpm` and look for the files in the
 ```bash
 $ ./buildrpm
 ```
- The `srpm` generated can be uploaded to
-[copr](http://copr.fedoraproject.org) to build for any platform.
+ The `rpm`s are available on
+[copr](https://copr.fedorainfracloud.org/coprs/peterfpeterson/fastgr/).
 
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
