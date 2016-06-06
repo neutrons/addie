@@ -59,7 +59,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -197,80 +197,145 @@
        <attribute name="title">
         <string>Bragg</string>
        </attribute>
-       <widget class="QGraphicsView" name="graphicsView">
-        <property name="geometry">
-         <rect>
-          <x>90</x>
-          <y>70</y>
-          <width>641</width>
-          <height>461</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QRadioButton" name="radioButton">
-        <property name="geometry">
-         <rect>
-          <x>830</x>
-          <y>80</y>
-          <width>116</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Bank 1</string>
-        </property>
-       </widget>
-       <widget class="QRadioButton" name="radioButton_2">
-        <property name="geometry">
-         <rect>
-          <x>830</x>
-          <y>120</y>
-          <width>116</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Bank 6</string>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="comboBox">
-        <property name="geometry">
-         <rect>
-          <x>90</x>
-          <y>550</y>
-          <width>78</width>
-          <height>27</height>
-         </rect>
-        </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
-         <property name="text">
-          <string>TOF</string>
-         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_5">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout">
+                <item>
+                 <widget class="QLabel" name="label_3">
+                  <property name="text">
+                   <string>SNS Powder Reduction Configuration for NOMAD</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_5">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QGraphicsView" name="graphicsView"/>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_3">
+                <item>
+                 <widget class="QComboBox" name="comboBox">
+                  <item>
+                   <property name="text">
+                    <string>TOF</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>d-Spacing</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Q</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_4">
+              <item>
+               <widget class="QPushButton" name="pushButton_5">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Load GSS/S(Q)/general 3-column ASCII&lt;/p&gt;&lt;p&gt;1. GSS: load and then split to 6 workspaces with single spectrum.  Finally group all 6 workspaces to a workspace group&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Load</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_2">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Ignored</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="radioButton">
+                <property name="text">
+                 <string>Bank 1</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="radioButton_2">
+                <property name="text">
+                 <string>Bank 6</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_3">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </item>
         <item>
-         <property name="text">
-          <string>d-Spacing</string>
-         </property>
+         <widget class="QTreeWidget" name="treeWidget_2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;List of workspace names.  Each workspace is an individual bank&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <column>
+           <property name="text">
+            <string notr="true">1</string>
+           </property>
+          </column>
+         </widget>
         </item>
-        <item>
-         <property name="text">
-          <string>Q</string>
-         </property>
-        </item>
-       </widget>
-       <widget class="QLabel" name="label_3">
-        <property name="geometry">
-         <rect>
-          <x>50</x>
-          <y>20</y>
-          <width>401</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>SNS Powder Reduction Configuration for NOMAD</string>
-        </property>
-       </widget>
+       </layout>
       </widget>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
@@ -475,7 +540,7 @@
           <item>
            <widget class="QPushButton" name="pushButton_loadSQ">
             <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Load S(Q) from the reduction tab.  Plot S(Q), S(Q)-1 or Q[S(Q)-1] according to the selected radio buttons below.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Load S(Q) from the reduction tab. Plot S(Q), S(Q)-1 or Q[S(Q)-1] according to the selected radio buttons below.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Use regular file loader at this phase.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Duplicate the function in FastGR/scripts/fastgr&lt;/p&gt;&lt;p&gt;149     def read_SQ_file(self):&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
              <string>Load SQ</string>
@@ -531,6 +596,9 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;write click on the workspace name should give user the option to plot/over plot &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
             <column>
              <property name="text">
               <string notr="true">1</string>
@@ -569,16 +637,14 @@
         </item>
        </layout>
        <zorder>graphicsView_sq</zorder>
-       <zorder>verticalLayoutWidget</zorder>
-       <zorder>labeldelR</zorder>
-       <zorder>gridLayoutWidget_3</zorder>
        <zorder>graphicsView_gr</zorder>
-       <zorder>gridLayoutWidget_2</zorder>
-       <zorder>verticalLayoutWidget_2</zorder>
        <zorder>pushButton_saveGR</zorder>
        <zorder>pushButton_generateGR</zorder>
       </widget>
      </widget>
+    </item>
+    <item>
+     <widget class="fakewidget" name="widget_myWidget" native="true"/>
     </item>
    </layout>
   </widget>
@@ -600,6 +666,12 @@
    <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QDockWidget" name="dockWidget_ipython">
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents"/>
+  </widget>
   <action name="actionQuit">
    <property name="text">
     <string>Quit</string>
@@ -609,6 +681,14 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>fakewidget</class>
+   <extends>QWidget</extends>
+   <header>fakewidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
