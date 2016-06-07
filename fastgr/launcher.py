@@ -16,6 +16,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
 
         self.ui = ui_mainWindow.Ui_MainWindow()
         self.ui.setupUi(self)
+        self.ui.dockWidget_ipython.setup()
 
         # set widgets
         self._init_widgets()
@@ -40,6 +41,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
                      self.evt_plot_bragg_bank)
 
         # for tab G(R)
+        """
         self.connect(self.ui.pushButton_loadSQ, QtCore.SIGNAL('clicked()'),
                      self.do_load_sq)
         self.connect(self.ui.radioButton_sq, QtCore.SIGNAL('toggled(int)'),
@@ -54,6 +56,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
                      self.do_generateGR)
         self.connect(self.ui.pushButton_saveGR, QtCore.SIGNAL('clicked()'),
                      self.do_save_GR)
+        """
 
         return
 
@@ -94,11 +97,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
 
 
 def main():
-    app = QApplication(sys.argv)
+    app = PyQt4.QtGui.QApplication(sys.argv)
     app.setOrganizationName("Qtrac Ltd.")
     app.setOrganizationDomain("qtrac.eu")
     app.setApplicationName("Image Changer")
-    app.setWindowIcon(QIcon(":/icon.png"))
+    app.setWindowIcon(PyQt4.QtGui.QIcon(":/icon.png"))
     form = MainWindow()
     form.show()
     app.exec_()

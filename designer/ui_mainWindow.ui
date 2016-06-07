@@ -751,9 +751,6 @@
       </widget>
      </widget>
     </item>
-    <item>
-     <widget class="fakewidget" name="widget_myWidget" native="true"/>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -762,7 +759,7 @@
      <x>0</x>
      <y>0</y>
      <width>1269</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -774,7 +771,7 @@
    <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QDockWidget" name="dockWidget_ipython">
+  <widget class="IPythonDockWidget" name="dockWidget_ipython">
    <attribute name="dockWidgetArea">
     <number>8</number>
    </attribute>
@@ -791,9 +788,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>fakewidget</class>
-   <extends>QWidget</extends>
-   <header>fakewidget.h</header>
+   <class>IPythonDockWidget</class>
+   <extends>QDockWidget</extends>
+   <header>ipythondockwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
