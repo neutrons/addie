@@ -59,7 +59,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -285,13 +285,6 @@
                </spacer>
               </item>
               <item>
-               <widget class="QRadioButton" name="radioButton_b1">
-                <property name="text">
-                 <string>Bank 1</string>
-                </property>
-               </widget>
-              </item>
-              <item>
                <spacer name="verticalSpacer_4">
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>
@@ -308,13 +301,6 @@
                </spacer>
               </item>
               <item>
-               <widget class="QRadioButton" name="radioButton_b2">
-                <property name="text">
-                 <string>Bank 2</string>
-                </property>
-               </widget>
-              </item>
-              <item>
                <spacer name="verticalSpacer_5">
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>
@@ -329,6 +315,28 @@
                  </size>
                 </property>
                </spacer>
+              </item>
+              <item>
+               <layout class="QGridLayout" name="gridLayout_7">
+                <item row="0" column="0">
+                 <widget class="QRadioButton" name="radioButton_b1">
+                  <property name="text">
+                   <string>Bank 1</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QGridLayout" name="gridLayout_8">
+                <item row="0" column="0">
+                 <widget class="QRadioButton" name="radioButton_b2">
+                  <property name="text">
+                   <string>Bank 2</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </item>
               <item>
                <widget class="QRadioButton" name="radioButton_b3">
@@ -426,7 +434,7 @@
          </layout>
         </item>
         <item>
-         <widget class="QTreeWidget" name="treeWidget_braggWS">
+         <widget class="QTreeWidget" name="treeWidget_braggWSList">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -540,9 +548,6 @@
           </item>
          </layout>
         </item>
-        <item row="0" column="0" colspan="2">
-         <widget class="QGraphicsView" name="graphicsView_sq"/>
-        </item>
         <item row="2" column="0">
          <layout class="QGridLayout" name="gridLayout_4">
           <item row="0" column="3">
@@ -587,7 +592,7 @@
              <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeType">
-             <enum>QSizePolicy::Preferred</enum>
+             <enum>QSizePolicy::Expanding</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -697,7 +702,7 @@
         <item row="4" column="2">
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
-           <widget class="QTreeWidget" name="treeWidget">
+           <widget class="QTreeWidget" name="treeWidget_grWsList">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Ignored" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -734,12 +739,29 @@
          </layout>
         </item>
         <item row="4" column="0">
-         <widget class="QGraphicsView" name="graphicsView_gr"/>
+         <widget class="GofRView" name="graphicsView_gr">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>300</height>
+           </size>
+          </property>
+         </widget>
         </item>
         <item row="5" column="2">
          <widget class="QPushButton" name="pushButton_saveGR">
           <property name="text">
            <string>Save GR</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="2">
+         <widget class="SofQView" name="graphicsView_sq">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>300</height>
+           </size>
           </property>
          </widget>
         </item>
@@ -772,6 +794,12 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="IPythonDockWidget" name="dockWidget_ipython">
+   <property name="maximumSize">
+    <size>
+     <width>524287</width>
+     <height>300</height>
+    </size>
+   </property>
    <attribute name="dockWidgetArea">
     <number>8</number>
    </attribute>
@@ -792,6 +820,16 @@
    <extends>QDockWidget</extends>
    <header>ipythondockwidget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GofRView</class>
+   <extends>QGraphicsView</extends>
+   <header>graphicviewlib.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SofQView</class>
+   <extends>QGraphicsView</extends>
+   <header>graphicviewlib.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

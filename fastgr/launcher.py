@@ -16,7 +16,14 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
     """
 
     def __init__(self, parent=None):
-        super(PyQt4.QtGui.QMainWindow, self).__init__(parent)
+        """ Initialization
+        Parameters
+        ----------
+        parent :: parent application
+        """
+
+        # Base class
+        QtGui.QMainWindow.__init__(self, parent)
 
         self.ui = ui_mainWindow.Ui_MainWindow()
         self.ui.setupUi(self)
@@ -29,17 +36,17 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         # bragg diffraction tab
         self.connect(self.ui.pushButton_loadBraggFile, QtCore.SIGNAL('clicked()'),
                      self.do_load_bragg_file)
-        self.connect(self.ui.radioButton_b1, QtCore.SIGNAL('toggled(int)'),
+        self.connect(self.ui.radioButton_b1, QtCore.SIGNAL('toggled(bool)'),
                      self.evt_plot_bragg_bank)
-        self.connect(self.ui.radioButton_b2, QtCore.SIGNAL('toggled(int)'),
+        self.connect(self.ui.radioButton_b2, QtCore.SIGNAL('toggled(bool)'),
                      self.evt_plot_bragg_bank)
-        self.connect(self.ui.radioButton_b3, QtCore.SIGNAL('toggled(int)'),
+        self.connect(self.ui.radioButton_b3, QtCore.SIGNAL('toggled(bool)'),
                      self.evt_plot_bragg_bank)
-        self.connect(self.ui.radioButton_b4, QtCore.SIGNAL('toggled(int)'),
+        self.connect(self.ui.radioButton_b4, QtCore.SIGNAL('toggled(bool)'),
                      self.evt_plot_bragg_bank)
-        self.connect(self.ui.radioButton_b5, QtCore.SIGNAL('toggled(int)'),
+        self.connect(self.ui.radioButton_b5, QtCore.SIGNAL('toggled(bool)'),
                      self.evt_plot_bragg_bank)
-        self.connect(self.ui.radioButton_b6, QtCore.SIGNAL('toggled(int)'),
+        self.connect(self.ui.radioButton_b6, QtCore.SIGNAL('toggled(bool)'),
                      self.evt_plot_bragg_bank)
         self.connect(self.ui.comboBox_xUnit, QtCore.SIGNAL('stateChanged(int)'),
                      self.evt_plot_bragg_bank)
@@ -56,7 +63,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         self.connect(self.ui.pushButton_showQMinMax, QtCore.SIGNAL('clicked()'),
                      self.do_show_sq_bound)
         self.connect(self.ui.pushButton_generateGR, QtCore.SIGNAL('clicked()'),
-                     self.do_generateGR)
+                     self.do_generate_GR)
         self.connect(self.ui.pushButton_saveGR, QtCore.SIGNAL('clicked()'),
                      self.do_save_GR)
 
@@ -73,6 +80,17 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         """
         self.ui.comboBox_xUnit.clear()
         self.ui.comboBox_xUnit.addItems(['TOF', ])
+
+        return
+
+    def do_generate_GR(self):
+        """
+
+        Returns
+        -------
+
+        """
+        # TODO/NOW - Implement!
 
     def do_load_bragg_file(self):
         """
@@ -119,8 +137,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         max_r = float(self.ui.doubleSpinBoxQmax.value())
         delta_r = float(self.ui.doubleSpinBoxDelR.value())
 
-        min_q = float(self.doubleSpinBoxQmin.value())
-        max_q = float(self.doubleSpinBoxQmax.value())
+        min_q = float(self.ui.doubleSpinBoxQmin.value())
+        max_q = float(self.ui.doubleSpinBoxQmax.value())
 
         self._myController.calculate_gr(min_r, delta_r, max_r, min_q, max_q)
 
@@ -130,6 +148,23 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
 
         return
 
+    def do_save_GR(self):
+        """
+
+        Returns
+        -------
+
+        """
+        # TODO/NOW - Implement!
+
+    def do_show_sq_bound(self):
+        """
+        Show or hide the left and right boundary of the S(Q)
+        Returns
+        -------
+
+        """
+
     def evt_plot_bragg_bank(self):
         """
 
@@ -137,6 +172,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         -------
 
         """
+        print '[Plot] Bragg Bank ... '
 
         return
 

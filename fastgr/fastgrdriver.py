@@ -1,7 +1,8 @@
 import os
 import numpy as np
-import mantidapi as mtd
-from mantid.kernel import AnalysisDataService
+import mantid.simpleapi as mtd
+from mantid.api import AnalysisDataService
+
 
 class FastGRDriver(object):
     """
@@ -40,7 +41,7 @@ class FastGRDriver(object):
         # check
         assert min_r < max_r, 'Rmin must be less than Rmax (%f >= %f)' % (min_r, max_r)
         assert delta_r < (max_r - min_r), 'Must have more than one bin in G(r) (%f >= %f)' \
-                                     '' % (delta_r, (max_r - min_r))
+                                          '' % (delta_r, (max_r - min_r))
 
         assert min_q < max_q, 'Qmin must be less than Qmax (%f >= %f)' % (min_q, max_q)
 
@@ -57,8 +58,11 @@ class FastGRDriver(object):
         # get the input unit
         sq_ws = AnalysisDataService.retrieve(self._currSqWsName)
         inputsofqtype = sq_ws.YUnitLabel()
+        # FIXME/TODO - Need a GUI widget to select from G(r), g(r), RDF(r)
+        inputsofqtype = 'S(Q)'
 
         # do the FFT
+        print '[DB]: Input Sof Q Type = |', sq_ws.YUnitLabel(), '|'
         mtd.PDFFourierTransform(InputWorkspace=self._currSqWsName,
                                 InputSofQType=inputsofqtype,
                                 **kwargs)
@@ -130,8 +134,9 @@ class FastGRDriver(object):
             raise RuntimeError('File %s is not of a supported type.' % file_name)
 
         # check
-        assert
+        assert AnalysisDataService.doesExist(gss_ws_name)
 
+        return
 
     def load_sq(self, file_name):
         """
