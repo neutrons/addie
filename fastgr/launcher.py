@@ -36,17 +36,17 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         # bragg diffraction tab
         self.connect(self.ui.pushButton_loadBraggFile, QtCore.SIGNAL('clicked()'),
                      self.do_load_bragg_file)
-        self.connect(self.ui.radioButton_b1, QtCore.SIGNAL('toggled(bool)'),
+        self.connect(self.ui.checkBox_bank1, QtCore.SIGNAL('toggled(bool)'),
                      self.evt_plot_bragg_bank)
-        self.connect(self.ui.radioButton_b2, QtCore.SIGNAL('toggled(bool)'),
+        self.connect(self.ui.checkBox_bank2, QtCore.SIGNAL('toggled(bool)'),
                      self.evt_plot_bragg_bank)
-        self.connect(self.ui.radioButton_b3, QtCore.SIGNAL('toggled(bool)'),
+        self.connect(self.ui.checkBox_bank3, QtCore.SIGNAL('toggled(bool)'),
                      self.evt_plot_bragg_bank)
-        self.connect(self.ui.radioButton_b4, QtCore.SIGNAL('toggled(bool)'),
+        self.connect(self.ui.checkBox_bank4, QtCore.SIGNAL('toggled(bool)'),
                      self.evt_plot_bragg_bank)
-        self.connect(self.ui.radioButton_b5, QtCore.SIGNAL('toggled(bool)'),
+        self.connect(self.ui.checkBox_bank5, QtCore.SIGNAL('toggled(bool)'),
                      self.evt_plot_bragg_bank)
-        self.connect(self.ui.radioButton_b6, QtCore.SIGNAL('toggled(bool)'),
+        self.connect(self.ui.checkBox_bank6, QtCore.SIGNAL('toggled(bool)'),
                      self.evt_plot_bragg_bank)
         self.connect(self.ui.comboBox_xUnit, QtCore.SIGNAL('stateChanged(int)'),
                      self.evt_plot_bragg_bank)
@@ -105,9 +105,13 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
             return
 
         # load file
-        self._myController.load_bragg_file(bragg_file_name)
+        gss_ws_name = self._myController.load_bragg_file(bragg_file_name)
 
-        #
+        # split
+        self._gssGroupName = self._myController.split_to_single_bank(gss_ws_name)
+
+        # plot
+        self.ui.checkBox_bank1.setChecked(True)
 
         return
 
@@ -173,6 +177,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
 
         """
         print '[Plot] Bragg Bank ... '
+
+        assert self._gssGroupName is not None
+
+        # get data via driver one by one
 
         return
 

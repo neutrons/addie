@@ -1,5 +1,10 @@
 import os
+import sys
 import numpy as np
+
+# add a python path for local development
+sys.path.append('/Users/wzz/MantidBuild/debug/bin/')
+
 import mantid.simpleapi as mtd
 from mantid.api import AnalysisDataService
 
@@ -57,14 +62,12 @@ class FastGRDriver(object):
 
         # get the input unit
         sq_ws = AnalysisDataService.retrieve(self._currSqWsName)
-        inputsofqtype = sq_ws.YUnitLabel()
-        # FIXME/TODO - Need a GUI widget to select from G(r), g(r), RDF(r)
-        inputsofqtype = 'S(Q)'
+        sofq_type = 'S(Q)'
 
         # do the FFT
         print '[DB]: Input Sof Q Type = |', sq_ws.YUnitLabel(), '|'
         mtd.PDFFourierTransform(InputWorkspace=self._currSqWsName,
-                                InputSofQType=inputsofqtype,
+                                InputSofQType=sofq_type,
                                 **kwargs)
 
         # check
@@ -91,7 +94,8 @@ class FastGRDriver(object):
         assert (min_r, max_r, delta_r) in self._grWsNameDict, error_msg
 
         # get the workspace
-        gr_ws = AnalysisDataService.retrieve((min_r, max_r, delta_r))
+        gr_ws_name = self._grWsNameDict[(min_r, max_r, delta_r)]
+        gr_ws = AnalysisDataService.retrieve(gr_ws_name)
 
         return gr_ws.readX(0), gr_ws.readY(0), gr_ws.readE(0)
 
@@ -136,7 +140,7 @@ class FastGRDriver(object):
         # check
         assert AnalysisDataService.doesExist(gss_ws_name)
 
-        return
+        return gss_ws_name
 
     def load_sq(self, file_name):
         """
@@ -161,3 +165,46 @@ class FastGRDriver(object):
 
         return
 
+    def split_to_single_bank(self, gss_ws_name):
+        """
+        Split a multiple-bank GSAS workspace to a set of single-spectrum MatrixWorkspace
+        Parameters
+        ----------
+        gss_ws_name
+
+        Returns
+        -------
+        Name of grouped workspace
+        """
+        # check
+        assert isinstance(gss_ws_name, str)
+        assert AnalysisDataService.doesExist(gss_ws_name)
+
+        # get workspace
+        gss_ws = AnalysisDataService.retrieve(gss_ws_name)
+
+        ws_list = list()
+
+        if gss_ws.getNumberHistograms() == 1:
+            # input is already a single-spectrum workspace
+            ws_list.append(gss_ws_name)
+        else:
+            num_spec = gss_ws.getNumberHistograms()
+
+            for i_ws in range(num_spec):
+                # split this one to a single workspace
+                out_ws_name = gss_ws_name + '_bank%d' % (i_ws+1)
+                mtd.CropWorkspace(InputWorkspace=gss_ws_name,
+                                  OutputWorkspace=out_ws_name,
+                                  StartWorkspaceIndex=i_ws, EndWorkspaceIndex=i_ws)
+                assert AnalysisDataService.doesExist(out_ws_name)
+                ws_list.append(out_ws_name)
+            # END-FOR
+        # END-IF
+
+        # group all the workspace
+        ws_group_name = gss_ws_name + '_group'
+        mtd.GroupWorkspaces(InputWorkspaces=ws_list,
+                            OutputWorkspace=ws_group_name)
+
+        return ws_group_name
