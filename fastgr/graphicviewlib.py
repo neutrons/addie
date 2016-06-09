@@ -1,6 +1,21 @@
 import mplgraphicsview as base
 
 
+class BraggView(base.MplGraphicsView):
+    """ Graphics view for Bragg diffraction
+    """
+    def __init__(self, parent):
+        """
+        Initialization
+        Parameters
+        ----------
+        parent
+        """
+        base.MplGraphicsView.__init__(self, parent)
+
+        return
+
+
 class GofRView(base.MplGraphicsView):
     """
     Graphics view for G(R)
@@ -45,6 +60,8 @@ class SofQView(base.MplGraphicsView):
         base.MplGraphicsView.__init__(self, parent)
 
         self._showBoundary = False
+        self._leftID = None
+        self._rightID = None
 
         return
 
@@ -61,7 +78,8 @@ class SofQView(base.MplGraphicsView):
         -------
 
         """
-        self.add_plot_1d(vec_r, vec_s, vec_e)
+        self.add_plot_1d(vec_r, vec_s, vec_e, color='blue', x_label='Q', y_label='S(Q)',
+                         marker='.')
 
         return
 
@@ -81,14 +99,15 @@ class SofQView(base.MplGraphicsView):
 
         if self._showBoundary:
             # Q-boundary indicator is on. turn off
-            self.hide_indicator(self._leftIndicator)
-            self.hide_indicator(self._rightIndicator)
+            self.remove_indicator(self._leftID)
+            self.remove_indicator(self._rightID)
+            self._leftID = None
+            self._rightID = None
             self._showBoundary = False
         else:
-            self.show_indicator(self._leftIndicator)
-            self.show_indicator(self._rightIndicator)
-            self.move_indicator_to(self._leftIndicator, q_left)
-            self.move_indicator_to(self._rightIndicator, q_right)
+            self._leftID = self.add_vertical_indicator(q_left, 'red')
+            self._rightID = self.add_vertical_indicator(q_right, 'red')
+            self._showBoundary = True
         # END-IF-ELSE (show boundary)
 
         return

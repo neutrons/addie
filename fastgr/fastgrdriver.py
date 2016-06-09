@@ -41,7 +41,7 @@ class FastGRDriver(object):
 
         Returns
         -------
-        None
+        string as G(r) workspace's name
         """
         # check
         assert min_r < max_r, 'Rmin must be less than Rmax (%f >= %f)' % (min_r, max_r)
@@ -72,11 +72,11 @@ class FastGRDriver(object):
 
         # check
         assert AnalysisDataService.doesExist(gr_ws_name), 'Failed to do Fourier Transform.'
-        self._grWsNameDict[(min_r, max_r, delta_r)] = gr_ws_name
+        self._grWsNameDict[(min_q, max_q)] = gr_ws_name
 
-        return
+        return gr_ws_name
 
-    def get_gr(self, min_r, delta_r, max_r):
+    def get_gr(self, min_q, max_q):
         """ Get G(r)
         Parameters
         ----------
@@ -91,10 +91,10 @@ class FastGRDriver(object):
         # check... find key in dictionary
         error_msg = 'R-range and delta R are not support. Current stored G(R) parameters are %s.' \
                     '' % str(self._grWsNameDict.keys())
-        assert (min_r, max_r, delta_r) in self._grWsNameDict, error_msg
+        assert ((min_q, max_q)) in self._grWsNameDict, error_msg
 
         # get the workspace
-        gr_ws_name = self._grWsNameDict[(min_r, max_r, delta_r)]
+        gr_ws_name = self._grWsNameDict[(min_q, max_q)]
         gr_ws = AnalysisDataService.retrieve(gr_ws_name)
 
         return gr_ws.readX(0), gr_ws.readY(0), gr_ws.readE(0)

@@ -68,7 +68,8 @@ class MantidIPythonWidget(RichIPythonWidget):
         mantidplotpath = path.split(path.dirname(__file__))[0] # It's the directory above this one
         mantidplotrc = path.join(mantidplotpath, 'mantidplotrc.py')
         shell = kernel.shell
-        shell.run_line_magic('run',mantidplotrc)
+        shell.run_line_magic('run', mantidplotrc)
+        print '[DB...BAUnderstand]: shell run: ', mantidplotrc
 
         # These 3 lines replace the run_code method of IPython's InteractiveShell class (of which the
         # shell variable is a derived instance) with our method defined above. The original method
@@ -82,3 +83,4 @@ class MantidIPythonWidget(RichIPythonWidget):
 
         self.kernel_manager = kernel_manager
         self.kernel_client = kernel_client
+

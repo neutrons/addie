@@ -63,7 +63,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         self.connect(self.ui.pushButton_showQMinMax, QtCore.SIGNAL('clicked()'),
                      self.do_show_sq_bound)
         self.connect(self.ui.pushButton_generateGR, QtCore.SIGNAL('clicked()'),
-                     self.do_generate_GR)
+                     self.do_generate_gr)
         self.connect(self.ui.pushButton_saveGR, QtCore.SIGNAL('clicked()'),
                      self.do_save_GR)
 
@@ -83,14 +83,33 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
 
         return
 
-    def do_generate_GR(self):
+    def do_generate_gr(self):
         """
-
+        Generate G(r) by the present user-setup
         Returns
         -------
 
         """
-        # TODO/NOW - Implement!
+        # get data
+        # calculate the G(R)
+        min_r = float(self.ui.doubleSpinBoxQmin.value())
+        max_r = float(self.ui.doubleSpinBoxQmax.value())
+        delta_r = float(self.ui.doubleSpinBoxDelR.value())
+
+        min_q = float(self.ui.doubleSpinBoxQmin.value())
+        max_q = float(self.ui.doubleSpinBoxQmax.value())
+
+        gr_ws_name = self._myController.calculate_gr(min_r, delta_r, max_r, min_q, max_q)
+
+        # plot G(R)
+        vec_r, vec_g, vec_ge = self._myController.get_gr(min_q, max_q)
+        self.ui.graphicsView_gr.plot_gr(vec_r, vec_g, vec_ge)
+
+        # add to tree
+        gr_param_str = 'Q: (%.3f, %.3f)' % (min_q, max_q)
+        self.ui.treeWidget_grWsList.add_gr(gr_param_str, gr_ws_name)
+
+        return
 
     def do_load_bragg_file(self):
         """
@@ -136,19 +155,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         self.ui.graphicsView_sq.plot_sq(vec_q, vec_s, vec_e)
         self.ui.radioButton_sq.setChecked(True)
 
-        # calculate the G(R)
-        min_r = float(self.ui.doubleSpinBoxQmin.value())
-        max_r = float(self.ui.doubleSpinBoxQmax.value())
-        delta_r = float(self.ui.doubleSpinBoxDelR.value())
-
-        min_q = float(self.ui.doubleSpinBoxQmin.value())
-        max_q = float(self.ui.doubleSpinBoxQmax.value())
-
-        self._myController.calculate_gr(min_r, delta_r, max_r, min_q, max_q)
-
-        # plot G(R)
-        vec_r, vec_g, vec_ge = self._myController.get_gr(min_r, delta_r, max_r)
-        self.ui.graphicsView_gr.plot_gr(vec_r, vec_g, vec_ge)
+        # calculate and calculate G(R)
+        self.do_generate_gr()
 
         return
 
@@ -160,6 +168,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
 
         """
         # TODO/NOW - Implement!
+        self.ui.dockWidget_ipython.wild_test()
 
     def do_show_sq_bound(self):
         """
@@ -168,6 +177,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         -------
 
         """
+        q_left = self.ui.doubleSpinBoxQmin.value()
+        q_right = self.ui.doubleSpinBoxQmax.value()
+        self.ui.graphicsView_sq.toggle_boundary(q_left, q_right)
+
+        return
 
     def evt_plot_bragg_bank(self):
         """

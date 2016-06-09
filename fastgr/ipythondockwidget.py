@@ -1,7 +1,7 @@
 import mantid_ipython_widget
 import PyQt4.QtGui
 
-# self.dockWidget_ipython = QtGui.QDockWidget(MainWindow)
+
 class IPythonDockWidget(PyQt4.QtGui.QDockWidget):
     """
     """
@@ -10,13 +10,25 @@ class IPythonDockWidget(PyQt4.QtGui.QDockWidget):
         """
         PyQt4.QtGui.QDockWidget.__init__(self, parent)
 
+        self.iPythonWidget = None
+
         return
 
     def setup(self):
         """
         """
         # set ipython
-        self.setWidget(mantid_ipython_widget.MantidIPythonWidget())
+        self.iPythonWidget = mantid_ipython_widget.MantidIPythonWidget()
+        self.setWidget(self.iPythonWidget)
 
         return
 
+    def wild_test(self):
+        """
+        WILD TEST
+        Returns
+        -------
+
+        """
+        # append output to the output stream but not input console
+        self.iPythonWidget.append_stream('bababa')
