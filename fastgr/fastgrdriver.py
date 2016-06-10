@@ -76,6 +76,21 @@ class FastGRDriver(object):
 
         return gr_ws_name
 
+    def get_bragg_data(self, bank):
+        """ Get Bragg diffraction data of 1 bank
+        Args:
+            bank:
+
+        Returns:
+        3-tuple of numpy 1D array for X, Y and E
+        """
+        # TODO/NOW : check and doc!
+
+        ws_name = 'bank%d' % bank
+        bank_ws = AnalysisDataService.retrieve(ws_name)
+        mtd.
+
+
     def get_gr(self, min_q, max_q):
         """ Get G(r)
         Parameters
@@ -193,7 +208,7 @@ class FastGRDriver(object):
 
             for i_ws in range(num_spec):
                 # split this one to a single workspace
-                out_ws_name = gss_ws_name + '_bank%d' % (i_ws+1)
+                out_ws_name = 'bank%d' % (i_ws+1)
                 mtd.CropWorkspace(InputWorkspace=gss_ws_name,
                                   OutputWorkspace=out_ws_name,
                                   StartWorkspaceIndex=i_ws, EndWorkspaceIndex=i_ws)

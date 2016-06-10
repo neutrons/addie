@@ -70,6 +70,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         # define the driver
         self._myController = driver.FastGRDriver()
 
+        self._gssGroupName = None
+
         return
 
     def _init_widgets(self):
@@ -131,6 +133,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
 
         # plot
         self.ui.checkBox_bank1.setChecked(True)
+        vec_x, vec_y, vec_e = self._myController.get_bragg_data(bank=1)
+        self.ui.graphicsView_bragg.add_plot_1d(vec_x, vec_y, vec_e)
 
         return
 
