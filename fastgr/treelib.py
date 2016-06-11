@@ -60,6 +60,97 @@ class FileSystemTreeView(QtGui.QTreeView):
         return
 
 
+class BraggTree(base.CustomizedTreeView):
+    """ Tree widget to store Bragg workspace """
+    def __init__(self, parent):
+        """
+        Initialize
+        Parameters
+        ----------
+        parent
+        """
+        base.CustomizedTreeView.__init__(self, parent)
+
+        self.init_setup(['Bragg Workspaces'])
+
+        # add actions
+        action_ipython = QtGui.QAction('To IPython', self)
+        action_ipython.triggered.connect(self.do_copy_to_ipython)
+        self.addAction(action_ipython)
+
+        return
+
+    def add_bragg_ws_group(self, ws_group_name, bank_name_list):
+        """
+        Add a workspace group containing a list of bank names
+        Parameters
+        ----------
+        ws_group_name
+        bank_name_list
+
+        Returns
+        -------
+
+        """
+        # TODO/NOW - Doc & check
+
+        # main node/leaf
+        main_leaf_value = str(ws_group_name)
+        # TODO/NOW - add check ...
+        self.add_main_item(main_leaf_value, True)
+
+        for bank_name in bank_name_list:
+            self.add_child_main_item(main_leaf_value, bank_name)
+
+        return
+
+    def do_copy_to_ipython(self):
+        """
+
+        Returns
+        -------
+
+        """
+        # TO/NOW - Doc and check
+
+        # Get current index and item
+        current_index = self.currentIndex()
+        if isinstance(current_index, QtCore.QModelIndex) is False:
+            return False, 'Current index is not QModelIndex instance, but %s.' % str(type(current_index))
+
+        assert (isinstance(current_index, QtCore.QModelIndex))
+
+        current_item = self.model().itemFromIndex(current_index)
+        if isinstance(current_item, QtGui.QStandardItem) is False:
+            return False, 'Current item is not QStandardItem instance, but %s.' % str(type(current_item))
+        assert (isinstance(current_item, QtGui.QStandardItem))
+
+        ws_name = str(current_item.text())
+
+        python_cmd = "ws = mtd['%s']" % ws_name
+
+        if self.parent_window is not None:
+            self.parent_window.set_ipython_script(python_cmd)
+
+        return
+
+    def set_parent_window(self, parent_window):
+        """
+
+        Parameters
+        ----------
+        parent_window
+
+        Returns
+        -------
+
+        """
+        # TODO/NOW - Doc and check
+        self.parent_window = parent_window
+
+        return
+
+
 class GofRTree(base.CustomizedTreeView):
     """ Tree to record G(R) workspaces
     """

@@ -84,41 +84,13 @@ class MantidIPythonWidget(RichIPythonWidget):
         self.kernel_manager = kernel_manager
         self.kernel_client = kernel_client
 
+    def execute(self, source=None, hidden=False, interactive=False):
+        print 'hi jack!'
+        super(RichIPythonWidget, self).execute(source, hidden, interactive)
+
     def write_command(self, command):
         self._store_edits()
         self.input_buffer = command
         return
 
-    def history_previous(self, substring='', as_prefix=True):
-        """ If possible, set the input buffer to a previous history item.
-
-            Parameters
-            ----------
-            substring : str, optional
-                If specified, search for an item with this substring.
-            as_prefix : bool, optional
-                If True, the substring must match at the beginning (default).
-
-            Returns
-            -------
-            Whether the input buffer was changed.
-        """
-        print 'Am I here?'
-        index = self._history_index
-        replace = False
-        while index > 0:
-                index -= 1
-                history = self._get_edited_history(index)
-                if (as_prefix and history.startswith(substring)) \
-                        or (not as_prefix and substring in history):
-                    replace = True
-                    break
-
-        if replace:
-                self.input_buffer += ' ... da da da'
-                self._store_edits()
-                self._history_index = index
-                self.input_buffer = history + '... da ddd'
-
-        return replace
 

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_mainWindow.ui'
 #
-# Created: Thu Jun  9 14:56:05 2016
+# Created: Fri Jun 10 16:32:06 2016
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -196,14 +196,13 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.addLayout(self.verticalLayout_4)
         self.verticalLayout_6.addLayout(self.horizontalLayout_2)
         self.horizontalLayout_4.addLayout(self.verticalLayout_6)
-        self.treeWidget_braggWSList = QtGui.QTreeWidget(self.tab_bragg)
+        self.treeWidget_braggWSList = BraggTree(self.tab_bragg)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.treeWidget_braggWSList.sizePolicy().hasHeightForWidth())
         self.treeWidget_braggWSList.setSizePolicy(sizePolicy)
         self.treeWidget_braggWSList.setObjectName(_fromUtf8("treeWidget_braggWSList"))
-        self.treeWidget_braggWSList.headerItem().setText(0, _fromUtf8("1"))
         self.horizontalLayout_4.addWidget(self.treeWidget_braggWSList)
         self.tabWidget.addTab(self.tab_bragg, _fromUtf8(""))
         self.tab_gR = QtGui.QWidget()
@@ -341,7 +340,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuFile.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -400,5 +399,5 @@ class Ui_MainWindow(object):
         self.actionQuit.setText(_translate("MainWindow", "Quit", None))
         self.actionQuit.setShortcut(_translate("MainWindow", "Ctrl+Q", None))
 
-from graphicviewlib import SofQView, BraggView, GofRView
-from treelib import GofRTree
+from graphicviewlib import BraggView, SofQView, GofRView
+from treelib import GofRTree, BraggTree

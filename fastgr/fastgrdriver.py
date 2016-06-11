@@ -87,9 +87,12 @@ class FastGRDriver(object):
         # TODO/NOW : check and doc!
 
         ws_name = 'bank%d' % bank
-        bank_ws = AnalysisDataService.retrieve(ws_name)
-        mtd.
+        # TODO: check existence
+        mtd.ConvertToPointData(InputWorkspace=ws_name, OutputWorkspace=ws_name)
 
+        bank_ws = AnalysisDataService.retrieve(ws_name)
+
+        return bank_ws.readX(0), bank_ws.readY(0), bank_ws.readE(0)
 
     def get_gr(self, min_q, max_q):
         """ Get G(r)

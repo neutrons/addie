@@ -83,6 +83,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         self.ui.comboBox_xUnit.clear()
         self.ui.comboBox_xUnit.addItems(['TOF', ])
 
+        self.ui.treeWidget_braggWSList.set_parent_window(self)
+
         return
 
     def do_generate_gr(self):
@@ -134,7 +136,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         # plot
         self.ui.checkBox_bank1.setChecked(True)
         vec_x, vec_y, vec_e = self._myController.get_bragg_data(bank=1)
-        self.ui.graphicsView_bragg.add_plot_1d(vec_x, vec_y, vec_e)
+        self.ui.graphicsView_bragg.plot_bragg(vec_x, vec_y, vec_e, 'TOF')
+
+        # add to tree
+        banks_list = ['bank1', 'bank2', 'bank3', 'bank4']
+        self.ui.treeWidget_braggWSList.add_bragg_ws_group(self._gssGroupName, banks_list)
 
         return
 
@@ -230,6 +236,22 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
 
         # plot
         self.ui.graphicsView_gr.plot_gr(vec_q, vec_y, vec_se, sq_unit)
+
+        return
+
+    def set_ipython_script(self, script):
+        """
+
+        Parameters
+        ----------
+        script
+
+        Returns
+        -------
+
+        """
+        # TODO/NOW - Doc and check
+        self.ui.dockWidget_ipython.iPythonWidget.write_command(script)
 
         return
 

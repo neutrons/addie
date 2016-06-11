@@ -15,6 +15,26 @@ class BraggView(base.MplGraphicsView):
 
         return
 
+    def plot_bragg(self, vec_x, vec_y, vec_e, unit):
+        """
+
+        Parameters
+        ----------
+        vec_x
+        vec_y
+        vec_e
+        unit
+
+        Returns
+        -------
+
+        """
+        # TODO/NOW - Doc and check
+        self.add_plot_1d(vec_x, vec_y, vec_e, color='blue', x_label=unit, y_label='I',
+                         marker='.')
+
+        return
+
 
 class GofRView(base.MplGraphicsView):
     """
