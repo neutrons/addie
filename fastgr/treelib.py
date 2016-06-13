@@ -78,6 +78,8 @@ class BraggTree(base.CustomizedTreeView):
         action_ipython.triggered.connect(self.do_copy_to_ipython)
         self.addAction(action_ipython)
 
+        self.parent_window = None
+
         return
 
     def add_bragg_ws_group(self, ws_group_name, bank_name_list):
@@ -169,11 +171,10 @@ class GofRTree(base.CustomizedTreeView):
         action_plot.triggered.connect(self.do_plot_gr)
         self.addAction(action_plot)
 
-        # Disable all the actions
-        m_actions = self.actions()
-        for m_action in m_actions:
-            if str(m_action.text()) != 'Info' and str(m_action.text()) != 'Plot':
-                m_action.setEnabled(False)
+        # add actions
+        action_ipython = QtGui.QAction('To IPython', self)
+        action_ipython.triggered.connect(self.do_copy_to_ipython)
+        self.addAction(action_ipython)
 
         self._mainWindow = None
 
@@ -198,6 +199,56 @@ class GofRTree(base.CustomizedTreeView):
         # Add workspace name as a leaf
         child_value = gr_ws_name
         self.add_child_main_item(main_leaf_value, child_value)
+
+        return
+
+    def add_temp_ws(self, ws_name):
+        """
+
+        Parameters
+        ----------
+        ws_name
+
+        Returns
+        -------
+
+        """
+        self.add_child_main_item('workspaces', ws_name)
+
+    def do_copy_to_ipython(self):
+        """
+
+        Returns
+        -------
+
+        """
+        # TODO/NOW - Doc and check
+
+        # Get current index and item
+        current_index = self.currentIndex()
+        if isinstance(current_index, QtCore.QModelIndex) is False:
+            return False, 'Current index is not QModelIndex instance, but %s.' % str(type(current_index))
+
+        assert (isinstance(current_index, QtCore.QModelIndex))
+
+        current_item = self.model().itemFromIndex(current_index)
+        if isinstance(current_item, QtGui.QStandardItem) is False:
+            return False, 'Current item is not QStandardItem instance, but %s.' % str(type(current_item))
+        assert (isinstance(current_item, QtGui.QStandardItem))
+
+        # get the workspace name.  if it is on main node, then use its child's value
+        if current_item.parent() is None:
+            # main node.  access its child and use child's name
+            only_child = current_item.child(0)
+            ws_name = only_child.text()
+        else:
+            # workspace name node.
+            ws_name = str(current_item.text())
+
+        python_cmd = "ws = mtd['%s']" % ws_name
+
+        if self._mainWindow is not None:
+            self._mainWindow.set_ipython_script(python_cmd)
 
         return
 

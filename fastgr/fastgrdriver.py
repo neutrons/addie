@@ -122,6 +122,15 @@ class FastGRDriver(object):
 
         return bank_ws.readX(0), bank_ws.readY(0), bank_ws.readE(0)
 
+    def get_current_workspaces(self):
+        """
+        Get current workspaces' names
+        Returns
+        -------
+        a list of strings
+        """
+        return AnalysisDataService.getObjectNames()
+
     def get_gr(self, min_q, max_q):
         """ Get G(r)
         Parameters

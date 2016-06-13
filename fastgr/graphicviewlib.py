@@ -82,10 +82,9 @@ class BraggView(base.MplGraphicsView):
             # add the new plot
             bank_color = self._bankColorDict[bank_id]
             vec_x, vec_y, vec_e = bank_data_list[index]
-            plot_id = self.add_plot_1d(vec_x, vec_y, line_style='.', color=bank_color,
+            plot_id = self.add_plot_1d(vec_x, vec_y, marker='.', color=bank_color,
                                        x_label=unit, y_label='I(%s)' % unit)
             self._bankPlotDict[bank_id] = plot_id
-            print '[DB...BAT] add line with ID = %d to bank %d.' % (plot_id, bank_id)
         # END-FOR (bank id)
 
         return
@@ -106,9 +105,24 @@ class BraggView(base.MplGraphicsView):
         for bank_id in bank_id_list:
             bank_line_id = self._bankPlotDict[bank_id]
             # remove from canvas
-            self.remove_line(bank_line_id)
-            # remove from daa structure
+            try:
+                self.remove_line(bank_line_id)
+            except ValueError as val_error:
+                error_message = 'Unable to remove bank %d plot (ID = %d) due to %s.' % (bank_id,
+                                                                                        bank_line_id,
+                                                                                        str(val_error))
+                raise ValueError(error_message)
+            # remove from data structure
+            self._bankPlotDict[bank_id] = False
         # END-FOR
+
+        # debug output
+        db_buf = ''
+        for bank_id in self._bankPlotDict:
+            db_buf += '%d: %s \t' % (bank_id, str(self._bankPlotDict[bank_id]))
+        print 'After removing %s, Buffer: %s.' % (str(bank_id_list), db_buf)
+
+        return
 
     def reset(self):
         """
@@ -125,6 +139,7 @@ class BraggView(base.MplGraphicsView):
 
         return
 
+
 class GofRView(base.MplGraphicsView):
     """
     Graphics view for G(R)
@@ -135,9 +150,15 @@ class GofRView(base.MplGraphicsView):
         """
         base.MplGraphicsView.__init__(self, parent)
 
+        # class variable containers
+        self._grDict = dict()
+
+        self._colorList = ['black', 'red', 'blue', 'green', 'brown', 'orange']
+        self._colorIndex = 0
+
         return
 
-    def plot_gr(self, vec_r, vec_g, vec_e):
+    def plot_gr(self, key_plot, vec_r, vec_g, vec_e=None, plot_error=False):
         """
         Plot G(r)
         Parameters
@@ -149,8 +170,35 @@ class GofRView(base.MplGraphicsView):
         -------
 
         """
-        line_id = self.add_plot_1d(vec_r, vec_g)
-        self._grList.append(line_id)
+        # TODO/NOW - Doc and check
+        if plot_error:
+            self.add_plot_1d(vec_r, vec_g, vec_e)
+            raise NotImplementedError('ASAP')
+        else:
+            line_id = self.add_plot_1d(vec_r, vec_g, marker='.',
+                                       color=self._colorList[self._colorIndex % len(self._colorList)])
+            self._colorIndex += 1
+            self._grDict[key_plot] = line_id
+
+        return
+
+    def remove_gr(self, key_plot):
+        """
+
+        Parameters
+        ----------
+        key_plot
+
+        Returns
+        -------
+
+        """
+        # TODO/NOW - Doc and check
+        line_id = self._grDict[key_plot]
+
+        self.remove_line(line_id)
+
+        del self._grDict[line_id]
 
         return
 
@@ -187,7 +235,7 @@ class SofQView(base.MplGraphicsView):
         -------
 
         """
-        self.add_plot_1d(vec_r, vec_s, vec_e, color='blue', x_label='Q', y_label='S(Q)',
+        self.add_plot_1d(vec_r, vec_s, color='blue', x_label='Q', y_label='S(Q)',
                          marker='.')
 
         return

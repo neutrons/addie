@@ -92,6 +92,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         self.ui.comboBox_xUnit.addItems(['TOF', ])
 
         self.ui.treeWidget_braggWSList.set_parent_window(self)
+        self.ui.treeWidget_grWsList.set_main_window(self)
+
+        self.ui.dockWidget_ipython.iPythonWidget.set_main_application(self)
 
         return
 
@@ -104,8 +107,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         """
         # get data
         # calculate the G(R)
-        min_r = float(self.ui.doubleSpinBoxQmin.value())
-        max_r = float(self.ui.doubleSpinBoxQmax.value())
+        min_r = float(self.ui.doubleSpinBoxRmin.value())
+        max_r = float(self.ui.doubleSpinBoxRmax.value())
         delta_r = float(self.ui.doubleSpinBoxDelR.value())
 
         min_q = float(self.ui.doubleSpinBoxQmin.value())
@@ -115,7 +118,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
 
         # plot G(R)
         vec_r, vec_g, vec_ge = self._myController.get_gr(min_q, max_q)
-        self.ui.graphicsView_gr.plot_gr(vec_r, vec_g, vec_ge)
+        key_plot = gr_ws_name
+        self.ui.graphicsView_gr.plot_gr(key_plot, vec_r, vec_g, vec_ge, False)
 
         # add to tree
         gr_param_str = 'Q: (%.3f, %.3f)' % (min_q, max_q)
@@ -265,7 +269,29 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
             raise RuntimeError('None of S(Q), S(Q)-1 or Q(S(Q)-1) is chosen.')
 
         # plot
-        self.ui.graphicsView_gr.plot_gr(vec_q, vec_y, vec_se, sq_unit)
+        self.ui.graphicsView_sq.plot_sq(vec_q, vec_y, vec_se, sq_unit)
+
+        return
+
+    def process_workspace_change(self, new_ws_list):
+        """
+
+        Returns
+        -------
+
+        """
+        # TODO/NOW - Check & doc & figure out what to do!
+        print 'current tab = ', self.ui.tabWidget.currentIndex(), self.ui.tabWidget.currentWidget(),
+        print self.ui.tabWidget.currentWidget().objectName()
+
+        print 'current workspaces: ', self._myController.get_current_workspaces()
+
+        # add to tree
+        if len(new_ws_list) > 0:
+            if self.ui.tabWidget.currentWidget().objectName() == 'tab_gR':
+                self.ui.treeWidget_grWsList.add_main_item('workspaces', append=True)
+                for new_ws in new_ws_list:
+                    self.ui.treeWidget_grWsList.add_temp_ws(new_ws)
 
         return
 

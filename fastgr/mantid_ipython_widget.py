@@ -15,6 +15,8 @@ from IPython.qt.console.rich_ipython_widget import RichIPythonWidget
 from IPython.qt.inprocess import QtInProcessKernelManager
 #import qtconsole.inprocess
 
+from mantid.api import AnalysisDataService as mtd
+
 from PyQt4 import QtGui
 
 
@@ -84,9 +86,53 @@ class MantidIPythonWidget(RichIPythonWidget):
         self.kernel_manager = kernel_manager
         self.kernel_client = kernel_client
 
+        self._mainApplication = None
+
+        return
+
     def execute(self, source=None, hidden=False, interactive=False):
-        print 'hi jack!'
+        """
+        Override super's execute() in order to emit customized signals to main application
+        Parameters
+        ----------
+        source
+        hidden
+        interactive
+
+        Returns
+        -------
+
+        """
+        # record previous information
+        if self._mainApplication is not None:
+            prev_workspace_names = set(mtd.getObjectNames())
+        else:
+            prev_workspace_names = None
+
         super(RichIPythonWidget, self).execute(source, hidden, interactive)
+
+        if self._mainApplication is not None:
+            post_workspace_names = set(mtd.getObjectNames())
+            diff_set = post_workspace_names - prev_workspace_names
+            self._mainApplication.process_workspace_change(diff_set)
+
+        return
+
+    def set_main_application(self, main_app):
+        """
+
+        Parameters
+        ----------
+        main_app
+
+        Returns
+        -------
+
+        """
+        # TODO/NOW - Doc and check
+        self._mainApplication = main_app
+
+        return
 
     def write_command(self, command):
         self._store_edits()
