@@ -5,7 +5,7 @@ import numpy as np
 # add a python path for local development
 sys.path.append('/Users/wzz/MantidBuild/debug/bin/')
 
-import mantid.simpleapi as mtd
+import mantid.simpleapi as simpleapi
 from mantid.api import AnalysisDataService
 
 
@@ -21,6 +21,8 @@ class FastGRDriver(object):
         """
         # name of the MatrixWorkspace for S(Q)
         self._currSqWsName = ''
+        # dictionary to record workspace index of a certain S(Q)
+        self._sqIndexDict = dict()
 
         # dictionary of the workspace with rmin, rmax and delta r setup
         self._grWsIndex = 0
@@ -52,7 +54,7 @@ class FastGRDriver(object):
 
         # set up the parameters for FourierTransform
         # output workspace
-        gr_ws_name = 'G(R)_%s' % self._currSqWsName
+        gr_ws_name = 'G(R)_%s_%d' % (self._currSqWsName, self._sqIndexDict[self._currSqWsName])
         kwargs = {'OutputWorkspace': gr_ws_name,
                   'Qmin': min_q,
                   'Qmax': max_q,
@@ -66,17 +68,31 @@ class FastGRDriver(object):
 
         # do the FFT
         print '[DB]: Input Sof Q Type = |', sq_ws.YUnitLabel(), '|'
-        mtd.PDFFourierTransform(InputWorkspace=self._currSqWsName,
-                                InputSofQType=sofq_type,
-                                **kwargs)
+        simpleapi.PDFFourierTransform(InputWorkspace=self._currSqWsName,
+                                      InputSofQType=sofq_type,
+                                      **kwargs)
 
         # check
         assert AnalysisDataService.doesExist(gr_ws_name), 'Failed to do Fourier Transform.'
         self._grWsNameDict[(min_q, max_q)] = gr_ws_name
 
+        # update state variable
+        self._sqIndexDict[self._currSqWsName] += 1
+
         return gr_ws_name
 
-    def get_bragg_data(self, bank):
+    def conjoin_banks(self):
+        """
+        Conjoin all 6 single banks
+        Returns:
+
+        """
+        simpleapi.ConjoinWorkspaces()
+
+        return
+
+    @staticmethod
+    def get_bragg_data(bank, x_unit):
         """ Get Bragg diffraction data of 1 bank
         Args:
             bank:
@@ -84,12 +100,24 @@ class FastGRDriver(object):
         Returns:
         3-tuple of numpy 1D array for X, Y and E
         """
-        # TODO/NOW : check and doc!
+        # check
+        assert isinstance(bank, int) and bank > 0
 
+        # construct bank workspace name
         ws_name = 'bank%d' % bank
-        # TODO: check existence
-        mtd.ConvertToPointData(InputWorkspace=ws_name, OutputWorkspace=ws_name)
+        assert AnalysisDataService.doesExist(ws_name), 'Workspace %s does not exist.' % ws_name
 
+        if x_unit != 'TOF':
+            bank_ws = AnalysisDataService.retrieve(ws_name)
+            curr_unit = bank_ws.getAxis(0).getUnitID()
+            if curr_unit != x_unit:
+                simpleapi.ConvertUnit(InputWorkspace=ws_name, OutputWorkspace=ws_name,
+                                      TargetUnit=x_unit)
+
+        # convert to point data for plotting
+        simpleapi.ConvertToPointData(InputWorkspace=ws_name, OutputWorkspace=ws_name)
+
+        # get workspace
         bank_ws = AnalysisDataService.retrieve(ws_name)
 
         return bank_ws.readX(0), bank_ws.readY(0), bank_ws.readE(0)
@@ -131,7 +159,8 @@ class FastGRDriver(object):
 
         return out_ws.readX(0), out_ws.readY(0), out_ws.readE(0)
 
-    def load_bragg_file(self, file_name):
+    @staticmethod
+    def load_bragg_file(file_name):
         """
         Load Bragg diffraction file (including 3-column data file, GSAS file) for Rietveld
         Parameters
@@ -146,10 +175,10 @@ class FastGRDriver(object):
         base_file_name = os.path.basename(file_name).lower()
         gss_ws_name = os.path.basename(file_name).split('.')[0]
         if base_file_name.endswith('.gss') or base_file_name.endswith('.gsa'):
-            mtd.LoadGSS(Filename=file_name,
+            simpleapi.LoadGSS(Filename=file_name,
                         OutputWorkspace=gss_ws_name)
         elif base_file_name.endswith('.dat'):
-            mtd.LoadAscii(Filename=file_name,
+            simpleapi.LoadAscii(Filename=file_name,
                           OutputWorkspace=gss_ws_name,
                           Unit='TOF')
         else:
@@ -174,12 +203,14 @@ class FastGRDriver(object):
         """
         out_ws_name = os.path.basename(file_name).split('.')[0]
 
-        mtd.LoadAscii(Filename=file_name,
+        simpleapi.LoadAscii(Filename=file_name,
                       OutputWorkspace=out_ws_name,
                       Unit='MomentumTransfer')
         assert AnalysisDataService.doesExist(out_ws_name), 'Unable to load S(Q) file %s.' % file_name
 
+        # set to the current S(Q) workspace name
         self._currSqWsName = out_ws_name
+        self._sqIndexDict[self._currSqWsName] = 0
 
         return
 
@@ -212,7 +243,8 @@ class FastGRDriver(object):
             for i_ws in range(num_spec):
                 # split this one to a single workspace
                 out_ws_name = 'bank%d' % (i_ws+1)
-                mtd.CropWorkspace(InputWorkspace=gss_ws_name,
+                # also can use ExtractSpectra()
+                simpleapi.CropWorkspace(InputWorkspace=gss_ws_name,
                                   OutputWorkspace=out_ws_name,
                                   StartWorkspaceIndex=i_ws, EndWorkspaceIndex=i_ws)
                 assert AnalysisDataService.doesExist(out_ws_name)
@@ -222,7 +254,7 @@ class FastGRDriver(object):
 
         # group all the workspace
         ws_group_name = gss_ws_name + '_group'
-        mtd.GroupWorkspaces(InputWorkspaces=ws_list,
+        simpleapi.GroupWorkspaces(InputWorkspaces=ws_list,
                             OutputWorkspace=ws_group_name)
 
         return ws_group_name

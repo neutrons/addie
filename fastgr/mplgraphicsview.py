@@ -961,7 +961,10 @@ class Qt4MplCanvas(FigureCanvas):
             self._lineDict[line_key] = r[0]
             self._lineIndex += 1
         else:
-            print "Impoooooooooooooooosible!  Return from plot is a %d-tuple. " % (len(r))
+            msg = 'Return from plot is a %d-tuple: %s.. \n' % (len(r), r)
+            for i_r in range(len(r)):
+                msg += 'r[%d] = %s\n' % (i_r, str(r[i_r]))
+            raise NotImplementedError(msg)
 
         # Flush/commit
         self.draw()
@@ -1199,7 +1202,11 @@ class Qt4MplCanvas(FigureCanvas):
         assert isinstance(lines, list)
 
         if plot_key in self._lineDict:
-            self.axes.lines.remove(self._lineDict[plot_key])
+            try:
+                self.axes.lines.remove(self._lineDict[plot_key])
+            except RuntimeError as r_error:
+                error_message = 'Unable to remove to 1D line (ID=%d) due to %s.' % (plot_key, str(r_error))
+                raise RuntimeError(error_message)
             self._lineDict[plot_key] = None
         else:
             raise RuntimeError('Line with ID %s is not recorded.' % plot_key)

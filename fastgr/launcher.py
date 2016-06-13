@@ -67,6 +67,14 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         self.connect(self.ui.pushButton_saveGR, QtCore.SIGNAL('clicked()'),
                      self.do_save_GR)
 
+        # organize widgets group
+        self.braggBankWidgets = {1: self.ui.checkBox_bank1,
+                                 2: self.ui.checkBox_bank2,
+                                 3: self.ui.checkBox_bank3,
+                                 4: self.ui.checkBox_bank4,
+                                 5: self.ui.checkBox_bank5,
+                                 6: self.ui.checkBox_bank6}
+
         # define the driver
         self._myController = driver.FastGRDriver()
 
@@ -133,13 +141,14 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         # split
         self._gssGroupName = self._myController.split_to_single_bank(gss_ws_name)
 
-        # plot
+        # clear all lines
+        self.ui.graphicsView_bragg.reset()
+
+        # plot and will triggered the graph
         self.ui.checkBox_bank1.setChecked(True)
-        vec_x, vec_y, vec_e = self._myController.get_bragg_data(bank=1)
-        self.ui.graphicsView_bragg.plot_bragg(vec_x, vec_y, vec_e, 'TOF')
 
         # add to tree
-        banks_list = ['bank1', 'bank2', 'bank3', 'bank4']
+        banks_list = ['bank1', 'bank2', 'bank3', 'bank4', 'bank5', 'bank6']
         self.ui.treeWidget_braggWSList.add_bragg_ws_group(self._gssGroupName, banks_list)
 
         return
@@ -195,16 +204,37 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
 
     def evt_plot_bragg_bank(self):
         """
-
+        Find out which bank will be plot
         Returns
         -------
 
         """
-        print '[Plot] Bragg Bank ... '
-
+        # check
         assert self._gssGroupName is not None
 
-        # get data via driver one by one
+        # get current unit
+        x_unit = str(self.ui.comboBox_xUnit.currentText())
+
+        # get bank IDs to plot
+        plot_bank_list = list()
+        for bank_id in self.braggBankWidgets.keys():
+            bank_checkbox = self.braggBankWidgets[bank_id]
+            if bank_checkbox.isChecked():
+                plot_bank_list.append(bank_id)
+            # END-IF
+        # END-FOR
+
+        # get the list of banks to plot or remove
+        new_bank_list, remove_bank_list = self.ui.graphicsView_bragg.check_banks(plot_bank_list)
+        new_data_list = list()
+        for bank_id in new_bank_list:
+            vec_x, vec_y, vec_e = self._myController.get_bragg_data(bank_id, x_unit)
+            new_data_list.append((vec_x, vec_y, vec_e))
+        # END-FOR
+
+        # remove unused and plot new
+        self.ui.graphicsView_bragg.remove_banks(remove_bank_list)
+        self.ui.graphicsView_bragg.plot_banks(new_bank_list, new_data_list, x_unit)
 
         return
 
