@@ -223,6 +223,15 @@ class SofQView(base.MplGraphicsView):
 
         return
 
+    def is_boundary_shown(self):
+        """
+
+        Returns
+        -------
+
+        """
+        return self._showBoundary
+
     def plot_sq(self, vec_r, vec_s, vec_e, sq_y_label):
         """
         Plot S(Q)

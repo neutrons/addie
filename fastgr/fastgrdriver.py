@@ -154,6 +154,22 @@ class FastGRDriver(object):
 
         return gr_ws.readX(0), gr_ws.readY(0), gr_ws.readE(0)
 
+    def get_gr_by_ws(self, gr_ws_name):
+        """
+        Parameters
+        ----------
+        gr_ws_name
+
+        Returns
+        -------
+
+        """
+        assert AnalysisDataService.doesExist(gr_ws_name), 'Workspace %s does not exist.' % gr_ws_name
+
+        gr_ws = AnalysisDataService.retrieve(gr_ws_name)
+
+        return gr_ws.readX(0), gr_ws.readY(0), gr_ws.readE(0)
+
     def get_sq(self):
         """
         Get S(Q)

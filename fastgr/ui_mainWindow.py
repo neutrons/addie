@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_mainWindow.ui'
 #
-# Created: Mon Jun 13 11:23:22 2016
+# Created: Thu Jun 16 17:26:55 2016
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -313,6 +313,9 @@ class Ui_MainWindow(object):
         self.doubleSpinBoxRmax.setObjectName(_fromUtf8("doubleSpinBoxRmax"))
         self.gridLayout_3.addWidget(self.doubleSpinBoxRmax, 1, 4, 1, 1)
         self.verticalLayout_3.addLayout(self.gridLayout_3)
+        self.pushButton_clearGrCanvas = QtGui.QPushButton(self.tab_gR)
+        self.pushButton_clearGrCanvas.setObjectName(_fromUtf8("pushButton_clearGrCanvas"))
+        self.verticalLayout_3.addWidget(self.pushButton_clearGrCanvas)
         self.pushButton_saveGR = QtGui.QPushButton(self.tab_gR)
         self.pushButton_saveGR.setObjectName(_fromUtf8("pushButton_saveGR"))
         self.verticalLayout_3.addWidget(self.pushButton_saveGR)
@@ -333,6 +336,8 @@ class Ui_MainWindow(object):
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuFile = QtGui.QMenu(self.menubar)
         self.menuFile.setObjectName(_fromUtf8("menuFile"))
+        self.menuHelp = QtGui.QMenu(self.menubar)
+        self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(MainWindow)
         self.statusbar.setObjectName(_fromUtf8("statusbar"))
@@ -346,8 +351,12 @@ class Ui_MainWindow(object):
         MainWindow.addDockWidget(QtCore.Qt.DockWidgetArea(8), self.dockWidget_ipython)
         self.actionQuit = QtGui.QAction(MainWindow)
         self.actionQuit.setObjectName(_fromUtf8("actionQuit"))
+        self.actionShow_Cheat_Sheet = QtGui.QAction(MainWindow)
+        self.actionShow_Cheat_Sheet.setObjectName(_fromUtf8("actionShow_Cheat_Sheet"))
         self.menuFile.addAction(self.actionQuit)
+        self.menuHelp.addAction(self.actionShow_Cheat_Sheet)
         self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
         self.tabWidget.setCurrentIndex(2)
@@ -405,11 +414,14 @@ class Ui_MainWindow(object):
         self.labelRmin.setText(_translate("MainWindow", "Rmin", None))
         self.labeldelR.setText(_translate("MainWindow", "deltaR", None))
         self.labelRmax.setText(_translate("MainWindow", "Rmax", None))
+        self.pushButton_clearGrCanvas.setText(_translate("MainWindow", "Clear Canvas", None))
         self.pushButton_saveGR.setText(_translate("MainWindow", "Save GR", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_gR), _translate("MainWindow", "Calculate G(R)", None))
         self.menuFile.setTitle(_translate("MainWindow", "File", None))
+        self.menuHelp.setTitle(_translate("MainWindow", "Help", None))
         self.actionQuit.setText(_translate("MainWindow", "Quit", None))
         self.actionQuit.setShortcut(_translate("MainWindow", "Ctrl+Q", None))
+        self.actionShow_Cheat_Sheet.setText(_translate("MainWindow", "Show Cheat Sheet", None))
 
 from graphicviewlib import BraggView, SofQView, GofRView
 from treelib import GofRTree, BraggTree

@@ -66,6 +66,17 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
                      self.do_generate_gr)
         self.connect(self.ui.pushButton_saveGR, QtCore.SIGNAL('clicked()'),
                      self.do_save_GR)
+        self.connect(self.ui.pushButton_clearGrCanvas, QtCore.SIGNAL('clicked()'),
+                     self.do_clear_gr)
+
+        # interaction with canvas
+
+        self.ui.graphicsView_sq.canvas().mpl_connect('button_press_event',
+                                                     self.on_mouse_press_event)
+        self.ui.graphicsView_sq.canvas().mpl_connect('button_release_event',
+                                                     self.on_mouse_release_event)
+        self.ui.graphicsView_sq.canvas().mpl_connect('motion_notify_event',
+                                                     self.on_mouse_motion)
 
         # organize widgets group
         self.braggBankWidgets = {1: self.ui.checkBox_bank1,
@@ -79,6 +90,53 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         self._myController = driver.FastGRDriver()
 
         self._gssGroupName = None
+
+        # some controlling variables
+
+
+        return
+
+    def on_mouse_press_event(self, event):
+        """
+
+        Returns
+        -------
+
+        """
+        print 'Pressed @ (%.5f, %.5f)' % (event.xdata, event.ydata)
+
+        if self.ui.graphicsView_sq.is_boundary_shown():
+            self.ui.graphicsView_sq.set_mouse_pressed_position(event.xdata, event.ydata)
+
+        return
+
+    def on_mouse_release_event(self, event):
+        """
+
+        Parameters
+        ----------
+        event
+
+        Returns
+        -------
+
+        """
+        print 'Released'
+
+        if self.ui.graphicsView_sq.is_boundary_shown():
+            self.ui.graphicsView_sq.set_mouse_current_position(event.xdata, event.ydata)
+
+        return
+
+    def on_mouse_motion(self, event):
+        """
+
+        Returns
+        -------
+
+        """
+        if self.ui.graphicsView_sq.is_boundary_shown():
+            self.ui.graphicsView_sq.set_mouse_current_position(event.xdata, event.ydata)
 
         return
 
@@ -95,6 +153,17 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         self.ui.treeWidget_grWsList.set_main_window(self)
 
         self.ui.dockWidget_ipython.iPythonWidget.set_main_application(self)
+
+        return
+
+    def do_clear_gr(self):
+        """
+        Clear G(r) canvas
+        Returns
+        -------
+
+        """
+        self.ui.graphicsView_gr.clear_all_lines()
 
         return
 
@@ -124,6 +193,27 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         # add to tree
         gr_param_str = 'Q: (%.3f, %.3f)' % (min_q, max_q)
         self.ui.treeWidget_grWsList.add_gr(gr_param_str, gr_ws_name)
+
+        return
+
+    def plot_gr(self, gr_ws_name_list):
+        """
+        Plot G(r) by its name (workspace as protocol)
+        Parameters
+        ----------
+        gr_ws_name
+
+        Returns
+        -------
+
+        """
+        # TODO/NOW - Docs and check
+
+        # plot G(R)
+        for gr_ws_name in gr_ws_name_list:
+            vec_r, vec_g, vec_ge = self._myController.get_gr_by_ws(gr_ws_name)
+            key_plot = gr_ws_name
+            self.ui.graphicsView_gr.plot_gr(key_plot, vec_r, vec_g, vec_ge, False)
 
         return
 

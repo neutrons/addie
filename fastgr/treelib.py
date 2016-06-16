@@ -268,11 +268,15 @@ class GofRTree(base.CustomizedTreeView):
         # sort
         leaf_list.sort()
 
-        print '[DB...BAT] selected leaves: ', leaf_list
+        # FIXME/LATER - replace this by signal
+        if self._mainWindow is not None:
+            self._mainWindow.plot_gr(leaf_list)
+        else:
+            raise NotImplementedError('Main windown has not been set up!')
 
-        print '[ASAP] Develop messaging mechanism to make main window to re-plot'
+        # print '[DB...BAT] selected leaves: ', leaf_list
 
-        return leaf_list
+        return
 
     def get_current_run(self):
         """ Get current run selected by mouse
