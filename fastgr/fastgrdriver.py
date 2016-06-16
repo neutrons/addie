@@ -208,20 +208,23 @@ class FastGRDriver(object):
 
         Returns
         -------
-        2-tuple as load-status, error-mesage
+        2-tuple range of Q
         """
         out_ws_name = os.path.basename(file_name).split('.')[0]
 
-        simpleapi.LoadAscii(Filename=file_name,
-                      OutputWorkspace=out_ws_name,
-                      Unit='MomentumTransfer')
+        simpleapi.LoadAscii(Filename=file_name, OutputWorkspace=out_ws_name, Unit='MomentumTransfer')
         assert AnalysisDataService.doesExist(out_ws_name), 'Unable to load S(Q) file %s.' % file_name
 
         # set to the current S(Q) workspace name
         self._currSqWsName = out_ws_name
         self._sqIndexDict[self._currSqWsName] = 0
 
-        return
+        # get range of Q from the loading
+        sq_ws = AnalysisDataService.retrieve(out_ws_name)
+        q_min = sq_ws.readX(0)[0]
+        q_max = sq_ws.readX(0)[-1]
+
+        return q_min, q_max
 
     def split_to_single_bank(self, gss_ws_name):
         """

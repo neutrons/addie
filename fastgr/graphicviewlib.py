@@ -1,3 +1,4 @@
+import numpy as np
 import mplgraphicsview as base
 
 
@@ -222,7 +223,7 @@ class SofQView(base.MplGraphicsView):
 
         return
 
-    def plot_sq(self, vec_r, vec_s, vec_e):
+    def plot_sq(self, vec_r, vec_s, vec_e, sq_y_label):
         """
         Plot S(Q)
         Parameters
@@ -230,12 +231,18 @@ class SofQView(base.MplGraphicsView):
         vec_r
         vec_s
         vec_e
+        sq_y_label :: label for Y-axis
 
         Returns
         -------
 
         """
-        self.add_plot_1d(vec_r, vec_s, color='blue', x_label='Q', y_label='S(Q)',
+        # check
+        assert isinstance(vec_r, np.ndarray) and isinstance(vec_s, np.ndarray)
+        assert isinstance(sq_y_label, str)
+
+        self.clear_all_lines()
+        self.add_plot_1d(vec_r, vec_s, color='blue', x_label='Q', y_label=sq_y_label,
                          marker='.')
 
         return

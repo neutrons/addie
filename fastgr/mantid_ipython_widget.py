@@ -1,6 +1,10 @@
 import threading
 import types
 import inspect
+import sys
+import os
+
+sys.path.append(os.path.join(os.path.expanduser('~/MantidBuild/debug/bin/')))
 
 
 # IPython monkey patches the  pygments.lexer.RegexLexer.get_tokens_unprocessed method
@@ -120,23 +124,39 @@ class MantidIPythonWidget(RichIPythonWidget):
 
     def set_main_application(self, main_app):
         """
-
+        Set the main application to the iPython widget to call
         Parameters
         ----------
-        main_app
+        main_app :: main FastGR application
 
         Returns
         -------
-
+        None
         """
-        # TODO/NOW - Doc and check
+        # check
+        assert main_app is not None
+
+        # set
         self._mainApplication = main_app
 
         return
 
     def write_command(self, command):
+        """
+        Write a command to the iPython console
+        Args:
+            command: string for a python command
+
+        Returns:
+            None
+        """
+        # check
+        assert isinstance(command, str)
+
+        # set
         self._store_edits()
         self.input_buffer = command
+
         return
 
 

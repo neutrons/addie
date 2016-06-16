@@ -54,11 +54,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         # for tab G(R)
         self.connect(self.ui.pushButton_loadSQ, QtCore.SIGNAL('clicked()'),
                      self.do_load_sq)
-        self.connect(self.ui.radioButton_sq, QtCore.SIGNAL('toggled(int)'),
+        self.connect(self.ui.radioButton_sq, QtCore.SIGNAL('toggled(bool)'),
                      self.evt_plot_sq)
-        self.connect(self.ui.radioButton_sq, QtCore.SIGNAL('toggled(int)'),
+        self.connect(self.ui.radioButton_sqm1, QtCore.SIGNAL('toggled(bool)'),
                      self.evt_plot_sq)
-        self.connect(self.ui.radioButton_sq, QtCore.SIGNAL('toggled(int)'),
+        self.connect(self.ui.radioButton_qsqm1, QtCore.SIGNAL('toggled(bool)'),
                      self.evt_plot_sq)
         self.connect(self.ui.pushButton_showQMinMax, QtCore.SIGNAL('clicked()'),
                      self.do_show_sq_bound)
@@ -89,7 +89,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
 
         """
         self.ui.comboBox_xUnit.clear()
-        self.ui.comboBox_xUnit.addItems(['TOF', ])
+        self.ui.comboBox_xUnit.addItems(['TOF', 'dSpacing', 'Q'])
 
         self.ui.treeWidget_braggWSList.set_parent_window(self)
         self.ui.treeWidget_grWsList.set_main_window(self)
@@ -171,11 +171,13 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
             return
 
         # open the file
-        self._myController.load_sq(sq_file_name)
+        q_min, q_max = self._myController.load_sq(sq_file_name)
+
+        # set the UI widgets
+        self.ui.doubleSpinBoxQmin.setValue(q_min)
+        self.ui.doubleSpinBoxQmax.setValue(q_max)
 
         # plot the figure
-        vec_q, vec_s, vec_e = self._myController.get_sq()
-        self.ui.graphicsView_sq.plot_sq(vec_q, vec_s, vec_e)
         self.ui.radioButton_sq.setChecked(True)
 
         # calculate and calculate G(R)
@@ -218,6 +220,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
 
         # get current unit
         x_unit = str(self.ui.comboBox_xUnit.currentText())
+        if x_unit == 'Q':
+            x_unit = 'MomentumTransfer'
 
         # get bank IDs to plot
         plot_bank_list = list()
@@ -261,7 +265,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
             # use S(Q)-1
             sq_unit = 'S(Q)-1'
             vec_y = vec_sq - 1
-        elif self.ui.radioButton_qsqm1:
+        elif self.ui.radioButton_qsqm1.isChecked():
             # use Q(S(Q)-1)
             sq_unit = 'Q(S(Q)-1)'
             vec_y = vec_q * (vec_sq - 1)
