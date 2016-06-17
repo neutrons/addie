@@ -74,11 +74,16 @@ class BraggTree(base.CustomizedTreeView):
         self.init_setup(['Bragg Workspaces'])
 
         # add actions
+        # plot
+        action_plot = QtGui.QAction('Plot', self)
+        action_plot.triggered.connect(self.do_plot_ws)
+        self.addAction(action_plot)
+        # to python
         action_ipython = QtGui.QAction('To IPython', self)
         action_ipython.triggered.connect(self.do_copy_to_ipython)
         self.addAction(action_ipython)
 
-        self.parent_window = None
+        self._mainWindow = None
 
         return
 
@@ -103,6 +108,21 @@ class BraggTree(base.CustomizedTreeView):
 
         for bank_name in bank_name_list:
             self.add_child_main_item(main_leaf_value, bank_name)
+
+        return
+
+    def add_temp_ws(self, ws_name):
+        """
+
+        Parameters
+        ----------
+        ws_name
+
+        Returns
+        -------
+
+        """
+        self.add_child_main_item('workspaces', ws_name)
 
         return
 
@@ -131,12 +151,36 @@ class BraggTree(base.CustomizedTreeView):
 
         python_cmd = "ws = mtd['%s']" % ws_name
 
-        if self.parent_window is not None:
-            self.parent_window.set_ipython_script(python_cmd)
+        if self._mainWindow is not None:
+            self._mainWindow.set_ipython_script(python_cmd)
 
         return
 
-    def set_parent_window(self, parent_window):
+    def do_plot_ws(self):
+        """
+        Add selected runs
+        :return:
+        """
+        item_list = self.get_selected_items()
+        leaf_list = list()
+
+        for item in item_list:
+            leaf = str(item.text())
+            leaf_list.append(leaf)
+        # END-FOR
+
+        # sort
+        leaf_list.sort()
+
+        # FIXME/LATER - replace this by signal
+        if self._mainWindow is not None:
+            self._mainWindow.plot_bragg(leaf_list)
+        else:
+            raise NotImplementedError('Main window has not been set up!')
+
+        return
+
+    def set_main_window(self, parent_window):
         """
 
         Parameters
@@ -148,7 +192,7 @@ class BraggTree(base.CustomizedTreeView):
 
         """
         # TODO/NOW - Doc and check
-        self.parent_window = parent_window
+        self._mainWindow = parent_window
 
         return
 
@@ -167,11 +211,11 @@ class GofRTree(base.CustomizedTreeView):
         self.init_setup(['G(R) Workspaces'])
 
         # Add actions
+        # plot
         action_plot = QtGui.QAction('Plot', self)
         action_plot.triggered.connect(self.do_plot_gr)
         self.addAction(action_plot)
-
-        # add actions
+        # to python
         action_ipython = QtGui.QAction('To IPython', self)
         action_ipython.triggered.connect(self.do_copy_to_ipython)
         self.addAction(action_ipython)

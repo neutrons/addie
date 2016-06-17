@@ -96,7 +96,7 @@ class FastGRDriver(object):
         """ Get Bragg diffraction data of 1 bank
         Args:
             bank:
-
+            x_unit:
         Returns:
         3-tuple of numpy 1D array for X, Y and E
         """
@@ -107,12 +107,13 @@ class FastGRDriver(object):
         ws_name = 'bank%d' % bank
         assert AnalysisDataService.doesExist(ws_name), 'Workspace %s does not exist.' % ws_name
 
-        if x_unit != 'TOF':
-            bank_ws = AnalysisDataService.retrieve(ws_name)
-            curr_unit = bank_ws.getAxis(0).getUnitID()
-            if curr_unit != x_unit:
-                simpleapi.ConvertUnit(InputWorkspace=ws_name, OutputWorkspace=ws_name,
-                                      TargetUnit=x_unit)
+        # convert units if necessary
+        bank_ws = AnalysisDataService.retrieve(ws_name)
+        curr_unit = bank_ws.getAxis(0).getUnit().unitID()
+        if curr_unit != x_unit:
+            simpleapi.ConvertToHistogram(InputWorkspace=ws_name, OutputWorkspace=ws_name)
+            simpleapi.ConvertUnits(InputWorkspace=ws_name, OutputWorkspace=ws_name,
+                                       Target=x_unit, EMode='Elastic')
 
         # convert to point data for plotting
         simpleapi.ConvertToPointData(InputWorkspace=ws_name, OutputWorkspace=ws_name)
@@ -181,6 +182,24 @@ class FastGRDriver(object):
                                                                   '' % self._currSqWsName
 
         out_ws = AnalysisDataService.retrieve(self._currSqWsName)
+
+        return out_ws.readX(0), out_ws.readY(0), out_ws.readE(0)
+
+    def get_ws_data(self, ws_name):
+        """
+
+        Parameters
+        ----------
+        ws_name
+
+        Returns
+        -------
+
+        """
+        # convert to point data for plotting
+        simpleapi.ConvertToPointData(InputWorkspace=ws_name, OutputWorkspace=ws_name)
+
+        out_ws = AnalysisDataService.retrieve(ws_name)
 
         return out_ws.readX(0), out_ws.readY(0), out_ws.readE(0)
 

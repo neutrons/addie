@@ -74,7 +74,7 @@ class BraggView(base.MplGraphicsView):
         assert len(bank_id_list) == len(bank_data_list)
 
         for index, bank_id in enumerate(bank_id_list):
-            # remove previous plot
+            # remove previous plot for update
             if self._bankPlotDict[bank_id]:
                 plot_id = self._bankPlotDict[bank_id]
                 assert isinstance(plot_id, int) and plot_id >= 0
@@ -84,9 +84,16 @@ class BraggView(base.MplGraphicsView):
             bank_color = self._bankColorDict[bank_id]
             vec_x, vec_y, vec_e = bank_data_list[index]
             plot_id = self.add_plot_1d(vec_x, vec_y, marker='.', color=bank_color,
-                                       x_label=unit, y_label='I(%s)' % unit)
+                                       x_label=unit, y_label='I(%s)' % unit,
+                                       label='Bank %d' % bank_id)
             self._bankPlotDict[bank_id] = plot_id
         # END-FOR (bank id)
+
+        return
+
+    def plot_general_ws(self, bragg_ws_name, vec_x, vec_y, vec_e):
+        plot_id = self.add_plot_1d(vec_x, vec_y, marker='.', color='black',
+                                   label=bragg_ws_name)
 
         return
 

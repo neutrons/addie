@@ -48,7 +48,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
                      self.evt_plot_bragg_bank)
         self.connect(self.ui.checkBox_bank6, QtCore.SIGNAL('toggled(bool)'),
                      self.evt_plot_bragg_bank)
-        self.connect(self.ui.comboBox_xUnit, QtCore.SIGNAL('stateChanged(int)'),
+        self.connect(self.ui.comboBox_xUnit, QtCore.SIGNAL('currentIndexChanged(int)'),
                      self.evt_plot_bragg_bank)
 
         # for tab G(R)
@@ -92,7 +92,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         self._gssGroupName = None
 
         # some controlling variables
-
+        self._currBraggXUnit = str(self.ui.comboBox_xUnit.currentText())
 
         return
 
@@ -149,8 +149,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         self.ui.comboBox_xUnit.clear()
         self.ui.comboBox_xUnit.addItems(['TOF', 'dSpacing', 'Q'])
 
-        self.ui.treeWidget_braggWSList.set_parent_window(self)
+        self.ui.treeWidget_braggWSList.set_main_window(self)
+        self.ui.treeWidget_braggWSList.add_main_item('workspaces', append=True)
+
         self.ui.treeWidget_grWsList.set_main_window(self)
+        self.ui.treeWidget_grWsList.add_main_item('workspaces', append=True)
 
         self.ui.dockWidget_ipython.iPythonWidget.set_main_application(self)
 
@@ -193,6 +196,27 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         # add to tree
         gr_param_str = 'Q: (%.3f, %.3f)' % (min_q, max_q)
         self.ui.treeWidget_grWsList.add_gr(gr_param_str, gr_ws_name)
+
+        return
+
+    def plot_bragg(self, bragg_ws_list):
+        """
+
+        Parameters
+        ----------
+        bragg_ws_list
+
+        Returns
+        -------
+
+        """
+        for bragg_ws_name in bragg_ws_list:
+            if bragg_ws_name.startswith('bank') and 0 <= int(bragg_ws_name.split('bank')[1]) < 6:
+                bank_id = int(bragg_ws_name.split('bank')[1])
+                self.braggBankWidgets[bank_id].setChecked(True)
+            else:
+                vec_x, vec_y, vec_e = self._myController.get_ws_data(bragg_ws_name)
+                self.ui.graphicsView_bragg.plot_general_ws(bragg_ws_name, vec_x, vec_y, vec_e)
 
         return
 
@@ -308,8 +332,15 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         # check
         assert self._gssGroupName is not None
 
-        # get current unit
+        # get current unit and check whether re-plot all banks is not a choice
         x_unit = str(self.ui.comboBox_xUnit.currentText())
+        if x_unit != self._currBraggXUnit:
+            re_plot = True
+        else:
+            re_plot = False
+        print 'unit: %s vs. %s' % (x_unit, self._currBraggXUnit)
+        self._currBraggXUnit = x_unit
+
         if x_unit == 'Q':
             x_unit = 'MomentumTransfer'
 
@@ -323,7 +354,15 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         # END-FOR
 
         # get the list of banks to plot or remove
-        new_bank_list, remove_bank_list = self.ui.graphicsView_bragg.check_banks(plot_bank_list)
+        if re_plot:
+            # case to re-plot all banks without considering anything
+            new_bank_list = plot_bank_list[:]
+            remove_bank_list = plot_bank_list[:]
+        else:
+            # case to plot only changed data set
+            new_bank_list, remove_bank_list = self.ui.graphicsView_bragg.check_banks(plot_bank_list)
+
+        # get new bank date
         new_data_list = list()
         for bank_id in new_bank_list:
             vec_x, vec_y, vec_e = self._myController.get_bragg_data(bank_id, x_unit)
@@ -332,6 +371,15 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
 
         # remove unused and plot new
         self.ui.graphicsView_bragg.remove_banks(remove_bank_list)
+        if re_plot:
+            self.ui.graphicsView_bragg.clear_all_lines()
+            if x_unit == 'TOF':
+                self.ui.graphicsView_bragg.setXYLimit(xmin=0, xmax=20000, ymin=None, ymax=None)
+            elif x_unit == 'MomentumTransfer':
+                self.ui.graphicsView_bragg.setXYLimit(xmin=0, xmax=20, ymin=None, ymax=None)
+            elif x_unit == 'dSpacing':
+                self.ui.graphicsView_bragg.setXYLimit(xmin=0, xmax=7, ymin=None, ymax=None)
+
         self.ui.graphicsView_bragg.plot_banks(new_bank_list, new_data_list, x_unit)
 
         return
@@ -383,9 +431,12 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         # add to tree
         if len(new_ws_list) > 0:
             if self.ui.tabWidget.currentWidget().objectName() == 'tab_gR':
-                self.ui.treeWidget_grWsList.add_main_item('workspaces', append=True)
                 for new_ws in new_ws_list:
                     self.ui.treeWidget_grWsList.add_temp_ws(new_ws)
+            elif self.ui.tabWidget.currentWidget().objectName() == 'tab_bragg':
+                for new_ws in new_ws_list:
+                    self.ui.treeWidget_braggWSList.add_temp_ws(new_ws)
+
 
         return
 
