@@ -132,7 +132,7 @@ class CustomizedTreeView(QtGui.QTreeView):
 
         return
 
-    def add_main_item(self, item_value, append):
+    def add_main_item(self, item_value, append, as_current_inex):
         """
         Append a new main leaf item to
         :param item_value:
@@ -166,6 +166,11 @@ class CustomizedTreeView(QtGui.QTreeView):
                 model.insertRow(row_number, [new_item])
             except ValueError as e:
                 raise RuntimeError('Impossible to have a ValueError as %s' % str(e))
+
+        # set to current index
+        if as_current_inex:
+            num_rows = self.model().rowCount()
+            self.setCurrentIndex(model.index(num_rows-1, 0))
 
         return True, ''
 

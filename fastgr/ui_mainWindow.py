@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_mainWindow.ui'
 #
-# Created: Thu Jun 16 17:26:55 2016
+# Created: Mon Jun 20 14:35:18 2016
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -201,8 +201,16 @@ class Ui_MainWindow(object):
         self.checkBox_bank6 = QtGui.QCheckBox(self.tab_bragg)
         self.checkBox_bank6.setObjectName(_fromUtf8("checkBox_bank6"))
         self.verticalLayout_4.addWidget(self.checkBox_bank6)
-        spacerItem10 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        spacerItem10 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Preferred)
         self.verticalLayout_4.addItem(spacerItem10)
+        self.checkBox_plotAllGSS = QtGui.QCheckBox(self.tab_bragg)
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.checkBox_plotAllGSS.setFont(font)
+        self.checkBox_plotAllGSS.setObjectName(_fromUtf8("checkBox_plotAllGSS"))
+        self.verticalLayout_4.addWidget(self.checkBox_plotAllGSS)
+        spacerItem11 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        self.verticalLayout_4.addItem(spacerItem11)
         self.horizontalLayout_2.addLayout(self.verticalLayout_4)
         self.verticalLayout_6.addLayout(self.horizontalLayout_2)
         self.horizontalLayout_4.addLayout(self.verticalLayout_6)
@@ -269,8 +277,8 @@ class Ui_MainWindow(object):
         self.pushButton_generateGR.setObjectName(_fromUtf8("pushButton_generateGR"))
         self.gridLayout_7.addWidget(self.pushButton_generateGR, 0, 0, 1, 1)
         self.verticalLayout_2.addLayout(self.gridLayout_7)
-        spacerItem11 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Preferred)
-        self.verticalLayout_2.addItem(spacerItem11)
+        spacerItem12 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Preferred)
+        self.verticalLayout_2.addItem(spacerItem12)
         self.gridLayout_5.addLayout(self.verticalLayout_2, 0, 2, 1, 1)
         self.verticalLayout_3 = QtGui.QVBoxLayout()
         self.verticalLayout_3.setObjectName(_fromUtf8("verticalLayout_3"))
@@ -359,7 +367,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -396,6 +404,7 @@ class Ui_MainWindow(object):
         self.checkBox_bank4.setText(_translate("MainWindow", "Bank 4", None))
         self.checkBox_bank5.setText(_translate("MainWindow", "Bank 5", None))
         self.checkBox_bank6.setText(_translate("MainWindow", "Bank 6", None))
+        self.checkBox_plotAllGSS.setText(_translate("MainWindow", "Plot All GSS", None))
         self.treeWidget_braggWSList.setToolTip(_translate("MainWindow", "<html><head/><body><p>List of workspace names.  Each workspace is an individual bank</p></body></html>", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_bragg), _translate("MainWindow", "Bragg Peaks", None))
         self.pushButton_loadSQ.setToolTip(_translate("MainWindow", "<html><head/><body><p>Load S(Q) from the reduction tab. Plot S(Q), S(Q)-1 or Q[S(Q)-1] according to the selected radio buttons below.</p><p><span style=\" font-weight:600;\">Use regular file loader at this phase.</span></p><p>Duplicate the function in FastGR/scripts/fastgr</p><p>149     def read_SQ_file(self):</p><p><br/></p></body></html>", None))

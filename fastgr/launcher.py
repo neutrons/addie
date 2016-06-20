@@ -150,10 +150,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         self.ui.comboBox_xUnit.addItems(['TOF', 'dSpacing', 'Q'])
 
         self.ui.treeWidget_braggWSList.set_main_window(self)
-        self.ui.treeWidget_braggWSList.add_main_item('workspaces', append=True)
+        self.ui.treeWidget_braggWSList.add_main_item('workspaces', append=True, as_current_inex=False)
 
         self.ui.treeWidget_grWsList.set_main_window(self)
-        self.ui.treeWidget_grWsList.add_main_item('workspaces', append=True)
+        self.ui.treeWidget_grWsList.add_main_item('workspaces', append=True, as_current_inex=False)
 
         self.ui.dockWidget_ipython.iPythonWidget.set_main_application(self)
 
@@ -259,15 +259,15 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         # split
         self._gssGroupName, banks_list = self._myController.split_to_single_bank(gss_ws_name)
 
+        # add to tree
+        # banks_list = ['bank1', 'bank2', 'bank3', 'bank4', 'bank5', 'bank6']
+        self.ui.treeWidget_braggWSList.add_bragg_ws_group(self._gssGroupName, banks_list)
+
         # clear all lines
         self.ui.graphicsView_bragg.reset()
 
         # plot and will triggered the graph
         self.ui.checkBox_bank1.setChecked(True)
-
-        # add to tree
-        # banks_list = ['bank1', 'bank2', 'bank3', 'bank4', 'bank5', 'bank6']
-        self.ui.treeWidget_braggWSList.add_bragg_ws_group(self._gssGroupName, banks_list)
 
         return
 
@@ -344,13 +344,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         if x_unit == 'Q':
             x_unit = 'MomentumTransfer'
 
-        # determine the GSS workspace to plot
-        plot_all_data = self.ui.checkBox_plot_all_gss().isChecked()
-        if plot_all_data:
-            ws_group_list = self.ui.treeWidget_braggWSList.get_main_nodes()
-        else:
-            ws_group_list = self.ui.treeWidget_braggWSList.get_current_main_node()
-
         # get bank IDs to plot
         plot_bank_list = list()
         for bank_id in self.braggBankWidgets.keys():
@@ -359,6 +352,29 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
                 plot_bank_list.append(bank_id)
             # END-IF
         # END-FOR
+
+        # determine the GSS workspace to plot
+        plot_all_data = self.ui.checkBox_plotAllGSS.isChecked()
+        if plot_all_data and len(plot_bank_list) > 1:
+            # not allowed to plot multiple banks and multiple data sets
+            plot_all_data = False
+            self.ui.checkBox_plotAllGSS.setChecked(False)
+
+        # get workspace groups
+        if plot_all_data:
+            ws_group_list = self.ui.treeWidget_braggWSList.get_main_nodes()
+            print '[DB...BAT] workspace groups list:', ws_group_list
+        else:
+            status, ret_obj = self.ui.treeWidget_braggWSList.get_current_main_node()
+            print '[DB...BAT] workspace group:', status, ret_obj
+            if status:
+                ws_group_list = ret_obj
+            else:
+                ws_group_list = [self._gssGroupName]
+        # END-IF-ELSE
+
+        print ws_group_list
+        return
 
         # get the list of banks to plot or remove
         if re_plot:

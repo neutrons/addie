@@ -104,7 +104,7 @@ class BraggTree(base.CustomizedTreeView):
         # main node/leaf
         main_leaf_value = str(ws_group_name)
         # TODO/NOW - add check ...
-        self.add_main_item(main_leaf_value, True)
+        self.add_main_item(main_leaf_value, True, True)
 
         for bank_name in bank_name_list:
             self.add_child_main_item(main_leaf_value, bank_name)
@@ -194,18 +194,24 @@ class BraggTree(base.CustomizedTreeView):
 
         assert (isinstance(current_index, QtCore.QModelIndex))
 
+        q_indexes = self.selectedIndexes()
+        print '[DB...BAT] Number of selected QIndexes = ', len(q_indexes), '. They are ',
+        for q_index in q_indexes:
+            print q_index, self.model().itemFromIndex(q_index).text()
+        print
+
         current_item = self.model().itemFromIndex(current_index)
         if isinstance(current_item, QtGui.QStandardItem) is False:
             return False, 'Current item is not QStandardItem instance, but %s.' % str(type(current_item))
         assert (isinstance(current_item, QtGui.QStandardItem))
 
-        if current_item.parent() is None:
+        if current_item.parent() is not None:
             # Top-level leaf, IPTS number
             node_name = str(current_item.parent().text())
         else:
             node_name = str(current_item.text())
 
-        return node_name
+        return True, node_name
 
     def set_main_window(self, parent_window):
         """
