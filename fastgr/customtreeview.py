@@ -296,6 +296,14 @@ class CustomizedTreeView(QtGui.QTreeView):
 
         return
 
+    def get_main_nodes(self):
+        """
+        Get all name of all main nodes
+        Returns:
+        A list of strings as names of main nodes
+        """
+        return self._leafDict.keys()
+
     def get_selected_items(self):
         """
         Get selected items

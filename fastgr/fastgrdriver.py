@@ -28,6 +28,10 @@ class FastGRDriver(object):
         self._grWsIndex = 0
         self._grWsNameDict = dict()
 
+        # dictionary to manage the GSAS data
+        # key: ws_group_name, value: (gss_ws_name, ws_list).  it is in similar architecture with tree
+        self._braggDataDict = dict()
+
         return
 
     def calculate_gr(self, min_r, delta_r, max_r, min_q, max_q):
@@ -91,20 +95,22 @@ class FastGRDriver(object):
 
         return
 
-    @staticmethod
-    def get_bragg_data(bank, x_unit):
+    def get_bragg_data(self, ws_group_name, bank_id, x_unit):
         """ Get Bragg diffraction data of 1 bank
         Args:
-            bank:
+            ws_group_name
+            bank_id:
             x_unit:
         Returns:
         3-tuple of numpy 1D array for X, Y and E
         """
         # check
-        assert isinstance(bank, int) and bank > 0
+        assert isinstance(bank_id, int) and bank_id > 0
+        assert ws_group_name in self._braggDataDict, 'Workspace groups %s does not exist in controller.'
+        assert bank_id in self._braggDataDict[ws_group_name][1]
 
         # construct bank workspace name
-        ws_name = 'bank%d' % bank
+        ws_name = self._braggDataDict[ws_group_name][1][bank_id]
         assert AnalysisDataService.doesExist(ws_name), 'Workspace %s does not exist.' % ws_name
 
         # convert units if necessary
@@ -245,17 +251,21 @@ class FastGRDriver(object):
         -------
         2-tuple range of Q
         """
-        out_ws_name = os.path.basename(file_name).split('.')[0]
+        sq_ws_name = os.path.basename(file_name).split('.')[0]
 
-        simpleapi.LoadAscii(Filename=file_name, OutputWorkspace=out_ws_name, Unit='MomentumTransfer')
-        assert AnalysisDataService.doesExist(out_ws_name), 'Unable to load S(Q) file %s.' % file_name
+        simpleapi.LoadAscii(Filename=file_name, OutputWorkspace=sq_ws_name, Unit='MomentumTransfer')
+        assert AnalysisDataService.doesExist(sq_ws_name), 'Unable to load S(Q) file %s.' % file_name
+
+        # TODO/FIXME : it is in fact S(Q)-1 in sq file.  So need to add 1 to the workspace
+        out_ws = AnalysisDataService.retrieve(sq_ws_name)
+        out_ws += 1
 
         # set to the current S(Q) workspace name
-        self._currSqWsName = out_ws_name
+        self._currSqWsName = sq_ws_name
         self._sqIndexDict[self._currSqWsName] = 0
 
         # get range of Q from the loading
-        sq_ws = AnalysisDataService.retrieve(out_ws_name)
+        sq_ws = AnalysisDataService.retrieve(sq_ws_name)
         q_min = sq_ws.readX(0)[0]
         q_max = sq_ws.readX(0)[-1]
 
@@ -270,7 +280,7 @@ class FastGRDriver(object):
 
         Returns
         -------
-        Name of grouped workspace
+        Name of grouped workspace and list
         """
         # check
         assert isinstance(gss_ws_name, str)
@@ -289,11 +299,11 @@ class FastGRDriver(object):
 
             for i_ws in range(num_spec):
                 # split this one to a single workspace
-                out_ws_name = 'bank%d' % (i_ws+1)
+                out_ws_name = '%s_bank%d' % (gss_ws_name, i_ws+1)
                 # also can use ExtractSpectra()
                 simpleapi.CropWorkspace(InputWorkspace=gss_ws_name,
-                                  OutputWorkspace=out_ws_name,
-                                  StartWorkspaceIndex=i_ws, EndWorkspaceIndex=i_ws)
+                                        OutputWorkspace=out_ws_name,
+                                        StartWorkspaceIndex=i_ws, EndWorkspaceIndex=i_ws)
                 assert AnalysisDataService.doesExist(out_ws_name)
                 ws_list.append(out_ws_name)
             # END-FOR
@@ -302,6 +312,8 @@ class FastGRDriver(object):
         # group all the workspace
         ws_group_name = gss_ws_name + '_group'
         simpleapi.GroupWorkspaces(InputWorkspaces=ws_list,
-                            OutputWorkspace=ws_group_name)
+                                  OutputWorkspace=ws_group_name)
 
-        return ws_group_name
+        self._braggDataDict[ws_group_name] = (gss_ws_name, ws_list)
+
+        return ws_group_name, ws_list

@@ -180,6 +180,33 @@ class BraggTree(base.CustomizedTreeView):
 
         return
 
+    def get_current_main_node(self):
+        """
+        Get the name of the current nodes that are selected
+        The reason to put the method here is that the 
+        Returns:
+
+        """
+        # Get current index and item
+        current_index = self.currentIndex()
+        if isinstance(current_index, QtCore.QModelIndex) is False:
+            return False, 'Current index is not QModelIndex instance, but %s.' % str(type(current_index))
+
+        assert (isinstance(current_index, QtCore.QModelIndex))
+
+        current_item = self.model().itemFromIndex(current_index)
+        if isinstance(current_item, QtGui.QStandardItem) is False:
+            return False, 'Current item is not QStandardItem instance, but %s.' % str(type(current_item))
+        assert (isinstance(current_item, QtGui.QStandardItem))
+
+        if current_item.parent() is None:
+            # Top-level leaf, IPTS number
+            node_name = str(current_item.parent().text())
+        else:
+            node_name = str(current_item.text())
+
+        return node_name
+
     def set_main_window(self, parent_window):
         """
 

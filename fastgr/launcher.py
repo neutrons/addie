@@ -257,7 +257,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         gss_ws_name = self._myController.load_bragg_file(bragg_file_name)
 
         # split
-        self._gssGroupName = self._myController.split_to_single_bank(gss_ws_name)
+        self._gssGroupName, banks_list = self._myController.split_to_single_bank(gss_ws_name)
 
         # clear all lines
         self.ui.graphicsView_bragg.reset()
@@ -266,7 +266,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         self.ui.checkBox_bank1.setChecked(True)
 
         # add to tree
-        banks_list = ['bank1', 'bank2', 'bank3', 'bank4', 'bank5', 'bank6']
+        # banks_list = ['bank1', 'bank2', 'bank3', 'bank4', 'bank5', 'bank6']
         self.ui.treeWidget_braggWSList.add_bragg_ws_group(self._gssGroupName, banks_list)
 
         return
@@ -344,6 +344,13 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         if x_unit == 'Q':
             x_unit = 'MomentumTransfer'
 
+        # determine the GSS workspace to plot
+        plot_all_data = self.ui.checkBox_plot_all_gss().isChecked()
+        if plot_all_data:
+            ws_group_list = self.ui.treeWidget_braggWSList.get_main_nodes()
+        else:
+            ws_group_list = self.ui.treeWidget_braggWSList.get_current_main_node()
+
         # get bank IDs to plot
         plot_bank_list = list()
         for bank_id in self.braggBankWidgets.keys():
@@ -365,7 +372,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         # get new bank date
         new_data_list = list()
         for bank_id in new_bank_list:
-            vec_x, vec_y, vec_e = self._myController.get_bragg_data(bank_id, x_unit)
+            vec_x, vec_y, vec_e = self._myController.get_bragg_data(ws_group, bank_id, x_unit)
             new_data_list.append((vec_x, vec_y, vec_e))
         # END-FOR
 
