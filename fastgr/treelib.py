@@ -180,10 +180,10 @@ class BraggTree(base.CustomizedTreeView):
 
         return
 
-    def get_current_main_node(self):
+    def get_current_main_nodes(self):
         """
         Get the name of the current nodes that are selected
-        The reason to put the method here is that the 
+        The reason to put the method here is that it is assumed that the tree only has 2 level (main and leaf)
         Returns:
 
         """
@@ -194,24 +194,25 @@ class BraggTree(base.CustomizedTreeView):
 
         assert (isinstance(current_index, QtCore.QModelIndex))
 
+        # Get all selected indexes and get their main-node (or itself)'s name
+        main_node_list = list()
         q_indexes = self.selectedIndexes()
-        print '[DB...BAT] Number of selected QIndexes = ', len(q_indexes), '. They are ',
         for q_index in q_indexes:
-            print q_index, self.model().itemFromIndex(q_index).text()
-        print
+            # get item by QIndex
+            this_item = self.model().itemFromIndex(q_index)
+            # check
+            if isinstance(this_item, QtGui.QStandardItem) is False:
+                return False, 'Current item is not QStandardItem instance, but %s.' % str(type(this_item))
 
-        current_item = self.model().itemFromIndex(current_index)
-        if isinstance(current_item, QtGui.QStandardItem) is False:
-            return False, 'Current item is not QStandardItem instance, but %s.' % str(type(current_item))
-        assert (isinstance(current_item, QtGui.QStandardItem))
+            # get node name of parent's node name
+            if this_item.parent() is not None:
+                node_name = str(this_item.parent().text())
+            else:
+                node_name = str(this_item.text())
+            main_node_list.append(node_name)
+        # END-FOR
 
-        if current_item.parent() is not None:
-            # Top-level leaf, IPTS number
-            node_name = str(current_item.parent().text())
-        else:
-            node_name = str(current_item.text())
-
-        return True, node_name
+        return True, main_node_list
 
     def set_main_window(self, parent_window):
         """

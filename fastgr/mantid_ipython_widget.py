@@ -4,6 +4,7 @@ import inspect
 import sys
 import os
 
+sys.path.append('/opt/mantidnightly/bin/')
 sys.path.append(os.path.join(os.path.expanduser('~/MantidBuild/debug/bin/')))
 
 

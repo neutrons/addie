@@ -79,12 +79,16 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
                                                      self.on_mouse_motion)
 
         # organize widgets group
-        self.braggBankWidgets = {1: self.ui.checkBox_bank1,
-                                 2: self.ui.checkBox_bank2,
-                                 3: self.ui.checkBox_bank3,
-                                 4: self.ui.checkBox_bank4,
-                                 5: self.ui.checkBox_bank5,
-                                 6: self.ui.checkBox_bank6}
+        self._braggBankWidgets = {1: self.ui.checkBox_bank1,
+                                  2: self.ui.checkBox_bank2,
+                                  3: self.ui.checkBox_bank3,
+                                  4: self.ui.checkBox_bank4,
+                                  5: self.ui.checkBox_bank5,
+                                  6: self.ui.checkBox_bank6}
+        self._braggBankWidgetRecords = dict()
+        for bank_id in self._braggBankWidgets.keys():
+            checked = self._braggBankWidgets[bank_id].isChecked()
+            self._braggBankWidgetRecords[bank_id] = checked
 
         # define the driver
         self._myController = driver.FastGRDriver()
@@ -213,7 +217,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         for bragg_ws_name in bragg_ws_list:
             if bragg_ws_name.startswith('bank') and 0 <= int(bragg_ws_name.split('bank')[1]) < 6:
                 bank_id = int(bragg_ws_name.split('bank')[1])
-                self.braggBankWidgets[bank_id].setChecked(True)
+                self._braggBankWidgets[bank_id].setChecked(True)
             else:
                 vec_x, vec_y, vec_e = self._myController.get_ws_data(bragg_ws_name)
                 self.ui.graphicsView_bragg.plot_general_ws(bragg_ws_name, vec_x, vec_y, vec_e)
@@ -345,27 +349,39 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
             x_unit = 'MomentumTransfer'
 
         # get bank IDs to plot
+        plot_all_gss = self.ui.checkBox_plotAllGSS.isChecked()
+
         plot_bank_list = list()
-        for bank_id in self.braggBankWidgets.keys():
-            bank_checkbox = self.braggBankWidgets[bank_id]
-            if bank_checkbox.isChecked():
+        for bank_id in self._braggBankWidgets.keys():
+            bank_checkbox = self._braggBankWidgets[bank_id]
+
+            if not bank_checkbox.isChecked():
+                # no-operation for not checked
+                continue
+
+            if plot_all_gss:
+                # only allow 1 check box newly checked
+                if self._braggBankWidgetRecords[bank_id]:
+                    bank_checkbox.setChecked(False)
+                    self._braggBankWidgetRecords[bank_id] = False
+                else:
+                    plot_bank_list.append(bank_id)
+            else:
+                # there is no limitation to plot multiple banks for 1-GSS mode
                 plot_bank_list.append(bank_id)
             # END-IF
         # END-FOR
 
-        # determine the GSS workspace to plot
-        plot_all_data = self.ui.checkBox_plotAllGSS.isChecked()
-        if plot_all_data and len(plot_bank_list) > 1:
-            # not allowed to plot multiple banks and multiple data sets
-            plot_all_data = False
-            self.ui.checkBox_plotAllGSS.setChecked(False)
+        # check
+        if plot_all_gss:
+            assert len(plot_bank_list) == 1
 
-        # get workspace groups
-        if plot_all_data:
+        # determine the GSS workspace to plot
+        if plot_all_gss:
             ws_group_list = self.ui.treeWidget_braggWSList.get_main_nodes()
             print '[DB...BAT] workspace groups list:', ws_group_list
         else:
-            status, ret_obj = self.ui.treeWidget_braggWSList.get_current_main_node()
+            status, ret_obj = self.ui.treeWidget_braggWSList.get_current_main_nodes()
             print '[DB...BAT] workspace group:', status, ret_obj
             if status:
                 ws_group_list = ret_obj
@@ -373,27 +389,21 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
                 ws_group_list = [self._gssGroupName]
         # END-IF-ELSE
 
-        print ws_group_list
-        return
-
         # get the list of banks to plot or remove
-        if re_plot:
-            # case to re-plot all banks without considering anything
-            new_bank_list = plot_bank_list[:]
-            remove_bank_list = plot_bank_list[:]
-        else:
-            # case to plot only changed data set
-            new_bank_list, remove_bank_list = self.ui.graphicsView_bragg.check_banks(plot_bank_list)
+        self.ui.graphicsView_bragg.clear_all_lines()
 
         # get new bank date
-        new_data_list = list()
-        for bank_id in new_bank_list:
-            vec_x, vec_y, vec_e = self._myController.get_bragg_data(ws_group, bank_id, x_unit)
-            new_data_list.append((vec_x, vec_y, vec_e))
+        plot_data_dict = dict()
+        for ws_group in ws_group_list:
+            ws_data_dict = dict()
+            for bank_id in plot_bank_list:
+                vec_x, vec_y, vec_e = self._myController.get_bragg_data(ws_group, bank_id, x_unit)
+                ws_data_dict[bank_id] = (vec_x, vec_y, vec_e)
+            # END-FOR
+            plot_data_dict[ws_group] = ws_data_dict
         # END-FOR
 
         # remove unused and plot new
-        self.ui.graphicsView_bragg.remove_banks(remove_bank_list)
         if re_plot:
             self.ui.graphicsView_bragg.clear_all_lines()
             if x_unit == 'TOF':
@@ -403,7 +413,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
             elif x_unit == 'dSpacing':
                 self.ui.graphicsView_bragg.setXYLimit(xmin=0, xmax=7, ymin=None, ymax=None)
 
-        self.ui.graphicsView_bragg.plot_banks(new_bank_list, new_data_list, x_unit)
+        self.ui.graphicsView_bragg.plot_banks(plot_data_dict, x_unit)
 
         return
 

@@ -56,37 +56,30 @@ class BraggView(base.MplGraphicsView):
 
         return new_plot_banks, to_remove_banks
 
-    def plot_banks(self, bank_id_list, bank_data_list, unit):
+    def plot_banks(self, plot_bank_dict, unit):
         """
         Plot a few banks to canvas.  If the bank has been plot on canvas already,
         then remove the previous data
         Args:
-            bank_id_list:
-            bank_data_list:
+            plot_bank_dict: dictionary: key = ws group name, value = dictionary (key = bank ID, value = (x, y, e)
             unit: string for X-range unit.  can be TOF, dSpacing or Q (momentum transfer)
 
         Returns:
 
         """
         # check
-        assert isinstance(bank_id_list, list)
-        assert isinstance(bank_data_list, list)
-        assert len(bank_id_list) == len(bank_data_list)
+        assert isinstance(plot_bank_dict, dict)
 
-        for index, bank_id in enumerate(bank_id_list):
-            # remove previous plot for update
-            if self._bankPlotDict[bank_id]:
-                plot_id = self._bankPlotDict[bank_id]
-                assert isinstance(plot_id, int) and plot_id >= 0
-                self.remove_line(plot_id)
-
-            # add the new plot
-            bank_color = self._bankColorDict[bank_id]
-            vec_x, vec_y, vec_e = bank_data_list[index]
-            plot_id = self.add_plot_1d(vec_x, vec_y, marker='.', color=bank_color,
-                                       x_label=unit, y_label='I(%s)' % unit,
-                                       label='Bank %d' % bank_id)
-            self._bankPlotDict[bank_id] = plot_id
+        # plot
+        for ws_group in plot_bank_dict.keys():
+            for bank_id in plot_bank_dict[ws_group]:
+                # add the new plot
+                bank_color = self._bankColorDict[bank_id]
+                vec_x, vec_y, vec_e = plot_bank_dict[ws_group][bank_id]
+                plot_id = self.add_plot_1d(vec_x, vec_y, marker='.', color=bank_color,
+                                           x_label=unit, y_label='I(%s)' % unit,
+                                           label='%s Bank %d' % (ws_group, bank_id))
+            #self._bankPlotDict[bank_id] = plot_id
         # END-FOR (bank id)
 
         return

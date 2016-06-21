@@ -107,10 +107,15 @@ class FastGRDriver(object):
         # check
         assert isinstance(bank_id, int) and bank_id > 0
         assert ws_group_name in self._braggDataDict, 'Workspace groups %s does not exist in controller.'
-        assert bank_id in self._braggDataDict[ws_group_name][1]
 
+        ws_name = '%s_bank%d' % (ws_group_name.split('_group')[0], bank_id)
+        error_message = 'Bank %d is not found in group %s. Available bank IDs are %s.' % (
+            bank_id, ws_group_name,  str(self._braggDataDict[ws_group_name][1]))
+        assert ws_name in self._braggDataDict[ws_group_name][1], error_message
+
+        # FIXME - It is quite messy here! Using dictionary or forming workspace name?
         # construct bank workspace name
-        ws_name = self._braggDataDict[ws_group_name][1][bank_id]
+        # ws_name = self._braggDataDict[ws_group_name][1][bank_id]
         assert AnalysisDataService.doesExist(ws_name), 'Workspace %s does not exist.' % ws_name
 
         # convert units if necessary
