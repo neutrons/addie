@@ -375,6 +375,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
 
             if not bank_checkbox.isChecked():
                 # no-operation for not checked
+                self._braggBankWidgetRecords[bank_id] = False
                 continue
 
             if plot_all_gss:
@@ -399,9 +400,16 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
 
         print '[DB...BAT] BraggBankWidgetRecord: ', str(self._braggBankWidgetRecords)
 
+        # deal with the situation that there is no line to plot
+        if len(plot_bank_list) == 0:
+            # self.ui.graphicsView_bragg.clear_all_lines()
+            self.ui.graphicsView_bragg.reset()
+            return
+
         # check
         if plot_all_gss:
-            assert len(plot_bank_list) == 1
+            assert len(plot_bank_list) == 1, 'Current number of banks selected is equal to %d. ' \
+                                             'Must be 1.' % len(plot_bank_list)
 
         # determine the GSS workspace to plot
         if plot_all_gss:
@@ -440,6 +448,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
                 self.ui.graphicsView_bragg.setXYLimit(xmin=0, xmax=20, ymin=None, ymax=None)
             elif x_unit == 'dSpacing':
                 self.ui.graphicsView_bragg.setXYLimit(xmin=0, xmax=7, ymin=None, ymax=None)
+
+        if plot_all_gss:
+            self.ui.graphicsView_bragg.set_to_single_gss(False)
+        else:
+            self.ui.graphicsView_bragg.set_to_single_gss(True)
 
         self.ui.graphicsView_bragg.plot_banks(plot_data_dict, x_unit)
 

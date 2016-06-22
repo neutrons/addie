@@ -9,7 +9,7 @@
 4. Plot 1 bank or multiple banks from 1.gss under tree node '2_group';
 5. Plot bank 2 of 1.gss and 2.gss
 6. Calculate difference of bank 2 of 1.gss and 2.gss by iPython console;
-7. Plot difference of bank 2;
+7. Plot difference of bank 2 from the item (i.e., workspace name) under node 'workspaces';
 
 
 == Tab 'G(R)' ==

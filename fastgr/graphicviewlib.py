@@ -19,12 +19,18 @@ class BraggView(base.MplGraphicsView):
         for bank_id in range(1, 7):
             self._bankPlotDict[bank_id] = False
 
+        self._singleGSSMode = True
         self._bankColorDict = {1: 'black',
                                2: 'red',
                                3: 'blue',
                                4: 'green',
                                5: 'brown',
                                6: 'yellow'}
+
+        self._gssColorList = ["black", "red", "blue", "green",
+                              "cyan", "magenta", "yellow"]
+        self._currColorIndex = 0
+
         return
 
     def check_banks(self, bank_to_plot_list):
@@ -56,6 +62,19 @@ class BraggView(base.MplGraphicsView):
 
         return new_plot_banks, to_remove_banks
 
+    def get_multi_gss_color(self):
+        """
+        Get the present color in multiple-GSS mode
+        Returns:
+
+        """
+        color = self._gssColorList[self._currColorIndex]
+        self._currColorIndex += 1
+        if self._currColorIndex == len(self._gssColorList):
+            self._currColorIndex = 0
+
+        return color
+
     def plot_banks(self, plot_bank_dict, unit):
         """
         Plot a few banks to canvas.  If the bank has been plot on canvas already,
@@ -74,7 +93,10 @@ class BraggView(base.MplGraphicsView):
         for ws_group in plot_bank_dict.keys():
             for bank_id in plot_bank_dict[ws_group]:
                 # add the new plot
-                bank_color = self._bankColorDict[bank_id]
+                if self._singleGSSMode:
+                    bank_color = self._bankColorDict[bank_id]
+                else:
+                    bank_color = self.get_multi_gss_color()
                 vec_x, vec_y, vec_e = plot_bank_dict[ws_group][bank_id]
                 plot_id = self.add_plot_1d(vec_x, vec_y, marker='.', color=bank_color,
                                            x_label=unit, y_label='I(%s)' % unit,
@@ -138,6 +160,21 @@ class BraggView(base.MplGraphicsView):
 
         # clear all lines
         self.clear_all_lines()
+
+        return
+
+    def set_to_single_gss(self, mode_on):
+        """
+        Set to single-GSAS/multiple-bank model
+        Args:
+            mode_on:
+
+        Returns:
+
+        """
+        assert isinstance(mode_on, bool)
+
+        self._singleGSSMode = mode_on
 
         return
 
