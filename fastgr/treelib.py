@@ -270,7 +270,7 @@ class GofRTree(base.CustomizedTreeView):
 
         # Create main leaf value
         main_leaf_value = str(gr_parameter)
-        status, message = self.add_main_item(main_leaf_value, False)
+        status, message = self.add_main_item(main_leaf_value, False, True)
         if status is False:
             print '[Log] %s' % message
 

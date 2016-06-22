@@ -131,7 +131,8 @@ class BraggView(base.MplGraphicsView):
         Returns:
         None
         """
-        # clear the control-dictionary
+        # clear the control-dictionary and uncheck all the banks
+        # set mutex on
         for bank_id in self._bankPlotDict.keys():
             self._bankPlotDict[bank_id] = False
 

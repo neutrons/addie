@@ -98,6 +98,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         # some controlling variables
         self._currBraggXUnit = str(self.ui.comboBox_xUnit.currentText())
 
+        # mutex-like variables
+        self._noEventBankWidgets = False
+
         return
 
     def on_mouse_press_event(self, event):
@@ -154,10 +157,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         self.ui.comboBox_xUnit.addItems(['TOF', 'dSpacing', 'Q'])
 
         self.ui.treeWidget_braggWSList.set_main_window(self)
-        self.ui.treeWidget_braggWSList.add_main_item('workspaces', append=True, as_current_inex=False)
+        self.ui.treeWidget_braggWSList.add_main_item('workspaces', append=True, as_current_index=False)
 
         self.ui.treeWidget_grWsList.set_main_window(self)
-        self.ui.treeWidget_grWsList.add_main_item('workspaces', append=True, as_current_inex=False)
+        self.ui.treeWidget_grWsList.add_main_item('workspaces', append=True, as_current_index=False)
+        self.ui.treeWidget_grWsList.add_main_item('SofQ', append=True, as_current_index=False)
 
         self.ui.dockWidget_ipython.iPythonWidget.set_main_application(self)
 
@@ -270,7 +274,13 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         # clear all lines
         self.ui.graphicsView_bragg.reset()
 
-        # plot and will triggered the graph
+        # un-check all the check boxes with mutex on and off
+        self._noEventBankWidgets = True
+        for check_box in self._braggBankWidgets.values():
+            check_box.setChecked(False)
+        self._noEventBankWidgets = False
+
+        # plot and will triggered the grap
         self.ui.checkBox_bank1.setChecked(True)
 
         return
@@ -289,7 +299,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
             return
 
         # open the file
-        q_min, q_max = self._myController.load_sq(sq_file_name)
+        sq_ws_name, q_min, q_max = self._myController.load_sq(sq_file_name)
+
+        # set to the tree
+        self.ui.treeWidget_grWsList.add_child_main_item('SofQ', sq_ws_name)
 
         # set the UI widgets
         self.ui.doubleSpinBoxQmin.setValue(q_min)
@@ -333,6 +346,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         -------
 
         """
+        # check mutex
+        if self._noEventBankWidgets:
+            return
+
         # check
         assert self._gssGroupName is not None
 
@@ -352,6 +369,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         plot_all_gss = self.ui.checkBox_plotAllGSS.isChecked()
 
         plot_bank_list = list()
+        print '[DB...BAT] braggBankWidget: ', self._braggBankWidgets.keys()
         for bank_id in self._braggBankWidgets.keys():
             bank_checkbox = self._braggBankWidgets[bank_id]
 
@@ -361,16 +379,25 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
 
             if plot_all_gss:
                 # only allow 1 check box newly checked
+                print '[DB...BAT] Bank %d is previously %s.' % (bank_id, str(self._braggBankWidgetRecords[bank_id]))
                 if self._braggBankWidgetRecords[bank_id]:
+                    # create a mutex on bank widget check box
+                    self._noEventBankWidgets = True
                     bank_checkbox.setChecked(False)
+                    self._noEventBankWidgets = False
+
                     self._braggBankWidgetRecords[bank_id] = False
                 else:
                     plot_bank_list.append(bank_id)
+                    self._braggBankWidgetRecords[bank_id] = True
             else:
                 # there is no limitation to plot multiple banks for 1-GSS mode
                 plot_bank_list.append(bank_id)
+                self._braggBankWidgetRecords[bank_id] = True
             # END-IF
         # END-FOR
+
+        print '[DB...BAT] BraggBankWidgetRecord: ', str(self._braggBankWidgetRecords)
 
         # check
         if plot_all_gss:
@@ -379,6 +406,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         # determine the GSS workspace to plot
         if plot_all_gss:
             ws_group_list = self.ui.treeWidget_braggWSList.get_main_nodes()
+            ws_group_list.remove('workspaces')
             print '[DB...BAT] workspace groups list:', ws_group_list
         else:
             status, ret_obj = self.ui.treeWidget_braggWSList.get_current_main_nodes()
