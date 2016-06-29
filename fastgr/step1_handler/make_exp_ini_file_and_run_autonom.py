@@ -88,6 +88,7 @@ class MakeExpIniFileAndRunAutonom(object):
     def run_auto_nom_script(self):
         _script_to_run = self.script_to_run
         os.chdir(self.folder)
+        self.parent.current_folder_label.setText(self.folder)
         os.system(_script_to_run)
         self.parent.statusbar.showMessage("autoNOM script: DONE !")        
 

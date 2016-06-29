@@ -29,7 +29,8 @@ __version__ = "1.0.0"
 class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
     """ Main FastGR window
     """
-    debugging = True
+    debugging = False
+    current_folder = os.getcwd()
 
     def __init__(self):
         """ Initialization

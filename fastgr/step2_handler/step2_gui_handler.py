@@ -1,13 +1,27 @@
+from PyQt4 import QtGui, QtCore
+import os
+
+
 class Step2GuiHandler(object):
 
     hidrogen_range = [1, 50]
     no_hidrogen_range = [10, 50]
+    current_folder = ""
     
     def __init__(self, parent=None):
+        self.parent_no_ui = parent
         self.parent = parent.ui
+        self.current_folder = parent.current_folder
         
     def move_to_folder(self):
-        pass
+        _current_folder = self.current_folder
+        _new_folder = QtGui.QFileDialog.getExistingDirectory(parent = self.parent_no_ui,
+                                                             caption = "Select working directory",
+                                                             directory = self.current_folder)
+        
+        if str(_new_folder):
+            os.chdir(_new_folder)
+            self.parent.current_folder_label.setText(_new_folder)
         
     def hidrogen_clicked(self):
         _range = self.hidrogen_range
