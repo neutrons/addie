@@ -309,6 +309,48 @@ class SofQView(base.MplGraphicsView):
         """
         return self._showBoundary
 
+    def move_left_indicator(self, displacement, relative):
+        """
+
+        Args:
+            displacement:
+            relative:
+
+        Returns:
+
+        """
+        # check
+        assert isinstance(displacement, float)
+        assert isinstance(relative, bool)
+
+        if relative:
+            self.move_indicator(self._leftID, displacement)
+        else:
+            self.set_indicator_position(self._leftID, displacement, 0)
+
+        return
+
+    def move_right_indicator(self, displacement, relative):
+        """
+
+        Args:
+            displacement:
+            relative:
+
+        Returns:
+
+        """
+        # check
+        assert isinstance(displacement, float)
+        assert isinstance(relative, bool)
+
+        if relative:
+            self.move_indicator(self._rightID, displacement)
+        else:
+            self.set_indicator_position(self._rightID, displacement, 0)
+
+        return
+
     def on_mouse_motion(self, event):
         """
 
@@ -356,7 +398,18 @@ class SofQView(base.MplGraphicsView):
             self.boundaryMoveSignal.emit(1, new_left_bound)
 
         else:
-            blabla
+            # right boundary
+            new_right_bound = right_bound_pos + cursor_displace
+
+            # return if the right boundary is too close or left to the left boundary
+            if new_right_bound < left_bound_pos + resolution * 5:
+                return
+
+            # move right boundary
+            self.move_indicator(self._rightID, cursor_displace, 0)
+
+            # emit signal to the main app
+            self.boundaryMoveSignal.emit(2, new_right_bound)
 
         # update cursor position
         self._prevCursorPos = cursor_pos
