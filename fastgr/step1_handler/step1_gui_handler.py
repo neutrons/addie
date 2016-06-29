@@ -1,7 +1,7 @@
-class GuiHandler(object):
+class Step1GuiHandler(object):
     
     def __init__(self, parent=None):
-        self.parent = parent
+        self.parent = parent.ui
         
     def check_go_button(self):
         if self.all_mandatory_fields_non_empty():

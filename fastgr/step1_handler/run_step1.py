@@ -2,7 +2,7 @@ import os
 from PyQt4 import QtGui
 import glob
 
-from step1_handler.make_exp_ini_file import MakeExpIniFile
+from step1_handler.make_exp_ini_file_and_run_autonom import MakeExpIniFileAndRunAutonom
 
 
 class RunStep1(object):
@@ -12,7 +12,7 @@ class RunStep1(object):
     auto_folder_base_name = 'autoNOM'
     
     def __init__(self, parent=None):
-        self.parent = parent
+        self.parent = parent.ui
         
     def create_folder(self):
         self._current_path = os.getcwd()
@@ -26,8 +26,9 @@ class RunStep1(object):
         if self.keep_running_status is False:
             return
         
-        _make_exp = MakeExpIniFile(parent=self.parent, folder = self.folder)
+        _make_exp = MakeExpIniFileAndRunAutonom(parent=self.parent, folder = self.folder)
         _make_exp.create()    
+        _make_exp.run_autonom()
     
     def create_manual_folder(self):
         _folder_name = str(self.parent.manual_output_folder_field.text()).strip()

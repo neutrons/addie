@@ -1,7 +1,7 @@
 import os
 
 
-class MakeExpIniFile(object):
+class MakeExpIniFileAndRunAutonom(object):
     
     _dict_mandatory = None
     _dict_optional = None
@@ -12,7 +12,7 @@ class MakeExpIniFile(object):
     title_optional = 'optional ' + _star
     list_mandatory = ['Dia', 'DiaBg', 'Vana', 'VanaBg', 'MTc']
     list_optional = ['recali', 'renorm', 'autotemp', 'scan1', 'scanl', 'Hz', '#']
-    script_to_run = "python ~zjn/pytest/autoNOM.py"
+    script_to_run = "python ~zjn/pytest/autoNOM.py &"
     
     def __init__(self, parent=None, folder=None):
         self.parent = parent
@@ -21,6 +21,8 @@ class MakeExpIniFile(object):
     def create(self):
         self.retrieve_metadata()
         self.create_exp_ini_file()
+
+    def run_autonom(self):
         self.run_auto_nom_script()
 
     def retrieve_metadata(self):

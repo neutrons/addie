@@ -1,6 +1,21 @@
 import sys
+import os
 
 import ui_mainWindow
+import step1
+import step2
+
+from initialization.init_step1 import InitStep1
+from step1_handler.step1_gui_handler import Step1GuiHandler
+from step1_handler.run_step1 import RunStep1
+
+from initialization.init_step2 import InitStep2
+from step2_handler.populate_master_table import PopulateMasterTable
+from step2_handler.populate_background_widgets import PopulateBackgroundWidgets
+from step2_handler.step2_gui_handler import Step2GuiHandler
+from step2_handler.table_handler import TableHandler
+from step2_handler.create_sample_files import CreateSampleFiles
+from step2_handler.create_ndsum_file import CreateNdsumFile
 
 import PyQt4
 import PyQt4.QtCore as QtCore
@@ -11,11 +26,12 @@ import fastgrdriver as driver
 __version__ = "1.0.0"
 
 
-class MainWindow(PyQt4.QtGui.QMainWindow):
+class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
     """ Main FastGR window
     """
+    debugging = True
 
-    def __init__(self, parent=None):
+    def __init__(self):
         """ Initialization
         Parameters
         ----------
@@ -23,14 +39,17 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         """
 
         # Base class
-        QtGui.QMainWindow.__init__(self, parent)
+        QtGui.QMainWindow.__init__(self)
 
         self.ui = ui_mainWindow.Ui_MainWindow()
         self.ui.setupUi(self)
+ 
         self.ui.dockWidget_ipython.setup()
 
         # set widgets
         self._init_widgets()
+        init_step1 = InitStep1(parent = self)
+        init_step2 = InitStep2(parent = self)
 
         # define the event handling methods
         # bragg diffraction tab
@@ -529,6 +548,98 @@ class MainWindow(PyQt4.QtGui.QMainWindow):
         self.ui.dockWidget_ipython.iPythonWidget.write_command(script)
 
         return
+
+# step1
+    def diamond_edited(self):
+        self.check_step1_gui()
+        
+    def diamond_background_edited(self):
+        self.check_step1_gui()
+        
+    def vanadium_edited(self):
+        self.check_step1_gui()
+        
+    def vanadium_background_edited(self):
+        self.check_step1_gui()
+        
+    def sample_background_edited(self):
+        self.check_step1_gui()
+        
+    def output_folder_radio_buttons(self):
+        o_gui_handler = Step1GuiHandler(parent=self)
+        o_gui_handler.manual_output_folder_button_handler()
+        o_gui_handler.check_go_button()
+
+    def manual_output_folder_field_edited(self):
+        self.check_step1_gui()
+        
+    def check_step1_gui(self):
+        '''check the status of the step1 GUI in order to enable or not the GO BUTTON at the bottom'''
+        o_gui_handler = Step1GuiHandler(parent=self)
+        o_gui_handler.check_go_button()
+        
+    def run_autonom(self):
+        """Will first create the output folder, then create the exp.ini file"""
+        _run_autonom = RunStep1(parent = self)
+        _run_autonom.create_folder()
+        _run_autonom.create_exp_ini_file()
+
+# step2
+    def populate_table_clicked(self):
+        
+        if self.debugging:
+            self.current_folder = os.getcwd()  + '/autoNOM_01/'
+        else:
+            self.current_folder = os.getcwd()
+
+        _pop_table = PopulateMasterTable(parent = self)
+        _pop_table.run()
+        
+        _pop_back_wdg = PopulateBackgroundWidgets(parent = self)
+        _pop_back_wdg.run()
+        
+        _o_gui = Step2GuiHandler(parent = self)
+        _o_gui.check_gui()
+            
+    def hidrogen_clicked(self):
+        o_gui = Step2GuiHandler(parent = self)
+        o_gui.hidrogen_clicked()
+    
+    def no_hidrogen_clicked(self):
+        o_gui = Step2GuiHandler(parent = self)
+        o_gui.no_hidrogen_clicked()
+    
+    def yes_background_clicked(self):
+        o_gui = Step2GuiHandler(parent = self)
+        o_gui.yes_background_clicked()
+    
+    def no_background_clicked(self):
+        o_gui = Step2GuiHandler(parent = self)
+        o_gui.no_background_clicked()
+        
+    def background_combobox_changed(self, index):
+        o_gui = Step2GuiHandler(parent = self)
+        o_gui.background_index_changed(row_index = index)
+
+    def create_sample_properties_files_clicked(self):
+        o_create_sample_files = CreateSampleFiles(parent = self)
+        o_create_sample_files.run()
+        
+    def run_ndabs_clicked(self):
+        o_create_ndsum_file = CreateNdsumFile(parent = self)
+        o_create_ndsum_file.run()
+        
+    def check_fourier_filter_widgets(self):
+        o_gui = Step2GuiHandler(parent = self)
+        o_gui.check_gui()
+
+    def check_plazcek_widgets(self):
+        o_gui = Step2GuiHandler(parent = self)
+        o_gui.check_gui()
+        
+    def table_right_click(self, position):
+        _o_table = TableHandler(parent = self)
+        _o_table.right_click(position = position)
 
 
 def main():

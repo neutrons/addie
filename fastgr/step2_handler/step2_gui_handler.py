@@ -1,10 +1,10 @@
-class GuiHandler(object):
+class Step2GuiHandler(object):
 
     hidrogen_range = [1, 50]
     no_hidrogen_range = [10, 50]
     
     def __init__(self, parent=None):
-        self.parent = parent
+        self.parent = parent.ui
         
     def hidrogen_clicked(self):
         _range = self.hidrogen_range

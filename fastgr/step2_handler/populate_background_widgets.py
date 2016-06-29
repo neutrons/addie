@@ -10,8 +10,8 @@ class PopulateBackgroundWidgets(object):
     current_folder = None
         
     def __init__(self, parent=None):
-        self.parent = parent
-        self.current_folder = self.parent.current_folder
+        self.parent = parent.ui
+        self.current_folder = parent.current_folder
         
     def run(self):
         self.retrieve_list_names_from_table()

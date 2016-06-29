@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/step2.ui'
 #
-# Created: Tue Jun 28 16:32:05 2016
+# Created: Tue Jun 28 17:28:19 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
