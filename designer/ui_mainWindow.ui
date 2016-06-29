@@ -21,7 +21,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -812,7 +812,7 @@
           <item>
            <widget class="QPushButton" name="move_to_button">
             <property name="text">
-             <string>Move to ...</string>
+             <string>Move to Folder ...</string>
             </property>
            </widget>
           </item>
@@ -2648,6 +2648,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>move_to_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>move_to_folder_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>59</x>
+     <y>84</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>759</x>
+     <y>35</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>diamond_edited()</slot>
@@ -2668,5 +2684,6 @@
   <slot>create_sample_properties_files_clicked()</slot>
   <slot>yes_background_clicked()</slot>
   <slot>background_combobox_changed()</slot>
+  <slot>move_to_folder_clicked()</slot>
  </slots>
 </ui>

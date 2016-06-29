@@ -585,6 +585,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         _run_autonom.create_exp_ini_file()
 
 # step2
+    def move_to_folder_clicked(self):
+        o_gui = Step2GuiHandler(parent = self)
+        o_gui.move_to_folder()
+
     def populate_table_clicked(self):
         
         if self.debugging:

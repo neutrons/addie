@@ -6,6 +6,9 @@ class Step2GuiHandler(object):
     def __init__(self, parent=None):
         self.parent = parent.ui
         
+    def move_to_folder(self):
+        pass
+        
     def hidrogen_clicked(self):
         _range = self.hidrogen_range
         self.populate_hidrogen_range(_range)

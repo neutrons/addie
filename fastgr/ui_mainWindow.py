@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Wed Jun 29 11:46:34 2016
+# Created: Wed Jun 29 12:50:36 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -881,7 +881,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         QtCore.QObject.connect(self.diamond, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_edited)
         QtCore.QObject.connect(self.diamond_background, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_background_edited)
         QtCore.QObject.connect(self.vanadium, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.vanadium_edited)
@@ -903,6 +903,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.create_sample_properties_files_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.create_sample_properties_files_clicked)
         QtCore.QObject.connect(self.background_yes, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.yes_background_clicked)
         QtCore.QObject.connect(self.background_comboBox, QtCore.SIGNAL(_fromUtf8("currentIndexChanged(int)")), MainWindow.background_combobox_changed)
+        QtCore.QObject.connect(self.move_to_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.move_to_folder_clicked)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         MainWindow.setTabOrder(self.tabWidget, self.diamond)
         MainWindow.setTabOrder(self.diamond, self.diamond_background)
@@ -1014,7 +1015,7 @@ class Ui_MainWindow(object):
         self.manual_output_folder.setText(_translate("MainWindow", "Manual", None))
         self.run_autonom_script.setText(_translate("MainWindow", "Run autoNOM script", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "autoNOM", None))
-        self.move_to_button.setText(_translate("MainWindow", "Move to ...", None))
+        self.move_to_button.setText(_translate("MainWindow", "Move to Folder ...", None))
         self.populate_table.setText(_translate("MainWindow", "Populate Table", None))
         item = self.table.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Select", None))
