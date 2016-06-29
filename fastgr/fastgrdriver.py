@@ -1,5 +1,6 @@
 import os
 import sys
+import math
 import numpy as np
 
 # add a python path for local development
@@ -295,6 +296,7 @@ class FastGRDriver(object):
         gss_ws = AnalysisDataService.retrieve(gss_ws_name)
 
         ws_list = list()
+        angle_list = list()
 
         if gss_ws.getNumberHistograms() == 1:
             # input is already a single-spectrum workspace
@@ -311,8 +313,14 @@ class FastGRDriver(object):
                                         StartWorkspaceIndex=i_ws, EndWorkspaceIndex=i_ws)
                 assert AnalysisDataService.doesExist(out_ws_name)
                 ws_list.append(out_ws_name)
+
             # END-FOR
         # END-IF
+
+        # calculate bank angles
+        for ws_name in ws_list:
+            bank_angle = calculate_bank_angle(ws_name)
+            angle_list.append(bank_angle)
 
         # group all the workspace
         ws_group_name = gss_ws_name + '_group'
@@ -321,4 +329,22 @@ class FastGRDriver(object):
 
         self._braggDataDict[ws_group_name] = (gss_ws_name, ws_list)
 
-        return ws_group_name, ws_list
+        return ws_group_name, ws_list, angle_list
+
+
+def calculate_bank_angle(ws_name):
+    """ Calculate bank's angle (2theta) focused detector
+    """
+    try:
+        bank_ws = AnalysisDataService.retrieve(ws_name)
+        instrument = bank_ws.getInstrument()
+        det_pos = bank_ws.getDetector(0).getPos()
+        sample_pos = instrument.getSample().getPos()
+        source_pos = instrument.getSource().getPos()
+
+        angle = (det_pos - sample_pos).angle(sample_pos - source_pos) * 180. / math.pi
+
+    except KeyError:
+        return None
+
+    return angle
