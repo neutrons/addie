@@ -1,0 +1,13 @@
+== New features required on 06.30.16 ==
+
+Jean:
+  - Provide scroll bars to GUI
+  - Add Q range widgets to tab#2
+  - Make run button on tab #2 available only if row selected has none empty metadata fields.
+  - And I will wait for them to tell me about the hydrogen/no hydrogen/constant flag there were debating on.
+
+Wenduo:
+  1. Support multiple S(q) including plotting;
+  2. Add a drop down for PDF Fourier transform for different type of g(r);
+  3. Implement Save G(R);
+  4. Add more legend to G(r) figure; And make font size of legends and units consistent
