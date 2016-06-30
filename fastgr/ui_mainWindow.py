@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Wed Jun 29 13:19:54 2016
+# Created: Thu Jun 30 10:22:25 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -27,7 +27,7 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(1404, 942)
+        MainWindow.resize(1406, 942)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.verticalLayout = QtGui.QVBoxLayout(self.centralwidget)
@@ -71,6 +71,7 @@ class Ui_MainWindow(object):
         self.diamond_background.setStatusTip(_fromUtf8(""))
         self.diamond_background.setAccessibleDescription(_fromUtf8(""))
         self.diamond_background.setInputMask(_fromUtf8(""))
+        self.diamond_background.setText(_fromUtf8(""))
         self.diamond_background.setPlaceholderText(_fromUtf8(""))
         self.diamond_background.setObjectName(_fromUtf8("diamond_background"))
         self.gridLayout.addWidget(self.diamond_background, 1, 1, 1, 1)
@@ -82,6 +83,7 @@ class Ui_MainWindow(object):
         self.sample_background.setStatusTip(_fromUtf8(""))
         self.sample_background.setAccessibleDescription(_fromUtf8(""))
         self.sample_background.setInputMask(_fromUtf8(""))
+        self.sample_background.setText(_fromUtf8(""))
         self.sample_background.setPlaceholderText(_fromUtf8(""))
         self.sample_background.setObjectName(_fromUtf8("sample_background"))
         self.gridLayout.addWidget(self.sample_background, 4, 1, 1, 1)
@@ -90,6 +92,7 @@ class Ui_MainWindow(object):
         self.vanadium.setStatusTip(_fromUtf8(""))
         self.vanadium.setAccessibleDescription(_fromUtf8(""))
         self.vanadium.setInputMask(_fromUtf8(""))
+        self.vanadium.setText(_fromUtf8(""))
         self.vanadium.setPlaceholderText(_fromUtf8(""))
         self.vanadium.setObjectName(_fromUtf8("vanadium"))
         self.gridLayout.addWidget(self.vanadium, 2, 1, 1, 1)
@@ -175,6 +178,7 @@ class Ui_MainWindow(object):
         self.vanadium_background.setStatusTip(_fromUtf8(""))
         self.vanadium_background.setAccessibleDescription(_fromUtf8(""))
         self.vanadium_background.setInputMask(_fromUtf8(""))
+        self.vanadium_background.setText(_fromUtf8(""))
         self.vanadium_background.setPlaceholderText(_fromUtf8(""))
         self.vanadium_background.setObjectName(_fromUtf8("vanadium_background"))
         self.gridLayout.addWidget(self.vanadium_background, 3, 1, 1, 1)
@@ -183,6 +187,7 @@ class Ui_MainWindow(object):
         self.diamond.setStatusTip(_fromUtf8(""))
         self.diamond.setAccessibleDescription(_fromUtf8(""))
         self.diamond.setInputMask(_fromUtf8(""))
+        self.diamond.setText(_fromUtf8(""))
         self.diamond.setPlaceholderText(_fromUtf8(""))
         self.diamond.setObjectName(_fromUtf8("diamond"))
         self.gridLayout.addWidget(self.diamond, 0, 1, 1, 1)
@@ -234,9 +239,11 @@ class Ui_MainWindow(object):
         self.label_19.setObjectName(_fromUtf8("label_19"))
         self.gridLayout_6.addWidget(self.label_19, 1, 0, 1, 1)
         self.last_scan = QtGui.QLineEdit(self.tab)
+        self.last_scan.setText(_fromUtf8(""))
         self.last_scan.setObjectName(_fromUtf8("last_scan"))
         self.gridLayout_6.addWidget(self.last_scan, 1, 1, 1, 1)
         self.first_scan = QtGui.QLineEdit(self.tab)
+        self.first_scan.setText(_fromUtf8(""))
         self.first_scan.setObjectName(_fromUtf8("first_scan"))
         self.gridLayout_6.addWidget(self.first_scan, 0, 1, 1, 1)
         self.frequency = QtGui.QComboBox(self.tab)
@@ -860,7 +867,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addLayout(self.gridLayout_2)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1404, 20))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1406, 20))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuFile = QtGui.QMenu(self.menubar)
         self.menuFile.setObjectName(_fromUtf8("menuFile"))
@@ -983,10 +990,7 @@ class Ui_MainWindow(object):
         self.groupBox_5.setTitle(_translate("MainWindow", "Scan Numbers  (ex: 1234, 1300-1305, 1310)", None))
         self.label_8.setText(_translate("MainWindow", "*", None))
         self.label_7.setText(_translate("MainWindow", "Vanadium background", None))
-        self.diamond_background.setText(_translate("MainWindow", "65456", None))
         self.label.setText(_translate("MainWindow", "Diamond", None))
-        self.sample_background.setText(_translate("MainWindow", "65472", None))
-        self.vanadium.setText(_translate("MainWindow", "65458", None))
         self.label_5.setText(_translate("MainWindow", "Vanadium", None))
         self.label_4.setText(_translate("MainWindow", "*", None))
         self.label_6.setText(_translate("MainWindow", "*", None))
@@ -994,15 +998,11 @@ class Ui_MainWindow(object):
         self.label_10.setText(_translate("MainWindow", "*", None))
         self.label_11.setText(_translate("MainWindow", "Diamond background", None))
         self.label_12.setText(_translate("MainWindow", "Sample background", None))
-        self.vanadium_background.setText(_translate("MainWindow", "65470", None))
-        self.diamond.setText(_translate("MainWindow", "65454", None))
         self.label_21.setText(_translate("MainWindow", "*", None))
         self.label_22.setText(_translate("MainWindow", ": Mandatory field", None))
         self.label_18.setText(_translate("MainWindow", "First scan to be analyzed", None))
         self.label_20.setText(_translate("MainWindow", "Frequency (Hz)", None))
         self.label_19.setText(_translate("MainWindow", "Last scan to be analyzed", None))
-        self.last_scan.setText(_translate("MainWindow", "65452", None))
-        self.first_scan.setText(_translate("MainWindow", "65450", None))
         self.frequency.setItemText(0, _translate("MainWindow", "60", None))
         self.frequency.setItemText(1, _translate("MainWindow", "30", None))
         self.groupBox_6.setTitle(_translate("MainWindow", "Recalibration", None))
