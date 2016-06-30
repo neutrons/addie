@@ -42,8 +42,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         # Base class
         QtGui.QMainWindow.__init__(self)
 
+        # Initialize the UI widgets
         self.ui = ui_mainWindow.Ui_MainWindow()
         self.ui.setupUi(self)
+        self.ui.graphicsView_sq.set_main(self)
  
         self.ui.dockWidget_ipython.setup()
 
@@ -89,14 +91,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         self.connect(self.ui.pushButton_clearGrCanvas, QtCore.SIGNAL('clicked()'),
                      self.do_clear_gr)
 
-        # interaction with canvas
-
-        self.ui.graphicsView_sq.canvas().mpl_connect('button_press_event',
-                                                     self.on_mouse_press_event)
-        self.ui.graphicsView_sq.canvas().mpl_connect('button_release_event',
-                                                     self.on_mouse_release_event)
-        self.ui.graphicsView_sq.canvas().mpl_connect('motion_notify_event',
-                                                     self.on_mouse_motion)
+        self.connect(self.ui.doubleSpinBoxQmin, QtCore.SIGNAL('valueChanged(double)'),
+                     self.evt_qmin_changed)
+        self.connect(self.ui.doubleSpinBoxQmax, QtCore.SIGNAL('valueChanged(double)'),
+                     self.evt_qmax_changed)
 
         # organize widgets group
         self._braggBankWidgets = {1: self.ui.checkBox_bank1,
@@ -123,47 +121,32 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         return
 
-    def on_mouse_press_event(self, event):
+    def evt_qmin_changed(self):
         """
 
-        Returns
-        -------
+        Returns:
 
         """
-        print 'Pressed @ (%.5f, %.5f)' % (event.xdata, event.ydata)
+        q_min = self.ui.doubleSpinBoxQmin.value()
+        q_max = self.ui.doubleSpinBoxQmax.value()
 
-        if self.ui.graphicsView_sq.is_boundary_shown():
-            self.ui.graphicsView_sq.set_mouse_pressed_position(event.xdata, event.ydata)
+        if q_min < q_max and self.ui.graphicsView_sq.is_boundary_shown():
+            self.ui.graphicsView_sq.move_left_indicator(q_min, relative=False)
 
         return
 
-    def on_mouse_release_event(self, event):
+    def evt_qmax_changed(self):
         """
-
-        Parameters
-        ----------
-        event
-
-        Returns
-        -------
+        Handle if the user change the value of Qmax of S(Q) including
+        1. moving the right boundary in S(q) figure
+        Returns:
 
         """
-        print 'Released'
+        q_min = self.ui.doubleSpinBoxQmin.value()
+        q_max = self.ui.doubleSpinBoxQmax.value()
 
-        if self.ui.graphicsView_sq.is_boundary_shown():
-            self.ui.graphicsView_sq.set_mouse_current_position(event.xdata, event.ydata)
-
-        return
-
-    def on_mouse_motion(self, event):
-        """
-
-        Returns
-        -------
-
-        """
-        if self.ui.graphicsView_sq.is_boundary_shown():
-            self.ui.graphicsView_sq.set_mouse_current_position(event.xdata, event.ydata)
+        if q_min < q_max and self.ui.graphicsView_sq.is_boundary_shown():
+            self.ui.graphicsView_sq.move_right_indicator(q_max, relative=False)
 
         return
 
@@ -184,6 +167,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         self.ui.treeWidget_grWsList.add_main_item('SofQ', append=True, as_current_index=False)
 
         self.ui.dockWidget_ipython.iPythonWidget.set_main_application(self)
+
+        self.ui.radioButton_multiBank.setChecked(True)
 
         return
 
@@ -285,11 +270,19 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         gss_ws_name = self._myController.load_bragg_file(bragg_file_name)
 
         # split
-        self._gssGroupName, banks_list = self._myController.split_to_single_bank(gss_ws_name)
+        self._gssGroupName, banks_list, bank_angles = self._myController.split_to_single_bank(gss_ws_name)
 
         # add to tree
         # banks_list = ['bank1', 'bank2', 'bank3', 'bank4', 'bank5', 'bank6']
         self.ui.treeWidget_braggWSList.add_bragg_ws_group(self._gssGroupName, banks_list)
+
+        # rename bank
+        for bank_id in self._braggBankWidgets.keys():
+            bank_check_box = self._braggBankWidgets[bank_id]
+            if bank_angles[bank_id-1] is None:
+                bank_check_box.setText('Bank %d' % bank_id)
+            else:
+                bank_check_box.setText('Bank %.1f' % bank_angles[bank_id-1])
 
         # clear all lines
         self.ui.graphicsView_bragg.reset()
@@ -386,7 +379,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
             x_unit = 'MomentumTransfer'
 
         # get bank IDs to plot
-        plot_all_gss = self.ui.checkBox_plotAllGSS.isChecked()
+        plot_all_gss = self.ui.radioButton_multiGSS.isChecked()
 
         plot_bank_list = list()
         print '[DB...BAT] braggBankWidget: ', self._braggBankWidgets.keys()
@@ -536,7 +529,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
     def set_ipython_script(self, script):
         """
-
+        Write a command (python script) to ipython console
         Parameters
         ----------
         script
@@ -545,8 +538,41 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         -------
 
         """
-        # TODO/NOW - Doc and check
-        self.ui.dockWidget_ipython.iPythonWidget.write_command(script)
+        # check
+        assert isinstance(script, str)
+
+        #
+        if len(script) == 0:
+            # ignore
+            return
+        else:
+            # write to the console
+            self.ui.dockWidget_ipython.iPythonWidget.write_command(script)
+
+        return
+
+    def update_sq_boundary(self, boundary_index, new_position):
+        """
+        Update the S(Q) range at the main app inputs
+        Returns
+        -------
+
+        """
+        # check
+        assert isinstance(boundary_index, int)
+        assert isinstance(new_position, float)
+
+        # set value
+        if boundary_index == 1:
+            # left boundary
+            self.ui.doubleSpinBoxQmin.setValue(new_position)
+        elif boundary_index == 2:
+            # right boundary
+            self.ui.doubleSpinBoxQmax.setValue(new_position)
+        else:
+            # exception
+            raise RuntimeError('Boundary index %f in method update_sq_boundary() is not '
+                               'supported.' % new_position)
 
         return
 
