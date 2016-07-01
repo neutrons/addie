@@ -1,5 +1,6 @@
 import sys
 import os
+from ipythondockwidget import IPythonDockWidget
 
 import ui_mainWindow
 import step1
@@ -633,6 +634,14 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         _pop_back_wdg = PopulateBackgroundWidgets(parent = self)
         _pop_back_wdg.run()
         
+        _o_gui = Step2GuiHandler(parent = self)
+        _o_gui.check_gui()
+
+    def table_select_state_changed(self, state, row):
+        _o_gui = Step2GuiHandler(parent = self)
+        _o_gui.check_gui()
+
+    def check_step2_gui(self, row, column):
         _o_gui = Step2GuiHandler(parent = self)
         _o_gui.check_gui()
             

@@ -72,6 +72,8 @@ class PopulateMasterTable(object):
         
         _widget = QtGui.QCheckBox()
         _widget.setEnabled(True)
+        QtCore.QObject.connect(_widget, QtCore.SIGNAL("stateChanged(int)"),  lambda state = 0, 
+                               row = row: self.parent.table_select_state_changed(state, row))
         self.parent.ui.table.setCellWidget(row, 0, _widget)
         
         _item = QtGui.QTableWidgetItem(_metadata['name'])

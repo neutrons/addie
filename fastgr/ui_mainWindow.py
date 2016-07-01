@@ -2,12 +2,11 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Fri Jul  1 09:32:08 2016
+# Created: Fri Jul  1 13:32:11 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
-from ipythondockwidget import IPythonDockWidget
 from PyQt4 import QtCore, QtGui
 
 try:
@@ -909,7 +908,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.tabWidget_2.setCurrentIndex(0)
+        self.tabWidget_2.setCurrentIndex(1)
         QtCore.QObject.connect(self.diamond, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_edited)
         QtCore.QObject.connect(self.diamond_background, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_background_edited)
         QtCore.QObject.connect(self.vanadium, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.vanadium_edited)
@@ -932,6 +931,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.background_yes, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.yes_background_clicked)
         QtCore.QObject.connect(self.background_comboBox, QtCore.SIGNAL(_fromUtf8("currentIndexChanged(int)")), MainWindow.background_combobox_changed)
         QtCore.QObject.connect(self.move_to_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.move_to_folder_clicked)
+        QtCore.QObject.connect(self.table, QtCore.SIGNAL(_fromUtf8("cellChanged(int,int)")), MainWindow.check_step2_gui)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

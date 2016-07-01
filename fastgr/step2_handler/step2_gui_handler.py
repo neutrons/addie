@@ -1,6 +1,8 @@
 from PyQt4 import QtGui, QtCore
 import os
 
+from step2_handler.table_handler import TableHandler
+
 
 class Step2GuiHandler(object):
 
@@ -58,14 +60,46 @@ class Step2GuiHandler(object):
         if not self.parent.table.rowCount() > 0:
             _status = False
             
+        if not self.at_least_one_row_checked():
+            _status = False
+            
         if self.any_fourier_filter_widgets_empty():
             _status = False
             
         if self.any_plazcek_widgets_empty():
             _status = False
 
+        # make sure the row checked have none empty metadata fields
+        if _status:
+            for _row in range(self.parent.table.rowCount()):
+                _this_row_status_ok = self.check_if_this_row_is_ok(_row)
+                if not _this_row_status_ok:
+                    _status = False
+                    break
+
         self.parent.create_sample_properties_files_button.setEnabled(_status)
         self.parent.run_ndabs_button.setEnabled(_status)
+
+    def at_least_one_row_checked(self):
+        o_table_handler = TableHandler(parent = self.parent_no_ui)
+        o_table_handler.retrieve_list_of_selected_rows()
+        list_of_selected_row = o_table_handler.list_selected_row
+        if len(list_of_selected_row) > 0:
+            return True
+        else:
+            return False
+
+    def check_if_this_row_is_ok(self, row):
+        _status_ok = True
+        _selected_widget = self.parent.table.cellWidget(row, 0)
+        if (_selected_widget.checkState() == QtCore.Qt.Checked):
+            _table_handler = TableHandler(parent = self.parent_no_ui)
+            for _column in range(1,7):
+                if _table_handler.retrieve_item_text(row, _column) == '':
+                    _status_ok = False
+                    break
+
+        return _status_ok
 
     def any_plazcek_widgets_empty(self):
         _min = str(self.parent.plazcek_fit_range_min.text()).strip()
