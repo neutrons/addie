@@ -12,6 +12,7 @@ class InitStep2(object):
         
         self.init_table_dimensions()
         self.init_current_folder_label()
+        self.init_labels()
 
     def init_table_dimensions(self):
         
@@ -22,3 +23,12 @@ class InitStep2(object):
         _current_folder = self.parent.current_folder
         self.parent.ui.current_folder_label.setText(_current_folder)
         
+    def init_labels(self):
+        
+        #q range
+        _q_range_title = u"Q range (\u212B\u207B\u00b9)"
+        self.parent.ui.q_range_group_box.setTitle(_q_range_title)
+        
+        #fourier filter
+        _fourier_filter_title = u"Fourier filter (\u212B)"
+        self.parent.ui.fourier_filter_group_box.setTitle(_fourier_filter_title)

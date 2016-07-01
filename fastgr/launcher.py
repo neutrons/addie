@@ -17,6 +17,8 @@ from step2_handler.step2_gui_handler import Step2GuiHandler
 from step2_handler.table_handler import TableHandler
 from step2_handler.create_sample_files import CreateSampleFiles
 from step2_handler.create_ndsum_file import CreateNdsumFile
+from step2_handler.run_ndabs import RunNDabs
+from step2_handler.run_sum_scans import RunSumScans
 
 import PyQt4
 import PyQt4.QtCore as QtCore
@@ -641,6 +643,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         _o_gui = Step2GuiHandler(parent = self)
         _o_gui.check_gui()
 
+    def check_q_range(self):
+        _o_gui = Step2GuiHandler(parent = self)
+        _o_gui.check_gui()
+
     def check_step2_gui(self, row, column):
         _o_gui = Step2GuiHandler(parent = self)
         _o_gui.check_gui()
@@ -665,13 +671,21 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         o_gui = Step2GuiHandler(parent = self)
         o_gui.background_index_changed(row_index = index)
 
-    def create_sample_properties_files_clicked(self):
+    def reset_q_range(self):
+        o_gui = Step2GuiHandler(parent = self)
+        o_gui.reset_q_range()
+
+    def run_ndabs_clicked(self):
         o_create_sample_files = CreateSampleFiles(parent = self)
         o_create_sample_files.run()
         
-    def run_ndabs_clicked(self):
+        list_sample_files = o_create_sample_files.list_sample_files
+        
         o_create_ndsum_file = CreateNdsumFile(parent = self)
         o_create_ndsum_file.run()
+
+        o_run_ndsum = RunNDabs(parent = self, list_sample_files = list_sample_files)
+        o_run_ndsum.run()
         
     def check_fourier_filter_widgets(self):
         o_gui = Step2GuiHandler(parent = self)
@@ -685,6 +699,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         _o_table = TableHandler(parent = self)
         _o_table.right_click(position = position)
 
+    def run_sum_scans_clicked(self):
+        o_run_sum_scans = RunSumScans(parent = self)
+        o_run_sum_scans.run()
 
 def main():
     app = PyQt4.QtGui.QApplication(sys.argv)

@@ -9,6 +9,7 @@ class Step2GuiHandler(object):
     hidrogen_range = [1, 50]
     no_hidrogen_range = [10, 50]
     current_folder = ""
+    default_q_range = [0.2, 31.4]
     
     def __init__(self, parent=None):
         self.parent_no_ui = parent
@@ -69,6 +70,9 @@ class Step2GuiHandler(object):
         if self.any_plazcek_widgets_empty():
             _status = False
 
+        if self.any_q_range_widgets_empty():
+            _status = False
+
         # make sure the row checked have none empty metadata fields
         if _status:
             for _row in range(self.parent.table.rowCount()):
@@ -77,8 +81,8 @@ class Step2GuiHandler(object):
                     _status = False
                     break
 
-        self.parent.create_sample_properties_files_button.setEnabled(_status)
         self.parent.run_ndabs_button.setEnabled(_status)
+        self.parent.run_sum_scans_button.setEnabled(_status)
 
     def at_least_one_row_checked(self):
         o_table_handler = TableHandler(parent = self.parent_no_ui)
@@ -112,6 +116,17 @@ class Step2GuiHandler(object):
 
         return False
         
+    def any_q_range_widgets_empty(self):
+        _min = str(self.parent.q_range_min.text()).strip()
+        if _min == "":
+            return True
+    
+        _max = str(self.parent.q_range_max.text()).strip()
+        if _max == "":
+            return True
+
+        return False
+
     def any_fourier_filter_widgets_empty(self):
         _from = str(self.parent.fourier_filter_from.text()).strip()
         if _from == "":
@@ -122,3 +137,10 @@ class Step2GuiHandler(object):
             return True
         
         return False
+    
+    def reset_q_range(self):
+        _q_min = "%s" %str(self.default_q_range[0])
+        _q_max = "%s" %str(self.default_q_range[1])
+        self.parent.q_range_min.setText(_q_min)
+        self.parent.q_range_max.setText(_q_max)
+        

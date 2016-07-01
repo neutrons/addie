@@ -50,6 +50,7 @@ class GenerateSumthing(object):
         outfile = open(full_output_file_name, "w")
         outfile.write("background \n")
         
+        print(">creating file %s" %full_output_file_name)
         for key in sorted(run_nums.iterkeys()):
             outbit = str(run_nums[key])
             outbit = outbit.replace("[","")

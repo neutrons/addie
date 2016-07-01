@@ -25,16 +25,16 @@ class CreateNdsumFile(object):
 
     def _retrieve_gui_settings(self):
         _gui_settings = {}
-        _gui_settings['background_flag']= self.parent.background_yes.isChecked()
-        _gui_settings['background_no_field'] = str(self.parent.background_no_field.text())
-        _gui_settings['background_yes_field'] = str(self.parent.background_line_edit.text())
-        _gui_settings['muscat_flag'] = self.parent.muscat_yes.isChecked()
-        _gui_settings['scale_data_flag'] = self.parent.scale_data_yes.isChecked()
-        _gui_settings['run_rmc_flag'] = self.parent.run_rmc_yes.isChecked()
-        _gui_settings['plazcek_from'] = str(self.parent.plazcek_fit_range_min.text())
-        _gui_settings['plazcek_to'] = str(self.parent.plazcek_fit_range_max.text())
-        _gui_settings['bfil_from'] = str(self.parent.fourier_filter_from.text())
-        _gui_settings['bfil_to'] = str(self.parent.fourier_filter_to.text())
+        _gui_settings['background_flag']= self.parent.ui.background_yes.isChecked()
+        _gui_settings['background_no_field'] = str(self.parent.ui.background_no_field.text())
+        _gui_settings['background_yes_field'] = str(self.parent.ui.background_line_edit.text())
+        _gui_settings['muscat_flag'] = self.parent.ui.muscat_yes.isChecked()
+        _gui_settings['scale_data_flag'] = self.parent.ui.scale_data_yes.isChecked()
+        _gui_settings['run_rmc_flag'] = self.parent.ui.run_rmc_yes.isChecked()
+        _gui_settings['plazcek_from'] = str(self.parent.ui.plazcek_fit_range_min.text())
+        _gui_settings['plazcek_to'] = str(self.parent.ui.plazcek_fit_range_max.text())
+        _gui_settings['bfil_from'] = str(self.parent.ui.fourier_filter_from.text())
+        _gui_settings['bfil_to'] = str(self.parent.ui.fourier_filter_to.text())
         self.gui_settings = _gui_settings
 
     def _create_sto_output_file(self):
@@ -76,6 +76,7 @@ class CreateNdsumFile(object):
         _plazcek = "plarange \t%s,%s\n" %(_gui_settings['plazcek_from'], _gui_settings['plazcek_to'])
         _text.append(_plazcek)
 
+        print("[LOG] creating file %s" %full_file_name)
         f = open(full_file_name, 'w')
         for _line in _text:
             f.write(_line)
