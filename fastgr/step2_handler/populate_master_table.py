@@ -7,16 +7,24 @@ from step2_handler.generate_sumthing import GenerateSumthing
 class PopulateMasterTable(object):
     
     auto_sum_ini_file = 'auto_sum.inp'
+    error_reported = False
              
     def __init__(self, parent=None):
         self.parent = parent
         
     def run(self):
-        o_generate = GenerateSumthing(folder= self.parent.current_folder)
-        o_generate.create_sum_inp_file()
+
+        try:
+            o_generate = GenerateSumthing(folder= self.parent.current_folder)
+            o_generate.create_sum_inp_file()
         
-        self.read_auto_sum_file()
-        self.populate_table()
+            self.read_auto_sum_file()
+            self.populate_table()
+        except IOError:
+            _error_box = QtGui.QMessageBox.warning(self.parent, "File does not exist!", "Check your folder!         ")
+#            _error_box.show()
+            self.error_reported = True
+            
         
     def empty_metadata(self):
         _metadata = {'name': "",
@@ -60,40 +68,40 @@ class PopulateMasterTable(object):
                 
     def add_new_row(self, _metadata, row=0):
         
-        self.parent.table.insertRow(row)
+        self.parent.ui.table.insertRow(row)
         
         _widget = QtGui.QCheckBox()
         _widget.setEnabled(True)
-        self.parent.table.setCellWidget(row, 0, _widget)
+        self.parent.ui.table.setCellWidget(row, 0, _widget)
         
         _item = QtGui.QTableWidgetItem(_metadata['name'])
-        self.parent.table.setItem(row, 1, _item)
+        self.parent.ui.table.setItem(row, 1, _item)
 
         _item = QtGui.QTableWidgetItem(_metadata['runs'])
-        self.parent.table.setItem(row, 2, _item)
+        self.parent.ui.table.setItem(row, 2, _item)
         
         if not _metadata['sample_formula']:
             _item = QtGui.QTableWidgetItem(_metadata['sample_formula'])
-            self.parent.table.setItem(row, 3, _item)
+            self.parent.ui.table.setItem(row, 3, _item)
             
         if not _metadata['mass_density']:
             _item = QtGui.QTableWidgetItem(_metadata['mass_density'])
-            self.parent.table.setItem(row, 4, _item)
+            self.parent.ui.table.setItem(row, 4, _item)
             
         if not _metadata['radius']:
             _item = QtGui.QTableWidgetItem(_metadata['radius'])
-            self.parent.table.setItem(row, 5, _item)
+            self.parent.ui.table.setItem(row, 5, _item)
             
         if not _metadata['packing_fraction']:
             _item = QtGui.QTableWidgetItem(_metadata['packing_fraction'])
-            self.parent.table.setItem(row, 6, _item)
+            self.parent.ui.table.setItem(row, 6, _item)
         
         _widget = QtGui.QComboBox()
         _widget.addItem("cylindrical")
         _widget.addItem("spherical")
         if _metadata['sample_shape'] == 'spherical':
             _widget.setCurrentIndex(1)
-        self.parent.table.setCellWidget(row, 7, _widget)
+        self.parent.ui.table.setCellWidget(row, 7, _widget)
         
         _layout = QtGui.QHBoxLayout()
         _widget = QtGui.QCheckBox()
@@ -106,5 +114,5 @@ class PopulateMasterTable(object):
         _layout.addStretch()
         _new_widget = QtGui.QWidget()
         _new_widget.setLayout(_layout)
-        self.parent.table.setCellWidget(row, 8, _new_widget)
+        self.parent.ui.table.setCellWidget(row, 8, _new_widget)
 

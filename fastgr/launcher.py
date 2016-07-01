@@ -625,6 +625,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         _pop_table = PopulateMasterTable(parent = self)
         _pop_table.run()
+        _error_reported = _pop_table.error_reported
+        
+        if _error_reported:
+            return
         
         _pop_back_wdg = PopulateBackgroundWidgets(parent = self)
         _pop_back_wdg.run()

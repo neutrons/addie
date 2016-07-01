@@ -23,6 +23,9 @@ class GenerateSumthing(object):
         name_list=[]
         run_nums=defaultdict(list)
         
+        if not os.path.isfile(full_input_file_name):
+            raise IOError("File does not exist!")
+        
         with open(full_input_file_name, "r") as myfile:
             data = myfile.readlines()
         

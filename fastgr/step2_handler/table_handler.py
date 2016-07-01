@@ -8,7 +8,8 @@ class TableHandler(object):
     list_selected_row = None
     
     def __init__(self, parent=None):
-        self.parent = parent
+        self.parent = parent.ui
+        self.parent_no_ui = parent
         
     def retrieve_list_of_selected_rows(self):
         self.list_selected_row = []
@@ -72,7 +73,7 @@ class TableHandler(object):
         _remove_row = -1
         _new_row = -1
 
-        menu = QtGui.QMenu(self.parent)
+        menu = QtGui.QMenu(self.parent_no_ui)
         _new_row = menu.addAction("Insert Blank Row")
 
         if (self.parent.table.rowCount() > 0):
@@ -100,7 +101,7 @@ class TableHandler(object):
         _row = self.current_row
         if _row == -1:
             _row = 0
-        o_populate = PopulateMasterTable(parent = self.parent)
+        o_populate = PopulateMasterTable(parent = self.parent_no_ui)
         _metadata = o_populate.empty_metadata()
         o_populate.add_new_row(_metadata, row = _row)
     

@@ -6,17 +6,44 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>676</width>
-    <height>617</height>
+    <width>1313</width>
+    <height>741</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>300</width>
+    <height>0</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QScrollArea" name="scrollArea">
+      <property name="minimumSize">
+       <size>
+        <width>800</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
       <property name="widgetResizable">
        <bool>true</bool>
       </property>
@@ -25,9 +52,15 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>638</width>
+         <width>1275</width>
          <height>713</height>
         </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_44">
         <item>
@@ -133,7 +166,7 @@
                       <string/>
                      </property>
                      <property name="text">
-                      <string/>
+                      <string>65456</string>
                      </property>
                      <property name="placeholderText">
                       <string/>
@@ -162,7 +195,7 @@
                       <string/>
                      </property>
                      <property name="text">
-                      <string/>
+                      <string>65472</string>
                      </property>
                      <property name="placeholderText">
                       <string/>
@@ -184,7 +217,7 @@
                       <string/>
                      </property>
                      <property name="text">
-                      <string/>
+                      <string>65458</string>
                      </property>
                      <property name="placeholderText">
                       <string/>
@@ -423,7 +456,7 @@
                       <string/>
                      </property>
                      <property name="text">
-                      <string/>
+                      <string>65470</string>
                      </property>
                      <property name="placeholderText">
                       <string/>
@@ -445,7 +478,7 @@
                       <string/>
                      </property>
                      <property name="text">
-                      <string/>
+                      <string>65454</string>
                      </property>
                      <property name="placeholderText">
                       <string/>
@@ -742,22 +775,22 @@
                </layout>
               </item>
               <item>
+               <spacer name="verticalSpacer_25">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
                <layout class="QHBoxLayout" name="horizontalLayout_58">
                 <item>
                  <layout class="QVBoxLayout" name="verticalLayout_33">
-                  <item>
-                   <spacer name="verticalSpacer_25">
-                    <property name="orientation">
-                     <enum>Qt::Vertical</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>20</width>
-                      <height>40</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
                   <item>
                    <widget class="QGroupBox" name="groupBox_31">
                     <property name="title">
@@ -872,6 +905,12 @@
               </item>
               <item>
                <widget class="QPushButton" name="populate_table">
+                <property name="minimumSize">
+                 <size>
+                  <width>800</width>
+                  <height>0</height>
+                 </size>
+                </property>
                 <property name="text">
                  <string>Populate Table</string>
                 </property>
@@ -881,7 +920,7 @@
                <widget class="QTableWidget" name="table">
                 <property name="minimumSize">
                  <size>
-                  <width>50</width>
+                  <width>800</width>
                   <height>0</height>
                  </size>
                 </property>
@@ -2209,7 +2248,7 @@
          <widget class="IPythonDockWidget" name="dockWidget_ipython">
           <property name="minimumSize">
            <size>
-            <width>70</width>
+            <width>800</width>
             <height>36</height>
            </size>
           </property>
@@ -2233,7 +2272,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>676</width>
+     <width>1313</width>
      <height>20</height>
     </rect>
    </property>
