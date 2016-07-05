@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Fri Jul  1 16:57:42 2016
+# Created: Tue Jul  5 15:16:24 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -368,7 +368,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_60 = QtGui.QHBoxLayout()
         self.horizontalLayout_60.setObjectName(_fromUtf8("horizontalLayout_60"))
         self.move_to_button = QtGui.QPushButton(self.tab_6)
-        self.move_to_button.setMaximumSize(QtCore.QSize(130, 16777215))
+        self.move_to_button.setMaximumSize(QtCore.QSize(240, 16777215))
         self.move_to_button.setObjectName(_fromUtf8("move_to_button"))
         self.horizontalLayout_60.addWidget(self.move_to_button)
         self.label_79 = QtGui.QLabel(self.tab_6)
@@ -1043,10 +1043,10 @@ class Ui_MainWindow(object):
         self.manual_output_folder.setText(_translate("MainWindow", "Manual", None))
         self.run_autonom_script.setText(_translate("MainWindow", "Run autoNOM script", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_5), _translate("MainWindow", "autoNOM", None))
-        self.move_to_button.setText(_translate("MainWindow", "Move to Folder ...", None))
+        self.move_to_button.setText(_translate("MainWindow", "Move to Folder and Refresh Table ...", None))
         self.label_79.setText(_translate("MainWindow", "Current folder:", None))
         self.current_folder_label.setText(_translate("MainWindow", "N/A", None))
-        self.populate_table.setText(_translate("MainWindow", "Populate Table", None))
+        self.populate_table.setText(_translate("MainWindow", "Refresh Table", None))
         item = self.table.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Select", None))
         item = self.table.horizontalHeaderItem(1)

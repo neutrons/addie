@@ -618,7 +618,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
     def move_to_folder_clicked(self):
         o_gui = Step2GuiHandler(parent = self)
         o_gui.move_to_folder()
-
+        self.populate_table_clicked()
+        
     def populate_table_clicked(self):
         
         if self.debugging:

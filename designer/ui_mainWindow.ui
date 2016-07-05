@@ -872,12 +872,12 @@
                  <widget class="QPushButton" name="move_to_button">
                   <property name="maximumSize">
                    <size>
-                    <width>130</width>
+                    <width>240</width>
                     <height>16777215</height>
                    </size>
                   </property>
                   <property name="text">
-                   <string>Move to Folder ...</string>
+                   <string>Move to Folder and Refresh Table ...</string>
                   </property>
                  </widget>
                 </item>
@@ -912,7 +912,7 @@
                  </size>
                 </property>
                 <property name="text">
-                 <string>Populate Table</string>
+                 <string>Refresh Table</string>
                 </property>
                </widget>
               </item>

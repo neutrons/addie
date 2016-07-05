@@ -53,9 +53,21 @@ class Step2GuiHandler(object):
         self.parent.background_line_edit.setText(self.parent.table.item(row_index, 2).text())
         
     def check_gui(self):
-        self.check_create_sample_properties_files_button()
+        self.check_run_ndabs_button()
+        self.check_run_sum_scans_button()
         
-    def check_create_sample_properties_files_button(self):
+    def check_run_sum_scans_button(self):
+        
+        _status = True
+        if not self.parent.table.rowCount() > 0:
+            _status = False
+            
+        if not self.at_least_one_row_checked():
+            _status = False
+            
+        self.parent.run_sum_scans_button.setEnabled(_status)
+        
+    def check_run_ndabs_button(self):
         
         _status = True
         if not self.parent.table.rowCount() > 0:
@@ -82,7 +94,6 @@ class Step2GuiHandler(object):
                     break
 
         self.parent.run_ndabs_button.setEnabled(_status)
-        self.parent.run_sum_scans_button.setEnabled(_status)
 
     def at_least_one_row_checked(self):
         o_table_handler = TableHandler(parent = self.parent_no_ui)
