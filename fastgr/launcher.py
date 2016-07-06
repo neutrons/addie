@@ -54,8 +54,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         # set widgets
         self._init_widgets()
-        init_step1 = InitStep1(parent = self)
-        init_step2 = InitStep2(parent = self)
+        init_step1 = InitStep1(parent=self)
+        init_step2 = InitStep2(parent=self)
 
         # define the event handling methods
         # bragg diffraction tab
@@ -85,6 +85,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
                      self.evt_plot_sq)
         self.connect(self.ui.radioButton_qsqm1, QtCore.SIGNAL('toggled(bool)'),
                      self.evt_plot_sq)
+        self.connect(self.ui.pushButton_clearSofQ, QtCore.SIGNAL('clicked()'),
+                     self.do_clear_sq)
         self.connect(self.ui.pushButton_showQMinMax, QtCore.SIGNAL('clicked()'),
                      self.do_show_sq_bound)
         self.connect(self.ui.pushButton_generateGR, QtCore.SIGNAL('clicked()'),
@@ -171,6 +173,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         self.ui.dockWidget_ipython.iPythonWidget.set_main_application(self)
 
+        self.ui.radioButton_sq.setChecked(True)
         self.ui.radioButton_multiBank.setChecked(True)
 
         # add the combo box for PDF type
@@ -189,6 +192,17 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         """
         self.ui.graphicsView_gr.clear_all_lines()
+
+        return
+
+    def do_clear_sq(self):
+        """
+        Clear S(Q) canvas
+        Returns
+        -------
+
+        """
+        self.ui.graphicsView_sq.clear_all_lines()
 
         return
 
@@ -270,6 +284,50 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         return
 
+    def plot_sq(self, sq_ws_name, clear_prev):
+        """
+        Plot S(Q)
+        Parameters
+        ----------
+        sq_ws_name
+        clear_prev
+
+        Returns
+        -------
+
+        """
+        # clear previous lines
+        if clear_prev:
+            self.ui.graphicsView_sq.clear_all_lines()
+
+        # get data
+        vec_q, vec_sq, vec_se = self._myController.get_sq(sq_ws_name)
+
+        # get the unit & do conversion if necessary
+        if self.ui.radioButton_sq.isChecked():
+            # use the original S(Q)
+            sq_unit = 'S(Q)'
+            vec_y = vec_sq
+        elif self.ui.radioButton_sqm1.isChecked():
+            # use S(Q)-1
+            sq_unit = 'S(Q)-1'
+            vec_y = vec_sq - 1
+        elif self.ui.radioButton_qsqm1.isChecked():
+            # use Q(S(Q)-1)
+            sq_unit = 'Q(S(Q)-1)'
+            vec_y = vec_q * (vec_sq - 1)
+        else:
+            raise RuntimeError('None of S(Q), S(Q)-1 or Q(S(Q)-1) is chosen.')
+
+        # plot
+        if clear_prev:
+            reset = True
+        else:
+            reset = False
+        self.ui.graphicsView_sq.plot_sq(sq_ws_name, vec_q, vec_y, vec_se, sq_unit, reset)
+
+        return
+
     def do_load_bragg_file(self):
         """
         Load Bragg files including GSAS, NeXus, 3-column ASCii.
@@ -333,13 +391,14 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         # set to the tree and combo box
         self.ui.treeWidget_grWsList.add_child_main_item('SofQ', sq_ws_name)
         self.ui.comboBox_SofQ.addItem(sq_ws_name)
+        self.ui.comboBox_SofQ.setCurrentIndex(self.ui.comboBox_SofQ.count()-1)
 
         # set the UI widgets
         self.ui.doubleSpinBoxQmin.setValue(q_min)
         self.ui.doubleSpinBoxQmax.setValue(q_max)
 
         # plot the figure
-        self.ui.radioButton_sq.setChecked(True)
+        self.evt_plot_sq()
 
         # calculate and calculate G(R)
         self.do_generate_gr()
@@ -363,15 +422,18 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         else:
             gr_ws_name = gr_name_list[0]
 
+        print '[DB...BAT] G(r) workspace: %s' % gr_ws_name
+
         # pop-up a dialog for the file to save
+        default_dir = os.getcwd()
         file_ext = 'Data (*.dat)'
-        gr_file_name = QtGui.QFileDialog.getSaveFileName(self, 'Save G(r)', file_ext)
+        gr_file_name = str(QtGui.QFileDialog.getSaveFileName(self, caption='Save G(r)',
+                                                             directory=default_dir, filter=file_ext))
 
         # save!
         self._myController.save_ascii(gr_ws_name, gr_file_name)
 
         return
-
 
     def do_show_sq_bound(self):
         """
@@ -512,28 +574,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         """
         # get the raw S(Q)
-        vec_q, vec_sq, vec_se = self._myController.get_sq()
         sq_name = self._myController.get_current_sq_name()
 
-        # get the unit
-        sq_unit = None
-        if self.ui.radioButton_sq.isChecked():
-            # use the original S(Q)
-            sq_unit = 'S(Q)'
-            vec_y = vec_sq
-        elif self.ui.radioButton_sqm1.isChecked():
-            # use S(Q)-1
-            sq_unit = 'S(Q)-1'
-            vec_y = vec_sq - 1
-        elif self.ui.radioButton_qsqm1.isChecked():
-            # use Q(S(Q)-1)
-            sq_unit = 'Q(S(Q)-1)'
-            vec_y = vec_q * (vec_sq - 1)
-        else:
-            raise RuntimeError('None of S(Q), S(Q)-1 or Q(S(Q)-1) is chosen.')
-
-        # plot
-        self.ui.graphicsView_sq.plot_sq(sq_name, vec_q, vec_y, vec_se, sq_unit)
+        # plot S(Q)
+        self.plot_sq(sq_name, clear_prev=True)
 
         return
 
@@ -545,17 +589,17 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         """
         # TODO/NOW - Check & doc & figure out what to do!
-        print 'current tab = ', self.ui.tabWidget.currentIndex(), self.ui.tabWidget.currentWidget(),
-        print self.ui.tabWidget.currentWidget().objectName()
+        print 'current tab = ', self.ui.tabWidget_2.currentIndex(), self.ui.tabWidget_2.currentWidget(),
+        print self.ui.tabWidget_2.currentWidget().objectName()
 
         print 'current workspaces: ', self._myController.get_current_workspaces()
 
         # add to tree
         if len(new_ws_list) > 0:
-            if self.ui.tabWidget.currentWidget().objectName() == 'tab_gR':
+            if self.ui.tabWidget_2.currentWidget().objectName() == 'tab_gR':
                 for new_ws in new_ws_list:
                     self.ui.treeWidget_grWsList.add_temp_ws(new_ws)
-            elif self.ui.tabWidget.currentWidget().objectName() == 'tab_bragg':
+            elif self.ui.tabWidget_2.currentWidget().objectName() == 'tab_bragg':
                 for new_ws in new_ws_list:
                     self.ui.treeWidget_braggWSList.add_temp_ws(new_ws)
 

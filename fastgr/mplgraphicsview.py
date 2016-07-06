@@ -859,6 +859,7 @@ class Qt4MplCanvas(FigureCanvas):
 
         if True:
             self.axes = self.fig.add_subplot(111) # return: matplotlib.axes.AxesSubplot
+            self.fig.subplots_adjust(bottom=0.15)
             self.axes2 = None
         else:
             self.axes = self.fig.add_host_subplot(111)
@@ -927,6 +928,12 @@ class Qt4MplCanvas(FigureCanvas):
         # Hold previous data
         self.axes.hold(True)
 
+        # set x-axis and y-axis label
+        if x_label is not None:
+            self.axes.set_xlabel(x_label, fontsize=16)
+        if y_label is not None:
+            self.axes.set_ylabel(y_label, fontsize=16)
+
         # process inputs and defaults
         if color is None:
             color = (0, 1, 0, 1)
@@ -945,12 +952,6 @@ class Qt4MplCanvas(FigureCanvas):
                                    label=label, linewidth=line_width)
 
         self.axes.set_aspect('auto')
-
-        # set x-axis and y-axis label
-        if x_label is not None:
-            self.axes.set_xlabel(x_label, fontsize=20)
-        if y_label is not None:
-            self.axes.set_ylabel(y_label, fontsize=20)
 
         # set/update legend
         self._setupLegend()
@@ -1138,12 +1139,12 @@ class Qt4MplCanvas(FigureCanvas):
             self.fig.clear()
             # Re-create subplot
             self.axes = self.fig.add_subplot(111)
+            self.fig.subplots_adjust(bottom=0.15)
 
         # flush/commit
         self._flush()
 
         return
-
 
     def getLastPlotIndexKey(self):
         """ Get the index/key of the last added line

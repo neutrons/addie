@@ -199,17 +199,25 @@ class FastGRDriver(object):
 
         return gr_ws.readX(0), gr_ws.readY(0), gr_ws.readE(0)
 
-    def get_sq(self):
+    def get_sq(self, sq_name=None):
         """
         Get S(Q)
         Returns
         -------
         3-tuple of numpy array as Q, S(Q) and Sigma(Q)
         """
-        assert AnalysisDataService.doesExist(self._currSqWsName), 'S(Q) matrix workspace %s does not exist.' \
-                                                                  '' % self._currSqWsName
+        # check
+        assert isinstance(sq_name, str) or sq_name is None
 
-        out_ws = AnalysisDataService.retrieve(self._currSqWsName)
+        # set up default
+        if sq_name is None:
+            sq_name = self._currSqWsName
+
+        assert AnalysisDataService.doesExist(sq_name), 'S(Q) matrix workspace %s does not exist.' \
+                                                       '' % sq_name
+
+        # access output workspace and return vector X, Y, E
+        out_ws = AnalysisDataService.retrieve(sq_name)
 
         return out_ws.readX(0), out_ws.readY(0), out_ws.readE(0)
 
@@ -274,6 +282,7 @@ class FastGRDriver(object):
         2-tuple range of Q
         """
         sq_ws_name = os.path.basename(file_name).split('.')[0]
+        print '[DB...BAT] Split file %s to workspace %s.' % (file_name, sq_ws_name)
 
         simpleapi.LoadAscii(Filename=file_name, OutputWorkspace=sq_ws_name, Unit='MomentumTransfer')
         assert AnalysisDataService.doesExist(sq_ws_name), 'Unable to load S(Q) file %s.' % file_name
@@ -347,7 +356,8 @@ class FastGRDriver(object):
 
         return ws_group_name, ws_list, angle_list
 
-    def save_ascii(self, ws_name, file_name):
+    @staticmethod
+    def save_ascii(ws_name, file_name):
         """
 
         Args:
@@ -357,6 +367,8 @@ class FastGRDriver(object):
         Returns:
 
         """
+        assert isinstance(ws_name, str)
+        assert isinstance(file_name, str)
         simpleapi.SaveAscii(InputWorkspace=ws_name, Filename=file_name)
 
         return

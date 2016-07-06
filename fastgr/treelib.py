@@ -7,59 +7,6 @@ from PyQt4 import QtGui, QtCore
 import customtreeview as base
 
 
-class FileSystemTreeView(QtGui.QTreeView):
-    """
-
-    """
-    def __init__(self, parent):
-        """
-
-        :param parent:
-        :return:
-        """
-        QtGui.QTreeView.__init__(self, parent)
-
-        # Selection mode
-        self.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
-
-        # Model
-        cur_dir = os.path.expanduser('~')
-        file_model = QtGui.QFileSystemModel()
-        #file_model.setRootPath(QtCore.QString(cur_dir))
-        file_model.setRootPath(str(cur_dir))
-
-        self.setModel(file_model)
-
-        return
-
-    def set_root_path(self, root_path):
-        """
-
-        :param root_path: root path (i.e., no parent)
-        :return:
-        """
-        # Root path: from model to TreeView
-        self.model().setRootPath(root_path)
-        idx = self.model().index(root_path)
-        self.setRootIndex(idx)
-
-        self.set_current_path(root_path)
-
-        return
-
-    def set_current_path(self, current_path):
-        """
-
-        :param current_path:
-        :return:
-        """
-        # Set default path (i.e., current view)
-        idx = self.model().index(current_path)
-        self.setCurrentIndex(idx)
-
-        return
-
-
 class BraggTree(base.CustomizedTreeView):
     """ Tree widget to store Bragg workspace """
     def __init__(self, parent):
@@ -247,7 +194,7 @@ class GofRTree(base.CustomizedTreeView):
         # Add actions
         # plot
         action_plot = QtGui.QAction('Plot', self)
-        action_plot.triggered.connect(self.do_plot_gr)
+        action_plot.triggered.connect(self.do_plot)
         self.addAction(action_plot)
         # to python
         action_ipython = QtGui.QAction('To IPython', self)
@@ -330,29 +277,44 @@ class GofRTree(base.CustomizedTreeView):
 
         return
 
-    def do_plot_gr(self):
+    def do_plot(self):
         """
         Add selected runs
         :return:
         """
-        item_list = self.get_selected_items()
-        leaf_list = list()
+        item_list = self.get_selected_items_of_level(target_item_level=2, excluded_parent=None,
+                                                     return_item_text=False)
+
+        gr_list = list()
+        sq_list = list()
 
         for item in item_list:
+            print '[DB...BAT]', item.text()
             leaf = str(item.text())
-            leaf_list.append(leaf)
+
+            parent_i = item.parent()
+            if str(parent_i.text()) == 'SofQ':
+                sq_list.append(leaf)
+            else:
+                gr_list.append(leaf)
         # END-FOR
 
         # sort
-        leaf_list.sort()
+        sq_list.sort()
+        gr_list.sort()
+
+        print sq_list
+        print gr_list
 
         # FIXME/LATER - replace this by signal
-        if self._mainWindow is not None:
-            self._mainWindow.plot_gr(leaf_list)
-        else:
-            raise NotImplementedError('Main windown has not been set up!')
+        if self._mainWindow is None:
+            raise NotImplementedError('Main window has not been set up!')
 
-        # print '[DB...BAT] selected leaves: ', leaf_list
+        if len(gr_list) > 0:
+            self._mainWindow.plot_gr(gr_list)
+
+        for sq_name in sq_list:
+            self._mainWindow.plot_sq(sq_name, False)
 
         return
 

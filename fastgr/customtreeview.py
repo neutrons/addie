@@ -347,7 +347,7 @@ class CustomizedTreeView(QtGui.QTreeView):
         Get the selected items in a specified level
         Args:
             target_item_level: root is 0.
-            excluded_parent: parent nodes' name to be excluded
+            excluded_parent: (1) parent nodes' name to be excluded or (2) None for nothing to exclude
             return_item_text: if True, the return the item text; otherwise, QItem
         Returns: list of q-items
 
@@ -356,7 +356,7 @@ class CustomizedTreeView(QtGui.QTreeView):
         assert isinstance(target_item_level, int) and target_item_level >= 1, \
             'Level %s is not allowed. It must be larger than 0.' % str(target_item_level)
         assert isinstance(return_item_text, bool)
-        assert isinstance(excluded_parent, str)
+        assert isinstance(excluded_parent, str) or excluded_parent is None
 
         # get selected QIndexes
         selected_items = self.get_selected_items()
@@ -368,10 +368,10 @@ class CustomizedTreeView(QtGui.QTreeView):
             item_level = self.get_item_level(item)
             if item_level != target_item_level:
                 continue
-            if self.has_ancestor(item, excluded_parent):
+            if excluded_parent is not None and self.has_ancestor(item, excluded_parent):
                 continue
             if return_item_text:
-                return_list.append(item.text())
+                return_list.append(str(item.text()))
             else:
                 return_list.append(item)
             # END-IF

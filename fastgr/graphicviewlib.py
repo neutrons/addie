@@ -228,7 +228,8 @@ class GofRView(base.MplGraphicsView):
         else:
             line_id = self.add_plot_1d(vec_r, vec_g, marker='.',
                                        color=self._colorList[self._colorIndex % len(self._colorList)],
-                                       label=key_plot)
+                                       label=key_plot,
+                                       x_label=r'r ($\AA$)')
             self._colorIndex += 1
             self._grDict[key_plot] = line_id
 
@@ -482,28 +483,36 @@ class SofQView(base.MplGraphicsView):
 
         return
 
-    def plot_sq(self, sq_name, vec_r, vec_s, vec_e, sq_y_label):
+    def plot_sq(self, sq_name, vec_q, vec_s, vec_e, sq_y_label, reset_color_mark):
         """
         Plot S(Q)
         Parameters
         ----------
         sq_name:
-        vec_r
+        vec_q
         vec_s
         vec_e
         sq_y_label :: label for Y-axis
+        reset_color_mark : boolean to reset color marker
 
         Returns
         -------
 
         """
         # check
-        assert isinstance(vec_r, np.ndarray) and isinstance(vec_s, np.ndarray)
+        assert isinstance(vec_q, np.ndarray) and isinstance(vec_s, np.ndarray)
         assert isinstance(sq_y_label, str)
 
-        self.clear_all_lines()
-        self.add_plot_1d(vec_r, vec_s, color='blue', x_label='Q', y_label=sq_y_label,
-                         marker='.', label=sq_name)
+        # define color
+        if reset_color_mark:
+            color = 'blue'
+            marker = '.'
+        else:
+            marker, color = self.getNextLineMarkerColorCombo()
+
+        # plot
+        self.add_plot_1d(vec_q, vec_s, color=color, x_label='Q', y_label=sq_y_label,
+                         marker=marker, label=sq_name)
 
         return
 
