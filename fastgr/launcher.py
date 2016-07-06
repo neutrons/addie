@@ -90,7 +90,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         self.connect(self.ui.pushButton_generateGR, QtCore.SIGNAL('clicked()'),
                      self.do_generate_gr)
         self.connect(self.ui.pushButton_saveGR, QtCore.SIGNAL('clicked()'),
-                     self.do_save_GR)
+                     self.do_save_gr)
         self.connect(self.ui.pushButton_clearGrCanvas, QtCore.SIGNAL('clicked()'),
                      self.do_clear_gr)
 
@@ -173,6 +173,12 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         self.ui.radioButton_multiBank.setChecked(True)
 
+        # add the combo box for PDF type
+        self.ui.comboBox_pdfType.addItems(['G(r)', 'g(r)', 'RDF(r)'])
+
+        # some starting value
+        self.ui.doubleSpinBoxDelR.setValue(0.01)
+
         return
 
     def do_clear_gr(self):
@@ -193,8 +199,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         -------
 
         """
-        # get data
-        # calculate the G(R)
+        # get S(Q) workspace
+        sq_ws_name = str(self.ui.comboBox_SofQ.currentText())
+
+        # get r-range and q-range
         min_r = float(self.ui.doubleSpinBoxRmin.value())
         max_r = float(self.ui.doubleSpinBoxRmax.value())
         delta_r = float(self.ui.doubleSpinBoxDelR.value())
@@ -202,7 +210,12 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         min_q = float(self.ui.doubleSpinBoxQmin.value())
         max_q = float(self.ui.doubleSpinBoxQmax.value())
 
-        gr_ws_name = self._myController.calculate_gr(min_r, delta_r, max_r, min_q, max_q)
+        # PDF type
+        pdf_type = str(self.ui.comboBox_pdfType.currentText())
+
+        # calculate the G(R)
+        gr_ws_name = self._myController.calculate_gr(sq_ws_name, pdf_type, min_r, delta_r, max_r,
+                                                     min_q, max_q)
 
         # plot G(R)
         vec_r, vec_g, vec_ge = self._myController.get_gr(min_q, max_q)
@@ -314,11 +327,12 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         if sq_file_name is None:
             return
 
-        # open the file
+        # load S(q)
         sq_ws_name, q_min, q_max = self._myController.load_sq(sq_file_name)
 
-        # set to the tree
+        # set to the tree and combo box
         self.ui.treeWidget_grWsList.add_child_main_item('SofQ', sq_ws_name)
+        self.ui.comboBox_SofQ.addItem(sq_ws_name)
 
         # set the UI widgets
         self.ui.doubleSpinBoxQmin.setValue(q_min)
@@ -332,15 +346,32 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         return
 
-    def do_save_GR(self):
+    def do_save_gr(self):
         """
-
+        Save the selected the G(r) from menu to ASCII file
         Returns
         -------
 
         """
-        # TODO/NOW - Implement!
-        self.ui.dockWidget_ipython.wild_test()
+        # read the selected item from the tree
+        gr_name_list = self.ui.treeWidget_grWsList.get_selected_items_of_level(2, excluded_parent='SofQ',
+                                                                               return_item_text=True)
+        if len(gr_name_list) != 1:
+            self.pop_message('Error! Only 1 workspace of G(r) that can be selected.  So far %d'
+                             ' is selected.' % len(gr_name_list))
+            return
+        else:
+            gr_ws_name = gr_name_list[0]
+
+        # pop-up a dialog for the file to save
+        file_ext = 'Data (*.dat)'
+        gr_file_name = QtGui.QFileDialog.getSaveFileName(self, 'Save G(r)', file_ext)
+
+        # save!
+        self._myController.save_ascii(gr_ws_name, gr_file_name)
+
+        return
+
 
     def do_show_sq_bound(self):
         """
@@ -482,6 +513,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         """
         # get the raw S(Q)
         vec_q, vec_sq, vec_se = self._myController.get_sq()
+        sq_name = self._myController.get_current_sq_name()
 
         # get the unit
         sq_unit = None
@@ -501,7 +533,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
             raise RuntimeError('None of S(Q), S(Q)-1 or Q(S(Q)-1) is chosen.')
 
         # plot
-        self.ui.graphicsView_sq.plot_sq(vec_q, vec_y, vec_se, sq_unit)
+        self.ui.graphicsView_sq.plot_sq(sq_name, vec_q, vec_y, vec_se, sq_unit)
 
         return
 

@@ -205,6 +205,7 @@ class GofRView(base.MplGraphicsView):
         Plot G(r)
         Parameters
         -------
+        key_plot: a key to the current plot
         vec_r: numpy array for R
         vec_g: numpy array for G(r)
         vec_e: numpy array for G(r) error
@@ -212,13 +213,22 @@ class GofRView(base.MplGraphicsView):
         -------
 
         """
-        # TODO/NOW - Doc and check
+        # check
+        assert isinstance(key_plot, str), 'Key for the plot must be a string but not %s.' \
+                                          '' % str(type(key_plot))
+        assert isinstance(vec_r, np.ndarray), 'Vector(r) must be a numpy vector but not %s.' \
+                                              '' % str(type(vec_r))
+        assert isinstance(vec_g, np.ndarray), 'Vector(G) must be a numpy vector but not %s.' \
+                                              '' % str(type(vec_g))
+
+        # plot
         if plot_error:
             self.add_plot_1d(vec_r, vec_g, vec_e)
             raise NotImplementedError('ASAP')
         else:
             line_id = self.add_plot_1d(vec_r, vec_g, marker='.',
-                                       color=self._colorList[self._colorIndex % len(self._colorList)])
+                                       color=self._colorList[self._colorIndex % len(self._colorList)],
+                                       label=key_plot)
             self._colorIndex += 1
             self._grDict[key_plot] = line_id
 
@@ -472,11 +482,12 @@ class SofQView(base.MplGraphicsView):
 
         return
 
-    def plot_sq(self, vec_r, vec_s, vec_e, sq_y_label):
+    def plot_sq(self, sq_name, vec_r, vec_s, vec_e, sq_y_label):
         """
         Plot S(Q)
         Parameters
         ----------
+        sq_name:
         vec_r
         vec_s
         vec_e
@@ -492,7 +503,7 @@ class SofQView(base.MplGraphicsView):
 
         self.clear_all_lines()
         self.add_plot_1d(vec_r, vec_s, color='blue', x_label='Q', y_label=sq_y_label,
-                         marker='.')
+                         marker='.', label=sq_name)
 
         return
 

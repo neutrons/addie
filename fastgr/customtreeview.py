@@ -341,3 +341,79 @@ class CustomizedTreeView(QtGui.QTreeView):
             print '[Error] %s' % error_message
 
         return item_list
+
+    def get_selected_items_of_level(self, target_item_level, excluded_parent, return_item_text):
+        """
+        Get the selected items in a specified level
+        Args:
+            target_item_level: root is 0.
+            excluded_parent: parent nodes' name to be excluded
+            return_item_text: if True, the return the item text; otherwise, QItem
+        Returns: list of q-items
+
+        """
+        # check
+        assert isinstance(target_item_level, int) and target_item_level >= 1, \
+            'Level %s is not allowed. It must be larger than 0.' % str(target_item_level)
+        assert isinstance(return_item_text, bool)
+        assert isinstance(excluded_parent, str)
+
+        # get selected QIndexes
+        selected_items = self.get_selected_items()
+
+        return_list = list()
+
+        # remove the items of different levels
+        for item in selected_items:
+            item_level = self.get_item_level(item)
+            if item_level != target_item_level:
+                continue
+            if self.has_ancestor(item, excluded_parent):
+                continue
+            if return_item_text:
+                return_list.append(item.text())
+            else:
+                return_list.append(item)
+            # END-IF
+        # END-FOR
+
+        return return_list
+
+    @staticmethod
+    def get_item_level(q_item):
+        """
+        Get the level of a QItem in the tree
+        Args:
+            q_item:
+
+        Returns:
+            integer as level
+        """
+
+        level = 0
+        while q_item is not None:
+            q_item = q_item.parent()
+            level += 1
+
+        return level
+
+    @staticmethod
+    def has_ancestor(q_item, ancestor_name):
+        """
+        Check whether a node has an ancestor with similar name
+        Args:
+            q_item:
+            ancestor_name:
+
+        Returns:
+
+        """
+        has = False
+
+        while not has and q_item is not None:
+            if q_item.text() == ancestor_name:
+                has = True
+            else:
+                q_item = q_item.parent()
+
+        return has

@@ -35,11 +35,13 @@ class FastGRDriver(object):
 
         return
 
-    def calculate_gr(self, min_r, delta_r, max_r, min_q, max_q):
+    def calculate_gr(self, sq_ws_name, pdf_type, min_r, delta_r, max_r, min_q, max_q):
         """
         Calculate G(R)
         Parameters
         ----------
+        sq_ws_name :: workspace name of S(q)
+        pdf_type :: type of PDF as G(r), g(r) and RDF(r)
         min_r :: R_min
         delta_r :: delta R
         max_r
@@ -51,11 +53,17 @@ class FastGRDriver(object):
         string as G(r) workspace's name
         """
         # check
+        assert isinstance(sq_ws_name, str) and AnalysisDataService.doesExist(sq_ws_name)
+        assert isinstance(pdf_type, str) and len(pdf_type) > 0, \
+            'PDF type is %s is not supported.' % str(pdf_type)
         assert min_r < max_r, 'Rmin must be less than Rmax (%f >= %f)' % (min_r, max_r)
         assert delta_r < (max_r - min_r), 'Must have more than one bin in G(r) (%f >= %f)' \
                                           '' % (delta_r, (max_r - min_r))
 
         assert min_q < max_q, 'Qmin must be less than Qmax (%f >= %f)' % (min_q, max_q)
+
+        # set to the current S(q) workspace name
+        self._currSqWsName = sq_ws_name
 
         # set up the parameters for FourierTransform
         # output workspace
@@ -63,7 +71,7 @@ class FastGRDriver(object):
         kwargs = {'OutputWorkspace': gr_ws_name,
                   'Qmin': min_q,
                   'Qmax': max_q,
-                  'PDFType': 'G(r)',
+                  'PDFType': pdf_type,
                   'DeltaR': delta_r,
                   'Rmax': max_r}
 
@@ -134,6 +142,14 @@ class FastGRDriver(object):
         bank_ws = AnalysisDataService.retrieve(ws_name)
 
         return bank_ws.readX(0), bank_ws.readY(0), bank_ws.readE(0)
+
+    def get_current_sq_name(self):
+        """
+        Get the (workspace) name of current S(Q)
+        Returns:
+
+        """
+        return self._currSqWsName
 
     def get_current_workspaces(self):
         """
@@ -331,6 +347,19 @@ class FastGRDriver(object):
 
         return ws_group_name, ws_list, angle_list
 
+    def save_ascii(self, ws_name, file_name):
+        """
+
+        Args:
+            ws_name:
+            file_name:
+
+        Returns:
+
+        """
+        simpleapi.SaveAscii(InputWorkspace=ws_name, Filename=file_name)
+
+        return
 
 def calculate_bank_angle(ws_name):
     """ Calculate bank's angle (2theta) focused detector
