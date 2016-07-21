@@ -20,6 +20,9 @@ class BraggTree(base.CustomizedTreeView):
 
         self.init_setup(['Bragg Workspaces'])
 
+        # set up actions
+        # TODO - actions shall be added according to the level of the item selected.
+
         # add actions
         # plot
         action_plot = QtGui.QAction('Plot', self)
@@ -29,6 +32,14 @@ class BraggTree(base.CustomizedTreeView):
         action_ipython = QtGui.QAction('To IPython', self)
         action_ipython.triggered.connect(self.do_copy_to_ipython)
         self.addAction(action_ipython)
+        # to delete
+        action_delete = QtGui.QAction('Delete', self)
+        action_delete.triggered.connect(self.do_delete_gsas)
+        self.addAction(action_delete)
+        # to merge GSAS file
+        action_merge_gss = QtGui.QAction('Merge to GSAS', self)
+        action_merge_gss.triggered.connect(self.do_merge_to_gss)
+        self.addAction(action_merge_gss)
 
         self._mainWindow = None
 
@@ -36,7 +47,7 @@ class BraggTree(base.CustomizedTreeView):
 
     def add_bragg_ws_group(self, ws_group_name, bank_name_list):
         """
-        Add a workspace group containing a list of bank names
+        Add a workspace group containing a list of bank names as a main node in the tree
         Parameters
         ----------
         ws_group_name
@@ -46,11 +57,12 @@ class BraggTree(base.CustomizedTreeView):
         -------
 
         """
-        # TODO/NOW - Doc & check
-
+        # check inputs' validity
+        assert isinstance(ws_group_name, str), 'ws_group_name must be a string but not %s.' % str(type(ws_group_name))
+        assert isinstance(bank_name_list, list) and len(bank_name_list) > 0, 'Bank name list must be a non-empty list' \
+                                                                             ' but not %s.' % str(type(bank_name_list))
         # main node/leaf
         main_leaf_value = str(ws_group_name)
-        # TODO/NOW - add check ...
         self.add_main_item(main_leaf_value, True, True)
 
         for bank_name in bank_name_list:
@@ -100,6 +112,28 @@ class BraggTree(base.CustomizedTreeView):
 
         if self._mainWindow is not None:
             self._mainWindow.set_ipython_script(python_cmd)
+
+        return
+
+    def do_delete_gsas(self):
+        """
+        Delete a GSAS workspace and its split workspaces, and its item in the GSAS-tree as well.
+        Returns:
+
+        """
+        raise RuntimeError('Implement in issue #1')
+
+    def do_merge_to_gss(self):
+        """
+        Merge a selected GSAS workspace (with split workspaces) to a new GSAS file
+        Returns:
+
+        """
+        # get the selected GSAS node's name
+
+        # pop-out a file dialog for GSAS file's name
+
+        # emit the signal to the main window
 
         return
 
