@@ -19,6 +19,7 @@ from step2_handler.create_sample_files import CreateSampleFiles
 from step2_handler.create_ndsum_file import CreateNdsumFile
 from step2_handler.run_ndabs import RunNDabs
 from step2_handler.run_sum_scans import RunSumScans
+from step3_handler.step3_gui_handler import Step3GuiHandler
 
 import PyQt4
 import PyQt4.QtCore as QtCore
@@ -56,6 +57,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         self._init_widgets()
         init_step1 = InitStep1(parent=self)
         init_step2 = InitStep2(parent=self)
+
+        return
 
         # define the event handling methods
         # bragg diffraction tab
@@ -779,6 +782,12 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
     def run_sum_scans_clicked(self):
         o_run_sum_scans = RunSumScans(parent = self)
         o_run_sum_scans.run()
+
+    # tab3 - ascii display
+    def browse_ascii_file_clicked(self):
+        o_gui = Step3GuiHandler(parent = self)
+        o_gui.browse_file()
+
 
 def main():
     app = PyQt4.QtGui.QApplication(sys.argv)

@@ -52,8 +52,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1338</width>
-         <height>959</height>
+         <width>1342</width>
+         <height>966</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -74,7 +74,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>3</number>
+             <number>2</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -166,7 +166,7 @@
                       <string/>
                      </property>
                      <property name="text">
-                      <string>65456</string>
+                      <string/>
                      </property>
                      <property name="placeholderText">
                       <string/>
@@ -195,7 +195,7 @@
                       <string/>
                      </property>
                      <property name="text">
-                      <string>65472</string>
+                      <string/>
                      </property>
                      <property name="placeholderText">
                       <string/>
@@ -217,7 +217,7 @@
                       <string/>
                      </property>
                      <property name="text">
-                      <string>65458</string>
+                      <string/>
                      </property>
                      <property name="placeholderText">
                       <string/>
@@ -456,7 +456,7 @@
                       <string/>
                      </property>
                      <property name="text">
-                      <string>65470</string>
+                      <string/>
                      </property>
                      <property name="placeholderText">
                       <string/>
@@ -478,7 +478,7 @@
                       <string/>
                      </property>
                      <property name="text">
-                      <string>65454</string>
+                      <string/>
                      </property>
                      <property name="placeholderText">
                       <string/>
@@ -1868,6 +1868,50 @@
               </item>
              </layout>
             </widget>
+            <widget class="QWidget" name="tab">
+             <attribute name="title">
+              <string>Ascii</string>
+             </attribute>
+             <layout class="QVBoxLayout" name="verticalLayout_2">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_3">
+                <item>
+                 <widget class="QPushButton" name="browse_ascii_button">
+                  <property name="minimumSize">
+                   <size>
+                    <width>100</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>100</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Browse ...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="browse_ascii_name">
+                  <property name="text">
+                   <string>N/A</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QTextEdit" name="browse_ascii_text_edit">
+                <property name="textInteractionFlags">
+                 <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
             <widget class="QWidget" name="tab_bragg">
              <attribute name="title">
               <string>Bragg Peaks</string>
@@ -1917,7 +1961,7 @@
                       <item>
                        <widget class="QComboBox" name="comboBox_xUnit">
                         <property name="sizePolicy">
-                         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                           <horstretch>0</horstretch>
                           <verstretch>0</verstretch>
                          </sizepolicy>
@@ -1951,6 +1995,16 @@
                          </size>
                         </property>
                        </spacer>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="pushButton_combineBanks">
+                        <property name="toolTip">
+                         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Combine banks back to a 6-bank GSAS file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                        </property>
+                        <property name="text">
+                         <string>Combine to GSAS</string>
+                        </property>
+                       </widget>
                       </item>
                      </layout>
                     </item>
@@ -2200,18 +2254,8 @@
              <attribute name="title">
               <string>Calculate G(R)</string>
              </attribute>
-             <layout class="QGridLayout" name="gridLayout">
-              <item row="0" column="0">
-               <widget class="SofQView" name="graphicsView_sq">
-                <property name="minimumSize">
-                 <size>
-                  <width>50</width>
-                  <height>300</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
+             <layout class="QGridLayout" name="gridLayout_17">
+              <item row="0" column="2">
                <layout class="QVBoxLayout" name="verticalLayout_42">
                 <item>
                  <widget class="QPushButton" name="pushButton_loadSQ">
@@ -2246,9 +2290,6 @@
                 </item>
                 <item>
                  <layout class="QGridLayout" name="gridLayout_18">
-                  <item row="3" column="1">
-                   <widget class="QComboBox" name="comboBox_pdfType"/>
-                  </item>
                   <item row="1" column="0">
                    <widget class="QLabel" name="labelQmax">
                     <property name="text">
@@ -2289,6 +2330,20 @@
                     </property>
                    </widget>
                   </item>
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="label_93">
+                    <property name="text">
+                     <string>More Options ...</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="1">
+                   <widget class="QCheckBox" name="checkBox">
+                    <property name="text">
+                     <string>CheckBox</string>
+                    </property>
+                   </widget>
+                  </item>
                   <item row="2" column="1">
                    <widget class="QPushButton" name="pushButton_showQMinMax">
                     <property name="toolTip">
@@ -2299,31 +2354,18 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="3" column="0">
-                   <widget class="QLabel" name="label_3">
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QGridLayout" name="gridLayout_19">
+                  <item row="0" column="0">
+                   <widget class="QPushButton" name="pushButton_generateGR">
                     <property name="text">
-                     <string>PDF Type</string>
+                     <string>Generate GR</string>
                     </property>
                    </widget>
                   </item>
                  </layout>
-                </item>
-                <item>
-                 <widget class="QComboBox" name="comboBox_SofQ"/>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_generateGR">
-                  <property name="text">
-                   <string>Generate GR</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_clearSofQ">
-                  <property name="text">
-                   <string>Clear S(Q) Canvas</string>
-                  </property>
-                 </widget>
                 </item>
                 <item>
                  <spacer name="verticalSpacer_36">
@@ -2343,25 +2385,8 @@
                 </item>
                </layout>
               </item>
-              <item row="1" column="0">
-               <widget class="GofRView" name="graphicsView_gr">
-                <property name="minimumSize">
-                 <size>
-                  <width>50</width>
-                  <height>300</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
+              <item row="4" column="2">
                <layout class="QVBoxLayout" name="verticalLayout_43">
-                <item>
-                 <widget class="QPushButton" name="pushButton_loadGofR">
-                  <property name="text">
-                   <string>Load G(r)</string>
-                  </property>
-                 </widget>
-                </item>
                 <item>
                  <widget class="GofRTree" name="treeWidget_grWsList">
                   <property name="sizePolicy">
@@ -2445,18 +2470,38 @@
                 <item>
                  <widget class="QPushButton" name="pushButton_clearGrCanvas">
                   <property name="text">
-                   <string>Clear G(r) Canvas</string>
+                   <string>Clear Canvas</string>
                   </property>
                  </widget>
                 </item>
                 <item>
                  <widget class="QPushButton" name="pushButton_saveGR">
                   <property name="text">
-                   <string>Save G(r)</string>
+                   <string>Save GR</string>
                   </property>
                  </widget>
                 </item>
                </layout>
+              </item>
+              <item row="4" column="0">
+               <widget class="GofRView" name="graphicsView_gr">
+                <property name="minimumSize">
+                 <size>
+                  <width>50</width>
+                  <height>300</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0" colspan="2">
+               <widget class="SofQView" name="graphicsView_sq">
+                <property name="minimumSize">
+                 <size>
+                  <width>50</width>
+                  <height>300</height>
+                 </size>
+                </property>
+               </widget>
               </item>
              </layout>
             </widget>
@@ -2469,7 +2514,7 @@
           <property name="minimumSize">
            <size>
             <width>800</width>
-            <height>38</height>
+            <height>36</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -2493,7 +2538,7 @@
      <x>0</x>
      <y>0</y>
      <width>1364</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -2502,50 +2547,8 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>File</string>
-    </property>
-    <addaction name="actionQuit"/>
-   </widget>
-   <widget class="QMenu" name="menuEdit">
-    <property name="title">
-     <string>Edit</string>
-    </property>
-    <addaction name="actionReset_GSAS_tab"/>
-    <addaction name="actionReset_GofR_tab"/>
-   </widget>
-   <widget class="QMenu" name="menuHelp">
-    <property name="title">
-     <string>Help</string>
-    </property>
-    <addaction name="actionCheat_sheet"/>
-   </widget>
-   <addaction name="menuFile"/>
-   <addaction name="menuEdit"/>
-   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionReset_GSAS_tab">
-   <property name="text">
-    <string>Reset GSAS-tab</string>
-   </property>
-  </action>
-  <action name="actionReset_GofR_tab">
-   <property name="text">
-    <string>Reset GofR-tab</string>
-   </property>
-  </action>
-  <action name="actionQuit">
-   <property name="text">
-    <string>Quit</string>
-   </property>
-  </action>
-  <action name="actionCheat_sheet">
-   <property name="text">
-    <string>Cheat sheet</string>
-   </property>
-  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -2998,6 +3001,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>browse_ascii_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>browse_ascii_file_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>91</x>
+     <y>85</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>506</x>
+     <y>25</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>diamond_edited()</slot>
@@ -3023,5 +3042,6 @@
   <slot>reset_q_range()</slot>
   <slot>check_q_range()</slot>
   <slot>run_sum_scans_clicked()</slot>
+  <slot>browse_ascii_file_clicked()</slot>
  </slots>
 </ui>
