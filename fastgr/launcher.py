@@ -58,8 +58,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         init_step1 = InitStep1(parent=self)
         init_step2 = InitStep2(parent=self)
 
-        return
-
         # define the event handling methods
         # bragg diffraction tab
         self.connect(self.ui.pushButton_loadBraggFile, QtCore.SIGNAL('clicked()'),
