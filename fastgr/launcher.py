@@ -35,6 +35,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
     """
     debugging = False
     current_folder = os.getcwd()
+    table_selection_buffer = {}
 
     def __init__(self):
         """ Initialization
@@ -702,7 +703,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         self.populate_table_clicked()
         
     def populate_table_clicked(self):
-        
         if self.debugging:
             self.current_folder = os.getcwd()  + '/autoNOM_01/'
         else:

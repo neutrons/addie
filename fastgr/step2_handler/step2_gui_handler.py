@@ -24,7 +24,8 @@ class Step2GuiHandler(object):
         
         if str(_new_folder):
             os.chdir(_new_folder)
-            self.parent.current_folder_label.setText(_new_folder)
+            self.parent_no_ui.current_folder = _new_folder
+            self.parent_no_ui.setWindowTitle(_new_folder)
         
     def hidrogen_clicked(self):
         _range = self.hidrogen_range
