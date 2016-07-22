@@ -117,7 +117,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         # define the driver
         self._myController = driver.FastGRDriver()
 
+        # class variable for easy access
         self._gssGroupName = None
+        self._currDataDir = None
 
         # some controlling variables
         self._currBraggXUnit = str(self.ui.comboBox_xUnit.currentText())
@@ -336,10 +338,20 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         -------
         """
         # get file
-        ext = 'GSAS (*.gsa, *.gss);;DAT (*.dat);;Nexus (*.nxs)'
-        bragg_file_name = str(QtGui.QFileDialog.getOpenFileName(self, 'Choose Bragg File', ext))
-        if bragg_file_name is None:
+        ext = 'GSAS (*.gsa);;DAT (*.dat);;All (*.*)'
+
+        # get default dir
+        if self._currDataDir is None:
+            default_dir = os.getcwd()
+        else:
+            default_dir = self._currDataDir
+
+        bragg_file_name = str(QtGui.QFileDialog.getOpenFileName(self, 'Choose Bragg File', default_dir, ext))
+        if bragg_file_name is None or bragg_file_name == '':
             return
+
+        # update stored data directory
+        self._currDataDir = os.path.abspath(bragg_file_name)
 
         # load file
         gss_ws_name = self._myController.load_bragg_file(bragg_file_name)
@@ -380,11 +392,19 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         -------
 
         """
+        # get default dir
+        if self._currDataDir is None:
+            default_dir = os.getcwd()
+        else:
+            default_dir = self._currDataDir
+
         # get the file
         ext = 'DAT (*.dat);;All (*.*)'
-        sq_file_name = str(QtGui.QFileDialog.getOpenFileName(self, 'Choose S(Q) File', ext))
-        if sq_file_name is None:
+        sq_file_name = str(QtGui.QFileDialog.getOpenFileName(self, 'Choose S(Q) File', default_dir, ext))
+        if sq_file_name is None or sq_file_name == '':
             return
+
+        self._currDataDir = os.path.abspath(sq_file_name)
 
         # load S(q)
         sq_ws_name, q_min, q_max = self._myController.load_sq(sq_file_name)
