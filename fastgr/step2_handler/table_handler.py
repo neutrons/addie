@@ -210,7 +210,9 @@ class TableHandler(object):
         self.parent_no_ui.populate_table_clicked()
 
     def _clear_table(self):
-        pass
+        _number_of_row = self.parent.table.rowCount()
+        for _row in np.arange(_number_of_row):
+            self.parent.table.removeRow(0)
     
     def set_widget_state(self, _widget_state, _row):
         _widget = self.parent.table.cellWidget(_row, 8).children()[1]
