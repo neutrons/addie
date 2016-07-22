@@ -657,6 +657,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         return
 
 # step1
+    def select_current_folder_clicked(self):
+        o_gui = Step1GuiHandler(parent = self)
+        o_gui.select_working_folder()
+
     def diamond_edited(self):
         self.check_step1_gui()
         

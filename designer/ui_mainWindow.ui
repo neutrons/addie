@@ -96,7 +96,7 @@
                  <item>
                   <layout class="QHBoxLayout" name="horizontalLayout_4">
                    <item>
-                    <widget class="QPushButton" name="pushButton_2">
+                    <widget class="QPushButton" name="select_current_folder_button">
                      <property name="minimumSize">
                       <size>
                        <width>160</width>
@@ -115,30 +115,36 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLabel" name="label_4">
+                    <widget class="QLabel" name="exp_ini_file_status">
                      <property name="minimumSize">
                       <size>
-                       <width>100</width>
+                       <width>500</width>
                        <height>0</height>
                       </size>
                      </property>
                      <property name="maximumSize">
                       <size>
-                       <width>100</width>
+                       <width>500</width>
                        <height>16777215</height>
                       </size>
                      </property>
                      <property name="text">
-                      <string>Current Folder:</string>
+                      <string/>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLabel" name="label_5">
-                     <property name="text">
-                      <string>N/A</string>
+                    <spacer name="horizontalSpacer_3">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
                      </property>
-                    </widget>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
                    </item>
                   </layout>
                  </item>
@@ -215,7 +221,7 @@
                       <string/>
                      </property>
                      <property name="text">
-                      <string>65456</string>
+                      <string/>
                      </property>
                      <property name="placeholderText">
                       <string/>
@@ -244,7 +250,7 @@
                       <string/>
                      </property>
                      <property name="text">
-                      <string>65472</string>
+                      <string/>
                      </property>
                      <property name="placeholderText">
                       <string/>
@@ -266,7 +272,7 @@
                       <string/>
                      </property>
                      <property name="text">
-                      <string>65458</string>
+                      <string/>
                      </property>
                      <property name="placeholderText">
                       <string/>
@@ -505,7 +511,7 @@
                       <string/>
                      </property>
                      <property name="text">
-                      <string>65470</string>
+                      <string/>
                      </property>
                      <property name="placeholderText">
                       <string/>
@@ -527,7 +533,7 @@
                       <string/>
                      </property>
                      <property name="text">
-                      <string>65454</string>
+                      <string/>
                      </property>
                      <property name="placeholderText">
                       <string/>
@@ -715,7 +721,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QRadioButton" name="radioButton_5">
+                    <widget class="QRadioButton" name="recalibration_no">
                      <property name="text">
                       <string>No</string>
                      </property>
@@ -747,7 +753,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QRadioButton" name="radioButton_21">
+                    <widget class="QRadioButton" name="renormalization_no">
                      <property name="text">
                       <string>No</string>
                      </property>
@@ -782,7 +788,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QRadioButton" name="radioButton_22">
+                    <widget class="QRadioButton" name="autotemplate_no">
                      <property name="text">
                       <string>No</string>
                      </property>
@@ -2682,8 +2688,8 @@
    <slot>diamond_edited()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>79</x>
-     <y>99</y>
+     <x>207</x>
+     <y>133</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2698,8 +2704,8 @@
    <slot>diamond_background_edited()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>79</x>
-     <y>101</y>
+     <x>207</x>
+     <y>161</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2714,8 +2720,8 @@
    <slot>vanadium_edited()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>79</x>
-     <y>103</y>
+     <x>207</x>
+     <y>189</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2730,8 +2736,8 @@
    <slot>vanadium_background_edited()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>79</x>
-     <y>104</y>
+     <x>207</x>
+     <y>217</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2746,8 +2752,8 @@
    <slot>sample_background_edited()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>79</x>
-     <y>106</y>
+     <x>207</x>
+     <y>245</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2763,7 +2769,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>57</x>
-     <y>118</y>
+     <y>670</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2779,7 +2785,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>48</x>
-     <y>111</y>
+     <y>717</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2794,8 +2800,8 @@
    <slot>manual_output_folder_field_edited()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>56</x>
-     <y>111</y>
+     <x>122</x>
+     <y>717</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2810,8 +2816,8 @@
    <slot>run_autonom()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>111</x>
-     <y>96</y>
+     <x>1228</x>
+     <y>745</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -3107,6 +3113,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>select_current_folder_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>select_current_folder_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>161</x>
+     <y>113</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>594</x>
+     <y>-2</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>diamond_edited()</slot>
@@ -3133,5 +3155,6 @@
   <slot>check_q_range()</slot>
   <slot>run_sum_scans_clicked()</slot>
   <slot>browse_ascii_file_clicked()</slot>
+  <slot>select_current_folder_clicked()</slot>
  </slots>
 </ui>

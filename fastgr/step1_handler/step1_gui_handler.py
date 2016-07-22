@@ -1,7 +1,15 @@
+from PyQt4 import QtGui
+from  step1_handler.auto_populate_widgets import AutoPopulateWidgets
+
+
 class Step1GuiHandler(object):
     
     def __init__(self, parent=None):
         self.parent = parent.ui
+        self.parent_no_ui = parent
+        
+    def set_main_window_title(self):
+        self.parent_no_ui.setWindowTitle(self.parent_no_ui.current_folder)
         
     def check_go_button(self):
         if self.all_mandatory_fields_non_empty():
@@ -42,6 +50,19 @@ class Step1GuiHandler(object):
             status = False
         self.parent.manual_output_folder_field.setEnabled(status)
         
+    def select_working_folder(self):
+        _current_folder = self.parent_no_ui.current_folder
+        _new_folder = QtGui.QFileDialog.getExistingDirectory(parent = self.parent_no_ui,
+                                                             caption = "Select working directory",
+                                                             directory = _current_folder)
+        
+        if str(_new_folder):
+            self.parent_no_ui.current_folder = _new_folder
+            o_gui = Step1GuiHandler(parent = self.parent_no_ui)
+            o_gui.set_main_window_title()
+
+            o_auto_populate = AutoPopulateWidgets(parent = self.parent_no_ui)
+            o_auto_populate.run()
         
         
         
