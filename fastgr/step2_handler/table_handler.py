@@ -1,7 +1,7 @@
 import os
 import numpy as np
 from PyQt4.QtCore import Qt
-from PyQt4 import QtGui
+from PyQt4 import QtGui, QtCore
 
 
 class TableHandler(object):
@@ -90,7 +90,7 @@ class TableHandler(object):
             _paste = menu.addAction("Paste")
             self._paste_menu = _paste
             _paste.setEnabled(paste_status)
-            _cut = menu.addAction("Cut")
+            _cut = menu.addAction("Clear")
             menu.addSeparator()
         
         _new_row = menu.addAction("Insert Blank Row")
@@ -136,7 +136,7 @@ class TableHandler(object):
                                                     'bottom_row': bottom_row}
         self._paste_menu.setEnabled(True)
     
-    def _paste(self):
+    def _paste(self, _cut = False):
         _copy_selection = self.parent_no_ui.table_selection_buffer
         _copy_left_column = _copy_selection['left_column']
         
@@ -160,17 +160,57 @@ class TableHandler(object):
         for _row in range(_copy_top_row, _copy_bottom_row+1):
             _paste_row = _paste_top_row + index
             for _column in range(_copy_left_column, _copy_right_column + 1):
+
                 if _column in np.arange(1,7):
-                    _item_text = self.retrieve_item_text(_row, _column)
+                    if _cut:
+                        _item_text = ''
+                    else:
+                        _item_text = self.retrieve_item_text(_row, _column)
                     self.paste_item_text(_paste_row, _column, _item_text)
+
                 if _column == 7:
-                    _widget_index = self.retrieve_sample_shape_index(_row)
+                    if _cut:
+                        _widget_index = 0
+                    else:
+                        _widget_index = self.retrieve_sample_shape_index(_row)
                     self.set_widget_index(_widget_index, _paste_row)
+
                 if _column == 8:
-                    _widget_state = self.retrieve_do_abs_correction_state(_row)
+                    if _cut:
+                        _widget_state = QtCore.Qt.Unchecked
+                    else:    
+                        _widget_state = self.retrieve_do_abs_correction_state(_row)
                     self.set_widget_state(_widget_state, _paste_row)
                     
             index += 1
+    
+    def _cut(self):
+        self._copy()
+        self._paste(_cut = True)
+            
+    def _duplicate_row(self):
+        _row = self.current_row
+        metadata_to_copy = self._collect_metadata(row_index = _row)
+        o_populate = PopulateMasterTable(parent = self.parent)
+        o_populate.add_new_row(metadata_to_copy, row = _row)
+    
+    def _new_row(self):
+        _row = self.current_row
+        if _row == -1:
+            _row = 0
+        o_populate = PopulateMasterTable(parent = self.parent_no_ui)
+        _metadata = o_populate.empty_metadata()
+        o_populate.add_new_row(_metadata, row = _row)
+    
+    def _remove_row(self):
+        _row = self.current_row
+        self.parent.table.removeRow(_row)
+        
+    def _refresh_table(self):
+        self.parent_no_ui.populate_table_clicked()
+
+    def _clear_table(self):
+        pass
     
     def set_widget_state(self, _widget_state, _row):
         _widget = self.parent.table.cellWidget(_row, 8).children()[1]
@@ -200,29 +240,4 @@ class TableHandler(object):
         else:
             return str(_item.text())
 
-    def _cut(self):
-        pass
-            
-    def _duplicate_row(self):
-        _row = self.current_row
-        metadata_to_copy = self._collect_metadata(row_index = _row)
-        o_populate = PopulateMasterTable(parent = self.parent)
-        o_populate.add_new_row(metadata_to_copy, row = _row)
     
-    def _new_row(self):
-        _row = self.current_row
-        if _row == -1:
-            _row = 0
-        o_populate = PopulateMasterTable(parent = self.parent_no_ui)
-        _metadata = o_populate.empty_metadata()
-        o_populate.add_new_row(_metadata, row = _row)
-    
-    def _remove_row(self):
-        _row = self.current_row
-        self.parent.table.removeRow(_row)
-        
-    def _refresh_table(self):
-        self.parent_no_ui.populate_table_clicked()
-
-    def _clear_table(self):
-        pass
