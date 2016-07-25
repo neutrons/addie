@@ -717,7 +717,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         """
         # check input
-        assert isinstance(new_ws_list, list), 'Input workspace list must be a string.'
+        assert isinstance(new_ws_list, list), 'Input workspace list must be a list of string' \
+                                              'but not %s.' % str(type(new_ws_list))
 
         # TODO - Figure out what to do!
         # print 'current tab = ', self.ui.tabWidget_2.currentIndex(), self.ui.tabWidget_2.currentWidget(),

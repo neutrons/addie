@@ -56,7 +56,7 @@ class CustomizedTreeView(QtGui.QTreeView):
     def init_setup(self, header_list):
         """
         To set up customized header
-        :param num_cols:
+        :param header_list:
         :param header_list:
         :return:
         """

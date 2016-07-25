@@ -302,6 +302,7 @@ class GofRTree(base.CustomizedTreeView):
         self.addAction(action_ipython)
 
         self._mainWindow = None
+        self._workspaceNameList = list()
 
         return
 
@@ -325,6 +326,9 @@ class GofRTree(base.CustomizedTreeView):
         child_value = gr_ws_name
         self.add_child_main_item(main_leaf_value, child_value)
 
+        # ...
+        self._workspaceNameList.append(gr_ws_name)
+
         return
 
     def add_temp_ws(self, ws_name):
@@ -338,7 +342,43 @@ class GofRTree(base.CustomizedTreeView):
         -------
 
         """
+        # TODO/NOW - Doc and check!
         self.add_child_main_item('workspaces', ws_name)
+
+        self._workspaceNameList.append(ws_name)
+
+        return
+
+    def clear(self):
+        """
+        Clear the leaves of the tree only leaving the main node 'workspaces'
+        Returns
+        -------
+
+        """
+        # ISSUE 1
+        # TODO/NOW - Think of making it a proper and systematic method for all
+        #            tree classes alike.
+
+        # clear all
+        self.model().clear()
+        self._myHeaderList = list()
+        self._leafDict.clear()
+
+        # re-initialize the workspace
+        self._myNumCols = 1
+        model = QtGui.QStandardItemModel()
+        model.setColumnCount(self._myNumCols)
+        self.setModel(model)
+
+        self.init_setup(['G(R) Workspaces'])
+        self.add_main_item('SofQ', append=False, as_current_index=False)
+        self.add_main_item('workspaces', append=True, as_current_index=False)
+
+        # reset workspace names list
+        self._workspaceNameList = list()
+
+        return
 
     def do_copy_to_ipython(self):
         """
@@ -448,6 +488,15 @@ class GofRTree(base.CustomizedTreeView):
             return False, 'Unable to convert %s to run number as integer.' % value_str
 
         return True, run
+
+    def get_workspaces(self):
+        """
+        Get workspaces controlled by GSAS tree.
+        Returns
+        -------
+
+        """
+        return self._workspaceNameList
 
     def mouseDoubleClickEvent(self, e):
         """ Override event handling method
