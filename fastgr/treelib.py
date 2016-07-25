@@ -25,23 +25,84 @@ class BraggTree(base.CustomizedTreeView):
 
         # add actions
         # plot
-        action_plot = QtGui.QAction('Plot', self)
-        action_plot.triggered.connect(self.do_plot_ws)
-        self.addAction(action_plot)
+        self._action_plot = QtGui.QAction('Plot', self)
+        self._action_plot.triggered.connect(self.do_plot_ws)
+
         # to python
-        action_ipython = QtGui.QAction('To IPython', self)
-        action_ipython.triggered.connect(self.do_copy_to_ipython)
-        self.addAction(action_ipython)
+        self._action_ipython = QtGui.QAction('To IPython', self)
+        self._action_ipython.triggered.connect(self.do_copy_to_ipython)
+
         # to delete
-        action_delete = QtGui.QAction('Delete', self)
-        action_delete.triggered.connect(self.do_delete_gsas)
-        self.addAction(action_delete)
+        self._action_delete = QtGui.QAction('Delete', self)
+        self._action_delete.triggered.connect(self.do_delete_gsas)
+
         # to merge GSAS file
-        action_merge_gss = QtGui.QAction('Merge to GSAS', self)
-        action_merge_gss.triggered.connect(self.do_merge_to_gss)
-        self.addAction(action_merge_gss)
+        self._action_merge_gss = QtGui.QAction('Merge to GSAS', self)
+        self._action_merge_gss.triggered.connect(self.do_merge_to_gss)
 
         self._mainWindow = None
+
+        return
+
+    # override
+    def mousePressEvent(self, e):
+        """
+        Over ride mouse press event
+        Parameters
+        ----------
+        e :: event
+
+        Returns
+        -------
+
+        """
+        button_pressed = e.button()
+        if button_pressed == 2:
+            # override the response for right button
+            self.pop_up_menu()
+        else:
+            # keep base method for other buttons
+            base.CustomizedTreeView.mousePressEvent(self, e)
+
+        return
+
+    def pop_up_menu(self):
+        """
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
+        """
+        selected_items = self.get_selected_items()
+        if len(selected_items) == 0:
+            print '[DB] None item is selected. Return'
+            return
+
+        leaf_level = -1
+        for item in selected_items:
+            if item.parent() is None and leaf_level == -1:
+                leaf_level = 1
+            elif item.parent() is not None and leaf_level == -1:
+                leaf_level = 2
+            elif item.parent() is None and leaf_level != 1:
+                print '[Error] Nodes of different levels are selected.'
+            elif item.parent() is None and leaf_level != 2:
+                print '[Error] Nodes of different levels are selected.'
+        # END-FOR
+
+        if leaf_level == 1:
+            self.addAction(self._action_plot)
+            self.addAction(self._action_ipython)
+            self.addAction(self._action_delete)
+            self.addAction(self._action_merge_gss)
+        elif leaf_level == 2:
+            self.removeAction(self._action_merge_gss)
+            self.addAction(self._action_plot)
+            self.addAction(self._action_ipython)
+            self.addAction(self._action_delete)
 
         return
 
