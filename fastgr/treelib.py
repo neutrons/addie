@@ -119,9 +119,14 @@ class BraggTree(base.CustomizedTreeView):
         """
         Delete a GSAS workspace and its split workspaces, and its item in the GSAS-tree as well.
         Returns:
-
+        None
         """
-        raise RuntimeError('Implement in issue #1')
+        gsas_ws_name_list = self.get_current_main_nodes()
+
+        for gsas_ws_name in gsas_ws_name_list:
+            self._mainWindow.get_workflow().delete_gsas_workspace(gsas_ws_name)
+
+        return
 
     def do_merge_to_gss(self):
         """

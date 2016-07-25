@@ -67,7 +67,13 @@ class FastGRDriver(object):
 
         # set up the parameters for FourierTransform
         # output workspace
-        gr_ws_name = 'G(R)_%s_%d' % (self._currSqWsName, self._sqIndexDict[self._currSqWsName])
+        prefix = 'G'
+        if pdf_type.startswith('g'):
+            prefix = 'g'
+        elif pdf_type.startswith('r'):
+            prefix = 'RDF'
+
+        gr_ws_name = '%s(R)_%s_%d' % (prefix, self._currSqWsName, self._sqIndexDict[self._currSqWsName])
         kwargs = {'OutputWorkspace': gr_ws_name,
                   'Qmin': min_q,
                   'Qmax': max_q,
@@ -94,13 +100,47 @@ class FastGRDriver(object):
 
         return gr_ws_name
 
-    def conjoin_banks(self):
+    def delete_workspace(self, workspace_name):
+        """
+        Delete a workspace from Mantid's AnalysisDataService
+        Args:
+            workspace_name: name of a workspace as a string instance
+
+        Returns: None
+
+        """
+        # check
+        assert isinstance(workspace_name, str), \
+            'Input workspace name must be a string, but not %s.' % str(type(workspace_name))
+        assert AnalysisDataService.doesExist(workspace_name), 'Workspace %s does not exist.' % workspace_name
+
+        # delete
+        simpleapi.DeleteWorkspace(Workspace=workspace_name)
+
+        return
+
+    def conjoin_banks(self, ws_name_list, output_ws_name):
         """
         Conjoin all 6 single banks
+        Args:
+            ws_name_list: list of workspaces' names for conjoining
+            output_ws_name: name of the output workspace
         Returns:
 
         """
-        simpleapi.ConjoinWorkspaces()
+        # check inputs
+        assert isinstance(ws_name_list, list) and len(ws_name_list) > 1, \
+            'There must be at least 2 workspaces for conjoining operation.'
+        assert isinstance(output_ws_name, str)
+
+        # clone the first workspace for the output workspace
+        simpleapi.CloneWorkspace(InputWorkspace=ws_name_list[0],
+                                 OutputWorkspace=output_ws_name)
+
+        for i_ws in range(1, len(ws_name_list)):
+            simpleapi.ConjoinWorkspaces(InputWorkspace1=output_ws_name,
+                                        InputWorkspace2=ws_name_list[i_ws])
+        # END-FOR(i_ws)
 
         return
 
@@ -268,6 +308,29 @@ class FastGRDriver(object):
         assert AnalysisDataService.doesExist(gss_ws_name)
 
         return gss_ws_name
+
+    def load_gr(self, gr_file_name):
+        """
+        Load an ASCII file containing G(r)
+        Args:
+            gr_file_name:
+
+        Returns:
+
+        """
+        # check
+        assert isinstance(gr_file_name, str) and len(gr_file_name) > 0
+
+        # load
+        gr_ws_name = os.path.basename(gr_file_name).split('.')[0]
+        simpleapi.LoadAscii(Filename=gr_file_name, OutputWorkspace=gr_ws_name, Unit='Empty')
+
+        # check output
+        if not AnalysisDataService.doesExist(gr_ws_name):
+            return False, 'Unable to load file %s as target workspace %s cannot be found.' % (gr_ws_name,
+                                                                                              gr_ws_name)
+
+        return True, gr_ws_name
 
     def load_sq(self, file_name):
         """

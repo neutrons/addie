@@ -77,6 +77,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         self.connect(self.ui.comboBox_xUnit, QtCore.SIGNAL('currentIndexChanged(int)'),
                      self.evt_plot_bragg_bank)
 
+        self.connect(self.ui.actionReset_GSAS_tab, QtCore.SIGNAL('triggered()'),
+                     self.do_reset_gsas_tab)
+
         # for tab G(R)
         self.connect(self.ui.pushButton_loadSQ, QtCore.SIGNAL('clicked()'),
                      self.do_load_sq)
@@ -92,6 +95,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
                      self.do_show_sq_bound)
         self.connect(self.ui.pushButton_generateGR, QtCore.SIGNAL('clicked()'),
                      self.do_generate_gr)
+        self.connect(self.ui.pushButton_loadGofR, QtCore.SIGNAL('clicked()'),
+                     self.do_load_gr)
         self.connect(self.ui.pushButton_saveGR, QtCore.SIGNAL('clicked()'),
                      self.do_save_gr)
         self.connect(self.ui.pushButton_clearGrCanvas, QtCore.SIGNAL('clicked()'),
@@ -101,6 +106,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
                      self.evt_qmin_changed)
         self.connect(self.ui.doubleSpinBoxQmax, QtCore.SIGNAL('valueChanged(double)'),
                      self.evt_qmax_changed)
+
+        self.connect(self.ui.actionReset_GofR_tab, QtCore.SIGNAL('triggered()'),
+                     self.do_reset_gr_tab)
 
         # organize widgets group
         self._braggBankWidgets = {1: self.ui.checkBox_bank1,
@@ -245,6 +253,53 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         return
 
+    def do_reset_gr_tab(self):
+        """
+        Reset G(r)-tab, including deleting all the G(r) and S(Q) workspaces,
+        clearing the G(r) and S(Q) trees, and clearing both G(r) and S(Q) canvas
+        Returns:
+        None
+        """
+        # get workspace from trees
+        workspace_list = self.ui.treeWidget_grWsList.get_workspaces()
+
+        # reset the tree to initial status
+        self.ui.treeWidget_grWsList.clear()
+
+        # delete all the workspaces
+        for workspace in workspace_list:
+            self._myController.delete_workspace(workspace)
+
+        # clear all the canvas
+        self.ui.graphicsView_gr.clear_all_lines()
+        self.ui.graphicsView_sq.clear_all_lines()
+
+        return
+
+    def do_reset_gsas_tab(self):
+        """
+        Reset the GSAS-tab including
+        1. deleting all the GSAS workspaces
+        2. clearing the GSAS tree
+        3. clearing GSAS canvas
+        Returns:
+        None
+        """
+        # get GSAS workspaces from tree
+        gsas_ws_list = self.ui.treeWidget_braggWSList.get_workspaces()
+
+        # reset the GSAS tree
+        self.ui.treeWidget_braggWSList.clear()
+
+        # delete all workspaces
+        for workspace in gsas_ws_list:
+            self._myController.delete_workspace(workspace)
+
+        # clear the canvas
+        self.ui.graphicsView_bragg.clear_all_lines()
+
+        return
+
     def plot_bragg(self, bragg_ws_list):
         """
 
@@ -385,6 +440,42 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         return
 
+    def do_load_gr(self):
+        """
+        Load an ASCII file containing G(r)
+        Returns:
+        """
+        # get default dir
+        if self._currDataDir is None:
+            default_dir = os.getcwd()
+        else:
+            default_dir = self._currDataDir
+
+        # pop out file
+        file_filter = 'Data Files (*.data);;All Files (*.*)'
+        g_file_name = str(QtGui.QFileDialog.getOpenFileName(self, 'Open a G(r) file', default_dir, file_filter))
+
+        # return if operation is cancelled
+        if g_file_name is None or g_file_name == '':
+            return
+        else:
+            # update current data directory
+            self._currDataDir = os.path.abspath(g_file_name)
+
+        # read file
+        status, ret_obj = self._myController.load_gr(g_file_name)
+        if not status:
+            err_msg = ret_obj
+            print err_msg
+            return
+        else:
+            gr_ws_name = ret_obj
+
+        # plot
+        self.plot_gr([gr_ws_name])
+
+        return
+
     def do_load_sq(self):
         """
         Load S(Q) from file
@@ -403,8 +494,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         sq_file_name = str(QtGui.QFileDialog.getOpenFileName(self, 'Choose S(Q) File', default_dir, ext))
         if sq_file_name is None or sq_file_name == '':
             return
-
-        self._currDataDir = os.path.abspath(sq_file_name)
+        else:
+            # update current data directory
+            self._currDataDir = os.path.abspath(sq_file_name)
 
         # load S(q)
         sq_ws_name, q_min, q_max = self._myController.load_sq(sq_file_name)
@@ -602,18 +694,35 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         return
 
+    def get_workflow(self):
+        """
+        Return the reference to the main workflow controller
+        Returns: workflow controller
+
+        """
+        return self._myController
+
     def process_workspace_change(self, new_ws_list):
         """
+        Process (including
+        1. add workspace name to tree list and etc) when detecting that
+        there is some change to any workspace
+
+        Parameters
+        ----------
+        new_ws_list :: list of new workspaces' names
 
         Returns
         -------
 
         """
-        # TODO/NOW - Check & doc & figure out what to do!
-        print 'current tab = ', self.ui.tabWidget_2.currentIndex(), self.ui.tabWidget_2.currentWidget(),
-        print self.ui.tabWidget_2.currentWidget().objectName()
+        # check input
+        assert isinstance(new_ws_list, list), 'Input workspace list must be a string.'
 
-        print 'current workspaces: ', self._myController.get_current_workspaces()
+        # TODO - Figure out what to do!
+        # print 'current tab = ', self.ui.tabWidget_2.currentIndex(), self.ui.tabWidget_2.currentWidget(),
+        # print self.ui.tabWidget_2.currentWidget().objectName()
+        # print 'current workspaces: ', self._myController.get_current_workspaces()
 
         # add to tree
         if len(new_ws_list) > 0:
@@ -623,7 +732,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
             elif self.ui.tabWidget_2.currentWidget().objectName() == 'tab_bragg':
                 for new_ws in new_ws_list:
                     self.ui.treeWidget_braggWSList.add_temp_ws(new_ws)
-
 
         return
 
