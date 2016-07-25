@@ -8,6 +8,7 @@ class PopulateBackgroundWidgets(object):
     list_names = []
     exp_ini_back_file = 'N/A'
     current_folder = None
+    we_are_done_here = False
         
     def __init__(self, parent=None):
         self.parent = parent.ui
@@ -15,6 +16,8 @@ class PopulateBackgroundWidgets(object):
         
     def run(self):
         self.retrieve_list_names_from_table()
+        if self.we_are_done_here:
+            return
         self.reset_background_combobox_index()
         self.retrieve_background_file_from_exp_ini_file()
         self.populate_widgets()
@@ -22,6 +25,9 @@ class PopulateBackgroundWidgets(object):
     def retrieve_list_names_from_table(self):
         _list_names = []
         _nbr_row = self.parent.table.rowCount()
+        if _nbr_row == 0:
+            self.we_are_done_here = True
+            return
         for _index_row in range(_nbr_row):
             _label = self.parent.table.item(_index_row, 1).text()
             _list_names.append(_label)
