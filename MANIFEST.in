@@ -1,2 +1,6 @@
 include versioneer.py
 include fastgr/_version.py
+include README.md
+include fastgr/*
+recursive-include icons *.png *.svg *.ico
+
