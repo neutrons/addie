@@ -264,7 +264,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         workspace_list = self.ui.treeWidget_grWsList.get_workspaces()
 
         # reset the tree to initial status
-        self.ui.treeWidget_grWsList.reset()
+        self.ui.treeWidget_grWsList.reset_gr_tree()
 
         # delete all the workspaces
         for workspace in workspace_list:
@@ -289,7 +289,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         gsas_ws_list = self.ui.treeWidget_braggWSList.get_workspaces()
 
         # reset the GSAS tree
-        self.ui.treeWidget_braggWSList.clear()
+        self.ui.treeWidget_braggWSList.reset_bragg_tree()
 
         # delete all workspaces
         for workspace in gsas_ws_list:

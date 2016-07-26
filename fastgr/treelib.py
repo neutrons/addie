@@ -39,11 +39,11 @@ class BraggTree(base.CustomizedTreeView):
         self._workspaceNameList = None
 
         # reset
-        self.reset()
+        self.reset_bragg_tree()
 
         return
 
-    def reset(self):
+    def reset_bragg_tree(self):
         """
         Clear the leaves of the tree only leaving the main node 'workspaces'
         Returns
@@ -51,7 +51,8 @@ class BraggTree(base.CustomizedTreeView):
 
         """
         # clear all
-        self.model().clear()
+        if self.model() is not None:
+            self.model().clear()
 
         # reset workspace names list
         self._workspaceNameList = list()
@@ -65,10 +66,7 @@ class BraggTree(base.CustomizedTreeView):
         self.setModel(model)
 
         self.init_setup(['Bragg Workspaces'])
-        self.add_main_item('SofQ', append=False, as_current_index=False)
         self.add_main_item('workspaces', append=True, as_current_index=False)
-
-
 
         return
 
@@ -155,7 +153,10 @@ class BraggTree(base.CustomizedTreeView):
         self.add_main_item(main_leaf_value, True, True)
 
         for bank_name in bank_name_list:
+            # add the tree
             self.add_child_main_item(main_leaf_value, bank_name)
+            # register
+            self._workspaceNameList.append(bank_name)
 
         return
 
@@ -210,10 +211,19 @@ class BraggTree(base.CustomizedTreeView):
         Returns:
         None
         """
-        gsas_ws_name_list = self.get_current_main_nodes()
+        # get main node
+        gsas_node_list = self.get_current_main_nodes()
 
-        for gsas_ws_name in gsas_ws_name_list:
-            self._mainWindow.get_workflow().delete_gsas_workspace(gsas_ws_name)
+        for gsas_node in gsas_ws_name_list:
+            # delete a gsas workspace and its split
+            gss_ws_name = gsas_node.split('_group')[0]
+            self._mainWindow.get_workflow().delete_workspace(gss_ws_name)
+            
+            # get the sub nodes
+            # ISSUE 1: implement/find out the method to get children nodes' names
+            sub_leaves = self.get(gsas_node)
+            for ws_name in sub_leaves:
+                self._mainWindow.get_workflow().delete_workspace(sub_leaves)
 
         return
 
@@ -349,7 +359,7 @@ class GofRTree(base.CustomizedTreeView):
         self._mainWindow = None
         self._workspaceNameList = None
 
-        self.reset()
+        self.reset_gr_tree()
 
         return
 
@@ -479,7 +489,7 @@ class GofRTree(base.CustomizedTreeView):
 
         return
 
-    def reset(self):
+    def reset_gr_tree(self):
         """
         Clear the leaves of the tree only leaving the main node 'workspaces'
         Returns
@@ -487,7 +497,8 @@ class GofRTree(base.CustomizedTreeView):
 
         """
         # clear all
-        self.model().clear()
+        if self.model() is not None:
+            self.model().clear()
 
         # reset workspace data structures
         self._workspaceNameList = list()
@@ -501,8 +512,8 @@ class GofRTree(base.CustomizedTreeView):
         self.setModel(model)
 
         self.init_setup(['G(R) Workspaces'])
-        self.add_main_item('SofQ', append=False, as_current_index=False)
         self.add_main_item('workspaces', append=True, as_current_index=False)
+        self.add_main_item('SofQ', append=False, as_current_index=False)
 
         return
 

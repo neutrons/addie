@@ -23,10 +23,10 @@ class CustomizedTreeView(QtGui.QTreeView):
         self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
 
         # Set up model
-        self._myNumCols = 1
-        model = QtGui.QStandardItemModel()
-        model.setColumnCount(self._myNumCols)
-        self.setModel(model)
+        # self._myNumCols = 1
+        # model = QtGui.QStandardItemModel()
+        # model.setColumnCount(self._myNumCols)
+        # self.setModel(model)
 
         # Set up tree
         # ... ... self.setDragEnabled(True)
