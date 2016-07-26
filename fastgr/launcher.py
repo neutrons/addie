@@ -264,7 +264,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         workspace_list = self.ui.treeWidget_grWsList.get_workspaces()
 
         # reset the tree to initial status
-        self.ui.treeWidget_grWsList.clear()
+        self.ui.treeWidget_grWsList.reset()
 
         # delete all the workspaces
         for workspace in workspace_list:
@@ -502,7 +502,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         sq_ws_name, q_min, q_max = self._myController.load_sq(sq_file_name)
 
         # set to the tree and combo box
-        self.ui.treeWidget_grWsList.add_child_main_item('SofQ', sq_ws_name)
+        self.ui.treeWidget_grWsList.add_sq(sq_ws_name)
         self.ui.comboBox_SofQ.addItem(sq_ws_name)
         self.ui.comboBox_SofQ.setCurrentIndex(self.ui.comboBox_SofQ.count()-1)
 
@@ -694,6 +694,14 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         return
 
+    def get_default_data_dir(self):
+        """
+        Get default data directory
+        Returns:
+
+        """
+        return self._currDataDir
+
     def get_workflow(self):
         """
         Return the reference to the main workflow controller
@@ -729,10 +737,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         if len(new_ws_list) > 0:
             if self.ui.tabWidget_2.currentWidget().objectName() == 'tab_gR':
                 for new_ws in new_ws_list:
-                    self.ui.treeWidget_grWsList.add_temp_ws(new_ws)
+                    self.ui.treeWidget_grWsList.add_arb_gr(new_ws)
             elif self.ui.tabWidget_2.currentWidget().objectName() == 'tab_bragg':
                 for new_ws in new_ws_list:
-                    self.ui.treeWidget_braggWSList.add_temp_ws(new_ws)
+                    self.ui.treeWidget_braggWSList.add_arb_gr(new_ws)
 
         return
 

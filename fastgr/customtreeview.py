@@ -47,8 +47,8 @@ class CustomizedTreeView(QtGui.QTreeView):
         self.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
 
         # Data structure to control the items
-        self._leafDict = {}  # dictionary for each leaf and its child. key is string only!
-        self._myHeaderList = []
+        self._leafDict = dict()  # dictionary for each leaf and its child. key is string only!
+        self._myHeaderList = list()
         self._childrenInOrder = True
 
         return
