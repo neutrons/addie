@@ -237,11 +237,16 @@ class BraggTree(base.CustomizedTreeView):
         assert self._mainWindow is not None, 'Main window is not set up.'
 
         # get the selected GSAS node's name
-        gss_node_list = self.get_current_main_nodes()
+        status, ret_obj = self.get_current_main_nodes()
+        if not status:
+            print '[Error] Get current main nodes: %s.' % str(ret_obj)
+            return
+        
+        gss_node_list = ret_obj
         if len(gss_node_list) == 0:
             return
         elif len(gss_node_list) > 1:
-            print '[Error] Only 1 GSS node can be selected.'
+            print '[Error] Only 1 GSS node can be selected.  Current selected nodes are %s.' % str(gss_node_list)
             return
 
         # pop-out a file dialog for GSAS file's name
@@ -254,7 +259,10 @@ class BraggTree(base.CustomizedTreeView):
             return
 
         # emit the signal to the main window
-        self._mainWindow.get_workflow().combine_gsas_file(gss_node_list[0], new_gss_file_name)
+        self._mainWindow.get_workflow().conjoin_banks(.
+        
+        combine_gsas_file(gss_node_list[0], new_gss_file_name)
+    defself, ws_name_list, output_ws_name):
 
         return
 
