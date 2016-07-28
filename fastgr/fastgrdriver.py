@@ -119,7 +119,8 @@ class FastGRDriver(object):
 
         return
 
-    def conjoin_banks(self, ws_name_list, output_ws_name):
+    @staticmethod
+    def conjoin_banks(ws_name_list, output_ws_name):
         """
         Conjoin all 6 single banks
         Args:
@@ -134,6 +135,7 @@ class FastGRDriver(object):
         assert isinstance(output_ws_name, str)
 
         # clone the first workspace for the output workspace
+        assert AnalysisDataService.doesExist(ws_name_list[0])
         simpleapi.CloneWorkspace(InputWorkspace=ws_name_list[0],
                                  OutputWorkspace=output_ws_name)
 
@@ -435,6 +437,28 @@ class FastGRDriver(object):
         simpleapi.SaveAscii(InputWorkspace=ws_name, Filename=file_name)
 
         return
+
+    @staticmethod
+    def write_gss_file(workspace, gss_file_name):
+        """
+        Write a MatrixWorkspace to a GSAS file
+        Args:
+            workspace:
+            gss_file_name:
+
+        Returns:
+
+        """
+        # check
+        assert AnalysisDataService.doesExist(workspace)
+        assert isinstance(gss_file_name, str)
+
+        # write
+        simpleapi.SaveGSS(InputWorkspace=workspace, Filename=gss_file_name,
+                          Format='SLOG', Bank=1)
+
+        return
+
 
 def calculate_bank_angle(ws_name):
     """ Calculate bank's angle (2theta) focused detector

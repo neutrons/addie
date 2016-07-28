@@ -380,6 +380,30 @@ class CustomizedTreeView(QtGui.QTreeView):
         return return_list
 
     @staticmethod
+    def get_child_nodes(parent_node, output_str=False):
+        """
+        Get a list of children nodes
+        Args:
+            parent_node:
+            output_str: if True, then output list of item's text instead of QStandardItem
+
+        Returns:
+
+        """
+        assert isinstance(parent_node, QtGui.QStandardItem)
+        child_count = parent_node.rowCount()
+
+        child_item_list = list()
+        for i_child in range(child_count):
+            child_item = parent_node.child(i_child)
+            if output_str:
+                child_item_list.append(str(child_item.text()))
+            else:
+                child_item_list.append(child_item)
+
+        return child_item_list
+
+    @staticmethod
     def get_item_level(q_item):
         """
         Get the level of a QItem in the tree
