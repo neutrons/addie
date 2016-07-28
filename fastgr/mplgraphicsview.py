@@ -4,15 +4,18 @@ import numpy as np
 
 from PyQt4 import QtGui
 
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-try: 
-    from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as NavigationToolbar2
-except ImportError:
-    from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar2
+import matplotlib
 from matplotlib.figure import Figure
 import matplotlib.image
+if matplotlib.__version__ >= '1.5.1':
+    from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar2
+    from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
+else:
+    from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as NavigationToolbar2
+    from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 
-MplLineStyles = ['-' , '--' , '-.' , ':' , 'None' , ' ' , '']
+
+MplLineStyles = ['-', '--', '-.', ':', 'None', ' ', '']
 MplLineMarkers = [
     ". (point         )",
     "* (star          )",

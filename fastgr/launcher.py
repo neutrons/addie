@@ -76,9 +76,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
                      self.evt_plot_bragg_bank)
         self.connect(self.ui.comboBox_xUnit, QtCore.SIGNAL('currentIndexChanged(int)'),
                      self.evt_plot_bragg_bank)
-
         self.connect(self.ui.actionReset_GSAS_tab, QtCore.SIGNAL('triggered()'),
                      self.do_reset_gsas_tab)
+        self.connect(self.ui.radioButton_multiBank, QtCore.SIGNAL('toggled(bool)'),
+                     self.evt_change_gss_mode)
 
         # for tab G(R)
         self.connect(self.ui.pushButton_loadSQ, QtCore.SIGNAL('clicked()'),
@@ -134,35 +135,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         # mutex-like variables
         self._noEventBankWidgets = False
-
-        return
-
-    def evt_qmin_changed(self):
-        """
-
-        Returns:
-
-        """
-        q_min = self.ui.doubleSpinBoxQmin.value()
-        q_max = self.ui.doubleSpinBoxQmax.value()
-
-        if q_min < q_max and self.ui.graphicsView_sq.is_boundary_shown():
-            self.ui.graphicsView_sq.move_left_indicator(q_min, relative=False)
-
-        return
-
-    def evt_qmax_changed(self):
-        """
-        Handle if the user change the value of Qmax of S(Q) including
-        1. moving the right boundary in S(q) figure
-        Returns:
-
-        """
-        q_min = self.ui.doubleSpinBoxQmin.value()
-        q_max = self.ui.doubleSpinBoxQmax.value()
-
-        if q_min < q_max and self.ui.graphicsView_sq.is_boundary_shown():
-            self.ui.graphicsView_sq.move_right_indicator(q_max, relative=False)
 
         return
 
@@ -415,13 +387,13 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         self._gssGroupName, banks_list, bank_angles = self._myController.split_to_single_bank(gss_ws_name)
 
         # add to tree
-        # banks_list = ['bank1', 'bank2', 'bank3', 'bank4', 'bank5', 'bank6']
         self.ui.treeWidget_braggWSList.add_bragg_ws_group(self._gssGroupName, banks_list)
 
         # rename bank
         for bank_id in self._braggBankWidgets.keys():
             bank_check_box = self._braggBankWidgets[bank_id]
-            if bank_angles[bank_id-1] is None:
+
+            if bank_id > len(bank_angles) or bank_angles[bank_id-1] is None:
                 bank_check_box.setText('Bank %d' % bank_id)
             else:
                 bank_check_box.setText('Bank %.1f' % bank_angles[bank_id-1])
@@ -435,7 +407,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
             check_box.setChecked(False)
         self._noEventBankWidgets = False
 
-        # plot and will triggered the grap
+        # plot and will triggered the graph
         self.ui.checkBox_bank1.setChecked(True)
 
         return
@@ -558,6 +530,47 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         q_left = self.ui.doubleSpinBoxQmin.value()
         q_right = self.ui.doubleSpinBoxQmax.value()
         self.ui.graphicsView_sq.toggle_boundary(q_left, q_right)
+
+        return
+
+    def evt_change_gss_mode(self):
+        """
+
+        Returns
+        -------
+
+        """
+        print '[DB]  Multi-Bank: ', self.ui.radioButton_multiBank.isChecked(),
+        print '[DB]  Multi-GSS: ', self.ui.radioButton_multiGSS.isChecked()
+
+        # ISSUE 1: merge with evt_plot_bragg_bank
+
+    def evt_qmin_changed(self):
+        """
+
+        Returns:
+
+        """
+        q_min = self.ui.doubleSpinBoxQmin.value()
+        q_max = self.ui.doubleSpinBoxQmax.value()
+
+        if q_min < q_max and self.ui.graphicsView_sq.is_boundary_shown():
+            self.ui.graphicsView_sq.move_left_indicator(q_min, relative=False)
+
+        return
+
+    def evt_qmax_changed(self):
+        """
+        Handle if the user change the value of Qmax of S(Q) including
+        1. moving the right boundary in S(q) figure
+        Returns:
+
+        """
+        q_min = self.ui.doubleSpinBoxQmin.value()
+        q_max = self.ui.doubleSpinBoxQmax.value()
+
+        if q_min < q_max and self.ui.graphicsView_sq.is_boundary_shown():
+            self.ui.graphicsView_sq.move_right_indicator(q_max, relative=False)
 
         return
 
