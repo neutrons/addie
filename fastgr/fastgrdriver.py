@@ -119,33 +119,6 @@ class FastGRDriver(object):
 
         return
 
-    @staticmethod
-    def conjoin_banks(ws_name_list, output_ws_name):
-        """
-        Conjoin all 6 single banks
-        Args:
-            ws_name_list: list of workspaces' names for conjoining
-            output_ws_name: name of the output workspace
-        Returns:
-
-        """
-        # check inputs
-        assert isinstance(ws_name_list, list) and len(ws_name_list) > 1, \
-            'There must be at least 2 workspaces for conjoining operation.'
-        assert isinstance(output_ws_name, str)
-
-        # clone the first workspace for the output workspace
-        assert AnalysisDataService.doesExist(ws_name_list[0])
-        simpleapi.CloneWorkspace(InputWorkspace=ws_name_list[0],
-                                 OutputWorkspace=output_ws_name)
-
-        for i_ws in range(1, len(ws_name_list)):
-            simpleapi.ConjoinWorkspaces(InputWorkspace1=output_ws_name,
-                                        InputWorkspace2=ws_name_list[i_ws])
-        # END-FOR(i_ws)
-
-        return
-
     def get_bragg_data(self, ws_group_name, bank_id, x_unit):
         """ Get Bragg diffraction data of 1 bank
         Args:
@@ -439,7 +412,7 @@ class FastGRDriver(object):
         return
 
     @staticmethod
-    def write_gss_file(workspace, gss_file_name):
+    def write_gss_file(ws_name_list, gss_file_name):
         """
         Write a MatrixWorkspace to a GSAS file
         Args:
@@ -450,12 +423,17 @@ class FastGRDriver(object):
 
         """
         # check
-        assert AnalysisDataService.doesExist(workspace)
+        assert isinstance(ws_name_list, list) and len(ws_name_list) > 1, \
+            'There must be at least 2 workspaces for conjoining operation.'
         assert isinstance(gss_file_name, str)
 
-        # write
-        simpleapi.SaveGSS(InputWorkspace=workspace, Filename=gss_file_name,
-                          Format='SLOG', Bank=1)
+        # write with appending
+        append_mode = False
+        for i_ws, ws_name in enumerate(ws_name_list):
+            simpleapi.SaveGSS(InputWorkspace=ws_name, Filename=gss_file_name,
+                              Format='SLOG', Bank=1, Append=append_mode)
+            append_mode = True
+        # END-FOR
 
         return
 

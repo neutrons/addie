@@ -123,6 +123,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
             checked = self._braggBankWidgets[bank_id].isChecked()
             self._braggBankWidgetRecords[bank_id] = checked
 
+        # records of the plots on canvas
+        # workspaces' names (not bank, but original workspace) on canvas
+        self._braggWorkspaceOnCanvasList = list()
+
         # define the driver
         self._myController = driver.FastGRDriver()
 
@@ -272,17 +276,26 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         return
 
-    def plot_bragg(self, bragg_ws_list):
+    def plot_bragg(self, bragg_ws_list, clear_canvas=False):
         """
 
         Parameters
         ----------
         bragg_ws_list
+        clear_canvas
 
         Returns
         -------
 
         """
+        # check
+        assert isinstance(bragg_ws_list, list)
+
+        # clear canvas if necessary
+        if clear_canvas:
+            self.ui.graphicsView_bragg.clear_all_lines()
+
+        # plot all workspsaces
         for bragg_ws_name in bragg_ws_list:
             if bragg_ws_name.startswith('bank') and 0 <= int(bragg_ws_name.split('bank')[1]) < 6:
                 bank_id = int(bragg_ws_name.split('bank')[1])
@@ -295,16 +308,17 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
     def plot_gr(self, gr_ws_name_list):
         """
-        Plot G(r) by its name (workspace as protocol)
+        Plot G(r) by their names (workspace as protocol)
         Parameters
         ----------
-        gr_ws_name
+        gr_ws_name_list: list of G(r) workspaces
 
         Returns
         -------
 
         """
-        # TODO/NOW - Docs and check
+        # check
+        assert isinstance(gr_ws_name_list, list) and len(gr_ws_name_list) > 0
 
         # plot G(R)
         for gr_ws_name in gr_ws_name_list:
@@ -533,6 +547,23 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         return
 
+    def get_bragg_banks_selected(self):
+        """
+        Find out the banks of bragg-tab that are selected.
+        Returns:
+
+        """
+        bank_id_list = list()
+        for bank_id in self._braggBankWidgets.keys():
+            # access the checkbox
+            bank_checkbox = self._braggBankWidgets[bank_id]
+            # append
+            if bank_checkbox.isChecked():
+                bank_id_list.append(bank_id)
+        # END-FOR
+
+        return bank_id_list
+
     def evt_change_gss_mode(self):
         """
 
@@ -540,37 +571,54 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         -------
 
         """
-        print '[DB]  Multi-Bank: ', self.ui.radioButton_multiBank.isChecked(),
-        print '[DB]  Multi-GSS: ', self.ui.radioButton_multiGSS.isChecked()
+        # check the mode (multiple bank or multiple GSS)
+        single_gss_mode = self.ui.radioButton_multiBank.isChecked()
+        assert single_gss_mode != self.ui.radioButton_multiGSS.isChecked()
 
-        # ISSUE 1: merge with evt_plot_bragg_bank
+        # get the banks that are selected
+        to_plot_bank_list = self.get_bragg_banks_selected()
+        # return with doing anything if the canvas is empty, i.e., no bank is selected
+        if len(to_plot_bank_list) == 0:
+            return
+        # return if there is no workspace that is plotted on canvas now
+        if len(self._braggWorkspaceOnCanvasList) == 0:
+            return
 
-    def evt_qmin_changed(self):
-        """
+        # process the plot with various situation
+        if single_gss_mode:
+            # switch to single GSAS mode from multiple GSAS mode.
+            #  select the arbitrary gsas file to
+            assert len(to_plot_bank_list) == 1
 
-        Returns:
+            # skip if there is one and only one workspace
+            if len(self._braggWorkspaceOnCanvasList) == 1:
+                return
+            else:
+                plot_ws_name = self._braggWorkspaceOnCanvasList[0]
 
-        """
-        q_min = self.ui.doubleSpinBoxQmin.value()
-        q_max = self.ui.doubleSpinBoxQmax.value()
+            # plot
+            bragg_bank_ws = '%s_bank%d' % (plot_ws_name, to_plot_bank_list[0])
+            self.plot_bragg(bragg_ws_list=[bragg_bank_ws], clear_canvas=True)
 
-        if q_min < q_max and self.ui.graphicsView_sq.is_boundary_shown():
-            self.ui.graphicsView_sq.move_left_indicator(q_min, relative=False)
+        else:
+            # multiple GSAS mode. as currently there is one GSAS file that is plot, then the first bank
+            # that is plotted will be kept on the canvas
+            # assumption: switched from single-bank mode
+            assert len(self._braggWorkspaceOnCanvasList) == 1
 
-        return
+            # skip if there is one and only 1 bank that is selected
+            if len(to_plot_bank_list) == 1:
+                return
+            else:
+                # choose first bank
+                bank_to_plot = to_plot_bank_list[0]
 
-    def evt_qmax_changed(self):
-        """
-        Handle if the user change the value of Qmax of S(Q) including
-        1. moving the right boundary in S(q) figure
-        Returns:
+            # plot
+            plot_ws_name = self._braggBankWidgetRecords[0]
+            bragg_bank_ws = '%s_bank%d' % (plot_ws_name, bank_to_plot)
+            self.plot_bragg(bragg_ws_list=[bragg_bank_ws], clear_canvas=True)
 
-        """
-        q_min = self.ui.doubleSpinBoxQmin.value()
-        q_max = self.ui.doubleSpinBoxQmax.value()
-
-        if q_min < q_max and self.ui.graphicsView_sq.is_boundary_shown():
-            self.ui.graphicsView_sq.move_right_indicator(q_max, relative=False)
+        # END-IF-ELSE
 
         return
 
@@ -604,12 +652,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         plot_all_gss = self.ui.radioButton_multiGSS.isChecked()
 
         plot_bank_list = list()
-        print '[DB...BAT] braggBankWidget: ', self._braggBankWidgets.keys()
+        selected_bank_id = self.get_bragg_banks_selected()
         for bank_id in self._braggBankWidgets.keys():
-            bank_checkbox = self._braggBankWidgets[bank_id]
-
-            if not bank_checkbox.isChecked():
-                # no-operation for not checked
+            # rule out if this bank is not selected
+            # no-operation for not checked
+            if bank_id not in selected_bank_id:
                 self._braggBankWidgetRecords[bank_id] = False
                 continue
 
@@ -619,7 +666,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
                 if self._braggBankWidgetRecords[bank_id]:
                     # create a mutex on bank widget check box
                     self._noEventBankWidgets = True
-                    bank_checkbox.setChecked(False)
+                    self._braggBankWidgets[bank_id].setChecked(False)
                     self._noEventBankWidgets = False
 
                     self._braggBankWidgetRecords[bank_id] = False
@@ -706,6 +753,36 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         self.plot_sq(sq_name, clear_prev=True)
 
         return
+
+    def evt_qmin_changed(self):
+        """
+
+        Returns:
+
+        """
+        q_min = self.ui.doubleSpinBoxQmin.value()
+        q_max = self.ui.doubleSpinBoxQmax.value()
+
+        if q_min < q_max and self.ui.graphicsView_sq.is_boundary_shown():
+            self.ui.graphicsView_sq.move_left_indicator(q_min, relative=False)
+
+        return
+
+    def evt_qmax_changed(self):
+        """
+        Handle if the user change the value of Qmax of S(Q) including
+        1. moving the right boundary in S(q) figure
+        Returns:
+
+        """
+        q_min = self.ui.doubleSpinBoxQmin.value()
+        q_max = self.ui.doubleSpinBoxQmax.value()
+
+        if q_min < q_max and self.ui.graphicsView_sq.is_boundary_shown():
+            self.ui.graphicsView_sq.move_right_indicator(q_max, relative=False)
+
+        return
+
 
     def get_default_data_dir(self):
         """
