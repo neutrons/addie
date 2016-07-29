@@ -34,6 +34,14 @@ class BraggTree(base.CustomizedTreeView):
         self._action_merge_gss = QtGui.QAction('Merge to GSAS', self)
         self._action_merge_gss.triggered.connect(self.do_merge_to_gss)
 
+        # to select
+        self._action_select_node = QtGui.QAction('Select', self)
+        self._action_select_node.triggered.connect(self.do_select_gss_node)
+
+        # to de-select
+        self._action_deselect_node = QtGui.QAction('Deselect', self)
+        self._action_deselect_node.triggered.connect(self.do_deselect_gss_node)
+
         # class variables
         self._mainWindow = None
         self._workspaceNameList = None
@@ -120,14 +128,18 @@ class BraggTree(base.CustomizedTreeView):
         # END-FOR
 
         if leaf_level == 1:
-            self.addAction(self._action_plot)
+            self.removeAction(self._action_plot)
+            self.addAction(self._action_select_node)
             self.addAction(self._action_ipython)
-            self.addAction(self._action_delete)
             self.addAction(self._action_merge_gss)
+            self.addAction(self._action_deselect_node)
+            self.addAction(self._action_delete)
         elif leaf_level == 2:
-            self.removeAction(self._action_merge_gss)
             self.addAction(self._action_plot)
+            self.removeAction(self._action_select_node)
+            self.removeAction(self._action_merge_gss)
             self.addAction(self._action_ipython)
+            self.removeAction(self._action_deselect_node)
             self.removeAction(self._action_delete)
 
         return
@@ -205,6 +217,23 @@ class BraggTree(base.CustomizedTreeView):
 
         return
 
+    def do_deselect_gss_node(self):
+        """
+        De-select a node if it is plot on canvas
+        Returns
+        -------
+
+        """
+        # TODO/NOW/ISSUE 1
+
+        # check whether it is on canvas
+        blabla
+
+        # remove it from canvas
+        blabla
+
+        return
+
     def do_delete_gsas(self):
         """
         Delete a GSAS workspace and its split workspaces, and its item in the GSAS-tree as well.
@@ -212,18 +241,21 @@ class BraggTree(base.CustomizedTreeView):
         None
         """
         # get main node
-        gsas_node_list = self.get_current_main_nodes()
+        # TODO/NOW/ISSUE 1: better documentation
+        status, gsas_node_list = self.get_current_main_nodes()
+        assert status
 
-        for gsas_node in gsas_ws_name_list:
+        for gsas_node in gsas_node_list:
             # delete a gsas workspace and its split
             gss_ws_name = gsas_node.split('_group')[0]
             self._mainWindow.get_workflow().delete_workspace(gss_ws_name)
             
             # get the sub nodes
-            # ISSUE 1: implement/find out the method to get children nodes' names
-            sub_leaves = self.get(gsas_node)
+            # TODO/NOW/ISSUE 1: implement/find out the method to get children nodes' names
+            sub_leaves = self.get_child_nodes(parent_node=gsas_node, output_str=True)
             for ws_name in sub_leaves:
-                self._mainWindow.get_workflow().delete_workspace(sub_leaves)
+                self._mainWindow.get_workflow().delete_workspace(ws_name)
+        # END-FOR
 
         return
 
@@ -295,11 +327,26 @@ class BraggTree(base.CustomizedTreeView):
 
         return
 
+    def do_select_gss_node(self):
+        """
+        Select a GSAS node such that this workspace (group) will be plotted to canvas
+        Returns
+        -------
+
+        """
+        # get selected nodes
+        selected_nodes = self.get_selected_items()
+
+        # set to plot
+        for gss_group_node in selected_nodes:
+            gss_group_name = str(gss_group_node.text())
+            self._mainWindow.set_bragg_ws_to_plot(gss_group_name)
+
     def get_current_main_nodes(self):
         """
         Get the name of the current nodes that are selected
         The reason to put the method here is that it is assumed that the tree only has 2 level (main and leaf)
-        Returns:
+        Returns: a list of strings as main nodes' names
 
         """
         # Get current index and item
@@ -591,8 +638,10 @@ class GofRTree(base.CustomizedTreeView):
         # END-FOR
 
         # get item and delete
+        # TODO/NOW/ISSUE 1: Just not correct !!!
         if curr_level == 0:
             # delete node
+            # TODO/NOW/ISSUE 1: SofQ and workspaces cannot be deleted: only their children workspaces will!
             for item in selected_items:
                 sub_leaves = self.get_leaves(item)
                 for ws_name in sub_leaves:
@@ -601,7 +650,8 @@ class GofRTree(base.CustomizedTreeView):
         else:
             # delete leaf
             for item in selected_items:
-                self._mainWindow.get_workflow().delete_workspace(item)
+                ws_name = str(item.text())
+                self._mainWindow.get_workflow().delete_workspace(ws_name)
                 self.delete_leaf(item)
         # END-IF-ELSE
 

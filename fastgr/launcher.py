@@ -59,6 +59,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         init_step2 = InitStep2(parent=self)
 
         # define the event handling methods
+        # TODO/NOW/ISSUE : add action to close
+        # self.ui.actionQuit
+
         # bragg diffraction tab
         self.connect(self.ui.pushButton_loadBraggFile, QtCore.SIGNAL('clicked()'),
                      self.do_load_bragg_file)
@@ -122,10 +125,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         for bank_id in self._braggBankWidgets.keys():
             checked = self._braggBankWidgets[bank_id].isChecked()
             self._braggBankWidgetRecords[bank_id] = checked
-
-        # records of the plots on canvas
-        # workspaces' names (not bank, but original workspace) on canvas
-        self._braggWorkspaceOnCanvasList = list()
 
         # define the driver
         self._myController = driver.FastGRDriver()
@@ -262,7 +261,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         None
         """
         # get GSAS workspaces from tree
-        gsas_ws_list = self.ui.treeWidget_braggWSList.get_workspaces()
+        # TODO/NOW/ISSUE 1 : not supported method: get main nodes names...
+        gsas_ws_list = self.ui.treeWidget_braggWSList.GET_WORKSPACES()
 
         # reset the GSAS tree
         self.ui.treeWidget_braggWSList.reset_bragg_tree()
@@ -272,7 +272,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
             self._myController.delete_workspace(workspace)
 
         # clear the canvas
-        self.ui.graphicsView_bragg.clear_all_lines()
+        self.ui.graphicsView_bragg.reset()
 
         return
 
@@ -281,7 +281,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         Parameters
         ----------
-        bragg_ws_list
+        bragg_ws_list: list of (single spectrum) Bragg workspace
         clear_canvas
 
         Returns
@@ -293,13 +293,36 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         # clear canvas if necessary
         if clear_canvas:
-            self.ui.graphicsView_bragg.clear_all_lines()
+            self.ui.graphicsView_bragg.reset()
+
+        # get unit
+        curr_unit = str(self.ui.comboBox_xUnit.currentText())
 
         # plot all workspsaces
+        print '[DB...BAT] Bragg ws list: ', bragg_ws_list
         for bragg_ws_name in bragg_ws_list:
-            if bragg_ws_name.startswith('bank') and 0 <= int(bragg_ws_name.split('bank')[1]) < 6:
+
+            # get the last section of the workspace name: _bank%d
+            postfix = bragg_ws_name.split('_')[-1]
+
+            if postfix.startswith('bank') and 0 <= int(postfix.split('bank')[1]) <= 6:
+                # belonged to a Bragg-workspace-group
+                ws_group = bragg_ws_name.split('_%s' % postfix)[0] + '_group'
                 bank_id = int(bragg_ws_name.split('bank')[1])
+                vec_x, vec_y, vec_e = self._myController.get_bragg_data(ws_group_name=ws_group, bank_id=bank_id,
+                                                                        x_unit=curr_unit)
+
+                # construct dictionary for plotting
+                plot_data_dict = dict()
+                plot_data_dict[ws_group] = dict()
+                plot_data_dict[ws_group][bank_id] = (vec_x, vec_y, vec_e)
+
+                # set the bank to be checked
                 self._braggBankWidgets[bank_id].setChecked(True)
+
+                # plot
+                self.ui.graphicsView_bragg.plot_banks(plot_data_dict, curr_unit)
+
             else:
                 vec_x, vec_y, vec_e = self._myController.get_ws_data(bragg_ws_name)
                 self.ui.graphicsView_bragg.plot_general_ws(bragg_ws_name, vec_x, vec_y, vec_e)
@@ -577,12 +600,16 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         # get the banks that are selected
         to_plot_bank_list = self.get_bragg_banks_selected()
+        on_canvas_ws_list = self.ui.graphicsView_bragg.get_workspaces()
         # return with doing anything if the canvas is empty, i.e., no bank is selected
         if len(to_plot_bank_list) == 0:
             return
         # return if there is no workspace that is plotted on canvas now
-        if len(self._braggWorkspaceOnCanvasList) == 0:
+        if len(on_canvas_ws_list) == 0:
             return
+
+        # set to single GSS
+        self.ui.graphicsView_bragg.set_to_single_gss(single_gss_mode)
 
         # process the plot with various situation
         if single_gss_mode:
@@ -591,10 +618,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
             assert len(to_plot_bank_list) == 1
 
             # skip if there is one and only one workspace
-            if len(self._braggWorkspaceOnCanvasList) == 1:
+            if len(on_canvas_ws_list) == 1:
                 return
             else:
-                plot_ws_name = self._braggWorkspaceOnCanvasList[0]
+                plot_ws_name = on_canvas_ws_list[0]
 
             # plot
             bragg_bank_ws = '%s_bank%d' % (plot_ws_name, to_plot_bank_list[0])
@@ -604,7 +631,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
             # multiple GSAS mode. as currently there is one GSAS file that is plot, then the first bank
             # that is plotted will be kept on the canvas
             # assumption: switched from single-bank mode
-            assert len(self._braggWorkspaceOnCanvasList) == 1
+            assert len(self.ui.graphicsView_bragg.get_workspaces()) == 1
 
             # skip if there is one and only 1 bank that is selected
             if len(to_plot_bank_list) == 1:
@@ -613,8 +640,15 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
                 # choose first bank
                 bank_to_plot = to_plot_bank_list[0]
 
+            # disable all the banks except the one to plot. Notice the mutex must be on
+            self._noEventBankWidgets = True
+            for bank_id in self._braggBankWidgets.keys():
+                if bank_id != bank_to_plot:
+                    self._braggBankWidgets[bank_id].setChecked(False)
+            self._noEventBankWidgets = False
+
             # plot
-            plot_ws_name = self._braggBankWidgetRecords[0]
+            plot_ws_name = on_canvas_ws_list[0]
             bragg_bank_ws = '%s_bank%d' % (plot_ws_name, bank_to_plot)
             self.plot_bragg(bragg_ws_list=[bragg_bank_ws], clear_canvas=True)
 
@@ -708,7 +742,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         # END-IF-ELSE
 
         # get the list of banks to plot or remove
-        self.ui.graphicsView_bragg.clear_all_lines()
+        self.ui.graphicsView_bragg.reset()
 
         # get new bank date
         plot_data_dict = dict()
@@ -723,7 +757,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         # remove unused and plot new
         if re_plot:
-            self.ui.graphicsView_bragg.clear_all_lines()
+            self.ui.graphicsView_bragg.reset()
             if x_unit == 'TOF':
                 self.ui.graphicsView_bragg.setXYLimit(xmin=0, xmax=20000, ymin=None, ymax=None)
             elif x_unit == 'MomentumTransfer':
@@ -831,6 +865,57 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
             elif self.ui.tabWidget_2.currentWidget().objectName() == 'tab_bragg':
                 for new_ws in new_ws_list:
                     self.ui.treeWidget_braggWSList.add_arb_gr(new_ws)
+
+        return
+
+    def set_bragg_ws_to_plot(self, gss_group_name):
+        """
+        Set a Bragg workspace group to plot.  If the Bragg-tab is in
+        (1) single-GSS mode, then switch to plot this gss_group
+        (2) multiple-GSS mode, then add this group to current canvas
+        Parameters
+        ----------
+        gss_group_name
+
+        Returns
+        -------
+
+        """
+        # check
+        assert isinstance(gss_group_name, str), 'GSS workspace group name is expected to be a string, but not' \
+                                                ' %s.' % str(type(gss_group_name))
+
+        # rule out the unsupported situation
+        assert gss_group_name.endswith('_group'), 'GSAS workspace group\' name must be ends with _group, ' \
+                                                  'but not as %s.' % gss_group_name
+        root_ws_name = gss_group_name.split('_group')[0]
+
+        # process
+        if self.ui.radioButton_multiBank.isChecked():
+            # single-GSS/multi-bank mode
+            # reset canvas
+            self.ui.graphicsView_bragg.reset()
+
+            # get the banks to plot
+            selected_banks = self.get_bragg_banks_selected()
+
+            bragg_ws_list = ['%s_bank%d' % (root_ws_name, bank_id) for bank_id in selected_banks]
+            self.plot_bragg(bragg_ws_list=bragg_ws_list, clear_canvas=False)
+
+        else:
+            # multiple-GSS/single-bank mode
+            # canvas is not be reset
+
+            # get the bank to plot
+            selected_banks = self.get_bragg_banks_selected()
+            assert len(selected_banks) <= 1, 'At most 1 bank can be plot in multiple-GSS mode.'
+
+            # form the workspace
+            bragg_ws = '%s_bank%d' % (root_ws_name, selected_banks[0])
+
+            self.plot_bragg(bragg_ws_list=[bragg_ws], clear_canvas=False)
+
+        # END-IF-ELSE
 
         return
 
