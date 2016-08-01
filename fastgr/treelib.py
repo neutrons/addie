@@ -27,7 +27,7 @@ class BraggTree(base.CustomizedTreeView):
         self._action_ipython.triggered.connect(self.do_copy_to_ipython)
 
         # to delete
-        self._action_delete = QtGui.QAction('Delete', self)
+        self._action_delete = QtGui.QAction('Delete workspace', self)
         self._action_delete.triggered.connect(self.do_delete_gsas)
 
         # to merge GSAS file
@@ -35,11 +35,11 @@ class BraggTree(base.CustomizedTreeView):
         self._action_merge_gss.triggered.connect(self.do_merge_to_gss)
 
         # to select
-        self._action_select_node = QtGui.QAction('Select', self)
+        self._action_select_node = QtGui.QAction('Plot', self)
         self._action_select_node.triggered.connect(self.do_select_gss_node)
 
         # to de-select
-        self._action_deselect_node = QtGui.QAction('Deselect', self)
+        self._action_deselect_node = QtGui.QAction('Remove from plotting', self)
         self._action_deselect_node.triggered.connect(self.do_deselect_gss_node)
 
         # class variables
@@ -133,14 +133,16 @@ class BraggTree(base.CustomizedTreeView):
             self.addAction(self._action_ipython)
             self.addAction(self._action_merge_gss)
             self.addAction(self._action_deselect_node)
-            self.addAction(self._action_delete)
+            # FIXME - Implement it!
+            # self.addAction(self._action_delete)
         elif leaf_level == 2:
             self.addAction(self._action_plot)
             self.removeAction(self._action_select_node)
             self.removeAction(self._action_merge_gss)
             self.addAction(self._action_ipython)
             self.removeAction(self._action_deselect_node)
-            self.removeAction(self._action_delete)
+            # FIXME - Implement it!
+            # self.removeAction(self._action_delete)
 
         return
 

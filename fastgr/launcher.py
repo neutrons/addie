@@ -260,16 +260,15 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         Returns:
         None
         """
+        # delete all workspaces
         # get GSAS workspaces from tree
         # TODO/NOW/ISSUE 1 : not supported method: get main nodes names...
-        gsas_ws_list = self.ui.treeWidget_braggWSList.GET_WORKSPACES()
+        # gsas_ws_list = self.ui.treeWidget_braggWSList.GET_WORKSPACES()
+        # for workspace in gsas_ws_list:
+        #     self._myController.delete_workspace(workspace)
 
         # reset the GSAS tree
         self.ui.treeWidget_braggWSList.reset_bragg_tree()
-
-        # delete all workspaces
-        for workspace in gsas_ws_list:
-            self._myController.delete_workspace(workspace)
 
         # clear the canvas
         self.ui.graphicsView_bragg.reset()
