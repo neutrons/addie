@@ -1,6 +1,7 @@
+import os
+import numpy as np
 from PyQt4.QtCore import Qt
-from PyQt4 import QtGui
-from step2_handler.populate_master_table import PopulateMasterTable
+from PyQt4 import QtGui, QtCore
 
 
 class TableHandler(object):
@@ -68,28 +69,124 @@ class TableHandler(object):
         return _row
             
     def right_click(self, position = None):
-
         _duplicate_row = -1
         _remove_row = -1
         _new_row = -1
+        _copy = -1
+        _paste = -1
+        _cut = -1
+        _refresh_table = -1
+        _clear_table = -1
 
         menu = QtGui.QMenu(self.parent_no_ui)
-        _new_row = menu.addAction("Insert Blank Row")
+
+        if self.parent_no_ui.table_selection_buffer == {}:
+            paste_status = False
+        else:
+            paste_status = True
 
         if (self.parent.table.rowCount() > 0):
-            _duplicate_row = menu.addAction("Duplicate Row")
+            _copy = menu.addAction("Copy")
+            _paste = menu.addAction("Paste")
+            self._paste_menu = _paste
+            _paste.setEnabled(paste_status)
+            _cut = menu.addAction("Clear")
             menu.addSeparator()
+        
+        _new_row = menu.addAction("Insert Blank Row")
+        
+        if (self.parent.table.rowCount() > 0):
+            _duplicate_row = menu.addAction("Duplicate Row")
             _remove_row = menu.addAction("Remove Top Row Selected")
+            menu.addSeparator()
+            _refresh_table = menu.addAction("Refresh/Reset Table")
+            _clear_table = menu.addAction("Clear Table")
         
         action = menu.exec_(QtGui.QCursor.pos())
         self.current_row = self.current_row()
             
-        if action == _duplicate_row:
+        if action == _copy:
+            self._copy()
+        elif action == _paste:
+            self._paste()
+        elif action == _cut:
+            self._cut()
+        elif action == _duplicate_row:
             self._duplicate_row()
         elif action == _new_row:
             self._new_row()
         elif action == _remove_row:
             self._remove_row()
+        elif action == _refresh_table:
+            self._refresh_table()
+        elif action == _clear_table:
+            self._clear_table()
+           
+    def _copy(self):
+        _selection = self.parent.table.selectedRanges()
+        _selection = _selection[0]
+        left_column = _selection.leftColumn()
+        right_column = _selection.rightColumn()
+        top_row = _selection.topRow()
+        bottom_row = _selection.bottomRow()
+        
+        self.parent_no_ui.table_selection_buffer = {'left_column': left_column,
+                                                    'right_column': right_column,
+                                                    'top_row': top_row,
+                                                    'bottom_row': bottom_row}
+        self._paste_menu.setEnabled(True)
+    
+    def _paste(self, _cut = False):
+        _copy_selection = self.parent_no_ui.table_selection_buffer
+        _copy_left_column = _copy_selection['left_column']
+        
+        #make sure selection start at the same column
+        _paste_selection = self.parent.table.selectedRanges()
+        _paste_left_column = _paste_selection[0].leftColumn()
+        
+        if not (_copy_left_column == _paste_left_column):
+            _error_box = QtGui.QMessageBox.warning(self.parent_no_ui,  
+                                                   "Check copy/paste selection!", 
+                                                   "Check your selection!                   ")
+            return
+        
+        _copy_right_column = _copy_selection["right_column"]
+        _copy_top_row = _copy_selection["top_row"]
+        _copy_bottom_row = _copy_selection["bottom_row"]
+        
+        _paste_top_row = _paste_selection[0].topRow()
+        
+        index = 0
+        for _row in range(_copy_top_row, _copy_bottom_row+1):
+            _paste_row = _paste_top_row + index
+            for _column in range(_copy_left_column, _copy_right_column + 1):
+
+                if _column in np.arange(1,7):
+                    if _cut:
+                        _item_text = ''
+                    else:
+                        _item_text = self.retrieve_item_text(_row, _column)
+                    self.paste_item_text(_paste_row, _column, _item_text)
+
+                if _column == 7:
+                    if _cut:
+                        _widget_index = 0
+                    else:
+                        _widget_index = self.retrieve_sample_shape_index(_row)
+                    self.set_widget_index(_widget_index, _paste_row)
+
+                if _column == 8:
+                    if _cut:
+                        _widget_state = QtCore.Qt.Unchecked
+                    else:    
+                        _widget_state = self.retrieve_do_abs_correction_state(_row)
+                    self.set_widget_state(_widget_state, _paste_row)
+                    
+            index += 1
+    
+    def _cut(self):
+        self._copy()
+        self._paste(_cut = True)
             
     def _duplicate_row(self):
         _row = self.current_row
@@ -108,3 +205,41 @@ class TableHandler(object):
     def _remove_row(self):
         _row = self.current_row
         self.parent.table.removeRow(_row)
+        
+    def _refresh_table(self):
+        self.parent_no_ui.populate_table_clicked()
+
+    def _clear_table(self):
+        _number_of_row = self.parent.table.rowCount()
+        for _row in np.arange(_number_of_row):
+            self.parent.table.removeRow(0)
+    
+    def set_widget_state(self, _widget_state, _row):
+        _widget = self.parent.table.cellWidget(_row, 8).children()[1]
+        _widget.setCheckState(_widget_state)
+    
+    def retrieve_do_abs_correction_state(self, _row):
+        _widget = self.parent.table.cellWidget(_row, 8).children()[1]
+        return _widget.checkState()
+    
+    def set_widget_index(self, _widget_index, _row):
+        _widget = self.parent.table.cellWidget(_row, 7)
+        _widget.setCurrentIndex(_widget_index)
+    
+    def paste_item_text(self, _row, _column, _item_text):    
+        _item = self.parent.table.item(_row, _column)
+        _item.setText(_item_text)
+    
+    def retrieve_sample_shape_index(self, row_index):
+        _widget = self.parent.table.cellWidget(row_index, 7)
+        _selected_index = _widget.currentIndex()
+        return _selected_index
+    
+    def retrieve_item_text(self, row, column):
+        _item = self.parent.table.item(row, column)
+        if _item is None:
+            return ''
+        else:
+            return str(_item.text())
+
+    

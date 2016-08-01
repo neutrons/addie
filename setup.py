@@ -25,16 +25,16 @@ if sys.argv[-1] == 'pyuic':
         print("Did not convert any '.ui' files")
     sys.exit(0)
 
-setup(name="fastgr",
+setup(name="FastGR",
       version=versioneer.get_version(),
       cmdclass=versioneer.get_cmdclass(),
       description = "Need a description",
-      author = "Dan Olds",
-      author_email = "notsure@ornl.gov",
+      author = "Dan, Wenduo, Jean",
+      author_email = "notsure@ornl.gov, zhou@ornl.gov, j35@ornl.gov",
       url = "http://github.com/neutrons/FastGR",
       long_description = """Should have a longer description""",
       license = "The MIT License (MIT)",
-      scripts=["scripts/fastgr"],
+      scripts=["fastgr/FastGR"],
       packages=find_packages(),
       package_dir={},
       install_requires=['numpy','matplotlib'],
