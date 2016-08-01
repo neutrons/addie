@@ -119,7 +119,7 @@ class MantidIPythonWidget(RichIPythonWidget):
         if self._mainApplication is not None:
             post_workspace_names = set(mtd.getObjectNames())
             diff_set = post_workspace_names - prev_workspace_names
-            self._mainApplication.process_workspace_change(diff_set)
+            self._mainApplication.process_workspace_change(list(diff_set))
 
         return
 

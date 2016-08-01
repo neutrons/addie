@@ -62,6 +62,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         init_step2 = InitStep2(parent=self)
 
         # define the event handling methods
+        # TODO/NOW/ISSUE : add action to close
+        # self.ui.actionQuit
+
         # bragg diffraction tab
         self.connect(self.ui.pushButton_loadBraggFile, QtCore.SIGNAL('clicked()'),
                      self.do_load_bragg_file)
@@ -79,6 +82,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
                      self.evt_plot_bragg_bank)
         self.connect(self.ui.comboBox_xUnit, QtCore.SIGNAL('currentIndexChanged(int)'),
                      self.evt_plot_bragg_bank)
+        self.connect(self.ui.actionReset_GSAS_tab, QtCore.SIGNAL('triggered()'),
+                     self.do_reset_gsas_tab)
+        self.connect(self.ui.radioButton_multiBank, QtCore.SIGNAL('toggled(bool)'),
+                     self.evt_change_gss_mode)
 
         # for tab G(R)
         self.connect(self.ui.pushButton_loadSQ, QtCore.SIGNAL('clicked()'),
@@ -95,6 +102,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
                      self.do_show_sq_bound)
         self.connect(self.ui.pushButton_generateGR, QtCore.SIGNAL('clicked()'),
                      self.do_generate_gr)
+        self.connect(self.ui.pushButton_loadGofR, QtCore.SIGNAL('clicked()'),
+                     self.do_load_gr)
         self.connect(self.ui.pushButton_saveGR, QtCore.SIGNAL('clicked()'),
                      self.do_save_gr)
         self.connect(self.ui.pushButton_clearGrCanvas, QtCore.SIGNAL('clicked()'),
@@ -104,6 +113,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
                      self.evt_qmin_changed)
         self.connect(self.ui.doubleSpinBoxQmax, QtCore.SIGNAL('valueChanged(double)'),
                      self.evt_qmax_changed)
+
+        self.connect(self.ui.actionReset_GofR_tab, QtCore.SIGNAL('triggered()'),
+                     self.do_reset_gr_tab)
 
         # organize widgets group
         self._braggBankWidgets = {1: self.ui.checkBox_bank1,
@@ -120,42 +132,15 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         # define the driver
         self._myController = driver.FastGRDriver()
 
+        # class variable for easy access
         self._gssGroupName = None
+        self._currDataDir = None
 
         # some controlling variables
         self._currBraggXUnit = str(self.ui.comboBox_xUnit.currentText())
 
         # mutex-like variables
         self._noEventBankWidgets = False
-
-        return
-
-    def evt_qmin_changed(self):
-        """
-
-        Returns:
-
-        """
-        q_min = self.ui.doubleSpinBoxQmin.value()
-        q_max = self.ui.doubleSpinBoxQmax.value()
-
-        if q_min < q_max and self.ui.graphicsView_sq.is_boundary_shown():
-            self.ui.graphicsView_sq.move_left_indicator(q_min, relative=False)
-
-        return
-
-    def evt_qmax_changed(self):
-        """
-        Handle if the user change the value of Qmax of S(Q) including
-        1. moving the right boundary in S(q) figure
-        Returns:
-
-        """
-        q_min = self.ui.doubleSpinBoxQmin.value()
-        q_max = self.ui.doubleSpinBoxQmax.value()
-
-        if q_min < q_max and self.ui.graphicsView_sq.is_boundary_shown():
-            self.ui.graphicsView_sq.move_right_indicator(q_max, relative=False)
 
         return
 
@@ -246,21 +231,100 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         return
 
-    def plot_bragg(self, bragg_ws_list):
+    def do_reset_gr_tab(self):
+        """
+        Reset G(r)-tab, including deleting all the G(r) and S(Q) workspaces,
+        clearing the G(r) and S(Q) trees, and clearing both G(r) and S(Q) canvas
+        Returns:
+        None
+        """
+        # get workspace from trees
+        workspace_list = self.ui.treeWidget_grWsList.get_workspaces()
+
+        # reset the tree to initial status
+        self.ui.treeWidget_grWsList.reset_gr_tree()
+
+        # delete all the workspaces
+        for workspace in workspace_list:
+            self._myController.delete_workspace(workspace)
+
+        # clear all the canvas
+        self.ui.graphicsView_gr.clear_all_lines()
+        self.ui.graphicsView_sq.clear_all_lines()
+
+        return
+
+    def do_reset_gsas_tab(self):
+        """
+        Reset the GSAS-tab including
+        1. deleting all the GSAS workspaces
+        2. clearing the GSAS tree
+        3. clearing GSAS canvas
+        Returns:
+        None
+        """
+        # delete all workspaces
+        # get GSAS workspaces from tree
+        # TODO/NOW/ISSUE 1 : not supported method: get main nodes names...
+        # gsas_ws_list = self.ui.treeWidget_braggWSList.GET_WORKSPACES()
+        # for workspace in gsas_ws_list:
+        #     self._myController.delete_workspace(workspace)
+
+        # reset the GSAS tree
+        self.ui.treeWidget_braggWSList.reset_bragg_tree()
+
+        # clear the canvas
+        self.ui.graphicsView_bragg.reset()
+
+        return
+
+    def plot_bragg(self, bragg_ws_list, clear_canvas=False):
         """
 
         Parameters
         ----------
-        bragg_ws_list
+        bragg_ws_list: list of (single spectrum) Bragg workspace
+        clear_canvas
 
         Returns
         -------
 
         """
+        # check
+        assert isinstance(bragg_ws_list, list)
+
+        # clear canvas if necessary
+        if clear_canvas:
+            self.ui.graphicsView_bragg.reset()
+
+        # get unit
+        curr_unit = str(self.ui.comboBox_xUnit.currentText())
+
+        # plot all workspsaces
+        print '[DB...BAT] Bragg ws list: ', bragg_ws_list
         for bragg_ws_name in bragg_ws_list:
-            if bragg_ws_name.startswith('bank') and 0 <= int(bragg_ws_name.split('bank')[1]) < 6:
+
+            # get the last section of the workspace name: _bank%d
+            postfix = bragg_ws_name.split('_')[-1]
+
+            if postfix.startswith('bank') and 0 <= int(postfix.split('bank')[1]) <= 6:
+                # belonged to a Bragg-workspace-group
+                ws_group = bragg_ws_name.split('_%s' % postfix)[0] + '_group'
                 bank_id = int(bragg_ws_name.split('bank')[1])
+                vec_x, vec_y, vec_e = self._myController.get_bragg_data(ws_group_name=ws_group, bank_id=bank_id,
+                                                                        x_unit=curr_unit)
+
+                # construct dictionary for plotting
+                plot_data_dict = dict()
+                plot_data_dict[ws_group] = dict()
+                plot_data_dict[ws_group][bank_id] = (vec_x, vec_y, vec_e)
+
+                # set the bank to be checked
                 self._braggBankWidgets[bank_id].setChecked(True)
+
+                # plot
+                self.ui.graphicsView_bragg.plot_banks(plot_data_dict, curr_unit)
+
             else:
                 vec_x, vec_y, vec_e = self._myController.get_ws_data(bragg_ws_name)
                 self.ui.graphicsView_bragg.plot_general_ws(bragg_ws_name, vec_x, vec_y, vec_e)
@@ -269,16 +333,17 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
     def plot_gr(self, gr_ws_name_list):
         """
-        Plot G(r) by its name (workspace as protocol)
+        Plot G(r) by their names (workspace as protocol)
         Parameters
         ----------
-        gr_ws_name
+        gr_ws_name_list: list of G(r) workspaces
 
         Returns
         -------
 
         """
-        # TODO/NOW - Docs and check
+        # check
+        assert isinstance(gr_ws_name_list, list) and len(gr_ws_name_list) > 0
 
         # plot G(R)
         for gr_ws_name in gr_ws_name_list:
@@ -339,10 +404,20 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         -------
         """
         # get file
-        ext = 'GSAS (*.gsa, *.gss);;DAT (*.dat);;Nexus (*.nxs)'
-        bragg_file_name = str(QtGui.QFileDialog.getOpenFileName(self, 'Choose Bragg File', ext))
-        if bragg_file_name is None:
+        ext = 'GSAS (*.gsa);;DAT (*.dat);;All (*.*)'
+
+        # get default dir
+        if self._currDataDir is None:
+            default_dir = os.getcwd()
+        else:
+            default_dir = self._currDataDir
+
+        bragg_file_name = str(QtGui.QFileDialog.getOpenFileName(self, 'Choose Bragg File', default_dir, ext))
+        if bragg_file_name is None or bragg_file_name == '':
             return
+
+        # update stored data directory
+        self._currDataDir = os.path.abspath(bragg_file_name)
 
         # load file
         gss_ws_name = self._myController.load_bragg_file(bragg_file_name)
@@ -351,13 +426,13 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         self._gssGroupName, banks_list, bank_angles = self._myController.split_to_single_bank(gss_ws_name)
 
         # add to tree
-        # banks_list = ['bank1', 'bank2', 'bank3', 'bank4', 'bank5', 'bank6']
         self.ui.treeWidget_braggWSList.add_bragg_ws_group(self._gssGroupName, banks_list)
 
         # rename bank
         for bank_id in self._braggBankWidgets.keys():
             bank_check_box = self._braggBankWidgets[bank_id]
-            if bank_angles[bank_id-1] is None:
+
+            if bank_id > len(bank_angles) or bank_angles[bank_id-1] is None:
                 bank_check_box.setText('Bank %d' % bank_id)
             else:
                 bank_check_box.setText('Bank %.1f' % bank_angles[bank_id-1])
@@ -371,8 +446,44 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
             check_box.setChecked(False)
         self._noEventBankWidgets = False
 
-        # plot and will triggered the grap
+        # plot and will triggered the graph
         self.ui.checkBox_bank1.setChecked(True)
+
+        return
+
+    def do_load_gr(self):
+        """
+        Load an ASCII file containing G(r)
+        Returns:
+        """
+        # get default dir
+        if self._currDataDir is None:
+            default_dir = os.getcwd()
+        else:
+            default_dir = self._currDataDir
+
+        # pop out file
+        file_filter = 'Data Files (*.data);;All Files (*.*)'
+        g_file_name = str(QtGui.QFileDialog.getOpenFileName(self, 'Open a G(r) file', default_dir, file_filter))
+
+        # return if operation is cancelled
+        if g_file_name is None or g_file_name == '':
+            return
+        else:
+            # update current data directory
+            self._currDataDir = os.path.abspath(g_file_name)
+
+        # read file
+        status, ret_obj = self._myController.load_gr(g_file_name)
+        if not status:
+            err_msg = ret_obj
+            print err_msg
+            return
+        else:
+            gr_ws_name = ret_obj
+
+        # plot
+        self.plot_gr([gr_ws_name])
 
         return
 
@@ -383,17 +494,26 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         -------
 
         """
+        # get default dir
+        if self._currDataDir is None:
+            default_dir = os.getcwd()
+        else:
+            default_dir = self._currDataDir
+
         # get the file
         ext = 'DAT (*.dat);;All (*.*)'
-        sq_file_name = str(QtGui.QFileDialog.getOpenFileName(self, 'Choose S(Q) File', ext))
-        if sq_file_name is None:
+        sq_file_name = str(QtGui.QFileDialog.getOpenFileName(self, 'Choose S(Q) File', default_dir, ext))
+        if sq_file_name is None or sq_file_name == '':
             return
+        else:
+            # update current data directory
+            self._currDataDir = os.path.abspath(sq_file_name)
 
         # load S(q)
         sq_ws_name, q_min, q_max = self._myController.load_sq(sq_file_name)
 
         # set to the tree and combo box
-        self.ui.treeWidget_grWsList.add_child_main_item('SofQ', sq_ws_name)
+        self.ui.treeWidget_grWsList.add_sq(sq_ws_name)
         self.ui.comboBox_SofQ.addItem(sq_ws_name)
         self.ui.comboBox_SofQ.setCurrentIndex(self.ui.comboBox_SofQ.count()-1)
 
@@ -452,6 +572,92 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         return
 
+    def get_bragg_banks_selected(self):
+        """
+        Find out the banks of bragg-tab that are selected.
+        Returns:
+
+        """
+        bank_id_list = list()
+        for bank_id in self._braggBankWidgets.keys():
+            # access the checkbox
+            bank_checkbox = self._braggBankWidgets[bank_id]
+            # append
+            if bank_checkbox.isChecked():
+                bank_id_list.append(bank_id)
+        # END-FOR
+
+        return bank_id_list
+
+    def evt_change_gss_mode(self):
+        """
+
+        Returns
+        -------
+
+        """
+        # check the mode (multiple bank or multiple GSS)
+        single_gss_mode = self.ui.radioButton_multiBank.isChecked()
+        assert single_gss_mode != self.ui.radioButton_multiGSS.isChecked()
+
+        # get the banks that are selected
+        to_plot_bank_list = self.get_bragg_banks_selected()
+        on_canvas_ws_list = self.ui.graphicsView_bragg.get_workspaces()
+        # return with doing anything if the canvas is empty, i.e., no bank is selected
+        if len(to_plot_bank_list) == 0:
+            return
+        # return if there is no workspace that is plotted on canvas now
+        if len(on_canvas_ws_list) == 0:
+            return
+
+        # set to single GSS
+        self.ui.graphicsView_bragg.set_to_single_gss(single_gss_mode)
+
+        # process the plot with various situation
+        if single_gss_mode:
+            # switch to single GSAS mode from multiple GSAS mode.
+            #  select the arbitrary gsas file to
+            assert len(to_plot_bank_list) == 1
+
+            # skip if there is one and only one workspace
+            if len(on_canvas_ws_list) == 1:
+                return
+            else:
+                plot_ws_name = on_canvas_ws_list[0]
+
+            # plot
+            bragg_bank_ws = '%s_bank%d' % (plot_ws_name, to_plot_bank_list[0])
+            self.plot_bragg(bragg_ws_list=[bragg_bank_ws], clear_canvas=True)
+
+        else:
+            # multiple GSAS mode. as currently there is one GSAS file that is plot, then the first bank
+            # that is plotted will be kept on the canvas
+            # assumption: switched from single-bank mode
+            assert len(self.ui.graphicsView_bragg.get_workspaces()) == 1
+
+            # skip if there is one and only 1 bank that is selected
+            if len(to_plot_bank_list) == 1:
+                return
+            else:
+                # choose first bank
+                bank_to_plot = to_plot_bank_list[0]
+
+            # disable all the banks except the one to plot. Notice the mutex must be on
+            self._noEventBankWidgets = True
+            for bank_id in self._braggBankWidgets.keys():
+                if bank_id != bank_to_plot:
+                    self._braggBankWidgets[bank_id].setChecked(False)
+            self._noEventBankWidgets = False
+
+            # plot
+            plot_ws_name = on_canvas_ws_list[0]
+            bragg_bank_ws = '%s_bank%d' % (plot_ws_name, bank_to_plot)
+            self.plot_bragg(bragg_ws_list=[bragg_bank_ws], clear_canvas=True)
+
+        # END-IF-ELSE
+
+        return
+
     def evt_plot_bragg_bank(self):
         """
         Find out which bank will be plot
@@ -482,12 +688,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         plot_all_gss = self.ui.radioButton_multiGSS.isChecked()
 
         plot_bank_list = list()
-        print '[DB...BAT] braggBankWidget: ', self._braggBankWidgets.keys()
+        selected_bank_id = self.get_bragg_banks_selected()
         for bank_id in self._braggBankWidgets.keys():
-            bank_checkbox = self._braggBankWidgets[bank_id]
-
-            if not bank_checkbox.isChecked():
-                # no-operation for not checked
+            # rule out if this bank is not selected
+            # no-operation for not checked
+            if bank_id not in selected_bank_id:
                 self._braggBankWidgetRecords[bank_id] = False
                 continue
 
@@ -497,7 +702,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
                 if self._braggBankWidgetRecords[bank_id]:
                     # create a mutex on bank widget check box
                     self._noEventBankWidgets = True
-                    bank_checkbox.setChecked(False)
+                    self._braggBankWidgets[bank_id].setChecked(False)
                     self._noEventBankWidgets = False
 
                     self._braggBankWidgetRecords[bank_id] = False
@@ -539,7 +744,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         # END-IF-ELSE
 
         # get the list of banks to plot or remove
-        self.ui.graphicsView_bragg.clear_all_lines()
+        self.ui.graphicsView_bragg.reset()
 
         # get new bank date
         plot_data_dict = dict()
@@ -554,7 +759,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         # remove unused and plot new
         if re_plot:
-            self.ui.graphicsView_bragg.clear_all_lines()
+            self.ui.graphicsView_bragg.reset()
             if x_unit == 'TOF':
                 self.ui.graphicsView_bragg.setXYLimit(xmin=0, xmax=20000, ymin=None, ymax=None)
             elif x_unit == 'MomentumTransfer':
@@ -585,28 +790,134 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         return
 
+    def evt_qmin_changed(self):
+        """
+
+        Returns:
+
+        """
+        q_min = self.ui.doubleSpinBoxQmin.value()
+        q_max = self.ui.doubleSpinBoxQmax.value()
+
+        if q_min < q_max and self.ui.graphicsView_sq.is_boundary_shown():
+            self.ui.graphicsView_sq.move_left_indicator(q_min, relative=False)
+
+        return
+
+    def evt_qmax_changed(self):
+        """
+        Handle if the user change the value of Qmax of S(Q) including
+        1. moving the right boundary in S(q) figure
+        Returns:
+
+        """
+        q_min = self.ui.doubleSpinBoxQmin.value()
+        q_max = self.ui.doubleSpinBoxQmax.value()
+
+        if q_min < q_max and self.ui.graphicsView_sq.is_boundary_shown():
+            self.ui.graphicsView_sq.move_right_indicator(q_max, relative=False)
+
+        return
+
+
+    def get_default_data_dir(self):
+        """
+        Get default data directory
+        Returns:
+
+        """
+        return self._currDataDir
+
+    def get_workflow(self):
+        """
+        Return the reference to the main workflow controller
+        Returns: workflow controller
+
+        """
+        return self._myController
+
     def process_workspace_change(self, new_ws_list):
         """
+        Process (including
+        1. add workspace name to tree list and etc) when detecting that
+        there is some change to any workspace
+
+        Parameters
+        ----------
+        new_ws_list :: list of new workspaces' names
 
         Returns
         -------
 
         """
-        # TODO/NOW - Check & doc & figure out what to do!
-        print 'current tab = ', self.ui.tabWidget_2.currentIndex(), self.ui.tabWidget_2.currentWidget(),
-        print self.ui.tabWidget_2.currentWidget().objectName()
+        # check input
+        assert isinstance(new_ws_list, list), 'Input workspace list must be a list of string' \
+                                              'but not %s.' % str(type(new_ws_list))
 
-        print 'current workspaces: ', self._myController.get_current_workspaces()
+        # TODO - Figure out what to do!
+        # print 'current tab = ', self.ui.tabWidget_2.currentIndex(), self.ui.tabWidget_2.currentWidget(),
+        # print self.ui.tabWidget_2.currentWidget().objectName()
+        # print 'current workspaces: ', self._myController.get_current_workspaces()
 
         # add to tree
         if len(new_ws_list) > 0:
             if self.ui.tabWidget_2.currentWidget().objectName() == 'tab_gR':
                 for new_ws in new_ws_list:
-                    self.ui.treeWidget_grWsList.add_temp_ws(new_ws)
+                    self.ui.treeWidget_grWsList.add_arb_gr(new_ws)
             elif self.ui.tabWidget_2.currentWidget().objectName() == 'tab_bragg':
                 for new_ws in new_ws_list:
-                    self.ui.treeWidget_braggWSList.add_temp_ws(new_ws)
+                    self.ui.treeWidget_braggWSList.add_arb_gr(new_ws)
 
+        return
+
+    def set_bragg_ws_to_plot(self, gss_group_name):
+        """
+        Set a Bragg workspace group to plot.  If the Bragg-tab is in
+        (1) single-GSS mode, then switch to plot this gss_group
+        (2) multiple-GSS mode, then add this group to current canvas
+        Parameters
+        ----------
+        gss_group_name
+
+        Returns
+        -------
+
+        """
+        # check
+        assert isinstance(gss_group_name, str), 'GSS workspace group name is expected to be a string, but not' \
+                                                ' %s.' % str(type(gss_group_name))
+
+        # rule out the unsupported situation
+        assert gss_group_name.endswith('_group'), 'GSAS workspace group\' name must be ends with _group, ' \
+                                                  'but not as %s.' % gss_group_name
+        root_ws_name = gss_group_name.split('_group')[0]
+
+        # process
+        if self.ui.radioButton_multiBank.isChecked():
+            # single-GSS/multi-bank mode
+            # reset canvas
+            self.ui.graphicsView_bragg.reset()
+
+            # get the banks to plot
+            selected_banks = self.get_bragg_banks_selected()
+
+            bragg_ws_list = ['%s_bank%d' % (root_ws_name, bank_id) for bank_id in selected_banks]
+            self.plot_bragg(bragg_ws_list=bragg_ws_list, clear_canvas=False)
+
+        else:
+            # multiple-GSS/single-bank mode
+            # canvas is not be reset
+
+            # get the bank to plot
+            selected_banks = self.get_bragg_banks_selected()
+            assert len(selected_banks) <= 1, 'At most 1 bank can be plot in multiple-GSS mode.'
+
+            # form the workspace
+            bragg_ws = '%s_bank%d' % (root_ws_name, selected_banks[0])
+
+            self.plot_bragg(bragg_ws_list=[bragg_ws], clear_canvas=False)
+
+        # END-IF-ELSE
 
         return
 

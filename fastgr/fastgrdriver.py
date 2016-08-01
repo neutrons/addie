@@ -67,7 +67,13 @@ class FastGRDriver(object):
 
         # set up the parameters for FourierTransform
         # output workspace
-        gr_ws_name = 'G(R)_%s_%d' % (self._currSqWsName, self._sqIndexDict[self._currSqWsName])
+        prefix = 'G'
+        if pdf_type.startswith('g'):
+            prefix = 'g'
+        elif pdf_type.startswith('r'):
+            prefix = 'RDF'
+
+        gr_ws_name = '%s(R)_%s_%d' % (prefix, self._currSqWsName, self._sqIndexDict[self._currSqWsName])
         kwargs = {'OutputWorkspace': gr_ws_name,
                   'Qmin': min_q,
                   'Qmax': max_q,
@@ -94,13 +100,22 @@ class FastGRDriver(object):
 
         return gr_ws_name
 
-    def conjoin_banks(self):
+    def delete_workspace(self, workspace_name):
         """
-        Conjoin all 6 single banks
-        Returns:
+        Delete a workspace from Mantid's AnalysisDataService
+        Args:
+            workspace_name: name of a workspace as a string instance
+
+        Returns: None
 
         """
-        simpleapi.ConjoinWorkspaces()
+        # check
+        assert isinstance(workspace_name, str), \
+            'Input workspace name must be a string, but not %s.' % str(type(workspace_name))
+        assert AnalysisDataService.doesExist(workspace_name), 'Workspace %s does not exist.' % workspace_name
+
+        # delete
+        simpleapi.DeleteWorkspace(Workspace=workspace_name)
 
         return
 
@@ -269,6 +284,29 @@ class FastGRDriver(object):
 
         return gss_ws_name
 
+    def load_gr(self, gr_file_name):
+        """
+        Load an ASCII file containing G(r)
+        Args:
+            gr_file_name:
+
+        Returns:
+
+        """
+        # check
+        assert isinstance(gr_file_name, str) and len(gr_file_name) > 0
+
+        # load
+        gr_ws_name = os.path.basename(gr_file_name).split('.')[0]
+        simpleapi.LoadAscii(Filename=gr_file_name, OutputWorkspace=gr_ws_name, Unit='Empty')
+
+        # check output
+        if not AnalysisDataService.doesExist(gr_ws_name):
+            return False, 'Unable to load file %s as target workspace %s cannot be found.' % (gr_ws_name,
+                                                                                              gr_ws_name)
+
+        return True, gr_ws_name
+
     def load_sq(self, file_name):
         """
         Load S(Q) to a numpy
@@ -372,6 +410,33 @@ class FastGRDriver(object):
         simpleapi.SaveAscii(InputWorkspace=ws_name, Filename=file_name)
 
         return
+
+    @staticmethod
+    def write_gss_file(ws_name_list, gss_file_name):
+        """
+        Write a MatrixWorkspace to a GSAS file
+        Args:
+            workspace:
+            gss_file_name:
+
+        Returns:
+
+        """
+        # check
+        assert isinstance(ws_name_list, list) and len(ws_name_list) > 1, \
+            'There must be at least 2 workspaces for conjoining operation.'
+        assert isinstance(gss_file_name, str)
+
+        # write with appending
+        append_mode = False
+        for i_ws, ws_name in enumerate(ws_name_list):
+            simpleapi.SaveGSS(InputWorkspace=ws_name, Filename=gss_file_name,
+                              Format='SLOG', Bank=1, Append=append_mode)
+            append_mode = True
+        # END-FOR
+
+        return
+
 
 def calculate_bank_angle(ws_name):
     """ Calculate bank's angle (2theta) focused detector

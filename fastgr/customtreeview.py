@@ -23,10 +23,10 @@ class CustomizedTreeView(QtGui.QTreeView):
         self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
 
         # Set up model
-        self._myNumCols = 1
-        model = QtGui.QStandardItemModel()
-        model.setColumnCount(self._myNumCols)
-        self.setModel(model)
+        # self._myNumCols = 1
+        # model = QtGui.QStandardItemModel()
+        # model.setColumnCount(self._myNumCols)
+        # self.setModel(model)
 
         # Set up tree
         # ... ... self.setDragEnabled(True)
@@ -47,8 +47,8 @@ class CustomizedTreeView(QtGui.QTreeView):
         self.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
 
         # Data structure to control the items
-        self._leafDict = {}  # dictionary for each leaf and its child. key is string only!
-        self._myHeaderList = []
+        self._leafDict = dict()  # dictionary for each leaf and its child. key is string only!
+        self._myHeaderList = list()
         self._childrenInOrder = True
 
         return
@@ -56,7 +56,7 @@ class CustomizedTreeView(QtGui.QTreeView):
     def init_setup(self, header_list):
         """
         To set up customized header
-        :param num_cols:
+        :param header_list:
         :param header_list:
         :return:
         """
@@ -378,6 +378,30 @@ class CustomizedTreeView(QtGui.QTreeView):
         # END-FOR
 
         return return_list
+
+    @staticmethod
+    def get_child_nodes(parent_node, output_str=False):
+        """
+        Get a list of children nodes
+        Args:
+            parent_node:
+            output_str: if True, then output list of item's text instead of QStandardItem
+
+        Returns:
+
+        """
+        assert isinstance(parent_node, QtGui.QStandardItem)
+        child_count = parent_node.rowCount()
+
+        child_item_list = list()
+        for i_child in range(child_count):
+            child_item = parent_node.child(i_child)
+            if output_str:
+                child_item_list.append(str(child_item.text()))
+            else:
+                child_item_list.append(child_item)
+
+        return child_item_list
 
     @staticmethod
     def get_item_level(q_item):

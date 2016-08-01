@@ -18,30 +18,131 @@ class BraggTree(base.CustomizedTreeView):
         """
         base.CustomizedTreeView.__init__(self, parent)
 
-        self.init_setup(['Bragg Workspaces'])
-
         # set up actions
-        # TODO - actions shall be added according to the level of the item selected.
+        self._action_plot = QtGui.QAction('Plot', self)
+        self._action_plot.triggered.connect(self.do_plot_ws)
 
-        # add actions
-        # plot
-        action_plot = QtGui.QAction('Plot', self)
-        action_plot.triggered.connect(self.do_plot_ws)
-        self.addAction(action_plot)
         # to python
-        action_ipython = QtGui.QAction('To IPython', self)
-        action_ipython.triggered.connect(self.do_copy_to_ipython)
-        self.addAction(action_ipython)
-        # to delete
-        action_delete = QtGui.QAction('Delete', self)
-        action_delete.triggered.connect(self.do_delete_gsas)
-        self.addAction(action_delete)
-        # to merge GSAS file
-        action_merge_gss = QtGui.QAction('Merge to GSAS', self)
-        action_merge_gss.triggered.connect(self.do_merge_to_gss)
-        self.addAction(action_merge_gss)
+        self._action_ipython = QtGui.QAction('To IPython', self)
+        self._action_ipython.triggered.connect(self.do_copy_to_ipython)
 
+        # to delete
+        self._action_delete = QtGui.QAction('Delete workspace', self)
+        self._action_delete.triggered.connect(self.do_delete_gsas)
+
+        # to merge GSAS file
+        self._action_merge_gss = QtGui.QAction('Merge to GSAS', self)
+        self._action_merge_gss.triggered.connect(self.do_merge_to_gss)
+
+        # to select
+        self._action_select_node = QtGui.QAction('Plot', self)
+        self._action_select_node.triggered.connect(self.do_select_gss_node)
+
+        # to de-select
+        self._action_deselect_node = QtGui.QAction('Remove from plotting', self)
+        self._action_deselect_node.triggered.connect(self.do_deselect_gss_node)
+
+        # class variables
         self._mainWindow = None
+        self._workspaceNameList = None
+
+        # reset
+        self.reset_bragg_tree()
+
+        return
+
+    def reset_bragg_tree(self):
+        """
+        Clear the leaves of the tree only leaving the main node 'workspaces'
+        Returns
+        -------
+
+        """
+        # clear all
+        if self.model() is not None:
+            self.model().clear()
+
+        # reset workspace names list
+        self._workspaceNameList = list()
+        self._myHeaderList = list()
+        self._leafDict.clear()
+
+        # re-initialize the model
+        self._myNumCols = 1
+        model = QtGui.QStandardItemModel()
+        model.setColumnCount(self._myNumCols)
+        self.setModel(model)
+
+        self.init_setup(['Bragg Workspaces'])
+        self.add_main_item('workspaces', append=True, as_current_index=False)
+
+        return
+
+    # override
+    def mousePressEvent(self, e):
+        """
+        Over ride mouse press event
+        Parameters
+        ----------
+        e :: event
+
+        Returns
+        -------
+
+        """
+        button_pressed = e.button()
+        if button_pressed == 2:
+            # override the response for right button
+            self.pop_up_menu()
+        else:
+            # keep base method for other buttons
+            base.CustomizedTreeView.mousePressEvent(self, e)
+
+        return
+
+    def pop_up_menu(self):
+        """
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
+        """
+        selected_items = self.get_selected_items()
+        if len(selected_items) == 0:
+            print '[DB] None item is selected. Return'
+            return
+
+        leaf_level = -1
+        for item in selected_items:
+            if item.parent() is None and leaf_level == -1:
+                leaf_level = 1
+            elif item.parent() is not None and leaf_level == -1:
+                leaf_level = 2
+            elif item.parent() is None and leaf_level != 1:
+                print '[Error] Nodes of different levels are selected.'
+            elif item.parent() is None and leaf_level != 2:
+                print '[Error] Nodes of different levels are selected.'
+        # END-FOR
+
+        if leaf_level == 1:
+            self.removeAction(self._action_plot)
+            self.addAction(self._action_select_node)
+            self.addAction(self._action_ipython)
+            self.addAction(self._action_merge_gss)
+            self.addAction(self._action_deselect_node)
+            # FIXME - Implement it!
+            # self.addAction(self._action_delete)
+        elif leaf_level == 2:
+            self.addAction(self._action_plot)
+            self.removeAction(self._action_select_node)
+            self.removeAction(self._action_merge_gss)
+            self.addAction(self._action_ipython)
+            self.removeAction(self._action_deselect_node)
+            # FIXME - Implement it!
+            # self.removeAction(self._action_delete)
 
         return
 
@@ -66,7 +167,10 @@ class BraggTree(base.CustomizedTreeView):
         self.add_main_item(main_leaf_value, True, True)
 
         for bank_name in bank_name_list:
+            # add the tree
             self.add_child_main_item(main_leaf_value, bank_name)
+            # register
+            self._workspaceNameList.append(bank_name)
 
         return
 
@@ -115,13 +219,47 @@ class BraggTree(base.CustomizedTreeView):
 
         return
 
+    def do_deselect_gss_node(self):
+        """
+        De-select a node if it is plot on canvas
+        Returns
+        -------
+
+        """
+        # TODO/NOW/ISSUE 1
+
+        # check whether it is on canvas
+        blabla
+
+        # remove it from canvas
+        blabla
+
+        return
+
     def do_delete_gsas(self):
         """
         Delete a GSAS workspace and its split workspaces, and its item in the GSAS-tree as well.
         Returns:
-
+        None
         """
-        raise RuntimeError('Implement in issue #1')
+        # get main node
+        # TODO/NOW/ISSUE 1: better documentation
+        status, gsas_node_list = self.get_current_main_nodes()
+        assert status
+
+        for gsas_node in gsas_node_list:
+            # delete a gsas workspace and its split
+            gss_ws_name = gsas_node.split('_group')[0]
+            self._mainWindow.get_workflow().delete_workspace(gss_ws_name)
+            
+            # get the sub nodes
+            # TODO/NOW/ISSUE 1: implement/find out the method to get children nodes' names
+            sub_leaves = self.get_child_nodes(parent_node=gsas_node, output_str=True)
+            for ws_name in sub_leaves:
+                self._mainWindow.get_workflow().delete_workspace(ws_name)
+        # END-FOR
+
+        return
 
     def do_merge_to_gss(self):
         """
@@ -129,11 +267,41 @@ class BraggTree(base.CustomizedTreeView):
         Returns:
 
         """
+        # check prerequisite
+        assert self._mainWindow is not None, 'Main window is not set up.'
+
         # get the selected GSAS node's name
+        status, ret_obj = self.get_current_main_nodes()
+        if not status:
+            print '[Error] Get current main nodes: %s.' % str(ret_obj)
+            return
+        
+        gss_node_list = ret_obj
+        if len(gss_node_list) == 0:
+            return
+        elif len(gss_node_list) > 1:
+            print '[Error] Only 1 GSS node can be selected.  Current selected nodes are %s.' % str(gss_node_list)
+            return
 
         # pop-out a file dialog for GSAS file's name
+        file_ext = 'GSAS File (*.gsa);;Any File (*.*)'
+        new_gss_file_name = str(QtGui.QFileDialog.getSaveFileName(self, 'New GSAS file name',
+                                                                  self._mainWindow.get_default_data_dir(), file_ext))
+
+        # quit
+        if new_gss_file_name is None or len(new_gss_file_name) == 0:
+            return
 
         # emit the signal to the main window
+        print '[DB] Node list: ', gss_node_list[0]
+
+        #
+        selected_node = self.get_selected_items()[0]
+        bank_ws_list = self.get_child_nodes(selected_node, output_str=True)
+
+        out_gss_ws = os.path.basename(new_gss_file_name).split('.')[0]
+        # write all the banks to a GSAS file
+        self._mainWindow.get_workflow.write_gss_file(ws_name_list=bank_ws_list, gss_file_name=new_gss_file_name)
 
         return
 
@@ -161,11 +329,26 @@ class BraggTree(base.CustomizedTreeView):
 
         return
 
+    def do_select_gss_node(self):
+        """
+        Select a GSAS node such that this workspace (group) will be plotted to canvas
+        Returns
+        -------
+
+        """
+        # get selected nodes
+        selected_nodes = self.get_selected_items()
+
+        # set to plot
+        for gss_group_node in selected_nodes:
+            gss_group_name = str(gss_group_node.text())
+            self._mainWindow.set_bragg_ws_to_plot(gss_group_name)
+
     def get_current_main_nodes(self):
         """
         Get the name of the current nodes that are selected
         The reason to put the method here is that it is assumed that the tree only has 2 level (main and leaf)
-        Returns:
+        Returns: a list of strings as main nodes' names
 
         """
         # Get current index and item
@@ -223,33 +406,98 @@ class GofRTree(base.CustomizedTreeView):
         """
         base.CustomizedTreeView.__init__(self, parent)
 
-        self.init_setup(['G(R) Workspaces'])
+        # define actions
+        self._action_plot = QtGui.QAction('Plot', self)
+        self._action_plot.triggered.connect(self.do_plot)
 
-        # Add actions
-        # plot
-        action_plot = QtGui.QAction('Plot', self)
-        action_plot.triggered.connect(self.do_plot)
-        self.addAction(action_plot)
         # to python
-        action_ipython = QtGui.QAction('To IPython', self)
-        action_ipython.triggered.connect(self.do_copy_to_ipython)
-        self.addAction(action_ipython)
+        self._action_ipython = QtGui.QAction('To IPython', self)
+        self._action_ipython.triggered.connect(self.do_copy_to_ipython)
+
+        # delete
+        self._action_delete = QtGui.QAction('Delete', self)
+        self._action_delete.triggered.connect(self.do_delete_item)
 
         self._mainWindow = None
+        self._workspaceNameList = None
+
+        self.reset_gr_tree()
+
+        return
+
+    # override
+    def mousePressEvent(self, e):
+        """
+        Over ride mouse press event
+        Parameters
+        ----------
+        e :: event
+
+        Returns
+        -------
+
+        """
+        button_pressed = e.button()
+        if button_pressed == 2:
+            # override the response for right button
+            self.pop_up_menu()
+        else:
+            # keep base method for other buttons
+            base.CustomizedTreeView.mousePressEvent(self, e)
+
+        return
+
+    def pop_up_menu(self):
+        """
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
+        """
+        selected_items = self.get_selected_items()
+        if len(selected_items) == 0:
+            print '[DB] None item is selected. Return'
+            return
+
+        leaf_level = -1
+        for item in selected_items:
+            if item.parent() is None and leaf_level == -1:
+                leaf_level = 1
+            elif item.parent() is not None and leaf_level == -1:
+                leaf_level = 2
+            elif item.parent() is None and leaf_level != 1:
+                print '[Error] Nodes of different levels are selected.'
+            elif item.parent() is None and leaf_level != 2:
+                print '[Error] Nodes of different levels are selected.'
+        # END-FOR
+
+        if leaf_level == 1:
+            self.addAction(self._action_plot)
+            self.addAction(self._action_ipython)
+            self.addAction(self._action_delete)
+        elif leaf_level == 2:
+            self.addAction(self._action_plot)
+            self.addAction(self._action_ipython)
+            self.addAction(self._action_delete)
 
         return
 
     def add_gr(self, gr_parameter, gr_ws_name):
         """
-        Add runs of on IPTS
-        :param ipts_number: it might an ipts number or a directory
-        :param run_numbers:
+        Add a G(r) workspace with given Qmin and Qmax
+        :param gr_parameter: it might an ipts number or a directory
+        :param gr_ws_name:
         :return:
         """
-        # TODO/DOC - check and etc.
         # Check
+        assert isinstance(gr_parameter, str), 'G(r) parameters must be a string but not a %s.' \
+                                              '' % str(type(gr_parameter))
+        assert isinstance(gr_ws_name, str)
 
-        # Create main leaf value
+        # Create main leaf value if it does not exist
         main_leaf_value = str(gr_parameter)
         status, message = self.add_main_item(main_leaf_value, False, True)
         if status is False:
@@ -259,11 +507,14 @@ class GofRTree(base.CustomizedTreeView):
         child_value = gr_ws_name
         self.add_child_main_item(main_leaf_value, child_value)
 
+        # register workspace
+        self._workspaceNameList.append(gr_ws_name)
+
         return
 
-    def add_temp_ws(self, ws_name):
+    def add_arb_gr(self, ws_name):
         """
-
+        Add a G(r) workspace that is not belonged to any S(Q) and add it under 'workspaces'
         Parameters
         ----------
         ws_name
@@ -272,17 +523,69 @@ class GofRTree(base.CustomizedTreeView):
         -------
 
         """
+        # check
+        assert isinstance(ws_name, str)
+
+        # add leaf
         self.add_child_main_item('workspaces', ws_name)
 
-    def do_copy_to_ipython(self):
-        """
+        # register workspace
+        self._workspaceNameList.append(ws_name)
 
+        return
+
+    def add_sq(self, sq_ws_name):
+        """
+        Add an SofQ workspace
+        Args:
+            sq_ws_name:
+
+        Returns:
+
+        """
+        # check
+        assert isinstance(sq_ws_name, str)
+
+        # add
+        self.add_child_main_item('SofQ', sq_ws_name)
+
+        return
+
+    def reset_gr_tree(self):
+        """
+        Clear the leaves of the tree only leaving the main node 'workspaces'
         Returns
         -------
 
         """
-        # TODO/NOW - Doc and check
+        # clear all
+        if self.model() is not None:
+            self.model().clear()
 
+        # reset workspace data structures
+        self._workspaceNameList = list()
+        self._myHeaderList = list()
+        self._leafDict.clear()
+
+        # re-initialize the model
+        self._myNumCols = 1
+        model = QtGui.QStandardItemModel()
+        model.setColumnCount(self._myNumCols)
+        self.setModel(model)
+
+        self.init_setup(['G(R) Workspaces'])
+        self.add_main_item('workspaces', append=True, as_current_index=False)
+        self.add_main_item('SofQ', append=False, as_current_index=False)
+
+        return
+
+    def do_copy_to_ipython(self):
+        """
+        Copy the selected item to an iPython command
+        Returns
+        -------
+
+        """
         # Get current index and item
         current_index = self.currentIndex()
         if isinstance(current_index, QtCore.QModelIndex) is False:
@@ -308,6 +611,51 @@ class GofRTree(base.CustomizedTreeView):
 
         if self._mainWindow is not None:
             self._mainWindow.set_ipython_script(python_cmd)
+
+        return
+
+    def do_delete_item(self):
+        """
+        Delete the workspaces assigned to the selected items
+        Returns:
+
+        """
+        # get selected item
+        selected_items = self.get_selected_items()
+        if len(selected_items) == 0:
+            return
+
+        # check that all the items should be of the same level
+        curr_level = -1
+        for item in selected_items:
+            # get this level
+            if item.parent() is None:
+                temp_level = 0
+            else:
+                temp_level = 1
+            if curr_level == -1:
+                curr_level = temp_level
+            elif curr_level != temp_level:
+                raise RuntimeError('Nodes of different levels are selected. It is not supported for deletion.')
+        # END-FOR
+
+        # get item and delete
+        # TODO/NOW/ISSUE 1: Just not correct !!!
+        if curr_level == 0:
+            # delete node
+            # TODO/NOW/ISSUE 1: SofQ and workspaces cannot be deleted: only their children workspaces will!
+            for item in selected_items:
+                sub_leaves = self.get_leaves(item)
+                for ws_name in sub_leaves:
+                    self._mainWindow.get_workflow().delete_workspace(ws_name)
+                self.delete_node(item)
+        else:
+            # delete leaf
+            for item in selected_items:
+                ws_name = str(item.text())
+                self._mainWindow.get_workflow().delete_workspace(ws_name)
+                self.delete_leaf(item)
+        # END-IF-ELSE
 
         return
 
@@ -382,6 +730,15 @@ class GofRTree(base.CustomizedTreeView):
             return False, 'Unable to convert %s to run number as integer.' % value_str
 
         return True, run
+
+    def get_workspaces(self):
+        """
+        Get workspaces controlled by GSAS tree.
+        Returns
+        -------
+
+        """
+        return self._workspaceNameList
 
     def mouseDoubleClickEvent(self, e):
         """ Override event handling method

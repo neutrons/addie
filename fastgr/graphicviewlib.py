@@ -34,6 +34,10 @@ class BraggView(base.MplGraphicsView):
                               "cyan", "magenta", "yellow"]
         self._currColorIndex = 0
 
+        # records of the plots on canvas
+        # workspaces' names (not bank, but original workspace) on canvas
+        self._workspaceSet = set()
+
         return
 
     def check_banks(self, bank_to_plot_list):
@@ -78,6 +82,15 @@ class BraggView(base.MplGraphicsView):
 
         return color
 
+    def get_workspaces(self):
+        """
+        Get the names of workspaces on the canvas
+        Returns
+        -------
+
+        """
+        return list(self._workspaceSet)
+
     def plot_banks(self, plot_bank_dict, unit):
         """
         Plot a few banks to canvas.  If the bank has been plot on canvas already,
@@ -94,6 +107,10 @@ class BraggView(base.MplGraphicsView):
 
         # plot
         for ws_group in plot_bank_dict.keys():
+            # get workspace name
+            ws_name = ws_group.split('_group')[0]
+            self._workspaceSet.add(ws_name)
+
             for bank_id in plot_bank_dict[ws_group]:
                 # add the new plot
                 if self._singleGSSMode:
@@ -110,6 +127,22 @@ class BraggView(base.MplGraphicsView):
         return
 
     def plot_general_ws(self, bragg_ws_name, vec_x, vec_y, vec_e):
+        """
+        Plot a workspace that does not belong to any workspace group
+        Parameters
+        ----------
+        bragg_ws_name
+        vec_x
+        vec_y
+        vec_e
+
+        Returns
+        -------
+
+        """
+        # register
+        self._workspaceSet.add(bragg_ws_name)
+
         plot_id = self.add_plot_1d(vec_x, vec_y, marker='.', color='black',
                                    label=bragg_ws_name)
 
@@ -160,6 +193,9 @@ class BraggView(base.MplGraphicsView):
         # set mutex on
         for bank_id in self._bankPlotDict.keys():
             self._bankPlotDict[bank_id] = False
+
+        # clear the workspace record
+        self._workspaceSet.clear()
 
         # clear all lines
         self.clear_all_lines()
