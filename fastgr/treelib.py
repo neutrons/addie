@@ -414,8 +414,12 @@ class GofRTree(base.CustomizedTreeView):
         self._action_ipython = QtGui.QAction('To IPython', self)
         self._action_ipython.triggered.connect(self.do_copy_to_ipython)
 
-        # delete
-        self._action_delete = QtGui.QAction('Delete', self)
+        # remove from plot
+        self._action_remove_plot = QtGui.QAction('Remove from plot', self)
+        self._action_remove_plot.trigger.connect(self.do_remove_from_plot)
+
+        # delete workspace/data
+        self._action_delete = QtGui.QAction('Delete data', self)
         self._action_delete.triggered.connect(self.do_delete_item)
 
         self._mainWindow = None
@@ -481,6 +485,7 @@ class GofRTree(base.CustomizedTreeView):
         elif leaf_level == 2:
             self.addAction(self._action_plot)
             self.addAction(self._action_ipython)
+            self.addAction(self._action_remove_plot)
             self.addAction(self._action_delete)
 
         return
@@ -697,6 +702,31 @@ class GofRTree(base.CustomizedTreeView):
 
         for sq_name in sq_list:
             self._mainWindow.plot_sq(sq_name, False)
+
+        return
+
+    def do_remove_from_plot(self):
+        """
+        Remove the selected item from plot if it is plotted
+        Returns:
+
+        """
+        # get selected items
+        item_list = self.get_selected_items()
+
+        # remove the selected items from plotting
+        for tree_item in item_list:
+            # get its name and its parent's name
+            leaf_name = str(tree_item.text())
+            node_name = str(tree_item.parent().text())
+
+            # remove from canvas by calling parents
+            if node_name == 'SofQ':
+                self._mainWindow.remove_sq_from_plot(leaf_name)
+            else:
+                self._mainWindow.remove_gss_from_plot(leaf_name)
+            # END-IF
+        # END-FOR
 
         return
 

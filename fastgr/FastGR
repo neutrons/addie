@@ -62,8 +62,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         init_step2 = InitStep2(parent=self)
 
         # define the event handling methods
-        # TODO/NOW/ISSUE : add action to close
-        # self.ui.actionQuit
 
         # bragg diffraction tab
         self.connect(self.ui.pushButton_loadBraggFile, QtCore.SIGNAL('clicked()'),
@@ -82,8 +80,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
                      self.evt_plot_bragg_bank)
         self.connect(self.ui.comboBox_xUnit, QtCore.SIGNAL('currentIndexChanged(int)'),
                      self.evt_plot_bragg_bank)
-        self.connect(self.ui.actionReset_GSAS_tab, QtCore.SIGNAL('triggered()'),
-                     self.do_reset_gsas_tab)
         self.connect(self.ui.radioButton_multiBank, QtCore.SIGNAL('toggled(bool)'),
                      self.evt_change_gss_mode)
 
@@ -114,8 +110,13 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         self.connect(self.ui.doubleSpinBoxQmax, QtCore.SIGNAL('valueChanged(double)'),
                      self.evt_qmax_changed)
 
+        #  menu operations
         self.connect(self.ui.actionReset_GofR_tab, QtCore.SIGNAL('triggered()'),
                      self.do_reset_gr_tab)
+        self.connect(self.ui.actionReset_GSAS_tab, QtCore.SIGNAL('triggered()'),
+                     self.do_reset_gsas_tab)
+        self.connect(self.ui.actionQuit, QtCore.SIGNAL('triggered()'),
+                     self.evt_quit)
 
         # organize widgets group
         self._braggBankWidgets = {1: self.ui.checkBox_bank1,
@@ -790,20 +791,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         return
 
-    def evt_qmin_changed(self):
-        """
-
-        Returns:
-
-        """
-        q_min = self.ui.doubleSpinBoxQmin.value()
-        q_max = self.ui.doubleSpinBoxQmax.value()
-
-        if q_min < q_max and self.ui.graphicsView_sq.is_boundary_shown():
-            self.ui.graphicsView_sq.move_left_indicator(q_min, relative=False)
-
-        return
-
     def evt_qmax_changed(self):
         """
         Handle if the user change the value of Qmax of S(Q) including
@@ -819,6 +806,27 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         return
 
+    def evt_qmin_changed(self):
+        """
+
+        Returns:
+
+        """
+        q_min = self.ui.doubleSpinBoxQmin.value()
+        q_max = self.ui.doubleSpinBoxQmax.value()
+
+        if q_min < q_max and self.ui.graphicsView_sq.is_boundary_shown():
+            self.ui.graphicsView_sq.move_left_indicator(q_min, relative=False)
+
+        return
+
+    def evet_quit(self):
+        """
+        Quit the application
+        Returns:
+
+        """
+        self.close()
 
     def get_default_data_dir(self):
         """
