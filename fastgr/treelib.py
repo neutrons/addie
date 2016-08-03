@@ -245,8 +245,9 @@ class BraggTree(base.CustomizedTreeView):
         """
         # get main node
         # TODO/NOW/ISSUE 1: better documentation
-        status, gsas_node_list = self.get_current_main_nodes()
-        assert status
+        # status, gsas_node_list = self.get_current_main_nodes()
+        # assert status
+        gsas_node_list = self.get_selected_items()
 
         for gsas_node in gsas_node_list:
             # delete a gsas workspace and its split
@@ -653,7 +654,7 @@ class GofRTree(base.CustomizedTreeView):
         else:
             # delete leaf
             for item in selected_items:
-                self._delete_ws_node(item)
+                self._delete_ws_node(item, None, check_gr_sq=True)
         # END-IF-ELSE
 
         return
@@ -717,12 +718,15 @@ class GofRTree(base.CustomizedTreeView):
         # delete workspace
         self._mainWindow.get_workflow().delete_workspace(leaf_node_name)
         # remove from canvas
-        if is_gr:
-            self._mainWindow.remove_gr_from_plot(leaf_node_name)
-        else:
-            self._mainWindow.remove_sq_from_plot(leaf_node_name)
+        try:
+            if is_gr:
+                self._mainWindow.remove_gr_from_plot(leaf_node_name)
+            else:
+                self._mainWindow.remove_sq_from_plot(leaf_node_name)
+        except AssertionError as ass_err:
+            print 'Unable to remove %s from canvas due to %s.' % (leaf_node_name, str(ass_err))
         # delete node
-        self.delete_item(ws_item)
+        self.delete_node(ws_item)
 
         return
 

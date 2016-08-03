@@ -891,7 +891,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         assert isinstance(gr_name, str)
 
         # remove
-        self.ui.graphicsView_gr.remove_gr(line_id=gr_name)
+        self.ui.graphicsView_gr.remove_gr(plot_key=gr_name)
 
         return
 
@@ -934,7 +934,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
         assert isinstance(sq_name, str)
 
         # remove
-        self.ui.graphicsView_sq.remove_sq(line_id=sq_name)
+        self.ui.graphicsView_sq.remove_sq(plot_key=sq_name)
 
         return
 

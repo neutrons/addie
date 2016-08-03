@@ -5,6 +5,10 @@ from PyQt4 import QtCore
 import mplgraphicsview as base
 
 
+#
+# FIXME - _bankPlotDict should be reviewed.  It is only designed for plotting one GSAS file
+#
+
 class BraggView(base.MplGraphicsView):
     """ Graphics view for Bragg diffraction
     """
@@ -175,7 +179,7 @@ class BraggView(base.MplGraphicsView):
 
     def remove_gss_banks(self, ws_group_name, bank_id_list):
         """
-        Remove a few bank ID fro Bragg plot
+        Remove a few bank ID from Bragg plot
         Args:
             ws_group_name: workspace group name as bank ID
             bank_id_list:
@@ -216,6 +220,7 @@ class BraggView(base.MplGraphicsView):
         # debug output
         db_buf = ''
         for bank_id in self._bankPlotDict:
+            print '[DB...BAT] bank_id = %s of type %s.' % (str(bank_id), str(type(bank_id)))
             db_buf += '%d: %s \t' % (bank_id, str(self._bankPlotDict[bank_id]))
         print 'After removing %s, Buffer: %s.' % (str(bank_id_list), db_buf)
 
@@ -277,12 +282,12 @@ class GofRView(base.MplGraphicsView):
 
         return
 
-    def plot_gr(self, key_plot, vec_r, vec_g, vec_e=None, plot_error=False):
+    def plot_gr(self, plot_key, vec_r, vec_g, vec_e=None, plot_error=False):
         """
         Plot G(r)
         Parameters
         -------
-        key_plot: a key to the current plot
+        plot_key: a key to the current plot
         vec_r: numpy array for R
         vec_g: numpy array for G(r)
         vec_e: numpy array for G(r) error
@@ -291,8 +296,8 @@ class GofRView(base.MplGraphicsView):
 
         """
         # check
-        assert isinstance(key_plot, str), 'Key for the plot must be a string but not %s.' \
-                                          '' % str(type(key_plot))
+        assert isinstance(plot_key, str), 'Key for the plot must be a string but not %s.' \
+                                          '' % str(type(plot_key))
         assert isinstance(vec_r, np.ndarray), 'Vector(r) must be a numpy vector but not %s.' \
                                               '' % str(type(vec_r))
         assert isinstance(vec_g, np.ndarray), 'Vector(G) must be a numpy vector but not %s.' \
@@ -305,37 +310,37 @@ class GofRView(base.MplGraphicsView):
         else:
             line_id = self.add_plot_1d(vec_r, vec_g, marker='.',
                                        color=self._colorList[self._colorIndex % len(self._colorList)],
-                                       label=key_plot,
+                                       label=plot_key,
                                        x_label=r'r ($\AA$)')
             self._colorIndex += 1
-            self._grDict[key_plot] = line_id
+            self._grDict[plot_key] = line_id
 
         return
 
-    def remove_gr(self, key_plot):
+    def remove_gr(self, plot_key):
         """
 
         Parameters
         ----------
-        key_plot :: key to locate the 1-D plot on canvas
+        plot_key :: key to locate the 1-D plot on canvas
 
         Returns :: boolean, string (as error message)
         -------
 
         """
         # check
-        assert isinstance(key_plot, str), 'Key for the plot must be a string but not %s.' % str(type(key_plot))
-        if key_plot not in self._grDict:
-            return False, 'Workspace %s cannot be found in GofR dictionary of canvas'  % key_plot
+        assert isinstance(plot_key, str), 'Key for the plot must be a string but not %s.' % str(type(plot_key))
+        if plot_key not in self._grDict:
+            return False, 'Workspace %s cannot be found in GofR dictionary of canvas'  % plot_key
 
         # get line ID
-        line_id = self._grDict[key_plot]
+        line_id = self._grDict[plot_key]
 
         # remove from plot
         self.remove_line(line_id)
 
         # clean G(r) plot
-        del self._grDict[line_id]
+        del self._grDict[plot_key]
 
         return
 

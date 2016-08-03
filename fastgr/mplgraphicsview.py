@@ -1215,6 +1215,8 @@ class Qt4MplCanvas(FigureCanvas):
         else:
             raise RuntimeError('Line with ID %s is not recorded.' % plot_key)
 
+        self.axes.legend()
+
         # Draw
         self.draw()
 
