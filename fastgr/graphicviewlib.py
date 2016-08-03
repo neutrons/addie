@@ -91,6 +91,27 @@ class BraggView(base.MplGraphicsView):
         """
         return list(self._workspaceSet)
 
+    @staticmethod
+    def _generate_plot_key(ws_group_name, bank_id):
+        """
+        Generate a standard key for a plot from GSAS Workspace group name and bank ID
+        Args:
+            ws_group_name:
+            bank_id:
+
+        Returns:
+
+        """
+        # check
+        assert isinstance(ws_group_name, str), 'Workspace group\'s name must be a string, but not %s.' \
+                                               '' % str(type(ws_group_name))
+        assert isinstance(bank_id, int), 'Bank ID %s must be an integer but not %s.' \
+                                         '' % (str(bank_id), str(type(bank_id)))
+
+        plot_key = '%s_bank%d' % (ws_group_name, bank_id)
+
+        return plot_key
+
     def plot_banks(self, plot_bank_dict, unit):
         """
         Plot a few banks to canvas.  If the bank has been plot on canvas already,
@@ -121,8 +142,12 @@ class BraggView(base.MplGraphicsView):
                 plot_id = self.add_plot_1d(vec_x, vec_y, marker='.', color=bank_color,
                                            x_label=unit, y_label='I(%s)' % unit,
                                            label='%s Bank %d' % (ws_group, bank_id))
-            #self._bankPlotDict[bank_id] = plot_id
-        # END-FOR (bank id)
+
+                # plot key
+                plot_key = self._generate_plot_key(ws_group, bank_id)
+                self._bankPlotDict[plot_key] = plot_id
+            # END-FOR (bank id)
+        # END-FOR (ws_group)
 
         return
 
@@ -148,21 +173,34 @@ class BraggView(base.MplGraphicsView):
 
         return
 
-    def remove_banks(self, bank_id_list):
+    def remove_gss_banks(self, ws_group_name, bank_id_list):
         """
         Remove a few bank ID fro Bragg plot
         Args:
+            ws_group_name: workspace group name as bank ID
             bank_id_list:
 
-        Returns:
+        Returns: error message (empty string for non-error)
 
         """
         # check
         assert isinstance(bank_id_list, list)
 
-        # remove
+        # remove line from canvas
+        error_message = ''
         for bank_id in bank_id_list:
-            bank_line_id = self._bankPlotDict[bank_id]
+            # check bank ID type
+            assert isinstance(bank_id, int), 'Bank ID %s must be an integer but not a %s.' % (str(bank_id),
+                                                                                              str(type(bank_id)))
+            # from bank ID key
+            plot_key = self._generate_plot_key(ws_group_name, bank_id)
+
+            # line is not plot
+            if plot_key not in self._bankPlotDict:
+                error_message += 'Workspace %s Bank %d is not on canvas to delete.\n' % (ws_group_name, bank_id)
+                continue
+
+            bank_line_id = self._bankPlotDict[plot_key]
             # remove from canvas
             try:
                 self.remove_line(bank_line_id)
@@ -172,7 +210,7 @@ class BraggView(base.MplGraphicsView):
                                                                                         str(val_error))
                 raise ValueError(error_message)
             # remove from data structure
-            self._bankPlotDict[bank_id] = False
+            del self._bankPlotDict[plot_key]
         # END-FOR
 
         # debug output
@@ -181,7 +219,7 @@ class BraggView(base.MplGraphicsView):
             db_buf += '%d: %s \t' % (bank_id, str(self._bankPlotDict[bank_id]))
         print 'After removing %s, Buffer: %s.' % (str(bank_id_list), db_buf)
 
-        return
+        return error_message
 
     def reset(self):
         """
@@ -199,6 +237,9 @@ class BraggView(base.MplGraphicsView):
 
         # clear all lines
         self.clear_all_lines()
+
+        # clear plot bank
+        self._bankPlotDict.clear()
 
         return
 
@@ -276,18 +317,39 @@ class GofRView(base.MplGraphicsView):
 
         Parameters
         ----------
-        key_plot
+        key_plot :: key to locate the 1-D plot on canvas
 
-        Returns
+        Returns :: boolean, string (as error message)
         -------
 
         """
-        # TODO/NOW - Doc and check
+        # check
+        assert isinstance(key_plot, str), 'Key for the plot must be a string but not %s.' % str(type(key_plot))
+        if key_plot not in self._grDict:
+            return False, 'Workspace %s cannot be found in GofR dictionary of canvas'  % key_plot
+
+        # get line ID
         line_id = self._grDict[key_plot]
 
+        # remove from plot
         self.remove_line(line_id)
 
+        # clean G(r) plot
         del self._grDict[line_id]
+
+        return
+
+    def reset(self):
+        """
+        Reset the canvas by deleting all lines and clean the dictionary
+        Returns:
+
+        """
+        # remove all lines
+        self.clear_all_lines()
+
+        # clean dictionary
+        self._grDict.clear()
 
         return
 
@@ -320,6 +382,9 @@ class SofQView(base.MplGraphicsView):
 
         self._mainApp = None
 
+        # dictionary to record all the plots, key usually is the SofQ's name
+        self._sqLineDict = dict()
+
         # link signal
         # self.boundaryMoveSignal.connect(self._myParent.update_sq_boundary)
 
@@ -330,20 +395,6 @@ class SofQView(base.MplGraphicsView):
 
         self._selectedBoundary = 0
         self._prevCursorPos = None
-
-        return
-
-    def set_main(self, main_app):
-        """
-
-        Returns
-        -------
-
-        """
-        self._mainApp = main_app
-
-        # link signal
-        self.boundaryMoveSignal.connect(self._mainApp.update_sq_boundary)
 
         return
 
@@ -547,8 +598,45 @@ class SofQView(base.MplGraphicsView):
             marker, color = self.getNextLineMarkerColorCombo()
 
         # plot
-        self.add_plot_1d(vec_q, vec_s, color=color, x_label='Q', y_label=sq_y_label,
-                         marker=marker, label=sq_name)
+        plot_id = self.add_plot_1d(vec_q, vec_s, color=color, x_label='Q', y_label=sq_y_label,
+                                   marker=marker, label=sq_name)
+        self._sqLineDict[sq_name] = plot_id
+
+        return
+
+    def remove_sq(self, plot_key):
+        """
+        Remove 1 S(q) line from canvas
+        Args:
+            plot_key:
+
+        Returns:
+
+        """
+        # check whether S(Q) does exist
+        assert isinstance(plot_key, str)
+        assert plot_key in self._sqLineDict, 'Plot key (SofQ name) %s does not exist on the S(Q) canvas.' % plot_key
+
+        # retrieve the plot and remove it from the dictionary
+        plot_id = self._sqLineDict[plot_key]
+        del self._sqLineDict[plot_key]
+
+        # delete from canvas
+        self.remove_line(plot_id)
+
+        return
+
+    def set_main(self, main_app):
+        """
+
+        Returns
+        -------
+
+        """
+        self._mainApp = main_app
+
+        # link signal
+        self.boundaryMoveSignal.connect(self._mainApp.update_sq_boundary)
 
         return
 
@@ -586,3 +674,18 @@ class SofQView(base.MplGraphicsView):
         # END-IF-ELSE (show boundary)
 
         return
+
+    def reset(self):
+        """
+        Reset the canvas including removing all the 1-D plots and boundary indicators
+        Returns:
+
+        """
+        # clear the dictionary
+        self._sqLineDict.clear()
+
+        # clear the image
+        self.clear_all_lines()
+
+        return
+

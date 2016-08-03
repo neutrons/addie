@@ -390,7 +390,8 @@ class CustomizedTreeView(QtGui.QTreeView):
         Returns:
 
         """
-        assert isinstance(parent_node, QtGui.QStandardItem)
+        assert isinstance(parent_node, QtGui.QStandardItem), 'Parent node %s must be a QStandardItem but not ' \
+                                                             'of type %s.' % str(type(parent_node))
         child_count = parent_node.rowCount()
 
         child_item_list = list()

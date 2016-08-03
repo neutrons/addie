@@ -820,7 +820,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
 
         return
 
-    def evet_quit(self):
+    def evt_quit(self):
         """
         Quit the application
         Returns:
@@ -875,6 +875,66 @@ class MainWindow(PyQt4.QtGui.QMainWindow, ui_mainWindow.Ui_MainWindow):
             elif self.ui.tabWidget_2.currentWidget().objectName() == 'tab_bragg':
                 for new_ws in new_ws_list:
                     self.ui.treeWidget_braggWSList.add_arb_gr(new_ws)
+
+        return
+
+    def remove_gr_from_plot(self, gr_name):
+        """
+        Remove a GofR line from GofR canvas
+        Args:
+            gr_name: supposed to the G(r) name that is same as workspace name and plot key on canvas as well
+
+        Returns:
+
+        """
+        # check
+        assert isinstance(gr_name, str)
+
+        # remove
+        self.ui.graphicsView_gr.remove_gr(line_id=gr_name)
+
+        return
+
+    def remove_gss_from_plot(self, gss_group_name, gss_bank_ws_name_list):
+        """
+
+        Args:
+            gss_group_name: name of the GSS node, i.e., GSS workspace group's name
+            gss_bank_ws_name_list: list of names of GSS single banks' workspace name
+
+        Returns:
+
+        """
+        # check
+        assert isinstance(gss_group_name, str), 'GSS group workspace name must be a string but not %s.' \
+                                                '' % str(type(gss_group_name))
+        assert isinstance(gss_bank_ws_name_list, list) and len(gss_bank_ws_name_list) > 0
+
+        # get bank IDs
+        bank_ids = list()
+        for gss_bank_ws in gss_bank_ws_name_list:
+            bank_id = int(gss_bank_ws.split('_bank')[-1])
+            bank_ids.append(bank_id)
+
+        # remove
+        self.ui.graphicsView_bragg.remove_gss_banks(gss_group_name, bank_ids)
+
+        return
+
+    def remove_sq_from_plot(self, sq_name):
+        """
+        Remove an SofQ line from SofQ canvas
+        Args:
+            sq_name: supposed to be the S(Q) name which is same as workspace name and plot key of canvas
+
+        Returns:
+
+        """
+        # check
+        assert isinstance(sq_name, str)
+
+        # remove
+        self.ui.graphicsView_sq.remove_sq(line_id=sq_name)
 
         return
 
