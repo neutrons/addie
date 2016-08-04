@@ -3,14 +3,14 @@ import os
 from PyQt4 import QtCore, QtGui
 import sys
 
-import step2
-from initialization.init_step2 import InitStep2
-from step2_handler.populate_master_table import PopulateMasterTable
-from step2_handler.populate_background_widgets import PopulateBackgroundWidgets
-from step2_handler.gui_handler import GuiHandler
-from step2_handler.table_handler import TableHandler
-from step2_handler.create_sample_files import CreateSampleFiles
-from step2_handler.create_ndsum_file import CreateNdsumFile
+import fastgr.step2
+from fastgr.initialization.init_step2 import InitStep2
+from fastgr.step2_handler.populate_master_table import PopulateMasterTable
+from fastgr.step2_handler.populate_background_widgets import PopulateBackgroundWidgets
+from fastgr.step2_handler.gui_handler import GuiHandler
+from fastgr.step2_handler.table_handler import TableHandler
+from fastgr.step2_handler.create_sample_files import CreateSampleFiles
+from fastgr.step2_handler.create_ndsum_file import CreateNdsumFile
 
 
 class MyApp(QtGui.QMainWindow, step2.Ui_MainWindow):

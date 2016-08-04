@@ -1,7 +1,7 @@
 from PyQt4.QtCore import Qt
 import os
 
-from step2_handler.table_handler import TableHandler
+from fastgr.step2_handler.table_handler import TableHandler
 
 
 class CreateSampleFiles(object):

@@ -1,4 +1,4 @@
-import autoNOM
+import fastgr.setp1_handler.autoNOM
 import numpy as np
 import os
 from PyQt4 import QtCore, QtGui
