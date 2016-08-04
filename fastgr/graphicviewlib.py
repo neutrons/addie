@@ -22,9 +22,12 @@ class BraggView(base.MplGraphicsView):
         base.MplGraphicsView.__init__(self, parent)
 
         # control class
+        # key: bank ID, value: list of workspace names
         self._bankPlotDict = dict()
         for bank_id in range(1, 7):
-            self._bankPlotDict[bank_id] = False
+            self._bankPlotDict[bank_id] = list()
+        # key: workspace name. value: line ID
+        self._gssDict = dict()
 
         self._singleGSSMode = True
         self._bankColorDict = {1: 'black',
@@ -60,7 +63,7 @@ class BraggView(base.MplGraphicsView):
         to_remove_banks = list()
 
         for bank_id in self._bankPlotDict.keys():
-            if self._bankPlotDict[bank_id] is False:
+            if len(self._bankPlotDict[bank_id]) == 0:
                 # previously-not-being plot. either in new_plot_banks already or no-op
                 continue
             elif bank_id in bank_to_plot_list:
@@ -149,7 +152,8 @@ class BraggView(base.MplGraphicsView):
 
                 # plot key
                 plot_key = self._generate_plot_key(ws_group, bank_id)
-                self._bankPlotDict[plot_key] = plot_id
+                self._bankPlotDict[bank_id].append(plot_key)
+                self._gssDict[plot_key] = plot_id
             # END-FOR (bank id)
         # END-FOR (ws_group)
 
@@ -200,11 +204,11 @@ class BraggView(base.MplGraphicsView):
             plot_key = self._generate_plot_key(ws_group_name, bank_id)
 
             # line is not plot
-            if plot_key not in self._bankPlotDict:
+            if plot_key not in self._gssDict:
                 error_message += 'Workspace %s Bank %d is not on canvas to delete.\n' % (ws_group_name, bank_id)
                 continue
 
-            bank_line_id = self._bankPlotDict[plot_key]
+            bank_line_id = self._gssDict[plot_key]
             # remove from canvas
             try:
                 self.remove_line(bank_line_id)
@@ -214,7 +218,8 @@ class BraggView(base.MplGraphicsView):
                                                                                         str(val_error))
                 raise ValueError(error_message)
             # remove from data structure
-            del self._bankPlotDict[plot_key]
+            del self._gssDict[plot_key]
+            self._bankPlotDict[bank_id].remove(plot_key)
         # END-FOR
 
         # debug output
@@ -232,19 +237,16 @@ class BraggView(base.MplGraphicsView):
         Returns:
         None
         """
-        # clear the control-dictionary and uncheck all the banks
-        # set mutex on
+        # clean the dictionaries
         for bank_id in self._bankPlotDict.keys():
-            self._bankPlotDict[bank_id] = False
+            self._bankPlotDict[bank_id] = list()
+        self._gssDict.clear()
 
         # clear the workspace record
         self._workspaceSet.clear()
 
         # clear all lines
         self.clear_all_lines()
-
-        # clear plot bank
-        self._bankPlotDict.clear()
 
         return
 

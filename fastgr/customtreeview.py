@@ -54,9 +54,8 @@ class CustomizedTreeView(QtGui.QTreeView):
         return
 
     def delete_node(self, node_item):
+        """ Delete a node in the tree
         """
-        """
-        # TODO/NOW/ISSUE 3: Documentation!
         # check input
         assert isinstance(node_item, QtGui.QStandardItem)
 
@@ -71,10 +70,9 @@ class CustomizedTreeView(QtGui.QTreeView):
         # delete by using parent
         the_parent = node_item.parent()
         if the_parent is None:
-            # top main item
+            # top main item: remove the item and delete from the leaf dictionary
             self.model().removeRows(row_number, 1)
-            children = self._leafDict.pop(node_value)
-            print '[INFO] Remove leaf %s with children %s.' % (node_value, str(children))
+            del self._leafDict[node_value]
         else:
             # it is a child
             parent_index = self.model().indexFromItem(the_parent)
@@ -83,9 +81,8 @@ class CustomizedTreeView(QtGui.QTreeView):
 
             if self._leafDict.has_key(parent_value):
                 self._leafDict[parent_value].remove(node_value)
-                print '[INFO] Remove child %s from leaf %s.' % (node_value, parent_value)
-            else:
-                print '[INFO] Remove child %s from non-leaf parent %s.' % (node_value, parent_value)
+            # END-IF
+        # END-IF-ELSE
 
         return
 

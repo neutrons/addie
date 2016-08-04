@@ -243,22 +243,26 @@ class BraggTree(base.CustomizedTreeView):
         Returns:
         None
         """
-        # get main node
-        # TODO/NOW/ISSUE 1: better documentation
-        # status, gsas_node_list = self.get_current_main_nodes()
-        # assert status
+        # get selected nodes
         gsas_node_list = self.get_selected_items()
 
         for gsas_node in gsas_node_list:
-            # delete a gsas workspace and its split
-            gss_ws_name = gsas_node.split('_group')[0]
+            # delete a gsas workspace and the workspaces split from it
+            gsas_name = str(gsas_node.text())
+            gss_ws_name = gsas_name.split('_group')[0]
             self._mainWindow.get_workflow().delete_workspace(gss_ws_name)
             
-            # get the sub nodes
-            # TODO/NOW/ISSUE 1: implement/find out the method to get children nodes' names
+            # get the sub nodes and delete the workspaces
             sub_leaves = self.get_child_nodes(parent_node=gsas_node, output_str=True)
             for ws_name in sub_leaves:
                 self._mainWindow.get_workflow().delete_workspace(ws_name)
+                try:
+                    self._mainWindow.remove_gss_from_plot(gss_group_name=gsas_name, gss_bank_ws_name_list=[ws_name])
+                except AssertionError as ass_err:
+                    print 'Workspace %s is not on canvas.' % ws_name
+
+            # delete the node from the tree
+            self.delete_node(gsas_node)
         # END-FOR
 
         return
@@ -382,7 +386,7 @@ class BraggTree(base.CustomizedTreeView):
 
     def set_main_window(self, parent_window):
         """
-
+        Set the main window (parent window) to this tree
         Parameters
         ----------
         parent_window
@@ -391,7 +395,9 @@ class BraggTree(base.CustomizedTreeView):
         -------
 
         """
-        # TODO/NOW - Doc and check
+        # check
+        assert parent_window is not None, 'Parent window cannot be None'
+
         self._mainWindow = parent_window
 
         return
