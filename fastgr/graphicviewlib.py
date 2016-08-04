@@ -5,10 +5,6 @@ from PyQt4 import QtCore
 import mplgraphicsview as base
 
 
-#
-# FIXME - _bankPlotDict should be reviewed.  It is only designed for plotting one GSAS file
-#
-
 class BraggView(base.MplGraphicsView):
     """ Graphics view for Bragg diffraction
     """

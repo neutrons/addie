@@ -70,7 +70,7 @@ class FastGRDriver(object):
         prefix = 'G'
         if pdf_type.startswith('g'):
             prefix = 'g'
-        elif pdf_type.startswith('r'):
+        elif pdf_type.startswith('R'):
             prefix = 'RDF'
 
         gr_ws_name = '%s(R)_%s_%d' % (prefix, self._currSqWsName, self._sqIndexDict[self._currSqWsName])
