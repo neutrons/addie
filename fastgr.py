@@ -481,7 +481,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         status, ret_obj = self._myController.load_gr(g_file_name)
         if not status:
             err_msg = ret_obj
-            print err_msg
+	    print '[Error]: %s' % err_msg
             return
         else:
             gr_ws_name = ret_obj
