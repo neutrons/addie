@@ -40,7 +40,7 @@ class BraggTree(base.CustomizedTreeView):
 
         # to de-select
         self._action_deselect_node = QtGui.QAction('Remove from plotting', self)
-        self._action_deselect_node.triggered.connect(self.do_deselect_gss_node)
+        self._action_deselect_node.triggered.connect(self.do_remove_from_plot)
 
         # class variables
         self._mainWindow = None
@@ -133,16 +133,14 @@ class BraggTree(base.CustomizedTreeView):
             self.addAction(self._action_ipython)
             self.addAction(self._action_merge_gss)
             self.addAction(self._action_deselect_node)
-            # FIXME - Implement it!
-            # self.addAction(self._action_delete)
+            self.addAction(self._action_delete)
         elif leaf_level == 2:
             self.addAction(self._action_plot)
             self.removeAction(self._action_select_node)
             self.removeAction(self._action_merge_gss)
             self.addAction(self._action_ipython)
             self.removeAction(self._action_deselect_node)
-            # FIXME - Implement it!
-            # self.removeAction(self._action_delete)
+            self.removeAction(self._action_delete)
 
         return
 
@@ -219,20 +217,23 @@ class BraggTree(base.CustomizedTreeView):
 
         return
 
-    def do_deselect_gss_node(self):
+    def do_remove_from_plot(self):
         """
-        De-select a node if it is plot on canvas
+        Remove a node's plot if it is plot on canvas
         Returns
         -------
 
         """
-        # TODO/NOW/ISSUE 1
-
-        # check whether it is on canvas
-        blabla
+        # get the selected gsas node
+        selected_nodes = self.get_selected_items()
+        if len(selected_nodes) == 0:
+            return
 
         # remove it from canvas
-        blabla
+        for gss_node in selected_nodes:
+            gss_ws_name = str(gss_node.text())
+            gss_bank_names = self.get_child_nodes(gss_node, output_str=True)
+            self._mainWindow.remove_gss_from_plot(gss_ws_name, gss_bank_names)
 
         return
 
@@ -242,21 +243,26 @@ class BraggTree(base.CustomizedTreeView):
         Returns:
         None
         """
-        # get main node
-        # TODO/NOW/ISSUE 1: better documentation
-        status, gsas_node_list = self.get_current_main_nodes()
-        assert status
+        # get selected nodes
+        gsas_node_list = self.get_selected_items()
 
         for gsas_node in gsas_node_list:
-            # delete a gsas workspace and its split
-            gss_ws_name = gsas_node.split('_group')[0]
+            # delete a gsas workspace and the workspaces split from it
+            gsas_name = str(gsas_node.text())
+            gss_ws_name = gsas_name.split('_group')[0]
             self._mainWindow.get_workflow().delete_workspace(gss_ws_name)
             
-            # get the sub nodes
-            # TODO/NOW/ISSUE 1: implement/find out the method to get children nodes' names
+            # get the sub nodes and delete the workspaces
             sub_leaves = self.get_child_nodes(parent_node=gsas_node, output_str=True)
             for ws_name in sub_leaves:
                 self._mainWindow.get_workflow().delete_workspace(ws_name)
+                try:
+                    self._mainWindow.remove_gss_from_plot(gss_group_name=gsas_name, gss_bank_ws_name_list=[ws_name])
+                except AssertionError as ass_err:
+                    print 'Workspace %s is not on canvas.' % ws_name
+
+            # delete the node from the tree
+            self.delete_node(gsas_node)
         # END-FOR
 
         return
@@ -380,7 +386,7 @@ class BraggTree(base.CustomizedTreeView):
 
     def set_main_window(self, parent_window):
         """
-
+        Set the main window (parent window) to this tree
         Parameters
         ----------
         parent_window
@@ -389,7 +395,9 @@ class BraggTree(base.CustomizedTreeView):
         -------
 
         """
-        # TODO/NOW - Doc and check
+        # check
+        assert parent_window is not None, 'Parent window cannot be None'
+
         self._mainWindow = parent_window
 
         return
@@ -414,9 +422,13 @@ class GofRTree(base.CustomizedTreeView):
         self._action_ipython = QtGui.QAction('To IPython', self)
         self._action_ipython.triggered.connect(self.do_copy_to_ipython)
 
-        # delete
-        self._action_delete = QtGui.QAction('Delete', self)
-        self._action_delete.triggered.connect(self.do_delete_item)
+        # remove from plot
+        self._action_remove_plot = QtGui.QAction('Remove from plot', self)
+        self._action_remove_plot.triggered.connect(self.do_remove_from_plot)
+
+        # delete workspace/data
+        self._action_delete = QtGui.QAction('Delete data', self)
+        self._action_delete.triggered.connect(self.do_delete_selected_items)
 
         self._mainWindow = None
         self._workspaceNameList = None
@@ -481,6 +493,7 @@ class GofRTree(base.CustomizedTreeView):
         elif leaf_level == 2:
             self.addAction(self._action_plot)
             self.addAction(self._action_ipython)
+            self.addAction(self._action_remove_plot)
             self.addAction(self._action_delete)
 
         return
@@ -614,7 +627,7 @@ class GofRTree(base.CustomizedTreeView):
 
         return
 
-    def do_delete_item(self):
+    def do_delete_selected_items(self):
         """
         Delete the workspaces assigned to the selected items
         Returns:
@@ -640,22 +653,86 @@ class GofRTree(base.CustomizedTreeView):
         # END-FOR
 
         # get item and delete
-        # TODO/NOW/ISSUE 1: Just not correct !!!
         if curr_level == 0:
             # delete node
-            # TODO/NOW/ISSUE 1: SofQ and workspaces cannot be deleted: only their children workspaces will!
             for item in selected_items:
-                sub_leaves = self.get_leaves(item)
-                for ws_name in sub_leaves:
-                    self._mainWindow.get_workflow().delete_workspace(ws_name)
-                self.delete_node(item)
+                self._delete_main_node(item)
         else:
             # delete leaf
             for item in selected_items:
-                ws_name = str(item.text())
-                self._mainWindow.get_workflow().delete_workspace(ws_name)
-                self.delete_leaf(item)
+                self._delete_ws_node(item, None, check_gr_sq=True)
         # END-IF-ELSE
+
+        return
+
+    def _delete_main_node(self, node_item):
+        """
+        Delete a main node
+        Args:
+            node_item:
+
+        Returns:
+
+        """
+        # Check
+        assert node_item.parent() is None
+
+        # check item
+        item_name = str(node_item.text())
+        keep_main_node = False
+        is_gr = True
+        if item_name == 'workspaces':
+            keep_main_node = True
+        elif item_name == 'SofQ':
+            keep_main_node = True
+            is_gr = False
+
+        # node workspaces and SofQ cannot be deleted
+        sub_leaves = self.get_child_nodes(node_item, output_str=False)
+        for leaf_node in sub_leaves:
+            # delete a leaf
+            self._delete_ws_node(leaf_node, is_gr, check_gr_sq=False)
+        # END-FOR
+
+        # delete this node
+        if not keep_main_node:
+            self.delete_node(node_item)
+
+        return
+
+    def _delete_ws_node(self, ws_item, is_gr, check_gr_sq):
+        """
+        Delete a level-2 item
+        Args:
+            ws_item:
+
+        Returns:
+
+        """
+        # check
+        assert ws_item.parent() is not None
+
+        if check_gr_sq:
+            parent_node = ws_item.parent()
+            if str(parent_node.text()) == 'SofQ':
+                is_gr = False
+            else:
+                is_gr = True
+
+        # get leaf node name
+        leaf_node_name = str(ws_item.text())
+        # delete workspace
+        self._mainWindow.get_workflow().delete_workspace(leaf_node_name)
+        # remove from canvas
+        try:
+            if is_gr:
+                self._mainWindow.remove_gr_from_plot(leaf_node_name)
+            else:
+                self._mainWindow.remove_sq_from_plot(leaf_node_name)
+        except AssertionError as ass_err:
+            print 'Unable to remove %s from canvas due to %s.' % (leaf_node_name, str(ass_err))
+        # delete node
+        self.delete_node(ws_item)
 
         return
 
@@ -697,6 +774,31 @@ class GofRTree(base.CustomizedTreeView):
 
         for sq_name in sq_list:
             self._mainWindow.plot_sq(sq_name, False)
+
+        return
+
+    def do_remove_from_plot(self):
+        """
+        Remove the selected item from plot if it is plotted
+        Returns:
+
+        """
+        # get selected items
+        item_list = self.get_selected_items()
+
+        # remove the selected items from plotting
+        for tree_item in item_list:
+            # get its name and its parent's name
+            leaf_name = str(tree_item.text())
+            node_name = str(tree_item.parent().text())
+
+            # remove from canvas by calling parents
+            if node_name == 'SofQ':
+                self._mainWindow.remove_sq_from_plot(leaf_name)
+            else:
+                self._mainWindow.remove_gr_from_plot(leaf_name)
+            # END-IF
+        # END-FOR
 
         return
 

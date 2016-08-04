@@ -53,6 +53,39 @@ class CustomizedTreeView(QtGui.QTreeView):
 
         return
 
+    def delete_node(self, node_item):
+        """ Delete a node in the tree
+        """
+        # check input
+        assert isinstance(node_item, QtGui.QStandardItem)
+
+        # Get current item
+        node_index = self.model().indexFromItem(node_item)
+        assert node_index is not None
+
+        # get row number and node value
+        row_number = node_index.row()
+        node_value = str(node_item.text())
+
+        # delete by using parent
+        the_parent = node_item.parent()
+        if the_parent is None:
+            # top main item: remove the item and delete from the leaf dictionary
+            self.model().removeRows(row_number, 1)
+            del self._leafDict[node_value]
+        else:
+            # it is a child
+            parent_index = self.model().indexFromItem(the_parent)
+            self.model().removeRows(row_number, 1, parent_index)
+            parent_value = str(the_parent.text())
+
+            if self._leafDict.has_key(parent_value):
+                self._leafDict[parent_value].remove(node_value)
+            # END-IF
+        # END-IF-ELSE
+
+        return
+
     def init_setup(self, header_list):
         """
         To set up customized header
@@ -390,7 +423,8 @@ class CustomizedTreeView(QtGui.QTreeView):
         Returns:
 
         """
-        assert isinstance(parent_node, QtGui.QStandardItem)
+        assert isinstance(parent_node, QtGui.QStandardItem), 'Parent node %s must be a QStandardItem but not ' \
+                                                             'of type %s.' % (str(parent_node), str(type(parent_node)))
         child_count = parent_node.rowCount()
 
         child_item_list = list()

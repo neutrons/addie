@@ -325,7 +325,7 @@ class FastGRDriver(object):
         simpleapi.LoadAscii(Filename=file_name, OutputWorkspace=sq_ws_name, Unit='MomentumTransfer')
         assert AnalysisDataService.doesExist(sq_ws_name), 'Unable to load S(Q) file %s.' % file_name
 
-        # TODO/FIXME : it is in fact S(Q)-1 in sq file.  So need to add 1 to the workspace
+        # The S(Q) file is in fact S(Q)-1 in sq file.  So need to add 1 to the workspace
         out_ws = AnalysisDataService.retrieve(sq_ws_name)
         out_ws += 1
 
