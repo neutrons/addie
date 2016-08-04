@@ -1,7 +1,7 @@
 from PyQt4 import QtGui, QtCore
 import os
 
-from step2_handler.table_handler import TableHandler
+from fastgr.step2_handler.table_handler import TableHandler
 
 
 class Step2GuiHandler(object):

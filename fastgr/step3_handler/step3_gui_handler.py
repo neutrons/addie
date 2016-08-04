@@ -1,7 +1,7 @@
 from PyQt4 import QtGui, QtCore
 import os
 
-from utilities.file_handler import FileHandler
+from fastgr.utilities.file_handler import FileHandler
 
 
 class Step3GuiHandler(object):

@@ -1,5 +1,5 @@
 from PyQt4 import QtGui
-from step1_handler.step1_gui_handler import Step1GuiHandler
+from fastgr.step1_handler.step1_gui_handler import Step1GuiHandler
 
 
 class InitStep1(object):

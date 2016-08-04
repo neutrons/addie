@@ -1,5 +1,5 @@
 from PyQt4 import QtGui
-from  step1_handler.auto_populate_widgets import AutoPopulateWidgets
+from fastgr. step1_handler.auto_populate_widgets import AutoPopulateWidgets
 
 
 class Step1GuiHandler(object):

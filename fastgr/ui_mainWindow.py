@@ -1212,6 +1212,6 @@ class Ui_MainWindow(object):
         self.actionQuit.setText(_translate("MainWindow", "Quit", None))
         self.actionCheat_sheet.setText(_translate("MainWindow", "Cheat sheet", None))
 
-from graphicviewlib import BraggView, SofQView, GofRView
-from ipythondockwidget import IPythonDockWidget
-from treelib import GofRTree, BraggTree
+from fastgr.graphicviewlib import BraggView, SofQView, GofRView
+from fastgr.ipythondockwidget import IPythonDockWidget
+from fastgr.treelib import GofRTree, BraggTree

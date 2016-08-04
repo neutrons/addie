@@ -1,7 +1,7 @@
 import os
 from PyQt4 import QtGui, QtCore
 
-from step2_handler.generate_sumthing import GenerateSumthing
+from fastgr.step2_handler.generate_sumthing import GenerateSumthing
 
 
 class PopulateMasterTable(object):
