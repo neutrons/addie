@@ -100,11 +100,13 @@ class FastGRDriver(object):
 
         return gr_ws_name
 
-    def delete_workspace(self, workspace_name):
+    @staticmethod
+    def delete_workspace(workspace_name, no_throw=False):
         """
         Delete a workspace from Mantid's AnalysisDataService
         Args:
             workspace_name: name of a workspace as a string instance
+            no_throw: if True, then it won't throw any exception if the workspace does not exist in AnalysisDataService
 
         Returns: None
 
@@ -112,10 +114,14 @@ class FastGRDriver(object):
         # check
         assert isinstance(workspace_name, str), \
             'Input workspace name must be a string, but not %s.' % str(type(workspace_name))
-        assert AnalysisDataService.doesExist(workspace_name), 'Workspace %s does not exist.' % workspace_name
 
-        # delete
-        simpleapi.DeleteWorkspace(Workspace=workspace_name)
+        # check whether the workspace exists
+        does_exit = AnalysisDataService.doesExist(workspace_name)
+        if does_exit:
+            # delete
+            simpleapi.DeleteWorkspace(Workspace=workspace_name)
+        elif not no_throw:
+            raise RuntimeError('Workspace %s does not exist.' % workspace_name)
 
         return
 

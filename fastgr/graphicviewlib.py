@@ -72,6 +72,23 @@ class BraggView(base.MplGraphicsView):
 
         return new_plot_banks, to_remove_banks
 
+    def get_ws_name_on_canvas(self, bank_id):
+        """
+        Get workspace' names on canvas according to its bank ID
+        Args:
+            bank_id: bank ID, integer between 1 and 6
+
+        Returns: a list of workspace' names
+
+        """
+        # check input requirements
+        assert isinstance(bank_id, int), 'Bank ID %s must be an integer but not %s.' \
+                                         '' % (str(bank_id), str(type(bank_id)))
+        assert 1 <= bank_id <= 6, 'Bank ID %d must be in [1, 6].' % bank_id
+
+        # return
+        return self._bankPlotDict[bank_id]
+
     def get_multi_gss_color(self):
         """
         Get the present color in multiple-GSS mode

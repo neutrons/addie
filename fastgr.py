@@ -265,11 +265,19 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         None
         """
         # delete all workspaces: get GSAS workspaces from tree
-        # TODO/FIXME/ISSUE 5 : delete all the workspaces related
-        blablabla
-        # gsas_ws_list = self.ui.treeWidget_braggWSList.GET_WORKSPACES()
-        # for workspace in gsas_ws_list:
-        #     self._myController.delete_workspace(workspace)
+        gsas_group_node_list = self.ui.treeWidget_braggWSList.get_main_nodes(output_str=False)
+        for gsas_group_node in gsas_group_node_list:
+            # get the split workspaces' names and delete
+            gsas_ws_name_list = self.ui.treeWidget_braggWSList.get_child_nodes(gsas_group_node, output_str=True)
+            for workspace in gsas_ws_name_list:
+                self._myController.delete_workspace(workspace)
+            # END-FOR
+
+            # guess for the main workspace and delete
+            gss_main_ws = str(gsas_group_node.text()).split('_group')
+            self._myController.delete_workspace(workspace, no_throw=True)
+            
+        # END-FOR (gsas_group_node)
 
         # reset the GSAS tree
         self.ui.treeWidget_braggWSList.reset_bragg_tree()
@@ -277,8 +285,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         # clear the canvas
         self.ui.graphicsView_bragg.reset()
 
-        # TODO/FIXME/ISSUE 5: clear the checkboxes for banks
-        blablabla
+        # clear the checkboxes for banks
+        self._noEventBankWidgets = True
+        for check_box in self._braggBankWidgets.values():
+            check_box.setChecked(False)
+        self._noEventBankWidgets = False
 
         return
 
@@ -489,8 +500,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         # plot
         self.plot_gr([gr_ws_name])
 
-        # TODO/FIXME/ISSUE 5: put the loaded G(r) workspace to tree 'workspaces'
-        blablabla
+        # put the loaded G(r) workspace to tree 'workspaces'
+        self.ui.treeWidget_grWsList.add_child_main_item('workspaces', gr_ws_name)
 
         return
 
@@ -903,6 +914,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
     def remove_gss_from_plot(self, gss_group_name, gss_bank_ws_name_list):
         """
+        Remove a GSAS group from canvas if they exits
 
         Args:
             gss_group_name: name of the GSS node, i.e., GSS workspace group's name
@@ -925,8 +937,17 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         # remove
         self.ui.graphicsView_bragg.remove_gss_banks(gss_group_name, bank_ids)
 
-        # TODO/FIXME/ISSUE 5: check if there is no such bank's plot on figure, make sure 
-        #                     the checkbox is unselected
+        # check if there is no such bank's plot on figure, make sure the checkbox is unselected
+        # turn on the mutex lock
+        self._noEventBankWidgets = True
+
+        for bank_id in range(1, 7):
+            has_plot_on_canvas = len(self.ui.graphicsView_bragg.get_ws_name_on_canvas()) > 0
+            self._braggBankWidgets[bank_id].setChecked(has_plot_on_canvas)
+
+        # turn off the mutex lock
+        self._noEventBankWidgets = False
+
 
         return
 
