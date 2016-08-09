@@ -213,6 +213,8 @@ class TableHandler(object):
         _number_of_row = self.parent.table.rowCount()
         for _row in np.arange(_number_of_row):
             self.parent.table.removeRow(0)
+        self.parent.background_line_edit.setText("")
+        self.parent.background_comboBox.clear()
     
     def set_widget_state(self, _widget_state, _row):
         _widget = self.parent.table.cellWidget(_row, 8).children()[1]

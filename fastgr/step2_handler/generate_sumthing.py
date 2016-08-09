@@ -74,7 +74,7 @@ class GenerateSumthing(object):
             outfile.write(key + " " + outbit+"\n")
     
         outfile.close()
-
+        print("[LOG] Created %s" %full_output_file_name)
 
     def create_sum_inp_file_from_old_format(self, full_input_file_name):
 

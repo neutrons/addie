@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1364</width>
-    <height>1028</height>
+    <width>1348</width>
+    <height>904</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -52,8 +52,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1342</width>
-         <height>966</height>
+         <width>1326</width>
+         <height>842</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -74,7 +74,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -875,6 +875,16 @@
                         <widget class="QLineEdit" name="manual_output_folder_field">
                          <property name="enabled">
                           <bool>false</bool>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QPushButton" name="manual_output_folder_button">
+                         <property name="enabled">
+                          <bool>false</bool>
+                         </property>
+                         <property name="text">
+                          <string>Select ...</string>
                          </property>
                         </widget>
                        </item>
@@ -2584,7 +2594,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1364</width>
+     <width>1348</width>
      <height>20</height>
     </rect>
    </property>
@@ -2612,6 +2622,7 @@
      <string>Help</string>
     </property>
     <addaction name="actionCheat_sheet"/>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -2636,6 +2647,11 @@
   <action name="actionCheat_sheet">
    <property name="text">
     <string>Cheat sheet</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About ...</string>
    </property>
   </action>
  </widget>
@@ -2825,8 +2841,8 @@
    <slot>table_right_click()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>580</x>
-     <y>336</y>
+     <x>604</x>
+     <y>189</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2841,7 +2857,7 @@
    <slot>run_ndabs_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1330</x>
+     <x>1314</x>
      <y>770</y>
     </hint>
     <hint type="destinationlabel">
@@ -2857,8 +2873,8 @@
    <slot>populate_table_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>580</x>
-     <y>118</y>
+     <x>604</x>
+     <y>130</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2873,7 +2889,7 @@
    <slot>check_plazcek_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1078</x>
+     <x>1070</x>
      <y>654</y>
     </hint>
     <hint type="destinationlabel">
@@ -2889,7 +2905,7 @@
    <slot>check_plazcek_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1160</x>
+     <x>1152</x>
      <y>654</y>
     </hint>
     <hint type="destinationlabel">
@@ -2905,7 +2921,7 @@
    <slot>hidrogen_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1198</x>
+     <x>1185</x>
      <y>625</y>
     </hint>
     <hint type="destinationlabel">
@@ -2921,7 +2937,7 @@
    <slot>no_hidrogen_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1318</x>
+     <x>1302</x>
      <y>625</y>
     </hint>
     <hint type="destinationlabel">
@@ -2937,7 +2953,7 @@
    <slot>check_fourier_filter_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>733</x>
+     <x>691</x>
      <y>640</y>
     </hint>
     <hint type="destinationlabel">
@@ -2953,7 +2969,7 @@
    <slot>check_fourier_filter_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>919</x>
+     <x>873</x>
      <y>640</y>
     </hint>
     <hint type="destinationlabel">
@@ -2985,7 +3001,7 @@
    <slot>background_combobox_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>294</x>
+     <x>344</x>
      <y>655</y>
     </hint>
     <hint type="destinationlabel">
@@ -3017,8 +3033,8 @@
    <slot>check_step2_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>648</x>
-     <y>333</y>
+     <x>672</x>
+     <y>189</y>
     </hint>
     <hint type="destinationlabel">
      <x>656</x>
@@ -3081,12 +3097,12 @@
    <slot>run_sum_scans_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1217</x>
+     <x>1201</x>
      <y>770</y>
     </hint>
     <hint type="destinationlabel">
      <x>1194</x>
-     <y>1007</y>
+     <y>903</y>
     </hint>
    </hints>
   </connection>
@@ -3118,7 +3134,39 @@
     </hint>
     <hint type="destinationlabel">
      <x>594</x>
-     <y>-2</y>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>manual_output_folder_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>manual_output_folder_button_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1120</x>
+     <y>727</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1340</x>
+     <y>825</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAbout</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>help_about_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>673</x>
+     <y>451</y>
     </hint>
    </hints>
   </connection>
@@ -3149,5 +3197,7 @@
   <slot>run_sum_scans_clicked()</slot>
   <slot>browse_ascii_file_clicked()</slot>
   <slot>select_current_folder_clicked()</slot>
+  <slot>manual_output_folder_button_clicked()</slot>
+  <slot>help_about_clicked()</slot>
  </slots>
 </ui>

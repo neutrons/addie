@@ -49,6 +49,8 @@ class PopulateMasterTable(object):
         #remove first line (background)
         self._data_from_file = _data_table[1:]
 
+        print("[LOG] Read auto_sum_file (%s)" %_full_auto_sum_file_name)
+
     def populate_table(self):
         
         _index = 0
@@ -65,6 +67,8 @@ class PopulateMasterTable(object):
                 
             self.add_new_row(_metadata, row=_index)
             _index += 1
+            
+        print("[LOG] Populated table")
                 
     def add_new_row(self, _metadata, row=0):
         

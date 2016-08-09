@@ -13,6 +13,7 @@ class RunStep1(object):
     
     def __init__(self, parent=None):
         self.parent = parent.ui
+        self.parent_no_ui = parent
         
     def create_folder(self):
         self._current_path = os.getcwd()
@@ -26,7 +27,7 @@ class RunStep1(object):
         if self.keep_running_status is False:
             return
         
-        _make_exp = MakeExpIniFileAndRunAutonom(parent=self.parent, folder = self.folder)
+        _make_exp = MakeExpIniFileAndRunAutonom(parent=self.parent_no_ui, folder = self.folder)
         _make_exp.create()    
         _make_exp.run_autonom()
     

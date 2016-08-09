@@ -1,4 +1,5 @@
 import os
+from fastgr.step1_handler.step1_gui_handler import Step1GuiHandler
 
 
 class MakeExpIniFileAndRunAutonom(object):
@@ -15,7 +16,8 @@ class MakeExpIniFileAndRunAutonom(object):
     script_to_run = "python ~zjn/pytest/autoNOM.py &"
     
     def __init__(self, parent=None, folder=None):
-        self.parent = parent
+        self.parent_no_ui = parent
+        self.parent = parent.ui
         self.folder = folder
         
     def create(self):
@@ -89,7 +91,10 @@ class MakeExpIniFileAndRunAutonom(object):
     def run_auto_nom_script(self):
         _script_to_run = self.script_to_run
         os.chdir(self.folder)
-        self.parent.current_folder_label.setText(self.folder)
+        
+        o_gui = Step1GuiHandler(parent = self.parent_no_ui)
+        o_gui.set_main_window_title()
+        
         print("[LOG] running script:")
         print("[LOG] " + _script_to_run)
         os.system(_script_to_run)
