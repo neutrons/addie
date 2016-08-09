@@ -74,7 +74,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -2622,6 +2622,7 @@
      <string>Help</string>
     </property>
     <addaction name="actionCheat_sheet"/>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -2646,6 +2647,11 @@
   <action name="actionCheat_sheet">
    <property name="text">
     <string>Cheat sheet</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About ...</string>
    </property>
   </action>
  </widget>
@@ -2835,8 +2841,8 @@
    <slot>table_right_click()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>592</x>
-     <y>78</y>
+     <x>604</x>
+     <y>189</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2851,8 +2857,8 @@
    <slot>run_ndabs_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>131</x>
-     <y>120</y>
+     <x>1314</x>
+     <y>770</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2867,8 +2873,8 @@
    <slot>populate_table_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>592</x>
-     <y>75</y>
+     <x>604</x>
+     <y>130</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2883,8 +2889,8 @@
    <slot>check_plazcek_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>81</x>
-     <y>114</y>
+     <x>1070</x>
+     <y>654</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2899,8 +2905,8 @@
    <slot>check_plazcek_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>81</x>
-     <y>114</y>
+     <x>1152</x>
+     <y>654</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2915,8 +2921,8 @@
    <slot>hidrogen_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>131</x>
-     <y>114</y>
+     <x>1185</x>
+     <y>625</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2931,8 +2937,8 @@
    <slot>no_hidrogen_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>131</x>
-     <y>114</y>
+     <x>1302</x>
+     <y>625</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2947,8 +2953,8 @@
    <slot>check_fourier_filter_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>131</x>
-     <y>114</y>
+     <x>691</x>
+     <y>640</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2963,8 +2969,8 @@
    <slot>check_fourier_filter_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>131</x>
-     <y>114</y>
+     <x>873</x>
+     <y>640</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2979,8 +2985,8 @@
    <slot>yes_background_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>100</x>
-     <y>114</y>
+     <x>88</x>
+     <y>654</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2995,8 +3001,8 @@
    <slot>background_combobox_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>281</x>
-     <y>114</y>
+     <x>344</x>
+     <y>655</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -3027,8 +3033,8 @@
    <slot>check_step2_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>660</x>
-     <y>78</y>
+     <x>672</x>
+     <y>189</y>
     </hint>
     <hint type="destinationlabel">
      <x>656</x>
@@ -3043,8 +3049,8 @@
    <slot>reset_q_range()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>131</x>
-     <y>117</y>
+     <x>402</x>
+     <y>726</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -3059,8 +3065,8 @@
    <slot>check_q_range()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>111</x>
-     <y>117</y>
+     <x>163</x>
+     <y>724</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -3075,8 +3081,8 @@
    <slot>check_q_range()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>111</x>
-     <y>117</y>
+     <x>305</x>
+     <y>724</y>
     </hint>
     <hint type="destinationlabel">
      <x>6</x>
@@ -3091,8 +3097,8 @@
    <slot>run_sum_scans_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>131</x>
-     <y>120</y>
+     <x>1201</x>
+     <y>770</y>
     </hint>
     <hint type="destinationlabel">
      <x>1194</x>
@@ -3148,6 +3154,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionAbout</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>help_about_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>673</x>
+     <y>451</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>diamond_edited()</slot>
@@ -3176,5 +3198,6 @@
   <slot>browse_ascii_file_clicked()</slot>
   <slot>select_current_folder_clicked()</slot>
   <slot>manual_output_folder_button_clicked()</slot>
+  <slot>help_about_clicked()</slot>
  </slots>
 </ui>

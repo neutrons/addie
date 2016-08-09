@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Tue Aug  9 11:38:00 2016
+# Created: Tue Aug  9 12:58:27 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -1029,16 +1029,19 @@ class Ui_MainWindow(object):
         self.actionQuit.setObjectName(_fromUtf8("actionQuit"))
         self.actionCheat_sheet = QtGui.QAction(MainWindow)
         self.actionCheat_sheet.setObjectName(_fromUtf8("actionCheat_sheet"))
+        self.actionAbout = QtGui.QAction(MainWindow)
+        self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
         self.menuFile.addAction(self.actionQuit)
         self.menuEdit.addAction(self.actionReset_GSAS_tab)
         self.menuEdit.addAction(self.actionReset_GofR_tab)
         self.menuHelp.addAction(self.actionCheat_sheet)
+        self.menuHelp.addAction(self.actionAbout)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuEdit.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget_2.setCurrentIndex(0)
+        self.tabWidget_2.setCurrentIndex(1)
         QtCore.QObject.connect(self.diamond, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_edited)
         QtCore.QObject.connect(self.diamond_background, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_background_edited)
         QtCore.QObject.connect(self.vanadium, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.vanadium_edited)
@@ -1068,6 +1071,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.browse_ascii_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.browse_ascii_file_clicked)
         QtCore.QObject.connect(self.select_current_folder_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.select_current_folder_clicked)
         QtCore.QObject.connect(self.manual_output_folder_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.manual_output_folder_button_clicked)
+        QtCore.QObject.connect(self.actionAbout, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.help_about_clicked)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -1217,6 +1221,7 @@ class Ui_MainWindow(object):
         self.actionReset_GofR_tab.setText(_translate("MainWindow", "Reset GofR-tab", None))
         self.actionQuit.setText(_translate("MainWindow", "Quit", None))
         self.actionCheat_sheet.setText(_translate("MainWindow", "Cheat sheet", None))
+        self.actionAbout.setText(_translate("MainWindow", "About ...", None))
 
 from graphicviewlib import BraggView, SofQView, GofRView
 from ipythondockwidget import IPythonDockWidget
