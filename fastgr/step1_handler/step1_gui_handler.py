@@ -49,6 +49,7 @@ class Step1GuiHandler(object):
         else:
             status = False
         self.parent.manual_output_folder_field.setEnabled(status)
+        self.parent.manual_output_folder_button.setEnabled(status)
         
     def select_working_folder(self):
         _current_folder = self.parent_no_ui.current_folder
@@ -63,6 +64,23 @@ class Step1GuiHandler(object):
 
             o_auto_populate = AutoPopulateWidgets(parent = self.parent_no_ui)
             o_auto_populate.run()
+            
+    def select_manual_output_folder(self):
+        _current_folder = self.parent_no_ui.current_folder
+        dlg = QtGui.QFileDialog(parent=self.parent_no_ui, 
+                                caption="Select or Define Output Directory")
+        dlg.setFileMode(QtGui.QFileDialog.Directory)
+        if dlg.exec_():
+            output_folder_name = str(dlg.selectedFiles()[0])
+            self.parent.manual_output_folder_field.setText(output_folder_name)
+        
+        
+
+
+
+        
+
+
         
         
         

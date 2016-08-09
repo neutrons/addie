@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Fri Jul 22 15:53:45 2016
+# Created: Tue Aug  9 11:38:00 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(1364, 1028)
+        MainWindow.resize(1348, 904)
         MainWindow.setMinimumSize(QtCore.QSize(300, 0))
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setMinimumSize(QtCore.QSize(0, 0))
@@ -40,7 +40,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
         self.scrollAreaWidgetContents = QtGui.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1342, 966))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1326, 842))
         self.scrollAreaWidgetContents.setMinimumSize(QtCore.QSize(0, 0))
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
         self.verticalLayout_44 = QtGui.QVBoxLayout(self.scrollAreaWidgetContents)
@@ -368,6 +368,10 @@ class Ui_MainWindow(object):
         self.manual_output_folder_field.setEnabled(False)
         self.manual_output_folder_field.setObjectName(_fromUtf8("manual_output_folder_field"))
         self.horizontalLayout_59.addWidget(self.manual_output_folder_field)
+        self.manual_output_folder_button = QtGui.QPushButton(self.groupBox_31)
+        self.manual_output_folder_button.setEnabled(False)
+        self.manual_output_folder_button.setObjectName(_fromUtf8("manual_output_folder_button"))
+        self.horizontalLayout_59.addWidget(self.manual_output_folder_button)
         self.verticalLayout_34.addLayout(self.horizontalLayout_59)
         self.verticalLayout_33.addWidget(self.groupBox_31)
         self.horizontalLayout_58.addLayout(self.verticalLayout_33)
@@ -1000,7 +1004,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.scrollArea)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1364, 20))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1348, 20))
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -1063,6 +1067,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.run_sum_scans_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.run_sum_scans_clicked)
         QtCore.QObject.connect(self.browse_ascii_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.browse_ascii_file_clicked)
         QtCore.QObject.connect(self.select_current_folder_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.select_current_folder_clicked)
+        QtCore.QObject.connect(self.manual_output_folder_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.manual_output_folder_button_clicked)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -1099,6 +1104,7 @@ class Ui_MainWindow(object):
         self.groupBox_31.setTitle(_translate("MainWindow", "Name of Output Folder", None))
         self.auto_manual_folder.setText(_translate("MainWindow", "Automatic (autoNOM_##)", None))
         self.manual_output_folder.setText(_translate("MainWindow", "Manual", None))
+        self.manual_output_folder_button.setText(_translate("MainWindow", "Select ...", None))
         self.run_autonom_script.setText(_translate("MainWindow", "Run autoNOM script", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_5), _translate("MainWindow", "autoNOM", None))
         self.move_to_button.setText(_translate("MainWindow", "Move to Folder and Refresh Table ...", None))
@@ -1212,6 +1218,6 @@ class Ui_MainWindow(object):
         self.actionQuit.setText(_translate("MainWindow", "Quit", None))
         self.actionCheat_sheet.setText(_translate("MainWindow", "Cheat sheet", None))
 
-from fastgr.graphicviewlib import BraggView, SofQView, GofRView
-from fastgr.ipythondockwidget import IPythonDockWidget
-from fastgr.treelib import GofRTree, BraggTree
+from graphicviewlib import BraggView, SofQView, GofRView
+from ipythondockwidget import IPythonDockWidget
+from treelib import GofRTree, BraggTree

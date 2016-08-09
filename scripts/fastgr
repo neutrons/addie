@@ -1038,10 +1038,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         return
 
-# step1
+# tab1
     def select_current_folder_clicked(self):
         o_gui = Step1GuiHandler(parent = self)
         o_gui.select_working_folder()
+        self.check_step1_gui()
 
     def diamond_edited(self):
         self.check_step1_gui()
@@ -1066,6 +1067,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     def manual_output_folder_field_edited(self):
         self.check_step1_gui()
         
+    def manual_output_folder_button_clicked(self):
+        o_gui = Step1GuiHandler(parent = self)
+        o_gui.select_manual_output_folder()
+        self.check_step1_gui()
+        
     def check_step1_gui(self):
         '''check the status of the step1 GUI in order to enable or not the GO BUTTON at the bottom'''
         o_gui_handler = Step1GuiHandler(parent=self)
@@ -1077,7 +1083,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         _run_autonom.create_folder()
         _run_autonom.create_exp_ini_file()
 
-# step2
+# tab2
     def move_to_folder_clicked(self):
         o_gui = Step2GuiHandler(parent = self)
         o_gui.move_to_folder()
