@@ -174,6 +174,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         # some starting value
         self.ui.doubleSpinBoxDelR.setValue(0.01)
 
+        # set a constant item to combobox Sq
+        self.ui.comboBox_SofQ.addItem('All')
+
         return
 
     def do_clear_gr(self):
@@ -206,7 +209,19 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         """
         # get S(Q) workspace
-        sq_ws_name = str(self.ui.comboBox_SofQ.currentText())
+        selected_sq = str(self.ui.comboBox_SofQ.currentText())
+        if selected_sq == 'All':
+            sq_ws_name_list = list()
+            for index in range(self.ui.comboBox_SofQ.count()):
+                item = str(self.ui.comboBox_SofQ.itemText(index))
+                if item != 'All':
+                    # add S(Q) name unless it is 'All'
+                    sq_ws_name_list.append(item)
+                # END-IF
+            # END-FOR
+        else:
+            # selected S(Q) is a single S(Q) name
+            sq_ws_name_list = [selected_sq]
 
         # get r-range and q-range
         min_r = float(self.ui.doubleSpinBoxRmin.value())
@@ -216,21 +231,31 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         min_q = float(self.ui.doubleSpinBoxQmin.value())
         max_q = float(self.ui.doubleSpinBoxQmax.value())
 
+        use_filter = self.ui.checkBox_pdfFilter.isChecked()
+        rho0_str = str(self.ui.lineEdit_rho.text())
+        if rho0_str.isdigit():
+            rho0 = float(rho0_str)
+        else:
+            rho0 = None
+
         # PDF type
         pdf_type = str(self.ui.comboBox_pdfType.currentText())
 
-        # calculate the G(R)
-        gr_ws_name = self._myController.calculate_gr(sq_ws_name, pdf_type, min_r, delta_r, max_r,
-                                                     min_q, max_q)
+        # loop for all selected S(Q)
+        for sq_ws_name in sq_ws_name_list:
+            # calculate G(r)
+            gr_ws_name = self._myController.calculate_gr(sq_ws_name, pdf_type, min_r, delta_r, max_r,
+                                                         min_q, max_q, use_filter, rho0)
 
-        # plot G(R)
-        vec_r, vec_g, vec_ge = self._myController.get_gr(min_q, max_q)
-        key_plot = gr_ws_name
-        self.ui.graphicsView_gr.plot_gr(key_plot, vec_r, vec_g, vec_ge, False)
+            # plot G(R)
+            vec_r, vec_g, vec_ge = self._myController.get_gr(min_q, max_q)
+            key_plot = gr_ws_name
+            self.ui.graphicsView_gr.plot_gr(key_plot, vec_r, vec_g, vec_ge, False)
 
-        # add to tree
-        gr_param_str = 'Q: (%.3f, %.3f)' % (min_q, max_q)
-        self.ui.treeWidget_grWsList.add_gr(gr_param_str, gr_ws_name)
+            # add to tree
+            gr_param_str = 'Q: (%.3f, %.3f)' % (min_q, max_q)
+            self.ui.treeWidget_grWsList.add_gr(gr_param_str, gr_ws_name)
+        # END-FOR
 
         return
 
@@ -255,6 +280,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         self.ui.graphicsView_gr.clear_all_lines()
         self.ui.graphicsView_sq.clear_all_lines()
 
+        # clear the S(Q) combo box
+        self.ui.comboBox_SofQ.clear()
+        self.ui.comboBox_SofQ.addItem('All')
+        
+
         return
 
     def do_reset_gsas_tab(self):
@@ -266,18 +296,36 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         Returns:
         None
         """
-        # delete all workspaces
-        # get GSAS workspaces from tree
-        # TODO/NOW/ISSUE 1 : not supported method: get main nodes names...
-        # gsas_ws_list = self.ui.treeWidget_braggWSList.GET_WORKSPACES()
-        # for workspace in gsas_ws_list:
-        #     self._myController.delete_workspace(workspace)
+        # delete all workspaces: get GSAS workspaces from tree
+        gsas_group_node_list = self.ui.treeWidget_braggWSList.get_main_nodes(output_str=False)
+        for gsas_group_node in gsas_group_node_list:
+            # skip if the workspace is 'workspaces'
+            gss_node_name = str(gsas_group_node.text())
+            if gss_node_name == 'workspaces':
+                continue
+            # get the split workspaces' names and delete
+            gsas_ws_name_list = self.ui.treeWidget_braggWSList.get_child_nodes(gsas_group_node, output_str=True)
+            for workspace in gsas_ws_name_list:
+                self._myController.delete_workspace(workspace)
+            # END-FOR
+
+            # guess for the main workspace and delete
+            gss_main_ws = gss_node_name.split('_group')[0]
+            self._myController.delete_workspace(gss_main_ws, no_throw=True)
+            
+        # END-FOR (gsas_group_node)
 
         # reset the GSAS tree
         self.ui.treeWidget_braggWSList.reset_bragg_tree()
 
         # clear the canvas
         self.ui.graphicsView_bragg.reset()
+
+        # clear the checkboxes for banks
+        self._noEventBankWidgets = True
+        for check_box in self._braggBankWidgets.values():
+            check_box.setChecked(False)
+        self._noEventBankWidgets = False
 
         return
 
@@ -370,7 +418,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         """
         # clear previous lines
         if clear_prev:
-            self.ui.graphicsView_sq.clear_all_lines()
+            self.ui.graphicsView_sq.reset()
 
         # get data
         vec_q, vec_sq, vec_se = self._myController.get_sq(sq_ws_name)
@@ -480,13 +528,16 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         status, ret_obj = self._myController.load_gr(g_file_name)
         if not status:
             err_msg = ret_obj
-            print err_msg
+	    print '[Error]: %s' % err_msg
             return
         else:
             gr_ws_name = ret_obj
 
         # plot
         self.plot_gr([gr_ws_name])
+
+        # put the loaded G(r) workspace to tree 'workspaces'
+        self.ui.treeWidget_grWsList.add_child_main_item('workspaces', gr_ws_name)
 
         return
 
@@ -899,6 +950,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
     def remove_gss_from_plot(self, gss_group_name, gss_bank_ws_name_list):
         """
+        Remove a GSAS group from canvas if they exits
 
         Args:
             gss_group_name: name of the GSS node, i.e., GSS workspace group's name
@@ -921,6 +973,18 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         # remove
         self.ui.graphicsView_bragg.remove_gss_banks(gss_group_name, bank_ids)
 
+        # check if there is no such bank's plot on figure, make sure the checkbox is unselected
+        # turn on the mutex lock
+        self._noEventBankWidgets = True
+
+        for bank_id in range(1, 7):
+            has_plot_on_canvas = len(self.ui.graphicsView_bragg.get_ws_name_on_canvas(bank_id)) > 0
+            self._braggBankWidgets[bank_id].setChecked(has_plot_on_canvas)
+
+        # turn off the mutex lock
+        self._noEventBankWidgets = False
+
+
         return
 
     def remove_sq_from_plot(self, sq_name):
@@ -936,7 +1000,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         assert isinstance(sq_name, str)
 
         # remove
-        self.ui.graphicsView_sq.remove_sq(plot_key=sq_name)
+        if self.ui.graphicsView_sq.is_on_canvas(sq_name):
+            self.ui.graphicsView_sq.remove_sq(plot_key=sq_name)
 
         return
 
@@ -1073,7 +1138,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
     def manual_output_folder_field_edited(self):
         self.check_step1_gui()
-        
+
     def manual_output_folder_button_clicked(self):
         o_gui = Step1GuiHandler(parent = self)
         o_gui.select_manual_output_folder()
