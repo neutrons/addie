@@ -973,7 +973,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         self._noEventBankWidgets = True
 
         for bank_id in range(1, 7):
-            has_plot_on_canvas = len(self.ui.graphicsView_bragg.get_ws_name_on_canvas()) > 0
+            has_plot_on_canvas = len(self.ui.graphicsView_bragg.get_ws_name_on_canvas(bank_id)) > 0
             self._braggBankWidgets[bank_id].setChecked(has_plot_on_canvas)
 
         # turn off the mutex lock
