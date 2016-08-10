@@ -24,6 +24,8 @@ class BraggView(base.MplGraphicsView):
             self._bankPlotDict[bank_id] = list()
         # key: workspace name. value: line ID
         self._gssDict = dict()
+        # dictionary for on-canvas plot Y size
+        self._plotScaleDict = dict()
 
         self._singleGSSMode = True
         self._bankColorDict = {1: 'black',
@@ -167,8 +169,11 @@ class BraggView(base.MplGraphicsView):
                 plot_key = self._generate_plot_key(ws_group, bank_id)
                 self._bankPlotDict[bank_id].append(plot_key)
                 self._gssDict[plot_key] = plot_id
+                self._plotScaleDict[plot_id] = (min(vec_y), max(vec_y))
             # END-FOR (bank id)
         # END-FOR (ws_group)
+
+        self.scale_auto()
 
         return
 
@@ -189,8 +194,13 @@ class BraggView(base.MplGraphicsView):
         # register
         self._workspaceSet.add(bragg_ws_name)
 
+        # plot
         plot_id = self.add_plot_1d(vec_x, vec_y, marker='.', color='black',
                                    label=bragg_ws_name)
+        self._plotScaleDict[plot_id] = (min(vec_y), max(vec_y))
+
+        # scale the plot automatically
+        self.scale_auto()
 
         return
 
@@ -232,8 +242,12 @@ class BraggView(base.MplGraphicsView):
                 raise ValueError(error_message)
             # remove from data structure
             del self._gssDict[plot_key]
+            del self._plotScaleDict[bank_line_id]
             self._bankPlotDict[bank_id].remove(plot_key)
         # END-FOR
+
+        # scale automatically
+        self.scale_auto()
 
         # debug output
         db_buf = ''
@@ -254,12 +268,35 @@ class BraggView(base.MplGraphicsView):
         for bank_id in self._bankPlotDict.keys():
             self._bankPlotDict[bank_id] = list()
         self._gssDict.clear()
+        self._plotScaleDict.clear()
 
         # clear the workspace record
         self._workspaceSet.clear()
 
         # clear all lines
         self.clear_all_lines()
+
+        return
+
+    def scale_auto(self):
+        """ Scale automatically for the plots on the canvas
+        Args:
+
+        Returns: None
+
+        """
+        # get Y min and Y max
+        y_min = 0
+        y_max = 0
+        for plot_id in self._plotScaleDict.keys():
+            if self._plotScaleDict[plot_id][1] > y_max:
+                y_max = self._plotScaleDict[plot_id][1]
+
+        # determine the canvas Y list
+        upper_y = y_max * 1.05
+
+        # set limit
+        self.setXYLimit(ymin=y_min, ymax=upper_y)
 
         return
 
