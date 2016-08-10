@@ -439,7 +439,7 @@ class SofQView(base.MplGraphicsView):
 
         self._mainApp = None
 
-        # dictionary to record all the plots, key usually is the SofQ's name
+        # dictionary to record all the plots, key: (usually) SofQ's name, value: plot ID
         self._sqLineDict = dict()
 
         # link signal
@@ -463,6 +463,22 @@ class SofQView(base.MplGraphicsView):
 
         """
         return self._showBoundary
+
+    def is_on_canvas(self, sq_name):
+        """
+        check whether an S(Q) is on canvas now
+        Args:
+            sq_name:
+
+        Returns: boolean. True if on canvas; Otherwise False
+
+        """
+        # check input
+        assert isinstance(sq_name, str), 'SofQ name %s must be a string but not of type %s.' \
+                                         '' % (str(sq_name), str(type(sq_name)))
+
+        # return
+        return sq_name in self._sqLineDict
 
     def move_left_indicator(self, displacement, relative):
         """

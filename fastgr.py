@@ -211,6 +211,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         # get S(Q) workspace
         selected_sq = str(self.ui.comboBox_SofQ.currentText())
         if selected_sq == 'All':
+            sq_ws_name_list = list()
             for index in range(self.ui.comboBox_SofQ.count()):
                 item = str(self.ui.comboBox_SofQ.itemText(index))
                 if item != 'All':
@@ -230,7 +231,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         min_q = float(self.ui.doubleSpinBoxQmin.value())
         max_q = float(self.ui.doubleSpinBoxQmax.value())
 
-        use_filter = self.ui.checkbox_pdfFilter.isChecked()
+        use_filter = self.ui.checkBox_pdfFilter.isChecked()
         rho0_str = str(self.ui.lineEdit_rho.text())
         if rho0_str.isdigit():
             rho0 = float(rho0_str)
@@ -413,7 +414,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         """
         # clear previous lines
         if clear_prev:
-            self.ui.graphicsView_sq.clear_all_lines()
+            self.ui.graphicsView_sq.reset()
 
         # get data
         vec_q, vec_sq, vec_se = self._myController.get_sq(sq_ws_name)
@@ -995,7 +996,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         assert isinstance(sq_name, str)
 
         # remove
-        self.ui.graphicsView_sq.remove_sq(plot_key=sq_name)
+        if self.ui.graphicsView_sq.is_on_canvas(sq_name):
+            self.ui.graphicsView_sq.remove_sq(plot_key=sq_name)
 
         return
 
