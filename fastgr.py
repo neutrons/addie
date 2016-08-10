@@ -282,7 +282,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         # clear the S(Q) combo box
         self.ui.comboBox_SofQ.clear()
-        self.ui.comboGox_SofQ.addItem('All')
+        self.ui.comboBox_SofQ.addItem('All')
         
 
         return
@@ -299,6 +299,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         # delete all workspaces: get GSAS workspaces from tree
         gsas_group_node_list = self.ui.treeWidget_braggWSList.get_main_nodes(output_str=False)
         for gsas_group_node in gsas_group_node_list:
+            # skip if the workspace is 'workspaces'
+            gss_node_name = str(gsas_group_node.text())
+            if gss_node_name == 'workspaces':
+                continue
             # get the split workspaces' names and delete
             gsas_ws_name_list = self.ui.treeWidget_braggWSList.get_child_nodes(gsas_group_node, output_str=True)
             for workspace in gsas_ws_name_list:
@@ -306,8 +310,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
             # END-FOR
 
             # guess for the main workspace and delete
-            gss_main_ws = str(gsas_group_node.text()).split('_group')
-            self._myController.delete_workspace(workspace, no_throw=True)
+            gss_main_ws = gss_node_name.split('_group')[0]
+            self._myController.delete_workspace(gss_main_ws, no_throw=True)
             
         # END-FOR (gsas_group_node)
 
