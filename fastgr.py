@@ -174,6 +174,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         # some starting value
         self.ui.doubleSpinBoxDelR.setValue(0.01)
 
+        # set a constant item to combobox Sq
+        self.ui.comboBox_SofQ.addItem('All')
+
         return
 
     def do_clear_gr(self):
@@ -206,7 +209,18 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         """
         # get S(Q) workspace
-        sq_ws_name = str(self.ui.comboBox_SofQ.currentText())
+        selected_sq = str(self.ui.comboBox_SofQ.currentText())
+        if selected_sq == 'All':
+            for index in range(self.ui.comboBox_SofQ.count()):
+                item = str(self.ui.comboBox_SofQ.itemText(index))
+                if item != 'All':
+                    # add S(Q) name unless it is 'All'
+                    sq_ws_name_list.append(item)
+                # END-IF
+            # END-FOR
+        else:
+            # selected S(Q) is a single S(Q) name
+            sq_ws_name_list = [selected_sq]
 
         # get r-range and q-range
         min_r = float(self.ui.doubleSpinBoxRmin.value())
@@ -219,18 +233,21 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         # PDF type
         pdf_type = str(self.ui.comboBox_pdfType.currentText())
 
-        # calculate the G(R)
-        gr_ws_name = self._myController.calculate_gr(sq_ws_name, pdf_type, min_r, delta_r, max_r,
-                                                     min_q, max_q)
+        # loop for all selected S(Q)
+        for sq_ws_name in sq_ws_name_list:
+            # calculate G(r)
+            gr_ws_name = self._myController.calculate_gr(sq_ws_name, pdf_type, min_r, delta_r, max_r,
+                                                         min_q, max_q)
 
-        # plot G(R)
-        vec_r, vec_g, vec_ge = self._myController.get_gr(min_q, max_q)
-        key_plot = gr_ws_name
-        self.ui.graphicsView_gr.plot_gr(key_plot, vec_r, vec_g, vec_ge, False)
+            # plot G(R)
+            vec_r, vec_g, vec_ge = self._myController.get_gr(min_q, max_q)
+            key_plot = gr_ws_name
+            self.ui.graphicsView_gr.plot_gr(key_plot, vec_r, vec_g, vec_ge, False)
 
-        # add to tree
-        gr_param_str = 'Q: (%.3f, %.3f)' % (min_q, max_q)
-        self.ui.treeWidget_grWsList.add_gr(gr_param_str, gr_ws_name)
+            # add to tree
+            gr_param_str = 'Q: (%.3f, %.3f)' % (min_q, max_q)
+            self.ui.treeWidget_grWsList.add_gr(gr_param_str, gr_ws_name)
+        # END-FOR
 
         return
 
@@ -254,6 +271,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         # clear all the canvas
         self.ui.graphicsView_gr.clear_all_lines()
         self.ui.graphicsView_sq.clear_all_lines()
+
+        # clear the S(Q) combo box
+        self.ui.comboBox_SofQ.clear()
+        self.ui.comboGox_SofQ.addItem('All')
+        
 
         return
 
