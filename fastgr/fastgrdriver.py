@@ -35,7 +35,7 @@ class FastGRDriver(object):
 
         return
 
-    def calculate_gr(self, sq_ws_name, pdf_type, min_r, delta_r, max_r, min_q, max_q):
+    def calculate_gr(self, sq_ws_name, pdf_type, min_r, delta_r, max_r, min_q, max_q, use_filter, rho0):
         """
         Calculate G(R)
         Parameters
@@ -47,6 +47,8 @@ class FastGRDriver(object):
         max_r
         min_q
         max_q
+        use_filter :: turn on the PDF filter
+        rho0 :: average number density used for g(r) and RDF(r) conversions
 
         Returns
         -------
@@ -61,6 +63,9 @@ class FastGRDriver(object):
                                           '' % (delta_r, (max_r - min_r))
 
         assert min_q < max_q, 'Qmin must be less than Qmax (%f >= %f)' % (min_q, max_q)
+        assert isinstance(use_filter, bool)
+        assert isinstance(rho0, float) or rho0 is None, 'rho0 must be either None or a float but not a %s.' \
+                                                        '' % str(type(rho0))
 
         # set to the current S(q) workspace name
         self._currSqWsName = sq_ws_name
@@ -79,7 +84,10 @@ class FastGRDriver(object):
                   'Qmax': max_q,
                   'PDFType': pdf_type,
                   'DeltaR': delta_r,
-                  'Rmax': max_r}
+                  'Rmax': max_r,
+                  'Filter': use_filter}
+        if rho0 is not None:
+            kwargs['rho0'] = rho0
 
         # get the input unit
         sq_ws = AnalysisDataService.retrieve(self._currSqWsName)

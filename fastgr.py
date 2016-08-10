@@ -230,6 +230,13 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         min_q = float(self.ui.doubleSpinBoxQmin.value())
         max_q = float(self.ui.doubleSpinBoxQmax.value())
 
+        use_filter = self.ui.checkbox_pdfFilter.isChecked()
+        rho0_str = str(self.ui.lineEdit_rho.text())
+        if rho0_str.isdigit():
+            rho0 = float(rho0_str)
+        else:
+            rho0 = None
+
         # PDF type
         pdf_type = str(self.ui.comboBox_pdfType.currentText())
 
@@ -237,7 +244,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         for sq_ws_name in sq_ws_name_list:
             # calculate G(r)
             gr_ws_name = self._myController.calculate_gr(sq_ws_name, pdf_type, min_r, delta_r, max_r,
-                                                         min_q, max_q)
+                                                         min_q, max_q, use_filter, rho0)
 
             # plot G(R)
             vec_r, vec_g, vec_ge = self._myController.get_gr(min_q, max_q)

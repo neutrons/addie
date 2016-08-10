@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
+# Form implementation generated from reading ui file 'ui_mainWindow.ui'
 #
-# Created: Tue Aug  9 12:58:27 2016
-#      by: PyQt4 UI code generator 4.10.1
+# Created: Wed Aug 10 10:18:56 2016
+#      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -40,7 +40,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
         self.scrollAreaWidgetContents = QtGui.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1326, 842))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1307, 844))
         self.scrollAreaWidgetContents.setMinimumSize(QtCore.QSize(0, 0))
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
         self.verticalLayout_44 = QtGui.QVBoxLayout(self.scrollAreaWidgetContents)
@@ -894,6 +894,17 @@ class Ui_MainWindow(object):
         self.verticalLayout_42.addWidget(self.radioButton_qsqm1)
         self.gridLayout_18 = QtGui.QGridLayout()
         self.gridLayout_18.setObjectName(_fromUtf8("gridLayout_18"))
+        self.lineEdit_rho = QtGui.QLineEdit(self.tab_gR)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lineEdit_rho.sizePolicy().hasHeightForWidth())
+        self.lineEdit_rho.setSizePolicy(sizePolicy)
+        self.lineEdit_rho.setObjectName(_fromUtf8("lineEdit_rho"))
+        self.gridLayout_18.addWidget(self.lineEdit_rho, 5, 1, 1, 1)
+        self.label_4 = QtGui.QLabel(self.tab_gR)
+        self.label_4.setObjectName(_fromUtf8("label_4"))
+        self.gridLayout_18.addWidget(self.label_4, 5, 0, 1, 1)
         self.comboBox_pdfType = QtGui.QComboBox(self.tab_gR)
         self.comboBox_pdfType.setObjectName(_fromUtf8("comboBox_pdfType"))
         self.gridLayout_18.addWidget(self.comboBox_pdfType, 3, 1, 1, 1)
@@ -921,6 +932,13 @@ class Ui_MainWindow(object):
         self.label_3 = QtGui.QLabel(self.tab_gR)
         self.label_3.setObjectName(_fromUtf8("label_3"))
         self.gridLayout_18.addWidget(self.label_3, 3, 0, 1, 1)
+        self.label_5 = QtGui.QLabel(self.tab_gR)
+        self.label_5.setObjectName(_fromUtf8("label_5"))
+        self.gridLayout_18.addWidget(self.label_5, 4, 0, 1, 1)
+        self.checkBox_pdfFilter = QtGui.QCheckBox(self.tab_gR)
+        self.checkBox_pdfFilter.setText(_fromUtf8(""))
+        self.checkBox_pdfFilter.setObjectName(_fromUtf8("checkBox_pdfFilter"))
+        self.gridLayout_18.addWidget(self.checkBox_pdfFilter, 4, 1, 1, 1)
         self.verticalLayout_42.addLayout(self.gridLayout_18)
         self.comboBox_SofQ = QtGui.QComboBox(self.tab_gR)
         self.comboBox_SofQ.setObjectName(_fromUtf8("comboBox_SofQ"))
@@ -1004,7 +1022,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.scrollArea)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1348, 20))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1348, 22))
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -1041,7 +1059,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget_2.setCurrentIndex(1)
+        self.tabWidget_2.setCurrentIndex(0)
         QtCore.QObject.connect(self.diamond, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_edited)
         QtCore.QObject.connect(self.diamond_background, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_background_edited)
         QtCore.QObject.connect(self.vanadium, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.vanadium_edited)
@@ -1199,11 +1217,13 @@ class Ui_MainWindow(object):
         self.radioButton_sq.setText(_translate("MainWindow", "S(Q)", None))
         self.radioButton_sqm1.setText(_translate("MainWindow", "S(Q)-1", None))
         self.radioButton_qsqm1.setText(_translate("MainWindow", "Q[S(Q)-1]", None))
+        self.label_4.setText(_translate("MainWindow", "rho0", None))
         self.labelQmax.setText(_translate("MainWindow", "Qmax", None))
         self.labelQmin.setText(_translate("MainWindow", "Qmin", None))
         self.pushButton_showQMinMax.setToolTip(_translate("MainWindow", "<html><head/><body><p>Show or hide the vertical indicators for Qmin and Qmax</p></body></html>", None))
         self.pushButton_showQMinMax.setText(_translate("MainWindow", "Show Min/Max", None))
         self.label_3.setText(_translate("MainWindow", "PDF Type", None))
+        self.label_5.setText(_translate("MainWindow", "Filter", None))
         self.pushButton_generateGR.setText(_translate("MainWindow", "Generate GR", None))
         self.pushButton_clearSofQ.setText(_translate("MainWindow", "Clear S(Q) Canvas", None))
         self.pushButton_loadGofR.setText(_translate("MainWindow", "Load G(r)", None))
