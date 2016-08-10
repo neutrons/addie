@@ -5,10 +5,6 @@ from PyQt4 import QtCore
 import mplgraphicsview as base
 
 
-#
-# FIXME - _bankPlotDict should be reviewed.  It is only designed for plotting one GSAS file
-#
-
 class BraggView(base.MplGraphicsView):
     """ Graphics view for Bragg diffraction
     """
@@ -28,6 +24,8 @@ class BraggView(base.MplGraphicsView):
             self._bankPlotDict[bank_id] = list()
         # key: workspace name. value: line ID
         self._gssDict = dict()
+        # dictionary for on-canvas plot Y size
+        self._plotScaleDict = dict()
 
         self._singleGSSMode = True
         self._bankColorDict = {1: 'black',
@@ -75,6 +73,23 @@ class BraggView(base.MplGraphicsView):
         # END-FOR (bank_id)
 
         return new_plot_banks, to_remove_banks
+
+    def get_ws_name_on_canvas(self, bank_id):
+        """
+        Get workspace' names on canvas according to its bank ID
+        Args:
+            bank_id: bank ID, integer between 1 and 6
+
+        Returns: a list of workspace' names
+
+        """
+        # check input requirements
+        assert isinstance(bank_id, int), 'Bank ID %s must be an integer but not %s.' \
+                                         '' % (str(bank_id), str(type(bank_id)))
+        assert 1 <= bank_id <= 6, 'Bank ID %d must be in [1, 6].' % bank_id
+
+        # return
+        return self._bankPlotDict[bank_id]
 
     def get_multi_gss_color(self):
         """
@@ -154,8 +169,11 @@ class BraggView(base.MplGraphicsView):
                 plot_key = self._generate_plot_key(ws_group, bank_id)
                 self._bankPlotDict[bank_id].append(plot_key)
                 self._gssDict[plot_key] = plot_id
+                self._plotScaleDict[plot_id] = (min(vec_y), max(vec_y))
             # END-FOR (bank id)
         # END-FOR (ws_group)
+
+        self.scale_auto()
 
         return
 
@@ -176,8 +194,13 @@ class BraggView(base.MplGraphicsView):
         # register
         self._workspaceSet.add(bragg_ws_name)
 
+        # plot
         plot_id = self.add_plot_1d(vec_x, vec_y, marker='.', color='black',
                                    label=bragg_ws_name)
+        self._plotScaleDict[plot_id] = (min(vec_y), max(vec_y))
+
+        # scale the plot automatically
+        self.scale_auto()
 
         return
 
@@ -219,8 +242,12 @@ class BraggView(base.MplGraphicsView):
                 raise ValueError(error_message)
             # remove from data structure
             del self._gssDict[plot_key]
+            del self._plotScaleDict[bank_line_id]
             self._bankPlotDict[bank_id].remove(plot_key)
         # END-FOR
+
+        # scale automatically
+        self.scale_auto()
 
         # debug output
         db_buf = ''
@@ -241,12 +268,35 @@ class BraggView(base.MplGraphicsView):
         for bank_id in self._bankPlotDict.keys():
             self._bankPlotDict[bank_id] = list()
         self._gssDict.clear()
+        self._plotScaleDict.clear()
 
         # clear the workspace record
         self._workspaceSet.clear()
 
         # clear all lines
         self.clear_all_lines()
+
+        return
+
+    def scale_auto(self):
+        """ Scale automatically for the plots on the canvas
+        Args:
+
+        Returns: None
+
+        """
+        # get Y min and Y max
+        y_min = 0
+        y_max = 0
+        for plot_id in self._plotScaleDict.keys():
+            if self._plotScaleDict[plot_id][1] > y_max:
+                y_max = self._plotScaleDict[plot_id][1]
+
+        # determine the canvas Y list
+        upper_y = y_max * 1.05
+
+        # set limit
+        self.setXYLimit(ymin=y_min, ymax=upper_y)
 
         return
 
@@ -389,7 +439,7 @@ class SofQView(base.MplGraphicsView):
 
         self._mainApp = None
 
-        # dictionary to record all the plots, key usually is the SofQ's name
+        # dictionary to record all the plots, key: (usually) SofQ's name, value: plot ID
         self._sqLineDict = dict()
 
         # link signal
@@ -413,6 +463,22 @@ class SofQView(base.MplGraphicsView):
 
         """
         return self._showBoundary
+
+    def is_on_canvas(self, sq_name):
+        """
+        check whether an S(Q) is on canvas now
+        Args:
+            sq_name:
+
+        Returns: boolean. True if on canvas; Otherwise False
+
+        """
+        # check input
+        assert isinstance(sq_name, str), 'SofQ name %s must be a string but not of type %s.' \
+                                         '' % (str(sq_name), str(type(sq_name)))
+
+        # return
+        return sq_name in self._sqLineDict
 
     def move_left_indicator(self, displacement, relative):
         """

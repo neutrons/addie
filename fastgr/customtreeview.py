@@ -8,12 +8,11 @@ from PyQt4 import QtGui, QtCore
 
 
 class CustomizedTreeView(QtGui.QTreeView):
-    """
+    """ Customized TreeView for data management
     """
     def __init__(self, parent=None):
-        """
-
-        :param parent:
+        """ Initialization
+        :param parent: parent window
         :return:
         """
         QtGui.QTreeView.__init__(self, parent)
@@ -22,32 +21,11 @@ class CustomizedTreeView(QtGui.QTreeView):
         # Enabled to select multiple items with shift key
         self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
 
-        # Set up model
-        # self._myNumCols = 1
-        # model = QtGui.QStandardItemModel()
-        # model.setColumnCount(self._myNumCols)
-        # self.setModel(model)
-
-        # Set up tree
-        # ... ... self.setDragEnabled(True)
-        # ... ... self.setColumnWidth(0, 90)
-        # ... ... self.setColumnWidth(1, 60)
-
-        # Add action menu: to use right mouse operation for pop-up sub menu
-        """
-        action_del = QtGui.QAction('Delete', self)
-        action_del.triggered.connect(self.do_delete_leaf)
-        self.addAction(action_del)
-
-        action_info = QtGui.QAction('Info', self)
-        action_info.triggered.connect(self.do_show_info)
-        self.addAction(action_info)
-        """
-
         self.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
 
         # Data structure to control the items
-        self._leafDict = dict()  # dictionary for each leaf and its child. key is string only!
+        self._leafDict = dict()  # dictionary for the name each leaf and its child. key is string only!
+        self._mainNodeDict = dict() # dictionary for each main node
         self._myHeaderList = list()
         self._childrenInOrder = True
 
@@ -73,6 +51,7 @@ class CustomizedTreeView(QtGui.QTreeView):
             # top main item: remove the item and delete from the leaf dictionary
             self.model().removeRows(row_number, 1)
             del self._leafDict[node_value]
+            del self._mainNodeDict[node_value]
         else:
             # it is a child
             parent_index = self.model().indexFromItem(the_parent)
@@ -101,39 +80,6 @@ class CustomizedTreeView(QtGui.QTreeView):
             header = header_list[i_col]
             self.model().setHeaderData(0, QtCore.Qt.Horizontal, header)
         self._myHeaderList = header_list[:]
-
-        return
-
-    def do_delete_leaf(self):
-        """
-        Delete a run under an IPTS from tree
-        :return:
-        """
-        # Get current item
-        current_index = self.currentIndex()
-        assert(isinstance(current_index, QtCore.QModelIndex))
-        current_item = self.model().itemFromIndex(current_index)
-        assert(isinstance(current_item, QtGui.QStandardItem))
-        row_number = current_index.row()
-        current_value = str(current_item.text())
-
-        the_parent = current_item.parent()
-        if the_parent is None:
-            # top main item
-            self.model().removeRows(row_number, 1)
-            children = self._leafDict.pop(current_value)
-            print '[INFO] Remove leaf %s with children %s.' % (current_value, str(children))
-        else:
-            # it is a child
-            parent_index = self.model().indexFromItem(the_parent)
-            self.model().removeRows(row_number, 1, parent_index)
-            parent_value = str(the_parent.text())
-
-            if self._leafDict.has_key(parent_value):
-                self._leafDict[parent_value].remove(current_value)
-                print '[INFO] Remove child %s from leaf %s.' % (current_value, parent_value)
-            else:
-                print '[INFO] Remove child %s from non-leaf parent %s.' % (current_value, parent_value)
 
         return
 
@@ -168,22 +114,24 @@ class CustomizedTreeView(QtGui.QTreeView):
     def add_main_item(self, item_value, append, as_current_index):
         """
         Append a new main leaf item to
-        :param item_value:
-        :param append:
+        :param item_value: value or name of the node
+        :param append: appending mode?
         :param as_current_index: if it is set to true, then the newly added main node is set to be current
         :return: If true, then append new item; otherwise, insert in increasing order
         """
-        # Check
-        assert(isinstance(item_value, str))
+        # Check requirements
+        assert isinstance(item_value, str), 'Item value (i.e., node name) %s must be an integer but not' \
+                                            '%s.' % (str(item_value), str(type(item_value)))
+        assert isinstance(append, bool), 'Parameter append must be a boolean but not %s.' % str(type(bool))
 
+        # whether the main node with the same value exists. It is a key!
         if self._leafDict.has_key(item_value) is True:
             return False, 'Item %s has been in Tree already.' % str(item_value)
-        assert(isinstance(append, bool))
 
-        # Create QStandardItem and add to data manager
-        # new_item = QtGui.QStandardItem(QtCore.QString(item_value))
-        new_item = QtGui.QStandardItem(str(item_value))
+        # Create QStandardItem and add to data manager))
+        main_node_item = QtGui.QStandardItem(str(item_value))
         self._leafDict[item_value] = []
+        self._mainNodeDict[item_value] = main_node_item
 
         # Get current number of row
         model = self.model()
@@ -191,13 +139,13 @@ class CustomizedTreeView(QtGui.QTreeView):
         if append is True:
             # append
             num_rows = self.model().rowCount()
-            model.setItem(num_rows, 0, new_item)
+            model.setItem(num_rows, 0, main_node_item)
         else:
             # insert
             leaf_value_list = sorted(self._leafDict.keys())
             try:
                 row_number = leaf_value_list.index(item_value)
-                model.insertRow(row_number, [new_item])
+                model.insertRow(row_number, [main_node_item])
             except ValueError as e:
                 raise RuntimeError('Impossible to have a ValueError as %s' % str(e))
 
@@ -232,39 +180,42 @@ class CustomizedTreeView(QtGui.QTreeView):
         return
 
     def add_child_main_item(self, main_item_value, child_value):
-        """ Add a child with main item
-        :return:
+        """ Add a child under a main item with given name
+        :return: boolean. True: add the child item successfully. False: unable to add child due to being duplicate.
         """
+        # check requirements on inputs
+        assert isinstance(main_item_value, str), 'Main item value (%s) must be a string but not of type %s.' \
+                                                 '' % (str(main_item_value), str(type(main_item_value)))
+        assert isinstance(child_value, str), 'Child item value (%s) must be a string but not of type %s.' \
+                                             '' % (str(child_value), str(type(child_value)))
+
+        # find the main item value
+        if main_item_value not in self._mainNodeDict:
+            raise KeyError('Main node item %s does not exist in the tree.' % main_item_value)
+
+        # get the model of the tree
         my_model = self.model()
         assert(isinstance(my_model, QtGui.QStandardItemModel))
 
-        leaf_found = False
-        num_rows = my_model.rowCount()
-        # found_item = my_model.findItems(QtCore.QString(main_item_value))
-        my_model.findItems(str(main_item_value))
-
-        for i_row in xrange(num_rows):
-            # Get item per line:
-            temp_item = my_model.item(i_row)
-            assert(isinstance(temp_item, QtGui.QStandardItem))
-
-            # Use text() to match the target value
-            temp_value = str(temp_item.text())
-            if temp_value != main_item_value:
-                continue
-
-            # Add child
-            self._add_child_item(temp_item, child_value, not self._childrenInOrder)
-
-            break
-        # END-FOR
-
-        if leaf_found is False:
+        # check whether the child item (value) has exist
+        if child_value in self._leafDict[main_item_value]:
             return False
+
+        # add the child item to main item
+        main_node_item = self._mainNodeDict[main_item_value]
+        self._add_child_item(main_node_item, child_value, not self._childrenInOrder)
 
         return True
 
     def insert_child_current_item(self, child_value):
+        """
+        Insert a child item to currently selected item
+        Args:
+            child_value:
+
+        Returns:
+
+        """
         current_index = self.currentIndex()
         assert(isinstance(current_index, QtCore.QModelIndex))
         current_row = current_index.row()
@@ -293,6 +244,10 @@ class CustomizedTreeView(QtGui.QTreeView):
 
         # model.clear() removes the header too
         self.model().setHeaderData(0, QtCore.Qt.Horizontal, 'IPTS')
+
+        # clear all the fast access data structure
+        self._mainNodeDict.clear()
+        self._leafDict.clear()
 
         return
 
@@ -335,13 +290,17 @@ class CustomizedTreeView(QtGui.QTreeView):
 
         return
 
-    def get_main_nodes(self):
+    def get_main_nodes(self, output_str=True):
         """
         Get all name of all main nodes
         Returns:
         A list of strings as names of main nodes
         """
-        return self._leafDict.keys()
+        # return with list of main nodes' names
+        if output_str:
+            return self._leafDict.keys()
+
+        return self._mainNodeDict.values()
 
     def get_selected_items(self):
         """

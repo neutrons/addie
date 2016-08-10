@@ -52,8 +52,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1326</width>
-         <height>842</height>
+         <width>1307</width>
+         <height>844</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -74,7 +74,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -2348,6 +2348,23 @@
                 </item>
                 <item>
                  <layout class="QGridLayout" name="gridLayout_18">
+                  <item row="5" column="1">
+                   <widget class="QLineEdit" name="lineEdit_rho">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="0">
+                   <widget class="QLabel" name="label_4">
+                    <property name="text">
+                     <string>rho0</string>
+                    </property>
+                   </widget>
+                  </item>
                   <item row="3" column="1">
                    <widget class="QComboBox" name="comboBox_pdfType"/>
                   </item>
@@ -2405,6 +2422,20 @@
                    <widget class="QLabel" name="label_3">
                     <property name="text">
                      <string>PDF Type</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="0">
+                   <widget class="QLabel" name="label_5">
+                    <property name="text">
+                     <string>Filter</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="1">
+                   <widget class="QCheckBox" name="checkBox_pdfFilter">
+                    <property name="text">
+                     <string/>
                     </property>
                    </widget>
                   </item>
@@ -2595,7 +2626,7 @@
      <x>0</x>
      <y>0</y>
      <width>1348</width>
-     <height>20</height>
+     <height>22</height>
     </rect>
    </property>
    <property name="sizePolicy">
