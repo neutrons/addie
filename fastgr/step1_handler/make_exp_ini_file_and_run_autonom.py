@@ -13,7 +13,8 @@ class MakeExpIniFileAndRunAutonom(object):
     title_optional = 'optional ' + _star
     list_mandatory = ['Dia', 'DiaBg', 'Vana', 'VanaBg', 'MTc']
     list_optional = ['recali', 'renorm', 'autotemp', 'scan1', 'scanl', 'Hz', '#']
-    script_to_run = "python ~zjn/pytest/autoNOM.py &"
+    script_to_run = "python ~zjn/pytest/autoNOM.py "
+    script_flag = ""
     
     def __init__(self, parent=None, folder=None):
         self.parent_no_ui = parent
@@ -23,6 +24,11 @@ class MakeExpIniFileAndRunAutonom(object):
     def create(self):
         self.retrieve_metadata()
         self.create_exp_ini_file()
+        self.retrieve_flags()
+        
+    def retrieve_flags(self):
+        _postprocessing_flag = self.parent.postprocessing_yes.isChecked()
+        self.script_flag += " -p %s" %_postprocessing_flag
 
     def run_autonom(self):
         self.run_auto_nom_script()
@@ -89,7 +95,7 @@ class MakeExpIniFileAndRunAutonom(object):
         print("[LOG] created file %s" %_full_file_name)
         
     def run_auto_nom_script(self):
-        _script_to_run = self.script_to_run
+        _script_to_run = self.script_to_run + self.script_flag + "&"
         os.chdir(self.folder)
         
         o_gui = Step1GuiHandler(parent = self.parent_no_ui)
