@@ -3,6 +3,8 @@ import numpy as np
 from PyQt4.QtCore import Qt
 from PyQt4 import QtGui, QtCore
 from fastgr.step2_handler.populate_master_table import PopulateMasterTable
+from fastgr.step2_handler.export_table import ExportTable
+from fastgr.utilities.file_handler import FileHandler
 
 
 class TableHandler(object):
@@ -133,10 +135,33 @@ class TableHandler(object):
             self._export()
             
     def _import(self):
-        print("import")
+        _current_folder = self.parent_no_ui.current_folder
+        _table_file = QtGui.QFileDialog.getOpenFileName(parent = self.parent_no_ui,
+                                                             caption = "Select File",
+                                                             directory = _current_folder,
+                                                             filter = ("CSV (*.csv);; All Files (*.*)"))
+        if _table_file:
+            new_path = os.path.dirname(_table_file)
+            self.parent_no_ui.current_folder = new_path
+            
+            #FIXME
         
     def _export(self):
-        print("export")
+        _current_folder = self.parent_no_ui.current_folder
+        _table_file = QtGui.QFileDialog.getSaveFileName(parent = self.parent_no_ui,
+                                                             caption = "Select File",
+                                                             directory = _current_folder,
+                                                             filter = ("CSV (*.csv);; All Files (*.*)"))
+        if _table_file:
+            _file_handler = FileHandler(filename = _table_file)
+            _file_handler.check_file_extension(ext_requested='csv')
+            _table_file = _file_handler.filename
+
+            _export_handler = ExportTable(parent = self.parent_no_ui)
+            _export_handler.run()
+
+
+
            
     def _copy(self):
         _selection = self.parent.table.selectedRanges()
