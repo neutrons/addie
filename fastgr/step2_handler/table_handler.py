@@ -2,6 +2,7 @@ import os
 import numpy as np
 from PyQt4.QtCore import Qt
 from PyQt4 import QtGui, QtCore
+from fastgr.step2_handler.populate_master_table import PopulateMasterTable
 
 
 class TableHandler(object):
@@ -102,6 +103,11 @@ class TableHandler(object):
             _refresh_table = menu.addAction("Refresh/Reset Table")
             _clear_table = menu.addAction("Clear Table")
         
+        menu.addSeparator()
+        _import = menu.addAction("Import ...")
+        if(self.parent.table.rowCount() > 0):
+            _export = menu.addAction("Export ...")
+        
         action = menu.exec_(QtGui.QCursor.pos())
         self.current_row = self.current_row()
             
@@ -121,6 +127,16 @@ class TableHandler(object):
             self._refresh_table()
         elif action == _clear_table:
             self._clear_table()
+        elif action == _import:
+            self._import()
+        elif action == _export:
+            self._export()
+            
+    def _import(self):
+        print("import")
+        
+    def _export(self):
+        print("export")
            
     def _copy(self):
         _selection = self.parent.table.selectedRanges()
