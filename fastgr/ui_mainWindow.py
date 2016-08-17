@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Thu Aug 11 14:09:02 2016
+# Created: Wed Aug 17 09:44:28 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -940,11 +940,30 @@ class Ui_MainWindow(object):
         self.pushButton_generateGR = QtGui.QPushButton(self.tab_gR)
         self.pushButton_generateGR.setObjectName(_fromUtf8("pushButton_generateGR"))
         self.verticalLayout_42.addWidget(self.pushButton_generateGR)
+        self.horizontalLayout_6 = QtGui.QHBoxLayout()
+        self.horizontalLayout_6.setObjectName(_fromUtf8("horizontalLayout_6"))
+        self.checkBox_pdfFilter = QtGui.QCheckBox(self.tab_gR)
+        self.checkBox_pdfFilter.setObjectName(_fromUtf8("checkBox_pdfFilter"))
+        self.horizontalLayout_6.addWidget(self.checkBox_pdfFilter)
+        spacerItem25 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
+        self.horizontalLayout_6.addItem(spacerItem25)
+        self.label_4 = QtGui.QLabel(self.tab_gR)
+        self.label_4.setObjectName(_fromUtf8("label_4"))
+        self.horizontalLayout_6.addWidget(self.label_4)
+        self.lineEdit_rho = QtGui.QLineEdit(self.tab_gR)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lineEdit_rho.sizePolicy().hasHeightForWidth())
+        self.lineEdit_rho.setSizePolicy(sizePolicy)
+        self.lineEdit_rho.setObjectName(_fromUtf8("lineEdit_rho"))
+        self.horizontalLayout_6.addWidget(self.lineEdit_rho)
+        self.verticalLayout_42.addLayout(self.horizontalLayout_6)
         self.pushButton_clearSofQ = QtGui.QPushButton(self.tab_gR)
         self.pushButton_clearSofQ.setObjectName(_fromUtf8("pushButton_clearSofQ"))
         self.verticalLayout_42.addWidget(self.pushButton_clearSofQ)
-        spacerItem25 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Preferred)
-        self.verticalLayout_42.addItem(spacerItem25)
+        spacerItem26 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Preferred)
+        self.verticalLayout_42.addItem(spacerItem26)
         self.gridLayout.addLayout(self.verticalLayout_42, 0, 1, 1, 1)
         self.graphicsView_gr = GofRView(self.tab_gR)
         self.graphicsView_gr.setMinimumSize(QtCore.QSize(50, 300))
@@ -1222,6 +1241,8 @@ class Ui_MainWindow(object):
         self.pushButton_showQMinMax.setText(_translate("MainWindow", "Show Min/Max", None))
         self.label_3.setText(_translate("MainWindow", "PDF Type", None))
         self.pushButton_generateGR.setText(_translate("MainWindow", "Generate GR", None))
+        self.checkBox_pdfFilter.setText(_translate("MainWindow", "Filter", None))
+        self.label_4.setText(_translate("MainWindow", "rho0", None))
         self.pushButton_clearSofQ.setText(_translate("MainWindow", "Clear S(Q) Canvas", None))
         self.pushButton_loadGofR.setText(_translate("MainWindow", "Load G(r)", None))
         self.treeWidget_grWsList.setToolTip(_translate("MainWindow", "<html><head/><body><p>write click on the workspace name should give user the option to plot/over plot </p></body></html>", None))
