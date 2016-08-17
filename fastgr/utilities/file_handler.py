@@ -30,3 +30,4 @@ class FileHandler(object):
         for _line in contain:
             f.write(_line + "\n")
         f.close()
+        

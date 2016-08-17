@@ -4,6 +4,7 @@ from PyQt4.QtCore import Qt
 from PyQt4 import QtGui, QtCore
 from fastgr.step2_handler.populate_master_table import PopulateMasterTable
 from fastgr.step2_handler.export_table import ExportTable
+from fastgr.step2_handler.import_table import ImportTable
 from fastgr.utilities.file_handler import FileHandler
 
 
@@ -144,8 +145,9 @@ class TableHandler(object):
             new_path = os.path.dirname(_table_file)
             self.parent_no_ui.current_folder = new_path
             
-            #FIXME
-        
+            _import_handler = ImportTable(filename = _table_file, parent=self.parent_no_ui)
+            _import_handler.run()
+
     def _export(self):
         _current_folder = self.parent_no_ui.current_folder
         _table_file = QtGui.QFileDialog.getSaveFileName(parent = self.parent_no_ui,
@@ -160,9 +162,6 @@ class TableHandler(object):
             _export_handler = ExportTable(parent = self.parent_no_ui, 
                                           filename = _table_file)
             _export_handler.run()
-
-
-
            
     def _copy(self):
         _selection = self.parent.table.selectedRanges()
