@@ -2,10 +2,12 @@ import os
 import numpy as np
 from PyQt4.QtCore import Qt
 from PyQt4 import QtGui, QtCore
-from fastgr.step2_handler.populate_master_table import PopulateMasterTable
+import fastgr.step2_handler.populate_master_table
 from fastgr.step2_handler.export_table import ExportTable
 from fastgr.step2_handler.import_table import ImportTable
 from fastgr.utilities.file_handler import FileHandler
+from fastgr.step2_handler.populate_background_widgets import PopulateBackgroundWidgets
+import fastgr.step2_handler.step2_gui_handler
 
 
 class TableHandler(object):
@@ -81,6 +83,8 @@ class TableHandler(object):
         _cut = -1
         _refresh_table = -1
         _clear_table = -1
+        _import = -1
+        _export = -1
 
         menu = QtGui.QMenu(self.parent_no_ui)
 
@@ -145,9 +149,17 @@ class TableHandler(object):
             new_path = os.path.dirname(_table_file)
             self.parent_no_ui.current_folder = new_path
             
+            self._clear_table()
+            
             _import_handler = ImportTable(filename = _table_file, parent=self.parent_no_ui)
             _import_handler.run()
-
+            
+            _pop_back_wdg = PopulateBackgroundWidgets(parent = self.parent_no_ui)
+            _pop_back_wdg.run()
+            
+            _o_gui = fastgr.step2_handler.step2_gui_handler.Step2GuiHandler(parent = self.parent_no_ui)
+            _o_gui.check_gui()
+            
     def _export(self):
         _current_folder = self.parent_no_ui.current_folder
         _table_file = QtGui.QFileDialog.getSaveFileName(parent = self.parent_no_ui,
@@ -232,14 +244,14 @@ class TableHandler(object):
     def _duplicate_row(self):
         _row = self.current_row
         metadata_to_copy = self._collect_metadata(row_index = _row)
-        o_populate = PopulateMasterTable(parent = self.parent)
+        o_populate = fastgr.step2_handler.populate_master_table.PopulateMasterTable(parent = self.parent)
         o_populate.add_new_row(metadata_to_copy, row = _row)
     
     def _new_row(self):
         _row = self.current_row
         if _row == -1:
             _row = 0
-        o_populate = PopulateMasterTable(parent = self.parent_no_ui)
+        o_populate = fastgr.step2_handler.populate_master_table.PopulateMasterTable(parent = self.parent_no_ui)
         _metadata = o_populate.empty_metadata()
         o_populate.add_new_row(_metadata, row = _row)
     

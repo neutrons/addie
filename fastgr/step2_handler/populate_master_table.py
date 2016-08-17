@@ -2,7 +2,7 @@ import os
 from PyQt4 import QtGui, QtCore
 
 from fastgr.step2_handler.generate_sumthing import GenerateSumthing
-
+import fastgr.step2_handler.table_handler
 
 class PopulateMasterTable(object):
     
@@ -52,6 +52,9 @@ class PopulateMasterTable(object):
         print("[LOG] Read auto_sum_file (%s)" %_full_auto_sum_file_name)
 
     def populate_table(self):
+        
+        o_table = fastgr.step2_handler.table_handler.TableHandler(parent = self.parent)
+        o_table._clear_table()
         
         _index = 0
 

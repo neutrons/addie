@@ -37,12 +37,20 @@ class ImportTable(object):
         _contain_parsed = self.contain_parsed
         for _row, _entry in enumerate(_contain_parsed):
             
-            print(_entry)
             if _entry == ['']:
                 continue
             
             self.parent.ui.table.insertRow(_row)
-                        
+            
+            #select
+            _widget = QtGui.QCheckBox()
+            _widget.setEnabled(True)
+            #if _entry[0] == "True":
+             #   _widget.setChecked(True)
+            QtCore.QObject.connect(_widget, QtCore.SIGNAL("stateChanged(int)"), lambda state = 0,
+                                   row = _row: self.parent.table_select_state_changed(state, row))
+            self.parent.ui.table.setCellWidget(_row, 0, _widget)
+                
             #name
             _item = QtGui.QTableWidgetItem(_entry[1])
             self.parent.ui.table.setItem(_row, 1, _item)
@@ -52,22 +60,22 @@ class ImportTable(object):
             self.parent.ui.table.setItem(_row, 2, _item)
             
             #Sample formula
-            if not _entry[3]:
+            if _entry[3]:
                 _item = QtGui.QTableWidgetItem(_entry[3])
                 self.parent.ui.table.setItem(_row, 3, _item)
                 
             #mass density
-            if not _entry[4]:
+            if _entry[4]:
                 _item = QtGui.QTableWidgetItem(_entry[4])
                 self.parent.ui.table.setItem(_row, 4, _item)
                 
             #radius
-            if not _entry[5]:
+            if _entry[5]:
                 _item = QtGui.QTableWidgetItem(_entry[5])
                 self.parent.ui.table.setItem(_row, 5, _item)
-                
+
             #packing fraction
-            if not _entry[6]:
+            if _entry[6]:
                 _item = QtGui.QTableWidgetItem(_entry[6])
                 self.parent.ui.table.setItem(_row, 6, _item)
                 
@@ -93,13 +101,12 @@ class ImportTable(object):
             _new_widget.setLayout(_layout)
             self.parent.ui.table.setCellWidget(_row, 8, _new_widget)
 
+        for _row, _entry in enumerate(_contain_parsed):
+            
+            if _entry == ['']:
+                continue
+            
             #select
-            _widget = QtGui.QCheckBox()
-            _widget.setEnabled(True)
+            _widget = self.parent.ui.table.cellWidget(_row, 0)
             if _entry[0] == "True":
                 _widget.setChecked(True)
-            QtCore.QObject.connect(_widget, QtCore.SIGNAL("stateChanged(int)"), lambda state = 0,
-                                   row = _row: self.parent.table_select_state_changed(state, row))
-            self.parent.ui.table.setCellWidget(_row, 0, _widget)
-                
-        

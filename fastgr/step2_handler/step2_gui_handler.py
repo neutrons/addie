@@ -1,7 +1,7 @@
 from PyQt4 import QtGui, QtCore
 import os
 
-from fastgr.step2_handler.table_handler import TableHandler
+import fastgr.step2_handler.table_handler
 
 
 class Step2GuiHandler(object):
@@ -97,7 +97,7 @@ class Step2GuiHandler(object):
         self.parent.run_ndabs_button.setEnabled(_status)
 
     def at_least_one_row_checked(self):
-        o_table_handler = TableHandler(parent = self.parent_no_ui)
+        o_table_handler = fastgr.step2_handler.table_handler.TableHandler(parent = self.parent_no_ui)
         o_table_handler.retrieve_list_of_selected_rows()
         list_of_selected_row = o_table_handler.list_selected_row
         if len(list_of_selected_row) > 0:
@@ -109,7 +109,7 @@ class Step2GuiHandler(object):
         _status_ok = True
         _selected_widget = self.parent.table.cellWidget(row, 0)
         if (_selected_widget.checkState() == QtCore.Qt.Checked):
-            _table_handler = TableHandler(parent = self.parent_no_ui)
+            _table_handler = fastgr.step2_handler.table_handler.TableHandler(parent = self.parent_no_ui)
             for _column in range(1,7):
                 if _table_handler.retrieve_item_text(row, _column) == '':
                     _status_ok = False

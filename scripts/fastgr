@@ -1162,7 +1162,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         self.populate_table_clicked()
         
     def populate_table_clicked(self):
-#        self.current_folder = os.getcwd()
         _pop_table = PopulateMasterTable(parent = self)
         _pop_table.run()
         _error_reported = _pop_table.error_reported

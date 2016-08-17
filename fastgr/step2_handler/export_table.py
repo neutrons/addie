@@ -37,27 +37,27 @@ class ExportTable(object):
             _row.append(_select_flag)
             
             # name 
-            _name_item = str(self.parent.ui.table.item(i, 1).text())
+            _name_item = self.get_item_value(i, 1)
             _row.append(_name_item)
             
             # runs
-            _run_item = str(self.parent.ui.table.item(i, 2).text())
+            _run_item = self.get_item_value(i, 2)
             _row.append(_run_item)
             
             # sample formula
-            _sample_formula = str(self.parent.ui.table.item(i, 3).text())
+            _sample_formula = self.get_item_value(i, 3)
             _row.append(_sample_formula)
             
             # mass density
-            _mass_density = str(self.parent.ui.table.item(i, 4).text())
+            _mass_density = self.get_item_value(i, 4)
             _row.append(_mass_density)
             
             # radius
-            _radius = str(self.parent.ui.table.item(i, 5).text())
+            _radius = self.get_item_value(i, 5)
             _row.append(_radius)
             
             # packing fraction
-            _packing_fraction = str(self.parent.ui.table.item(i, 6).text())
+            _packing_fraction = self.get_item_value(i, 6)
             _row.append(_packing_fraction)
             
             # sample shape
@@ -70,6 +70,11 @@ class ExportTable(object):
             
             _data.append(_row)
         self.data = _data
+
+    def get_item_value(self, row, column):
+        if self.parent.ui.table.item(row, column) is None:
+            return ''
+        return str(self.parent.ui.table.item(row, column).text())
 
     def format_data(self):
         _column_label = self.column_label
