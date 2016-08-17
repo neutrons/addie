@@ -42,23 +42,23 @@ class GenerateSumthing(object):
                   
         for i in range(len(data)):
             if len(data[i].split(',')) == 8:
-                if 'scan' in data[i].split(',') [6]:
-                    word = data[i].split(',')[6]
-                    run_num = int(data[i].split(',')[0])
+#                if 'scan' in data[i].split(',') [6]:
+                word = data[i].split(',')[6]
+                run_num = int(data[i].split(',')[0])
 
-                    temp_range = data[i].split(',')[7].replace("K", "").split('to')
-                    from_temp = round(float(temp_range[0]))
-                    temp_name = str(from_temp).replace(".0", "")
-  
-                    word = word.replace("(","")
-                    word = word.replace(")","_")
-                    word = word.replace(" ", "_")
-                    word = word + "_" + temp_name + "K"
-                    if word in name_list:
-                        run_nums[word].append(run_num)
-                    else:
-                        name_list.append(word)
-                        run_nums[word].append(run_num)
+                temp_range = data[i].split(',')[7].replace("K", "").split('to')
+                from_temp = round(float(temp_range[0]))
+                temp_name = str(from_temp).replace(".0", "")
+
+                word = word.replace("(","")
+                word = word.replace(")","_")
+                word = word.replace(" ", "_")
+                word = word + "_" + temp_name + "K"
+                if word in name_list:
+                    run_nums[word].append(run_num)
+                else:
+                    name_list.append(word)
+                    run_nums[word].append(run_num)
     
         full_output_file_name = os.path.join(self.folder, "auto_sum.inp")        
     
