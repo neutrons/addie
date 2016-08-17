@@ -23,3 +23,10 @@ class FileHandler(object):
                 self.filename = self.filename + "." + ext_requested
         else:
             self.filename = self.filename + "." + ext_requested
+
+    def create_ascii(self, contain=None):
+        _filename = self.filename
+        f = open(_filename, 'w')
+        for _line in contain:
+            f.write(_line + "\n")
+        f.close()

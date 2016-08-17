@@ -1,21 +1,21 @@
 from PyQt4.QtCore import Qt
+from fastgr.utilities.file_handler import FileHandler
 
 
 class ExportTable(object):
     
     column_label = []
     data = []
+    output_text = []
     
-    def __init__(self, parent = None):
+    def __init__(self, parent = None, filename = ''):
         self.parent = parent
+        self.filename = filename
         
     def run(self):
         self.collect_data()
-        
-        # format data
-        
-        # export data
-        pass
+        self.format_data()
+        self.export_data()
     
     def collect_data(self):
         nbr_row = self.parent.ui.table.rowCount()
@@ -70,6 +70,26 @@ class ExportTable(object):
             
             _data.append(_row)
         self.data = _data
+
+    def format_data(self):
+        _column_label = self.column_label
+        _data = self.data
+        
+        output_text = []
+        _title = "|".join(_column_label)
+        output_text.append("#" + _title)
+        
+        for _row in _data:
+            _formatted_row = "|".join(_row)
+            output_text.append(_formatted_row)
+
+        self.output_text = output_text
+
+    def export_data(self):
+        _output_text = self.output_text
+        _filename = self.filename
+        _o_file = FileHandler(filename = _filename)
+        _o_file.create_ascii(contain = _output_text)
 
     def retrieve_abs_corr_state(self, row=0, column=8):
         _widget = self.parent.ui.table.cellWidget(row, 8).children()[1]

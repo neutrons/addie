@@ -139,7 +139,7 @@ class TableHandler(object):
         _table_file = QtGui.QFileDialog.getOpenFileName(parent = self.parent_no_ui,
                                                              caption = "Select File",
                                                              directory = _current_folder,
-                                                             filter = ("CSV (*.csv);; All Files (*.*)"))
+                                                             filter = ("text (*.txt);; All Files (*.*)"))
         if _table_file:
             new_path = os.path.dirname(_table_file)
             self.parent_no_ui.current_folder = new_path
@@ -151,13 +151,14 @@ class TableHandler(object):
         _table_file = QtGui.QFileDialog.getSaveFileName(parent = self.parent_no_ui,
                                                              caption = "Select File",
                                                              directory = _current_folder,
-                                                             filter = ("CSV (*.csv);; All Files (*.*)"))
+                                                             filter = ("text (*.txt);; All Files (*.*)"))
         if _table_file:
             _file_handler = FileHandler(filename = _table_file)
-            _file_handler.check_file_extension(ext_requested='csv')
+            _file_handler.check_file_extension(ext_requested='txt')
             _table_file = _file_handler.filename
 
-            _export_handler = ExportTable(parent = self.parent_no_ui)
+            _export_handler = ExportTable(parent = self.parent_no_ui, 
+                                          filename = _table_file)
             _export_handler.run()
 
 
