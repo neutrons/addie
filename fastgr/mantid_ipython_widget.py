@@ -70,13 +70,18 @@ class MantidIPythonWidget(RichIPythonWidget):
         kernel = kernel_manager.kernel
         kernel.gui = 'qt4'
 
-        # Figure out the full path to the mantidplotrc.py file and then %run it
-        from os import path
-        mantidplotpath = path.split(path.dirname(__file__))[0] # It's the directory above this one
-        mantidplotrc = path.join(mantidplotpath, 'mantidplotrc.py')
         shell = kernel.shell
+
+        # Figure out the full path to the mantidplotrc.py file and then %run it
+
+        # create a python file to import mantid dynamically
+        mantidplot_path = os.path.expanduser('~')
+        mantidplotrc = os.path.join(mantidplot_path, 'mantidplotrc.py')
+        self.generate_script_file(mantidplotrc)
+
         shell.run_line_magic('run', mantidplotrc)
-        print '[DB...BAUnderstand]: shell run: ', mantidplotrc
+
+        os.remove(mantidplotrc)
 
         # These 3 lines replace the run_code method of IPython's InteractiveShell class (of which the
         # shell variable is a derived instance) with our method defined above. The original method
@@ -92,6 +97,36 @@ class MantidIPythonWidget(RichIPythonWidget):
         self.kernel_client = kernel_client
 
         self._mainApplication = None
+
+        # self.start_mantid()
+
+        return
+
+    @staticmethod
+    def generate_script_file(mantidplotrc):
+        """
+
+        Args:
+            mantidplotrc:
+
+        Returns:
+
+        """
+        # check
+        assert isinstance(mantidplotrc, str)
+
+        # write
+        file_content = ''
+        file_content += 'import mantid\n'
+        file_content += 'from mantid.kernel import *\n'
+        file_content += 'from mantid.simpleapi import *\n'
+        file_content += 'from mantid.geometry import *\n'
+        file_content += 'from mantid.api import *\n'
+        file_content += 'from mantid.api import AnalysisDataService as mtd'
+
+        ofile = open(mantidplotrc, 'w')
+        ofile.write(file_content)
+        ofile.close()
 
         return
 
