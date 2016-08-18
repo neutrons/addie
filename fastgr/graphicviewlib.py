@@ -252,7 +252,6 @@ class BraggView(base.MplGraphicsView):
         # debug output
         db_buf = ''
         for bank_id in self._bankPlotDict:
-            print '[DB...BAT] bank_id = %s of type %s.' % (str(bank_id), str(type(bank_id)))
             db_buf += '%d: %s \t' % (bank_id, str(self._bankPlotDict[bank_id]))
         print 'After removing %s, Buffer: %s.' % (str(bank_id_list), db_buf)
 
@@ -614,10 +613,8 @@ class SofQView(base.MplGraphicsView):
         right_bound_pos = self.get_indicator_position(self._rightID)[0]
         if abs(mouse_x_pos - left_bound_pos) < resolution:
             self._selectedBoundary = 1
-            print '[DB...] Left boundary selected'
         elif abs(mouse_x_pos - right_bound_pos) < resolution:
             self._selectedBoundary = 2
-            print '[DB...] Right boundary selected'
         else:
             self._selectedBoundary = 0
         # END-IF-ELSE

@@ -112,7 +112,6 @@ class BraggTree(base.CustomizedTreeView):
         """
         selected_items = self.get_selected_items()
         if len(selected_items) == 0:
-            print '[DB] None item is selected. Return'
             return
 
         leaf_level = -1
@@ -299,9 +298,6 @@ class BraggTree(base.CustomizedTreeView):
             return
 
         # emit the signal to the main window
-        print '[DB] Node list: ', gss_node_list[0]
-
-        #
         selected_node = self.get_selected_items()[0]
         bank_ws_list = self.get_child_nodes(selected_node, output_str=True)
 
@@ -471,7 +467,6 @@ class GofRTree(base.CustomizedTreeView):
         """
         selected_items = self.get_selected_items()
         if len(selected_items) == 0:
-            print '[DB] None item is selected. Return'
             return
 
         leaf_level = -1
@@ -748,7 +743,6 @@ class GofRTree(base.CustomizedTreeView):
         sq_list = list()
 
         for item in item_list:
-            print '[DB...BAT]', item.text()
             leaf = str(item.text())
 
             parent_i = item.parent()

@@ -352,7 +352,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         curr_unit = str(self.ui.comboBox_xUnit.currentText())
 
         # plot all workspsaces
-        print '[DB...BAT] Bragg ws list: ', bragg_ws_list
         for bragg_ws_name in bragg_ws_list:
 
             # get the last section of the workspace name: _bank%d
@@ -600,8 +599,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         else:
             gr_ws_name = gr_name_list[0]
 
-        print '[DB...BAT] G(r) workspace: %s' % gr_ws_name
-
         # pop-up a dialog for the file to save
         default_dir = os.getcwd()
         file_ext = 'Data (*.dat)'
@@ -752,7 +749,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
             if plot_all_gss:
                 # only allow 1 check box newly checked
-                print '[DB...BAT] Bank %d is previously %s.' % (bank_id, str(self._braggBankWidgetRecords[bank_id]))
                 if self._braggBankWidgetRecords[bank_id]:
                     # create a mutex on bank widget check box
                     self._noEventBankWidgets = True
@@ -770,8 +766,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
             # END-IF
         # END-FOR
 
-        print '[DB...BAT] BraggBankWidgetRecord: ', str(self._braggBankWidgetRecords)
-
         # deal with the situation that there is no line to plot
         if len(plot_bank_list) == 0:
             # self.ui.graphicsView_bragg.clear_all_lines()
@@ -787,10 +781,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         if plot_all_gss:
             ws_group_list = self.ui.treeWidget_braggWSList.get_main_nodes()
             ws_group_list.remove('workspaces')
-            print '[DB...BAT] workspace groups list:', ws_group_list
         else:
             status, ret_obj = self.ui.treeWidget_braggWSList.get_current_main_nodes()
-            print '[DB...BAT] workspace group:', status, ret_obj
             if status:
                 ws_group_list = ret_obj
             else:

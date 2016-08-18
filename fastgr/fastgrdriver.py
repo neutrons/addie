@@ -94,7 +94,6 @@ class FastGRDriver(object):
         sofq_type = 'S(Q)'
 
         # do the FFT
-        print '[DB]: Input Sof Q Type = |', sq_ws.YUnitLabel(), '|'
         simpleapi.PDFFourierTransform(InputWorkspace=self._currSqWsName,
                                       InputSofQType=sofq_type,
                                       **kwargs)
@@ -333,9 +332,10 @@ class FastGRDriver(object):
         -------
         2-tuple range of Q
         """
+        # generate S(Q) workspace name
         sq_ws_name = os.path.basename(file_name).split('.')[0]
-        print '[DB...BAT] Split file %s to workspace %s.' % (file_name, sq_ws_name)
 
+        # call mantid LoadAscii
         simpleapi.LoadAscii(Filename=file_name, OutputWorkspace=sq_ws_name, Unit='MomentumTransfer')
         assert AnalysisDataService.doesExist(sq_ws_name), 'Unable to load S(Q) file %s.' % file_name
 

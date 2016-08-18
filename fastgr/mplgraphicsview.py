@@ -7,12 +7,8 @@ from PyQt4 import QtGui
 import matplotlib
 from matplotlib.figure import Figure
 import matplotlib.image
-if matplotlib.__version__ >= '1.5.1':
-    from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar2
-    from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-else:
-    from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as NavigationToolbar2
-    from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar2
+from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 
 
 MplLineStyles = ['-', '--', '-.', ':', 'None', ' ', '']
@@ -202,8 +198,6 @@ class IndicatorManager(object):
 
         for line_key in self._lineManager.keys():
 
-            print '[MplGraph DB] Exam indicator key %s' % str(self._lineManager[line_key])
-
             if x is not None and y is not None:
                 # 2 way
                 raise NotImplementedError('ASAP')
@@ -227,7 +221,6 @@ class IndicatorManager(object):
         :return:
         """
         if line_id is not None:
-            print '[DB] Get line style. ID = %s' % str(line_id)
             style = '--'
         else:
             style = '--'
@@ -802,7 +795,6 @@ class MplGraphicsView(QtGui.QWidget):
         # process marker if it has information
         if marker.count(' (') > 0:
             marker = marker.split(' (')[0]
-        # print "[DB] Print line %d: marker = %s, color = %s" % (self._myLineMarkerColorIndex, marker, color)
 
         # update the index
         self._myLineMarkerColorIndex += 1
