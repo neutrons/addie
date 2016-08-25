@@ -45,9 +45,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         """ Initialization
         Parameters
         ----------
-        parent :: parent application
         """
-
         # Base class
         QtGui.QMainWindow.__init__(self)
 
@@ -593,8 +591,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         gr_name_list = self.ui.treeWidget_grWsList.get_selected_items_of_level(2, excluded_parent='SofQ',
                                                                                return_item_text=True)
         if len(gr_name_list) != 1:
-            self.pop_message('Error! Only 1 workspace of G(r) that can be selected.  So far %d'
-                             ' is selected.' % len(gr_name_list))
+            err_msg = 'Error! Only 1 workspace of G(r) that can be selected.  So far %d is selected.' \
+                      'They are %s.' % (len(gr_name_list), str(gr_name_list))
+            QtGui.QMessageBox.warning(self, 'Error', err_msg)
             return
         else:
             gr_ws_name = gr_name_list[0]
