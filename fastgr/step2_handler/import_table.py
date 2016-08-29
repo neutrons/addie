@@ -62,22 +62,30 @@ class ImportTable(object):
             #Sample formula
             if _entry[3]:
                 _item = QtGui.QTableWidgetItem(_entry[3])
-                self.parent.ui.table.setItem(_row, 3, _item)
+            else:
+                _item = QtGui.QTableWidgetItem("")
+            self.parent.ui.table.setItem(_row, 3, _item)
                 
             #mass density
             if _entry[4]:
                 _item = QtGui.QTableWidgetItem(_entry[4])
-                self.parent.ui.table.setItem(_row, 4, _item)
+            else:
+                _item = QtGui.QTableWidgetItem("")
+            self.parent.ui.table.setItem(_row, 4, _item)
                 
             #radius
             if _entry[5]:
                 _item = QtGui.QTableWidgetItem(_entry[5])
-                self.parent.ui.table.setItem(_row, 5, _item)
+            else:
+                _item = QtGui.QTableWidgetItem("")
+            self.parent.ui.table.setItem(_row, 5, _item)
 
             #packing fraction
             if _entry[6]:
                 _item = QtGui.QTableWidgetItem(_entry[6])
-                self.parent.ui.table.setItem(_row, 6, _item)
+            else:
+                _item = QtGui.QTableWidgetItem("")
+            self.parent.ui.table.setItem(_row, 6, _item)
                 
             #sample shape
             _widget = QtGui.QComboBox()
