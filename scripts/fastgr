@@ -1101,6 +1101,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         _about = AboutDialog(parent=self)
         _about.display()
 
+    def action_preview_ascii_clicked(self):
+	o_gui = Step3GuiHandler(parent = self)
+        o_gui.browse_file()
+
     # tab1
     def select_current_folder_clicked(self):
         o_gui = Step1GuiHandler(parent = self)
@@ -1229,12 +1233,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     def run_sum_scans_clicked(self):
         o_run_sum_scans = RunSumScans(parent = self)
         o_run_sum_scans.run()
-
-    # tab3 - ascii display
-    def browse_ascii_file_clicked(self):
-        o_gui = Step3GuiHandler(parent = self)
-        o_gui.browse_file()
-
 
 def main():
     app = PyQt4.QtGui.QApplication(sys.argv)

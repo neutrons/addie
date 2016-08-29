@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Wed Aug 17 09:44:28 2016
+# Created: Mon Aug 29 16:34:27 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -757,26 +757,6 @@ class Ui_MainWindow(object):
         self.horizontalLayout_71.addWidget(self.run_ndabs_button)
         self.verticalLayout_36.addLayout(self.horizontalLayout_71)
         self.tabWidget_2.addTab(self.tab_6, _fromUtf8(""))
-        self.tab = QtGui.QWidget()
-        self.tab.setObjectName(_fromUtf8("tab"))
-        self.verticalLayout_2 = QtGui.QVBoxLayout(self.tab)
-        self.verticalLayout_2.setObjectName(_fromUtf8("verticalLayout_2"))
-        self.horizontalLayout_3 = QtGui.QHBoxLayout()
-        self.horizontalLayout_3.setObjectName(_fromUtf8("horizontalLayout_3"))
-        self.browse_ascii_button = QtGui.QPushButton(self.tab)
-        self.browse_ascii_button.setMinimumSize(QtCore.QSize(100, 0))
-        self.browse_ascii_button.setMaximumSize(QtCore.QSize(100, 16777215))
-        self.browse_ascii_button.setObjectName(_fromUtf8("browse_ascii_button"))
-        self.horizontalLayout_3.addWidget(self.browse_ascii_button)
-        self.browse_ascii_name = QtGui.QLabel(self.tab)
-        self.browse_ascii_name.setObjectName(_fromUtf8("browse_ascii_name"))
-        self.horizontalLayout_3.addWidget(self.browse_ascii_name)
-        self.verticalLayout_2.addLayout(self.horizontalLayout_3)
-        self.browse_ascii_text_edit = QtGui.QTextEdit(self.tab)
-        self.browse_ascii_text_edit.setTextInteractionFlags(QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
-        self.browse_ascii_text_edit.setObjectName(_fromUtf8("browse_ascii_text_edit"))
-        self.verticalLayout_2.addWidget(self.browse_ascii_text_edit)
-        self.tabWidget_2.addTab(self.tab, _fromUtf8(""))
         self.tab_bragg = QtGui.QWidget()
         self.tab_bragg.setObjectName(_fromUtf8("tab_bragg"))
         self.horizontalLayout_72 = QtGui.QHBoxLayout(self.tab_bragg)
@@ -1062,7 +1042,11 @@ class Ui_MainWindow(object):
         self.actionCheat_sheet.setObjectName(_fromUtf8("actionCheat_sheet"))
         self.actionAbout = QtGui.QAction(MainWindow)
         self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
+        self.action_preview_ascii = QtGui.QAction(MainWindow)
+        self.action_preview_ascii.setObjectName(_fromUtf8("action_preview_ascii"))
         self.menuFile.addAction(self.actionQuit)
+        self.menuFile.addSeparator()
+        self.menuFile.addAction(self.action_preview_ascii)
         self.menuEdit.addAction(self.actionReset_GSAS_tab)
         self.menuEdit.addAction(self.actionReset_GofR_tab)
         self.menuHelp.addAction(self.actionCheat_sheet)
@@ -1072,7 +1056,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget_2.setCurrentIndex(0)
+        self.tabWidget_2.setCurrentIndex(2)
         QtCore.QObject.connect(self.diamond, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_edited)
         QtCore.QObject.connect(self.diamond_background, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_background_edited)
         QtCore.QObject.connect(self.vanadium, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.vanadium_edited)
@@ -1099,10 +1083,10 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.q_range_min, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.check_q_range)
         QtCore.QObject.connect(self.q_range_max, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.check_q_range)
         QtCore.QObject.connect(self.run_sum_scans_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.run_sum_scans_clicked)
-        QtCore.QObject.connect(self.browse_ascii_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.browse_ascii_file_clicked)
         QtCore.QObject.connect(self.select_current_folder_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.select_current_folder_clicked)
         QtCore.QObject.connect(self.manual_output_folder_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.manual_output_folder_button_clicked)
         QtCore.QObject.connect(self.actionAbout, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.help_about_clicked)
+        QtCore.QObject.connect(self.action_preview_ascii, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.action_preview_ascii_clicked)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -1211,9 +1195,6 @@ class Ui_MainWindow(object):
         self.run_sum_scans_button.setText(_translate("MainWindow", "Run Sum Scans", None))
         self.run_ndabs_button.setText(_translate("MainWindow", "Run NDabs", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_6), _translate("MainWindow", "NDabs", None))
-        self.browse_ascii_button.setText(_translate("MainWindow", "Browse ...", None))
-        self.browse_ascii_name.setText(_translate("MainWindow", "N/A", None))
-        self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab), _translate("MainWindow", "Ascii", None))
         self.label_92.setText(_translate("MainWindow", "SNS Powder Reduction Configuration for NOMAD", None))
         self.comboBox_xUnit.setItemText(0, _translate("MainWindow", "TOF", None))
         self.comboBox_xUnit.setItemText(1, _translate("MainWindow", "d-Spacing", None))
@@ -1260,6 +1241,7 @@ class Ui_MainWindow(object):
         self.actionQuit.setText(_translate("MainWindow", "Quit", None))
         self.actionCheat_sheet.setText(_translate("MainWindow", "Cheat sheet", None))
         self.actionAbout.setText(_translate("MainWindow", "About ...", None))
+        self.action_preview_ascii.setText(_translate("MainWindow", "Preview Ascii ...", None))
 
 from graphicviewlib import BraggView, SofQView, GofRView
 from ipythondockwidget import IPythonDockWidget

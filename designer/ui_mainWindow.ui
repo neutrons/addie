@@ -74,7 +74,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>2</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -1958,50 +1958,6 @@
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="tab">
-             <attribute name="title">
-              <string>Ascii</string>
-             </attribute>
-             <layout class="QVBoxLayout" name="verticalLayout_2">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_3">
-                <item>
-                 <widget class="QPushButton" name="browse_ascii_button">
-                  <property name="minimumSize">
-                   <size>
-                    <width>100</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>100</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>Browse ...</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="browse_ascii_name">
-                  <property name="text">
-                   <string>N/A</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <widget class="QTextEdit" name="browse_ascii_text_edit">
-                <property name="textInteractionFlags">
-                 <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
             <widget class="QWidget" name="tab_bragg">
              <attribute name="title">
               <string>Bragg Peaks</string>
@@ -2685,6 +2641,8 @@
      <string>File</string>
     </property>
     <addaction name="actionQuit"/>
+    <addaction name="separator"/>
+    <addaction name="action_preview_ascii"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -2728,6 +2686,11 @@
   <action name="actionAbout">
    <property name="text">
     <string>About ...</string>
+   </property>
+  </action>
+  <action name="action_preview_ascii">
+   <property name="text">
+    <string>Preview Ascii ...</string>
    </property>
   </action>
  </widget>
@@ -3183,22 +3146,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>browse_ascii_button</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>browse_ascii_file_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>103</x>
-     <y>84</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>512</x>
-     <y>23</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>select_current_folder_button</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
@@ -3246,6 +3193,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>action_preview_ascii</sender>
+   <signal>activated()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>action_preview_ascii_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>673</x>
+     <y>451</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>diamond_edited()</slot>
@@ -3275,5 +3238,6 @@
   <slot>select_current_folder_clicked()</slot>
   <slot>manual_output_folder_button_clicked()</slot>
   <slot>help_about_clicked()</slot>
+  <slot>action_preview_ascii_clicked()</slot>
  </slots>
 </ui>

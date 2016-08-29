@@ -2,6 +2,7 @@ from PyQt4 import QtGui, QtCore
 import os
 
 from fastgr.utilities.file_handler import FileHandler
+from fastgr.step3_handler.preview_ascii_window import PreviewAsciiWindow
 
 
 class Step3GuiHandler(object):
@@ -17,9 +18,10 @@ class Step3GuiHandler(object):
                                                              caption = 'Select file to display',
                                                              directory = self.current_folder)
         
-        if str(_ascii_file):
-            self.parent.browse_ascii_name.setText(str(_ascii_file))
-            o_file_handler = FileHandler(filename = _ascii_file)
-            o_file_handler.retrieve_contain()
-            text_contain = o_file_handler.file_contain
-            self.parent.browse_ascii_text_edit.setText(text_contain)
+	if str(_ascii_file):
+	    o_file_handler = FileHandler(filename = _ascii_file)
+	    o_file_handler.retrieve_contain()
+	    text_contain = o_file_handler.file_contain
+	    
+	    o_preview = PreviewAsciiWindow(parent = self.parent_no_ui, text = text_contain, filename=_ascii_file)
+	    o_preview.show()
