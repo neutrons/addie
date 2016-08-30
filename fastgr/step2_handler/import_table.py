@@ -41,10 +41,12 @@ class ImportTable(object):
     def change_path(self):
         full_contain_parsed = self.full_contain_parsed
         
-        _path_string_list = full_contain_parsed[0][0].split(':')
-        self.parent.current_folder = _path_string_list[1].strip()
-        
-        os.chdir(self.parent.current_folder)
+        try:
+            _path_string_list = full_contain_parsed[0][0].split(':')
+            self.parent.current_folder = _path_string_list[1].strip()
+            os.chdir(self.parent.current_folder)
+        except:
+            pass
     
     def populate_gui(self):
         _contain_parsed = self.contain_parsed

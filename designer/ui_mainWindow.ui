@@ -1938,6 +1938,55 @@
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
+                    <width>60</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_5">
+                  <property name="text">
+                   <string>Output File Name:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="run_ndabs_output_file_name">
+                  <property name="minimumSize">
+                   <size>
+                    <width>70</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>70</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>STO</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_6">
+                  <property name="text">
+                   <string>.ndsum</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_9">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Minimum</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
                     <width>20</width>
                     <height>20</height>
                    </size>
@@ -2816,8 +2865,8 @@
    <slot>output_folder_radio_buttons()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>57</x>
-     <y>670</y>
+     <x>82</x>
+     <y>703</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2832,8 +2881,8 @@
    <slot>output_folder_radio_buttons()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>48</x>
-     <y>717</y>
+     <x>74</x>
+     <y>758</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2848,8 +2897,8 @@
    <slot>manual_output_folder_field_edited()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>122</x>
-     <y>717</y>
+     <x>223</x>
+     <y>758</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2864,8 +2913,8 @@
    <slot>run_autonom()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1228</x>
-     <y>745</y>
+     <x>1313</x>
+     <y>798</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2897,7 +2946,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>1314</x>
-     <y>770</y>
+     <y>799</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2929,7 +2978,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>1070</x>
-     <y>654</y>
+     <y>683</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2945,7 +2994,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>1152</x>
-     <y>654</y>
+     <y>683</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2961,7 +3010,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>1185</x>
-     <y>625</y>
+     <y>654</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2977,7 +3026,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>1302</x>
-     <y>625</y>
+     <y>654</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -2992,8 +3041,8 @@
    <slot>check_fourier_filter_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>691</x>
-     <y>640</y>
+     <x>729</x>
+     <y>669</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -3008,8 +3057,8 @@
    <slot>check_fourier_filter_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>873</x>
-     <y>640</y>
+     <x>911</x>
+     <y>669</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -3025,7 +3074,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>88</x>
-     <y>654</y>
+     <y>683</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -3041,7 +3090,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>344</x>
-     <y>655</y>
+     <y>684</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -3089,7 +3138,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>402</x>
-     <y>726</y>
+     <y>755</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -3105,7 +3154,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>163</x>
-     <y>724</y>
+     <y>753</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -3121,7 +3170,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>305</x>
-     <y>724</y>
+     <y>753</y>
     </hint>
     <hint type="destinationlabel">
      <x>6</x>
@@ -3136,8 +3185,8 @@
    <slot>run_sum_scans_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1201</x>
-     <y>770</y>
+     <x>734</x>
+     <y>799</y>
     </hint>
     <hint type="destinationlabel">
      <x>1194</x>
@@ -3168,8 +3217,8 @@
    <slot>manual_output_folder_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1120</x>
-     <y>727</y>
+     <x>1157</x>
+     <y>760</y>
     </hint>
     <hint type="destinationlabel">
      <x>1340</x>
@@ -3209,6 +3258,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>run_ndabs_output_file_name</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>output_file_name_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1023</x>
+     <y>791</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1028</x>
+     <y>879</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>diamond_edited()</slot>
@@ -3239,5 +3304,6 @@
   <slot>manual_output_folder_button_clicked()</slot>
   <slot>help_about_clicked()</slot>
   <slot>action_preview_ascii_clicked()</slot>
+  <slot>output_file_name_changed()</slot>
  </slots>
 </ui>

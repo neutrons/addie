@@ -94,6 +94,9 @@ class Step2GuiHandler(object):
                     _status = False
                     break
 
+        if self.parent.run_ndabs_output_file_name.text() == '':
+            _status = False
+
         self.parent.run_ndabs_button.setEnabled(_status)
 
     def at_least_one_row_checked(self):
