@@ -4,6 +4,7 @@ from fastgr.utilities.file_handler import FileHandler
 
 class ExportTable(object):
     
+    current_path = ''
     column_label = []
     data = []
     output_text = []
@@ -19,6 +20,10 @@ class ExportTable(object):
     
     def collect_data(self):
         nbr_row = self.parent.ui.table.rowCount()
+
+        # collect current folder
+        _path = self.parent.current_folder
+        self.current_path = "current_folder: %s" %_path
 
         _full_column_label = []
         nbr_column = self.parent.ui.table.columnCount()
@@ -77,10 +82,13 @@ class ExportTable(object):
         return str(self.parent.ui.table.item(row, column).text())
 
     def format_data(self):
+        _current_path = self.current_path
         _column_label = self.column_label
         _data = self.data
         
         output_text = []
+        output_text.append("#" + _current_path)
+        
         _title = "|".join(_column_label)
         output_text.append("#" + _title)
         

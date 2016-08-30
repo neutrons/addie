@@ -1,4 +1,6 @@
 from PyQt4 import QtGui, QtCore
+import os
+
 from fastgr.utilities.file_handler import FileHandler
 
 
@@ -6,6 +8,7 @@ class ImportTable(object):
     
     file_contain = []
     contain_parsed = []
+    full_contain_parsed = []
     
     def __init__(self, parent=None, filename=''):
         self.parent = parent
@@ -14,6 +17,7 @@ class ImportTable(object):
     def run(self):
         self.load_ascii()
         self.parse_contain()
+        self.change_path()
         self.populate_gui()
     
     def load_ascii(self):
@@ -31,8 +35,17 @@ class ImportTable(object):
             _row_split = _row.split('|')
             _contain_parsed.append(_row_split)
             
-        self.contain_parsed = _contain_parsed[1:]
+        self.contain_parsed = _contain_parsed[2:]
+        self.full_contain_parsed = _contain_parsed
         
+    def change_path(self):
+        full_contain_parsed = self.full_contain_parsed
+        
+        _path_string_list = full_contain_parsed[0][0].split(':')
+        self.parent.current_folder = _path_string_list[1].strip()
+        
+        os.chdir(self.parent.current_folder)
+    
     def populate_gui(self):
         _contain_parsed = self.contain_parsed
         for _row, _entry in enumerate(_contain_parsed):
