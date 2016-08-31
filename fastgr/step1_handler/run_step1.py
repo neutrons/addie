@@ -18,6 +18,10 @@ class RunStep1(object):
     def create_folder(self):
         self._current_path = os.getcwd()
         
+        if not self.parent.create_folder_button.is_checked():
+            self.folder = self._current_path
+            return
+        
         if self.parent.manual_output_folder.isChecked():
             self.create_manual_folder()
         else:

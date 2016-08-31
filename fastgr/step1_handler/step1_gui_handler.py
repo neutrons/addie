@@ -8,6 +8,9 @@ class Step1GuiHandler(object):
         self.parent = parent.ui
         self.parent_no_ui = parent
         
+    def new_autonom_group_box(self, status=True):
+        self.parent.name_of_output_folder.setEnabled(status)
+        
     def set_main_window_title(self):
         self.parent_no_ui.setWindowTitle(self.parent_no_ui.current_folder)
         
@@ -38,9 +41,10 @@ class Step1GuiHandler(object):
         if _sample_background_field == "":
             return False
         
-        if self.parent.manual_output_folder.isChecked() and (str(self.parent.manual_output_folder_field.text()).strip() == ""):
-            return False
-        
+        if self.parent.create_folder_button.is_checked():
+            if self.parent.manual_output_folder.isChecked() and (str(self.parent.manual_output_folder_field.text()).strip() == ""):
+                return False
+            
         return True
     
     def manual_output_folder_button_handler(self):

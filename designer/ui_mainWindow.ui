@@ -879,7 +879,17 @@
                 <item>
                  <layout class="QVBoxLayout" name="verticalLayout_33">
                   <item>
-                   <widget class="QGroupBox" name="groupBox_31">
+                   <widget class="QCheckBox" name="create_folder_button">
+                    <property name="text">
+                     <string>Create New autoNOM Folder?</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QGroupBox" name="name_of_output_folder">
                     <property name="title">
                      <string>Name of Output Folder</string>
                     </property>
@@ -2866,7 +2876,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>82</x>
-     <y>703</y>
+     <y>729</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -3185,7 +3195,7 @@
    <slot>run_sum_scans_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>734</x>
+     <x>884</x>
      <y>799</y>
     </hint>
     <hint type="destinationlabel">
@@ -3265,12 +3275,28 @@
    <slot>output_file_name_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1023</x>
+     <x>1147</x>
      <y>791</y>
     </hint>
     <hint type="destinationlabel">
      <x>1028</x>
      <y>879</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>create_folder_button</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>create_new_autonom_folder_button_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>43</x>
+     <y>664</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>83</x>
+     <y>876</y>
     </hint>
    </hints>
   </connection>
@@ -3305,5 +3331,6 @@
   <slot>help_about_clicked()</slot>
   <slot>action_preview_ascii_clicked()</slot>
   <slot>output_file_name_changed()</slot>
+  <slot>create_new_autonom_folder_button_clicked()</slot>
  </slots>
 </ui>

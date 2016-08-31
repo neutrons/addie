@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Tue Aug 30 10:47:26 2016
+# Created: Wed Aug 31 16:38:21 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -363,29 +363,33 @@ class Ui_MainWindow(object):
         self.horizontalLayout_58.setObjectName(_fromUtf8("horizontalLayout_58"))
         self.verticalLayout_33 = QtGui.QVBoxLayout()
         self.verticalLayout_33.setObjectName(_fromUtf8("verticalLayout_33"))
-        self.groupBox_31 = QtGui.QGroupBox(self.tab_5)
-        self.groupBox_31.setObjectName(_fromUtf8("groupBox_31"))
-        self.verticalLayout_34 = QtGui.QVBoxLayout(self.groupBox_31)
+        self.create_folder_button = QtGui.QCheckBox(self.tab_5)
+        self.create_folder_button.setChecked(True)
+        self.create_folder_button.setObjectName(_fromUtf8("create_folder_button"))
+        self.verticalLayout_33.addWidget(self.create_folder_button)
+        self.name_of_output_folder = QtGui.QGroupBox(self.tab_5)
+        self.name_of_output_folder.setObjectName(_fromUtf8("name_of_output_folder"))
+        self.verticalLayout_34 = QtGui.QVBoxLayout(self.name_of_output_folder)
         self.verticalLayout_34.setObjectName(_fromUtf8("verticalLayout_34"))
-        self.auto_manual_folder = QtGui.QRadioButton(self.groupBox_31)
+        self.auto_manual_folder = QtGui.QRadioButton(self.name_of_output_folder)
         self.auto_manual_folder.setChecked(True)
         self.auto_manual_folder.setObjectName(_fromUtf8("auto_manual_folder"))
         self.verticalLayout_34.addWidget(self.auto_manual_folder)
         self.horizontalLayout_59 = QtGui.QHBoxLayout()
         self.horizontalLayout_59.setObjectName(_fromUtf8("horizontalLayout_59"))
-        self.manual_output_folder = QtGui.QRadioButton(self.groupBox_31)
+        self.manual_output_folder = QtGui.QRadioButton(self.name_of_output_folder)
         self.manual_output_folder.setObjectName(_fromUtf8("manual_output_folder"))
         self.horizontalLayout_59.addWidget(self.manual_output_folder)
-        self.manual_output_folder_field = QtGui.QLineEdit(self.groupBox_31)
+        self.manual_output_folder_field = QtGui.QLineEdit(self.name_of_output_folder)
         self.manual_output_folder_field.setEnabled(False)
         self.manual_output_folder_field.setObjectName(_fromUtf8("manual_output_folder_field"))
         self.horizontalLayout_59.addWidget(self.manual_output_folder_field)
-        self.manual_output_folder_button = QtGui.QPushButton(self.groupBox_31)
+        self.manual_output_folder_button = QtGui.QPushButton(self.name_of_output_folder)
         self.manual_output_folder_button.setEnabled(False)
         self.manual_output_folder_button.setObjectName(_fromUtf8("manual_output_folder_button"))
         self.horizontalLayout_59.addWidget(self.manual_output_folder_button)
         self.verticalLayout_34.addLayout(self.horizontalLayout_59)
-        self.verticalLayout_33.addWidget(self.groupBox_31)
+        self.verticalLayout_33.addWidget(self.name_of_output_folder)
         self.horizontalLayout_58.addLayout(self.verticalLayout_33)
         self.verticalLayout_35 = QtGui.QVBoxLayout()
         self.verticalLayout_35.setObjectName(_fromUtf8("verticalLayout_35"))
@@ -1101,6 +1105,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.actionAbout, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.help_about_clicked)
         QtCore.QObject.connect(self.action_preview_ascii, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.action_preview_ascii_clicked)
         QtCore.QObject.connect(self.run_ndabs_output_file_name, QtCore.SIGNAL(_fromUtf8("textChanged(QString)")), MainWindow.output_file_name_changed)
+        QtCore.QObject.connect(self.create_folder_button, QtCore.SIGNAL(_fromUtf8("clicked(bool)")), MainWindow.create_new_autonom_folder_button_clicked)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -1139,7 +1144,8 @@ class Ui_MainWindow(object):
         self.postprocessing_no.setToolTip(_translate("MainWindow", "Will overwrite the data reduction config file", None))
         self.postprocessing_no.setText(_translate("MainWindow", "No", None))
         self.label_78.setText(_translate("MainWindow", "Comments:", None))
-        self.groupBox_31.setTitle(_translate("MainWindow", "Name of Output Folder", None))
+        self.create_folder_button.setText(_translate("MainWindow", "Create New autoNOM Folder?", None))
+        self.name_of_output_folder.setTitle(_translate("MainWindow", "Name of Output Folder", None))
         self.auto_manual_folder.setText(_translate("MainWindow", "Automatic (autoNOM_##)", None))
         self.manual_output_folder.setText(_translate("MainWindow", "Manual", None))
         self.manual_output_folder_button.setText(_translate("MainWindow", "Select ...", None))
