@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Wed Aug 31 16:38:21 2016
+# Created: Wed Aug 31 16:47:53 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -1111,7 +1111,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
         self.groupBox_27.setTitle(_translate("MainWindow", "Scan Numbers  (ex: 1234, 1300-1305, 1310)", None))
-        self.select_current_folder_button.setText(_translate("MainWindow", "Select Current Folder ...", None))
+        self.select_current_folder_button.setText(_translate("MainWindow", "Select Working Folder ...", None))
         self.label_63.setText(_translate("MainWindow", "*", None))
         self.label_64.setText(_translate("MainWindow", "Vanadium background", None))
         self.label_65.setText(_translate("MainWindow", "Diamond", None))
