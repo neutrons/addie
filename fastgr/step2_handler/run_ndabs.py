@@ -14,6 +14,12 @@ class RunNDabs(object):
         
     def run(self):
         _str_list_sample_files = " ".join(self.list_sample_files)
+        _script_to_run = self.script_to_run + ' ' + _str_list_sample_files
+
+        _run_thread = self.parent._run_thread
+        _run_thread.setup(script = _script_to_run)
+        _run_thread.start()
+
         print("[LOG] executing:")
-        print("[LOG] " + self.script_to_run + ' ' + _str_list_sample_files + " &")
-        os.system(self.script_to_run + ' ' + _str_list_sample_files)
+        print("[LOG] " + _script_to_run)
+        #os.system(_script_to_run)

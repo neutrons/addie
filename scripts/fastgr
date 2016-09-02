@@ -23,6 +23,8 @@ from fastgr.step2_handler.create_sample_files import CreateSampleFiles
 from fastgr.step2_handler.create_ndsum_file import CreateNdsumFile
 from fastgr.step2_handler.run_ndabs import RunNDabs
 from fastgr.step2_handler.run_sum_scans import RunSumScans
+from fastgr.step2_handler.run_thread import RunThread
+
 from fastgr.step3_handler.step3_gui_handler import Step3GuiHandler
 
 import PyQt4
@@ -40,6 +42,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     debugging = False
     current_folder = os.getcwd()
     table_selection_buffer = {}
+    _run_thread = RunThread()
 
     def __init__(self):
         """ Initialization

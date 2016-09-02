@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Wed Aug 31 16:47:53 2016
+# Created: Thu Sep  1 09:14:53 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -749,6 +749,10 @@ class Ui_MainWindow(object):
         self.horizontalLayout_71.addWidget(self.label_91)
         spacerItem12 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_71.addItem(spacerItem12)
+        self.interactive_mode_checkbox = QtGui.QCheckBox(self.tab_6)
+        self.interactive_mode_checkbox.setChecked(True)
+        self.interactive_mode_checkbox.setObjectName(_fromUtf8("interactive_mode_checkbox"))
+        self.horizontalLayout_71.addWidget(self.interactive_mode_checkbox)
         self.run_sum_scans_button = QtGui.QPushButton(self.tab_6)
         self.run_sum_scans_button.setEnabled(False)
         self.run_sum_scans_button.setObjectName(_fromUtf8("run_sum_scans_button"))
@@ -1212,6 +1216,7 @@ class Ui_MainWindow(object):
         self.radioButton_28.setText(_translate("MainWindow", "No", None))
         self.label_90.setText(_translate("MainWindow", "*", None))
         self.label_91.setText(_translate("MainWindow", ": Mandatory field", None))
+        self.interactive_mode_checkbox.setText(_translate("MainWindow", "Interactive Mode ?", None))
         self.run_sum_scans_button.setText(_translate("MainWindow", "Run Sum Scans", None))
         self.label_5.setText(_translate("MainWindow", "Output File Name:", None))
         self.run_ndabs_output_file_name.setText(_translate("MainWindow", "STO", None))

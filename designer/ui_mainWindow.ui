@@ -1929,6 +1929,16 @@
                  </spacer>
                 </item>
                 <item>
+                 <widget class="QCheckBox" name="interactive_mode_checkbox">
+                  <property name="text">
+                   <string>Interactive Mode ?</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
                  <widget class="QPushButton" name="run_sum_scans_button">
                   <property name="enabled">
                    <bool>false</bool>

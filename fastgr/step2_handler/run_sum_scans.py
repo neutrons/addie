@@ -4,7 +4,7 @@ from PyQt4.QtCore import Qt
 
 class RunSumScans(object):
     
-    script = 'python  /SNS/users/zjn/pytest/sumscans.py -f '
+    script = 'python  /SNS/users/zjn/pytest/sumscans.py '
     output_file = 'sum_sto.inp'
     
     def __init__(self, parent=None):
@@ -18,11 +18,19 @@ class RunSumScans(object):
         self.run_script()
 
     def run_script(self):
-        _script_to_run = self.script + self.full_output_file_name
+        _script_to_run = self.add_script_flags()
+        _script_to_run += ' -f ' + self.full_output_file_name + ' &'
+
         os.system(_script_to_run)
-        print("[LOG] executing:")
+        print("[LOG] executing in its own thread:")
         print("[LOG] " + _script_to_run)
         
+    def add_script_flags(self):
+        if self.parent.interactive_mode_checkbox.isChecked():
+            return self.script
+        else:
+            return self.script + "-n NONINTER"
+                
     def create_output_file(self):
         _full_output_file_name = os.path.join(self.folder, self.output_file)
         self.full_output_file_name = _full_output_file_name
