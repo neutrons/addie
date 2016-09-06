@@ -1975,7 +1975,7 @@
                  <widget class="QLineEdit" name="run_ndabs_output_file_name">
                   <property name="minimumSize">
                    <size>
-                    <width>70</width>
+                    <width>130</width>
                     <height>0</height>
                    </size>
                   </property>
@@ -1986,7 +1986,7 @@
                    </size>
                   </property>
                   <property name="text">
-                   <string>STO</string>
+                   <string>sample_name</string>
                   </property>
                  </widget>
                 </item>

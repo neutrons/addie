@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Tue Sep  6 12:18:54 2016
+# Created: Tue Sep  6 16:03:43 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -763,7 +763,7 @@ class Ui_MainWindow(object):
         self.label_5.setObjectName(_fromUtf8("label_5"))
         self.horizontalLayout_71.addWidget(self.label_5)
         self.run_ndabs_output_file_name = QtGui.QLineEdit(self.tab_6)
-        self.run_ndabs_output_file_name.setMinimumSize(QtCore.QSize(70, 0))
+        self.run_ndabs_output_file_name.setMinimumSize(QtCore.QSize(130, 0))
         self.run_ndabs_output_file_name.setMaximumSize(QtCore.QSize(70, 16777215))
         self.run_ndabs_output_file_name.setObjectName(_fromUtf8("run_ndabs_output_file_name"))
         self.horizontalLayout_71.addWidget(self.run_ndabs_output_file_name)
@@ -1219,7 +1219,7 @@ class Ui_MainWindow(object):
         self.interactive_mode_checkbox.setText(_translate("MainWindow", "Interactive Mode ?", None))
         self.run_sum_scans_button.setText(_translate("MainWindow", "Run Sum Scans", None))
         self.label_5.setText(_translate("MainWindow", "Output File Name:", None))
-        self.run_ndabs_output_file_name.setText(_translate("MainWindow", "STO", None))
+        self.run_ndabs_output_file_name.setText(_translate("MainWindow", "sample_name", None))
         self.label_6.setText(_translate("MainWindow", ".ndsum", None))
         self.run_ndabs_button.setText(_translate("MainWindow", "Run NDabs", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_6), _translate("MainWindow", "NDabs", None))
