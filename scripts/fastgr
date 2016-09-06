@@ -42,6 +42,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     debugging = False
     current_folder = os.getcwd()
     table_selection_buffer = {}
+    _run_thread_sum_scans = RunThread()
     _run_thread = RunThread()
 
     def __init__(self):

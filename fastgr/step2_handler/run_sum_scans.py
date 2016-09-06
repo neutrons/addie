@@ -9,6 +9,7 @@ class RunSumScans(object):
     
     def __init__(self, parent=None):
         self.parent = parent.ui
+        self.parent_no_ui = parent
         self.folder = os.getcwd()
         
     def run(self):
@@ -21,7 +22,11 @@ class RunSumScans(object):
         _script_to_run = self.add_script_flags()
         _script_to_run += ' -f ' + self.full_output_file_name + ' &'
 
-        os.system(_script_to_run)
+        _run_thread = self.parent_no_ui._run_thread_sum_scans
+        _run_thread.setup(script = _script_to_run)
+        _run_thread.start()
+        
+#        os.system(_script_to_run)
         print("[LOG] executing in its own thread:")
         print("[LOG] " + _script_to_run)
         
