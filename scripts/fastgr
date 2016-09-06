@@ -939,7 +939,12 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         if len(new_ws_list) > 0:
             if self.ui.tabWidget_2.currentWidget().objectName() == 'tab_gR':
                 for new_ws in new_ws_list:
-                    self.ui.treeWidget_grWsList.add_arb_gr(new_ws)
+                    ws_unit = self._myController.get_ws_unit(new_ws)
+                    if ws_unit != 'MomentumTransfer':
+                        is_gr = True
+                    else:
+                        is_gr = False
+                    self.ui.treeWidget_grWsList.add_arb_gr(new_ws, is_gr)
             elif self.ui.tabWidget_2.currentWidget().objectName() == 'tab_bragg':
                 for new_ws in new_ws_list:
                     self.ui.treeWidget_braggWSList.add_arb_gr(new_ws)
