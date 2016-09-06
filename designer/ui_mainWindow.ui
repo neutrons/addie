@@ -52,8 +52,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1328</width>
-         <height>837</height>
+         <width>1326</width>
+         <height>842</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -1619,7 +1619,7 @@
                    <item>
                     <widget class="QLabel" name="label_2">
                      <property name="text">
-                      <string>Qmin</string>
+                      <string>Qmax</string>
                      </property>
                     </widget>
                    </item>
@@ -2672,7 +2672,7 @@
           <property name="minimumSize">
            <size>
             <width>800</width>
-            <height>41</height>
+            <height>38</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -2696,7 +2696,7 @@
      <x>0</x>
      <y>0</y>
      <width>1348</width>
-     <height>25</height>
+     <height>20</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -2709,9 +2709,9 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="action_preview_ascii"/>
-    <addaction name="separator"/>
     <addaction name="actionQuit"/>
+    <addaction name="separator"/>
+    <addaction name="action_preview_ascii"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -2745,9 +2745,6 @@
   <action name="actionQuit">
    <property name="text">
     <string>Quit</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Q</string>
    </property>
   </action>
   <action name="actionCheat_sheet">
