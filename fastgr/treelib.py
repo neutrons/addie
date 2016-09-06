@@ -520,12 +520,13 @@ class GofRTree(base.CustomizedTreeView):
 
         return
 
-    def add_arb_gr(self, ws_name):
+    def add_arb_gr(self, ws_name, is_gr=True):
         """
         Add a G(r) workspace that is not belonged to any S(Q) and add it under 'workspaces'
         Parameters
         ----------
         ws_name
+        is_gr
 
         Returns
         -------
@@ -535,7 +536,10 @@ class GofRTree(base.CustomizedTreeView):
         assert isinstance(ws_name, str)
 
         # add leaf
-        self.add_child_main_item('workspaces', ws_name)
+        if is_gr:
+            self.add_child_main_item('workspaces', ws_name)
+        else:
+            self.add_child_main_item('SofQ', ws_name)
 
         # register workspace
         self._workspaceNameList.append(ws_name)
@@ -736,6 +740,7 @@ class GofRTree(base.CustomizedTreeView):
         Add selected runs
         :return:
         """
+        # get list of the items that are selected
         item_list = self.get_selected_items_of_level(target_item_level=2, excluded_parent=None,
                                                      return_item_text=False)
 

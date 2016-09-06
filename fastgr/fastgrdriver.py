@@ -249,7 +249,8 @@ class FastGRDriver(object):
 
         return out_ws.readX(0), out_ws.readY(0), out_ws.readE(0)
 
-    def get_ws_data(self, ws_name):
+    @staticmethod
+    def get_ws_data(ws_name):
         """
 
         Parameters
@@ -266,6 +267,28 @@ class FastGRDriver(object):
         out_ws = AnalysisDataService.retrieve(ws_name)
 
         return out_ws.readX(0), out_ws.readY(0), out_ws.readE(0)
+
+    @staticmethod
+    def get_ws_unit(ws_name):
+        """
+        Find out the unit of the workspace
+        Parameters
+        ----------
+        ws_name
+
+        Returns
+        -------
+
+        """
+        # check
+        assert isinstance(ws_name, str), 'Workspace name must be a string but not a %s.' % ws_name.__class__.__name__
+        assert AnalysisDataService.doesExist(ws_name), 'Workspace %s does not exist.' % ws_name
+
+        ws = AnalysisDataService.retrieve(ws_name)
+
+        unit = ws.getAxis(0).getUnit().unitID()
+
+        return unit
 
     @staticmethod
     def load_bragg_file(file_name):
