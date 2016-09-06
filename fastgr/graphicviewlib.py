@@ -272,10 +272,21 @@ class BraggView(base.MplGraphicsView):
         # clear the workspace record
         self._workspaceSet.clear()
 
-        # clear all lines
+        # clear all lines and reset color/marker counter
         self.clear_all_lines()
+        self.reset_line_color_marker_index()
+        self._currColorIndex = 0
 
         return
+
+    def reset_color(self):
+        """
+        Reset color index
+        Returns
+        -------
+
+        """
+        self._currColorIndex = 0
 
     def scale_auto(self):
         """ Scale automatically for the plots on the canvas
@@ -382,7 +393,7 @@ class GofRView(base.MplGraphicsView):
         # check
         assert isinstance(plot_key, str), 'Key for the plot must be a string but not %s.' % str(type(plot_key))
         if plot_key not in self._grDict:
-            return False, 'Workspace %s cannot be found in GofR dictionary of canvas'  % plot_key
+            return False, 'Workspace %s cannot be found in GofR dictionary of canvas' % plot_key
 
         # get line ID
         line_id = self._grDict[plot_key]
@@ -395,14 +406,25 @@ class GofRView(base.MplGraphicsView):
 
         return
 
+    def reset_color(self):
+        """
+        Reset color scheme
+        Returns
+        -------
+
+        """
+        self._colorIndex = 0
+
     def reset(self):
         """
         Reset the canvas by deleting all lines and clean the dictionary
         Returns:
 
         """
-        # remove all lines
+        # remove all lines and reset marker/color default sequence
         self.clear_all_lines()
+        self.reset_line_color_marker_index()
+        self._colorIndex = 0
 
         # clean dictionary
         self._grDict.clear()
@@ -662,10 +684,8 @@ class SofQView(base.MplGraphicsView):
 
         # define color
         if reset_color_mark:
-            color = 'blue'
-            marker = '.'
-        else:
-            marker, color = self.getNextLineMarkerColorCombo()
+            self.reset_line_color_marker_index()
+        marker, color = self.getNextLineMarkerColorCombo()
 
         # plot
         plot_id = self.add_plot_1d(vec_q, vec_s, color=color, x_label='Q', y_label=sq_y_label,
@@ -754,8 +774,9 @@ class SofQView(base.MplGraphicsView):
         # clear the dictionary
         self._sqLineDict.clear()
 
-        # clear the image
+        # clear the image and reset the marker/color scheme
         self.clear_all_lines()
+        self.reset_line_color_marker_index()
 
         return
 
