@@ -10,6 +10,7 @@ class Step2GuiHandler(object):
     no_hidrogen_range = [10, 50]
     current_folder = ""
     default_q_range = [0.2, 31.4]
+    default_ndabs_output_file_name = "sample_name"
     
     def __init__(self, parent=None):
         self.parent_no_ui = parent
@@ -56,6 +57,19 @@ class Step2GuiHandler(object):
     def check_gui(self):
         self.check_run_ndabs_button()
         self.check_run_sum_scans_button()
+        self.define_new_ndabs_output_file_name()
+        
+    def define_new_ndabs_output_file_name(self):
+        """retrieve name of first row selected and use it to define output file name"""
+        o_table_handler = fastgr.step2_handler.table_handler.TableHandler(parent = self.parent_no_ui)
+        o_table_handler.retrieve_list_of_selected_rows()
+        list_of_selected_row = o_table_handler.list_selected_row
+        if len(list_of_selected_row) > 0:        
+            _metadata_selected = o_table_handler.list_selected_row[0]
+            _output_file_name = _metadata_selected['name']
+        else:
+            _output_file_name = self.default_ndabs_output_file_name
+        self.parent.run_ndabs_output_file_name.setText(_output_file_name)
         
     def check_run_sum_scans_button(self):
         
