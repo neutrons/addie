@@ -120,6 +120,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
                      self.do_reset_gsas_tab)
         self.connect(self.ui.actionQuit, QtCore.SIGNAL('triggered()'),
                      self.evt_quit)
+        self.connect(self.ui.actionCheat_sheet, QtCore.SIGNAL('triggered()'),
+                     self.do_show_help)
 
         # organize widgets group
         self._braggBankWidgets = {1: self.ui.checkBox_bank1,
@@ -145,6 +147,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         # mutex-like variables
         self._noEventBankWidgets = False
+
+        # help (refer to DGSPlanner and HFIR Powder reduction GUI)
+        self._assistantProcess = QtCore.QProcess(self)
 
         return
 
@@ -177,6 +182,20 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         # set a constant item to combobox Sq
         self.ui.comboBox_SofQ.addItem('All')
+
+        return
+
+    def do_show_help(self):
+        """ Show help
+        Copied from DGSPlanner
+        """
+        # close previous service
+        self._assistantProcess.close()
+        self.assistantProcess.waitForFinished()
+
+        # launch
+        helper_url = QtCore.QUrl('fastgr_helper.html')
+        QtGui.QDesktopServices.openUrl(helper_url)
 
         return
 
@@ -1107,7 +1126,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         _about.display()
 
     def action_preview_ascii_clicked(self):
-	o_gui = Step3GuiHandler(parent = self)
+        o_gui = Step3GuiHandler(parent = self)
         o_gui.browse_file()
 
     # tab1
