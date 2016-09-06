@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
+# Form implementation generated from reading ui file 'ui_mainWindow.ui'
 #
-# Created: Thu Sep  1 09:14:53 2016
-#      by: PyQt4 UI code generator 4.10.1
+# Created by: PyQt4 UI code generator 4.11.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -40,7 +39,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
         self.scrollAreaWidgetContents = QtGui.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1326, 842))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1328, 837))
         self.scrollAreaWidgetContents.setMinimumSize(QtCore.QSize(0, 0))
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
         self.verticalLayout_44 = QtGui.QVBoxLayout(self.scrollAreaWidgetContents)
@@ -1025,7 +1024,7 @@ class Ui_MainWindow(object):
         self.gridLayout_14.addWidget(self.tabWidget_2, 0, 0, 1, 1)
         self.verticalLayout_44.addLayout(self.gridLayout_14)
         self.dockWidget_ipython = IPythonDockWidget(self.scrollAreaWidgetContents)
-        self.dockWidget_ipython.setMinimumSize(QtCore.QSize(800, 38))
+        self.dockWidget_ipython.setMinimumSize(QtCore.QSize(800, 41))
         self.dockWidget_ipython.setMaximumSize(QtCore.QSize(524287, 300))
         self.dockWidget_ipython.setObjectName(_fromUtf8("dockWidget_ipython"))
         self.dockWidgetContents = QtGui.QWidget()
@@ -1036,7 +1035,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.scrollArea)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1348, 20))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1348, 25))
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -1065,9 +1064,9 @@ class Ui_MainWindow(object):
         self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
         self.action_preview_ascii = QtGui.QAction(MainWindow)
         self.action_preview_ascii.setObjectName(_fromUtf8("action_preview_ascii"))
-        self.menuFile.addAction(self.actionQuit)
-        self.menuFile.addSeparator()
         self.menuFile.addAction(self.action_preview_ascii)
+        self.menuFile.addSeparator()
+        self.menuFile.addAction(self.actionQuit)
         self.menuEdit.addAction(self.actionReset_GSAS_tab)
         self.menuEdit.addAction(self.actionReset_GofR_tab)
         self.menuHelp.addAction(self.actionCheat_sheet)
@@ -1267,10 +1266,11 @@ class Ui_MainWindow(object):
         self.actionReset_GSAS_tab.setText(_translate("MainWindow", "Reset GSAS-tab", None))
         self.actionReset_GofR_tab.setText(_translate("MainWindow", "Reset GofR-tab", None))
         self.actionQuit.setText(_translate("MainWindow", "Quit", None))
+        self.actionQuit.setShortcut(_translate("MainWindow", "Ctrl+Q", None))
         self.actionCheat_sheet.setText(_translate("MainWindow", "Cheat sheet", None))
         self.actionAbout.setText(_translate("MainWindow", "About ...", None))
         self.action_preview_ascii.setText(_translate("MainWindow", "Preview Ascii ...", None))
 
-from graphicviewlib import BraggView, SofQView, GofRView
+from graphicviewlib import BraggView, GofRView, SofQView
 from ipythondockwidget import IPythonDockWidget
-from treelib import GofRTree, BraggTree
+from treelib import BraggTree, GofRTree

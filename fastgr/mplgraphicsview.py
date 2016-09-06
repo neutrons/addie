@@ -803,7 +803,7 @@ class MplGraphicsView(QtGui.QWidget):
 
         return marker, color
 
-    def resetLineColorStyle(self):
+    def reset_line_color_marker_index(self):
         """ Reset the auto index for line's color and style
         """
         self._myLineMarkerColorIndex = 0
@@ -820,12 +820,12 @@ class MplGraphicsView(QtGui.QWidget):
         return
 
     def setAutoLineMarkerColorCombo(self):
+        """ Set the default/auto line marker/color combination list
         """
-        """
-        self._myLineMarkerColorList = []
+        self._myLineMarkerColorList = list()
         for marker in MplLineMarkers:
             for color in MplBasicColors:
-                self._myLineMarkerColorList.append( (marker, color) )
+                self._myLineMarkerColorList.append((marker, color))
 
         return
 
@@ -1265,19 +1265,19 @@ class Qt4MplCanvas(FigureCanvas):
         """ Get a list of line/marker color and marker style combination
         as default to add more and more line to plot
         """
-        combolist = []
-        nummarkers = len(MplLineMarkers)
-        numcolors = len(MplBasicColors)
+        combo_list = list()
+        num_markers = len(MplLineMarkers)
+        num_colors = len(MplBasicColors)
 
-        for i in xrange(nummarkers):
+        for i in xrange(num_markers):
             marker = MplLineMarkers[i]
-            for j in xrange(numcolors):
+            for j in xrange(num_colors):
                 color = MplBasicColors[j]
-                combolist.append( (marker, color) )
+                combo_list.append((marker, color))
             # ENDFOR (j)
         # ENDFOR(i)
 
-        return combolist
+        return combo_list
 
     def _flush(self):
         """ A dirty hack to flush the image

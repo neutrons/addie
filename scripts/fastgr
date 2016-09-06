@@ -188,17 +188,19 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         """
         self.ui.graphicsView_gr.clear_all_lines()
+        self.ui.graphicsView_gr.reset_color()
 
         return
 
     def do_clear_sq(self):
         """
-        Clear S(Q) canvas
+        Remove all lines from S(Q) canvas
         Returns
         -------
 
         """
         self.ui.graphicsView_sq.clear_all_lines()
+        self.ui.graphicsView_sq.reset_line_color_marker_index()
 
         return
 
