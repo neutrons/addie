@@ -192,7 +192,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         """
         # close previous service
         self._assistantProcess.close()
-        self.assistantProcess.waitForFinished()
+        self._assistantProcess.waitForFinished()
 
         # launch
         helper_url = QtCore.QUrl('fastgr_helper.html')
