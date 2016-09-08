@@ -57,8 +57,7 @@ class Step2GuiHandler(object):
     def check_gui(self):
         self.check_run_ndabs_button()
         self.check_run_sum_scans_button()
-        self.define_new_ndabs_output_file_name()
-        
+
     def define_new_ndabs_output_file_name(self):
         """retrieve name of first row selected and use it to define output file name"""
         o_table_handler = fastgr.step2_handler.table_handler.TableHandler(parent = self.parent_no_ui)

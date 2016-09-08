@@ -6,7 +6,6 @@ class CreateNdsumFile(object):
     
     list_selected_row = None
     gui_settings = None
-    file_name = 'STO.ndsum'
     current_folder = None
     
     def __init__(self, parent=None):
@@ -39,7 +38,8 @@ class CreateNdsumFile(object):
         self.gui_settings = _gui_settings
 
     def _create_sto_output_file(self):
-        full_file_name = os.path.join(self.current_folder, self.file_name)
+        _sto_file_name = str(self.parent.ui.run_ndabs_output_file_name.text()) + '.ndsum'
+        full_file_name = os.path.join(self.current_folder, _sto_file_name)
         _text = []
         for _entry in self.list_selected_row:
             _text.append(_entry['name'] + ' ' + _entry['runs'] + '\n')
