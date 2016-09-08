@@ -1988,6 +1988,9 @@
                   <property name="text">
                    <string>sample_name</string>
                   </property>
+                  <property name="readOnly">
+                   <bool>false</bool>
+                  </property>
                  </widget>
                 </item>
                 <item>
@@ -2709,9 +2712,9 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionQuit"/>
-    <addaction name="separator"/>
     <addaction name="action_preview_ascii"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -2726,6 +2729,8 @@
     </property>
     <addaction name="actionCheat_sheet"/>
     <addaction name="actionAbout"/>
+    <addaction name="separator"/>
+    <addaction name="actionAdvanced"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -2760,6 +2765,11 @@
   <action name="action_preview_ascii">
    <property name="text">
     <string>Preview Ascii ...</string>
+   </property>
+  </action>
+  <action name="actionAdvanced">
+   <property name="text">
+    <string>Advanced ...</string>
    </property>
   </action>
  </widget>
@@ -3310,6 +3320,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionAdvanced</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>advanced_option_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>673</x>
+     <y>451</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>diamond_edited()</slot>
@@ -3342,5 +3368,6 @@
   <slot>action_preview_ascii_clicked()</slot>
   <slot>output_file_name_changed()</slot>
   <slot>create_new_autonom_folder_button_clicked()</slot>
+  <slot>advanced_option_clicked()</slot>
  </slots>
 </ui>

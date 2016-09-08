@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Tue Sep  6 16:42:11 2016
+# Created: Thu Sep  8 16:43:14 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -765,6 +765,7 @@ class Ui_MainWindow(object):
         self.run_ndabs_output_file_name = QtGui.QLineEdit(self.tab_6)
         self.run_ndabs_output_file_name.setMinimumSize(QtCore.QSize(130, 0))
         self.run_ndabs_output_file_name.setMaximumSize(QtCore.QSize(70, 16777215))
+        self.run_ndabs_output_file_name.setReadOnly(False)
         self.run_ndabs_output_file_name.setObjectName(_fromUtf8("run_ndabs_output_file_name"))
         self.horizontalLayout_71.addWidget(self.run_ndabs_output_file_name)
         self.label_6 = QtGui.QLabel(self.tab_6)
@@ -1065,13 +1066,17 @@ class Ui_MainWindow(object):
         self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
         self.action_preview_ascii = QtGui.QAction(MainWindow)
         self.action_preview_ascii.setObjectName(_fromUtf8("action_preview_ascii"))
-        self.menuFile.addAction(self.actionQuit)
-        self.menuFile.addSeparator()
+        self.actionAdvanced = QtGui.QAction(MainWindow)
+        self.actionAdvanced.setObjectName(_fromUtf8("actionAdvanced"))
         self.menuFile.addAction(self.action_preview_ascii)
+        self.menuFile.addSeparator()
+        self.menuFile.addAction(self.actionQuit)
         self.menuEdit.addAction(self.actionReset_GSAS_tab)
         self.menuEdit.addAction(self.actionReset_GofR_tab)
         self.menuHelp.addAction(self.actionCheat_sheet)
         self.menuHelp.addAction(self.actionAbout)
+        self.menuHelp.addSeparator()
+        self.menuHelp.addAction(self.actionAdvanced)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuEdit.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
@@ -1110,6 +1115,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.action_preview_ascii, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.action_preview_ascii_clicked)
         QtCore.QObject.connect(self.run_ndabs_output_file_name, QtCore.SIGNAL(_fromUtf8("textChanged(QString)")), MainWindow.output_file_name_changed)
         QtCore.QObject.connect(self.create_folder_button, QtCore.SIGNAL(_fromUtf8("clicked(bool)")), MainWindow.create_new_autonom_folder_button_clicked)
+        QtCore.QObject.connect(self.actionAdvanced, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.advanced_option_clicked)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -1270,6 +1276,7 @@ class Ui_MainWindow(object):
         self.actionCheat_sheet.setText(_translate("MainWindow", "Cheat sheet", None))
         self.actionAbout.setText(_translate("MainWindow", "About ...", None))
         self.action_preview_ascii.setText(_translate("MainWindow", "Preview Ascii ...", None))
+        self.actionAdvanced.setText(_translate("MainWindow", "Advanced ...", None))
 
 from graphicviewlib import BraggView, SofQView, GofRView
 from ipythondockwidget import IPythonDockWidget
