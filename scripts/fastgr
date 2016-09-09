@@ -28,13 +28,14 @@ from fastgr.step2_handler.run_thread import RunThread
 
 from fastgr.step3_handler.step3_gui_handler import Step3GuiHandler
 
+from fastgr.mantid_handler.browse_file_folder_handler import BrowseFileFolderHandler
+from fastgr.mantid_handler.mantid_reduction import MantidReduction
+
 import PyQt4
 import PyQt4.QtCore as QtCore
 import PyQt4.QtGui as QtGui
 
 import fastgr.fastgrdriver as driver
-
-__version__ = "1.0.0"
 
 
 class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
@@ -42,6 +43,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     """
     debugging = False
     current_folder = os.getcwd()
+    file_path = os.getcwd()
     table_selection_buffer = {}
     _run_thread_sum_scans = RunThread()
     _run_thread = RunThread()
@@ -1190,6 +1192,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         _run_autonom.create_exp_ini_file()
 
 # tab2
+
     def move_to_folder_clicked(self):
         o_gui = Step2GuiHandler(parent = self)
         o_gui.move_to_folder()
@@ -1214,6 +1217,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         _o_gui.check_gui()
 	_o_gui.define_new_ndabs_output_file_name()
 
+    # PDF
+	
     def check_q_range(self):
         _o_gui = Step2GuiHandler(parent = self)
         _o_gui.check_gui()
@@ -1277,6 +1282,25 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     def output_file_name_changed(self):
 	o_gui = Step2GuiHandler(parent = self)
 	o_gui.check_gui()
+
+    # Rietveld
+    
+    def mantid_browse_calibration_clicked(self):
+	o_mantid_gui = BrowseFileHandler(parent = self)
+	o_mantid_gui.browse_file(type = 'calibration')
+    
+    def mantid_browse_characterization_clicked(self):
+	o_mantid_gui = BrowseFileFolderHandler(parent = self)
+	o_mantid_gui.browse_file(type = 'characterization')
+
+    def mantid_output_directory_clicked(self):
+	o_mantid_gui = BrowseFileFolderHandler(parent = self)
+	o_mantid_gui.browse_folder()
+
+    def mantid_run_reduction(self):
+	o_mantid_run = MantidReduction(parent = self)
+	o_mantid_run.run()
+
 
 def main():
     app = PyQt4.QtGui.QApplication(sys.argv)
