@@ -29,7 +29,7 @@ from fastgr.step2_handler.run_thread import RunThread
 from fastgr.step3_handler.step3_gui_handler import Step3GuiHandler
 
 from fastgr.mantid_handler.browse_file_folder_handler import BrowseFileFolderHandler
-from fastgr.mantid_handler.mantid_reduction import MantidReduction
+from fastgr.mantid_handler.mantid_reduction import GlobalMantidReduction
 
 import PyQt4
 import PyQt4.QtCore as QtCore
@@ -1304,7 +1304,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 	o_mantid_gui.browse_folder()
 
     def mantid_run_reduction(self):
-	o_mantid_run = MantidReduction(parent = self)
+	o_mantid_run = GlobalMantidReduction(parent = self)
 	o_mantid_run.run()
 
     def check_mantid_gui(self):

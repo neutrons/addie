@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Mon Sep 12 16:13:01 2016
+# Created: Mon Sep 12 17:04:26 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -477,12 +477,20 @@ class Ui_MainWindow(object):
         self.horizontalLayout_63.addWidget(self.background_yes)
         self.background_comboBox = QtGui.QComboBox(self.groupBox_32)
         self.background_comboBox.setEnabled(False)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.background_comboBox.sizePolicy().hasHeightForWidth())
+        self.background_comboBox.setSizePolicy(sizePolicy)
         self.background_comboBox.setMinimumSize(QtCore.QSize(250, 0))
         self.background_comboBox.setObjectName(_fromUtf8("background_comboBox"))
         self.horizontalLayout_63.addWidget(self.background_comboBox)
-        self.background_line_edit = QtGui.QLineEdit(self.groupBox_32)
-        self.background_line_edit.setEnabled(False)
-        self.background_line_edit.setMinimumSize(QtCore.QSize(200, 0))
+        self.background_line_edit = QtGui.QLabel(self.groupBox_32)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.background_line_edit.sizePolicy().hasHeightForWidth())
+        self.background_line_edit.setSizePolicy(sizePolicy)
         self.background_line_edit.setObjectName(_fromUtf8("background_line_edit"))
         self.horizontalLayout_63.addWidget(self.background_line_edit)
         self.verticalLayout_37.addLayout(self.horizontalLayout_63)
@@ -1256,6 +1264,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.mantid_max_crop_wavelength, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.check_mantid_gui)
         QtCore.QObject.connect(self.mantid_vanadium_radius, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.check_mantid_gui)
         QtCore.QObject.connect(self.mantid_output_directoy_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.check_mantid_gui)
+        QtCore.QObject.connect(self.mantid_run_reduction, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.mantid_run_reduction)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -1326,6 +1335,7 @@ class Ui_MainWindow(object):
         self.background_no_field.setText(_translate("MainWindow", "N/A", None))
         self.label_81.setText(_translate("MainWindow", "(from exp.ini file)", None))
         self.background_yes.setText(_translate("MainWindow", "Yes", None))
+        self.background_line_edit.setText(_translate("MainWindow", "N/A", None))
         self.label_80.setText(_translate("MainWindow", "Sample formula example: H 2 O 1, 2H 2 O 1, 238U 1 O 2", None))
         self.fourier_filter_group_box.setTitle(_translate("MainWindow", "Fourier Filter", None))
         self.fourier_filter_from.setText(_translate("MainWindow", "1.5", None))

@@ -86,6 +86,12 @@ class Step2GuiHandler(object):
 
         if _status and (self.parent.mantid_characterization_value.text() == 'N/A'):
             _status = False
+
+        if _status and (self.parent.vanadium.text() == ""):
+            _status = False
+
+        if _status and (self.parent.vanadium_background.text() == ""):
+            _status = False
             
         if _status and (not is_int(self.parent.mantid_number_of_bins.text())):            
             _status = False
