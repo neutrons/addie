@@ -2,6 +2,7 @@ from PyQt4 import QtGui, QtCore
 import os
 
 import fastgr.step2_handler.table_handler
+from fastgr.utilities.math_tools import is_int, is_float
 
 
 class Step2GuiHandler(object):
@@ -57,6 +58,7 @@ class Step2GuiHandler(object):
     def check_gui(self):
         self.check_run_ndabs_button()
         self.check_run_sum_scans_button()
+        self.check_run_mantid_reduction_button()
 
     def define_new_ndabs_output_file_name(self):
         """retrieve name of first row selected and use it to define output file name"""
@@ -69,6 +71,38 @@ class Step2GuiHandler(object):
         else:
             _output_file_name = self.default_ndabs_output_file_name
         self.parent.run_ndabs_output_file_name.setText(_output_file_name)
+        
+    def check_run_mantid_reduction_button(self):
+
+        _status = True
+        if not self.parent.table.rowCount() > 0:
+            _status = False
+            
+        if _status and (not self.at_least_one_row_checked()):
+            _status = False
+
+        if _status and (self.parent.mantid_calibration_value.text() == 'N/A'):
+            _status = False
+
+        if _status and (self.parent.mantid_characterization_value.text() == 'N/A'):
+            _status = False
+            
+        if _status and (not is_int(self.parent.mantid_number_of_bins.text())):            
+            _status = False
+            
+        if _status and (not is_float(self.parent.mantid_min_crop_wavelength.text())):
+            _status = False
+            
+        if _status and (not is_float(self.parent.mantid_max_crop_wavelength.text())):
+            _status = False
+            
+        if _status and (not is_float(self.parent.mantid_vanadium_radius.text())):
+            _status = False
+            
+        if _status and (self.parent.mantid_output_directory_value.text() == "N/A"):
+            _status = False
+            
+        self.parent.mantid_run_reduction.setEnabled(_status)
         
     def check_run_sum_scans_button(self):
         

@@ -11,14 +11,15 @@ class BrowseFileFolderHandler(object):
         self.current_folder = parent.file_path
         
     def browse_file(self, type='calibration'):
-        _current_folder = self.current_folder
         
         if type == 'calibration':
+            _current_folder = self.parent.calibration_folder
             _filter = "calib (*.h5);;all (*.*)"
             _caption = "Select Calibration File"
             _output_ui = self.parent.ui.mantid_calibration_value
         else:
-            _filter = "characterization (-ritveld.txt);;all (*.*)"
+            _current_folder = self.parent.characterization_folder
+            _filter = "characterization (*-rietveld.txt);;all (*.*)"
             _caption = "Select Characterization File"
             _output_ui = self.parent.ui.mantid_characterization_value
 
@@ -29,8 +30,13 @@ class BrowseFileFolderHandler(object):
         
         if _file:
             _output_ui.setText(str(_file))
-            self.parent.file_path = os.path.dirname(str(_file))
+            _path = os.path.dirname(str(_file))
             
+            if type == 'calibration':
+                self.parent.calibration_current_folder = _path
+            else:
+                self.parent.characterization_current_folder = _path
+                
     def browse_folder(self):
         _current_folder = self.current_folder
         _caption  = "Select Output Folder"

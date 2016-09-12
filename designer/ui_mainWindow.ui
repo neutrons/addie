@@ -2203,7 +2203,7 @@ p, li { white-space: pre-wrap; }
                         </widget>
                        </item>
                        <item>
-                        <widget class="QLineEdit" name="mantid_crop_wavelength_max">
+                        <widget class="QLineEdit" name="mantid_max_crop_wavelength">
                          <property name="text">
                           <string>2.1</string>
                          </property>
@@ -3687,6 +3687,118 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>mantid_browse_calibration_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>check_mantid_gui()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>197</x>
+     <y>569</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>3</x>
+     <y>576</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mantid_browse_characterization_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>check_mantid_gui()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>46</x>
+     <y>615</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>2</x>
+     <y>620</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mantid_number_of_bins</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>check_mantid_gui()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>226</x>
+     <y>658</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1</x>
+     <y>674</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mantid_min_crop_wavelength</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>check_mantid_gui()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>163</x>
+     <y>720</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>2</x>
+     <y>800</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mantid_max_crop_wavelength</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>check_mantid_gui()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>354</x>
+     <y>722</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>717</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mantid_vanadium_radius</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>check_mantid_gui()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>766</x>
+     <y>714</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1347</x>
+     <y>658</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mantid_output_directoy_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>check_mantid_gui()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>79</x>
+     <y>768</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>771</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>diamond_edited()</slot>
@@ -3723,5 +3835,6 @@ p, li { white-space: pre-wrap; }
   <slot>mantid_browse_calibration_clicked()</slot>
   <slot>mantid_browse_characterization_clicked()</slot>
   <slot>mantid_output_directory_clicked()</slot>
+  <slot>check_mantid_gui()</slot>
  </slots>
 </ui>

@@ -41,8 +41,10 @@ import fastgr.fastgrdriver as driver
 class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     """ Main FastGR window
     """
-    debugging = False
+    debugging = True
     current_folder = os.getcwd()
+    calibration_folder = current_folder 
+    characterization_folder = current_folder
     file_path = os.getcwd()
     table_selection_buffer = {}
     _run_thread_sum_scans = RunThread()
@@ -55,6 +57,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         """
         # Base class
         QtGui.QMainWindow.__init__(self)
+
+	if self.debugging:
+	    self.calibration_folder = '/SNS/NOM/IPTS-17118/shared/'
+	    self.characterization_folder = '/SNS/NOM/shared/CALIBRATION/'
 
         # Initialize the UI widgets
         self.ui = fastgr.ui_mainWindow.Ui_MainWindow()
@@ -1286,7 +1292,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     # Rietveld
     
     def mantid_browse_calibration_clicked(self):
-	o_mantid_gui = BrowseFileHandler(parent = self)
+	o_mantid_gui = BrowseFileFolderHandler(parent = self)
 	o_mantid_gui.browse_file(type = 'calibration')
     
     def mantid_browse_characterization_clicked(self):
@@ -1301,6 +1307,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 	o_mantid_run = MantidReduction(parent = self)
 	o_mantid_run.run()
 
+    def check_mantid_gui(self):
+	o_gui = Step2GuiHandler(parent = self)
+	o_gui.check_gui()
 
 def main():
     app = PyQt4.QtGui.QApplication(sys.argv)

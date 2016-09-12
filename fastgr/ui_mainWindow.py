@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Fri Sep  9 15:33:46 2016
+# Created: Mon Sep 12 16:13:01 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -858,9 +858,9 @@ class Ui_MainWindow(object):
         self.label_14 = QtGui.QLabel(self.groupBox_2)
         self.label_14.setObjectName(_fromUtf8("label_14"))
         self.horizontalLayout_3.addWidget(self.label_14)
-        self.mantid_crop_wavelength_max = QtGui.QLineEdit(self.groupBox_2)
-        self.mantid_crop_wavelength_max.setObjectName(_fromUtf8("mantid_crop_wavelength_max"))
-        self.horizontalLayout_3.addWidget(self.mantid_crop_wavelength_max)
+        self.mantid_max_crop_wavelength = QtGui.QLineEdit(self.groupBox_2)
+        self.mantid_max_crop_wavelength.setObjectName(_fromUtf8("mantid_max_crop_wavelength"))
+        self.horizontalLayout_3.addWidget(self.mantid_max_crop_wavelength)
         self.label_13 = QtGui.QLabel(self.groupBox_2)
         self.label_13.setObjectName(_fromUtf8("label_13"))
         self.horizontalLayout_3.addWidget(self.label_13)
@@ -1249,6 +1249,13 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.mantid_browse_calibration_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.mantid_browse_calibration_clicked)
         QtCore.QObject.connect(self.mantid_browse_characterization_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.mantid_browse_characterization_clicked)
         QtCore.QObject.connect(self.mantid_output_directoy_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.mantid_output_directory_clicked)
+        QtCore.QObject.connect(self.mantid_browse_calibration_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.check_mantid_gui)
+        QtCore.QObject.connect(self.mantid_browse_characterization_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.check_mantid_gui)
+        QtCore.QObject.connect(self.mantid_number_of_bins, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.check_mantid_gui)
+        QtCore.QObject.connect(self.mantid_min_crop_wavelength, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.check_mantid_gui)
+        QtCore.QObject.connect(self.mantid_max_crop_wavelength, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.check_mantid_gui)
+        QtCore.QObject.connect(self.mantid_vanadium_radius, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.check_mantid_gui)
+        QtCore.QObject.connect(self.mantid_output_directoy_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.check_mantid_gui)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -1378,7 +1385,7 @@ class Ui_MainWindow(object):
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">&#8491;</p></body></html>", None))
         self.label_14.setText(_translate("MainWindow", "Max", None))
-        self.mantid_crop_wavelength_max.setText(_translate("MainWindow", "2.1", None))
+        self.mantid_max_crop_wavelength.setText(_translate("MainWindow", "2.1", None))
         self.label_13.setText(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
