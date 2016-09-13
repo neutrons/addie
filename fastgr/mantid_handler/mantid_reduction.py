@@ -3,27 +3,28 @@ import fastgr.step2_handler.table_handler
 
 class GlobalMantidReduction(object):
     
-    parameters = {'_max_chunk_size': 8,
-                  '_preserve_events': True,
-                  '_push_data_positive': '/AddMinimum',
-                  '_remove_prompt_pulse_width': 50,
-                  '_bin_in_d_space': True,
-                  '_filter_bad_pulses': 25,
-                  '_save_as': 'gsas fullprof topas',
-                  '_strip_vanadium_peaks': True,
-                  '_normalize_by_current': True,
-                  '_final_data_units': 'dSpacing',
-                  '_runs': [],
-                  '_calibration_file': '',
-                  '_characterization_file': '',
-                  '_background_number': '',
-                  '_vanadium_number': '',
-                  '_vanadium_background_number': '',
-                  '_resamplex': None,
-                  '_crop_wavelength_min': None,
-                  '_corp_wavelength_max': None,
-                  '_output_directory':  '',
-                  '_vanadium_radius': None}
+    parameters = {'max_chunk_size': 8,
+                  'preserve_events': True,
+                  'exp_ini_filename': 'exp.ini',
+                  'push_data_positive': '/AddMinimum',
+                  'remove_prompt_pulse_width': 50,
+                  'bin_in_d_space': True,
+                  'filter_bad_pulses': 25,
+                  'save_as': 'gsas fullprof topas',
+                  'strip_vanadium_peaks': True,
+                  'normalize_by_current': True,
+                  'final_data_units': 'dSpacing',
+                  'runs': [],
+                  'calibration_file': '',
+                  'characterization_file': '',
+                  'background_number': '',
+                  'vanadium_number': '',
+                  'vanadium_background_number': '',
+                  'resamplex': None,
+                  'crop_wavelength_min': None,
+                  'corp_wavelength_max': None,
+                  'output_directory':  '',
+                  'vanadium_radius': None}
     
     def __init__(self, parent=None):
         self.parent = parent
@@ -33,16 +34,16 @@ class GlobalMantidReduction(object):
     def collect_parameters(self):
         _parameters = self.parameters
         
-        _parameters['_calibration_file'] = str(self.parent.ui.mantid_calibration_value.text())
-        _parameters['_characterization_file'] = str(self.parent.ui.mantid_characterization_value.text())
-        _parameters['_background_number'] = self.collect_background_number()
-        _parameters['_vanadium_number'] = str(self.parent.ui.vanadium.text())
-        _parameters['_vanadium_background_number'] = str(self.parent.ui.vanadium_background.text())
-        _parameters['_resamplex'] = str(self.parent.ui.mantid_number_of_bins.text())
-        _parameters['_crop_wavelength_min'] = str(self.parent.ui.mantid_min_crop_wavelength.text())
-        _parameters['_crop_wavelength_max'] = str(self.parent.ui.mantid_max_crop_wavelength.text())
-        _parameters['_output_directory'] = str(self.parent.ui.mantid_output_directory_value.text())
-        _parameters['_vanadium_radius'] = str(self.parent.ui.mantid_vanadium_radius.text())
+        _parameters['calibration_file'] = str(self.parent.ui.mantid_calibration_value.text())
+        _parameters['characterization_file'] = str(self.parent.ui.mantid_characterization_value.text())
+        _parameters['background_number'] = self.collect_background_number()
+        _parameters['vanadium_number'] = str(self.parent.ui.vanadium.text())
+        _parameters['vanadium_background_number'] = str(self.parent.ui.vanadium_background.text())
+        _parameters['resamplex'] = str(self.parent.ui.mantid_number_of_bins.text())
+        _parameters['crop_wavelength_min'] = str(self.parent.ui.mantid_min_crop_wavelength.text())
+        _parameters['crop_wavelength_max'] = str(self.parent.ui.mantid_max_crop_wavelength.text())
+        _parameters['output_directory'] = str(self.parent.ui.mantid_output_directory_value.text())
+        _parameters['vanadium_radius'] = float(str(self.parent.ui.mantid_vanadium_radius.text()))
         self.parameters = _parameters
         
     def collect_runs(self):
@@ -53,7 +54,7 @@ class GlobalMantidReduction(object):
         for _row in list_of_selected_row:
             _runs = _row['runs']
             runs.append(_runs)
-        self.parameters['_runs'] = runs
+        self.parameters['runs'] = runs
 
     def collect_background_number(self):
         if self.parent.ui.background_yes.isChecked():
