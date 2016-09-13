@@ -1,3 +1,5 @@
+import os
+
 import fastgr.step2_handler.table_handler
 
 
@@ -6,7 +8,7 @@ class GlobalMantidReduction(object):
     parameters = {'max_chunk_size': 8,
                   'preserve_events': True,
                   'exp_ini_filename': 'exp.ini',
-                  'push_data_positive': '/AddMinimum',
+                  'push_data_positive': 'AddMinimum',
                   'remove_prompt_pulse_width': 50,
                   'bin_in_d_space': True,
                   'filter_bad_pulses': 25,
@@ -30,9 +32,14 @@ class GlobalMantidReduction(object):
         self.parent = parent
         self.collect_parameters()
         self.collect_runs()
+        self.create_output_folder()
         
     def collect_parameters(self):
         _parameters = self.parameters
+        
+        _current_folder = self.parent.current_folder
+        _exp_ini = os.path.join(_current_folder, _parameters['exp_ini_filename'])
+        _parameters['exp_ini_filename'] = _exp_ini
         
         _parameters['calibration_file'] = str(self.parent.ui.mantid_calibration_value.text())
         _parameters['characterization_file'] = str(self.parent.ui.mantid_characterization_value.text())
@@ -63,7 +70,12 @@ class GlobalMantidReduction(object):
             return str(self.parent.ui.background_no_field.text())
         
     def run(self):
-        for index, runs in enumerate(self.parameters['_runs']):
+        for index, runs in enumerate(self.parameters['runs']):
             _o_mantid = self.parent._mantid_thread_array[index]
             _o_mantid.setup(runs = runs, parameters = self.parameters)
             _o_mantid.run()
+            
+    def create_output_folder(self):
+        output_folder = self.parameters['output_directory']
+        if not os.path.exists(output_folder):
+            os.makedirs(output_folder)
