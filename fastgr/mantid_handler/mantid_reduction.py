@@ -1,14 +1,6 @@
 import fastgr.step2_handler.table_handler
 
 
-class MantidReduction(object):
-    ''' One reduction for each row selected '''
-
-    _filename = ''
-
-
-
-
 class GlobalMantidReduction(object):
     
     parameters = {'_max_chunk_size': 8,
@@ -70,5 +62,7 @@ class GlobalMantidReduction(object):
             return str(self.parent.ui.background_no_field.text())
         
     def run(self):
-        pass
-        
+        for index, runs in enumerate(self.parameters['_runs']):
+            _o_mantid = self.parent._mantid_thread_array[index]
+            _o_mantid.setup(runs = runs, parameters = self.parameters)
+            _o_mantid.run()

@@ -2,6 +2,7 @@
 
 import sys
 import os
+import itertools
 from fastgr.ipythondockwidget import IPythonDockWidget
 
 import fastgr.ui_mainWindow
@@ -30,6 +31,7 @@ from fastgr.step3_handler.step3_gui_handler import Step3GuiHandler
 
 from fastgr.mantid_handler.browse_file_folder_handler import BrowseFileFolderHandler
 from fastgr.mantid_handler.mantid_reduction import GlobalMantidReduction
+from fastgr.mantid_handler.mantid_thread import MantidThread
 
 import PyQt4
 import PyQt4.QtCore as QtCore
@@ -49,6 +51,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     table_selection_buffer = {}
     _run_thread_sum_scans = RunThread()
     _run_thread = RunThread()
+    _mantid_thread_array = list(itertools.repeat(MantidThread(), 30))
 
     def __init__(self):
         """ Initialization
@@ -1289,6 +1292,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 	o_gui = Step2GuiHandler(parent = self)
 	o_gui.check_gui()
 
+    
     # Rietveld
     
     def mantid_browse_calibration_clicked(self):
