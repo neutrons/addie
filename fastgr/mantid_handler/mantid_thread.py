@@ -59,6 +59,29 @@ class MantidThread(QtCore.QThread):
                             parameters['normalize_by_current'],
                             parameters['final_data_units']))
 
+        print(type(self.runs))
+        print(type(parameters['max_chunk_size']))
+        print(type(parameters['preserve_events']))
+        print(type(parameters['push_data_positive']))
+        print(type(parameters['calibration_file']))
+        print(type(parameters['characterization_file']))
+        print(type(parameters['background_number']))
+        print(type(parameters['vanadium_number']))
+        print(type(parameters['vanadium_background_number']))
+        print(type(parameters['exp_ini_filename']))
+        print(type(int(parameters['remove_prompt_pulse_width'])))
+        print(type(parameters['resamplex']))
+        print(type(parameters['bin_in_d_space']))
+        print(type(int(parameters['filter_bad_pulses'])))
+        print(type(float(parameters['crop_wavelength_min'])))
+        print(type(float(parameters['crop_wavelength_max'])))
+        print(type(parameters['save_as']))
+        print(type(parameters['output_directory']))
+        print(type(parameters['strip_vanadium_peaks']))
+        print(type(parameters['vanadium_radius']))
+        print(type(parameters['normalize_by_current']))
+        print(type(parameters['final_data_units']))
+
         SNSPowderReduction( Filename = self.runs,
                             MaxChunkSize = parameters['max_chunk_size'],
                             PreserveEvents = parameters['preserve_events'],

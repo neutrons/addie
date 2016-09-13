@@ -39,11 +39,11 @@ class GlobalMantidReduction(object):
         
         _current_folder = self.parent.current_folder
         _exp_ini = os.path.join(_current_folder, _parameters['exp_ini_filename'])
-        _parameters['exp_ini_filename'] = _exp_ini
+        _parameters['exp_ini_filename'] = str(_exp_ini)
         
         _parameters['calibration_file'] = str(self.parent.ui.mantid_calibration_value.text())
         _parameters['characterization_file'] = str(self.parent.ui.mantid_characterization_value.text())
-        _parameters['background_number'] = self.collect_background_number()
+        _parameters['background_number'] = str(self.collect_background_number())
         _parameters['vanadium_number'] = str(self.parent.ui.vanadium.text())
         _parameters['vanadium_background_number'] = str(self.parent.ui.vanadium_background.text())
         _parameters['resamplex'] = str(self.parent.ui.mantid_number_of_bins.text())
