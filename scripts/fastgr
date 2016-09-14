@@ -43,7 +43,7 @@ import fastgr.fastgrdriver as driver
 class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     """ Main FastGR window
     """
-    debugging = True
+    debugging = False
     current_folder = os.getcwd()
     calibration_folder = current_folder 
     characterization_folder = current_folder

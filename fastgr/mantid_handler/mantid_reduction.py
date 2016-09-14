@@ -40,7 +40,6 @@ class GlobalMantidReduction(object):
         _current_folder = self.parent.current_folder
         _exp_ini = os.path.join(_current_folder, _parameters['exp_ini_filename'])
         _parameters['exp_ini_filename'] = str(_exp_ini)
-        
         _parameters['calibration_file'] = str(self.parent.ui.mantid_calibration_value.text())
         _parameters['characterization_file'] = str(self.parent.ui.mantid_characterization_value.text())
         _parameters['background_number'] = str(self.collect_background_number())
@@ -51,6 +50,19 @@ class GlobalMantidReduction(object):
         _parameters['crop_wavelength_max'] = str(self.parent.ui.mantid_max_crop_wavelength.text())
         _parameters['output_directory'] = str(self.parent.ui.mantid_output_directory_value.text())
         _parameters['vanadium_radius'] = float(str(self.parent.ui.mantid_vanadium_radius.text()))
+
+        if self.parent.debugging:
+            _parameters['exp_ini_filename'] = '/SNS/NOM/IPTS-17118/shared/autoNOM/exp.ini'
+            _parameters['calibration_file'] = '/SNS/NOM/IPTS-17210/shared/NOM_calibrate_d77194_2016_09_14.h5'
+            _parameters['characterization_file'] = '/SNS/NOM/shared/CALIBRATION/2016_2_1B_CAL/NOM_char_2016_08_18-rietveld.txt'
+            _parameters['background_number'] = '80289'
+            _parameters['vanadium_number'] = '79335'
+            _parameters['vanadium_background_number'] = '80289'
+            _parameters['resamplex'] = -6000
+            _parameters['crop_wavelength_min'] = .1
+            _parameters['crop_wavelength_max'] = 2.9
+            _parameters['vanadium_radius'] = 0.58
+
         self.parameters = _parameters
         
     def collect_runs(self):
@@ -59,8 +71,13 @@ class GlobalMantidReduction(object):
         list_of_selected_row = o_table_handler.list_selected_row
         runs = []
         for _row in list_of_selected_row:
-            _runs = _row['runs']
+            _runs = 'NOM_' + _row['runs']
             runs.append(_runs)
+
+        if self.parent.debugging:
+            runs = []
+            runs.append('NOM_80369')
+
         self.parameters['runs'] = runs
 
     def collect_background_number(self):
@@ -73,7 +90,7 @@ class GlobalMantidReduction(object):
         for index, runs in enumerate(self.parameters['runs']):
             _o_mantid = self.parent._mantid_thread_array[index]
             _o_mantid.setup(runs = runs, parameters = self.parameters)
-            _o_mantid.run()
+            _o_mantid.start()
             
     def create_output_folder(self):
         output_folder = self.parameters['output_directory']
