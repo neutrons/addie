@@ -24,10 +24,14 @@ class FileHandler(object):
         else:
             self.filename = self.filename + "." + ext_requested
 
-    def create_ascii(self, contain=None):
+    def create_ascii(self, contain=None, carriage_return=True):
         _filename = self.filename
         f = open(_filename, 'w')
         for _line in contain:
-            f.write(_line + "\n")
+            if carriage_return:
+                f.write(_line + "\n")
+            else:
+                f.write(_line)
+                
         f.close()
         

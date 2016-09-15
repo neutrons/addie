@@ -74,7 +74,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -1196,7 +1196,7 @@
               <item>
                <widget class="QTabWidget" name="tabWidget">
                 <property name="currentIndex">
-                 <number>0</number>
+                 <number>1</number>
                 </property>
                 <widget class="QWidget" name="tab">
                  <attribute name="title">
@@ -2324,7 +2324,7 @@ p, li { white-space: pre-wrap; }
                     <item>
                      <widget class="QPushButton" name="mantid_run_reduction">
                       <property name="enabled">
-                       <bool>false</bool>
+                       <bool>true</bool>
                       </property>
                       <property name="text">
                        <string>Run Reduction</string>
@@ -3652,8 +3652,8 @@ p, li { white-space: pre-wrap; }
    <slot>mantid_browse_calibration_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>105</x>
-     <y>568</y>
+     <x>120</x>
+     <y>551</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -3668,8 +3668,8 @@ p, li { white-space: pre-wrap; }
    <slot>mantid_browse_characterization_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>152</x>
-     <y>617</y>
+     <x>167</x>
+     <y>555</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -3684,8 +3684,8 @@ p, li { white-space: pre-wrap; }
    <slot>mantid_output_directory_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>141</x>
-     <y>775</y>
+     <x>57</x>
+     <y>568</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -3700,8 +3700,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>197</x>
-     <y>569</y>
+     <x>212</x>
+     <y>551</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -3716,8 +3716,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>46</x>
-     <y>615</y>
+     <x>61</x>
+     <y>555</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -3732,8 +3732,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>226</x>
-     <y>658</y>
+     <x>91</x>
+     <y>559</y>
     </hint>
     <hint type="destinationlabel">
      <x>1</x>
@@ -3748,8 +3748,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>163</x>
-     <y>720</y>
+     <x>57</x>
+     <y>589</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -3764,8 +3764,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>354</x>
-     <y>722</y>
+     <x>68</x>
+     <y>589</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -3780,8 +3780,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>766</x>
-     <y>714</y>
+     <x>104</x>
+     <y>564</y>
     </hint>
     <hint type="destinationlabel">
      <x>1347</x>
@@ -3796,8 +3796,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>79</x>
-     <y>768</y>
+     <x>57</x>
+     <y>568</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -3812,8 +3812,8 @@ p, li { white-space: pre-wrap; }
    <slot>mantid_run_reduction()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1261</x>
-     <y>770</y>
+     <x>123</x>
+     <y>567</y>
     </hint>
     <hint type="destinationlabel">
      <x>1333</x>

@@ -1,6 +1,8 @@
 import os
 
 import fastgr.step2_handler.table_handler
+from fastgr.step2_handler.mantid_reduction_dialogbox import MantidReductionDialogbox
+from fastgr.step2_handler.mantid_reduction_view import MantidReductionView
 
 
 class GlobalMantidReduction(object):
@@ -74,10 +76,6 @@ class GlobalMantidReduction(object):
             _runs = 'NOM_' + _row['runs']
             runs.append(_runs)
 
-        if self.parent.debugging:
-            runs = []
-            runs.append('NOM_80369')
-
         self.parameters['runs'] = runs
 
     def collect_background_number(self):
@@ -87,6 +85,11 @@ class GlobalMantidReduction(object):
             return str(self.parent.ui.background_no_field.text())
         
     def run(self):
+        # display message
+        o_mantid_launcher = MantidReductionDialogbox(parent = self.parent, father = self)
+        o_mantid_launcher.show()
+    
+    def run_reduction(self):
         for index, runs in enumerate(self.parameters['runs']):
             _o_mantid = self.parent._mantid_thread_array[index]
             _o_mantid.setup(runs = runs, parameters = self.parameters)
@@ -96,3 +99,7 @@ class GlobalMantidReduction(object):
         output_folder = self.parameters['output_directory']
         if not os.path.exists(output_folder):
             os.makedirs(output_folder)
+
+    def view_jobs(self):
+        o_view_launcher = MantidReductionView(parent = self.parent, father = self)
+        o_view_launcher.show()
