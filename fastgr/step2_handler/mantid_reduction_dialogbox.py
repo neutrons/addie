@@ -16,6 +16,11 @@ class MantidReductionDialogbox(QtGui.QDialog):
         _title = "Launching Mantid Reduction"
         self.setWindowTitle(_title)
         
+        _runs = self.father.parameters['runs']
+        nbr_jobs = len(_runs)
+        _message = 'You are about to launch {} Mantid Reductions jobs!'.format(nbr_jobs)
+        self.ui.label.setText(_message)
+        
     def cancel_clicked(self):
         self.close()
         
