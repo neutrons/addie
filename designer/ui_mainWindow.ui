@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1348</width>
-    <height>904</height>
+    <width>1454</width>
+    <height>1054</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -52,8 +52,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1326</width>
-         <height>842</height>
+         <width>1432</width>
+         <height>992</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -1090,6 +1090,13 @@
                </widget>
               </item>
               <item>
+               <widget class="QLabel" name="label_80">
+                <property name="text">
+                 <string>Sample formula example: H 2 O 1, 2H 2 O 1, 238U 1 O 2</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <widget class="QGroupBox" name="groupBox_32">
                 <property name="title">
                  <string>Background</string>
@@ -1196,601 +1203,848 @@
               <item>
                <widget class="QTabWidget" name="tabWidget">
                 <property name="currentIndex">
-                 <number>1</number>
+                 <number>0</number>
                 </property>
                 <widget class="QWidget" name="tab">
                  <attribute name="title">
                   <string>PDF</string>
                  </attribute>
-                 <layout class="QVBoxLayout" name="verticalLayout_2">
+                 <layout class="QHBoxLayout" name="horizontalLayout_15">
                   <item>
-                   <widget class="QLabel" name="label_80">
-                    <property name="text">
-                     <string>Sample formula example: H 2 O 1, 2H 2 O 1, 238U 1 O 2</string>
+                   <widget class="QGroupBox" name="groupBox_4">
+                    <property name="title">
+                     <string>NDabs</string>
                     </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_2">
+                     <item>
+                      <layout class="QHBoxLayout" name="horizontalLayout_61">
+                       <item>
+                        <widget class="QGroupBox" name="fourier_filter_group_box">
+                         <property name="title">
+                          <string>Fourier Filter</string>
+                         </property>
+                         <layout class="QHBoxLayout" name="horizontalLayout_64">
+                          <item>
+                           <widget class="QLineEdit" name="fourier_filter_from">
+                            <property name="text">
+                             <string>1.5</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QLabel" name="label_82">
+                            <property name="palette">
+                             <palette>
+                              <active>
+                               <colorrole role="WindowText">
+                                <brush brushstyle="SolidPattern">
+                                 <color alpha="255">
+                                  <red>255</red>
+                                  <green>0</green>
+                                  <blue>0</blue>
+                                 </color>
+                                </brush>
+                               </colorrole>
+                              </active>
+                              <inactive>
+                               <colorrole role="WindowText">
+                                <brush brushstyle="SolidPattern">
+                                 <color alpha="255">
+                                  <red>255</red>
+                                  <green>0</green>
+                                  <blue>0</blue>
+                                 </color>
+                                </brush>
+                               </colorrole>
+                              </inactive>
+                              <disabled>
+                               <colorrole role="WindowText">
+                                <brush brushstyle="SolidPattern">
+                                 <color alpha="255">
+                                  <red>128</red>
+                                  <green>128</green>
+                                  <blue>128</blue>
+                                 </color>
+                                </brush>
+                               </colorrole>
+                              </disabled>
+                             </palette>
+                            </property>
+                            <property name="font">
+                             <font>
+                              <pointsize>14</pointsize>
+                             </font>
+                            </property>
+                            <property name="text">
+                             <string>*</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QLabel" name="label_83">
+                            <property name="text">
+                             <string>,</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QLineEdit" name="fourier_filter_to">
+                            <property name="text">
+                             <string>50</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QLabel" name="label_84">
+                            <property name="palette">
+                             <palette>
+                              <active>
+                               <colorrole role="WindowText">
+                                <brush brushstyle="SolidPattern">
+                                 <color alpha="255">
+                                  <red>255</red>
+                                  <green>0</green>
+                                  <blue>0</blue>
+                                 </color>
+                                </brush>
+                               </colorrole>
+                              </active>
+                              <inactive>
+                               <colorrole role="WindowText">
+                                <brush brushstyle="SolidPattern">
+                                 <color alpha="255">
+                                  <red>255</red>
+                                  <green>0</green>
+                                  <blue>0</blue>
+                                 </color>
+                                </brush>
+                               </colorrole>
+                              </inactive>
+                              <disabled>
+                               <colorrole role="WindowText">
+                                <brush brushstyle="SolidPattern">
+                                 <color alpha="255">
+                                  <red>128</red>
+                                  <green>128</green>
+                                  <blue>128</blue>
+                                 </color>
+                                </brush>
+                               </colorrole>
+                              </disabled>
+                             </palette>
+                            </property>
+                            <property name="font">
+                             <font>
+                              <pointsize>14</pointsize>
+                             </font>
+                            </property>
+                            <property name="text">
+                             <string>*</string>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QGroupBox" name="groupBox_34">
+                         <property name="title">
+                          <string>Plazcek</string>
+                         </property>
+                         <layout class="QVBoxLayout" name="verticalLayout_38">
+                          <item>
+                           <layout class="QHBoxLayout" name="horizontalLayout_65">
+                            <item>
+                             <widget class="QLabel" name="label_85">
+                              <property name="text">
+                               <string>Type</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QRadioButton" name="hydrogen_yes">
+                              <property name="text">
+                               <string>hydrogen</string>
+                              </property>
+                              <property name="checked">
+                               <bool>false</bool>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QRadioButton" name="hydrogen_no">
+                              <property name="text">
+                               <string>no hydrogren</string>
+                              </property>
+                              <property name="checked">
+                               <bool>true</bool>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
+                          </item>
+                          <item>
+                           <layout class="QHBoxLayout" name="horizontalLayout_66">
+                            <item>
+                             <widget class="QLabel" name="label_86">
+                              <property name="text">
+                               <string>Fit Range</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QLineEdit" name="plazcek_fit_range_min">
+                              <property name="minimumSize">
+                               <size>
+                                <width>50</width>
+                                <height>0</height>
+                               </size>
+                              </property>
+                              <property name="maximumSize">
+                               <size>
+                                <width>50</width>
+                                <height>16777215</height>
+                               </size>
+                              </property>
+                              <property name="text">
+                               <string>10</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QLabel" name="label_87">
+                              <property name="palette">
+                               <palette>
+                                <active>
+                                 <colorrole role="WindowText">
+                                  <brush brushstyle="SolidPattern">
+                                   <color alpha="255">
+                                    <red>255</red>
+                                    <green>0</green>
+                                    <blue>0</blue>
+                                   </color>
+                                  </brush>
+                                 </colorrole>
+                                </active>
+                                <inactive>
+                                 <colorrole role="WindowText">
+                                  <brush brushstyle="SolidPattern">
+                                   <color alpha="255">
+                                    <red>255</red>
+                                    <green>0</green>
+                                    <blue>0</blue>
+                                   </color>
+                                  </brush>
+                                 </colorrole>
+                                </inactive>
+                                <disabled>
+                                 <colorrole role="WindowText">
+                                  <brush brushstyle="SolidPattern">
+                                   <color alpha="255">
+                                    <red>128</red>
+                                    <green>128</green>
+                                    <blue>128</blue>
+                                   </color>
+                                  </brush>
+                                 </colorrole>
+                                </disabled>
+                               </palette>
+                              </property>
+                              <property name="font">
+                               <font>
+                                <pointsize>14</pointsize>
+                               </font>
+                              </property>
+                              <property name="text">
+                               <string>*</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QLabel" name="label_88">
+                              <property name="text">
+                               <string>,</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QLineEdit" name="plazcek_fit_range_max">
+                              <property name="minimumSize">
+                               <size>
+                                <width>50</width>
+                                <height>0</height>
+                               </size>
+                              </property>
+                              <property name="maximumSize">
+                               <size>
+                                <width>50</width>
+                                <height>16777215</height>
+                               </size>
+                              </property>
+                              <property name="text">
+                               <string>50</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QLabel" name="label_89">
+                              <property name="palette">
+                               <palette>
+                                <active>
+                                 <colorrole role="WindowText">
+                                  <brush brushstyle="SolidPattern">
+                                   <color alpha="255">
+                                    <red>255</red>
+                                    <green>0</green>
+                                    <blue>0</blue>
+                                   </color>
+                                  </brush>
+                                 </colorrole>
+                                </active>
+                                <inactive>
+                                 <colorrole role="WindowText">
+                                  <brush brushstyle="SolidPattern">
+                                   <color alpha="255">
+                                    <red>255</red>
+                                    <green>0</green>
+                                    <blue>0</blue>
+                                   </color>
+                                  </brush>
+                                 </colorrole>
+                                </inactive>
+                                <disabled>
+                                 <colorrole role="WindowText">
+                                  <brush brushstyle="SolidPattern">
+                                   <color alpha="255">
+                                    <red>128</red>
+                                    <green>128</green>
+                                    <blue>128</blue>
+                                   </color>
+                                  </brush>
+                                 </colorrole>
+                                </disabled>
+                               </palette>
+                              </property>
+                              <property name="font">
+                               <font>
+                                <pointsize>14</pointsize>
+                               </font>
+                              </property>
+                              <property name="text">
+                               <string>*</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <spacer name="horizontalSpacer_21">
+                              <property name="orientation">
+                               <enum>Qt::Horizontal</enum>
+                              </property>
+                              <property name="sizeHint" stdset="0">
+                               <size>
+                                <width>40</width>
+                                <height>20</height>
+                               </size>
+                              </property>
+                             </spacer>
+                            </item>
+                           </layout>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                     <item>
+                      <layout class="QHBoxLayout" name="horizontalLayout_2">
+                       <item>
+                        <widget class="QGroupBox" name="q_range_group_box">
+                         <property name="title">
+                          <string>Q range</string>
+                         </property>
+                         <layout class="QHBoxLayout" name="horizontalLayout">
+                          <item>
+                           <widget class="QLabel" name="label">
+                            <property name="text">
+                             <string>Qmin</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QLineEdit" name="q_range_min">
+                            <property name="minimumSize">
+                             <size>
+                              <width>80</width>
+                              <height>0</height>
+                             </size>
+                            </property>
+                            <property name="maximumSize">
+                             <size>
+                              <width>80</width>
+                              <height>16777215</height>
+                             </size>
+                            </property>
+                            <property name="text">
+                             <string>0.2</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QLabel" name="label_94">
+                            <property name="palette">
+                             <palette>
+                              <active>
+                               <colorrole role="WindowText">
+                                <brush brushstyle="SolidPattern">
+                                 <color alpha="255">
+                                  <red>255</red>
+                                  <green>0</green>
+                                  <blue>0</blue>
+                                 </color>
+                                </brush>
+                               </colorrole>
+                              </active>
+                              <inactive>
+                               <colorrole role="WindowText">
+                                <brush brushstyle="SolidPattern">
+                                 <color alpha="255">
+                                  <red>255</red>
+                                  <green>0</green>
+                                  <blue>0</blue>
+                                 </color>
+                                </brush>
+                               </colorrole>
+                              </inactive>
+                              <disabled>
+                               <colorrole role="WindowText">
+                                <brush brushstyle="SolidPattern">
+                                 <color alpha="255">
+                                  <red>128</red>
+                                  <green>128</green>
+                                  <blue>128</blue>
+                                 </color>
+                                </brush>
+                               </colorrole>
+                              </disabled>
+                             </palette>
+                            </property>
+                            <property name="font">
+                             <font>
+                              <pointsize>14</pointsize>
+                             </font>
+                            </property>
+                            <property name="text">
+                             <string>*</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QLabel" name="label_2">
+                            <property name="text">
+                             <string>Qmax</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QLineEdit" name="q_range_max">
+                            <property name="minimumSize">
+                             <size>
+                              <width>80</width>
+                              <height>0</height>
+                             </size>
+                            </property>
+                            <property name="maximumSize">
+                             <size>
+                              <width>80</width>
+                              <height>16777215</height>
+                             </size>
+                            </property>
+                            <property name="text">
+                             <string>31.4</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QLabel" name="label_95">
+                            <property name="palette">
+                             <palette>
+                              <active>
+                               <colorrole role="WindowText">
+                                <brush brushstyle="SolidPattern">
+                                 <color alpha="255">
+                                  <red>255</red>
+                                  <green>0</green>
+                                  <blue>0</blue>
+                                 </color>
+                                </brush>
+                               </colorrole>
+                              </active>
+                              <inactive>
+                               <colorrole role="WindowText">
+                                <brush brushstyle="SolidPattern">
+                                 <color alpha="255">
+                                  <red>255</red>
+                                  <green>0</green>
+                                  <blue>0</blue>
+                                 </color>
+                                </brush>
+                               </colorrole>
+                              </inactive>
+                              <disabled>
+                               <colorrole role="WindowText">
+                                <brush brushstyle="SolidPattern">
+                                 <color alpha="255">
+                                  <red>128</red>
+                                  <green>128</green>
+                                  <blue>128</blue>
+                                 </color>
+                                </brush>
+                               </colorrole>
+                              </disabled>
+                             </palette>
+                            </property>
+                            <property name="font">
+                             <font>
+                              <pointsize>14</pointsize>
+                             </font>
+                            </property>
+                            <property name="text">
+                             <string>*</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QPushButton" name="pushButton">
+                            <property name="text">
+                             <string>Reset</string>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_2">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>40</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item>
+                        <widget class="QGroupBox" name="groupBox_38">
+                         <property name="minimumSize">
+                          <size>
+                           <width>120</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="title">
+                          <string>Muscat</string>
+                         </property>
+                         <layout class="QHBoxLayout" name="horizontalLayout_76">
+                          <item>
+                           <widget class="QRadioButton" name="muscat_yes">
+                            <property name="text">
+                             <string>Yes</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QRadioButton" name="radioButton_26">
+                            <property name="text">
+                             <string>No</string>
+                            </property>
+                            <property name="checked">
+                             <bool>true</bool>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_5">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>40</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item>
+                        <widget class="QGroupBox" name="groupBox_39">
+                         <property name="minimumSize">
+                          <size>
+                           <width>120</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="title">
+                          <string>Scale Data</string>
+                         </property>
+                         <layout class="QHBoxLayout" name="horizontalLayout_77">
+                          <item>
+                           <widget class="QRadioButton" name="scale_data_yes">
+                            <property name="text">
+                             <string>Yes</string>
+                            </property>
+                            <property name="checked">
+                             <bool>true</bool>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QRadioButton" name="radioButton_27">
+                            <property name="text">
+                             <string>No</string>
+                            </property>
+                            <property name="checked">
+                             <bool>false</bool>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_6">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>40</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item>
+                        <widget class="QGroupBox" name="groupBox_40">
+                         <property name="minimumSize">
+                          <size>
+                           <width>120</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="title">
+                          <string>Run RMC</string>
+                         </property>
+                         <layout class="QHBoxLayout" name="horizontalLayout_78">
+                          <item>
+                           <widget class="QRadioButton" name="run_rmc_yes">
+                            <property name="text">
+                             <string>Yes</string>
+                            </property>
+                            <property name="checked">
+                             <bool>true</bool>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QRadioButton" name="radioButton_28">
+                            <property name="text">
+                             <string>No</string>
+                            </property>
+                            <property name="checked">
+                             <bool>false</bool>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>40</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                      </layout>
+                     </item>
+                     <item>
+                      <layout class="QHBoxLayout" name="horizontalLayout_71">
+                       <item>
+                        <widget class="QLabel" name="label_90">
+                         <property name="palette">
+                          <palette>
+                           <active>
+                            <colorrole role="WindowText">
+                             <brush brushstyle="SolidPattern">
+                              <color alpha="255">
+                               <red>255</red>
+                               <green>0</green>
+                               <blue>0</blue>
+                              </color>
+                             </brush>
+                            </colorrole>
+                           </active>
+                           <inactive>
+                            <colorrole role="WindowText">
+                             <brush brushstyle="SolidPattern">
+                              <color alpha="255">
+                               <red>255</red>
+                               <green>0</green>
+                               <blue>0</blue>
+                              </color>
+                             </brush>
+                            </colorrole>
+                           </inactive>
+                           <disabled>
+                            <colorrole role="WindowText">
+                             <brush brushstyle="SolidPattern">
+                              <color alpha="255">
+                               <red>128</red>
+                               <green>128</green>
+                               <blue>128</blue>
+                              </color>
+                             </brush>
+                            </colorrole>
+                           </disabled>
+                          </palette>
+                         </property>
+                         <property name="font">
+                          <font>
+                           <pointsize>14</pointsize>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>*</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="label_91">
+                         <property name="text">
+                          <string>: Mandatory field</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_23">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>40</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_4">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeType">
+                          <enum>QSizePolicy::Fixed</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>60</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="label_5">
+                         <property name="text">
+                          <string>Output File Name:</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLineEdit" name="run_ndabs_output_file_name">
+                         <property name="minimumSize">
+                          <size>
+                           <width>130</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>70</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>sample_name</string>
+                         </property>
+                         <property name="readOnly">
+                          <bool>false</bool>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="label_6">
+                         <property name="text">
+                          <string>.ndsum</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="horizontalSpacer_9">
+                         <property name="orientation">
+                          <enum>Qt::Horizontal</enum>
+                         </property>
+                         <property name="sizeType">
+                          <enum>QSizePolicy::Minimum</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>20</width>
+                           <height>20</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
+                       <item>
+                        <widget class="QPushButton" name="run_ndabs_button">
+                         <property name="enabled">
+                          <bool>false</bool>
+                         </property>
+                         <property name="text">
+                          <string>Run NDabs</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
                    </widget>
                   </item>
                   <item>
-                   <layout class="QHBoxLayout" name="horizontalLayout_61">
+                   <layout class="QVBoxLayout" name="verticalLayout_4">
                     <item>
-                     <widget class="QGroupBox" name="fourier_filter_group_box">
+                     <widget class="QGroupBox" name="groupBox_3">
                       <property name="title">
-                       <string>Fourier Filter</string>
+                       <string>Sum Scans</string>
                       </property>
-                      <layout class="QHBoxLayout" name="horizontalLayout_64">
+                      <layout class="QHBoxLayout" name="horizontalLayout_14">
                        <item>
-                        <widget class="QLineEdit" name="fourier_filter_from">
+                        <widget class="QCheckBox" name="interactive_mode_checkbox">
                          <property name="text">
-                          <string>1.5</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QLabel" name="label_82">
-                         <property name="palette">
-                          <palette>
-                           <active>
-                            <colorrole role="WindowText">
-                             <brush brushstyle="SolidPattern">
-                              <color alpha="255">
-                               <red>255</red>
-                               <green>0</green>
-                               <blue>0</blue>
-                              </color>
-                             </brush>
-                            </colorrole>
-                           </active>
-                           <inactive>
-                            <colorrole role="WindowText">
-                             <brush brushstyle="SolidPattern">
-                              <color alpha="255">
-                               <red>255</red>
-                               <green>0</green>
-                               <blue>0</blue>
-                              </color>
-                             </brush>
-                            </colorrole>
-                           </inactive>
-                           <disabled>
-                            <colorrole role="WindowText">
-                             <brush brushstyle="SolidPattern">
-                              <color alpha="255">
-                               <red>128</red>
-                               <green>128</green>
-                               <blue>128</blue>
-                              </color>
-                             </brush>
-                            </colorrole>
-                           </disabled>
-                          </palette>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <pointsize>14</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>*</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QLabel" name="label_83">
-                         <property name="text">
-                          <string>,</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QLineEdit" name="fourier_filter_to">
-                         <property name="text">
-                          <string>50</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QLabel" name="label_84">
-                         <property name="palette">
-                          <palette>
-                           <active>
-                            <colorrole role="WindowText">
-                             <brush brushstyle="SolidPattern">
-                              <color alpha="255">
-                               <red>255</red>
-                               <green>0</green>
-                               <blue>0</blue>
-                              </color>
-                             </brush>
-                            </colorrole>
-                           </active>
-                           <inactive>
-                            <colorrole role="WindowText">
-                             <brush brushstyle="SolidPattern">
-                              <color alpha="255">
-                               <red>255</red>
-                               <green>0</green>
-                               <blue>0</blue>
-                              </color>
-                             </brush>
-                            </colorrole>
-                           </inactive>
-                           <disabled>
-                            <colorrole role="WindowText">
-                             <brush brushstyle="SolidPattern">
-                              <color alpha="255">
-                               <red>128</red>
-                               <green>128</green>
-                               <blue>128</blue>
-                              </color>
-                             </brush>
-                            </colorrole>
-                           </disabled>
-                          </palette>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <pointsize>14</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>*</string>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QGroupBox" name="groupBox_34">
-                      <property name="title">
-                       <string>Plazcek</string>
-                      </property>
-                      <layout class="QVBoxLayout" name="verticalLayout_38">
-                       <item>
-                        <layout class="QHBoxLayout" name="horizontalLayout_65">
-                         <item>
-                          <widget class="QLabel" name="label_85">
-                           <property name="text">
-                            <string>Type</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QRadioButton" name="hydrogen_yes">
-                           <property name="text">
-                            <string>hydrogen</string>
-                           </property>
-                           <property name="checked">
-                            <bool>false</bool>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QRadioButton" name="hydrogen_no">
-                           <property name="text">
-                            <string>no hydrogren</string>
-                           </property>
-                           <property name="checked">
-                            <bool>true</bool>
-                           </property>
-                          </widget>
-                         </item>
-                        </layout>
-                       </item>
-                       <item>
-                        <layout class="QHBoxLayout" name="horizontalLayout_66">
-                         <item>
-                          <widget class="QLabel" name="label_86">
-                           <property name="text">
-                            <string>Fit Range</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QLineEdit" name="plazcek_fit_range_min">
-                           <property name="minimumSize">
-                            <size>
-                             <width>50</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="maximumSize">
-                            <size>
-                             <width>50</width>
-                             <height>16777215</height>
-                            </size>
-                           </property>
-                           <property name="text">
-                            <string>10</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QLabel" name="label_87">
-                           <property name="palette">
-                            <palette>
-                             <active>
-                              <colorrole role="WindowText">
-                               <brush brushstyle="SolidPattern">
-                                <color alpha="255">
-                                 <red>255</red>
-                                 <green>0</green>
-                                 <blue>0</blue>
-                                </color>
-                               </brush>
-                              </colorrole>
-                             </active>
-                             <inactive>
-                              <colorrole role="WindowText">
-                               <brush brushstyle="SolidPattern">
-                                <color alpha="255">
-                                 <red>255</red>
-                                 <green>0</green>
-                                 <blue>0</blue>
-                                </color>
-                               </brush>
-                              </colorrole>
-                             </inactive>
-                             <disabled>
-                              <colorrole role="WindowText">
-                               <brush brushstyle="SolidPattern">
-                                <color alpha="255">
-                                 <red>128</red>
-                                 <green>128</green>
-                                 <blue>128</blue>
-                                </color>
-                               </brush>
-                              </colorrole>
-                             </disabled>
-                            </palette>
-                           </property>
-                           <property name="font">
-                            <font>
-                             <pointsize>14</pointsize>
-                            </font>
-                           </property>
-                           <property name="text">
-                            <string>*</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QLabel" name="label_88">
-                           <property name="text">
-                            <string>,</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QLineEdit" name="plazcek_fit_range_max">
-                           <property name="minimumSize">
-                            <size>
-                             <width>50</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="maximumSize">
-                            <size>
-                             <width>50</width>
-                             <height>16777215</height>
-                            </size>
-                           </property>
-                           <property name="text">
-                            <string>50</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QLabel" name="label_89">
-                           <property name="palette">
-                            <palette>
-                             <active>
-                              <colorrole role="WindowText">
-                               <brush brushstyle="SolidPattern">
-                                <color alpha="255">
-                                 <red>255</red>
-                                 <green>0</green>
-                                 <blue>0</blue>
-                                </color>
-                               </brush>
-                              </colorrole>
-                             </active>
-                             <inactive>
-                              <colorrole role="WindowText">
-                               <brush brushstyle="SolidPattern">
-                                <color alpha="255">
-                                 <red>255</red>
-                                 <green>0</green>
-                                 <blue>0</blue>
-                                </color>
-                               </brush>
-                              </colorrole>
-                             </inactive>
-                             <disabled>
-                              <colorrole role="WindowText">
-                               <brush brushstyle="SolidPattern">
-                                <color alpha="255">
-                                 <red>128</red>
-                                 <green>128</green>
-                                 <blue>128</blue>
-                                </color>
-                               </brush>
-                              </colorrole>
-                             </disabled>
-                            </palette>
-                           </property>
-                           <property name="font">
-                            <font>
-                             <pointsize>14</pointsize>
-                            </font>
-                           </property>
-                           <property name="text">
-                            <string>*</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <spacer name="horizontalSpacer_21">
-                           <property name="orientation">
-                            <enum>Qt::Horizontal</enum>
-                           </property>
-                           <property name="sizeHint" stdset="0">
-                            <size>
-                             <width>40</width>
-                             <height>20</height>
-                            </size>
-                           </property>
-                          </spacer>
-                         </item>
-                        </layout>
-                       </item>
-                      </layout>
-                     </widget>
-                    </item>
-                   </layout>
-                  </item>
-                  <item>
-                   <layout class="QHBoxLayout" name="horizontalLayout_2">
-                    <item>
-                     <widget class="QGroupBox" name="q_range_group_box">
-                      <property name="title">
-                       <string>Q range</string>
-                      </property>
-                      <layout class="QHBoxLayout" name="horizontalLayout">
-                       <item>
-                        <widget class="QLabel" name="label">
-                         <property name="text">
-                          <string>Qmin</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QLineEdit" name="q_range_min">
-                         <property name="minimumSize">
-                          <size>
-                           <width>80</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="maximumSize">
-                          <size>
-                           <width>80</width>
-                           <height>16777215</height>
-                          </size>
-                         </property>
-                         <property name="text">
-                          <string>0.2</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QLabel" name="label_94">
-                         <property name="palette">
-                          <palette>
-                           <active>
-                            <colorrole role="WindowText">
-                             <brush brushstyle="SolidPattern">
-                              <color alpha="255">
-                               <red>255</red>
-                               <green>0</green>
-                               <blue>0</blue>
-                              </color>
-                             </brush>
-                            </colorrole>
-                           </active>
-                           <inactive>
-                            <colorrole role="WindowText">
-                             <brush brushstyle="SolidPattern">
-                              <color alpha="255">
-                               <red>255</red>
-                               <green>0</green>
-                               <blue>0</blue>
-                              </color>
-                             </brush>
-                            </colorrole>
-                           </inactive>
-                           <disabled>
-                            <colorrole role="WindowText">
-                             <brush brushstyle="SolidPattern">
-                              <color alpha="255">
-                               <red>128</red>
-                               <green>128</green>
-                               <blue>128</blue>
-                              </color>
-                             </brush>
-                            </colorrole>
-                           </disabled>
-                          </palette>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <pointsize>14</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>*</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QLabel" name="label_2">
-                         <property name="text">
-                          <string>Qmax</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QLineEdit" name="q_range_max">
-                         <property name="minimumSize">
-                          <size>
-                           <width>80</width>
-                           <height>0</height>
-                          </size>
-                         </property>
-                         <property name="maximumSize">
-                          <size>
-                           <width>80</width>
-                           <height>16777215</height>
-                          </size>
-                         </property>
-                         <property name="text">
-                          <string>31.4</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QLabel" name="label_95">
-                         <property name="palette">
-                          <palette>
-                           <active>
-                            <colorrole role="WindowText">
-                             <brush brushstyle="SolidPattern">
-                              <color alpha="255">
-                               <red>255</red>
-                               <green>0</green>
-                               <blue>0</blue>
-                              </color>
-                             </brush>
-                            </colorrole>
-                           </active>
-                           <inactive>
-                            <colorrole role="WindowText">
-                             <brush brushstyle="SolidPattern">
-                              <color alpha="255">
-                               <red>255</red>
-                               <green>0</green>
-                               <blue>0</blue>
-                              </color>
-                             </brush>
-                            </colorrole>
-                           </inactive>
-                           <disabled>
-                            <colorrole role="WindowText">
-                             <brush brushstyle="SolidPattern">
-                              <color alpha="255">
-                               <red>128</red>
-                               <green>128</green>
-                               <blue>128</blue>
-                              </color>
-                             </brush>
-                            </colorrole>
-                           </disabled>
-                          </palette>
-                         </property>
-                         <property name="font">
-                          <font>
-                           <pointsize>14</pointsize>
-                          </font>
-                         </property>
-                         <property name="text">
-                          <string>*</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QPushButton" name="pushButton">
-                         <property name="text">
-                          <string>Reset</string>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
-                     </widget>
-                    </item>
-                    <item>
-                     <spacer name="horizontalSpacer_2">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>40</width>
-                        <height>20</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
-                    <item>
-                     <widget class="QGroupBox" name="groupBox_38">
-                      <property name="minimumSize">
-                       <size>
-                        <width>120</width>
-                        <height>0</height>
-                       </size>
-                      </property>
-                      <property name="title">
-                       <string>Muscat</string>
-                      </property>
-                      <layout class="QHBoxLayout" name="horizontalLayout_76">
-                       <item>
-                        <widget class="QRadioButton" name="muscat_yes">
-                         <property name="text">
-                          <string>Yes</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QRadioButton" name="radioButton_26">
-                         <property name="text">
-                          <string>No</string>
-                         </property>
-                         <property name="checked">
-                          <bool>true</bool>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
-                     </widget>
-                    </item>
-                    <item>
-                     <spacer name="horizontalSpacer_5">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>40</width>
-                        <height>20</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
-                    <item>
-                     <widget class="QGroupBox" name="groupBox_39">
-                      <property name="minimumSize">
-                       <size>
-                        <width>120</width>
-                        <height>0</height>
-                       </size>
-                      </property>
-                      <property name="title">
-                       <string>Scale Data</string>
-                      </property>
-                      <layout class="QHBoxLayout" name="horizontalLayout_77">
-                       <item>
-                        <widget class="QRadioButton" name="scale_data_yes">
-                         <property name="text">
-                          <string>Yes</string>
+                          <string>Interactive Mode ?</string>
                          </property>
                          <property name="checked">
                           <bool>true</bool>
@@ -1798,60 +2052,12 @@
                         </widget>
                        </item>
                        <item>
-                        <widget class="QRadioButton" name="radioButton_27">
-                         <property name="text">
-                          <string>No</string>
-                         </property>
-                         <property name="checked">
+                        <widget class="QPushButton" name="run_sum_scans_button">
+                         <property name="enabled">
                           <bool>false</bool>
                          </property>
-                        </widget>
-                       </item>
-                      </layout>
-                     </widget>
-                    </item>
-                    <item>
-                     <spacer name="horizontalSpacer_6">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>40</width>
-                        <height>20</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
-                    <item>
-                     <widget class="QGroupBox" name="groupBox_40">
-                      <property name="minimumSize">
-                       <size>
-                        <width>120</width>
-                        <height>0</height>
-                       </size>
-                      </property>
-                      <property name="title">
-                       <string>Run RMC</string>
-                      </property>
-                      <layout class="QHBoxLayout" name="horizontalLayout_78">
-                       <item>
-                        <widget class="QRadioButton" name="run_rmc_yes">
                          <property name="text">
-                          <string>Yes</string>
-                         </property>
-                         <property name="checked">
-                          <bool>true</bool>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QRadioButton" name="radioButton_28">
-                         <property name="text">
-                          <string>No</string>
-                         </property>
-                         <property name="checked">
-                          <bool>false</bool>
+                          <string>Run Sum Scans</string>
                          </property>
                         </widget>
                        </item>
@@ -1859,188 +2065,17 @@
                      </widget>
                     </item>
                     <item>
-                     <spacer name="horizontalSpacer">
+                     <spacer name="verticalSpacer">
                       <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>40</width>
-                        <height>20</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
-                   </layout>
-                  </item>
-                  <item>
-                   <layout class="QHBoxLayout" name="horizontalLayout_71">
-                    <item>
-                     <widget class="QLabel" name="label_90">
-                      <property name="palette">
-                       <palette>
-                        <active>
-                         <colorrole role="WindowText">
-                          <brush brushstyle="SolidPattern">
-                           <color alpha="255">
-                            <red>255</red>
-                            <green>0</green>
-                            <blue>0</blue>
-                           </color>
-                          </brush>
-                         </colorrole>
-                        </active>
-                        <inactive>
-                         <colorrole role="WindowText">
-                          <brush brushstyle="SolidPattern">
-                           <color alpha="255">
-                            <red>255</red>
-                            <green>0</green>
-                            <blue>0</blue>
-                           </color>
-                          </brush>
-                         </colorrole>
-                        </inactive>
-                        <disabled>
-                         <colorrole role="WindowText">
-                          <brush brushstyle="SolidPattern">
-                           <color alpha="255">
-                            <red>128</red>
-                            <green>128</green>
-                            <blue>128</blue>
-                           </color>
-                          </brush>
-                         </colorrole>
-                        </disabled>
-                       </palette>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <pointsize>14</pointsize>
-                       </font>
-                      </property>
-                      <property name="text">
-                       <string>*</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QLabel" name="label_91">
-                      <property name="text">
-                       <string>: Mandatory field</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <spacer name="horizontalSpacer_23">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>40</width>
-                        <height>20</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
-                    <item>
-                     <widget class="QCheckBox" name="interactive_mode_checkbox">
-                      <property name="text">
-                       <string>Interactive Mode ?</string>
-                      </property>
-                      <property name="checked">
-                       <bool>true</bool>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QPushButton" name="run_sum_scans_button">
-                      <property name="enabled">
-                       <bool>false</bool>
-                      </property>
-                      <property name="text">
-                       <string>Run Sum Scans</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <spacer name="horizontalSpacer_4">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeType">
-                       <enum>QSizePolicy::Fixed</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>60</width>
-                        <height>20</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
-                    <item>
-                     <widget class="QLabel" name="label_5">
-                      <property name="text">
-                       <string>Output File Name:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QLineEdit" name="run_ndabs_output_file_name">
-                      <property name="minimumSize">
-                       <size>
-                        <width>130</width>
-                        <height>0</height>
-                       </size>
-                      </property>
-                      <property name="maximumSize">
-                       <size>
-                        <width>70</width>
-                        <height>16777215</height>
-                       </size>
-                      </property>
-                      <property name="text">
-                       <string>sample_name</string>
-                      </property>
-                      <property name="readOnly">
-                       <bool>false</bool>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QLabel" name="label_6">
-                      <property name="text">
-                       <string>.ndsum</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <spacer name="horizontalSpacer_9">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeType">
-                       <enum>QSizePolicy::Minimum</enum>
+                       <enum>Qt::Vertical</enum>
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
                         <width>20</width>
-                        <height>20</height>
+                        <height>40</height>
                        </size>
                       </property>
                      </spacer>
-                    </item>
-                    <item>
-                     <widget class="QPushButton" name="run_ndabs_button">
-                      <property name="enabled">
-                       <bool>false</bool>
-                      </property>
-                      <property name="text">
-                       <string>Run NDabs</string>
-                      </property>
-                     </widget>
                     </item>
                    </layout>
                   </item>
@@ -3007,7 +3042,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1348</width>
+     <width>1454</width>
      <height>20</height>
     </rect>
    </property>
@@ -3653,7 +3688,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>120</x>
-     <y>551</y>
+     <y>558</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -3669,7 +3704,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>167</x>
-     <y>555</y>
+     <y>603</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -3685,7 +3720,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>57</x>
-     <y>568</y>
+     <y>758</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -3701,7 +3736,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>212</x>
-     <y>551</y>
+     <y>558</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -3717,7 +3752,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>61</x>
-     <y>555</y>
+     <y>603</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -3732,8 +3767,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>91</x>
-     <y>559</y>
+     <x>173</x>
+     <y>649</y>
     </hint>
     <hint type="destinationlabel">
      <x>1</x>
@@ -3748,8 +3783,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>57</x>
-     <y>589</y>
+     <x>83</x>
+     <y>712</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -3764,8 +3799,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>68</x>
-     <y>589</y>
+     <x>311</x>
+     <y>712</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -3780,8 +3815,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>104</x>
-     <y>564</y>
+     <x>644</x>
+     <y>704</y>
     </hint>
     <hint type="destinationlabel">
      <x>1347</x>
@@ -3797,7 +3832,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>57</x>
-     <y>568</y>
+     <y>758</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -3812,8 +3847,8 @@ p, li { white-space: pre-wrap; }
    <slot>mantid_run_reduction()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>123</x>
-     <y>567</y>
+     <x>1238</x>
+     <y>758</y>
     </hint>
     <hint type="destinationlabel">
      <x>1333</x>
