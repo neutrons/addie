@@ -173,13 +173,14 @@ class Step2GuiHandler(object):
 
     def check_if_this_row_is_ok(self, row):
         _status_ok = True
-        _selected_widget = self.parent.table.cellWidget(row, 0)
-        if (_selected_widget.checkState() == QtCore.Qt.Checked):
-            _table_handler = fastgr.step2_handler.table_handler.TableHandler(parent = self.parent_no_ui)
-            for _column in range(1,7):
-                if _table_handler.retrieve_item_text(row, _column) == '':
-                    _status_ok = False
-                    break
+        _selected_widget = self.parent.table.cellWidget(row, 0).children()
+        if len(_selected_widget) > 0:
+            if (_selected_widget[1].checkState() == QtCore.Qt.Checked):
+                _table_handler = fastgr.step2_handler.table_handler.TableHandler(parent = self.parent_no_ui)
+                for _column in range(1,7):
+                    if _table_handler.retrieve_item_text(row, _column) == '':
+                        _status_ok = False
+                        break
 
         return _status_ok
 

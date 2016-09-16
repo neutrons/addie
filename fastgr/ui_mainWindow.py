@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Fri Sep 16 09:46:48 2016
+# Created: Fri Sep 16 10:03:23 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -454,6 +454,7 @@ class Ui_MainWindow(object):
         self.table.setHorizontalHeaderItem(7, item)
         item = QtGui.QTableWidgetItem()
         self.table.setHorizontalHeaderItem(8, item)
+        self.table.horizontalHeader().setSortIndicatorShown(True)
         self.table.horizontalHeader().setStretchLastSection(True)
         self.table.verticalHeader().setVisible(False)
         self.table.verticalHeader().setSortIndicatorShown(False)
