@@ -116,7 +116,10 @@ class Step2GuiHandler(object):
         if not self.parent.table.rowCount() > 0:
             _status = False
             
-        if not self.at_least_one_row_checked():
+        if _status and (not self.at_least_one_row_checked()):
+            _status = False
+            
+        if _status and (str(self.parent.pdf_qmax_line_edit.text().strip()) == ''):
             _status = False
             
         self.parent.run_sum_scans_button.setEnabled(_status)

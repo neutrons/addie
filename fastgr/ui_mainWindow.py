@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Thu Sep 15 16:08:18 2016
+# Created: Fri Sep 16 09:26:17 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -767,13 +767,11 @@ class Ui_MainWindow(object):
         self.horizontalLayout_71.addWidget(self.label_91)
         spacerItem12 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_71.addItem(spacerItem12)
-        spacerItem13 = QtGui.QSpacerItem(60, 20, QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Minimum)
-        self.horizontalLayout_71.addItem(spacerItem13)
         self.label_5 = QtGui.QLabel(self.groupBox_4)
         self.label_5.setObjectName(_fromUtf8("label_5"))
         self.horizontalLayout_71.addWidget(self.label_5)
         self.run_ndabs_output_file_name = QtGui.QLineEdit(self.groupBox_4)
-        self.run_ndabs_output_file_name.setMinimumSize(QtCore.QSize(130, 0))
+        self.run_ndabs_output_file_name.setMinimumSize(QtCore.QSize(150, 0))
         self.run_ndabs_output_file_name.setMaximumSize(QtCore.QSize(70, 16777215))
         self.run_ndabs_output_file_name.setReadOnly(False)
         self.run_ndabs_output_file_name.setObjectName(_fromUtf8("run_ndabs_output_file_name"))
@@ -781,10 +779,11 @@ class Ui_MainWindow(object):
         self.label_6 = QtGui.QLabel(self.groupBox_4)
         self.label_6.setObjectName(_fromUtf8("label_6"))
         self.horizontalLayout_71.addWidget(self.label_6)
-        spacerItem14 = QtGui.QSpacerItem(20, 20, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
-        self.horizontalLayout_71.addItem(spacerItem14)
+        spacerItem13 = QtGui.QSpacerItem(20, 20, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
+        self.horizontalLayout_71.addItem(spacerItem13)
         self.run_ndabs_button = QtGui.QPushButton(self.groupBox_4)
         self.run_ndabs_button.setEnabled(False)
+        self.run_ndabs_button.setMinimumSize(QtCore.QSize(250, 0))
         self.run_ndabs_button.setObjectName(_fromUtf8("run_ndabs_button"))
         self.horizontalLayout_71.addWidget(self.run_ndabs_button)
         self.verticalLayout_2.addLayout(self.horizontalLayout_71)
@@ -793,16 +792,33 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.setObjectName(_fromUtf8("verticalLayout_4"))
         self.groupBox_3 = QtGui.QGroupBox(self.tab)
         self.groupBox_3.setObjectName(_fromUtf8("groupBox_3"))
-        self.horizontalLayout_14 = QtGui.QHBoxLayout(self.groupBox_3)
-        self.horizontalLayout_14.setObjectName(_fromUtf8("horizontalLayout_14"))
+        self.verticalLayout_5 = QtGui.QVBoxLayout(self.groupBox_3)
+        self.verticalLayout_5.setObjectName(_fromUtf8("verticalLayout_5"))
+        self.horizontalLayout_16 = QtGui.QHBoxLayout()
+        self.horizontalLayout_16.setObjectName(_fromUtf8("horizontalLayout_16"))
+        self.label_11 = QtGui.QLabel(self.groupBox_3)
+        self.label_11.setObjectName(_fromUtf8("label_11"))
+        self.horizontalLayout_16.addWidget(self.label_11)
+        self.pdf_qmax_line_edit = QtGui.QLineEdit(self.groupBox_3)
+        self.pdf_qmax_line_edit.setObjectName(_fromUtf8("pdf_qmax_line_edit"))
+        self.horizontalLayout_16.addWidget(self.pdf_qmax_line_edit)
+        self.label_12 = QtGui.QLabel(self.groupBox_3)
+        self.label_12.setObjectName(_fromUtf8("label_12"))
+        self.horizontalLayout_16.addWidget(self.label_12)
+        self.verticalLayout_5.addLayout(self.horizontalLayout_16)
+        self.label_17 = QtGui.QLabel(self.groupBox_3)
+        self.label_17.setObjectName(_fromUtf8("label_17"))
+        self.verticalLayout_5.addWidget(self.label_17)
+        spacerItem14 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        self.verticalLayout_5.addItem(spacerItem14)
         self.interactive_mode_checkbox = QtGui.QCheckBox(self.groupBox_3)
         self.interactive_mode_checkbox.setChecked(True)
         self.interactive_mode_checkbox.setObjectName(_fromUtf8("interactive_mode_checkbox"))
-        self.horizontalLayout_14.addWidget(self.interactive_mode_checkbox)
+        self.verticalLayout_5.addWidget(self.interactive_mode_checkbox)
         self.run_sum_scans_button = QtGui.QPushButton(self.groupBox_3)
         self.run_sum_scans_button.setEnabled(False)
         self.run_sum_scans_button.setObjectName(_fromUtf8("run_sum_scans_button"))
-        self.horizontalLayout_14.addWidget(self.run_sum_scans_button)
+        self.verticalLayout_5.addWidget(self.run_sum_scans_button)
         self.verticalLayout_4.addWidget(self.groupBox_3)
         spacerItem15 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
         self.verticalLayout_4.addItem(spacerItem15)
@@ -1280,6 +1296,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.mantid_vanadium_radius, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.check_mantid_gui)
         QtCore.QObject.connect(self.mantid_output_directoy_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.check_mantid_gui)
         QtCore.QObject.connect(self.mantid_run_reduction, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.mantid_run_reduction)
+        QtCore.QObject.connect(self.pdf_qmax_line_edit, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.pdf_qmax_line_edit_changed)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -1393,6 +1410,13 @@ class Ui_MainWindow(object):
         self.label_6.setText(_translate("MainWindow", ".ndsum", None))
         self.run_ndabs_button.setText(_translate("MainWindow", "Run NDabs", None))
         self.groupBox_3.setTitle(_translate("MainWindow", "Sum Scans", None))
+        self.label_11.setText(_translate("MainWindow", "Qmax", None))
+        self.label_12.setText(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'Sans Serif\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">&#8491;</p></body></html>", None))
+        self.label_17.setText(_translate("MainWindow", "(ex: 20, 30, 40)", None))
         self.interactive_mode_checkbox.setText(_translate("MainWindow", "Interactive Mode ?", None))
         self.run_sum_scans_button.setText(_translate("MainWindow", "Run Sum Scans", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "PDF", None))

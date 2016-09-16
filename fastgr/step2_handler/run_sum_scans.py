@@ -31,11 +31,16 @@ class RunSumScans(object):
         print("[LOG] " + _script_to_run)
         
     def add_script_flags(self):
-        if self.parent.interactive_mode_checkbox.isChecked():
-            return self.script
-        else:
-            return self.script + "-n NONINTER"
-                
+        _script = self.script
+
+        if not self.parent.interactive_mode_checkbox.isChecked():
+            _script +=  "-n True"
+
+        qmax_list = str(self.parent.pdf_qmax_line_edit.text()).strip()
+        _script  += ' -q ' + qmax_list
+
+        return _script
+
     def create_output_file(self):
         _full_output_file_name = os.path.join(self.folder, self.output_file)
         self.full_output_file_name = _full_output_file_name

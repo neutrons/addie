@@ -1951,22 +1951,6 @@
                         </spacer>
                        </item>
                        <item>
-                        <spacer name="horizontalSpacer_4">
-                         <property name="orientation">
-                          <enum>Qt::Horizontal</enum>
-                         </property>
-                         <property name="sizeType">
-                          <enum>QSizePolicy::Fixed</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>60</width>
-                           <height>20</height>
-                          </size>
-                         </property>
-                        </spacer>
-                       </item>
-                       <item>
                         <widget class="QLabel" name="label_5">
                          <property name="text">
                           <string>Output File Name:</string>
@@ -1977,7 +1961,7 @@
                         <widget class="QLineEdit" name="run_ndabs_output_file_name">
                          <property name="minimumSize">
                           <size>
-                           <width>130</width>
+                           <width>150</width>
                            <height>0</height>
                           </size>
                          </property>
@@ -2023,6 +2007,12 @@
                          <property name="enabled">
                           <bool>false</bool>
                          </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>250</width>
+                           <height>0</height>
+                          </size>
+                         </property>
                          <property name="text">
                           <string>Run NDabs</string>
                          </property>
@@ -2040,7 +2030,52 @@
                       <property name="title">
                        <string>Sum Scans</string>
                       </property>
-                      <layout class="QHBoxLayout" name="horizontalLayout_14">
+                      <layout class="QVBoxLayout" name="verticalLayout_5">
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_16">
+                         <item>
+                          <widget class="QLabel" name="label_11">
+                           <property name="text">
+                            <string>Qmax</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLineEdit" name="pdf_qmax_line_edit"/>
+                         </item>
+                         <item>
+                          <widget class="QLabel" name="label_12">
+                           <property name="text">
+                            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&amp;#8491;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="label_17">
+                         <property name="text">
+                          <string>(ex: 20, 30, 40)</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <spacer name="verticalSpacer_2">
+                         <property name="orientation">
+                          <enum>Qt::Vertical</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>20</width>
+                           <height>40</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
                        <item>
                         <widget class="QCheckBox" name="interactive_mode_checkbox">
                          <property name="text">
@@ -3495,8 +3530,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_plazcek_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>884</x>
-     <y>666</y>
+     <x>739</x>
+     <y>658</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -3511,8 +3546,8 @@ p, li { white-space: pre-wrap; }
    <slot>hidrogen_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1003</x>
-     <y>637</y>
+     <x>806</x>
+     <y>629</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -3527,8 +3562,8 @@ p, li { white-space: pre-wrap; }
    <slot>no_hidrogen_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1205</x>
-     <y>637</y>
+     <x>956</x>
+     <y>629</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -3543,8 +3578,8 @@ p, li { white-space: pre-wrap; }
    <slot>output_file_name_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1076</x>
-     <y>777</y>
+     <x>586</x>
+     <y>767</y>
     </hint>
     <hint type="destinationlabel">
      <x>1028</x>
@@ -3559,8 +3594,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_plazcek_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>802</x>
-     <y>666</y>
+     <x>657</x>
+     <y>658</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -3575,8 +3610,8 @@ p, li { white-space: pre-wrap; }
    <slot>run_ndabs_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1303</x>
-     <y>785</y>
+     <x>833</x>
+     <y>775</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -3591,8 +3626,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_fourier_filter_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>515</x>
-     <y>652</y>
+     <x>448</x>
+     <y>644</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -3607,8 +3642,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_fourier_filter_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>204</x>
-     <y>652</y>
+     <x>215</x>
+     <y>644</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -3623,8 +3658,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_q_range()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>321</x>
-     <y>736</y>
+     <x>332</x>
+     <y>728</y>
     </hint>
     <hint type="destinationlabel">
      <x>6</x>
@@ -3639,8 +3674,8 @@ p, li { white-space: pre-wrap; }
    <slot>reset_q_range()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>418</x>
-     <y>738</y>
+     <x>429</x>
+     <y>730</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -3655,8 +3690,8 @@ p, li { white-space: pre-wrap; }
    <slot>run_sum_scans_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>813</x>
-     <y>785</y>
+     <x>1143</x>
+     <y>729</y>
     </hint>
     <hint type="destinationlabel">
      <x>1194</x>
@@ -3671,8 +3706,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_q_range()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>174</x>
-     <y>736</y>
+     <x>185</x>
+     <y>728</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -3688,7 +3723,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>120</x>
-     <y>558</y>
+     <y>562</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -3704,7 +3739,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>167</x>
-     <y>603</y>
+     <y>605</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -3736,7 +3771,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>212</x>
-     <y>558</y>
+     <y>562</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -3752,7 +3787,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>61</x>
-     <y>603</y>
+     <y>605</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -3768,7 +3803,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>173</x>
-     <y>649</y>
+     <y>651</y>
     </hint>
     <hint type="destinationlabel">
      <x>1</x>
@@ -3784,7 +3819,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>83</x>
-     <y>712</y>
+     <y>713</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -3800,7 +3835,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>311</x>
-     <y>712</y>
+     <y>713</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -3816,7 +3851,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>644</x>
-     <y>704</y>
+     <y>705</y>
     </hint>
     <hint type="destinationlabel">
      <x>1347</x>
@@ -3853,6 +3888,22 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>1333</x>
      <y>880</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pdf_qmax_line_edit</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>pdf_qmax_line_edit_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1182</x>
+     <y>597</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1158</x>
+     <y>21</y>
     </hint>
    </hints>
   </connection>
@@ -3894,5 +3945,6 @@ p, li { white-space: pre-wrap; }
   <slot>mantid_output_directory_clicked()</slot>
   <slot>check_mantid_gui()</slot>
   <slot>mantid_run_reduction()</slot>
+  <slot>pdf_qmax_line_edit_changed()</slot>
  </slots>
 </ui>
