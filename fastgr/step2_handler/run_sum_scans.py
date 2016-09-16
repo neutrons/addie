@@ -35,9 +35,10 @@ class RunSumScans(object):
 
         if not self.parent.interactive_mode_checkbox.isChecked():
             _script +=  "-n True"
-
+            
         qmax_list = str(self.parent.pdf_qmax_line_edit.text()).strip()
-        _script  += ' -q ' + qmax_list
+        if not (qmax_list  == ""):
+            _script  += ' -q ' + qmax_list
 
         return _script
 
@@ -57,7 +58,7 @@ class RunSumScans(object):
     def collect_runs_checked(self):
         _runs = {}
         for _row_index in range(self.parent.table.rowCount()):
-            _selected_widget = self.parent.table.cellWidget(_row_index, 0)
+            _selected_widget = self.parent.table.cellWidget(_row_index, 0).children()[1]
             if (_selected_widget.checkState() == Qt.Checked):
                 _label = str(self.parent.table.item(_row_index, 1).text())
                 _value = str(self.parent.table.item(_row_index, 2).text())

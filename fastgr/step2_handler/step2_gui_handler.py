@@ -126,9 +126,6 @@ class Step2GuiHandler(object):
         if _status and (not self.at_least_one_row_checked()):
             _status = False
             
-        if _status and (str(self.parent.pdf_qmax_line_edit.text().strip()) == ''):
-            _status = False
-            
         self.parent.run_sum_scans_button.setEnabled(_status)
         
     def check_run_ndabs_button(self):

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Fri Sep 16 12:27:37 2016
+# Created: Fri Sep 16 14:15:18 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -796,12 +796,6 @@ class Ui_MainWindow(object):
         self.label_12 = QtGui.QLabel(self.groupBox_3)
         self.label_12.setObjectName(_fromUtf8("label_12"))
         self.horizontalLayout_16.addWidget(self.label_12)
-        self.label_18 = QtGui.QLabel(self.groupBox_3)
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        self.label_18.setFont(font)
-        self.label_18.setObjectName(_fromUtf8("label_18"))
-        self.horizontalLayout_16.addWidget(self.label_18)
         self.verticalLayout_5.addLayout(self.horizontalLayout_16)
         self.label_17 = QtGui.QLabel(self.groupBox_3)
         self.label_17.setObjectName(_fromUtf8("label_17"))
@@ -1458,7 +1452,6 @@ class Ui_MainWindow(object):
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">&#8491;</p></body></html>", None))
-        self.label_18.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" color:#ff0000;\">*</span></p></body></html>", None))
         self.label_17.setText(_translate("MainWindow", "(ex: 20, 30, 40)", None))
         self.interactive_mode_checkbox.setText(_translate("MainWindow", "Interactive Mode ?", None))
         self.run_sum_scans_button.setText(_translate("MainWindow", "Run Sum Scans", None))
@@ -1474,14 +1467,14 @@ class Ui_MainWindow(object):
         self.label_7.setText(_translate("MainWindow", "(\"-\" for log binning)", None))
         self.groupBox_2.setTitle(_translate("MainWindow", "Crop Wavelength", None))
         self.label_15.setText(_translate("MainWindow", "Min", None))
-        self.mantid_min_crop_wavelength.setText(_translate("MainWindow", ".9", None))
+        self.mantid_min_crop_wavelength.setText(_translate("MainWindow", ".1", None))
         self.label_16.setText(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">&#8491;</p></body></html>", None))
         self.label_14.setText(_translate("MainWindow", "Max", None))
-        self.mantid_max_crop_wavelength.setText(_translate("MainWindow", "2.1", None))
+        self.mantid_max_crop_wavelength.setText(_translate("MainWindow", "2.9", None))
         self.label_13.setText(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"

@@ -2022,18 +2022,6 @@ p, li { white-space: pre-wrap; }
                            </property>
                           </widget>
                          </item>
-                         <item>
-                          <widget class="QLabel" name="label_18">
-                           <property name="font">
-                            <font>
-                             <pointsize>14</pointsize>
-                            </font>
-                           </property>
-                           <property name="text">
-                            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                           </property>
-                          </widget>
-                         </item>
                         </layout>
                        </item>
                        <item>
@@ -2247,7 +2235,7 @@ p, li { white-space: pre-wrap; }
                        <item>
                         <widget class="QLineEdit" name="mantid_min_crop_wavelength">
                          <property name="text">
-                          <string>.9</string>
+                          <string>.1</string>
                          </property>
                         </widget>
                        </item>
@@ -2285,7 +2273,7 @@ p, li { white-space: pre-wrap; }
                        <item>
                         <widget class="QLineEdit" name="mantid_max_crop_wavelength">
                          <property name="text">
-                          <string>2.1</string>
+                          <string>2.9</string>
                          </property>
                         </widget>
                        </item>
