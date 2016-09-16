@@ -78,11 +78,17 @@ class PopulateMasterTable(object):
         
         self.parent.ui.table.insertRow(row)
         
+        _layout = QtGui.QHBoxLayout()
         _widget = QtGui.QCheckBox()
         _widget.setEnabled(True)
+        _layout.addWidget(_widget)
+        _layout.addStretch()
+        _new_widget = QtGui.QWidget()
+        _new_widget.setLayout(_layout)
+        
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("stateChanged(int)"),  lambda state = 0, 
                                row = row: self.parent.table_select_state_changed(state, row))
-        self.parent.ui.table.setCellWidget(row, 0, _widget)
+        self.parent.ui.table.setCellWidget(row, 0, _new_widget)
         
         _item = QtGui.QTableWidgetItem(_metadata['name'])
         self.parent.ui.table.setItem(row, 1, _item)

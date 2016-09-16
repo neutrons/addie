@@ -59,6 +59,7 @@ class Step2GuiHandler(object):
         self.check_run_ndabs_button()
         self.check_run_sum_scans_button()
         self.check_run_mantid_reduction_button()
+        self.check_import_export_buttons()
 
     def define_new_ndabs_output_file_name(self):
         """retrieve name of first row selected and use it to define output file name"""
@@ -72,8 +73,14 @@ class Step2GuiHandler(object):
             _output_file_name = self.default_ndabs_output_file_name
         self.parent.run_ndabs_output_file_name.setText(_output_file_name)
         
+    def check_import_export_buttons(self):
+        _export_status = False
+        if self.parent.table.rowCount() > 0:
+            _export_status = True
+            
+        self.parent.export_button.setEnabled(_export_status)
+        
     def check_run_mantid_reduction_button(self):
-
         _status = True
         if not self.parent.table.rowCount() > 0:
             _status = False
@@ -116,7 +123,10 @@ class Step2GuiHandler(object):
         if not self.parent.table.rowCount() > 0:
             _status = False
             
-        if not self.at_least_one_row_checked():
+        if _status and (not self.at_least_one_row_checked()):
+            _status = False
+            
+        if _status and (str(self.parent.pdf_qmax_line_edit.text().strip()) == ''):
             _status = False
             
         self.parent.run_sum_scans_button.setEnabled(_status)
@@ -163,13 +173,14 @@ class Step2GuiHandler(object):
 
     def check_if_this_row_is_ok(self, row):
         _status_ok = True
-        _selected_widget = self.parent.table.cellWidget(row, 0)
-        if (_selected_widget.checkState() == QtCore.Qt.Checked):
-            _table_handler = fastgr.step2_handler.table_handler.TableHandler(parent = self.parent_no_ui)
-            for _column in range(1,7):
-                if _table_handler.retrieve_item_text(row, _column) == '':
-                    _status_ok = False
-                    break
+        _selected_widget = self.parent.table.cellWidget(row, 0).children()
+        if len(_selected_widget) > 0:
+            if (_selected_widget[1].checkState() == QtCore.Qt.Checked):
+                _table_handler = fastgr.step2_handler.table_handler.TableHandler(parent = self.parent_no_ui)
+                for _column in range(1,7):
+                    if _table_handler.retrieve_item_text(row, _column) == '':
+                        _status_ok = False
+                        break
 
         return _status_ok
 

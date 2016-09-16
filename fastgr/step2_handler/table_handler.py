@@ -21,10 +21,12 @@ class TableHandler(object):
     def retrieve_list_of_selected_rows(self):
         self.list_selected_row = []
         for _row_index in range(self.parent.table.rowCount()):
-            _selected_widget = self.parent.table.cellWidget(_row_index, 0)
-            if (_selected_widget.checkState() == Qt.Checked):
-                _entry = self._collect_metadata(row_index = _row_index)
-                self.list_selected_row.append(_entry)
+            _widgets = self.parent.table.cellWidget(_row_index, 0).children()
+            if len(_widgets) > 0:
+                _selected_widget = self.parent.table.cellWidget(_row_index, 0).children()[1]
+                if (_selected_widget.checkState() == Qt.Checked):
+                    _entry = self._collect_metadata(row_index = _row_index)
+                    self.list_selected_row.append(_entry)
         
     def _collect_metadata(self, row_index = -1):
         if row_index == -1:
@@ -100,6 +102,9 @@ class TableHandler(object):
             _paste.setEnabled(paste_status)
             _cut = menu.addAction("Clear")
             menu.addSeparator()
+            _select_all = menu.addAction("Select All")
+            _unselect_all = menu.addAction("Unselect All")
+            menu.addSeparator()
         
         _new_row = menu.addAction("Insert Blank Row")
         
@@ -109,11 +114,6 @@ class TableHandler(object):
             menu.addSeparator()
             _refresh_table = menu.addAction("Refresh/Reset Table")
             _clear_table = menu.addAction("Clear Table")
-        
-        menu.addSeparator()
-        _import = menu.addAction("Import ...")
-        if(self.parent.table.rowCount() > 0):
-            _export = menu.addAction("Export ...")
         
         action = menu.exec_(QtGui.QCursor.pos())
         self.current_row = self.current_row()
@@ -134,10 +134,10 @@ class TableHandler(object):
             self._refresh_table()
         elif action == _clear_table:
             self._clear_table()
-        elif action == _import:
-            self._import()
-        elif action == _export:
-            self._export()
+        elif action == _select_all:
+            self.select_all()
+        elif action == _unselect_all:
+            self.unselect_all()
             
     def _import(self):
         _current_folder = self.parent_no_ui.current_folder
@@ -237,6 +237,42 @@ class TableHandler(object):
                     
             index += 1
     
+    def select_all(self):
+        self.select_first_column(status = True)
+        
+    def unselect_all(self):
+        self.select_first_column(status = False)
+        
+    def select_first_column(self, status=True):
+        for _row in range(self.parent.table.rowCount()):
+            _widgets = self.parent.table.cellWidget(_row, 0).children()
+            if len(_widgets) > 0:
+                _selected_widget = self.parent.table.cellWidget(_row, 0).children()[1]
+                _selected_widget.setChecked(status)
+
+        _o_gui = fastgr.step2_handler.step2_gui_handler.Step2GuiHandler(parent = self.parent_no_ui)
+        _o_gui.check_gui()
+    
+    def check_selection_status(self, state, row):
+        try:
+            bottom_row = self.parent.table.selectedRanges()[0].bottomRow()
+            top_row = self.parent.table.selectedRanges()[0].topRow()
+            range_row = range(top_row, bottom_row + 1)
+            if not (row in range_row):
+                return
+            
+            for _row in range_row:
+                _widgets = self.parent.table.cellWidget(_row, 0).children()
+                if len(_widgets) > 0:
+                    _selected_widget = self.parent.table.cellWidget(_row, 0).children()[1]
+                    _selected_widget.setChecked(state)
+                    
+        except:
+            pass
+                    
+        _o_gui = fastgr.step2_handler.step2_gui_handler.Step2GuiHandler(parent = self.parent_no_ui)
+        _o_gui.check_gui()
+
     def _cut(self):
         self._copy()
         self._paste(_cut = True)
@@ -259,8 +295,14 @@ class TableHandler(object):
         _row = self.current_row
         self.parent.table.removeRow(_row)
         
+        _o_gui = fastgr.step2_handler.step2_gui_handler.Step2GuiHandler(parent = self.parent_no_ui)
+        _o_gui.check_gui()
+        
     def _refresh_table(self):
         self.parent_no_ui.populate_table_clicked()
+
+        _o_gui = fastgr.step2_handler.step2_gui_handler.Step2GuiHandler(parent = self.parent_no_ui)
+        _o_gui.check_gui()
 
     def _clear_table(self):
         _number_of_row = self.parent.table.rowCount()
@@ -269,6 +311,9 @@ class TableHandler(object):
         self.parent.background_line_edit.setText("")
         self.parent.background_comboBox.clear()
     
+        _o_gui = fastgr.step2_handler.step2_gui_handler.Step2GuiHandler(parent = self.parent_no_ui)
+        _o_gui.check_gui()
+        
     def set_widget_state(self, _widget_state, _row):
         _widget = self.parent.table.cellWidget(_row, 8).children()[1]
         _widget.setCheckState(_widget_state)

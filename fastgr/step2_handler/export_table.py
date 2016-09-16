@@ -118,7 +118,7 @@ class ExportTable(object):
         return _sample_shape
             
     def retrieve_flag_state(self, row=0, column=0):
-        _widget = self.parent.ui.table.cellWidget(row, column)
+        _widget = self.parent.ui.table.cellWidget(row, column).children()[1]
         if _widget.checkState() == Qt.Checked:
             return "True"
         else:

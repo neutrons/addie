@@ -58,13 +58,19 @@ class ImportTable(object):
             self.parent.ui.table.insertRow(_row)
             
             #select
+            _layout = QtGui.QHBoxLayout()
             _widget = QtGui.QCheckBox()
             _widget.setEnabled(True)
+            _layout.addWidget(_widget)
+            _layout.addStretch()
+            _new_widget = QtGui.QWidget()
+            _new_widget.setLayout(_layout)
+
             #if _entry[0] == "True":
              #   _widget.setChecked(True)
             QtCore.QObject.connect(_widget, QtCore.SIGNAL("stateChanged(int)"), lambda state = 0,
                                    row = _row: self.parent.table_select_state_changed(state, row))
-            self.parent.ui.table.setCellWidget(_row, 0, _widget)
+            self.parent.ui.table.setCellWidget(_row, 0, _new_widget)
                 
             #name
             _item = QtGui.QTableWidgetItem(_entry[1])
