@@ -240,7 +240,6 @@ class TableHandler(object):
     def select_all(self):
         self.select_first_column(status = True)
         
-        
     def unselect_all(self):
         self.select_first_column(status = False)
         
@@ -254,12 +253,22 @@ class TableHandler(object):
         _o_gui = fastgr.step2_handler.step2_gui_handler.Step2GuiHandler(parent = self.parent_no_ui)
         _o_gui.check_gui()
     
-    def select_selection(self):
-        pass
-    
-    def unselect_selection(self):
-        pass
-    
+    def check_selection_status(self, state, row):
+        bottom_row = self.parent.table.selectedRanges()[0].bottomRow()
+        top_row = self.parent.table.selectedRanges()[0].topRow()
+        range_row = range(top_row, bottom_row + 1)
+        if not (row in range_row):
+            return
+        
+        for _row in range_row:
+            _widgets = self.parent.table.cellWidget(_row, 0).children()
+            if len(_widgets) > 0:
+                _selected_widget = self.parent.table.cellWidget(_row, 0).children()[1]
+                _selected_widget.setChecked(state)
+
+        _o_gui = fastgr.step2_handler.step2_gui_handler.Step2GuiHandler(parent = self.parent_no_ui)
+        _o_gui.check_gui()
+
     def _cut(self):
         self._copy()
         self._paste(_cut = True)

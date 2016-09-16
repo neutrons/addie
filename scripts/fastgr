@@ -1233,6 +1233,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         _o_gui = Step2GuiHandler(parent = self)
         _o_gui.check_gui()
 	_o_gui.define_new_ndabs_output_file_name()
+	
+	_o_table_handler = TableHandler(parent=self)
+	_o_table_handler.check_selection_status(state, row)
 
     # PDF
 	
