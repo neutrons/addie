@@ -1221,6 +1221,14 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         _o_gui = Step2GuiHandler(parent = self)
         _o_gui.check_gui()
 
+    def import_table_clicked(self):
+	_o_table = TableHandler(parent = self)
+	_o_table._import()
+    
+    def export_table_clicked(self):
+	_o_table = TableHandler(parent = self)
+	_o_table._export()
+
     def table_select_state_changed(self, state, row):
         _o_gui = Step2GuiHandler(parent = self)
         _o_gui.check_gui()
@@ -1294,7 +1302,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
     def pdf_qmax_line_edit_changed(self):
 	o_gui = Step2GuiHandler(parent = self)
-	o_gui.check_gui()
+	o_gui.check_gui()	
 	
     # Rietveld
     

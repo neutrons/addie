@@ -59,6 +59,7 @@ class Step2GuiHandler(object):
         self.check_run_ndabs_button()
         self.check_run_sum_scans_button()
         self.check_run_mantid_reduction_button()
+        self.check_import_export_buttons()
 
     def define_new_ndabs_output_file_name(self):
         """retrieve name of first row selected and use it to define output file name"""
@@ -72,8 +73,14 @@ class Step2GuiHandler(object):
             _output_file_name = self.default_ndabs_output_file_name
         self.parent.run_ndabs_output_file_name.setText(_output_file_name)
         
+    def check_import_export_buttons(self):
+        _export_status = False
+        if self.parent.table.rowCount() > 0:
+            _export_status = True
+            
+        self.parent.export_button.setEnabled(_export_status)
+        
     def check_run_mantid_reduction_button(self):
-
         _status = True
         if not self.parent.table.rowCount() > 0:
             _status = False

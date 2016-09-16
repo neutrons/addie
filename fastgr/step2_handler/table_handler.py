@@ -110,11 +110,6 @@ class TableHandler(object):
             _refresh_table = menu.addAction("Refresh/Reset Table")
             _clear_table = menu.addAction("Clear Table")
         
-        menu.addSeparator()
-        _import = menu.addAction("Import ...")
-        if(self.parent.table.rowCount() > 0):
-            _export = menu.addAction("Export ...")
-        
         action = menu.exec_(QtGui.QCursor.pos())
         self.current_row = self.current_row()
             
@@ -134,10 +129,6 @@ class TableHandler(object):
             self._refresh_table()
         elif action == _clear_table:
             self._clear_table()
-        elif action == _import:
-            self._import()
-        elif action == _export:
-            self._export()
             
     def _import(self):
         _current_folder = self.parent_no_ui.current_folder
@@ -259,8 +250,14 @@ class TableHandler(object):
         _row = self.current_row
         self.parent.table.removeRow(_row)
         
+        _o_gui = fastgr.step2_handler.step2_gui_handler.Step2GuiHandler(parent = self.parent_no_ui)
+        _o_gui.check_gui()
+        
     def _refresh_table(self):
         self.parent_no_ui.populate_table_clicked()
+
+        _o_gui = fastgr.step2_handler.step2_gui_handler.Step2GuiHandler(parent = self.parent_no_ui)
+        _o_gui.check_gui()
 
     def _clear_table(self):
         _number_of_row = self.parent.table.rowCount()
@@ -269,6 +266,9 @@ class TableHandler(object):
         self.parent.background_line_edit.setText("")
         self.parent.background_comboBox.clear()
     
+        _o_gui = fastgr.step2_handler.step2_gui_handler.Step2GuiHandler(parent = self.parent_no_ui)
+        _o_gui.check_gui()
+        
     def set_widget_state(self, _widget_state, _row):
         _widget = self.parent.table.cellWidget(_row, 8).children()[1]
         _widget.setCheckState(_widget_state)
