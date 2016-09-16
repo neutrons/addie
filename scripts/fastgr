@@ -207,7 +207,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         self._assistantProcess.waitForFinished()
 
         # launch
-        helper_url = QtCore.QUrl('fastgr_helper.html')
+        # helper_url = QtCore.QUrl('fastgr_helper.html')
+        helper_url = QtCore.QUrl('https://neutrons.github.io/FastGR/index.html')
         QtGui.QDesktopServices.openUrl(helper_url)
 
         return
