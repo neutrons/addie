@@ -102,11 +102,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         # for tab G(R)
         self.connect(self.ui.pushButton_loadSQ, QtCore.SIGNAL('clicked()'),
                      self.do_load_sq)
-        self.connect(self.ui.radioButton_sq, QtCore.SIGNAL('toggled(bool)'),
-                     self.evt_plot_sq)
-        self.connect(self.ui.radioButton_sqm1, QtCore.SIGNAL('toggled(bool)'),
-                     self.evt_plot_sq)
-        self.connect(self.ui.radioButton_qsqm1, QtCore.SIGNAL('toggled(bool)'),
+        self.connect(self.ui.comboBox_SofQType, QtCore.SIGNAL('currentIndexChanged(int)'),
                      self.evt_plot_sq)
         self.connect(self.ui.pushButton_clearSofQ, QtCore.SIGNAL('clicked()'),
                      self.do_clear_sq)
@@ -184,7 +180,12 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         self.ui.dockWidget_ipython.iPythonWidget.set_main_application(self)
 
-        self.ui.radioButton_sq.setChecked(True)
+        self.ui.comboBox_SofQType.clear()
+        self.ui.comboBox_SofQType.addItem('S(Q)')
+        self.ui.comboBox_SofQType.addItem('S(Q)-1')
+        self.ui.comboBox_SofQType.addItem('Q[S(Q)-1]')
+        self.ui.comboBox_SofQType.setCurrentIndex(0)
+
         self.ui.radioButton_multiBank.setChecked(True)
 
         # add the combo box for PDF type
