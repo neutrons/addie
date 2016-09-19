@@ -136,6 +136,6 @@ class ImportTable(object):
                 continue
             
             #select
-            _widget = self.parent.ui.table.cellWidget(_row, 0)
+            _widget = self.parent.ui.table.cellWidget(_row, 0).children()[1]
             if _entry[0] == "True":
                 _widget.setChecked(True)

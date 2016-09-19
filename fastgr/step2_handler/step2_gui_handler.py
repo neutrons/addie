@@ -12,6 +12,7 @@ class Step2GuiHandler(object):
     current_folder = ""
     default_q_range = [0.2, 31.4]
     default_ndabs_output_file_name = "sample_name"
+    use_canceled = False
     
     def __init__(self, parent=None):
         self.parent_no_ui = parent
@@ -28,6 +29,8 @@ class Step2GuiHandler(object):
             os.chdir(_new_folder)
             self.parent_no_ui.current_folder = _new_folder
             self.parent_no_ui.setWindowTitle(_new_folder)
+        else:
+            self.user_canceled = True
         
     def hidrogen_clicked(self):
         _range = self.hidrogen_range

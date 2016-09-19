@@ -87,6 +87,8 @@ class TableHandler(object):
         _clear_table = -1
         _import = -1
         _export = -1
+        _select_all = -1
+        _unselect_all = -1
 
         menu = QtGui.QMenu(self.parent_no_ui)
 
