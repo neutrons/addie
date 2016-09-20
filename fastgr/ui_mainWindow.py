@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Fri Sep 16 14:15:18 2016
+# Created: Mon Sep 19 10:49:26 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -1269,6 +1269,7 @@ class Ui_MainWindow(object):
         self.action_preview_ascii = QtGui.QAction(MainWindow)
         self.action_preview_ascii.setObjectName(_fromUtf8("action_preview_ascii"))
         self.actionAdvanced = QtGui.QAction(MainWindow)
+        self.actionAdvanced.setEnabled(False)
         self.actionAdvanced.setObjectName(_fromUtf8("actionAdvanced"))
         self.menuFile.addAction(self.action_preview_ascii)
         self.menuFile.addSeparator()
