@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Mon Sep 19 10:49:26 2016
+# Created: Tue Sep 20 10:45:19 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -1248,6 +1248,8 @@ class Ui_MainWindow(object):
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuFile = QtGui.QMenu(self.menubar)
         self.menuFile.setObjectName(_fromUtf8("menuFile"))
+        self.menuLoad_Configuration = QtGui.QMenu(self.menuFile)
+        self.menuLoad_Configuration.setObjectName(_fromUtf8("menuLoad_Configuration"))
         self.menuEdit = QtGui.QMenu(self.menubar)
         self.menuEdit.setObjectName(_fromUtf8("menuEdit"))
         self.menuHelp = QtGui.QMenu(self.menubar)
@@ -1271,7 +1273,17 @@ class Ui_MainWindow(object):
         self.actionAdvanced = QtGui.QAction(MainWindow)
         self.actionAdvanced.setEnabled(False)
         self.actionAdvanced.setObjectName(_fromUtf8("actionAdvanced"))
+        self.actionSave_Configuration = QtGui.QAction(MainWindow)
+        self.actionSave_Configuration.setObjectName(_fromUtf8("actionSave_Configuration"))
+        self.actionLoad = QtGui.QAction(MainWindow)
+        self.actionLoad.setObjectName(_fromUtf8("actionLoad"))
+        self.actionSave = QtGui.QAction(MainWindow)
+        self.actionSave.setObjectName(_fromUtf8("actionSave"))
+        self.menuLoad_Configuration.addAction(self.actionLoad)
+        self.menuLoad_Configuration.addAction(self.actionSave)
         self.menuFile.addAction(self.action_preview_ascii)
+        self.menuFile.addSeparator()
+        self.menuFile.addAction(self.menuLoad_Configuration.menuAction())
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionQuit)
         self.menuEdit.addAction(self.actionReset_GSAS_tab)
@@ -1334,6 +1346,8 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.pdf_qmax_line_edit, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.pdf_qmax_line_edit_changed)
         QtCore.QObject.connect(self.import_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.import_table_clicked)
         QtCore.QObject.connect(self.export_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.export_table_clicked)
+        QtCore.QObject.connect(self.actionLoad, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.action_load_configuration_clicked)
+        QtCore.QObject.connect(self.actionSave, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.action_save_configuration_clicked)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -1531,6 +1545,7 @@ class Ui_MainWindow(object):
         self.pushButton_saveGR.setText(_translate("MainWindow", "Save G(r)", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_gR), _translate("MainWindow", "Calculate G(R)", None))
         self.menuFile.setTitle(_translate("MainWindow", "File", None))
+        self.menuLoad_Configuration.setTitle(_translate("MainWindow", "Configuration", None))
         self.menuEdit.setTitle(_translate("MainWindow", "Edit", None))
         self.menuHelp.setTitle(_translate("MainWindow", "Help", None))
         self.actionReset_GSAS_tab.setText(_translate("MainWindow", "Reset GSAS-tab", None))
@@ -1540,6 +1555,9 @@ class Ui_MainWindow(object):
         self.actionAbout.setText(_translate("MainWindow", "About ...", None))
         self.action_preview_ascii.setText(_translate("MainWindow", "Preview Ascii ...", None))
         self.actionAdvanced.setText(_translate("MainWindow", "Advanced ...", None))
+        self.actionSave_Configuration.setText(_translate("MainWindow", "Save Configuration ...", None))
+        self.actionLoad.setText(_translate("MainWindow", "Load ...", None))
+        self.actionSave.setText(_translate("MainWindow", "Save ...", None))
 
 from graphicviewlib import BraggView, SofQView, GofRView
 from ipythondockwidget import IPythonDockWidget

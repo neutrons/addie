@@ -3168,7 +3168,16 @@ p, li { white-space: pre-wrap; }
     <property name="title">
      <string>File</string>
     </property>
+    <widget class="QMenu" name="menuLoad_Configuration">
+     <property name="title">
+      <string>Configuration</string>
+     </property>
+     <addaction name="actionLoad"/>
+     <addaction name="actionSave"/>
+    </widget>
     <addaction name="action_preview_ascii"/>
+    <addaction name="separator"/>
+    <addaction name="menuLoad_Configuration"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -3229,6 +3238,21 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="text">
     <string>Advanced ...</string>
+   </property>
+  </action>
+  <action name="actionSave_Configuration">
+   <property name="text">
+    <string>Save Configuration ...</string>
+   </property>
+  </action>
+  <action name="actionLoad">
+   <property name="text">
+    <string>Load ...</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>Save ...</string>
    </property>
   </action>
  </widget>
@@ -4019,6 +4043,38 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionLoad</sender>
+   <signal>activated()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>action_load_configuration_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>610</x>
+     <y>430</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSave</sender>
+   <signal>activated()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>action_save_configuration_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>610</x>
+     <y>430</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>diamond_edited()</slot>
@@ -4060,5 +4116,7 @@ p, li { white-space: pre-wrap; }
   <slot>pdf_qmax_line_edit_changed()</slot>
   <slot>import_table_clicked()</slot>
   <slot>export_table_clicked()</slot>
+  <slot>action_load_configuration_clicked()</slot>
+  <slot>action_save_configuration_clicked()</slot>
  </slots>
 </ui>
