@@ -1,4 +1,5 @@
 import os
+import ConfigParser
 
 
 class FileHandler(object):
@@ -34,4 +35,15 @@ class FileHandler(object):
                 f.write(_line)
                 
         f.close()
+        
+    def create_config_parser(self, dictionary=None):
+        config = ConfigParser.ConfigParser()
+        cfgfile = open(self.filename, 'w')
+        
+        config.add_section("Configuration")
+        for key, value in dictionary.iteritems():
+            config.set('Configuration', key, value)
+            
+        config.write(cfgfile)
+        cfgfile.close()
         

@@ -206,5 +206,8 @@ class ExportConfiguration(object):
     def save_settings(self):
         _output_filename = self.filename
         configuration = self.configuration
-        for key, value in configuration.iteritems():
-            print("{}: {}".format(key, value))
+        o_file_handler = FileHandler(filename=_output_filename)
+        o_file_handler.create_config_parser(dictionary=configuration)
+
+        #for key, value in configuration.iteritems():
+        #   print("{}: {}".format(key, value))
