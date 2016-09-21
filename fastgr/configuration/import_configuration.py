@@ -6,6 +6,7 @@ from fastgr.utilities.conversion import str2bool
 from fastgr.utilities.gui_handler import GuiHandler
 from fastgr.step1_handler.step1_gui_handler import Step1GuiHandler
 from fastgr.step2_handler.import_table import ImportTable
+from fastgr.step2_handler.step2_gui_handler import Step2GuiHandler
 
 
 class ImportConfiguration(object):
@@ -31,9 +32,9 @@ class ImportConfiguration(object):
     def repopulate_gui(self):
         
         o_gui = GuiHandler(parent = self.parent)
+        
+        # step1
 
-        ## autoNOM
-        # working folder
         current_folder = self.get_tag("current_folder")
         self.parent.current_folder = current_folder
         os.chdir(current_folder)
@@ -89,12 +90,86 @@ class ImportConfiguration(object):
         manual_autonom_folder_name = self.get_tag("manual_autonom_folder_name")
         self.parent.ui.manual_output_folder_field.setText(manual_autonom_folder_name)
         
+        # step2
+        
         table = self.get_tag("table")
         o_import_table = ImportTable(parent = self.parent)
         o_import_table.table_contain = table
         o_import_table.parse_config_table()
         o_import_table.populate_gui()
         
+        o_gui_step2 = Step2GuiHandler(parent = self.parent)
+
+        background_flag = self.get_tag("background_flag", data_type='bool')
+        o_gui.radiobutton_set_state(widget_id = self.parent.ui.background_no, state = background_flag)
+        o_gui_step2.step2_background_flag()
+        
+        background_no_field = self.get_tag("background_no_field")
+        self.parent.ui.background_no_field.setText(background_no_field)
+        
+        # PDF
+        
+        fourier_filter_min = self.get_tag("ndabs_fourier_filter_min")
+        self.parent.ui.fourier_filter_from.setText(fourier_filter_min)
+        
+        fourier_filter_max = self.get_tag("ndabs_fourier_filter_max")
+        self.parent.ui.fourier_filter_to.setText(fourier_filter_max)
+        
+        q_min = self.get_tag("q_min")
+        self.parent.ui.q_range_min.setText(q_min)
+        
+        q_max = self.get_tag("q_max")
+        self.parent.ui.q_range_max.setText(q_max)
+        
+        plazcek_fit_range_min = self.get_tag("plazcek_fit_range_min")
+        self.parent.ui.plazcek_fit_range_min.setText(plazcek_fit_range_min)
+        
+        plazcek_fit_range_max = self.get_tag("plazcek_fit_range_max")
+        self.parent.ui.plazcek_fit_range_max.setText(plazcek_fit_range_max)
+        
+        hydrogen_flag = self.get_tag("hydrogen_flag", data_type="bool")
+        o_gui.radiobutton_set_state(widget_id = self.parent.ui.hydrogen_yes, state = hydrogen_flag)
+        
+        muscat_flag = self.get_tag("muscat_flag", data_type="bool")
+        o_gui.radiobutton_set_state(widget_id = self.parent.ui.muscat_yes, state = muscat_flag)
+        
+        scale_data_flag = self.get_tag("scale_data_flag", data_type="bool")
+        o_gui.radiobutton_set_state(widget_id = self.parent.ui.scale_data_yes, state = scale_data_flag)
+        
+        run_rmc_flag = self.get_tag("run_rmc_flag", data_type = "bool")
+        o_gui.radiobutton_set_state(widget_id = self.parent.ui.run_rmc_yes, state = run_rmc_flag)
+        
+        output_file_name = self.get_tag("ndabs_output_file_name")
+        self.parent.ui.run_ndabs_output_file_name.setText(output_file_name)
+        
+        pdf_qmax_line_edit = self.get_tag("pdf_qmax_line_edit")
+        self.parent.ui.pdf_qmax_line_edit.setText(pdf_qmax_line_edit)
+        
+        interactive_mode_flag = self.get_tag("interactive_mode_flag", data_type = "bool")
+        o_gui.radiobutton_set_state(widget_id = self.parent.ui.interactive_mode_checkbox, state = interactive_mode_flag)
+        
+        mantid_calibration_value = self.get_tag("mantid_calibration_value")
+        self.parent.ui.mantid_calibration_value.setText(mantid_calibration_value)
+        
+        mantid_characterization = self.get_tag("mantid_characterization_value")
+        self.parent.ui.mantid_characterization_value.setText(mantid_characterization)
+        
+        number_of_bins = self.get_tag("mantid_number_of_bins")
+        self.parent.ui.mantid_number_of_bins.setText(number_of_bins)
+        
+        min_crop = self.get_tag("mantid_min_crop_wavelength")
+        self.parent.ui.mantid_min_crop_wavelength.setText(min_crop)
+        
+        max_crop = self.get_tag("mantid_max_crop_wavelength")
+        self.parent.ui.mantid_max_crop_wavelength.setText(max_crop)
+        
+        vanadium_radius = self.get_tag("mantid_vanadium_radius")
+        self.parent.ui.mantid_vanadium_radius.setText(vanadium_radius)
+        
+        output_directory = self.get_tag("mantid_output_directory_value")
+        self.parent.ui.mantid_output_directory_value.setText(output_directory)
+        
+        o_gui_step2.check_gui()
         
     def get_tag(self, tag_name, data_type='string'):
         config = self.config

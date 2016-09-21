@@ -107,10 +107,14 @@ class ExportConfiguration(object):
         background_flag = o_gui_handler.radiobutton_get_state(widget_id  = self.parent.ui.background_no)
         configuration['background_flag'] = background_flag
         
+        # background no field
+        background_no_field = self.parent.ui.background_no_field.text()
+        configuration['background_no_field'] = background_no_field
+        
         ## PDF
         # NDabs fourier filter min
         ndabs_fourier_filter_min = self.parent.ui.fourier_filter_from.text()
-        configuration['ndbas_fourier_filter_min'] = ndabs_fourier_filter_min
+        configuration['ndabs_fourier_filter_min'] = ndabs_fourier_filter_min
 
         # NDabs fourier filter max
         ndabs_fourier_filter_max = self.parent.ui.fourier_filter_to.text()

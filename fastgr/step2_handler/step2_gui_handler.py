@@ -45,6 +45,12 @@ class Step2GuiHandler(object):
         self.parent.plazcek_fit_range_min.setText("%d" % min_value)
         self.parent.plazcek_fit_range_max.setText("%d" % max_value)
     
+    def step2_background_flag(self):
+        if self.parent.background_no.isChecked():
+            self.no_background_clicked()
+        else:
+            self.yes_background_clicked()
+    
     def yes_background_clicked(self):
         self.parent.background_line_edit.setEnabled(True)
         self.parent.background_comboBox.setEnabled(True)

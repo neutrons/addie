@@ -2398,7 +2398,7 @@ p, li { white-space: pre-wrap; }
                     <item>
                      <widget class="QPushButton" name="mantid_run_reduction">
                       <property name="enabled">
-                       <bool>true</bool>
+                       <bool>false</bool>
                       </property>
                       <property name="text">
                        <string>Run Reduction</string>
