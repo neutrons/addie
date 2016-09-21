@@ -5,6 +5,7 @@ from fastgr.configuration.config_file_name_handler import ConfigFileNameHandler
 from fastgr.utilities.conversion import str2bool
 from fastgr.utilities.gui_handler import GuiHandler
 from fastgr.step1_handler.step1_gui_handler import Step1GuiHandler
+from fastgr.step2_handler.import_table import ImportTable
 
 
 class ImportConfiguration(object):
@@ -81,8 +82,18 @@ class ImportConfiguration(object):
         o_step1_handler = Step1GuiHandler(parent = self.parent)
         o_step1_handler.new_autonom_group_box(status=create_new_autonom_folder)
         
+        auto_autonom_folder = self.get_tag("auto_autonom_folder", data_type="bool")
+        o_gui.radiobutton_set_state(widget_id = self.parent.ui.auto_manual_folder, state = auto_autonom_folder)
+        o_step1_handler.manual_output_folder_button_handler()
         
+        manual_autonom_folder_name = self.get_tag("manual_autonom_folder_name")
+        self.parent.ui.manual_output_folder_field.setText(manual_autonom_folder_name)
         
+        table = self.get_tag("table")
+        o_import_table = ImportTable(parent = self.parent)
+        o_import_table.table_contain = table
+        o_import_table.parse_config_table()
+        o_import_table.populate_gui()
         
         
     def get_tag(self, tag_name, data_type='string'):

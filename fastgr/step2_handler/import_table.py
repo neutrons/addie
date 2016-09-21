@@ -7,6 +7,7 @@ from fastgr.utilities.file_handler import FileHandler
 class ImportTable(object):
     
     file_contain = []
+    table_contain = []
     contain_parsed = []
     full_contain_parsed = []
     
@@ -26,10 +27,18 @@ class ImportTable(object):
         o_file.retrieve_contain()
         self.file_contain = o_file.file_contain
         
+    def parse_config_table(self):
+        self._list_row = eval(self.table_contain)
+        self.parser()
+
     def parse_contain(self):
         _contain = self.file_contain
         _list_row = _contain.split("\n")
-
+        self.parser()
+        
+    def parser(self):
+        
+        _list_row = self._list_row
         _contain_parsed = []
         for _row in _list_row:
             _row_split = _row.split('|')
