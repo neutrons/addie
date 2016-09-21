@@ -12,6 +12,7 @@ import fastgr.step2
 from fastgr.about import AboutDialog
 from fastgr.advanced_window_handler.advanced_window import AdvancedWindow
 from fastgr.configuration.export_configuration import ExportConfiguration
+from fastgr.configuration.import_configuration import ImportConfiguration
 
 from fastgr.initialization.init_step1 import InitStep1
 from fastgr.step1_handler.step1_gui_handler import Step1GuiHandler
@@ -54,6 +55,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     _run_thread_sum_scans = RunThread()
     _run_thread = RunThread()
     _mantid_thread_array = list(itertools.repeat(MantidThread(), 30))
+    config_section_name = 'Configuration'
 
     def __init__(self):
         """ Initialization
@@ -1147,7 +1149,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         o_gui.browse_file()
 
     def action_load_configuration_clicked(self):
-	print("loading")
+	o_import_config = ImportConfiguration(parent = self)
+	o_import_config.run()
 	
     def action_save_configuration_clicked(self):
 	o_export_config = ExportConfiguration(parent = self)

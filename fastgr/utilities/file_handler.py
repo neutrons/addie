@@ -36,13 +36,13 @@ class FileHandler(object):
                 
         f.close()
         
-    def create_config_parser(self, dictionary=None):
+    def create_config_parser(self, section_name='Configuration', dictionary=None):
         config = ConfigParser.ConfigParser()
         cfgfile = open(self.filename, 'w')
         
-        config.add_section("Configuration")
+        config.add_section(section_name)
         for key, value in dictionary.iteritems():
-            config.set('Configuration', key, value)
+            config.set(section_name, key, value)
             
         config.write(cfgfile)
         cfgfile.close()

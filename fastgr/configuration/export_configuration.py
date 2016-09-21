@@ -3,6 +3,7 @@ import os
 
 from fastgr.utilities.gui_handler import GuiHandler
 from fastgr.step2_handler.export_table import ExportTable
+from fastgr.configuration.config_file_name_handler import ConfigFileNameHandler
 from fastgr.utilities.file_handler import FileHandler
 
 
@@ -58,23 +59,25 @@ class ExportConfiguration(object):
         configuration['last_scan'] = last_scan
         
         # frequency (dropdown)
-        frequency = o_gui_handler.dropdown_value(widget_id = self.parent.ui.frequency)
+        frequency = o_gui_handler.dropdown_get_value(widget_id = self.parent.ui.frequency)
         configuration['frequency'] = frequency
+        index = o_gui_handler.dropdown_get_index(widget_id = self.parent.ui.frequency)
+        configuration['frequency_index'] = index
 
         # recalibration (flag)
-        recalibration = o_gui_handler.radiobutton_state(widget_id = self.parent.ui.recalibration_yes)
+        recalibration = o_gui_handler.radiobutton_get_state(widget_id = self.parent.ui.recalibration_yes)
         configuration['recalibration'] = recalibration
         
         # renormalization (flag)
-        renormalization = o_gui_handler.radiobutton_state(widget_id = self.parent.ui.renormalization_yes)
+        renormalization = o_gui_handler.radiobutton_get_state(widget_id = self.parent.ui.renormalization_yes)
         configuration['renormalization'] = renormalization
         
         # autotemplate (flag)
-        autotemplate = o_gui_handler.radiobutton_state(widget_id = self.parent.ui.autotemplate_yes)
+        autotemplate = o_gui_handler.radiobutton_get_state(widget_id = self.parent.ui.autotemplate_yes)
         configuration['autotemplate'] = autotemplate
         
         # postprocessing (flag)
-        postprocessing = o_gui_handler.radiobutton_state(widget_id = self.parent.ui.postprocessing_yes)
+        postprocessing = o_gui_handler.radiobutton_get_state(widget_id = self.parent.ui.postprocessing_yes)
         configuration['postprocessing'] = postprocessing
         
         # comments
@@ -82,11 +85,11 @@ class ExportConfiguration(object):
         configuration['comments'] = comments
         
         # create new autoNOM folder (flag)
-        create_new_autonom_folder = o_gui_handler.radiobutton_state(widget_id = self.parent.ui.create_folder_button)
+        create_new_autonom_folder = o_gui_handler.radiobutton_get_state(widget_id = self.parent.ui.create_folder_button)
         configuration['create_new_autonom_folder'] = create_new_autonom_folder
         
         # automatic (flag)
-        auto_autonom_folder = o_gui_handler.radiobutton_state(widget_id = self.parent.ui.auto_manual_folder)
+        auto_autonom_folder = o_gui_handler.radiobutton_get_state(widget_id = self.parent.ui.auto_manual_folder)
         configuration['auto_autonom_folder'] = auto_autonom_folder
         
         # manual 
@@ -101,7 +104,7 @@ class ExportConfiguration(object):
         configuration['table'] = table
         
         # background No (flag)
-        background_flag = o_gui_handler.radiobutton_state(widget_id  = self.parent.ui.background_no)
+        background_flag = o_gui_handler.radiobutton_get_state(widget_id  = self.parent.ui.background_no)
         configuration['background_flag'] = background_flag
         
         ## PDF
@@ -130,19 +133,19 @@ class ExportConfiguration(object):
         configuration['plazcek_fit_range_max'] = plazcek_fit_range_max
         
         # hydrogen (flag)
-        hydrogen_flag = o_gui_handler.radiobutton_state(widget_id = self.parent.ui.hydrogen_yes)
+        hydrogen_flag = o_gui_handler.radiobutton_get_state(widget_id = self.parent.ui.hydrogen_yes)
         configuration['hydrogen_flag'] = hydrogen_flag
         
         # muscat yes (flag)
-        muscat_flag = o_gui_handler.radiobutton_state(widget_id = self.parent.ui.muscat_yes)
+        muscat_flag = o_gui_handler.radiobutton_get_state(widget_id = self.parent.ui.muscat_yes)
         configuration['muscat_flag'] = muscat_flag
         
         # scale data yes (flag)
-        scale_data_flag = o_gui_handler.radiobutton_state(widget_id = self.parent.ui.scale_data_yes)
+        scale_data_flag = o_gui_handler.radiobutton_get_state(widget_id = self.parent.ui.scale_data_yes)
         configuration['scale_data_flag'] = scale_data_flag
         
         # run RMC yes (flag)
-        run_rmc_flag = o_gui_handler.radiobutton_state(widget_id = self.parent.ui.run_rmc_yes)
+        run_rmc_flag = o_gui_handler.radiobutton_get_state(widget_id = self.parent.ui.run_rmc_yes)
         configuration['run_rmc_flag'] = run_rmc_flag
         
         # output file name
@@ -154,7 +157,7 @@ class ExportConfiguration(object):
         configuration['pdf_qmax_line_edit'] = pdf_qmax_line_edit
 
         # interactive mode (flag)
-        interactive_mode_flag = o_gui_handler.radiobutton_state(widget_id = self.parent.ui.interactive_mode_checkbox)
+        interactive_mode_flag = o_gui_handler.radiobutton_get_state(widget_id = self.parent.ui.interactive_mode_checkbox)
         configuration['interactive_mode_flag'] = interactive_mode_flag
         
         ## Rietveld
@@ -189,25 +192,16 @@ class ExportConfiguration(object):
         self.configuration = configuration
     
     def request_config_file_name(self):
-        _filter = 'config (*.cfg)'
-        _caption = 'Select or Define a Configuration File Name'
-        _current_folder = self.parent.configuration_folder
-        _file = QtGui.QFileDialog.getOpenFileName(parent = self.parent,
-                                                  filter = _filter,
-                                                  caption = _caption,
-                                                  directory = _current_folder)
-        if _file:
-            _new_path = os.path.dirname(_file)
-            self.parent.configuration_folder = _new_path
-            o_file_handler = FileHandler(filename = _file)
-            o_file_handler.check_file_extension(ext_requested='cfg')
-            self.filename = o_file_handler.filename
+        o_config_file = ConfigFileNameHandler(parent = self.parent)
+        o_config_file.request_config_file_name()
+        self.filename = o_config_file.filename
     
     def save_settings(self):
         _output_filename = self.filename
         configuration = self.configuration
         o_file_handler = FileHandler(filename=_output_filename)
-        o_file_handler.create_config_parser(dictionary=configuration)
+        o_file_handler.create_config_parser(section_name= self.parent.config_section_name, 
+                                            dictionary=configuration)
 
         #for key, value in configuration.iteritems():
         #   print("{}: {}".format(key, value))
