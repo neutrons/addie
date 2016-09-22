@@ -33,7 +33,7 @@ class ImportTable(object):
 
     def parse_contain(self):
         _contain = self.file_contain
-        _list_row = _contain.split("\n")
+        self._list_row = _contain.split("\n")
         self.parser()
         
     def parser(self):

@@ -197,7 +197,7 @@ class ExportConfiguration(object):
     
     def request_config_file_name(self):
         o_config_file = ConfigFileNameHandler(parent = self.parent)
-        o_config_file.request_config_file_name()
+        o_config_file.request_config_file_name(open_flag = False)
         self.filename = o_config_file.filename
     
     def save_settings(self):
