@@ -1,6 +1,7 @@
 #pylint: disable=invalid-name,too-many-public-methods,too-many-arguments,non-parent-init-called,R0902,too-many-branches,C0302
 import os
 import numpy as np
+from textwrap import wrap
 
 from PyQt4 import QtGui
 
@@ -854,7 +855,7 @@ class Qt4MplCanvas(FigureCanvas):
 
         if True:
             self.axes = self.fig.add_subplot(111) # return: matplotlib.axes.AxesSubplot
-            self.fig.subplots_adjust(bottom=0.15)
+            self.fig.subplots_adjust(left=0.07, bottom=0.15, right=0.80)
             self.axes2 = None
         else:
             self.axes = self.fig.add_host_subplot(111)
@@ -1311,7 +1312,9 @@ class Qt4MplCanvas(FigureCanvas):
             location = 'best'
 
         handles, labels = self.axes.get_legend_handles_labels()
-        self.axes.legend(handles, labels, loc=location)
+        legend = self.axes.legend(handles, labels, loc="center left", bbox_to_anchor=(1.0,0.5), prop={'size':10})
+        for l, label in zip(legend.get_texts(), labels):
+            l.set_text( "\n".join(wrap(label,18)))
         # print handles
         # print labels
         #self.axes.legend(self._myLegendHandlers, self._myLegentLabels)
