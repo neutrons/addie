@@ -674,6 +674,8 @@ class MplGraphicsView(QtGui.QWidget):
         """
         self._myCanvas.remove_plot_1d(line_id)
 
+        return
+
     def set_indicator_position(self, line_id, pos_x, pos_y):
         """ Set the indicator to new position
         :param line_id:
@@ -1207,7 +1209,7 @@ class Qt4MplCanvas(FigureCanvas):
         else:
             raise RuntimeError('Line with ID %s is not recorded.' % plot_key)
 
-        self.axes.legend()
+        self._setupLegend(location='best')
 
         # Draw
         self.draw()
