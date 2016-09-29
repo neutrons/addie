@@ -375,6 +375,10 @@ class MplGraphicsView(QtGui.QWidget):
         # Indicator manager
         self._myIndicatorsManager = IndicatorManager()
 
+        # some statistic recorder for convenient operation
+        self._statDict = dict()
+        self._statRightPlotDict = dict()
+
         return
 
     def add_arrow(self, start_x, start_y, stop_x, stop_y):
@@ -416,6 +420,8 @@ class MplGraphicsView(QtGui.QWidget):
         line_key = self._myCanvas.add_plot_1d(vec_x, vec_y, y_err, color, label, x_label, y_label, marker, line_style,
                                               line_width)
 
+        self._statDict[line_key] = (min(vec_x), max(vec_x), min(vec_y), max(vec_y))
+
         return line_key
 
     def add_plot_1d_right(self, vec_x, vec_y, color=None, label='', marker=None, line_style=None, line_width=1):
@@ -433,6 +439,8 @@ class MplGraphicsView(QtGui.QWidget):
         line_key = self._myCanvas.add_1d_plot_right(vec_x, vec_y, label=label,
                                                     color=color, marker=marker,
                                                     linestyle=line_style, linewidth=line_width)
+
+        self._statRightPlotDict[line_key] = (min(vec_x), max(vec_x), min(vec_y), max(vec_y))
 
         return line_key
 
@@ -582,6 +590,11 @@ class MplGraphicsView(QtGui.QWidget):
         """
         self._myCanvas.clear_all_1d_plots()
 
+        self._statRightPlotDict.clear()
+        self._statDict.clear()
+
+        return
+
     def clear_canvas(self):
         """ Clear canvas
         """
@@ -630,6 +643,38 @@ class MplGraphicsView(QtGui.QWidget):
         """
         return self._myCanvas.getYLimit()
 
+    def get_y_min(self):
+        """
+        Get the minimum Y value of the plots on canvas
+        :return:
+        """
+        if len(self._statDict) == 0:
+            return 1E10
+
+        line_id_list = self._statDict.keys()
+        min_y = self._statDict[line_id_list[0]][2]
+        for i_plot in range(1, len(line_id_list)):
+            if self._statDict[line_id_list[i_plot]][2] < min_y:
+                min_y = self._statDict[line_id_list[i_plot]][2]
+
+        return min_y
+
+    def get_y_max(self):
+        """
+        Get the maximum Y value of the plots on canvas
+        :return:
+        """
+        if len(self._statDict) == 0:
+            return -1E10
+
+        line_id_list = self._statDict.keys()
+        max_y = self._statDict[line_id_list[0]][3]
+        for i_plot in range(1, len(line_id_list)):
+            if self._statDict[line_id_list[i_plot]][3] > max_y:
+                min_y = self._statDict[line_id_list[i_plot]][3]
+
+        return max_y
+
     def move_indicator(self, line_id, dx, dy):
         """
         Move the indicator line in horizontal
@@ -673,6 +718,10 @@ class MplGraphicsView(QtGui.QWidget):
         :return:
         """
         self._myCanvas.remove_plot_1d(line_id)
+        if line_id in self._statDict:
+            del self._statDict[line_id]
+        else:
+            del self._statRightPlotDict[line_id]
 
         return
 

@@ -53,6 +53,102 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     _run_thread = RunThread()
     _mantid_thread_array = list(itertools.repeat(MantidThread(), 30))
 
+    #------------  NEW ------------------
+    def __init__(self):
+        self.connect(self.ui.pushButton_rescaleBragg, QtCore.SIGNAL('clicked()'),
+                     self.do_rescale_bragg)
+        self.connect(self.ui.pushButton_rescaleSofQ, QtCore.SIGNAL('clicked()'),
+                     self.do_rescale_sofq)
+        self.connect(self.ui.pushButton_rescaleGofR, QtCore.SIGNAL('clicked()'),
+                     self.do_rescale_gofr)
+
+        self.connect(self.ui.pushButton_selectBraggColorMarker, QtCore.SIGNAL('clicked()'),
+                     self.do_set_bragg_color_marker)
+        self.connect(self.ui.pushButton_selectGofRColorMarker, QtCore.SIGNAL('clicked()'),
+                     self.do_set_gofr_color_marker)
+    # END
+
+    def do_rescale_bragg(self):
+        """
+
+        :return:
+        """
+        min_y_value = self.ui.graphicsView_bragg.get_y_min()
+        max_y_value = self.ui.graphicsView_bragg.get_y_max()
+        delta_y = max(1, max_y_value - min_y_value)
+
+        y_lower_limit = min_y_value - delta_y * 0.05
+        y_upper_limit = max_y_value + delta_y * 0.05
+
+        self.ui.graphicsView_bragg.setXYLimit(minY=y_lower_limit, maxY=y_upper_limit)
+
+        return
+
+    def do_rescale_sofq(self):
+        """
+
+        :return:
+        """
+        min_y_value = self.ui.graphicsView_sq.get_y_min()
+        max_y_value = self.ui.graphicsView_sq.get_y_max()
+        delta_y = max(1, max_y_value - min_y_value)
+
+        y_lower_limit = min_y_value - delta_y * 0.05
+        y_upper_limit = max_y_value + delta_y * 0.05
+
+        self.ui.graphicsView_sq.setXYLimit(minY=y_lower_limit, maxY=y_upper_limit)
+
+        return
+
+    def do_rescale_gofr(self):
+        """
+
+        :return:
+        """
+        min_y_value = self.ui.graphicsView_gr.get_y_min()
+        max_y_value = self.ui.graphicsView_gr.get_y_max()
+        delta_y = max(1, max_y_value - min_y_value)
+
+        y_lower_limit = min_y_value - delta_y * 0.05
+        y_upper_limit = max_y_value + delta_y * 0.05
+
+        self.ui.graphicsView_gr.setXYLimit(minY=y_lower_limit, maxY=y_upper_limit)
+
+        return
+
+    def do_set_bragg_color_marker(self):
+        """
+        set the color/marker to plots on bragg canvas
+        :return:
+        """
+        color, marker = self.get_color_marker()
+        self.ui.graphicsView_bragg.set_marker_all_plots(marker)
+
+        return
+
+    def do_set_gofr_color_marker(self):
+        """
+        set the color/marker to plots on bragg canvas
+        :return:
+        """
+        color, marker = self.get_color_marker()
+        self.ui.graphicsView_gr.set_marker_all_plots(marker)
+        return
+
+
+    def get_color_marker(self):
+        """
+        Launch a dialog box to get the color and marker type for all the
+        :return:
+        """
+        # launch a window
+        raise NotImplementedError('ASAP')
+
+        return color, marker
+
+    #-------------------------------------
+
+
     def __init__(self):
         """ Initialization
         Parameters
