@@ -53,102 +53,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     _run_thread = RunThread()
     _mantid_thread_array = list(itertools.repeat(MantidThread(), 30))
 
-    #------------  NEW ------------------
-    def __init__(self):
-        self.connect(self.ui.pushButton_rescaleBragg, QtCore.SIGNAL('clicked()'),
-                     self.do_rescale_bragg)
-        self.connect(self.ui.pushButton_rescaleSofQ, QtCore.SIGNAL('clicked()'),
-                     self.do_rescale_sofq)
-        self.connect(self.ui.pushButton_rescaleGofR, QtCore.SIGNAL('clicked()'),
-                     self.do_rescale_gofr)
-
-        self.connect(self.ui.pushButton_selectBraggColorMarker, QtCore.SIGNAL('clicked()'),
-                     self.do_set_bragg_color_marker)
-        self.connect(self.ui.pushButton_selectGofRColorMarker, QtCore.SIGNAL('clicked()'),
-                     self.do_set_gofr_color_marker)
-    # END
-
-    def do_rescale_bragg(self):
-        """
-
-        :return:
-        """
-        min_y_value = self.ui.graphicsView_bragg.get_y_min()
-        max_y_value = self.ui.graphicsView_bragg.get_y_max()
-        delta_y = max(1, max_y_value - min_y_value)
-
-        y_lower_limit = min_y_value - delta_y * 0.05
-        y_upper_limit = max_y_value + delta_y * 0.05
-
-        self.ui.graphicsView_bragg.setXYLimit(minY=y_lower_limit, maxY=y_upper_limit)
-
-        return
-
-    def do_rescale_sofq(self):
-        """
-
-        :return:
-        """
-        min_y_value = self.ui.graphicsView_sq.get_y_min()
-        max_y_value = self.ui.graphicsView_sq.get_y_max()
-        delta_y = max(1, max_y_value - min_y_value)
-
-        y_lower_limit = min_y_value - delta_y * 0.05
-        y_upper_limit = max_y_value + delta_y * 0.05
-
-        self.ui.graphicsView_sq.setXYLimit(minY=y_lower_limit, maxY=y_upper_limit)
-
-        return
-
-    def do_rescale_gofr(self):
-        """
-
-        :return:
-        """
-        min_y_value = self.ui.graphicsView_gr.get_y_min()
-        max_y_value = self.ui.graphicsView_gr.get_y_max()
-        delta_y = max(1, max_y_value - min_y_value)
-
-        y_lower_limit = min_y_value - delta_y * 0.05
-        y_upper_limit = max_y_value + delta_y * 0.05
-
-        self.ui.graphicsView_gr.setXYLimit(minY=y_lower_limit, maxY=y_upper_limit)
-
-        return
-
-    def do_set_bragg_color_marker(self):
-        """
-        set the color/marker to plots on bragg canvas
-        :return:
-        """
-        color, marker = self.get_color_marker()
-        self.ui.graphicsView_bragg.set_marker_all_plots(marker)
-
-        return
-
-    def do_set_gofr_color_marker(self):
-        """
-        set the color/marker to plots on bragg canvas
-        :return:
-        """
-        color, marker = self.get_color_marker()
-        self.ui.graphicsView_gr.set_marker_all_plots(marker)
-        return
-
-
-    def get_color_marker(self):
-        """
-        Launch a dialog box to get the color and marker type for all the
-        :return:
-        """
-        # launch a window
-        raise NotImplementedError('ASAP')
-
-        return color, marker
-
-    #-------------------------------------
-
-
     def __init__(self):
         """ Initialization
         Parameters
@@ -191,9 +95,18 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         self.connect(self.ui.checkBox_bank6, QtCore.SIGNAL('toggled(bool)'),
                      self.evt_plot_bragg_bank)
         self.connect(self.ui.comboBox_xUnit, QtCore.SIGNAL('currentIndexChanged(int)'),
-                     self.evt_plot_bragg_bank)
+                     self.evt_switch_bragg_unit)
         self.connect(self.ui.radioButton_multiBank, QtCore.SIGNAL('toggled(bool)'),
                      self.evt_change_gss_mode)
+
+        self.connect(self.ui.pushButton_rescaleGSAS, QtCore.SIGNAL('clicked()'),
+                     self.do_rescale_bragg)
+
+        self.connect(self.ui.pushButton_gsasColorStyle, QtCore.SIGNAL('clicked()'),
+                     self.do_set_bragg_color_marker)
+
+        self.connect(self.ui.pushButton_rescaleGr, QtCore.SIGNAL('clicked()'),
+                     self.do_set_gofr_color_marker)
 
         # for tab G(R)
         self.connect(self.ui.pushButton_loadSQ, QtCore.SIGNAL('clicked()'),
@@ -217,6 +130,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
                      self.evt_qmin_changed)
         self.connect(self.ui.doubleSpinBoxQmax, QtCore.SIGNAL('valueChanged(double)'),
                      self.evt_qmax_changed)
+
+        self.connect(self.ui.pushButton_rescaleSq, QtCore.SIGNAL('clicked()'),
+                     self.do_rescale_sofq)
+        self.connect(self.ui.pushButton_rescaleGr, QtCore.SIGNAL('clicked()'),
+                     self.do_rescale_gofr)
 
         #  menu operations
         self.connect(self.ui.actionReset_GofR_tab, QtCore.SIGNAL('triggered()'),
@@ -249,6 +167,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         # some controlling variables
         self._currBraggXUnit = str(self.ui.comboBox_xUnit.currentText())
+        self._onCanvasGSSBankList = list()
 
         # mutex-like variables
         self._noEventBankWidgets = False
@@ -293,6 +212,31 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         # set a constant item to combobox Sq
         self.ui.comboBox_SofQ.addItem('All')
 
+        return
+
+    def do_set_bragg_color_marker(self):
+        """
+        set the color/marker to plots on bragg canvas
+        :return:
+        """
+        import fastgr.specify_plots_style as ps
+
+        line_id, color, marker = ps.get_plot_color_marker(self)
+
+        print line_id, color, marker
+
+        color, marker = self.get_color_marker()
+        self.ui.graphicsView_bragg.set_marker_all_plots(marker)
+
+        return
+
+    def do_set_gofr_color_marker(self):
+        """
+        set the color/marker to plots on bragg canvas
+        :return:
+        """
+        color, marker = self.get_color_marker()
+        self.ui.graphicsView_gr.set_marker_all_plots(marker)
         return
 
     def do_show_help(self):
@@ -392,6 +336,54 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         return
 
+    def do_rescale_bragg(self):
+        """
+
+        :return:
+        """
+        min_y_value = self.ui.graphicsView_bragg.get_y_min()
+        max_y_value = self.ui.graphicsView_bragg.get_y_max()
+        delta_y = max(1, max_y_value - min_y_value)
+
+        y_lower_limit = min_y_value - delta_y * 0.05
+        y_upper_limit = max_y_value + delta_y * 0.05
+
+        self.ui.graphicsView_bragg.setXYLimit(ymin=y_lower_limit, ymax=y_upper_limit)
+
+        return
+
+    def do_rescale_sofq(self):
+        """
+
+        :return:
+        """
+        min_y_value = self.ui.graphicsView_sq.get_y_min()
+        max_y_value = self.ui.graphicsView_sq.get_y_max()
+        delta_y = max(1, max_y_value - min_y_value)
+
+        y_lower_limit = min_y_value - delta_y * 0.05
+        y_upper_limit = max_y_value + delta_y * 0.05
+
+        self.ui.graphicsView_sq.setXYLimit(ymin=y_lower_limit, ymax=y_upper_limit)
+
+        return
+
+    def do_rescale_gofr(self):
+        """
+
+        :return:
+        """
+        min_y_value = self.ui.graphicsView_gr.get_y_min()
+        max_y_value = self.ui.graphicsView_gr.get_y_max()
+        delta_y = max(1, max_y_value - min_y_value)
+
+        y_lower_limit = min_y_value - delta_y * 0.05
+        y_upper_limit = max_y_value + delta_y * 0.05
+
+        self.ui.graphicsView_gr.setXYLimit(ymin=y_lower_limit, ymax=y_upper_limit)
+
+        return
+
     def do_reset_gr_tab(self):
         """
         Reset G(r)-tab, including deleting all the G(r) and S(Q) workspaces,
@@ -462,9 +454,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         return
 
-    def plot_bragg(self, bragg_ws_list, clear_canvas=False):
+    def plot_bragg(self, bragg_ws_list,  clear_canvas=False):
         """
-
         Parameters
         ----------
         bragg_ws_list: list of (single spectrum) Bragg workspace
@@ -606,31 +597,57 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         gss_ws_name = self._myController.load_bragg_file(bragg_file_name)
 
         # split
+        # FIXME - _gssGroupName may have an issie with multiple-GSS mode
         self._gssGroupName, banks_list, bank_angles = self._myController.split_to_single_bank(gss_ws_name)
 
         # add to tree
         self.ui.treeWidget_braggWSList.add_bragg_ws_group(self._gssGroupName, banks_list)
 
-        # rename bank
-        for bank_id in self._braggBankWidgets.keys():
-            bank_check_box = self._braggBankWidgets[bank_id]
+        # get plot mode
+        single_gss_mode = self.ui.radioButton_multiBank.isChecked()
 
-            if bank_id > len(bank_angles) or bank_angles[bank_id-1] is None:
-                bank_check_box.setText('Bank %d' % bank_id)
-            else:
-                bank_check_box.setText('Bank %.1f' % bank_angles[bank_id-1])
+        if single_gss_mode:
+            # single-GSS/multi-bank mode
+            # rename bank
+            for bank_id in self._braggBankWidgets.keys():
+                bank_check_box = self._braggBankWidgets[bank_id]
 
-        # clear all lines
-        self.ui.graphicsView_bragg.reset()
+                if bank_id > len(bank_angles) or bank_angles[bank_id - 1] is None:
+                    bank_check_box.setText('Bank %d' % bank_id)
+                else:
+                    bank_check_box.setText('Bank %.1f' % bank_angles[bank_id - 1])
+                    # END-IF
+                # END-IF-ELSE
+            # END-FOR
 
-        # un-check all the check boxes with mutex on and off
-        self._noEventBankWidgets = True
-        for check_box in self._braggBankWidgets.values():
-            check_box.setChecked(False)
-        self._noEventBankWidgets = False
+            # clear all previous lines
+            self.ui.graphicsView_bragg.reset()
 
-        # plot and will triggered the graph
-        self.ui.checkBox_bank1.setChecked(True)
+            # banks
+            self._onCanvasGSSBankList = self.get_bragg_banks_selected()
+            if len(self._onCanvasGSSBankList) == 0:
+                # select bank 1 as default
+                self._noEventBankWidgets = True
+                self.ui.checkBox_bank1.setChecked(True)
+                self._noEventBankWidgets = False
+                self._onCanvasGSSBankList = self.get_bragg_banks_selected()
+        # END-IF
+        # while in multiple-gss mode, no change will be made on the canvas at all
+
+        # prepare to plot new Bragg
+        # change unit
+        ws_data_dict = dict()
+        gss_group_name = gss_ws_name + '_group'
+        for bank_id in self._onCanvasGSSBankList:
+            vec_x, vec_y, vec_e = self._myController.get_bragg_data(gss_group_name, bank_id, self._currBraggXUnit)
+            ws_data_dict[bank_id] = (vec_x, vec_y, vec_e)
+        plot_data_dict = {gss_group_name: ws_data_dict}
+
+        # plot
+        self.ui.graphicsView_bragg.plot_banks(plot_data_dict, self._currBraggXUnit)
+
+        # reset unit
+        self.reset_bragg_data_range(self._currBraggXUnit)
 
         return
 
@@ -776,7 +793,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
     def evt_change_gss_mode(self):
         """
-
+        switch between multi-gss/single-bank mode and singl-gss/multiple-bank mode
         Returns
         -------
 
@@ -802,15 +819,20 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         if single_gss_mode:
             # switch to single GSAS mode from multiple GSAS mode.
             #  select the arbitrary gsas file to
-            assert len(to_plot_bank_list) == 1
+            assert len(to_plot_bank_list) == 1, 'From multi-GSS-single-Bank mode, only 1 bank can be selected.'
 
             # skip if there is one and only one workspace
             if len(on_canvas_ws_list) == 1:
                 return
             else:
-                plot_ws_name = on_canvas_ws_list[0]
+                status, ws_name_list = self.ui.treeWidget_braggWSList.get_current_main_nodes()
+                if not status:
+                    raise RuntimeError(str(ws_name_list))
+                else:
+                    plot_ws_name = ws_name_list[0]
 
             # plot
+            plot_ws_name = plot_ws_name.split('_group')[0]
             bragg_bank_ws = '%s_bank%d' % (plot_ws_name, to_plot_bank_list[0])
             self.plot_bragg(bragg_ws_list=[bragg_bank_ws], clear_canvas=True)
 
@@ -825,19 +847,22 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
                 return
             else:
                 # choose first bank
-                bank_to_plot = to_plot_bank_list[0]
+                bank_on_canvas = to_plot_bank_list[0]
 
             # disable all the banks except the one to plot. Notice the mutex must be on
             self._noEventBankWidgets = True
             for bank_id in self._braggBankWidgets.keys():
-                if bank_id != bank_to_plot:
+                if bank_id != bank_on_canvas:
                     self._braggBankWidgets[bank_id].setChecked(False)
             self._noEventBankWidgets = False
 
             # plot
             plot_ws_name = on_canvas_ws_list[0]
-            bragg_bank_ws = '%s_bank%d' % (plot_ws_name, bank_to_plot)
+            bragg_bank_ws = '%s_bank%d' % (plot_ws_name, bank_on_canvas)
             self.plot_bragg(bragg_ws_list=[bragg_bank_ws], clear_canvas=True)
+
+            # set
+            self._onCanvasGSSBankList = [bank_on_canvas]
 
         # END-IF-ELSE
 
@@ -846,113 +871,170 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     def evt_plot_bragg_bank(self):
         """
         Find out which bank will be plot
+
+        cases to trigger this event:
+        1. select more banks
+        2. deselect some banks
+
         Returns
         -------
 
         """
-        # check mutex
+        # check mutex for not responding the event
         if self._noEventBankWidgets:
             return
-
         # check
-        assert self._gssGroupName is not None
+        assert self._gssGroupName is not None, 'GSAS group name cannot be None'
 
-        # get current unit and check whether re-plot all banks is not a choice
-        x_unit = str(self.ui.comboBox_xUnit.currentText())
-        if x_unit != self._currBraggXUnit:
-            re_plot = True
+        # get mode for plotting
+        plot_multi_gss = self.ui.radioButton_multiGSS.isChecked()
+
+        # find the change of the banks
+        current_bank_set = set(self.get_bragg_banks_selected())
+        prev_bank_set = set(self._onCanvasGSSBankList)
+
+        if plot_multi_gss:
+            # multi-gss/single-bank mode
+            # get the banks to remove
+            rm_bank_list = self._onCanvasGSSBankList[:]
+
+            # deselect all the old banks and thus turn on the mutex
+            self._noEventBankWidgets = True
+            # turn off the
+            self.set_bragg_banks_selected(self._onCanvasGSSBankList, False)
+            # turn off mutex
+            self._noEventBankWidgets = False
+
+            # set banks to add
+            new_bank_list = list(current_bank_set - prev_bank_set)
+            assert len(new_bank_list) <= 1, 'Impossible to have more than 1 banks selected in multi-GSS mode.'
+
+            # set the current on canvas
+            self._onCanvasGSSBankList = new_bank_list
+
+            print '[DB...BAT] Multi-GSS-Mode: New ... ', new_bank_list, '; Remove... ', rm_bank_list
+
         else:
-            re_plot = False
-        print 'unit: %s vs. %s' % (x_unit, self._currBraggXUnit)
-        self._currBraggXUnit = x_unit
+            # single-gss/multi-bank mode
+            # determine the banks to add
+            new_bank_list = list(current_bank_set - prev_bank_set)
+            rm_bank_list = list(prev_bank_set - current_bank_set)
 
-        if x_unit == 'Q':
-            x_unit = 'MomentumTransfer'
+            print '[DB...BAT] Single-GSS-Mode: New ... ', new_bank_list, '; Remove... ', rm_bank_list
 
-        # get bank IDs to plot
-        plot_all_gss = self.ui.radioButton_multiGSS.isChecked()
+            # set the current on-canvas
+            self._onCanvasGSSBankList = list(current_bank_set)
 
-        plot_bank_list = list()
-        selected_bank_id = self.get_bragg_banks_selected()
-        for bank_id in self._braggBankWidgets.keys():
-            # rule out if this bank is not selected
-            # no-operation for not checked
-            if bank_id not in selected_bank_id:
-                self._braggBankWidgetRecords[bank_id] = False
-                continue
-
-            if plot_all_gss:
-                # only allow 1 check box newly checked
-                if self._braggBankWidgetRecords[bank_id]:
-                    # create a mutex on bank widget check box
-                    self._noEventBankWidgets = True
-                    self._braggBankWidgets[bank_id].setChecked(False)
-                    self._noEventBankWidgets = False
-
-                    self._braggBankWidgetRecords[bank_id] = False
-                else:
-                    plot_bank_list.append(bank_id)
-                    self._braggBankWidgetRecords[bank_id] = True
-            else:
-                # there is no limitation to plot multiple banks for 1-GSS mode
-                plot_bank_list.append(bank_id)
-                self._braggBankWidgetRecords[bank_id] = True
-            # END-IF
-        # END-FOR
-
-        # deal with the situation that there is no line to plot
-        if len(plot_bank_list) == 0:
-            # self.ui.graphicsView_bragg.clear_all_lines()
-            self.ui.graphicsView_bragg.reset()
-            return
-
-        # check
-        if plot_all_gss:
-            assert len(plot_bank_list) == 1, 'Current number of banks selected is equal to %d. ' \
-                                             'Must be 1.' % len(plot_bank_list)
-
-        # determine the GSS workspace to plot
-        if plot_all_gss:
-            ws_group_list = self.ui.treeWidget_braggWSList.get_main_nodes()
-            ws_group_list.remove('workspaces')
-        else:
-            status, ret_obj = self.ui.treeWidget_braggWSList.get_current_main_nodes()
-            if status:
-                ws_group_list = ret_obj
-            else:
-                ws_group_list = [self._gssGroupName]
         # END-IF-ELSE
 
-        # get the list of banks to plot or remove
-        self.ui.graphicsView_bragg.reset()
+        # get GSS data (group)
+        gss_group_list = self.ui.treeWidget_braggWSList.get_main_nodes()
+        gss_group_list.remove('workspaces')
 
-        # get new bank date
+        # remove banks
+        for gss_group_name in gss_group_list:
+            self.ui.graphicsView_bragg.remove_gss_banks(gss_group_name, rm_bank_list)
+
+        # get new bank data
         plot_data_dict = dict()
-        for ws_group in ws_group_list:
+        for ws_group in gss_group_list:
             ws_data_dict = dict()
-            for bank_id in plot_bank_list:
-                vec_x, vec_y, vec_e = self._myController.get_bragg_data(ws_group, bank_id, x_unit)
+            for bank_id in new_bank_list:
+                vec_x, vec_y, vec_e = self._myController.get_bragg_data(ws_group, bank_id, self._currBraggXUnit)
                 ws_data_dict[bank_id] = (vec_x, vec_y, vec_e)
             # END-FOR
             plot_data_dict[ws_group] = ws_data_dict
         # END-FOR
 
-        # remove unused and plot new
-        if re_plot:
-            self.ui.graphicsView_bragg.reset()
-            if x_unit == 'TOF':
-                self.ui.graphicsView_bragg.setXYLimit(xmin=0, xmax=20000, ymin=None, ymax=None)
-            elif x_unit == 'MomentumTransfer':
-                self.ui.graphicsView_bragg.setXYLimit(xmin=0, xmax=20, ymin=None, ymax=None)
-            elif x_unit == 'dSpacing':
-                self.ui.graphicsView_bragg.setXYLimit(xmin=0, xmax=7, ymin=None, ymax=None)
-
-        if plot_all_gss:
+        if plot_multi_gss:
             self.ui.graphicsView_bragg.set_to_single_gss(False)
         else:
             self.ui.graphicsView_bragg.set_to_single_gss(True)
 
-        self.ui.graphicsView_bragg.plot_banks(plot_data_dict, x_unit)
+        # plot new
+        self.ui.graphicsView_bragg.plot_banks(plot_data_dict, self._currBraggXUnit)
+
+        # reset
+        self.reset_bragg_data_range(self._currBraggXUnit)
+
+        return
+
+    def evt_switch_bragg_unit(self):
+        """
+        Unit of Bragg plot is changed.
+        Requirements:
+        1. clear the canvas
+        2. plot all the banks in the new units
+        3. reset the limit
+        Returns
+        -------
+
+        """
+        # get current unit and check whether re-plot all banks is not a choice
+        x_unit = str(self.ui.comboBox_xUnit.currentText())
+        # convert Q to MomentumTransfer by Mantid standard
+        if x_unit == 'Q':
+            x_unit = 'MomentumTransfer'
+
+        if x_unit == self._currBraggXUnit:
+            # return if no change. then this cannot happen
+            raise RuntimeError('New unit %s is same as original unit %s.' % (x_unit, self._currBraggXUnit))
+        else:
+            self._currBraggXUnit = x_unit
+
+        # reset canvas
+        self.ui.graphicsView_bragg.reset()
+
+        # get bank to plot
+        bank_list = self.get_bragg_banks_selected()
+
+        # get data sets
+        ws_group_list = self.ui.treeWidget_braggWSList.get_main_nodes()
+        ws_group_list.remove('workspaces')
+        assert len(ws_group_list) > 0, 'At least 1 GSS file must be selected.'
+
+        # check
+        assert len(bank_list) == 1 or len(ws_group_list) == 1, 'Must be either single bank or ' \
+                                                               'single GSS.'
+
+        # get data and plot
+        plot_data_dict = dict()
+        for ws_group in ws_group_list:
+            ws_data_dict = dict()
+            for bank_id in bank_list:
+                vec_x, vec_y, vec_e = self._myController.get_bragg_data(ws_group, bank_id, self._currBraggXUnit)
+                ws_data_dict[bank_id] = (vec_x, vec_y, vec_e)
+            # END-FOR
+            plot_data_dict[ws_group] = ws_data_dict
+        # END-FOR
+
+        # plot
+        self.ui.graphicsView_bragg.plot_banks(plot_data_dict, self._currBraggXUnit)
+
+        # reset unit
+        self.reset_bragg_data_range(x_unit)
+
+        return
+
+    def reset_bragg_data_range(self, x_unit):
+        """
+
+        Parameters
+        ----------
+        x_unit
+
+        Returns
+        -------
+
+        """
+        if x_unit == 'TOF':
+            self.ui.graphicsView_bragg.setXYLimit(xmin=0, xmax=20000, ymin=None, ymax=None)
+        elif x_unit == 'MomentumTransfer':
+            self.ui.graphicsView_bragg.setXYLimit(xmin=0, xmax=20, ymin=None, ymax=None)
+        elif x_unit == 'dSpacing':
+            self.ui.graphicsView_bragg.setXYLimit(xmin=0, xmax=7, ymin=None, ymax=None)
+        else:
+            raise RuntimeError('Unit %s unknown' % x_unit)
 
         return
 
@@ -1133,6 +1215,30 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         # remove
         if self.ui.graphicsView_sq.is_on_canvas(sq_name):
             self.ui.graphicsView_sq.remove_sq(plot_key=sq_name)
+
+        return
+
+    def set_bragg_banks_selected(self, bank_id_list, status):
+        """
+        set the status of selected bank IDs
+        Parameters
+        ----------
+        bank_id_list
+        status
+
+        Returns
+        -------
+
+        """
+        # check ...
+        # TODO/NOW - finish it
+
+        #
+        print '[DB...BAT] Banks ', bank_id_list, ' are set to ', status, ' without mutex locked'
+
+        # set
+        for bank_id in bank_id_list:
+            self._braggBankWidgets[bank_id].setChecked(status)
 
         return
 
