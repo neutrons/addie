@@ -420,7 +420,8 @@ class MplGraphicsView(QtGui.QWidget):
         line_key = self._myCanvas.add_plot_1d(vec_x, vec_y, y_err, color, label, x_label, y_label, marker, line_style,
                                               line_width)
 
-        self._statDict[line_key] = (min(vec_x), max(vec_x), min(vec_y), max(vec_y))
+        # record min/max
+        self._statDict[line_key] = min(vec_x), max(vec_x), min(vec_y), max(vec_y)
 
         return line_key
 
@@ -671,7 +672,7 @@ class MplGraphicsView(QtGui.QWidget):
         max_y = self._statDict[line_id_list[0]][3]
         for i_plot in range(1, len(line_id_list)):
             if self._statDict[line_id_list[i_plot]][3] > max_y:
-                min_y = self._statDict[line_id_list[i_plot]][3]
+                max_y = self._statDict[line_id_list[i_plot]][3]
 
         return max_y
 
