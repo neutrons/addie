@@ -23,6 +23,15 @@ class PlotStyleDialog(QtGui.QDialog):
         # init widgets
         self._init_widgets()
 
+        # define event handlers
+        self.connect(self.ui.pushButton_apply, QtCore.SIGNAL('clicked()'),
+                     self.do_accept_quit)
+        self.connect(self.ui.pushButton_quit, QtCore.SIGNAL('clicked()'),
+                     self.do_canbcel_quit)
+
+        # class variable
+        self._acceptSelection = False
+
         return
 
     def _init_widgets(self):
@@ -40,6 +49,30 @@ class PlotStyleDialog(QtGui.QDialog):
             self.ui.comboBox_color.addItem(color)
         for marker in marker_list:
             self.ui.comboBox_style.addItem(marker)
+
+        return
+
+    def do_accept_quit(self):
+        """
+
+        Returns
+        -------
+
+        """
+        self._acceptSelection = True
+        self.close()
+
+        return
+
+    def do_cancel_quit(self):
+        """
+
+        Returns
+        -------
+
+        """
+        self._acceptSelection = False
+        self.close()
 
         return
 

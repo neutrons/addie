@@ -167,6 +167,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         # some controlling variables
         self._currBraggXUnit = str(self.ui.comboBox_xUnit.currentText())
+        if self._currBraggXUnit == 'Q':
+            self._currBraggXUnit = 'MomentumTransfer'
         self._onCanvasGSSBankList = list()
 
         # mutex-like variables
@@ -473,7 +475,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
             self.ui.graphicsView_bragg.reset()
 
         # get unit
-        curr_unit = str(self.ui.comboBox_xUnit.currentText())
+        curr_unit = self._currBraggXUnit
+        # curr_unit = str(self.ui.comboBox_xUnit.currentText())
+        # if curr_unit == 'Q':
+        #     curr_unit =
 
         # plot all workspsaces
         for bragg_ws_name in bragg_ws_list:
@@ -989,13 +994,17 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         bank_list = self.get_bragg_banks_selected()
 
         # get data sets
-        ws_group_list = self.ui.treeWidget_braggWSList.get_main_nodes()
-        ws_group_list.remove('workspaces')
+        #  = self.ui.treeWidget_braggWSList.get_main_nodes()
+        ws_group_list = self.ui.treeWidget_braggWSList.get_selected_items_of_level(
+            target_item_level=1, excluded_parent=None, return_item_text=True)
+        if 'workspace' in ws_group_list:
+            ws_group_list.remove('workspaces')
         assert len(ws_group_list) > 0, 'At least 1 GSS file must be selected.'
 
         # check
-        assert len(bank_list) == 1 or len(ws_group_list) == 1, 'Must be either single bank or ' \
-                                                               'single GSS.'
+        assert len(bank_list) == 1 or len(ws_group_list) == 1, 'Must be either single bank (%d now) or ' \
+                                                               'single GSS (%d now).' % (len(bank_list),
+                                                                                         len(ws_group_list))
 
         # get data and plot
         plot_data_dict = dict()
