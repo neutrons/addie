@@ -27,10 +27,13 @@ class PlotStyleDialog(QtGui.QDialog):
         self.connect(self.ui.pushButton_apply, QtCore.SIGNAL('clicked()'),
                      self.do_accept_quit)
         self.connect(self.ui.pushButton_quit, QtCore.SIGNAL('clicked()'),
-                     self.do_canbcel_quit)
+                     self.do_cancel_quit)
 
         # class variable
         self._acceptSelection = False
+
+        # plot ID list
+        self._plotIDList = list()
 
         return
 
@@ -76,17 +79,21 @@ class PlotStyleDialog(QtGui.QDialog):
 
         return
 
-    def get_plot_color_marker(self):
+    def get_color_marker(self):
         """
-        Read from the combo boxes and return
-        Returns
-        -------
+
+        Returns: 3-tuple. Line ID (None for all lines),
+                          color (string, None for no change),
+                          mark (string, None for no change)
 
         """
-        # plot lines
-        plot_label = str(self.ui.comboBox_lines.currentText())
-        if plot_label == 'All':
-            plot_label = None
+        # plot IDs
+        plot_index = self.ui.comboBox_lines.currentIndex()
+        plot_id = self._plotIDList[plot_index]
+        if plot_id is None:
+            return_list = self._plotIDList[1:]
+        else:
+            return_list = [plot_id]
 
         # color
         color = str(self.ui.comboBox_color.currentText())
@@ -94,11 +101,19 @@ class PlotStyleDialog(QtGui.QDialog):
             color = None
 
         # marker
-        marker = str(self.ui.comboBox_style.currentText())
-        if marker == 'No Change':
-            marker = None
+        mark = str(self.ui.comboBox_style.currentText())
+        if mark == 'No Change':
+            mark = None
 
-        return plot_label, color, marker
+        return return_list, color, mark
+
+    def is_to_apply(self):
+        """
+        Check whether the user wants to apply the changes to the canvas or not
+        Returns: boolean to apply the change or not.
+
+        """
+        return self._acceptSelection
 
     def set_plot_labels(self, plot_labels):
         """
@@ -113,36 +128,53 @@ class PlotStyleDialog(QtGui.QDialog):
         assert isinstance(plot_labels, list), 'Plot lines\' labels must be list but not %s.' % type(plot_labels)
         assert len(plot_labels) > 0, 'Input plot lines cannot be an empty list.'
 
-        # clear combo box
+        # clear combo box and plot ID list
         self.ui.comboBox_lines.clear()
+        self._plotIDList = list()
 
         # add lines
         plot_labels.insert(0, 'All')
-        for label in plot_labels:
-            self.ui.comboBox_lines.addItem(plot_labels)
+        self._plotIDList.append(None)
+        for plot_id, label in plot_labels:
+            self.ui.comboBox_lines.addItem(label)
+            self._plotIDList.append(plot_id)
 
         return
 
 
-def get_plot_color_marker(parent_window):
+def get_plots_color_marker(parent_window, plot_label_list):
     """
+    Launch a dialog to get the new color and marker for all or a specific plot.
+    Note:
+        1. use 2-tuple list for input plot is to avoid 2 lines with same label
+    Args:
+        parent_window:  parent window (main UI)
+        plot_label_list: list of 2-tuples: line ID (integer) and line label (string)
 
-    Returns
-    -------
+    Returns:
+        3-tuples: line ID (None for all lines, -1 for canceling), color (string) and marker (string)
 
     """
+    # check input
+    assert isinstance(plot_label_list, list), 'List of plots\' labels must be a list but not a %s.' \
+                                              '' % plot_label_list.__class__.__name__
+
     # Launch window
     child_window = PlotStyleDialog(parent_window)
 
     # init set up
-    pass
+    child_window.set_plot_labels(plot_labels=plot_label_list)
 
     # launch window
-    print 'POP!'
     r = child_window.exec_()
 
-    # set the close one
-    line_id, color, marker = child_window.get_plot_color_marker()
+    # get result
+    if child_window.is_to_apply():
+        # set the close one
+        plot_id_list, color, marker = child_window.get_color_marker()
+    else:
+        # not accept
+        plot_id_list, color, marker = None, None, None
 
-    return line_id, color, marker
+    return plot_id_list, color, marker
 

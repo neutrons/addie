@@ -38,6 +38,7 @@ import PyQt4.QtCore as QtCore
 import PyQt4.QtGui as QtGui
 
 import fastgr.fastgrdriver as driver
+import fastgr.specify_plots_style as ps
 
 
 class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
@@ -221,25 +222,57 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         set the color/marker to plots on bragg canvas
         :return:
         """
-        import fastgr.specify_plots_style as ps
+        # get the current figure' on-shown plots
+        plot_id_label_list = self.ui.graphicsView_bragg.get_current_plots()
 
-        line_id, color, marker = ps.get_plot_color_marker(self)
-
-        print line_id, color, marker
-
-        color, marker = self.get_color_marker()
-        self.ui.graphicsView_bragg.set_marker_all_plots(marker)
+        # get the line ID, color, and marker
+        plot_id_list, color, marker = ps.get_plots_color_marker(self, plot_label_list=plot_id_label_list)
+        if plot_id_list is None:
+            # operation is cancelled by user
+            pass
+        else:
+            # set the color and mark
+            for plot_id in plot_id_list:
+                self.ui.graphicsView_bragg.updateLine(ikey=plot_id, line_color=color, marker=marker,
+                                                    markercolor=color)
 
         return
 
     def do_set_gofr_color_marker(self):
         """
-        set the color/marker to plots on bragg canvas
+        set the color/marker to plots on G(r) canvas
         :return:
         """
-        color, marker = self.get_color_marker()
-        self.ui.graphicsView_gr.set_marker_all_plots(marker)
+        # get the line ID, color, and marker
+        line_id, color, marker = ps.get_plots_color_marker(self)
+        if line_id == -1:
+            # operation is cancelled by user
+            return
+        else:
+            # set the color and mark
+            self.ui.graphicsView_gr.updateLine(ikey=line_id, line_color=color, marker=marker,
+                                                  markercolor=color)
+
         return
+
+    def do_set_sq_color_marker(self):
+        """
+        set the color/marker on S(q) canvas
+        Returns:
+
+        """
+        # get the line ID, color, and makr
+        line_id, color, marker = ps.get_plots_color_marker(self)
+        if line_id == -1:
+            # operation is cancelled by user
+            return
+        else:
+            # set the color and mark
+            self.ui.graphicsView_gr.updateLine(ikey=line_id, line_color=color, marker=marker,
+                                                  markercolor=color)
+
+        return
+
 
     def do_show_help(self):
         """ Show help

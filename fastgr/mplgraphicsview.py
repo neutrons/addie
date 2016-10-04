@@ -1266,9 +1266,24 @@ class Qt4MplCanvas(FigureCanvas):
 
         return
 
-    def updateLine(self, ikey, vecx, vecy, linestyle=None, linecolor=None, marker=None, markercolor=None):
+    def updateLine(self, ikey, vecx=None, vecy=None, linestyle=None, linecolor=None, marker=None, markercolor=None):
         """
+        Update a plot line or a series plot line
+        Args:
+            ikey:
+            vecx:
+            vecy:
+            linestyle:
+            linecolor:
+            marker:
+            markercolor:
+
+        Returns:
+
         """
+
+
+
         line = self._lineDict[ikey]
 
         if vecx is not None and vecy is not None:
