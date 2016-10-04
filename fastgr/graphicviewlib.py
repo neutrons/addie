@@ -161,6 +161,7 @@ class BraggView(base.MplGraphicsView):
                 else:
                     bank_color = self.get_multi_gss_color()
                 vec_x, vec_y, vec_e = plot_bank_dict[ws_group][bank_id]
+                print '[DB...BAT] Plot ', ws_group, bank_id
                 plot_id = self.add_plot_1d(vec_x, vec_y, marker='.', color=bank_color,
                                            x_label=unit, y_label='I(%s)' % unit,
                                            label='%s Bank %d' % (ws_group, bank_id))
@@ -173,7 +174,7 @@ class BraggView(base.MplGraphicsView):
             # END-FOR (bank id)
         # END-FOR (ws_group)
 
-        self.scale_auto()
+        #  self.scale_auto()
 
         return
 
@@ -247,7 +248,7 @@ class BraggView(base.MplGraphicsView):
         # END-FOR
 
         # scale automatically
-        self.scale_auto()
+        # self.scale_auto()
 
         # debug output
         db_buf = ''

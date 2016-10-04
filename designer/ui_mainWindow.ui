@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1221</width>
-    <height>861</height>
+    <width>1229</width>
+    <height>832</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>300</width>
+    <width>0</width>
     <height>0</height>
    </size>
   </property>
@@ -52,8 +52,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1199</width>
-         <height>799</height>
+         <width>1209</width>
+         <height>765</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -74,7 +74,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>2</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -2781,6 +2781,46 @@ p, li { white-space: pre-wrap; }
                      </widget>
                     </item>
                     <item>
+                     <spacer name="verticalSpacer_4">
+                      <property name="orientation">
+                       <enum>Qt::Vertical</enum>
+                      </property>
+                      <property name="sizeType">
+                       <enum>QSizePolicy::Preferred</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_rescaleGSAS">
+                      <property name="font">
+                       <font>
+                        <pointsize>10</pointsize>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>Rescale</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_gsasColorStyle">
+                      <property name="font">
+                       <font>
+                        <pointsize>10</pointsize>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>Color/Style</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
                      <spacer name="verticalSpacer_35">
                       <property name="orientation">
                        <enum>Qt::Vertical</enum>
@@ -2819,6 +2859,16 @@ p, li { white-space: pre-wrap; }
               <string>Calculate G(R)</string>
              </attribute>
              <layout class="QGridLayout" name="gridLayout">
+              <item row="1" column="0">
+               <widget class="GofRView" name="graphicsView_gr">
+                <property name="minimumSize">
+                 <size>
+                  <width>50</width>
+                  <height>300</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
               <item row="0" column="0">
                <widget class="SofQView" name="graphicsView_sq">
                 <property name="minimumSize">
@@ -2832,160 +2882,104 @@ p, li { white-space: pre-wrap; }
               <item row="0" column="1">
                <layout class="QVBoxLayout" name="verticalLayout_42">
                 <item>
-                 <widget class="QPushButton" name="pushButton_loadSQ">
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Load S(Q) from the reduction tab. Plot S(Q), S(Q)-1 or Q[S(Q)-1] according to the selected radio buttons below.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Use regular file loader at this phase.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Duplicate the function in FastGR/scripts/fastgr&lt;/p&gt;&lt;p&gt;149     def read_SQ_file(self):&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="text">
-                   <string>Load SQ</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="radioButton_sq">
-                  <property name="text">
-                   <string>S(Q)</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="radioButton_sqm1">
-                  <property name="text">
-                   <string>S(Q)-1</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QRadioButton" name="radioButton_qsqm1">
-                  <property name="text">
-                   <string>Q[S(Q)-1]</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
                  <layout class="QGridLayout" name="gridLayout_18">
-                  <item row="3" column="1">
-                   <widget class="QComboBox" name="comboBox_pdfType"/>
+                  <item row="6" column="1">
+                   <widget class="QPushButton" name="pushButton_clearSofQ">
+                    <property name="font">
+                     <font>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Clear S(Q) Canvas&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Clear S(Q)</string>
+                    </property>
+                   </widget>
                   </item>
                   <item row="1" column="0">
-                   <widget class="QLabel" name="labelQmax">
-                    <property name="text">
-                     <string>Qmax</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="1">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBoxQmax">
-                    <property name="minimum">
-                     <double>1.000000000000000</double>
-                    </property>
-                    <property name="maximum">
-                     <double>50.000000000000000</double>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.500000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="1">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBoxQmin">
-                    <property name="minimum">
-                     <double>0.010000000000000</double>
-                    </property>
-                    <property name="maximum">
-                     <double>10.000000000000000</double>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.010000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="labelQmin">
-                    <property name="text">
-                     <string>Qmin</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="1">
-                   <widget class="QPushButton" name="pushButton_showQMinMax">
-                    <property name="toolTip">
-                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Show or hide the vertical indicators for Qmin and Qmax&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                    </property>
-                    <property name="text">
-                     <string>Show Min/Max</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="0">
-                   <widget class="QLabel" name="label_3">
-                    <property name="text">
-                     <string>PDF Type</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <widget class="QComboBox" name="comboBox_SofQ"/>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_generateGR">
-                  <property name="text">
-                   <string>Generate GR</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_6">
-                  <item>
-                   <widget class="QCheckBox" name="checkBox_pdfFilter">
-                    <property name="text">
-                     <string>Filter</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <spacer name="horizontalSpacer_8">
-                    <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                     <enum>QSizePolicy::Minimum</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>40</width>
-                      <height>20</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="label_4">
-                    <property name="text">
-                     <string>rho0</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="lineEdit_rho">
+                   <widget class="QPushButton" name="pushButton_loadSQ">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Load S(Q) from the reduction tab. Plot S(Q), S(Q)-1 or Q[S(Q)-1] according to the selected radio buttons below.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Use regular file loader at this phase.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Duplicate the function in FastGR/scripts/fastgr&lt;/p&gt;&lt;p&gt;149     def read_SQ_file(self):&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Load SQ</string>
+                    </property>
                    </widget>
                   </item>
+                  <item row="5" column="1">
+                   <widget class="QPushButton" name="pushButton_sqColorStyle">
+                    <property name="font">
+                     <font>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Change line's color/style&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Color/Style</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="0">
+                   <widget class="QPushButton" name="pushButton_rescaleSq">
+                    <property name="font">
+                     <font>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Rescale</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QComboBox" name="comboBox_SofQType">
+                    <item>
+                     <property name="text">
+                      <string>S(Q)</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>S(Q)-1</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Q[S(Q)-1]</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                  <item row="3" column="1">
+                   <spacer name="verticalSpacer_3">
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>20</width>
+                      <height>40</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
                  </layout>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_clearSofQ">
-                  <property name="text">
-                   <string>Clear S(Q) Canvas</string>
-                  </property>
-                 </widget>
                 </item>
                 <item>
                  <spacer name="verticalSpacer_36">
@@ -3003,26 +2997,233 @@ p, li { white-space: pre-wrap; }
                   </property>
                  </spacer>
                 </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox_SofQ"/>
+                </item>
+                <item>
+                 <layout class="QGridLayout" name="gridLayout_2">
+                  <item row="0" column="0">
+                   <widget class="QPushButton" name="pushButton_generateGR">
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Generate GR</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QComboBox" name="comboBox_pdfType">
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;PDF Type&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <layout class="QHBoxLayout" name="horizontalLayout_18">
+                    <item>
+                     <widget class="QCheckBox" name="checkBox_pdfFilter">
+                      <property name="font">
+                       <font>
+                        <pointsize>10</pointsize>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>Filter</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="label_4">
+                      <property name="font">
+                       <font>
+                        <pointsize>10</pointsize>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="layoutDirection">
+                       <enum>Qt::LeftToRight</enum>
+                      </property>
+                      <property name="text">
+                       <string>rho0  </string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QLineEdit" name="lineEdit_rho">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QGridLayout" name="gridLayout_4">
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="labelQmin">
+                    <property name="text">
+                     <string>Qmin</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="2">
+                   <widget class="QPushButton" name="pushButton_showQMinMax">
+                    <property name="font">
+                     <font>
+                      <pointsize>7</pointsize>
+                     </font>
+                    </property>
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Show or hide the vertical indicators for Qmin and Qmax&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Show Min/Max</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QLabel" name="labelQmax">
+                    <property name="text">
+                     <string>Qmax</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QDoubleSpinBox" name="doubleSpinBoxQmin">
+                    <property name="font">
+                     <font>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
+                    <property name="minimum">
+                     <double>0.010000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>10.000000000000000</double>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.010000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QDoubleSpinBox" name="doubleSpinBoxQmax">
+                    <property name="font">
+                     <font>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
+                    <property name="minimum">
+                     <double>1.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>50.000000000000000</double>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.500000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
                </layout>
-              </item>
-              <item row="1" column="0">
-               <widget class="GofRView" name="graphicsView_gr">
-                <property name="minimumSize">
-                 <size>
-                  <width>50</width>
-                  <height>300</height>
-                 </size>
-                </property>
-               </widget>
               </item>
               <item row="1" column="1">
                <layout class="QVBoxLayout" name="verticalLayout_43">
                 <item>
-                 <widget class="QPushButton" name="pushButton_loadGofR">
-                  <property name="text">
-                   <string>Load G(r)</string>
-                  </property>
-                 </widget>
+                 <layout class="QGridLayout" name="gridLayout_5">
+                  <item row="0" column="1">
+                   <widget class="QLabel" name="labeldelR">
+                    <property name="text">
+                     <string>deltaR</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="2">
+                   <widget class="QLabel" name="labelRmax">
+                    <property name="text">
+                     <string>Rmax</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="labelRmin">
+                    <property name="text">
+                     <string>Rmin</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QDoubleSpinBox" name="doubleSpinBoxRmin">
+                    <property name="font">
+                     <font>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
+                    <property name="minimum">
+                     <double>0.100000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>4.000000000000000</double>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.100000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QDoubleSpinBox" name="doubleSpinBoxDelR">
+                    <property name="font">
+                     <font>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
+                    <property name="minimum">
+                     <double>0.010000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>1.000000000000000</double>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.010000000000000</double>
+                    </property>
+                    <property name="value">
+                     <double>0.100000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="2">
+                   <widget class="QDoubleSpinBox" name="doubleSpinBoxRmax">
+                    <property name="font">
+                     <font>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
+                    <property name="minimum">
+                     <double>5.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>100.000000000000000</double>
+                    </property>
+                    <property name="value">
+                     <double>20.000000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                 <item>
                  <widget class="GofRTree" name="treeWidget_grWsList">
@@ -3038,85 +3239,64 @@ p, li { white-space: pre-wrap; }
                  </widget>
                 </item>
                 <item>
-                 <layout class="QGridLayout" name="gridLayout_20">
+                 <layout class="QGridLayout" name="gridLayout_3">
                   <item row="0" column="0">
-                   <widget class="QLabel" name="labelRmin">
+                   <widget class="QPushButton" name="pushButton_loadGofR">
                     <property name="text">
-                     <string>Rmin</string>
+                     <string>Load G(r)</string>
                     </property>
                    </widget>
                   </item>
-                  <item row="0" column="2">
-                   <widget class="QLabel" name="labeldelR">
+                  <item row="0" column="1">
+                   <widget class="QPushButton" name="pushButton_saveGR">
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
                     <property name="text">
-                     <string>deltaR</string>
+                     <string>Save G(r)</string>
                     </property>
                    </widget>
                   </item>
-                  <item row="0" column="4">
-                   <widget class="QLabel" name="labelRmax">
+                  <item row="2" column="1">
+                   <widget class="QPushButton" name="pushButton_clearGrCanvas">
+                    <property name="font">
+                     <font>
+                      <pointsize>10</pointsize>
+                     </font>
+                    </property>
                     <property name="text">
-                     <string>Rmax</string>
+                     <string>Clear G(r)</string>
                     </property>
                    </widget>
                   </item>
                   <item row="1" column="0">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBoxRmin">
-                    <property name="minimum">
-                     <double>0.100000000000000</double>
+                   <widget class="QPushButton" name="pushButton_rescaleGr">
+                    <property name="font">
+                     <font>
+                      <pointsize>10</pointsize>
+                     </font>
                     </property>
-                    <property name="maximum">
-                     <double>4.000000000000000</double>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.100000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="2">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBoxDelR">
-                    <property name="minimum">
-                     <double>0.010000000000000</double>
-                    </property>
-                    <property name="maximum">
-                     <double>1.000000000000000</double>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.010000000000000</double>
-                    </property>
-                    <property name="value">
-                     <double>0.100000000000000</double>
+                    <property name="text">
+                     <string>Rescale</string>
                     </property>
                    </widget>
                   </item>
-                  <item row="1" column="4">
-                   <widget class="QDoubleSpinBox" name="doubleSpinBoxRmax">
-                    <property name="minimum">
-                     <double>5.000000000000000</double>
+                  <item row="1" column="1">
+                   <widget class="QPushButton" name="pushButton_grColorStyle">
+                    <property name="font">
+                     <font>
+                      <pointsize>10</pointsize>
+                     </font>
                     </property>
-                    <property name="maximum">
-                     <double>100.000000000000000</double>
-                    </property>
-                    <property name="value">
-                     <double>20.000000000000000</double>
+                    <property name="text">
+                     <string>Color/Style</string>
                     </property>
                    </widget>
                   </item>
                  </layout>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_clearGrCanvas">
-                  <property name="text">
-                   <string>Clear G(r) Canvas</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_saveGR">
-                  <property name="text">
-                   <string>Save G(r)</string>
-                  </property>
-                 </widget>
                 </item>
                </layout>
               </item>
@@ -3131,7 +3311,7 @@ p, li { white-space: pre-wrap; }
           <property name="minimumSize">
            <size>
             <width>800</width>
-            <height>38</height>
+            <height>41</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -3154,8 +3334,8 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1221</width>
-     <height>20</height>
+     <width>1229</width>
+     <height>25</height>
     </rect>
    </property>
    <property name="sizePolicy">

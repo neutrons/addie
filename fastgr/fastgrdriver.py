@@ -143,7 +143,9 @@ class FastGRDriver(object):
         """
         # check
         assert isinstance(bank_id, int) and bank_id > 0
-        assert ws_group_name in self._braggDataDict, 'Workspace groups %s does not exist in controller.' % ws_group_name
+        assert ws_group_name in self._braggDataDict, 'Workspace groups %s does not exist in controller.' \
+                                                     'Current existing are %s.' % (ws_group_name,
+                                                                                   str(self._braggDataDict.keys()))
 
         ws_name = '%s_bank%d' % (ws_group_name.split('_group')[0], bank_id)
         error_message = 'Bank %d is not found in group %s. Available bank IDs are %s.' % (

@@ -369,11 +369,18 @@ class MplGraphicsView(QtGui.QWidget):
         self._myLineMarkerColorIndex = 0
         self.setAutoLineMarkerColorCombo()
 
+        # records for all the lines that are plot on the canvas
+        self._my1DPlotDict = dict()
+
         # Declaration of class variables
         self._indicatorKey = None
 
         # Indicator manager
         self._myIndicatorsManager = IndicatorManager()
+
+        # some statistic recorder for convenient operation
+        self._statDict = dict()
+        self._statRightPlotDict = dict()
 
         return
 
@@ -416,6 +423,10 @@ class MplGraphicsView(QtGui.QWidget):
         line_key = self._myCanvas.add_plot_1d(vec_x, vec_y, y_err, color, label, x_label, y_label, marker, line_style,
                                               line_width)
 
+        # record min/max
+        self._statDict[line_key] = min(vec_x), max(vec_x), min(vec_y), max(vec_y)
+        self._my1DPlotDict[line_key] = label
+
         return line_key
 
     def add_plot_1d_right(self, vec_x, vec_y, color=None, label='', marker=None, line_style=None, line_width=1):
@@ -433,6 +444,8 @@ class MplGraphicsView(QtGui.QWidget):
         line_key = self._myCanvas.add_1d_plot_right(vec_x, vec_y, label=label,
                                                     color=color, marker=marker,
                                                     linestyle=line_style, linewidth=line_width)
+
+        self._statRightPlotDict[line_key] = (min(vec_x), max(vec_x), min(vec_y), max(vec_y))
 
         return line_key
 
@@ -582,9 +595,19 @@ class MplGraphicsView(QtGui.QWidget):
         """
         self._myCanvas.clear_all_1d_plots()
 
+        self._statRightPlotDict.clear()
+        self._statDict.clear()
+        self._my1DPlotDict.clear()
+
+        return
+
     def clear_canvas(self):
         """ Clear canvas
         """
+        # clear all the records
+        self._statDict.clear()
+        self._my1DPlotDict.clear()
+
         return self._myCanvas.clear_canvas()
 
     def draw(self):
@@ -630,6 +653,38 @@ class MplGraphicsView(QtGui.QWidget):
         """
         return self._myCanvas.getYLimit()
 
+    def get_y_min(self):
+        """
+        Get the minimum Y value of the plots on canvas
+        :return:
+        """
+        if len(self._statDict) == 0:
+            return 1E10
+
+        line_id_list = self._statDict.keys()
+        min_y = self._statDict[line_id_list[0]][2]
+        for i_plot in range(1, len(line_id_list)):
+            if self._statDict[line_id_list[i_plot]][2] < min_y:
+                min_y = self._statDict[line_id_list[i_plot]][2]
+
+        return min_y
+
+    def get_y_max(self):
+        """
+        Get the maximum Y value of the plots on canvas
+        :return:
+        """
+        if len(self._statDict) == 0:
+            return -1E10
+
+        line_id_list = self._statDict.keys()
+        max_y = self._statDict[line_id_list[0]][3]
+        for i_plot in range(1, len(line_id_list)):
+            if self._statDict[line_id_list[i_plot]][3] > max_y:
+                max_y = self._statDict[line_id_list[i_plot]][3]
+
+        return max_y
+
     def move_indicator(self, line_id, dx, dy):
         """
         Move the indicator line in horizontal
@@ -672,7 +727,17 @@ class MplGraphicsView(QtGui.QWidget):
         :param line_id:
         :return:
         """
+        # remove line
         self._myCanvas.remove_plot_1d(line_id)
+
+        # remove the records
+        if line_id in self._statDict:
+            del self._statDict[line_id]
+            del self._my1DPlotDict[line_id]
+        else:
+            del self._statRightPlotDict[line_id]
+
+        return
 
     def set_indicator_position(self, line_id, pos_x, pos_y):
         """ Set the indicator to new position
@@ -705,9 +770,27 @@ class MplGraphicsView(QtGui.QWidget):
         """
         return self._myCanvas.remove_plot_1d(ikey)
 
-    def updateLine(self, ikey, vecx, vecy, linestyle=None, linecolor=None, marker=None, markercolor=None):
+    def updateLine(self, ikey, vecx=None, vecy=None, linestyle=None, linecolor=None, marker=None, markercolor=None):
         """
+        update a line's set up
+        Parameters
+        ----------
+        ikey
+        vecx
+        vecy
+        linestyle
+        linecolor
+        marker
+        markercolor
+
+        Returns
+        -------
+
         """
+        # check
+        assert isinstance(ikey, int), 'Line key must be an integer.'
+        assert ikey in self._my1DPlotDict, 'Line with ID %d is not on canvas. ' % ikey
+
         return self._myCanvas.updateLine(ikey, vecx, vecy, linestyle, linecolor, marker, markercolor)
 
     def update_indicator(self, i_key, color):
@@ -732,6 +815,20 @@ class MplGraphicsView(QtGui.QWidget):
             self._myCanvas.updateLine(ikey=canvas_line_index_v, vecx=None, vecy=None, linecolor=color)
 
         return
+
+    def get_current_plots(self):
+        """
+        Get the current plots on canvas
+        Returns
+        -------
+        list of 2-tuple: integer (plot ID) and string (label)
+        """
+        tuple_list = list()
+        line_id_list = sorted(self._my1DPlotDict.keys())
+        for line_id in line_id_list:
+            tuple_list.append((line_id, self._my1DPlotDict[line_id]))
+
+        return tuple_list
 
     def get_indicator_key(self, x, y):
         """ Get the key of the indicator with given position
@@ -1207,16 +1304,31 @@ class Qt4MplCanvas(FigureCanvas):
         else:
             raise RuntimeError('Line with ID %s is not recorded.' % plot_key)
 
-        self.axes.legend()
+        self._setupLegend(location='best')
 
         # Draw
         self.draw()
 
         return
 
-    def updateLine(self, ikey, vecx, vecy, linestyle=None, linecolor=None, marker=None, markercolor=None):
+    def updateLine(self, ikey, vecx=None, vecy=None, linestyle=None, linecolor=None, marker=None, markercolor=None):
         """
+        Update a plot line or a series plot line
+        Args:
+            ikey:
+            vecx:
+            vecy:
+            linestyle:
+            linecolor:
+            marker:
+            markercolor:
+
+        Returns:
+
         """
+
+
+
         line = self._lineDict[ikey]
 
         if vecx is not None and vecy is not None:
