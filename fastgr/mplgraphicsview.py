@@ -369,6 +369,9 @@ class MplGraphicsView(QtGui.QWidget):
         self._myLineMarkerColorIndex = 0
         self.setAutoLineMarkerColorCombo()
 
+        # records for all the lines that are plot on the canvas
+        self._my1DPlotDict = dict()
+
         # Declaration of class variables
         self._indicatorKey = None
 
@@ -422,6 +425,7 @@ class MplGraphicsView(QtGui.QWidget):
 
         # record min/max
         self._statDict[line_key] = min(vec_x), max(vec_x), min(vec_y), max(vec_y)
+        self._my1DPlotDict[line_key] = label
 
         return line_key
 
@@ -593,12 +597,17 @@ class MplGraphicsView(QtGui.QWidget):
 
         self._statRightPlotDict.clear()
         self._statDict.clear()
+        self._my1DPlotDict.clear()
 
         return
 
     def clear_canvas(self):
         """ Clear canvas
         """
+        # clear all the records
+        self._statDict.clear()
+        self._my1DPlotDict.clear()
+
         return self._myCanvas.clear_canvas()
 
     def draw(self):
@@ -718,9 +727,13 @@ class MplGraphicsView(QtGui.QWidget):
         :param line_id:
         :return:
         """
+        # remove line
         self._myCanvas.remove_plot_1d(line_id)
+
+        # remove the records
         if line_id in self._statDict:
             del self._statDict[line_id]
+            del self._my1DPlotDict[line_id]
         else:
             del self._statRightPlotDict[line_id]
 
@@ -757,9 +770,27 @@ class MplGraphicsView(QtGui.QWidget):
         """
         return self._myCanvas.remove_plot_1d(ikey)
 
-    def updateLine(self, ikey, vecx, vecy, linestyle=None, linecolor=None, marker=None, markercolor=None):
+    def updateLine(self, ikey, vecx=None, vecy=None, linestyle=None, linecolor=None, marker=None, markercolor=None):
         """
+        update a line's set up
+        Parameters
+        ----------
+        ikey
+        vecx
+        vecy
+        linestyle
+        linecolor
+        marker
+        markercolor
+
+        Returns
+        -------
+
         """
+        # check
+        assert isinstance(ikey, int), 'Line key must be an integer.'
+        assert ikey in self._my1DPlotDict, 'Line with ID %d is not on canvas. ' % ikey
+
         return self._myCanvas.updateLine(ikey, vecx, vecy, linestyle, linecolor, marker, markercolor)
 
     def update_indicator(self, i_key, color):
@@ -784,6 +815,20 @@ class MplGraphicsView(QtGui.QWidget):
             self._myCanvas.updateLine(ikey=canvas_line_index_v, vecx=None, vecy=None, linecolor=color)
 
         return
+
+    def get_current_plots(self):
+        """
+        Get the current plots on canvas
+        Returns
+        -------
+        list of 2-tuple: integer (plot ID) and string (label)
+        """
+        tuple_list = list()
+        line_id_list = sorted(self._my1DPlotDict.keys())
+        for line_id in line_id_list:
+            tuple_list.append((line_id, self._my1DPlotDict[line_id]))
+
+        return tuple_list
 
     def get_indicator_key(self, x, y):
         """ Get the key of the indicator with given position

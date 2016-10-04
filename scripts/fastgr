@@ -106,9 +106,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         self.connect(self.ui.pushButton_gsasColorStyle, QtCore.SIGNAL('clicked()'),
                      self.do_set_bragg_color_marker)
 
-        self.connect(self.ui.pushButton_rescaleGr, QtCore.SIGNAL('clicked()'),
-                     self.do_set_gofr_color_marker)
-
         # for tab G(R)
         self.connect(self.ui.pushButton_loadSQ, QtCore.SIGNAL('clicked()'),
                      self.do_load_sq)
@@ -136,6 +133,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
                      self.do_rescale_sofq)
         self.connect(self.ui.pushButton_rescaleGr, QtCore.SIGNAL('clicked()'),
                      self.do_rescale_gofr)
+
+        self.connect(self.ui.pushButton_grColorStyle, QtCore.SIGNAL('clicked()'),
+                     self.do_set_gofr_color_marker)
+        self.connect(self.ui.pushButton_sqColorStyle, QtCore.SIGNAL('clicked()'),
+                     self.do_set_sq_color_marker)
 
         #  menu operations
         self.connect(self.ui.actionReset_GofR_tab, QtCore.SIGNAL('triggered()'),
@@ -233,8 +235,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         else:
             # set the color and mark
             for plot_id in plot_id_list:
-                self.ui.graphicsView_bragg.updateLine(ikey=plot_id, line_color=color, marker=marker,
-                                                    markercolor=color)
+                self.ui.graphicsView_bragg.updateLine(ikey=plot_id, linecolor=color, marker=marker,
+                                                      markercolor=color)
 
         return
 
@@ -244,14 +246,18 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         :return:
         """
         # get the line ID, color, and marker
-        line_id, color, marker = ps.get_plots_color_marker(self)
-        if line_id == -1:
+        plot_id_label_list = self.ui.graphicsView_gr.get_current_plots()
+
+        # get the line ID, color, and marker
+        plot_id_list, color, marker = ps.get_plots_color_marker(self, plot_label_list=plot_id_label_list)
+        if plot_id_list is None:
             # operation is cancelled by user
-            return
+            pass
         else:
             # set the color and mark
-            self.ui.graphicsView_gr.updateLine(ikey=line_id, line_color=color, marker=marker,
-                                                  markercolor=color)
+            for plot_id in plot_id_list:
+                self.ui.graphicsView_gr.updateLine(ikey=plot_id, linecolor=color, marker=marker,
+                                                   markercolor=color)
 
         return
 
@@ -261,18 +267,21 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         Returns:
 
         """
-        # get the line ID, color, and makr
-        line_id, color, marker = ps.get_plots_color_marker(self)
-        if line_id == -1:
+        # get the line ID, color, and marker
+        plot_id_label_list = self.ui.graphicsView_sq.get_current_plots()
+
+        # get the line ID, color, and marker
+        plot_id_list, color, marker = ps.get_plots_color_marker(self, plot_label_list=plot_id_label_list)
+        if plot_id_list is None:
             # operation is cancelled by user
-            return
+            pass
         else:
             # set the color and mark
-            self.ui.graphicsView_gr.updateLine(ikey=line_id, line_color=color, marker=marker,
-                                                  markercolor=color)
+            for plot_id in plot_id_list:
+                self.ui.graphicsView_sq.updateLine(ikey=plot_id, linecolor=color, marker=marker,
+                                                   markercolor=color)
 
         return
-
 
     def do_show_help(self):
         """ Show help
