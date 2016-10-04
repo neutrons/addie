@@ -74,13 +74,13 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
               <string>autoNOM</string>
              </attribute>
-             <layout class="QVBoxLayout" name="verticalLayout_30">
+             <layout class="QVBoxLayout" name="verticalLayout_7">
               <item>
                <widget class="QGroupBox" name="groupBox_27">
                 <property name="sizePolicy">
@@ -875,94 +875,173 @@
                </spacer>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_58">
+               <layout class="QVBoxLayout" name="verticalLayout_33">
                 <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_33">
-                  <item>
-                   <widget class="QCheckBox" name="create_folder_button">
-                    <property name="text">
-                     <string>Create New autoNOM Folder?</string>
-                    </property>
-                    <property name="checked">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QGroupBox" name="name_of_output_folder">
-                    <property name="title">
-                     <string>Name of Output Folder</string>
-                    </property>
-                    <layout class="QVBoxLayout" name="verticalLayout_34">
+                 <widget class="QCheckBox" name="create_folder_button">
+                  <property name="text">
+                   <string>Create New autoNOM Folder?</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QGroupBox" name="name_of_output_folder">
+                  <property name="title">
+                   <string>Name of Output Folder</string>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_34">
+                   <item>
+                    <widget class="QRadioButton" name="auto_manual_folder">
+                     <property name="text">
+                      <string>Automatic (autoNOM_##)</string>
+                     </property>
+                     <property name="checked">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_59">
                      <item>
-                      <widget class="QRadioButton" name="auto_manual_folder">
+                      <widget class="QRadioButton" name="manual_output_folder">
                        <property name="text">
-                        <string>Automatic (autoNOM_##)</string>
-                       </property>
-                       <property name="checked">
-                        <bool>true</bool>
+                        <string>Manual</string>
                        </property>
                       </widget>
                      </item>
                      <item>
-                      <layout class="QHBoxLayout" name="horizontalLayout_59">
-                       <item>
-                        <widget class="QRadioButton" name="manual_output_folder">
-                         <property name="text">
-                          <string>Manual</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QLineEdit" name="manual_output_folder_field">
-                         <property name="enabled">
-                          <bool>false</bool>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QPushButton" name="manual_output_folder_button">
-                         <property name="enabled">
-                          <bool>false</bool>
-                         </property>
-                         <property name="text">
-                          <string>Select ...</string>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
+                      <widget class="QLineEdit" name="manual_output_folder_field">
+                       <property name="enabled">
+                        <bool>false</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QPushButton" name="manual_output_folder_button">
+                       <property name="enabled">
+                        <bool>false</bool>
+                       </property>
+                       <property name="text">
+                        <string>Select ...</string>
+                       </property>
+                      </widget>
                      </item>
                     </layout>
-                   </widget>
-                  </item>
-                 </layout>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_26">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_19">
+                <item>
+                 <widget class="QPushButton" name="run_autonom_script">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Run autoNOM script</string>
+                  </property>
+                 </widget>
                 </item>
                 <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_35">
-                  <item>
-                   <spacer name="verticalSpacer_26">
-                    <property name="orientation">
-                     <enum>Qt::Vertical</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>20</width>
-                      <height>40</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="run_autonom_script">
-                    <property name="enabled">
-                     <bool>false</bool>
-                    </property>
-                    <property name="text">
-                     <string>Run autoNOM script</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
+                 <widget class="QPushButton" name="pushButton_2">
+                  <property name="minimumSize">
+                   <size>
+                    <width>20</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>20</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="palette">
+                   <palette>
+                    <active>
+                     <colorrole role="WindowText">
+                      <brush brushstyle="SolidPattern">
+                       <color alpha="255">
+                        <red>255</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                       </color>
+                      </brush>
+                     </colorrole>
+                     <colorrole role="ButtonText">
+                      <brush brushstyle="SolidPattern">
+                       <color alpha="255">
+                        <red>255</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                       </color>
+                      </brush>
+                     </colorrole>
+                    </active>
+                    <inactive>
+                     <colorrole role="WindowText">
+                      <brush brushstyle="SolidPattern">
+                       <color alpha="255">
+                        <red>255</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                       </color>
+                      </brush>
+                     </colorrole>
+                     <colorrole role="ButtonText">
+                      <brush brushstyle="SolidPattern">
+                       <color alpha="255">
+                        <red>255</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                       </color>
+                      </brush>
+                     </colorrole>
+                    </inactive>
+                    <disabled>
+                     <colorrole role="WindowText">
+                      <brush brushstyle="SolidPattern">
+                       <color alpha="255">
+                        <red>128</red>
+                        <green>128</green>
+                        <blue>128</blue>
+                       </color>
+                      </brush>
+                     </colorrole>
+                     <colorrole role="ButtonText">
+                      <brush brushstyle="SolidPattern">
+                       <color alpha="255">
+                        <red>128</red>
+                        <green>128</green>
+                        <blue>128</blue>
+                       </color>
+                      </brush>
+                     </colorrole>
+                    </disabled>
+                   </palette>
+                  </property>
+                  <property name="text">
+                   <string>?</string>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>
@@ -1227,7 +1306,7 @@
               <item>
                <widget class="QTabWidget" name="tabWidget">
                 <property name="currentIndex">
-                 <number>0</number>
+                 <number>1</number>
                 </property>
                 <widget class="QWidget" name="tab">
                  <attribute name="title">
@@ -1986,6 +2065,62 @@
                          </property>
                         </widget>
                        </item>
+                       <item>
+                        <widget class="QPushButton" name="pushButton_3">
+                         <property name="minimumSize">
+                          <size>
+                           <width>20</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>20</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="palette">
+                          <palette>
+                           <active>
+                            <colorrole role="ButtonText">
+                             <brush brushstyle="SolidPattern">
+                              <color alpha="255">
+                               <red>255</red>
+                               <green>0</green>
+                               <blue>0</blue>
+                              </color>
+                             </brush>
+                            </colorrole>
+                           </active>
+                           <inactive>
+                            <colorrole role="ButtonText">
+                             <brush brushstyle="SolidPattern">
+                              <color alpha="255">
+                               <red>255</red>
+                               <green>0</green>
+                               <blue>0</blue>
+                              </color>
+                             </brush>
+                            </colorrole>
+                           </inactive>
+                           <disabled>
+                            <colorrole role="ButtonText">
+                             <brush brushstyle="SolidPattern">
+                              <color alpha="255">
+                               <red>128</red>
+                               <green>128</green>
+                               <blue>128</blue>
+                              </color>
+                             </brush>
+                            </colorrole>
+                           </disabled>
+                          </palette>
+                         </property>
+                         <property name="text">
+                          <string>?</string>
+                         </property>
+                        </widget>
+                       </item>
                       </layout>
                      </item>
                     </layout>
@@ -2083,30 +2218,77 @@ p, li { white-space: pre-wrap; }
                         </widget>
                        </item>
                        <item>
-                        <widget class="QPushButton" name="run_sum_scans_button">
-                         <property name="enabled">
-                          <bool>false</bool>
-                         </property>
-                         <property name="text">
-                          <string>Run Sum Scans</string>
-                         </property>
-                        </widget>
+                        <layout class="QHBoxLayout" name="horizontalLayout_20">
+                         <item>
+                          <widget class="QPushButton" name="run_sum_scans_button">
+                           <property name="enabled">
+                            <bool>false</bool>
+                           </property>
+                           <property name="text">
+                            <string>Run Sum Scans</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QPushButton" name="pushButton_4">
+                           <property name="maximumSize">
+                            <size>
+                             <width>20</width>
+                             <height>16777215</height>
+                            </size>
+                           </property>
+                           <property name="sizeIncrement">
+                            <size>
+                             <width>20</width>
+                             <height>0</height>
+                            </size>
+                           </property>
+                           <property name="palette">
+                            <palette>
+                             <active>
+                              <colorrole role="ButtonText">
+                               <brush brushstyle="SolidPattern">
+                                <color alpha="255">
+                                 <red>255</red>
+                                 <green>0</green>
+                                 <blue>0</blue>
+                                </color>
+                               </brush>
+                              </colorrole>
+                             </active>
+                             <inactive>
+                              <colorrole role="ButtonText">
+                               <brush brushstyle="SolidPattern">
+                                <color alpha="255">
+                                 <red>255</red>
+                                 <green>0</green>
+                                 <blue>0</blue>
+                                </color>
+                               </brush>
+                              </colorrole>
+                             </inactive>
+                             <disabled>
+                              <colorrole role="ButtonText">
+                               <brush brushstyle="SolidPattern">
+                                <color alpha="255">
+                                 <red>128</red>
+                                 <green>128</green>
+                                 <blue>128</blue>
+                                </color>
+                               </brush>
+                              </colorrole>
+                             </disabled>
+                            </palette>
+                           </property>
+                           <property name="text">
+                            <string>?</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
                        </item>
                       </layout>
                      </widget>
-                    </item>
-                    <item>
-                     <spacer name="verticalSpacer">
-                      <property name="orientation">
-                       <enum>Qt::Vertical</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>20</width>
-                        <height>40</height>
-                       </size>
-                      </property>
-                     </spacer>
                     </item>
                    </layout>
                   </item>
@@ -2428,8 +2610,70 @@ p, li { white-space: pre-wrap; }
                       <property name="enabled">
                        <bool>false</bool>
                       </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>200</width>
+                        <height>0</height>
+                       </size>
+                      </property>
                       <property name="text">
                        <string>Run Reduction</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_5">
+                      <property name="minimumSize">
+                       <size>
+                        <width>20</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>20</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="palette">
+                       <palette>
+                        <active>
+                         <colorrole role="ButtonText">
+                          <brush brushstyle="SolidPattern">
+                           <color alpha="255">
+                            <red>255</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                           </color>
+                          </brush>
+                         </colorrole>
+                        </active>
+                        <inactive>
+                         <colorrole role="ButtonText">
+                          <brush brushstyle="SolidPattern">
+                           <color alpha="255">
+                            <red>255</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                           </color>
+                          </brush>
+                         </colorrole>
+                        </inactive>
+                        <disabled>
+                         <colorrole role="ButtonText">
+                          <brush brushstyle="SolidPattern">
+                           <color alpha="255">
+                            <red>128</red>
+                            <green>128</green>
+                            <blue>128</blue>
+                           </color>
+                          </brush>
+                         </colorrole>
+                        </disabled>
+                       </palette>
+                      </property>
+                      <property name="text">
+                       <string>?</string>
                       </property>
                      </widget>
                     </item>
@@ -3348,7 +3592,9 @@ p, li { white-space: pre-wrap; }
             <height>300</height>
            </size>
           </property>
-          <widget class="QWidget" name="dockWidgetContents"/>
+          <widget class="QWidget" name="dockWidgetContents">
+           <zorder>tabWidget_2</zorder>
+          </widget>
          </widget>
         </item>
        </layout>
@@ -3586,8 +3832,8 @@ p, li { white-space: pre-wrap; }
    <slot>output_folder_radio_buttons()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>107</x>
-     <y>686</y>
+     <x>106</x>
+     <y>605</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -3602,8 +3848,8 @@ p, li { white-space: pre-wrap; }
    <slot>output_folder_radio_buttons()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>100</x>
-     <y>715</y>
+     <x>99</x>
+     <y>634</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -3618,8 +3864,8 @@ p, li { white-space: pre-wrap; }
    <slot>manual_output_folder_field_edited()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>324</x>
-     <y>716</y>
+     <x>323</x>
+     <y>635</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -3634,8 +3880,8 @@ p, li { white-space: pre-wrap; }
    <slot>run_autonom()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1194</x>
-     <y>730</y>
+     <x>168</x>
+     <y>731</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -3762,8 +4008,8 @@ p, li { white-space: pre-wrap; }
    <slot>manual_output_folder_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1038</x>
-     <y>718</y>
+     <x>1183</x>
+     <y>637</y>
     </hint>
     <hint type="destinationlabel">
      <x>1220</x>
@@ -3810,8 +4056,8 @@ p, li { white-space: pre-wrap; }
    <slot>create_new_autonom_folder_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>57</x>
-     <y>634</y>
+     <x>56</x>
+     <y>553</y>
     </hint>
     <hint type="destinationlabel">
      <x>83</x>
@@ -3890,8 +4136,8 @@ p, li { white-space: pre-wrap; }
    <slot>output_file_name_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>636</x>
-     <y>669</y>
+     <x>610</x>
+     <y>676</y>
     </hint>
     <hint type="destinationlabel">
      <x>1028</x>
@@ -3922,8 +4168,8 @@ p, li { white-space: pre-wrap; }
    <slot>run_ndabs_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>972</x>
-     <y>671</y>
+     <x>946</x>
+     <y>678</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -4002,8 +4248,8 @@ p, li { white-space: pre-wrap; }
    <slot>run_sum_scans_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1173</x>
-     <y>651</y>
+     <x>1146</x>
+     <y>678</y>
     </hint>
     <hint type="destinationlabel">
      <x>1194</x>
@@ -4035,7 +4281,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>135</x>
-     <y>454</y>
+     <y>467</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -4051,7 +4297,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>182</x>
-     <y>500</y>
+     <y>513</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -4067,7 +4313,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>51</x>
-     <y>659</y>
+     <y>672</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -4083,7 +4329,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>227</x>
-     <y>454</y>
+     <y>467</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -4099,7 +4345,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>76</x>
-     <y>500</y>
+     <y>513</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -4115,7 +4361,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>173</x>
-     <y>549</y>
+     <y>562</y>
     </hint>
     <hint type="destinationlabel">
      <x>1</x>
@@ -4131,7 +4377,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>83</x>
-     <y>613</y>
+     <y>626</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -4147,7 +4393,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>311</x>
-     <y>613</y>
+     <y>626</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -4163,7 +4409,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>644</x>
-     <y>605</y>
+     <y>618</y>
     </hint>
     <hint type="destinationlabel">
      <x>1220</x>
@@ -4179,7 +4425,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>51</x>
-     <y>659</y>
+     <y>672</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -4195,7 +4441,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>1119</x>
-     <y>659</y>
+     <y>672</y>
     </hint>
     <hint type="destinationlabel">
      <x>1220</x>
@@ -4291,7 +4537,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>1077</x>
-     <y>588</y>
+     <y>614</y>
     </hint>
     <hint type="destinationlabel">
      <x>1103</x>
@@ -4312,6 +4558,70 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>201</x>
      <y>27</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>help_button_clicked_ndabs()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>961</x>
+     <y>670</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>966</x>
+     <y>808</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>help_button_clicked_scans()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1162</x>
+     <y>667</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>915</x>
+     <y>807</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>help_button_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1185</x>
+     <y>723</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>956</x>
+     <y>803</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_5</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>help_button_clicked_mantid()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1172</x>
+     <y>675</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1225</x>
+     <y>724</y>
     </hint>
    </hints>
   </connection>
@@ -4360,5 +4670,9 @@ p, li { white-space: pre-wrap; }
   <slot>action_save_configuration_clicked()</slot>
   <slot>sum_scans_output_file_name_changed()</slot>
   <slot>main_tab_widget_changed()</slot>
+  <slot>help_button_clicked_autonom()</slot>
+  <slot>help_button_clicked_ndabs()</slot>
+  <slot>help_button_clicked_scans()</slot>
+  <slot>help_button_clicked_mantid()</slot>
  </slots>
 </ui>
