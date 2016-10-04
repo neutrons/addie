@@ -594,17 +594,18 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         vec_q, vec_sq, vec_se = self._myController.get_sq(sq_ws_name)
 
         # get the unit & do conversion if necessary
-        if self.ui.radioButton_sq.isChecked():
+        sq_type = str(self.ui.comboBox_SofQType.currentText())
+        if sq_type == 'S(Q)':
             # use the original S(Q)
             sq_unit = 'S(Q)'
             vec_y = vec_sq
-        elif self.ui.radioButton_sqm1.isChecked():
+        elif sq_type == 'S(Q)-1':
             # use S(Q)-1
             sq_unit = 'S(Q)-1'
             vec_y = vec_sq - 1
-        elif self.ui.radioButton_qsqm1.isChecked():
+        elif sq_type == 'Q[S(Q)-1]':
             # use Q(S(Q)-1)
-            sq_unit = 'Q(S(Q)-1)'
+            sq_unit = 'Q[S(Q)-1]'
             vec_y = vec_q * (vec_sq - 1)
         else:
             raise RuntimeError('None of S(Q), S(Q)-1 or Q(S(Q)-1) is chosen.')
