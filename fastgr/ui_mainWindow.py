@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Tue Oct  4 11:42:35 2016
+# Created: Tue Oct  4 14:26:49 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -802,6 +802,21 @@ class Ui_MainWindow(object):
         self.verticalLayout_5.addWidget(self.label_17)
         spacerItem14 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
         self.verticalLayout_5.addItem(spacerItem14)
+        self.label_3 = QtGui.QLabel(self.groupBox_3)
+        self.label_3.setObjectName(_fromUtf8("label_3"))
+        self.verticalLayout_5.addWidget(self.label_3)
+        self.horizontalLayout_6 = QtGui.QHBoxLayout()
+        self.horizontalLayout_6.setObjectName(_fromUtf8("horizontalLayout_6"))
+        self.label_18 = QtGui.QLabel(self.groupBox_3)
+        self.label_18.setObjectName(_fromUtf8("label_18"))
+        self.horizontalLayout_6.addWidget(self.label_18)
+        self.sum_scans_output_file_name = QtGui.QLineEdit(self.groupBox_3)
+        self.sum_scans_output_file_name.setObjectName(_fromUtf8("sum_scans_output_file_name"))
+        self.horizontalLayout_6.addWidget(self.sum_scans_output_file_name)
+        self.label_22 = QtGui.QLabel(self.groupBox_3)
+        self.label_22.setObjectName(_fromUtf8("label_22"))
+        self.horizontalLayout_6.addWidget(self.label_22)
+        self.verticalLayout_5.addLayout(self.horizontalLayout_6)
         self.interactive_mode_checkbox = QtGui.QCheckBox(self.groupBox_3)
         self.interactive_mode_checkbox.setChecked(True)
         self.interactive_mode_checkbox.setObjectName(_fromUtf8("interactive_mode_checkbox"))
@@ -1389,7 +1404,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget_2.setCurrentIndex(0)
+        self.tabWidget_2.setCurrentIndex(1)
         self.tabWidget.setCurrentIndex(0)
         QtCore.QObject.connect(self.diamond, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_edited)
         QtCore.QObject.connect(self.diamond_background, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_background_edited)
@@ -1440,6 +1455,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.export_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.export_table_clicked)
         QtCore.QObject.connect(self.actionLoad, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.action_load_configuration_clicked)
         QtCore.QObject.connect(self.actionSave, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.action_save_configuration_clicked)
+        QtCore.QObject.connect(self.sum_scans_output_file_name, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.sum_scans_output_file_name_changed)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -1560,6 +1576,9 @@ class Ui_MainWindow(object):
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">&#8491;</p></body></html>", None))
         self.label_17.setText(_translate("MainWindow", "(ex: 20, 30, 40)", None))
+        self.label_3.setText(_translate("MainWindow", "Output File Name", None))
+        self.label_18.setText(_translate("MainWindow", "sum_", None))
+        self.label_22.setText(_translate("MainWindow", ".inp", None))
         self.interactive_mode_checkbox.setText(_translate("MainWindow", "Interactive Mode ?", None))
         self.run_sum_scans_button.setText(_translate("MainWindow", "Run Sum Scans", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "PDF", None))
