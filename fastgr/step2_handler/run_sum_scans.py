@@ -5,7 +5,7 @@ from PyQt4.QtCore import Qt
 class RunSumScans(object):
     
     script = 'python  /SNS/users/zjn/pytest/sumscans.py '
-    output_file = 'sum_sto.inp'
+    output_file = ''
     
     def __init__(self, parent=None):
         self.parent = parent.ui
@@ -43,7 +43,8 @@ class RunSumScans(object):
         return _script
 
     def create_output_file(self):
-        _full_output_file_name = os.path.join(self.folder, self.output_file)
+        _output_file_name = self.parent.sum_scans_output_file_name.text()
+        _full_output_file_name = os.path.join(self.folder, _output_file)
         self.full_output_file_name = _full_output_file_name
         
         f = open(_full_output_file_name, 'w')
