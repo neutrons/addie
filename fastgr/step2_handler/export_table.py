@@ -99,8 +99,10 @@ class ExportTable(object):
         self.output_text = output_text
 
     def export_data(self):
-        _output_text = self.output_text
         _filename = self.filename
+        if _filename == '':
+            return
+        _output_text = self.output_text
         _o_file = FileHandler(filename = _filename)
         _o_file.create_ascii(contain = _output_text)
 
