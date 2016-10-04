@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui_mainWindow.ui'
+# Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Mon Sep 19 10:49:26 2016
+# Created: Tue Oct  4 11:33:17 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -40,7 +40,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
         self.scrollAreaWidgetContents = QtGui.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1209, 765))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1207, 770))
         self.scrollAreaWidgetContents.setMinimumSize(QtCore.QSize(0, 0))
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
         self.verticalLayout_44 = QtGui.QVBoxLayout(self.scrollAreaWidgetContents)
@@ -1331,7 +1331,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.scrollArea)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1229, 25))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1229, 20))
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -1377,7 +1377,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget_2.setCurrentIndex(2)
+        self.tabWidget_2.setCurrentIndex(0)
         self.tabWidget.setCurrentIndex(0)
         QtCore.QObject.connect(self.diamond, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_edited)
         QtCore.QObject.connect(self.diamond_background, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_background_edited)
@@ -1641,6 +1641,6 @@ class Ui_MainWindow(object):
         self.action_preview_ascii.setText(_translate("MainWindow", "Preview Ascii ...", None))
         self.actionAdvanced.setText(_translate("MainWindow", "Advanced ...", None))
 
-from graphicviewlib import BraggView, GofRView, SofQView
+from graphicviewlib import BraggView, SofQView, GofRView
 from ipythondockwidget import IPythonDockWidget
-from treelib import BraggTree, GofRTree
+from treelib import GofRTree, BraggTree
