@@ -90,7 +90,7 @@ class PlotStyleDialog(QtGui.QDialog):
         # plot IDs
         plot_index = self.ui.comboBox_lines.currentIndex()
         plot_id = self._plotIDList[plot_index]
-        if plot_id is None:
+        if plot_id == -1:
             return_list = self._plotIDList[1:]
         else:
             return_list = [plot_id]
@@ -104,6 +104,8 @@ class PlotStyleDialog(QtGui.QDialog):
         mark = str(self.ui.comboBox_style.currentText())
         if mark == 'No Change':
             mark = None
+        else:
+            mark = mark.split('(')[0].strip()
 
         return return_list, color, mark
 
@@ -133,9 +135,9 @@ class PlotStyleDialog(QtGui.QDialog):
         self._plotIDList = list()
 
         # add lines
-        plot_labels.insert(0, 'All')
-        self._plotIDList.append(None)
-        for plot_id, label in plot_labels:
+        plot_labels.insert(0, (-1, 'All'))
+        for line_info in plot_labels:
+            plot_id, label = line_info
             self.ui.comboBox_lines.addItem(label)
             self._plotIDList.append(plot_id)
 
