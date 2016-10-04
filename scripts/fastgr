@@ -1419,6 +1419,14 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 	_advanced = AdvancedWindow(parent = self)
 	_advanced.show()
 	
+    def main_tab_widget_changed(self, tab_selected):
+	if tab_selected == 0:
+	    o_gui = Step1GuiHandler(parent = self)
+	    self.check_step1_gui()
+	if tab_selected == 1:
+	    _o_gui = Step2GuiHandler(parent = self)
+	    _o_gui.check_gui()
+	
     # tab1
     def select_current_folder_clicked(self):
         o_gui = Step1GuiHandler(parent = self)
@@ -1467,9 +1475,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         _run_autonom = RunStep1(parent = self)
         _run_autonom.create_folder()
         _run_autonom.create_exp_ini_file()
-
-# tab2
-
+    # tab2
     def move_to_folder_clicked(self):
         o_gui = Step2GuiHandler(parent = self)
         o_gui.move_to_folder()

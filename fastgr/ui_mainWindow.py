@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Tue Oct  4 14:26:49 2016
+# Created: Tue Oct  4 17:25:17 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -66,7 +66,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4 = QtGui.QHBoxLayout()
         self.horizontalLayout_4.setObjectName(_fromUtf8("horizontalLayout_4"))
         self.select_current_folder_button = QtGui.QPushButton(self.groupBox_27)
-        self.select_current_folder_button.setMinimumSize(QtCore.QSize(160, 0))
+        self.select_current_folder_button.setMinimumSize(QtCore.QSize(189, 0))
         self.select_current_folder_button.setMaximumSize(QtCore.QSize(160, 16777215))
         self.select_current_folder_button.setObjectName(_fromUtf8("select_current_folder_button"))
         self.horizontalLayout_4.addWidget(self.select_current_folder_button)
@@ -1404,7 +1404,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget_2.setCurrentIndex(1)
+        self.tabWidget_2.setCurrentIndex(0)
         self.tabWidget.setCurrentIndex(0)
         QtCore.QObject.connect(self.diamond, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_edited)
         QtCore.QObject.connect(self.diamond_background, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_background_edited)
@@ -1456,6 +1456,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.actionLoad, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.action_load_configuration_clicked)
         QtCore.QObject.connect(self.actionSave, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.action_save_configuration_clicked)
         QtCore.QObject.connect(self.sum_scans_output_file_name, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.sum_scans_output_file_name_changed)
+        QtCore.QObject.connect(self.tabWidget_2, QtCore.SIGNAL(_fromUtf8("currentChanged(int)")), MainWindow.main_tab_widget_changed)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

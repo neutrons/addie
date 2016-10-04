@@ -74,7 +74,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -99,7 +99,7 @@
                     <widget class="QPushButton" name="select_current_folder_button">
                      <property name="minimumSize">
                       <size>
-                       <width>160</width>
+                       <width>189</width>
                        <height>0</height>
                       </size>
                      </property>
@@ -4035,7 +4035,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>135</x>
-     <y>446</y>
+     <y>454</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -4051,7 +4051,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>182</x>
-     <y>450</y>
+     <y>500</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -4067,7 +4067,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>51</x>
-     <y>463</y>
+     <y>659</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -4083,7 +4083,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>227</x>
-     <y>446</y>
+     <y>454</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -4099,7 +4099,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>76</x>
-     <y>450</y>
+     <y>500</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -4114,8 +4114,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>91</x>
-     <y>454</y>
+     <x>173</x>
+     <y>549</y>
     </hint>
     <hint type="destinationlabel">
      <x>1</x>
@@ -4130,8 +4130,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>57</x>
-     <y>484</y>
+     <x>83</x>
+     <y>613</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -4146,8 +4146,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>68</x>
-     <y>484</y>
+     <x>311</x>
+     <y>613</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -4162,8 +4162,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>104</x>
-     <y>459</y>
+     <x>644</x>
+     <y>605</y>
     </hint>
     <hint type="destinationlabel">
      <x>1220</x>
@@ -4179,7 +4179,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>51</x>
-     <y>463</y>
+     <y>659</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -4194,8 +4194,8 @@ p, li { white-space: pre-wrap; }
    <slot>mantid_run_reduction()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>123</x>
-     <y>462</y>
+     <x>1119</x>
+     <y>659</y>
     </hint>
     <hint type="destinationlabel">
      <x>1220</x>
@@ -4299,6 +4299,22 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>tabWidget_2</sender>
+   <signal>currentChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>main_tab_widget_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>141</x>
+     <y>50</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>201</x>
+     <y>27</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>diamond_edited()</slot>
@@ -4343,5 +4359,6 @@ p, li { white-space: pre-wrap; }
   <slot>action_load_configuration_clicked()</slot>
   <slot>action_save_configuration_clicked()</slot>
   <slot>sum_scans_output_file_name_changed()</slot>
+  <slot>main_tab_widget_changed()</slot>
  </slots>
 </ui>
