@@ -10,6 +10,7 @@ class HelpGui(QtGui.QMainWindow):
     
     def __init__(self, parent=None, button_name=''):
         self.parent = parent
+        self.button_name = button_name
         
         QtGui.QMainWindow.__init__(self, parent = parent)
         self.ui = UiMainWindow()
@@ -17,3 +18,12 @@ class HelpGui(QtGui.QMainWindow):
         
         self.ui.button_name.setText(button_name)
         
+    def closeEvent(self, event=None):
+        if self.button_name == 'autonom':
+            self.parent.o_help_autonom = None
+        elif self.button_name == 'ndabs':
+            self.parent.o_help_ndabs = None
+        elif self.button_name == 'scans':
+            self.parent.o_help_scans = None
+        elif self.button_name == 'mantid':
+            self.parent.o_help_mantid = None
