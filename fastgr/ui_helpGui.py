@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_helpGui.ui'
 #
-# Created: Thu Oct  6 11:35:00 2016
+# Created: Thu Oct  6 14:21:02 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,12 +26,15 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(490, 557)
+        MainWindow.resize(499, 832)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.verticalLayout = QtGui.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.table_status = QtGui.QTableWidget(self.centralwidget)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.table_status.setFont(font)
         self.table_status.setEditTriggers(QtGui.QAbstractItemView.AnyKeyPressed|QtGui.QAbstractItemView.DoubleClicked)
         self.table_status.setAlternatingRowColors(True)
         self.table_status.setSelectionMode(QtGui.QAbstractItemView.NoSelection)
@@ -54,7 +57,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 490, 20))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 499, 20))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(MainWindow)

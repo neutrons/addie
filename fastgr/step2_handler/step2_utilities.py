@@ -117,6 +117,18 @@ class Step2Utilities(object):
 
         return _status_ok
     
+    def is_ndabs_output_empty(self):
+        if self.parent.ui.run_ndabs_output_file_name.text().strip() == "":
+            return True
+        else:
+            return False
+    
+    def is_scans_output_file_name_empty(self):
+        if self.parent.ui.sum_scans_output_file_name.text().strip() == "":
+            return True
+        else:
+            return False
+
 class TableHandler(object):
     
     def __init__(self, parent=None):

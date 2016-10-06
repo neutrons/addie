@@ -9,7 +9,7 @@ class HelpGui(QtGui.QMainWindow):
     '''
     button_name = ['autonom', 'ndabs', 'scans', 'mantid']
     '''
-    column_widths = [300, 40]
+    column_widths = [330, 40]
     
     def __init__(self, parent=None, button_name=''):
         self.parent = parent
