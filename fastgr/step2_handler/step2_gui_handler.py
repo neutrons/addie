@@ -3,6 +3,7 @@ import os
 
 import fastgr.step2_handler.table_handler
 from fastgr.utilities.math_tools import is_int, is_float
+from fastgr.general_handler.help_gui import check_status
 
 
 class Step2GuiHandler(object):
@@ -125,6 +126,7 @@ class Step2GuiHandler(object):
             _status = False
             
         self.parent.mantid_run_reduction.setEnabled(_status)
+        check_status(parent = self.parent_no_ui, button_name='mantid')
         
     def check_run_sum_scans_button(self):
         
@@ -139,6 +141,7 @@ class Step2GuiHandler(object):
             _status = False
             
         self.parent.run_sum_scans_button.setEnabled(_status)
+        check_status(parent = self.parent_no_ui, button_name='scans')
         
     def check_run_ndabs_button(self):
         
@@ -170,6 +173,7 @@ class Step2GuiHandler(object):
             _status = False
 
         self.parent.run_ndabs_button.setEnabled(_status)
+        check_status(parent = self.parent_no_ui, button_name='ndabs')
 
     def at_least_one_row_checked(self):
         o_table_handler = fastgr.step2_handler.table_handler.TableHandler(parent = self.parent_no_ui)

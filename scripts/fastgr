@@ -14,7 +14,7 @@ from fastgr.advanced_window_handler.advanced_window import AdvancedWindow
 from fastgr.configuration.export_configuration import ExportConfiguration
 from fastgr.configuration.import_configuration import ImportConfiguration
 
-from fastgr.general_handler.help_gui import HelpGui
+from fastgr.general_handler.help_gui import HelpGui, help_button_activator
 
 from fastgr.initialization.init_step1 import InitStep1
 from fastgr.step1_handler.step1_gui_handler import Step1GuiHandler
@@ -1435,27 +1435,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 	    _o_gui.check_gui()
 
     def help_button_clicked(self, button_name='autonom'):
-	    if button_name == 'autonom':
-		if self.o_help_autonom is None:
-		    o_help = HelpGui(parent=self, button_name=button_name)
-		    o_help.show()
-		    self.o_help_autonom = o_help
-	    elif button_name == 'ndabs':
-		if self.o_help_ndabs is None:
-		    o_help = HelpGui(parent=self, button_name=button_name)
-		    o_help.show()
-		    self.o_help_ndabs = o_help
-	    elif button_name == 'scans':
-		if self.o_help_scans is None:
-		    o_help = HelpGui(parent=self, button_name=button_name)
-		    o_help.show()
-		    self.o_help_scans = o_help
-	    elif button_name == 'mantid':
-		if self.o_help_mantid is None:
-		    o_help = HelpGui(parent=self, button_name=button_name)
-		    o_help.show()
-		    self.o_help_mantid = o_help
-
+	help_button_activator(parent=self, button_name=button_name)
+	
     # tab1
     def select_current_folder_clicked(self):
         o_gui = Step1GuiHandler(parent = self)

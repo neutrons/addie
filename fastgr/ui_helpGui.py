@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_helpGui.ui'
 #
-# Created: Tue Oct  4 18:05:16 2016
+# Created: Thu Oct  6 09:34:06 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -31,22 +31,19 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.verticalLayout = QtGui.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
-        self.horizontalLayout = QtGui.QHBoxLayout()
-        self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
-        self.label = QtGui.QLabel(self.centralwidget)
-        self.label.setMinimumSize(QtCore.QSize(110, 0))
-        self.label.setMaximumSize(QtCore.QSize(110, 16777215))
-        self.label.setObjectName(_fromUtf8("label"))
-        self.horizontalLayout.addWidget(self.label)
-        self.button_name = QtGui.QLabel(self.centralwidget)
-        self.button_name.setObjectName(_fromUtf8("button_name"))
-        self.horizontalLayout.addWidget(self.button_name)
-        self.verticalLayout.addLayout(self.horizontalLayout)
-        self.tableWidget = QtGui.QTableWidget(self.centralwidget)
-        self.tableWidget.setObjectName(_fromUtf8("tableWidget"))
-        self.tableWidget.setColumnCount(0)
-        self.tableWidget.setRowCount(0)
-        self.verticalLayout.addWidget(self.tableWidget)
+        self.table_status = QtGui.QTableWidget(self.centralwidget)
+        self.table_status.setEditTriggers(QtGui.QAbstractItemView.AnyKeyPressed|QtGui.QAbstractItemView.DoubleClicked)
+        self.table_status.setAlternatingRowColors(True)
+        self.table_status.setSelectionMode(QtGui.QAbstractItemView.NoSelection)
+        self.table_status.setObjectName(_fromUtf8("table_status"))
+        self.table_status.setColumnCount(2)
+        self.table_status.setRowCount(0)
+        item = QtGui.QTableWidgetItem()
+        self.table_status.setHorizontalHeaderItem(0, item)
+        item = QtGui.QTableWidgetItem()
+        self.table_status.setHorizontalHeaderItem(1, item)
+        self.table_status.horizontalHeader().setStretchLastSection(True)
+        self.verticalLayout.addWidget(self.table_status)
         self.horizontalLayout_2 = QtGui.QHBoxLayout()
         self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
         spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
@@ -65,11 +62,14 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
+        QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.hide_button_clicked)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "Button Status", None))
-        self.label.setText(_translate("MainWindow", "Name of button:", None))
-        self.button_name.setText(_translate("MainWindow", "N/A", None))
+        item = self.table_status.horizontalHeaderItem(0)
+        item.setText(_translate("MainWindow", "Fields/Widgets", None))
+        item = self.table_status.horizontalHeaderItem(1)
+        item.setText(_translate("MainWindow", "Status", None))
         self.pushButton.setText(_translate("MainWindow", "Hide", None))
 

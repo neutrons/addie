@@ -1,5 +1,6 @@
 from PyQt4 import QtGui
 from fastgr. step1_handler.auto_populate_widgets import AutoPopulateWidgets
+from fastgr.general_handler.help_gui import check_status
 
 
 class Step1GuiHandler(object):
@@ -19,6 +20,7 @@ class Step1GuiHandler(object):
             self.parent.run_autonom_script.setEnabled(True)
         else:
             self.parent.run_autonom_script.setEnabled(False)
+        check_status(parent = self.parent_no_ui, button_name='autonom')
 
     def all_mandatory_fields_non_empty(self):
         _diamond_field = str(self.parent.diamond.text()).strip().replace(" ", "")
