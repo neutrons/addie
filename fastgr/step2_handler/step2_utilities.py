@@ -1,3 +1,7 @@
+from PyQt4 import QtGui, QtCore
+from PyQt4.QtCore import Qt
+
+
 class Step2Utilities(object):
     
     def __init__(self, parent=None):
@@ -42,6 +46,20 @@ class Step2Utilities(object):
             return True
         
         return False
+       
+    def is_plazcek_from_empty(self):
+        _min = str(self.parent.ui.plazcek_fit_range_min.text()).strip()
+        if _min == "":
+            return True
+        else:
+            return False
+        
+    def is_plazcek_to_empty(self):
+        _max = str(self.parent.ui.plazcek_fit_range_max.text()).strip()
+        if _max == "":
+            return True
+        else:
+            return False
         
     def any_plazcek_widgets_empty(self):
         _min = str(self.parent.ui.plazcek_fit_range_min.text()).strip()
@@ -54,6 +72,20 @@ class Step2Utilities(object):
 
         return False
         
+    def is_q_min_empty(self):
+        _min = str(self.parent.ui.q_range_min.text()).strip()
+        if _min == "":
+            return True
+        else:
+            return False
+        
+    def is_q_max_empty(self):
+        _max = str(self.parent.ui.q_range_max.text()).strip()
+        if _max == "":
+            return True
+        else:
+            return False
+        
     def any_q_range_widgets_empty(self):
         _min = str(self.parent.ui.q_range_min.text()).strip()
         if _min == "":
@@ -65,7 +97,26 @@ class Step2Utilities(object):
 
         return False
         
+    def are_row_checked_have_missing_fields(self):
+        for _row in range(self.parent.ui.table.rowCount()):
+            _this_row_status_ok = self.check_if_this_row_is_ok(_row)
+            if not _this_row_status_ok:
+                return True
+        return False
+    
+    def check_if_this_row_is_ok(self, row):
+        _status_ok = True
+        _selected_widget = self.parent.ui.table.cellWidget(row, 0).children()
+        if len(_selected_widget) > 0:
+            if (_selected_widget[1].checkState() == QtCore.Qt.Checked):
+                _table_handler = TableHandler(parent = self.parent)
+                for _column in range(1,7):
+                    if _table_handler.retrieve_item_text(row, _column) == '':
+                        _status_ok = False
+                        break
 
+        return _status_ok
+    
 class TableHandler(object):
     
     def __init__(self, parent=None):

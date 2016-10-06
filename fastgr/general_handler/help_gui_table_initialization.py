@@ -177,6 +177,28 @@ class HelpGuiTableInitialization(object):
         self.parent.parent.ui.fourier_filter_to.setFocus()
         self.parent.parent.activateWindow()
         
+    def jump_to_step2_plazcek_from(self):
+        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
+        self.parent.parent.ui.plazcek_fit_range_min.setFocus()
+        self.parent.parent.activateWindow()
+        
+    def jump_to_step2_plazcek_to(self):
+        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
+        self.parent.parent.ui.plazcek_fit_range_max.setFocus()
+        self.parent.parent.activateWindow()
+
+    def jump_to_step2_q_min(self):
+        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
+        self.parent.parent.ui.q_range_min.setFocus()
+        self.parent.parent.activateWindow()
+        
+    def jump_to_step2_q_max(self):
+        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
+        self.parent.parent.ui.q_range_max.setFocus()
+        self.parent.parent.activateWindow()
+        
+
+
     def fill_ndabs(self):
         o_step2_handler = Step2Utilities(parent = self.parent.parent)
         
@@ -214,9 +236,26 @@ class HelpGuiTableInitialization(object):
         QtCore.QObject.connect(_widget_2, QtCore.SIGNAL("clicked()"), self.jump_to_step2_table)
         self.parent.ui.table_status.setCellWidget(1, 1, _widget_2)
         
-        # any fourier filter from
+        # missing fields in row checked
         self.parent.ui.table_status.insertRow(2)
         self.parent.ui.table_status.setRowHeight(2, self.row_height)
+        _widget = QtGui.QTextEdit()
+        _text = "Is missing metadata in row checked?<br/><b>Post Processing>Table</b>"
+        _widget.setHtml(_text)
+        if o_step2_handler.are_row_checked_have_missing_fields():
+            _widget.setStyleSheet(self.widget_bad)
+        else:
+            _widget.setStyleSheet(self.widget_ok)
+        self.parent.ui.table_status.setCellWidget(2, 0, _widget)
+        _widget_2 = QtGui.QPushButton()
+        _widget_2.setEnabled(o_step2_handler.are_row_checked_have_missing_fields())
+        _widget_2.setText("Jump There!")
+        QtCore.QObject.connect(_widget_2, QtCore.SIGNAL("clicked()"), self.jump_to_step2_table)
+        self.parent.ui.table_status.setCellWidget(2, 1, _widget_2)
+
+        # fourier filter from
+        self.parent.ui.table_status.insertRow(3)
+        self.parent.ui.table_status.setRowHeight(3, self.row_height)
         _widget = QtGui.QTextEdit()
         _text = "Is Fourier From Widgets Empty?<br/><b>Post Processing>Fourier Filter From</b>"
         _widget.setHtml(_text)
@@ -224,16 +263,16 @@ class HelpGuiTableInitialization(object):
             _widget.setStyleSheet(self.widget_bad)
         else:
             _widget.setStyleSheet(self.widget_ok)
-        self.parent.ui.table_status.setCellWidget(2, 0, _widget)
+        self.parent.ui.table_status.setCellWidget(3, 0, _widget)
         _widget_2 = QtGui.QPushButton()
         _widget_2.setEnabled(not o_step2_handler.is_fourier_filter_from_empty())
         _widget_2.setText("Jump There!")
         QtCore.QObject.connect(_widget_2, QtCore.SIGNAL("clicked()"), self.jump_to_step2_fourier_from)
-        self.parent.ui.table_status.setCellWidget(2, 1, _widget_2)
+        self.parent.ui.table_status.setCellWidget(3, 1, _widget_2)
 
-        # any fourier filter to
-        self.parent.ui.table_status.insertRow(3)
-        self.parent.ui.table_status.setRowHeight(3, self.row_height)
+        # fourier filter to
+        self.parent.ui.table_status.insertRow(4)
+        self.parent.ui.table_status.setRowHeight(4, self.row_height)
         _widget = QtGui.QTextEdit()
         _text = "Is Fourier To Widgets Empty?<br/><b>Post Processing>Fourier Filter To</b>"
         _widget.setHtml(_text)
@@ -241,10 +280,79 @@ class HelpGuiTableInitialization(object):
             _widget.setStyleSheet(self.widget_bad)
         else:
             _widget.setStyleSheet(self.widget_ok)
-        self.parent.ui.table_status.setCellWidget(3, 0, _widget)
+        self.parent.ui.table_status.setCellWidget(4, 0, _widget)
         _widget_2 = QtGui.QPushButton()
         _widget_2.setEnabled(not o_step2_handler.is_fourier_filter_to_empty())
         _widget_2.setText("Jump There!")
         QtCore.QObject.connect(_widget_2, QtCore.SIGNAL("clicked()"), self.jump_to_step2_fourier_to)
-        self.parent.ui.table_status.setCellWidget(3, 1, _widget_2)
+        self.parent.ui.table_status.setCellWidget(4, 1, _widget_2)
+
+        # plazcek filter from
+        self.parent.ui.table_status.insertRow(5)
+        self.parent.ui.table_status.setRowHeight(5, self.row_height)
+        _widget = QtGui.QTextEdit()
+        _text = "Is Plazcek From Widgets Empty?<br/><b>Post Processing>Plazcek Filter From</b>"
+        _widget.setHtml(_text)
+        if o_step2_handler.is_plazcek_from_empty():
+            _widget.setStyleSheet(self.widget_bad)
+        else:
+            _widget.setStyleSheet(self.widget_ok)
+        self.parent.ui.table_status.setCellWidget(5, 0, _widget)
+        _widget_2 = QtGui.QPushButton()
+        _widget_2.setEnabled(not o_step2_handler.is_plazcek_from_empty())
+        _widget_2.setText("Jump There!")
+        QtCore.QObject.connect(_widget_2, QtCore.SIGNAL("clicked()"), self.jump_to_step2_plazcek_from)
+        self.parent.ui.table_status.setCellWidget(5, 1, _widget_2)
+
+        #  plazcek filter to
+        self.parent.ui.table_status.insertRow(6)
+        self.parent.ui.table_status.setRowHeight(6, self.row_height)
+        _widget = QtGui.QTextEdit()
+        _text = "Is Plazcek To Widgets Empty?<br/><b>Post Processing>Plazcek Filter To</b>"
+        _widget.setHtml(_text)
+        if o_step2_handler.is_plazcek_to_empty():
+            _widget.setStyleSheet(self.widget_bad)
+        else:
+            _widget.setStyleSheet(self.widget_ok)
+        self.parent.ui.table_status.setCellWidget(6, 0, _widget)
+        _widget_2 = QtGui.QPushButton()
+        _widget_2.setEnabled(not o_step2_handler.is_plazcek_to_empty())
+        _widget_2.setText("Jump There!")
+        QtCore.QObject.connect(_widget_2, QtCore.SIGNAL("clicked()"), self.jump_to_step2_plazcek_to)
+        self.parent.ui.table_status.setCellWidget(6, 1, _widget_2)
+
+        # q min
+        self.parent.ui.table_status.insertRow(7)
+        self.parent.ui.table_status.setRowHeight(7, self.row_height)
+        _widget = QtGui.QTextEdit()
+        _text = "Is Q min Widgets Empty?<br/><b>Post Processing>Q min</b>"
+        _widget.setHtml(_text)
+        if o_step2_handler.is_q_min_empty():
+            _widget.setStyleSheet(self.widget_bad)
+        else:
+            _widget.setStyleSheet(self.widget_ok)
+        self.parent.ui.table_status.setCellWidget(7, 0, _widget)
+        _widget_2 = QtGui.QPushButton()
+        _widget_2.setEnabled(not o_step2_handler.is_q_min_empty())
+        _widget_2.setText("Jump There!")
+        QtCore.QObject.connect(_widget_2, QtCore.SIGNAL("clicked()"), self.jump_to_step2_q_min)
+        self.parent.ui.table_status.setCellWidget(7, 1, _widget_2)
+
+        #  q max
+        self.parent.ui.table_status.insertRow(8)
+        self.parent.ui.table_status.setRowHeight(8, self.row_height)
+        _widget = QtGui.QTextEdit()
+        _text = "Is Q max Widgets Empty?<br/><b>Post Processing>Q max</b>"
+        _widget.setHtml(_text)
+        if o_step2_handler.is_q_max_empty():
+            _widget.setStyleSheet(self.widget_bad)
+        else:
+            _widget.setStyleSheet(self.widget_ok)
+        self.parent.ui.table_status.setCellWidget(8, 0, _widget)
+        _widget_2 = QtGui.QPushButton()
+        _widget_2.setEnabled(not o_step2_handler.is_q_max_empty())
+        _widget_2.setText("Jump There!")
+        QtCore.QObject.connect(_widget_2, QtCore.SIGNAL("clicked()"), self.jump_to_step2_q_max)
+        self.parent.ui.table_status.setCellWidget(8, 1, _widget_2)
+        
         
