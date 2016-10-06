@@ -1,5 +1,5 @@
 from PyQt4 import QtGui
-from fastgr. step1_handler.auto_populate_widgets import AutoPopulateWidgets
+from fastgr.step1_handler.auto_populate_widgets import AutoPopulateWidgets
 from fastgr.general_handler.help_gui import check_status
 
 

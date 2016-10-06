@@ -1,13 +1,15 @@
 from PyQt4 import QtGui
 
 from fastgr.ui_helpGui import Ui_MainWindow as UiMainWindow
+from fastgr.general_handler.help_gui_table_initialization import HelpGuiTableInitialization
+
 
 class HelpGui(QtGui.QMainWindow):
     
     '''
     button_name = ['autonom', 'ndabs', 'scans', 'mantid']
     '''
-    column_widths = [250, 40]
+    column_widths = [300, 40]
     
     def __init__(self, parent=None, button_name=''):
         self.parent = parent
@@ -18,7 +20,11 @@ class HelpGui(QtGui.QMainWindow):
         self.ui.setupUi(self)
         
         self.init_global_gui()
-        
+        self.init_table()
+	
+    def init_table(self):
+	self.o_table = HelpGuiTableInitialization(parent=self, button_name=self.button_name)
+	self.o_table.fill()
     
     def init_global_gui(self):
 	for index, col_width in enumerate(self.column_widths):
@@ -26,7 +32,7 @@ class HelpGui(QtGui.QMainWindow):
 	self.setWindowTitle("Button Status: {}".format(self.button_name))
     
     def refresh(self):
-	print("refreshing {}".format(self.button_name))
+	self.o_table.refill()
 
     def closeEvent(self, event=None):
         if self.button_name == 'autonom':
@@ -83,3 +89,5 @@ def check_status(parent=None, button_name = 'autonom'):
 	parent.o_help_scans.refresh()
     if (button_name == 'mantid') and parent.o_help_mantid:
 	parent.o_help_mantid.refresh()
+	
+	
