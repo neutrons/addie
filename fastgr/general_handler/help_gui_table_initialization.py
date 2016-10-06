@@ -14,7 +14,6 @@ class HelpGuiTableInitialization(object):
     def __init__(self, parent=None, button_name='autonom'):
         self.parent = parent
         self.button_name = button_name
-        print(button_name)
         
     def fill(self):
         if self.button_name == 'autonom':
@@ -23,6 +22,8 @@ class HelpGuiTableInitialization(object):
             self.fill_ndabs()
         elif self.button_name == 'scans':
             self.fill_scans()
+        elif self.button_name == 'mantid':
+            self.fill_mantid()
             
     def refill(self):
         nbr_row = self.parent.ui.table_status.rowCount()
@@ -223,6 +224,48 @@ class HelpGuiTableInitialization(object):
         self.parent.parent.ui.sum_scans_output_file_name.setFocus()
         self.parent.parent.activateWindow()
 
+    def jump_to_step2_mantid_browse_calibration(self):
+        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
+        self.parent.parent.ui.tabWidget.setCurrentIndex(1)
+        self.parent.parent.ui.mantid_browse_calibration_button.setFocus()
+        self.parent.parent.activateWindow()
+        
+    def jump_to_step2_mantid_browse_characterization(self):
+        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
+        self.parent.parent.ui.tabWidget.setCurrentIndex(1)
+        self.parent.parent.ui.mantid_browse_characterization_button.setFocus()
+        self.parent.parent.activateWindow()
+        
+    def jump_to_step2_mantid_number_of_bins(self):
+        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
+        self.parent.parent.ui.tabWidget.setCurrentIndex(1)
+        self.parent.parent.ui.mantid_number_of_bins.setFocus()
+        self.parent.parent.activateWindow()
+        
+    def jump_to_step2_mantid_min_crop_wavelength(self):
+        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
+        self.parent.parent.ui.tabWidget.setCurrentIndex(1)
+        self.parent.parent.ui.mantid_min_crop_wavelength.setFocus()
+        self.parent.parent.activateWindow()
+            
+    def jump_to_step2_mantid_max_crop_wavelength(self):
+        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
+        self.parent.parent.ui.tabWidget.setCurrentIndex(1)
+        self.parent.parent.ui.mantid_max_crop_wavelength.setFocus()
+        self.parent.parent.activateWindow()
+
+    def jump_to_step2_mantid_vanadium_radius(self):
+        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
+        self.parent.parent.ui.tabWidget.setCurrentIndex(1)
+        self.parent.parent.ui.mantid_vanadium_radius.setFocus()
+        self.parent.parent.activateWindow()
+        
+    def jump_to_step2_mantid_output_directory_button(self):
+        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
+        self.parent.parent.ui.tabWidget.setCurrentIndex(1)
+        self.parent.parent.ui.mantid_output_directory_button.setFocus()
+        self.parent.parent.activateWindow()
+
     def fill_scans(self):
         o_step2_handler = Step2Utilities(parent = self.parent.parent)
 
@@ -276,9 +319,6 @@ class HelpGuiTableInitialization(object):
         _widget_2.setText(self.jump_message)
         QtCore.QObject.connect(_widget_2, QtCore.SIGNAL("clicked()"), self.jump_to_step2_scans_output_file_name)
         self.parent.ui.table_status.setCellWidget(2, 1, _widget_2)
-        
-
-
 
     def fill_ndabs(self):
         o_step2_handler = Step2Utilities(parent = self.parent.parent)
@@ -453,4 +493,40 @@ class HelpGuiTableInitialization(object):
         QtCore.QObject.connect(_widget_2, QtCore.SIGNAL("clicked()"), self.jump_to_step2_output_empty)
         self.parent.ui.table_status.setCellWidget(9, 1, _widget_2)
         
+    def fill_mantid(self):
+        o_step2_handler = Step2Utilities(parent = self.parent.parent)
+        
+        # table status
+        self.parent.ui.table_status.insertRow(0)
+        self.parent.ui.table_status.setRowHeight(0, self.row_height)
+        _widget = QtGui.QTextEdit()
+        _text = "Main Table Empty?<br/><b>Post Processing>Table</b>"
+        _widget.setHtml(_text)
+        if o_step2_handler.is_table_empty():
+            _widget.setStyleSheet(self.widget_bad)
+        else:
+            _widget.setStyleSheet(self.widget_ok)
+        self.parent.ui.table_status.setCellWidget(0, 0, _widget)
+        _widget_2 = QtGui.QPushButton()
+        _widget_2.setEnabled(o_step2_handler.is_table_empty())
+        _widget_2.setText(self.jump_message)
+        QtCore.QObject.connect(_widget_2, QtCore.SIGNAL("clicked()"), self.jump_to_step2_table)
+        self.parent.ui.table_status.setCellWidget(0, 1, _widget_2)
+        
+        # at least one row checked
+        self.parent.ui.table_status.insertRow(1)
+        self.parent.ui.table_status.setRowHeight(1, self.row_height)
+        _widget = QtGui.QTextEdit()
+        _text = "Main Table Row Selected?<br/><b>Post Processing>Table</b>"
+        _widget.setHtml(_text)
+        if o_step2_handler.at_least_one_row_checked():
+            _widget.setStyleSheet(self.widget_ok)
+        else:
+            _widget.setStyleSheet(self.widget_bad)
+        self.parent.ui.table_status.setCellWidget(1, 0, _widget)
+        _widget_2 = QtGui.QPushButton()
+        _widget_2.setEnabled(not o_step2_handler.at_least_one_row_checked())
+        _widget_2.setText(self.jump_message)
+        QtCore.QObject.connect(_widget_2, QtCore.SIGNAL("clicked()"), self.jump_to_step2_table)
+        self.parent.ui.table_status.setCellWidget(1, 1, _widget_2)
         

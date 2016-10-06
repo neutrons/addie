@@ -129,6 +129,22 @@ class Step2Utilities(object):
         else:
             return False
 
+    # mantid
+    def is_mantid_calibration_empty(self):
+        if (self.parent.ui.mantid_calibration_value.text() == 'N/A'):
+            return True
+        else:
+            return False
+
+    def is_mantid_characterization_empty(self):
+        if (self.parent.ui.mantid_characterization_value.text() == 'N/A'):
+            return True
+        else:
+            return False
+
+    
+
+
 class TableHandler(object):
     
     def __init__(self, parent=None):
