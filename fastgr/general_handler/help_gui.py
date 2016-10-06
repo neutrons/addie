@@ -58,6 +58,7 @@ def help_button_activator(parent=None, button_name='autonom'):
 	    parent.o_help_autonom = o_help
 	else:
 	    parent.o_help_autonom.refresh()
+	    parent.o_help_autonom.activateWindow()
     elif button_name == 'ndabs':
 	if parent.o_help_ndabs is None:
 	    o_help = HelpGui(parent=parent, button_name=button_name)
@@ -65,6 +66,7 @@ def help_button_activator(parent=None, button_name='autonom'):
 	    parent.o_help_ndabs = o_help
 	else:
 	    parent.o_help_ndabs.refresh()
+	    parent.o_help_ndabs.activateWindow()
     elif button_name == 'scans':
 	if parent.o_help_scans is None:
 	    o_help = HelpGui(parent=parent, button_name=button_name)
@@ -72,6 +74,7 @@ def help_button_activator(parent=None, button_name='autonom'):
 	    parent.o_help_scans = o_help
 	else:
 	    parent.o_help_scans.refresh()
+	    parent.o_hlep_scans.activateWindow()
     elif button_name == 'mantid':
 	if parent.o_help_mantid is None:
 	    o_help = HelpGui(parent=parent, button_name=button_name)
@@ -79,6 +82,7 @@ def help_button_activator(parent=None, button_name='autonom'):
 	    parent.o_help_mantid = o_help
 	else:
 	    parent.o_help_mantid.refresh()
+	    parent.o_help_mantid.activateWindow()
 
 def check_status(parent=None, button_name = 'autonom'):
     if (button_name == 'autonom') and parent.o_help_autonom:
