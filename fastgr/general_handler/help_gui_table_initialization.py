@@ -263,7 +263,7 @@ class HelpGuiTableInitialization(object):
     def jump_to_step2_mantid_output_directory_button(self):
         self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
         self.parent.parent.ui.tabWidget.setCurrentIndex(1)
-        self.parent.parent.ui.mantid_output_directory_button.setFocus()
+        self.parent.parent.ui.mantid_output_directoy_button.setFocus()
         self.parent.parent.activateWindow()
 
     def fill_scans(self):
