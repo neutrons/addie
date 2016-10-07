@@ -65,6 +65,10 @@ class Step2GuiHandler(object):
             return
         self.parent.background_line_edit.setText(self.parent.table.item(row_index, 2).text())
         
+    def step2_update_background_dropdown(self):
+        row_index = self.parent.background_comboBox.currentIndex()
+        self.background_index_changed(row_index = row_index)
+        
     def check_gui(self):
         self.check_run_ndabs_button()
         self.check_run_sum_scans_button()
