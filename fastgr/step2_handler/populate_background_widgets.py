@@ -22,6 +22,14 @@ class PopulateBackgroundWidgets(object):
         self.retrieve_background_file_from_exp_ini_file()
         self.populate_widgets()
         
+    def refresh_contain(self):
+        _index_selected = self.parent.background_comboBox.currentIndex()
+        self.retrieve_list_names_from_table()
+        self.parent.background_comboBox.clear()
+        for _item in self.list_names:
+            self.parent.background_comboBox.addItem(_item)
+        self.parent.background_comboBox.setCurrentIndex(_index_selected)
+        
     def retrieve_list_names_from_table(self):
         _list_names = []
         _nbr_row = self.parent.table.rowCount()
@@ -44,6 +52,7 @@ class PopulateBackgroundWidgets(object):
         self.parent.background_comboBox.setCurrentIndex(0)
 
     def populate_widgets(self):
+        self.parent.background_comboBox.clear()
         for _item in self.list_names:
             self.parent.background_comboBox.addItem(_item)
         

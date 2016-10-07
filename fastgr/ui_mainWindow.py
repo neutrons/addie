@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Fri Oct  7 09:20:19 2016
+# Created: Fri Oct  7 14:55:57 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -431,7 +431,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_60 = QtGui.QHBoxLayout()
         self.horizontalLayout_60.setObjectName(_fromUtf8("horizontalLayout_60"))
         self.move_to_button = QtGui.QPushButton(self.tab_6)
-        self.move_to_button.setMaximumSize(QtCore.QSize(240, 16777215))
+        self.move_to_button.setMaximumSize(QtCore.QSize(250, 16777215))
         self.move_to_button.setObjectName(_fromUtf8("move_to_button"))
         self.horizontalLayout_60.addWidget(self.move_to_button)
         spacerItem6 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
