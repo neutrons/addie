@@ -1,6 +1,7 @@
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt
 
+from fastgr.utilities.math_tools import is_int, is_float
 
 class Step2Utilities(object):
     
@@ -142,8 +143,35 @@ class Step2Utilities(object):
         else:
             return False
 
-    
-
+    def is_mantid_number_of_bins_no_int(self):
+        if not is_int(self.parent.ui.mantid_number_of_bins.text()):
+            return True
+        else:
+            return False
+        
+    def is_mantid_min_crop_wavelength_no_float(self):
+        if not is_float(self.parent.ui.mantid_min_crop_wavelength.text()):
+            return True
+        else:
+            return False
+        
+    def is_mantid_max_crop_wavelength_no_float(self):
+        if not is_float(self.parent.ui.mantid_max_crop_wavelength.text()):
+            return True
+        else:
+            return False
+        
+    def is_mantid_vanadium_radius_not_float(self):
+        if not is_float(self.parent.ui.mantid_vanadium_radius.text()):
+            return True
+        else:
+            return False
+        
+    def is_mantid_output_directory_empty(self):
+        if self.parent.ui.mantid_output_directory_value.text() == "N/A":
+            return True
+        else:
+            return False
 
 class TableHandler(object):
     

@@ -70,7 +70,7 @@ class HelpGuiTableInitialization(object):
         self.parent.ui.table_status.insertRow(0)
         self.parent.ui.table_status.setRowHeight(0, self.row_height)       
         _widget = QtGui.QTextEdit()
-        _text = "Diamond Field<br/><b>AutoNom>Diamond</b>"
+        _text = "Diamond Field Empty?<br/><b>AutoNom>Diamond</b>"
         _widget.setHtml(_text)
         if o_step1_handler.is_diamond_text_empty():
             _widget.setStyleSheet(self.widget_bad)
@@ -87,7 +87,7 @@ class HelpGuiTableInitialization(object):
         self.parent.ui.table_status.insertRow(1)
         self.parent.ui.table_status.setRowHeight(1, self.row_height)       
         _widget = QtGui.QTextEdit()
-        _text = "Diamond Field<br/><b>AutoNom>Diamond Background</b>"
+        _text = "Diamond Background Field Empty?<br/><b>AutoNom>Diamond Background</b>"
         _widget.setHtml(_text)
         if o_step1_handler.is_diamond_background_text_empty():
             _widget.setStyleSheet(self.widget_bad)
@@ -104,7 +104,7 @@ class HelpGuiTableInitialization(object):
         self.parent.ui.table_status.insertRow(2)
         self.parent.ui.table_status.setRowHeight(2, self.row_height)       
         _widget = QtGui.QTextEdit()
-        _text = "Diamond Field<br/><b>AutoNom>Vanadium</b>"
+        _text = "Vanadium Field Empty?<br/><b>AutoNom>Vanadium</b>"
         _widget.setHtml(_text)
         if o_step1_handler.is_vanadium_text_empty():
             _widget.setStyleSheet(self.widget_bad)
@@ -121,7 +121,7 @@ class HelpGuiTableInitialization(object):
         self.parent.ui.table_status.insertRow(3)
         self.parent.ui.table_status.setRowHeight(3, self.row_height)       
         _widget = QtGui.QTextEdit()
-        _text = "Diamond Field<br/><b>AutoNom>Vanadium Background</b>"
+        _text = "Vanadium Background Field Empty?<br/><b>AutoNom>Vanadium Background</b>"
         _widget.setHtml(_text)
         if o_step1_handler.is_vanadium_background_text_empty():
             _widget.setStyleSheet(self.widget_bad)
@@ -138,7 +138,7 @@ class HelpGuiTableInitialization(object):
         self.parent.ui.table_status.insertRow(4)
         self.parent.ui.table_status.setRowHeight(4, self.row_height)       
         _widget = QtGui.QTextEdit()
-        _text = "Diamond Field<br/><b>AutoNom>Sample Background</b>"
+        _text = "Sample Background Field Empty?<br/><b>AutoNom>Sample Background</b>"
         _widget.setHtml(_text)
         if o_step1_handler.is_sample_background_text_empty():
             _widget.setStyleSheet(self.widget_bad)
@@ -155,7 +155,7 @@ class HelpGuiTableInitialization(object):
         self.parent.ui.table_status.insertRow(5)
         self.parent.ui.table_status.setRowHeight(5, self.row_height + 20)       
         _widget = QtGui.QTextEdit()
-        _text = "Diamond Field<br/><b>AutoNom>Create New AutoNom Folder</b>"
+        _text = "Create Folder Button Status?<br/><b>AutoNom>Create New AutoNom Folder</b>"
         _widget.setHtml(_text)
         if o_step1_handler.is_create_folder_button_status_ok():
             _widget.setStyleSheet(self.widget_ok)
@@ -494,11 +494,51 @@ class HelpGuiTableInitialization(object):
         self.parent.ui.table_status.setCellWidget(9, 1, _widget_2)
         
     def fill_mantid(self):
+        self.row_height = 62
+
+        o_step1_handler = Step1Utilities(parent = self.parent.parent)
         o_step2_handler = Step2Utilities(parent = self.parent.parent)
         
+        # vanadium
+        _row = 0
+        self.parent.ui.table_status.insertRow(_row)
+        self.parent.ui.table_status.setRowHeight(_row, self.row_height)       
+        _widget = QtGui.QTextEdit()
+        _text = "Vanadium Field Empty?<br/><b>AutoNom>Vanadium</b>"
+        _widget.setHtml(_text)
+        if o_step1_handler.is_vanadium_text_empty():
+            _widget.setStyleSheet(self.widget_bad)
+        else:
+            _widget.setStyleSheet(self.widget_ok)
+        self.parent.ui.table_status.setCellWidget(_row, 0, _widget)
+        _widget_2 = QtGui.QPushButton()        
+        _widget_2.setEnabled(o_step1_handler.is_vanadium_text_empty())
+        _widget_2.setText(self.jump_message)
+        QtCore.QObject.connect(_widget_2, QtCore.SIGNAL("clicked()"), self.jump_to_step1_vanadium)
+        self.parent.ui.table_status.setCellWidget(_row, 1, _widget_2)
+
+        # vanadium background
+        _row = 1
+        self.parent.ui.table_status.insertRow(_row)
+        self.parent.ui.table_status.setRowHeight(_row, self.row_height)       
+        _widget = QtGui.QTextEdit()
+        _text = "Vanadium Background Field Empty?<br/><b>AutoNom>Vanadium Background</b>"
+        _widget.setHtml(_text)
+        if o_step1_handler.is_vanadium_background_text_empty():
+            _widget.setStyleSheet(self.widget_bad)
+        else:
+            _widget.setStyleSheet(self.widget_ok)
+        self.parent.ui.table_status.setCellWidget(_row, 0, _widget)
+        _widget_2 = QtGui.QPushButton()        
+        _widget_2.setEnabled(o_step1_handler.is_vanadium_background_text_empty())
+        _widget_2.setText(self.jump_message)
+        QtCore.QObject.connect(_widget_2, QtCore.SIGNAL("clicked()"), self.jump_to_step1_vanadium_background)
+        self.parent.ui.table_status.setCellWidget(_row, 1, _widget_2)
+
         # table status
-        self.parent.ui.table_status.insertRow(0)
-        self.parent.ui.table_status.setRowHeight(0, self.row_height)
+        _row = 2
+        self.parent.ui.table_status.insertRow(_row)
+        self.parent.ui.table_status.setRowHeight(_row, self.row_height)
         _widget = QtGui.QTextEdit()
         _text = "Main Table Empty?<br/><b>Post Processing>Table</b>"
         _widget.setHtml(_text)
@@ -506,16 +546,17 @@ class HelpGuiTableInitialization(object):
             _widget.setStyleSheet(self.widget_bad)
         else:
             _widget.setStyleSheet(self.widget_ok)
-        self.parent.ui.table_status.setCellWidget(0, 0, _widget)
+        self.parent.ui.table_status.setCellWidget(_row, 0, _widget)
         _widget_2 = QtGui.QPushButton()
         _widget_2.setEnabled(o_step2_handler.is_table_empty())
         _widget_2.setText(self.jump_message)
         QtCore.QObject.connect(_widget_2, QtCore.SIGNAL("clicked()"), self.jump_to_step2_table)
-        self.parent.ui.table_status.setCellWidget(0, 1, _widget_2)
+        self.parent.ui.table_status.setCellWidget(_row, 1, _widget_2)
         
         # at least one row checked
-        self.parent.ui.table_status.insertRow(1)
-        self.parent.ui.table_status.setRowHeight(1, self.row_height)
+        _row = 3
+        self.parent.ui.table_status.insertRow(_row)
+        self.parent.ui.table_status.setRowHeight(_row, self.row_height)
         _widget = QtGui.QTextEdit()
         _text = "Main Table Row Selected?<br/><b>Post Processing>Table</b>"
         _widget.setHtml(_text)
@@ -523,10 +564,136 @@ class HelpGuiTableInitialization(object):
             _widget.setStyleSheet(self.widget_ok)
         else:
             _widget.setStyleSheet(self.widget_bad)
-        self.parent.ui.table_status.setCellWidget(1, 0, _widget)
+        self.parent.ui.table_status.setCellWidget(_row, 0, _widget)
         _widget_2 = QtGui.QPushButton()
         _widget_2.setEnabled(not o_step2_handler.at_least_one_row_checked())
         _widget_2.setText(self.jump_message)
         QtCore.QObject.connect(_widget_2, QtCore.SIGNAL("clicked()"), self.jump_to_step2_table)
-        self.parent.ui.table_status.setCellWidget(1, 1, _widget_2)
+        self.parent.ui.table_status.setCellWidget(_row, 1, _widget_2)
+        
+        # calibration
+        _row = 4
+        self.parent.ui.table_status.insertRow(_row)
+        self.parent.ui.table_status.setRowHeight(_row, self.row_height)
+        _widget = QtGui.QTextEdit()
+        _text = "Calibration File Selected?<br/><b>Post Processing>Rietveld>Calibration</b>"
+        _widget.setHtml(_text)
+        if o_step2_handler.is_mantid_calibration_empty():
+            _widget.setStyleSheet(self.widget_bad)
+        else:
+            _widget.setStyleSheet(self.widget_ok)
+        self.parent.ui.table_status.setCellWidget(_row, 0, _widget)
+        _widget_2 = QtGui.QPushButton()
+        _widget_2.setEnabled(o_step2_handler.is_mantid_calibration_empty())
+        _widget_2.setText(self.jump_message)
+        QtCore.QObject.connect(_widget_2, QtCore.SIGNAL("clicked()"), self.jump_to_step2_mantid_browse_calibration)
+        self.parent.ui.table_status.setCellWidget(_row, 1, _widget_2)
+
+        # characterization
+        _row  += 1
+        self.parent.ui.table_status.insertRow(_row)
+        self.parent.ui.table_status.setRowHeight(_row, self.row_height)
+        _widget = QtGui.QTextEdit()
+        _text = "Characterization File Selected?<br/><b>Post Processing>Rietveld>Characterization</b>"
+        _widget.setHtml(_text)
+        if o_step2_handler.is_mantid_characterization_empty():
+            _widget.setStyleSheet(self.widget_bad)
+        else:
+            _widget.setStyleSheet(self.widget_ok)
+        self.parent.ui.table_status.setCellWidget(_row, 0, _widget)
+        _widget_2 = QtGui.QPushButton()
+        _widget_2.setEnabled(o_step2_handler.is_mantid_characterization_empty())
+        _widget_2.setText(self.jump_message)
+        QtCore.QObject.connect(_widget_2, QtCore.SIGNAL("clicked()"), self.jump_to_step2_mantid_browse_characterization)
+        self.parent.ui.table_status.setCellWidget(_row, 1, _widget_2)
+
+        # number of bins int
+        _row += 1
+        self.parent.ui.table_status.insertRow(_row)
+        self.parent.ui.table_status.setRowHeight(_row, self.row_height)
+        _widget = QtGui.QTextEdit()
+        _text = "Is Number of Bins an Int?<br/><b>Post Processing>Rietveld>Number of Bins</b>"
+        _widget.setHtml(_text)
+        if o_step2_handler.is_mantid_number_of_bins_no_int():
+            _widget.setStyleSheet(self.widget_bad)
+        else:
+            _widget.setStyleSheet(self.widget_ok)
+        self.parent.ui.table_status.setCellWidget(_row, 0, _widget)
+        _widget_2 = QtGui.QPushButton()
+        _widget_2.setEnabled(o_step2_handler.is_mantid_number_of_bins_no_int())
+        _widget_2.setText(self.jump_message)
+        QtCore.QObject.connect(_widget_2, QtCore.SIGNAL("clicked()"), self.jump_to_step2_mantid_number_of_bins)
+        self.parent.ui.table_status.setCellWidget(_row, 1, _widget_2)
+
+        # min crop wavelegenth
+        _row += 1
+        self.parent.ui.table_status.insertRow(_row)
+        self.parent.ui.table_status.setRowHeight(_row, self.row_height)
+        _widget = QtGui.QTextEdit()
+        _text = "Is min Crop Wavelength a float?<br/><b>Post Processing>Rietveld>Crop Wavelength Min</b>"
+        _widget.setHtml(_text)
+        if o_step2_handler.is_mantid_min_crop_wavelength_no_float():
+            _widget.setStyleSheet(self.widget_bad)
+        else:
+            _widget.setStyleSheet(self.widget_ok)
+        self.parent.ui.table_status.setCellWidget(_row, 0, _widget)
+        _widget_2 = QtGui.QPushButton()
+        _widget_2.setEnabled(o_step2_handler.is_mantid_min_crop_wavelength_no_float())
+        _widget_2.setText(self.jump_message)
+        QtCore.QObject.connect(_widget_2, QtCore.SIGNAL("clicked()"), self.jump_to_step2_mantid_min_crop_wavelength)
+        self.parent.ui.table_status.setCellWidget(_row, 1, _widget_2)
+
+        # max crop wavelegenth
+        _row += 1
+        self.parent.ui.table_status.insertRow(_row)
+        self.parent.ui.table_status.setRowHeight(_row, self.row_height)
+        _widget = QtGui.QTextEdit()
+        _text = "Is max Crop Wavelength a float?<br/><b>Post Processing>Rietveld>Crop Wavelength Max</b>"
+        _widget.setHtml(_text)
+        if o_step2_handler.is_mantid_max_crop_wavelength_no_float():
+            _widget.setStyleSheet(self.widget_bad)
+        else:
+            _widget.setStyleSheet(self.widget_ok)
+        self.parent.ui.table_status.setCellWidget(_row, 0, _widget)
+        _widget_2 = QtGui.QPushButton()
+        _widget_2.setEnabled(o_step2_handler.is_mantid_max_crop_wavelength_no_float())
+        _widget_2.setText(self.jump_message)
+        QtCore.QObject.connect(_widget_2, QtCore.SIGNAL("clicked()"), self.jump_to_step2_mantid_max_crop_wavelength)
+        self.parent.ui.table_status.setCellWidget(_row, 1, _widget_2)
+        
+        # vanadium radius
+        _row += 1
+        self.parent.ui.table_status.insertRow(_row)
+        self.parent.ui.table_status.setRowHeight(_row, self.row_height)
+        _widget = QtGui.QTextEdit()
+        _text = "Is Vanadium Radius a float?<br/><b>Post Processing>Rietveld>Vanadium Radius</b>"
+        _widget.setHtml(_text)
+        if o_step2_handler.is_mantid_vanadium_radius_not_float():
+            _widget.setStyleSheet(self.widget_bad)
+        else:
+            _widget.setStyleSheet(self.widget_ok)
+        self.parent.ui.table_status.setCellWidget(_row, 0, _widget)
+        _widget_2 = QtGui.QPushButton()
+        _widget_2.setEnabled(o_step2_handler.is_mantid_vanadium_radius_not_float())
+        _widget_2.setText(self.jump_message)
+        QtCore.QObject.connect(_widget_2, QtCore.SIGNAL("clicked()"), self.jump_to_step2_mantid_vanadium_radius)
+        self.parent.ui.table_status.setCellWidget(_row, 1, _widget_2)
+        
+        # output directory
+        _row += 1
+        self.parent.ui.table_status.insertRow(_row)
+        self.parent.ui.table_status.setRowHeight(_row, self.row_height)
+        _widget = QtGui.QTextEdit()
+        _text = "Is Output Directory Empty?<br/><b>Post Processing>Rietveld>Output Directory</b>"
+        _widget.setHtml(_text)
+        if o_step2_handler.is_mantid_output_directory_empty():
+            _widget.setStyleSheet(self.widget_bad)
+        else:
+            _widget.setStyleSheet(self.widget_ok)
+        self.parent.ui.table_status.setCellWidget(_row, 0, _widget)
+        _widget_2 = QtGui.QPushButton()
+        _widget_2.setEnabled(o_step2_handler.is_mantid_output_directory_empty())
+        _widget_2.setText(self.jump_message)
+        QtCore.QObject.connect(_widget_2, QtCore.SIGNAL("clicked()"), self.jump_to_step2_mantid_output_directory_button)
+        self.parent.ui.table_status.setCellWidget(_row, 1, _widget_2)
         
