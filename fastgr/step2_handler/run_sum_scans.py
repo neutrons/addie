@@ -43,8 +43,10 @@ class RunSumScans(object):
         return _script
 
     def create_output_file(self):
-        _output_file_name = self.parent.sum_scans_output_file_name.text()
+        _output_file_name = "sum_" + self.parent.sum_scans_output_file_name.text() + ".inp"
+        print("_output_file_name: {}".format(_output_file_name))
         _full_output_file_name = os.path.join(self.folder, _output_file_name)
+        print("_full_output_file_name: {}".format(_full_output_file_name))
         self.full_output_file_name = _full_output_file_name
         
         f = open(_full_output_file_name, 'w')
