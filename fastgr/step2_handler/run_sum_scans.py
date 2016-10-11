@@ -44,7 +44,7 @@ class RunSumScans(object):
 
     def create_output_file(self):
         _output_file_name = self.parent.sum_scans_output_file_name.text()
-        _full_output_file_name = os.path.join(self.folder, _output_file)
+        _full_output_file_name = os.path.join(self.folder, _output_file_name)
         self.full_output_file_name = _full_output_file_name
         
         f = open(_full_output_file_name, 'w')
