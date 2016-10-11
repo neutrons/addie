@@ -63,6 +63,8 @@ class Step2GuiHandler(object):
     def background_index_changed(self, row_index = -1):
         if row_index == -1:
             return
+        if self.parent.table.item(row_index, 2) is None:
+            return
         self.parent.background_line_edit.setText(self.parent.table.item(row_index, 2).text())
         
     def step2_update_background_dropdown(self):

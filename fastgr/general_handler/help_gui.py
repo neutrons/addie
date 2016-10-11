@@ -74,7 +74,7 @@ def help_button_activator(parent=None, button_name='autonom'):
 	    parent.o_help_scans = o_help
 	else:
 	    parent.o_help_scans.refresh()
-	    parent.o_hlep_scans.activateWindow()
+	    parent.o_help_scans.activateWindow()
     elif button_name == 'mantid':
 	if parent.o_help_mantid is None:
 	    o_help = HelpGui(parent=parent, button_name=button_name)
