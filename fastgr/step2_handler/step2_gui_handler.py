@@ -33,6 +33,9 @@ class Step2GuiHandler(object):
         else:
             self.user_canceled = True
         
+    def is_hidrogen_clicked(self):
+        return self.parent.hydrogen_yes.isChecked()
+        
     def hidrogen_clicked(self):
         _range = self.hidrogen_range
         self.populate_hidrogen_range(_range)
@@ -45,6 +48,16 @@ class Step2GuiHandler(object):
         min_value, max_value = fit_range
         self.parent.plazcek_fit_range_min.setText("%d" % min_value)
         self.parent.plazcek_fit_range_max.setText("%d" % max_value)
+    
+    def get_plazcek_range(self):
+        fit_range_min = self.parent.plazcek_fit_range_min.text().strip()
+        fit_range_max = self.parent.plazcek_fit_range_max.text().strip()
+        return [fit_range_min, fit_range_max]
+    
+    def get_q_range(self):
+        q_range_min = self.parent.q_range_min.text().strip()
+        q_range_max = self.parent.q_range_max.text().strip()
+        return [q_range_min, q_range_max]
     
     def step2_background_flag(self):
         if self.parent.background_no.isChecked():

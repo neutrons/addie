@@ -1,5 +1,6 @@
 import os
 from PyQt4.QtCore import Qt
+from fastgr.step2_handler.step2_gui_handler import Step2GuiHandler
 
 
 class RunSumScans(object):
@@ -44,17 +45,36 @@ class RunSumScans(object):
 
     def create_output_file(self):
         _output_file_name = "sum_" + self.parent.sum_scans_output_file_name.text() + ".inp"
-        print("_output_file_name: {}".format(_output_file_name))
+#        print("_output_file_name: {}".format(_output_file_name))
         _full_output_file_name = os.path.join(self.folder, _output_file_name)
-        print("_full_output_file_name: {}".format(_full_output_file_name))
+ #       print("_full_output_file_name: {}".format(_full_output_file_name))
         self.full_output_file_name = _full_output_file_name
         
         f = open(_full_output_file_name, 'w')
         
-        f.write("background %s\n" %self._background)
         for _label in self._runs.keys():
             f.write("%s %s\n" %(_label, self._runs[_label]))
-            
+        f.write("endsamples\n")
+        f.write("Background %s\n" %self._background) 
+        
+        o_gui_handler = Step2GuiHandler(parent = self.parent_no_ui)
+
+        # hydrogen flag
+        plattype_flag = 0
+        if o_gui_handler.is_hidrogen_clicked():
+            plattype_flag = 1
+        f.write("platype {}\n".format(plattype_flag))
+        
+        # platrange
+        [plarange_min, plarange_max] = o_gui_handler.get_plazcek_range()
+        if (plarange_min is not "") and (plarange_max is not ""):
+            f.write("plarange {},{}\n".format(plarange_min, plarange_max))
+        
+        # qrangeft
+        [q_range_min, q_range_max]= o_gui_handler.get_q_range()
+        if (q_range_min is not "") and (q_range_max is not ""):
+            f.write("qrangeft {},{}\n".format(q_range_min, q_range_max))
+        
         f.close()
         print("[LOG] created file %s" %_full_output_file_name)
         
