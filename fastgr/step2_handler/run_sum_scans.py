@@ -62,7 +62,7 @@ class RunSumScans(object):
         # hydrogen flag
         plattype_flag = 0
         if o_gui_handler.is_hidrogen_clicked():
-            plattype_flag = 1
+            plattype_flag = 2
         f.write("platype {}\n".format(plattype_flag))
         
         # platrange
