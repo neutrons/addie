@@ -1593,7 +1593,11 @@ p, li { white-space: pre-wrap; }
                           </widget>
                          </item>
                          <item>
-                          <widget class="QLineEdit" name="sum_scans_output_file_name"/>
+                          <widget class="QLineEdit" name="sum_scans_output_file_name">
+                           <property name="text">
+                            <string>sample_name</string>
+                           </property>
+                          </widget>
                          </item>
                          <item>
                           <widget class="QLabel" name="label_22">

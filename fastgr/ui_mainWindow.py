@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Wed Oct 19 10:45:36 2016
+# Created: Wed Oct 19 11:16:17 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -1502,6 +1502,7 @@ class Ui_MainWindow(object):
         self.label_17.setText(_translate("MainWindow", "(ex: 20, 30, 40)", None))
         self.label_3.setText(_translate("MainWindow", "Output File Name", None))
         self.label_18.setText(_translate("MainWindow", "sum_", None))
+        self.sum_scans_output_file_name.setText(_translate("MainWindow", "sample_name", None))
         self.label_22.setText(_translate("MainWindow", ".inp", None))
         self.interactive_mode_checkbox.setText(_translate("MainWindow", "Interactive Mode ?", None))
         self.run_sum_scans_button.setText(_translate("MainWindow", "Run Sum Scans", None))

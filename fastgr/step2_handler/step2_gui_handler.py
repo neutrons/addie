@@ -92,6 +92,16 @@ class Step2GuiHandler(object):
 
     def define_new_ndabs_output_file_name(self):
         """retrieve name of first row selected and use it to define output file name"""
+        _output_file_name = self.define_new_output_file_name()
+        self.parent.run_ndabs_output_file_name.setText(_output_file_name)
+        
+    def define_new_sum_scans_output_file_name(self):
+        """retrieve name of first row selected and use it to define output file name"""
+        _output_file_name = self.define_new_output_file_name()
+        self.parent.sum_scans_output_file_name.setText(_output_file_name)
+        
+    def define_new_output_file_name(self):
+        """retrieve name of first row selected and use it to define output file name"""
         o_table_handler = fastgr.step2_handler.table_handler.TableHandler(parent = self.parent_no_ui)
         o_table_handler.retrieve_list_of_selected_rows()
         list_of_selected_row = o_table_handler.list_selected_row
@@ -100,8 +110,8 @@ class Step2GuiHandler(object):
             _output_file_name = _metadata_selected['name']
         else:
             _output_file_name = self.default_ndabs_output_file_name
-        self.parent.run_ndabs_output_file_name.setText(_output_file_name)
-        
+        return _output_file_name
+
     def check_import_export_buttons(self):
         _export_status = False
         if self.parent.table.rowCount() > 0:
