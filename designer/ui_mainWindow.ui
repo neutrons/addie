@@ -489,25 +489,25 @@
                   </property>
                   <layout class="QHBoxLayout" name="horizontalLayout_5">
                    <item>
-                    <widget class="QRadioButton" name="postprocessing_yes">
-                     <property name="toolTip">
-                      <string>Will not overwrite the data reduction config file</string>
-                     </property>
-                     <property name="text">
-                      <string>Yes</string>
-                     </property>
-                     <property name="checked">
-                      <bool>true</bool>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
                     <widget class="QRadioButton" name="postprocessing_no">
                      <property name="toolTip">
                       <string>Will overwrite the data reduction config file</string>
                      </property>
                      <property name="text">
+                      <string>Yes</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="postprocessing_yes">
+                     <property name="toolTip">
+                      <string>Will not overwrite the data reduction config file</string>
+                     </property>
+                     <property name="text">
                       <string>No</string>
+                     </property>
+                     <property name="checked">
+                      <bool>true</bool>
                      </property>
                     </widget>
                    </item>
@@ -3049,7 +3049,6 @@ p, li { white-space: pre-wrap; }
   <tabstop>renormalization_no</tabstop>
   <tabstop>autotemplate_yes</tabstop>
   <tabstop>autotemplate_no</tabstop>
-  <tabstop>postprocessing_yes</tabstop>
   <tabstop>postprocessing_no</tabstop>
   <tabstop>comments</tabstop>
   <tabstop>create_folder_button</tabstop>

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Thu Oct 20 12:02:54 2016
+# Created: Thu Oct 20 12:06:22 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -227,13 +227,13 @@ class Ui_MainWindow(object):
         self.groupBox.setObjectName(_fromUtf8("groupBox"))
         self.horizontalLayout_5 = QtGui.QHBoxLayout(self.groupBox)
         self.horizontalLayout_5.setObjectName(_fromUtf8("horizontalLayout_5"))
+        self.postprocessing_no = QtGui.QRadioButton(self.groupBox)
+        self.postprocessing_no.setObjectName(_fromUtf8("postprocessing_no"))
+        self.horizontalLayout_5.addWidget(self.postprocessing_no)
         self.postprocessing_yes = QtGui.QRadioButton(self.groupBox)
         self.postprocessing_yes.setChecked(True)
         self.postprocessing_yes.setObjectName(_fromUtf8("postprocessing_yes"))
         self.horizontalLayout_5.addWidget(self.postprocessing_yes)
-        self.postprocessing_no = QtGui.QRadioButton(self.groupBox)
-        self.postprocessing_no.setObjectName(_fromUtf8("postprocessing_no"))
-        self.horizontalLayout_5.addWidget(self.postprocessing_no)
         self.horizontalLayout_53.addWidget(self.groupBox)
         spacerItem2 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_53.addItem(spacerItem2)
@@ -1301,8 +1301,7 @@ class Ui_MainWindow(object):
         MainWindow.setTabOrder(self.renormalization_yes, self.renormalization_no)
         MainWindow.setTabOrder(self.renormalization_no, self.autotemplate_yes)
         MainWindow.setTabOrder(self.autotemplate_yes, self.autotemplate_no)
-        MainWindow.setTabOrder(self.autotemplate_no, self.postprocessing_yes)
-        MainWindow.setTabOrder(self.postprocessing_yes, self.postprocessing_no)
+        MainWindow.setTabOrder(self.autotemplate_no, self.postprocessing_no)
         MainWindow.setTabOrder(self.postprocessing_no, self.comments)
         MainWindow.setTabOrder(self.comments, self.create_folder_button)
         MainWindow.setTabOrder(self.create_folder_button, self.auto_manual_folder)
@@ -1417,10 +1416,10 @@ class Ui_MainWindow(object):
         self.autotemplate_yes.setText(_translate("MainWindow", "Yes", None))
         self.autotemplate_no.setText(_translate("MainWindow", "No", None))
         self.groupBox.setTitle(_translate("MainWindow", "Live", None))
-        self.postprocessing_yes.setToolTip(_translate("MainWindow", "Will not overwrite the data reduction config file", None))
-        self.postprocessing_yes.setText(_translate("MainWindow", "Yes", None))
         self.postprocessing_no.setToolTip(_translate("MainWindow", "Will overwrite the data reduction config file", None))
-        self.postprocessing_no.setText(_translate("MainWindow", "No", None))
+        self.postprocessing_no.setText(_translate("MainWindow", "Yes", None))
+        self.postprocessing_yes.setToolTip(_translate("MainWindow", "Will not overwrite the data reduction config file", None))
+        self.postprocessing_yes.setText(_translate("MainWindow", "No", None))
         self.label_78.setText(_translate("MainWindow", "Comments:", None))
         self.create_folder_button.setText(_translate("MainWindow", "Create New autoNOM Folder?", None))
         self.name_of_output_folder.setTitle(_translate("MainWindow", "Name of Output Folder", None))
