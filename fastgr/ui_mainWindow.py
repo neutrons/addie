@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Thu Oct 20 11:18:10 2016
+# Created: Thu Oct 20 11:39:22 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -1433,7 +1433,7 @@ class Ui_MainWindow(object):
         self.move_to_button.setText(_translate("MainWindow", "Move to Folder and Refresh Table ...", None))
         self.import_button.setText(_translate("MainWindow", "Import Table ...", None))
         self.export_button.setText(_translate("MainWindow", "Export Table ...", None))
-        self.populate_table.setText(_translate("MainWindow", "Refresh Table", None))
+        self.populate_table.setText(_translate("MainWindow", "Reload List of Scans", None))
         item = self.table.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Select", None))
         item = self.table.horizontalHeaderItem(1)

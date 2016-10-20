@@ -792,7 +792,7 @@
                    </size>
                   </property>
                   <property name="text">
-                   <string>Refresh Table</string>
+                   <string>Reload List of Scans</string>
                   </property>
                  </widget>
                 </item>
