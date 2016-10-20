@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Thu Oct 20 11:39:22 2016
+# Created: Thu Oct 20 12:02:54 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -1416,7 +1416,7 @@ class Ui_MainWindow(object):
         self.groupBox_30.setTitle(_translate("MainWindow", "Autotemplate", None))
         self.autotemplate_yes.setText(_translate("MainWindow", "Yes", None))
         self.autotemplate_no.setText(_translate("MainWindow", "No", None))
-        self.groupBox.setTitle(_translate("MainWindow", "Postprocessing", None))
+        self.groupBox.setTitle(_translate("MainWindow", "Live", None))
         self.postprocessing_yes.setToolTip(_translate("MainWindow", "Will not overwrite the data reduction config file", None))
         self.postprocessing_yes.setText(_translate("MainWindow", "Yes", None))
         self.postprocessing_no.setToolTip(_translate("MainWindow", "Will overwrite the data reduction config file", None))
