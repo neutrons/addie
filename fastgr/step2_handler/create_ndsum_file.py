@@ -68,11 +68,11 @@ class CreateNdsumFile(object):
             _scale_data = "No"
         _text.append("scale_data \t%s\n" %_scale_data)
         
-        if _gui_settings['run_rmc_flag']:
-            _run_rmc = "Yes"
-        else:
-            _run_rmc = "No"
-        _text.append("run_rmc \t%s\n" %_run_rmc)
+        #if _gui_settings['run_rmc_flag']:
+            #_run_rmc = "Yes"
+        #else:
+            #_run_rmc = "No"
+        #_text.append("run_rmc \t%s\n" %_run_rmc)
         
         _plazcek = "plarange \t%s,%s\n" %(_gui_settings['plazcek_from'], _gui_settings['plazcek_to'])
         _text.append(_plazcek)

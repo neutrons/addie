@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Thu Oct 20 12:06:22 2016
+# Created: Thu Oct 20 12:44:32 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -555,20 +555,20 @@ class Ui_MainWindow(object):
         self.radioButton_27.setObjectName(_fromUtf8("radioButton_27"))
         self.horizontalLayout_77.addWidget(self.radioButton_27)
         self.horizontalLayout_2.addWidget(self.groupBox_39)
-        self.groupBox_40 = QtGui.QGroupBox(self.groupBox_4)
-        self.groupBox_40.setMinimumSize(QtCore.QSize(120, 0))
-        self.groupBox_40.setObjectName(_fromUtf8("groupBox_40"))
-        self.horizontalLayout_78 = QtGui.QHBoxLayout(self.groupBox_40)
+        self.run_rmc_groupbox = QtGui.QGroupBox(self.groupBox_4)
+        self.run_rmc_groupbox.setMinimumSize(QtCore.QSize(120, 0))
+        self.run_rmc_groupbox.setObjectName(_fromUtf8("run_rmc_groupbox"))
+        self.horizontalLayout_78 = QtGui.QHBoxLayout(self.run_rmc_groupbox)
         self.horizontalLayout_78.setObjectName(_fromUtf8("horizontalLayout_78"))
-        self.run_rmc_yes = QtGui.QRadioButton(self.groupBox_40)
+        self.run_rmc_yes = QtGui.QRadioButton(self.run_rmc_groupbox)
         self.run_rmc_yes.setChecked(True)
         self.run_rmc_yes.setObjectName(_fromUtf8("run_rmc_yes"))
         self.horizontalLayout_78.addWidget(self.run_rmc_yes)
-        self.radioButton_28 = QtGui.QRadioButton(self.groupBox_40)
+        self.radioButton_28 = QtGui.QRadioButton(self.run_rmc_groupbox)
         self.radioButton_28.setChecked(False)
         self.radioButton_28.setObjectName(_fromUtf8("radioButton_28"))
         self.horizontalLayout_78.addWidget(self.radioButton_28)
-        self.horizontalLayout_2.addWidget(self.groupBox_40)
+        self.horizontalLayout_2.addWidget(self.run_rmc_groupbox)
         spacerItem9 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem9)
         self.verticalLayout_2.addLayout(self.horizontalLayout_2)
@@ -1483,7 +1483,7 @@ class Ui_MainWindow(object):
         self.groupBox_39.setTitle(_translate("MainWindow", "Scale Data", None))
         self.scale_data_yes.setText(_translate("MainWindow", "Yes", None))
         self.radioButton_27.setText(_translate("MainWindow", "No", None))
-        self.groupBox_40.setTitle(_translate("MainWindow", "Run RMC", None))
+        self.run_rmc_groupbox.setTitle(_translate("MainWindow", "Run RMC", None))
         self.run_rmc_yes.setText(_translate("MainWindow", "Yes", None))
         self.radioButton_28.setText(_translate("MainWindow", "No", None))
         self.label_5.setText(_translate("MainWindow", "Output File Name:", None))

@@ -136,8 +136,8 @@ class ImportConfiguration(object):
         scale_data_flag = self.get_tag("scale_data_flag", data_type="bool")
         o_gui.radiobutton_set_state(widget_id = self.parent.ui.scale_data_yes, state = scale_data_flag)
         
-        run_rmc_flag = self.get_tag("run_rmc_flag", data_type = "bool")
-        o_gui.radiobutton_set_state(widget_id = self.parent.ui.run_rmc_yes, state = run_rmc_flag)
+        #run_rmc_flag = self.get_tag("run_rmc_flag", data_type = "bool")
+        #o_gui.radiobutton_set_state(widget_id = self.parent.ui.run_rmc_yes, state = run_rmc_flag)
         
         output_file_name = self.get_tag("ndabs_output_file_name")
         self.parent.ui.run_ndabs_output_file_name.setText(output_file_name)

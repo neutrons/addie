@@ -148,9 +148,9 @@ class ExportConfiguration(object):
         scale_data_flag = o_gui_handler.radiobutton_get_state(widget_id = self.parent.ui.scale_data_yes)
         configuration['scale_data_flag'] = scale_data_flag
         
-        # run RMC yes (flag)
-        run_rmc_flag = o_gui_handler.radiobutton_get_state(widget_id = self.parent.ui.run_rmc_yes)
-        configuration['run_rmc_flag'] = run_rmc_flag
+        ## run RMC yes (flag)
+        #run_rmc_flag = o_gui_handler.radiobutton_get_state(widget_id = self.parent.ui.run_rmc_yes)
+        #configuration['run_rmc_flag'] = run_rmc_flag
         
         # output file name
         output_file_name = self.parent.ui.run_ndabs_output_file_name.text()
