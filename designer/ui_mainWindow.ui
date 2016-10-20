@@ -2340,7 +2340,7 @@ p, li { white-space: pre-wrap; }
                        </font>
                       </property>
                       <property name="text">
-                       <string>Multiple GSS</string>
+                       <string>Multiple GSAS</string>
                       </property>
                      </widget>
                     </item>

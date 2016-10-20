@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Wed Oct 19 11:16:17 2016
+# Created: Thu Oct 20 11:18:10 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -1552,7 +1552,7 @@ class Ui_MainWindow(object):
         self.checkBox_bank5.setText(_translate("MainWindow", "Bank 5", None))
         self.checkBox_bank6.setText(_translate("MainWindow", "Bank 6", None))
         self.radioButton_multiBank.setText(_translate("MainWindow", "Multiple Banks", None))
-        self.radioButton_multiGSS.setText(_translate("MainWindow", "Multiple GSS", None))
+        self.radioButton_multiGSS.setText(_translate("MainWindow", "Multiple GSAS", None))
         self.pushButton_rescaleGSAS.setText(_translate("MainWindow", "Rescale", None))
         self.pushButton_gsasColorStyle.setText(_translate("MainWindow", "Color/Style", None))
         self.treeWidget_braggWSList.setToolTip(_translate("MainWindow", "<html><head/><body><p>List of workspace names.  Each workspace is an individual bank</p></body></html>", None))
