@@ -4,7 +4,7 @@ import math
 import numpy as np
 
 # add a python path for local development
-sys.path.append('/Users/wzz/MantidBuild/debug/bin/')
+sys.path.append('/opt/mantid38/bin/')
 
 import mantid.simpleapi as simpleapi
 from mantid.api import AnalysisDataService
