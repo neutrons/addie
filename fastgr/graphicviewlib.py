@@ -162,7 +162,7 @@ class BraggView(base.MplGraphicsView):
                     bank_color = self.get_multi_gss_color()
                 vec_x, vec_y, vec_e = plot_bank_dict[ws_group][bank_id]
                 print '[DB...BAT] Plot ', ws_group, bank_id
-                plot_id = self.add_plot_1d(vec_x, vec_y, marker='.', color=bank_color,
+                plot_id = self.add_plot_1d(vec_x, vec_y, marker=None, color=bank_color,
                                            x_label=unit, y_label='I(%s)' % unit,
                                            label='%s Bank %d' % (ws_group, bank_id))
 
@@ -196,7 +196,7 @@ class BraggView(base.MplGraphicsView):
         self._workspaceSet.add(bragg_ws_name)
 
         # plot
-        plot_id = self.add_plot_1d(vec_x, vec_y, marker='.', color='black',
+        plot_id = self.add_plot_1d(vec_x, vec_y, marker=None, color='black',
                                    label=bragg_ws_name)
         self._plotScaleDict[plot_id] = (min(vec_y), max(vec_y))
 
@@ -371,7 +371,7 @@ class GofRView(base.MplGraphicsView):
             self.add_plot_1d(vec_r, vec_g, vec_e)
             raise NotImplementedError('ASAP')
         else:
-            line_id = self.add_plot_1d(vec_r, vec_g, marker='.',
+            line_id = self.add_plot_1d(vec_r, vec_g, marker=None,
                                        color=self._colorList[self._colorIndex % len(self._colorList)],
                                        label=plot_key,
                                        x_label=r'r ($\AA$)')
@@ -690,7 +690,7 @@ class SofQView(base.MplGraphicsView):
 
         # plot
         plot_id = self.add_plot_1d(vec_q, vec_s, color=color, x_label='Q', y_label=sq_y_label,
-                                   marker=marker, label=sq_name)
+                                   marker=None, label=sq_name)
         self._sqLineDict[sq_name] = plot_id
 
         return

@@ -1030,7 +1030,7 @@ class Qt4MplCanvas(FigureCanvas):
         if color is None:
             color = (0, 1, 0, 1)
         if marker is None:
-            marker = 'o'
+            marker = 'None'
         if line_style is None:
             line_style = '-'
 
