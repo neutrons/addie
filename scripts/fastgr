@@ -178,6 +178,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         # class variable for easy access
         self._gssGroupName = None
         self._currDataDir = None
+        self._inFixedDiretoryStructure = False
+
 
         # some controlling variables
         self._currBraggXUnit = str(self.ui.comboBox_xUnit.currentText())
@@ -644,7 +646,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         if self._currDataDir is None:
             default_dir = os.getcwd()
         else:
-            default_dir = self._currDataDir
+            default_dir = self.getDefaultDir(sub_dir='GSAS')
 
         bragg_file_name = str(QtGui.QFileDialog.getOpenFileName(self, 'Choose Bragg File', default_dir, ext))
         if bragg_file_name is None or bragg_file_name == '':
@@ -652,6 +654,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         # update stored data directory
         self._currDataDir = os.path.abspath(bragg_file_name)
+        self.checkInFixedDirectoryStructure(sub_dir='GSAS')
 
         # load file
         gss_ws_name = self._myController.load_bragg_file(bragg_file_name)
@@ -720,7 +723,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         if self._currDataDir is None:
             default_dir = os.getcwd()
         else:
-            default_dir = self._currDataDir
+            default_dir = self.getDefaultDir('gofr')
 
         # pop out file
         file_filter = 'Data Files (*.data);;All Files (*.*)'
@@ -748,7 +751,51 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         # put the loaded G(r) workspace to tree 'workspaces'
         self.ui.treeWidget_grWsList.add_child_main_item('workspaces', gr_ws_name)
 
+        self.checkInFixedDirectoryStructure('gofr')
+
         return
+
+    def checkInFixedDirectoryStructure(self, sub_dir):
+        """
+        Check whether _currDataDir ends with 'GSAS', 'gofr' or 'SofQ'
+        If it is, then reset the _currDataDir to its upper directory and set the in-format flag;
+        Otherwise, keep as is
+        """
+        # make sure that the last character of currDataDir is not /
+        if self._currDataDir.endswith('/') or self._currDataDir.endswith('\\'):
+            # consider Linxu and Windows case
+            self._currDataDir = self._currDataDir[:-1]
+
+        # split 
+        main_path, last_dir = os.path.split(self._currDataDir)
+        if last_dir == sub_dir:
+            self._inFixedDiretoryStructure = True
+            self._currDataDir = main_path
+        else:
+            self._inFixedDiretoryStructure = False
+        # END-IF-ELSE
+
+        return 
+
+    def getDefaultDir(self, sub_dir):
+        """ Get the default data directory.
+        If is in Fixed-Directory-Structure, then _currDataDir is the parent directory for all GSAS, gofr and SofQ
+        and thus return the data directory with _currDataDir joined with sub_dir
+        Otherwise, no operation
+
+        :param sub_dir:
+        :return: directory
+        """
+        # check
+        assert isinstance(sub_dir, str), 'sub directory must be a string but not %s.' % type(sub_dir)
+
+        if self._inFixedDiretoryStructure:
+            default_dir = os.path.join(self._currDataDir, sub_dir)
+        else:
+            default_dir = self._currDataDir
+
+        return default_dir
+
 
     def do_load_sq(self):
         """
@@ -761,7 +808,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         if self._currDataDir is None:
             default_dir = os.getcwd()
         else:
-            default_dir = self._currDataDir
+            default_dir = self.getDefaultDir(sub_dir='SofQ')
 
         # get the file
         ext = 'DAT (*.dat);;All (*.*)'
@@ -771,6 +818,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         else:
             # update current data directory
             self._currDataDir = os.path.abspath(sq_file_name)
+            self.checkInFixedDirectoryStructure('SofQ')
 
         # load S(q)
         sq_ws_name, q_min, q_max = self._myController.load_sq(sq_file_name)
@@ -1159,6 +1207,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         Returns:
 
         """
+        # FIXME/TODO/NOW - Whether this method has ever been called???
         return self._currDataDir
 
     def get_workflow(self):
@@ -1187,7 +1236,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         assert isinstance(new_ws_list, list), 'Input workspace list must be a list of string' \
                                               'but not %s.' % str(type(new_ws_list))
 
-        # TODO - Figure out what to do!
         # print 'current tab = ', self.ui.tabWidget_2.currentIndex(), self.ui.tabWidget_2.currentWidget(),
         # print self.ui.tabWidget_2.currentWidget().objectName()
         # print 'current workspaces: ', self._myController.get_current_workspaces()
@@ -1195,16 +1243,24 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         # add to tree
         if len(new_ws_list) > 0:
             if self.ui.tabWidget_2.currentWidget().objectName() == 'tab_gR':
+                # a new G(r) or S(q)
                 for new_ws in new_ws_list:
                     ws_unit = self._myController.get_ws_unit(new_ws)
                     if ws_unit != 'MomentumTransfer':
                         is_gr = True
                     else:
+                        # case for SofQ
                         is_gr = False
+                        # add to combo box
+                        self.ui.comboBox_SofQ.addItem(new_ws)
+                    # END-IF
                     self.ui.treeWidget_grWsList.add_arb_gr(new_ws, is_gr)
+
             elif self.ui.tabWidget_2.currentWidget().objectName() == 'tab_bragg':
+                # new Bragg pattern
                 for new_ws in new_ws_list:
                     self.ui.treeWidget_braggWSList.add_arb_gr(new_ws)
+            # END-IF-ELSE
 
         return
 

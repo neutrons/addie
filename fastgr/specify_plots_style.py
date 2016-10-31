@@ -53,6 +53,8 @@ class PlotStyleDialog(QtGui.QDialog):
         for marker in marker_list:
             self.ui.comboBox_style.addItem(marker)
 
+        self.ui.pushButton_quit.setText('Cancel')
+
         return
 
     def do_accept_quit(self):
