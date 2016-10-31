@@ -78,7 +78,16 @@ class FastGRDriver(object):
         elif pdf_type.startswith('R'):
             prefix = 'RDF'
 
-        gr_ws_name = '%s(R)_%s_%d' % (prefix, self._currSqWsName, self._sqIndexDict[self._currSqWsName])
+        if self._currSqWsName in self._sqIndexDict:
+            # for S(q) loaded from file
+            ws_seq_index = self._sqIndexDict[self._currSqWsName]
+            update_index = True
+        else:
+            # for S(q) calculated from IPython console
+            ws_seq_index = 0
+            update_index = False
+
+        gr_ws_name = '%s(R)_%s_%d' % (prefix, self._currSqWsName, ws_seq_index)
         kwargs = {'OutputWorkspace': gr_ws_name,
                   'Qmin': min_q,
                   'Qmax': max_q,
@@ -103,7 +112,8 @@ class FastGRDriver(object):
         self._grWsNameDict[(min_q, max_q)] = gr_ws_name
 
         # update state variable
-        self._sqIndexDict[self._currSqWsName] += 1
+        if update_index:
+            self._sqIndexDict[self._currSqWsName] += 1
 
         return gr_ws_name
 
