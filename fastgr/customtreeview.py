@@ -82,17 +82,17 @@ class CustomizedTreeView(QtGui.QTreeView):
         for i_col in xrange(self._myNumCols):
             header = header_list[i_col]
             self.model().setHeaderData(0, QtCore.Qt.Horizontal, header)
-
-            # prototype and test for horizontal scroll bar
-            header = self.header()
-            assert isinstance(header, QtGui.QHeaderView)
-            header.setHorizontalScrollBar(QtGui.QScrollBar())
-
-            header.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerItem)
-            header.setResizeMode(QtGui.QHeaderView.ResizeToContents)
-            header.setStretchLastSection(False)
-
+        # END-IF
         self._myHeaderList = header_list[:]
+
+        # Enable scroll bar
+        header = self.header()
+        assert isinstance(header, QtGui.QHeaderView), 'Header must be a QHeaderView instance.'
+        # header.setHorizontalScrollBar(QtGui.QScrollBar())
+
+        header.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerItem)
+        header.setResizeMode(QtGui.QHeaderView.ResizeToContents)
+        header.setStretchLastSection(False)
 
         return
 

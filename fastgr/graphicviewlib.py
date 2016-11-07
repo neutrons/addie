@@ -1,6 +1,6 @@
 import numpy as np
 
-from PyQt4 import QtCore
+from PyQt4 import QtCore, QtGui
 
 import mplgraphicsview as base
 
@@ -343,7 +343,81 @@ class GofRView(base.MplGraphicsView):
         self._colorList = ['black', 'red', 'blue', 'green', 'brown', 'orange']
         self._colorIndex = 0
 
+        # define the dynamic menu
+        self._myCanvas.mpl_connect('button_press_event', self.on_mouse_press_event)
+        self._myCanvas.mpl_connect('button_release_event', self.on_mouse_release_event)
+        self._myCanvas.mpl_connect('motion_notify_event', self.on_mouse_motion)
+
+        # variable
+        self._isLegendOn = False
+
         return
+
+    # TODO/FIXME/NOW - Make it complete!
+    def on_mouse_press_event(self, event):
+        """
+        blabla
+        Args:
+            event:
+
+        Returns:
+
+        """
+        button = event.button
+
+        curr_x = event.xdata
+        curr_y = event.ydata
+        if curr_x is None or curr_y is None:
+            # outside of canvas
+            return
+
+        if button == 1:
+            # left button: no operation
+            pass
+
+        elif button == 3:
+            # right button:
+            # Pop-out menu
+            self.menu = QtGui.QMenu(self)
+
+            action1 = QtGui.QAction('Remove legend', self)
+            action1.triggered.connect(self.menu_remove_legend)
+            self.menu.addAction(action1)
+
+            # add other required actions
+            self.menu.popup(QtGui.QCursor.pos())
+        # END-IF-ELSE
+
+        return
+
+    def menu_remove_legend(self):
+        """
+        blabla
+        Returns:
+
+        """
+        return
+
+    def on_mouse_release_event(self, event):
+        """
+        blabla
+        Args:
+            event:
+
+        Returns:
+
+        """
+        return
+
+    def on_mouse_motion(self, event):
+        """
+        blabla
+        Args:
+            event:
+
+        Returns:
+
+        """
 
     def plot_gr(self, plot_key, vec_r, vec_g, vec_e=None, plot_error=False):
         """
