@@ -982,6 +982,30 @@ class Qt4MplCanvas(FigureCanvas):
 
         return
 
+    @property
+    def is_legend_on(self):
+        """ blabla """
+        return self._isLegendOn
+
+    def hide_legend(self):
+        """ remove legend """
+        # TODO/NOW/Clean: self.axes.legend() can be None
+
+
+        self.axes.legend().set_visible(False)
+        self.draw()
+        self._isLegendOn = False
+
+        return
+
+    def show_legend(self):
+        """
+        """
+        # TODO/NOW/Clean: self.axes.legend() can be None
+        self.axes.legend().set_visible(True)
+        self.draw()
+        self._isLegendOn = True
+
     def add_arrow(self, start_x, start_y, stop_x, stop_y):
         """
         0, 0, 0.5, 0.5, head_width=0.05, head_length=0.1, fc='k', ec='k')

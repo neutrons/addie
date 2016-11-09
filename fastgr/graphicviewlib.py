@@ -39,6 +39,8 @@ class BraggView(base.MplGraphicsView):
                               "cyan", "magenta", "yellow"]
         self._currColorIndex = 0
 
+        # TODO/NOW/ISSUE - Define mouse action and etc.
+
         # records of the plots on canvas
         # workspaces' names (not bank, but original workspace) on canvas
         self._workspaceSet = set()
@@ -390,10 +392,14 @@ class GofRView(base.MplGraphicsView):
                 action3 = QtGui.QAction('Legend font smaller', self)
                 action3.triggered.connect(self.menu_decrease_legend_font)
 
+                self.menu.addAction(action2)
+                self.menu.addAction(action3)
+
             else:
                 # figure does not have legend: add legend
                 action1 = QtGui.QAction('Show legend', self)
                 action1.triggered.connect(self.menu_show_legend)
+
             self.menu.addAction(action1)
 
             # pop up menu
@@ -410,7 +416,7 @@ class GofRView(base.MplGraphicsView):
         """
         raise NotImplemented('ASAP')
 
-    def menu_incease_legend_font(self):
+    def menu_increase_legend_font(self):
         """
 
         Returns:
@@ -424,7 +430,7 @@ class GofRView(base.MplGraphicsView):
         Returns:
 
         """
-        self.get_canvas().remove_legend()
+        self.get_canvas().hide_legend()
 
         return
 
@@ -434,7 +440,7 @@ class GofRView(base.MplGraphicsView):
         Returns:
 
         """
-        self.get_canvas().add_legend()
+        self.get_canvas().show_legend()
 
     def on_mouse_release_event(self, event):
         """
@@ -730,6 +736,7 @@ class SofQView(base.MplGraphicsView):
         """
         # ignore if boundary is not shown
         if not self._showBoundary:
+            # TODO/NOW/ISSUE - should pop out a menu
             return
 
         # get mouse cursor x position
