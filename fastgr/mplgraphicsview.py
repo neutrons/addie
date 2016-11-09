@@ -816,6 +816,14 @@ class MplGraphicsView(QtGui.QWidget):
 
         return
 
+    def get_canvas(self):
+        """
+        get canvas
+        Returns:
+
+        """
+        return self._myCanvas
+
     def get_current_plots(self):
         """
         Get the current plots on canvas
@@ -970,6 +978,7 @@ class Qt4MplCanvas(FigureCanvas):
 
         # legend and color bar
         self._colorBar = None
+        self._isLegendOn = False
 
         return
 
@@ -1046,7 +1055,7 @@ class Qt4MplCanvas(FigureCanvas):
         self.axes.set_aspect('auto')
 
         # set/update legend
-        self._setupLegend()
+        self._setup_legend()
 
         # Register
         line_key = self._lineIndex
@@ -1102,7 +1111,7 @@ class Qt4MplCanvas(FigureCanvas):
             self.axes2.set_ylabel(ylabel, fontsize=20)
 
         # set/update legend
-        self._setupLegend()
+        self._setup_legend()
 
         # Register
         line_key = -1
@@ -1206,7 +1215,7 @@ class Qt4MplCanvas(FigureCanvas):
             # ENDIF(plot)
         # ENDFOR
 
-        self._setupLegend()
+        self._setup_legend()
 
         self.draw()
 
@@ -1304,7 +1313,7 @@ class Qt4MplCanvas(FigureCanvas):
         else:
             raise RuntimeError('Line with ID %s is not recorded.' % plot_key)
 
-        self._setupLegend(location='best')
+        self._setup_legend(location='best')
 
         # Draw
         self.draw()
@@ -1326,9 +1335,6 @@ class Qt4MplCanvas(FigureCanvas):
         Returns:
 
         """
-
-
-
         line = self._lineDict[ikey]
 
         if vecx is not None and vecy is not None:
@@ -1350,7 +1356,8 @@ class Qt4MplCanvas(FigureCanvas):
         oldlabel = line.get_label()
         line.set_label(oldlabel)
 
-        self.axes.legend()
+        # self.axes.legend()
+        self._setup_legend()
 
         # commit
         self.draw()
@@ -1400,12 +1407,18 @@ class Qt4MplCanvas(FigureCanvas):
 
         return
 
-    def _setupLegend(self, location='best'):
-        """ Set up legend
-        self.axes.legend()
-        Handler is a Line2D object. Lable maps to the line object
+    def _setup_legend(self, location='best', font_size=10):
         """
-        loclist = [
+        Set up legend
+        self.axes.legend(): Handler is a Line2D object. Lable maps to the line object
+        Args:
+            location:
+            font_size:
+
+        Returns:
+
+        """
+        allowed_location_list = [
             "best",
             "upper right",
             "upper left",
@@ -1419,14 +1432,13 @@ class Qt4MplCanvas(FigureCanvas):
             "center"]
 
         # Check legend location valid or not
-        if location not in loclist:
+        if location not in allowed_location_list:
             location = 'best'
 
         handles, labels = self.axes.get_legend_handles_labels()
-        self.axes.legend(handles, labels, loc=location)
-        # print handles
-        # print labels
-        #self.axes.legend(self._myLegendHandlers, self._myLegentLabels)
+        self.axes.legend(handles, labels, loc=location, fontsize=font_size)
+
+        self._isLegendOn = True
 
         return
 

@@ -356,21 +356,21 @@ class GofRView(base.MplGraphicsView):
     # TODO/FIXME/NOW - Make it complete!
     def on_mouse_press_event(self, event):
         """
-        blabla
+        Event handling for mouse press action
         Args:
             event:
 
         Returns:
 
         """
-        button = event.button
-
+        # get the button and position information.
         curr_x = event.xdata
         curr_y = event.ydata
         if curr_x is None or curr_y is None:
             # outside of canvas
             return
 
+        button = event.button
         if button == 1:
             # left button: no operation
             pass
@@ -379,24 +379,62 @@ class GofRView(base.MplGraphicsView):
             # right button:
             # Pop-out menu
             self.menu = QtGui.QMenu(self)
+            if self.get_canvas().is_legend_on:
+                # figure has legend: remove legend
+                action1 = QtGui.QAction('Hide legend', self)
+                action1.triggered.connect(self.menu_hide_legend)
 
-            action1 = QtGui.QAction('Remove legend', self)
-            action1.triggered.connect(self.menu_remove_legend)
+                action2 = QtGui.QAction('Legend font larger', self)
+                action2.triggered.connect(self.menu_increase_legend_font)
+
+                action3 = QtGui.QAction('Legend font smaller', self)
+                action3.triggered.connect(self.menu_decrease_legend_font)
+
+            else:
+                # figure does not have legend: add legend
+                action1 = QtGui.QAction('Show legend', self)
+                action1.triggered.connect(self.menu_show_legend)
             self.menu.addAction(action1)
 
-            # add other required actions
+            # pop up menu
             self.menu.popup(QtGui.QCursor.pos())
         # END-IF-ELSE
 
         return
 
-    def menu_remove_legend(self):
+    def menu_decrease_legend_font(self):
         """
-        blabla
+
         Returns:
 
         """
+        raise NotImplemented('ASAP')
+
+    def menu_incease_legend_font(self):
+        """
+
+        Returns:
+
+        """
+        raise NotImplemented('ASAP')
+
+    def menu_hide_legend(self):
+        """
+        Get a call from dynamic menu to hide the legend
+        Returns:
+
+        """
+        self.get_canvas().remove_legend()
+
         return
+
+    def menu_show_legend(self):
+        """
+        show legend
+        Returns:
+
+        """
+        self.get_canvas().add_legend()
 
     def on_mouse_release_event(self, event):
         """
