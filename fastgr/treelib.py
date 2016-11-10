@@ -761,9 +761,6 @@ class GofRTree(base.CustomizedTreeView):
         sq_list.sort()
         gr_list.sort()
 
-        print sq_list
-        print gr_list
-
         # FIXME/LATER - replace this by signal
         if self._mainWindow is None:
             raise NotImplementedError('Main window has not been set up!')
