@@ -931,5 +931,8 @@ class SofQView(base.MplGraphicsView):
         self.clear_all_lines()
         self.reset_line_color_marker_index()
 
+        # clear the boundary flag
+        self._showBoundary = False
+
         return
 
