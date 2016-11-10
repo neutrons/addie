@@ -39,7 +39,10 @@ class BraggView(base.MplGraphicsView):
                               "cyan", "magenta", "yellow"]
         self._currColorIndex = 0
 
-        # TODO/NOW/ISSUE - Define mouse action and etc.
+        # define the dynamic menu
+        self._myCanvas.mpl_connect('button_press_event', self.on_mouse_press_event)
+        # self._myCanvas.mpl_connect('button_release_event', self.on_mouse_release_event)
+        # self._myCanvas.mpl_connect('motion_notify_event', self.on_mouse_motion)
 
         # records of the plots on canvas
         # workspaces' names (not bank, but original workspace) on canvas
@@ -135,6 +138,56 @@ class BraggView(base.MplGraphicsView):
         plot_key = '%s_bank%d' % (ws_group_name, bank_id)
 
         return plot_key
+
+    def on_mouse_press_event(self, event):
+        """
+        handle mouse pressing event
+        Returns:
+
+        """
+        # get the button and position information.
+        curr_x = event.xdata
+        curr_y = event.ydata
+        if curr_x is None or curr_y is None:
+            # outside of canvas
+            return
+
+        button = event.button
+        if button == 1:
+            # left button: no operation
+            pass
+
+        elif button == 3:
+            # right button:
+            # Pop-out menu
+            self.menu = QtGui.QMenu(self)
+            if self.get_canvas().is_legend_on:
+                # figure has legend: remove legend
+                action1 = QtGui.QAction('Hide legend', self)
+                action1.triggered.connect(self._myCanvas.hide_legend)
+
+                action2 = QtGui.QAction('Legend font larger', self)
+                action2.triggered.connect(self._myCanvas.increase_legend_font_size)
+
+                action3 = QtGui.QAction('Legend font smaller', self)
+                action3.triggered.connect(self._myCanvas.decrease_legend_font_size)
+
+                self.menu.addAction(action2)
+                self.menu.addAction(action3)
+
+            else:
+                # figure does not have legend: add legend
+                action1 = QtGui.QAction('Show legend', self)
+                action1.triggered.connect(self._myCanvas.show_legend)
+
+            self.menu.addAction(action1)
+
+            # pop up menu
+            self.menu.popup(QtGui.QCursor.pos())
+        # END-IF-ELSE
+        return
+
+
 
     def plot_banks(self, plot_bank_dict, unit):
         """
@@ -345,17 +398,16 @@ class GofRView(base.MplGraphicsView):
         self._colorList = ['black', 'red', 'blue', 'green', 'brown', 'orange']
         self._colorIndex = 0
 
-        # define the dynamic menu
+        # define the event handlers to the mouse actions
         self._myCanvas.mpl_connect('button_press_event', self.on_mouse_press_event)
-        self._myCanvas.mpl_connect('button_release_event', self.on_mouse_release_event)
-        self._myCanvas.mpl_connect('motion_notify_event', self.on_mouse_motion)
+        # self._myCanvas.mpl_connect('button_release_event', self.on_mouse_release_event)
+        # self._myCanvas.mpl_connect('motion_notify_event', self.on_mouse_motion)
 
         # variable
         self._isLegendOn = False
 
         return
 
-    # TODO/FIXME/NOW - Make it complete!
     def on_mouse_press_event(self, event):
         """
         Event handling for mouse press action
@@ -381,16 +433,17 @@ class GofRView(base.MplGraphicsView):
             # right button:
             # Pop-out menu
             self.menu = QtGui.QMenu(self)
+
             if self.get_canvas().is_legend_on:
                 # figure has legend: remove legend
                 action1 = QtGui.QAction('Hide legend', self)
-                action1.triggered.connect(self.menu_hide_legend)
+                action1.triggered.connect(self._myCanvas.hide_legend)
 
                 action2 = QtGui.QAction('Legend font larger', self)
-                action2.triggered.connect(self.menu_increase_legend_font)
+                action2.triggered.connect(self._myCanvas.increase_legend_font_size)
 
                 action3 = QtGui.QAction('Legend font smaller', self)
-                action3.triggered.connect(self.menu_decrease_legend_font)
+                action3.triggered.connect(self._myCanvas.decrease_legend_font_size)
 
                 self.menu.addAction(action2)
                 self.menu.addAction(action3)
@@ -398,7 +451,7 @@ class GofRView(base.MplGraphicsView):
             else:
                 # figure does not have legend: add legend
                 action1 = QtGui.QAction('Show legend', self)
-                action1.triggered.connect(self.menu_show_legend)
+                action1.triggered.connect(self._myCanvas.show_legend)
 
             self.menu.addAction(action1)
 
@@ -407,61 +460,6 @@ class GofRView(base.MplGraphicsView):
         # END-IF-ELSE
 
         return
-
-    def menu_decrease_legend_font(self):
-        """
-
-        Returns:
-
-        """
-        raise NotImplemented('ASAP')
-
-    def menu_increase_legend_font(self):
-        """
-
-        Returns:
-
-        """
-        raise NotImplemented('ASAP')
-
-    def menu_hide_legend(self):
-        """
-        Get a call from dynamic menu to hide the legend
-        Returns:
-
-        """
-        self.get_canvas().hide_legend()
-
-        return
-
-    def menu_show_legend(self):
-        """
-        show legend
-        Returns:
-
-        """
-        self.get_canvas().show_legend()
-
-    def on_mouse_release_event(self, event):
-        """
-        blabla
-        Args:
-            event:
-
-        Returns:
-
-        """
-        return
-
-    def on_mouse_motion(self, event):
-        """
-        blabla
-        Args:
-            event:
-
-        Returns:
-
-        """
 
     def plot_gr(self, plot_key, vec_r, vec_g, vec_e=None, plot_error=False):
         """
@@ -729,14 +727,49 @@ class SofQView(base.MplGraphicsView):
 
     def on_mouse_press_event(self, event):
         """
-
+        Handle mouse pressing event
+        (1) left mouse: in show-boundary mode, check the action to select a boundary indicator
+        (2) right mouse: pop up the menu
         Returns
         -------
 
         """
-        # ignore if boundary is not shown
+        # get the button
+        button = event.button
+
+        if button == 3:
+            # right button:
+            # Pop-out menu
+            self.menu = QtGui.QMenu(self)
+
+            if self.get_canvas().is_legend_on:
+                # figure has legend: remove legend
+                action1 = QtGui.QAction('Hide legend', self)
+                action1.triggered.connect(self._myCanvas.hide_legend)
+
+                action2 = QtGui.QAction('Legend font larger', self)
+                action2.triggered.connect(self._myCanvas.increase_legend_font_size)
+
+                action3 = QtGui.QAction('Legend font smaller', self)
+                action3.triggered.connect(self._myCanvas.decrease_legend_font_size)
+
+                self.menu.addAction(action2)
+                self.menu.addAction(action3)
+
+            else:
+                # figure does not have legend: add legend
+                action1 = QtGui.QAction('Show legend', self)
+                action1.triggered.connect(self._myCanvas.show_legend)
+
+            self.menu.addAction(action1)
+            # pop up menu
+            self.menu.popup(QtGui.QCursor.pos())
+
+            return
+        # END-IF
+
+        # ignore if boundary is not shown and the pressed mouse button is left or middle
         if not self._showBoundary:
-            # TODO/NOW/ISSUE - should pop out a menu
             return
 
         # get mouse cursor x position

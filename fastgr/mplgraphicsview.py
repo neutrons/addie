@@ -979,32 +979,18 @@ class Qt4MplCanvas(FigureCanvas):
         # legend and color bar
         self._colorBar = None
         self._isLegendOn = False
+        self._legendFontSize = 8
 
         return
 
     @property
     def is_legend_on(self):
-        """ blabla """
+        """
+        check whether the legend is shown or hide
+        Returns:
+        boolean
+        """
         return self._isLegendOn
-
-    def hide_legend(self):
-        """ remove legend """
-        # TODO/NOW/Clean: self.axes.legend() can be None
-
-
-        self.axes.legend().set_visible(False)
-        self.draw()
-        self._isLegendOn = False
-
-        return
-
-    def show_legend(self):
-        """
-        """
-        # TODO/NOW/Clean: self.axes.legend() can be None
-        self.axes.legend().set_visible(True)
-        self.draw()
-        self._isLegendOn = True
 
     def add_arrow(self, start_x, start_y, stop_x, stop_y):
         """
@@ -1271,6 +1257,21 @@ class Qt4MplCanvas(FigureCanvas):
 
         return
 
+    def decrease_legend_font_size(self):
+        """
+        reset the legend with the new font size
+        Returns:
+
+        """
+        # minimum legend font size is 2! return if it already uses the smallest font size.
+        if self._legendFontSize <= 2:
+            return
+
+        self._legendFontSize -= 1
+        self._setup_legend(font_size=self._legendFontSize)
+
+        return
+
     def getLastPlotIndexKey(self):
         """ Get the index/key of the last added line
         """
@@ -1291,6 +1292,33 @@ class Qt4MplCanvas(FigureCanvas):
         """ Get limit of Y-axis
         """
         return self.axes.get_ylim()
+
+    def hide_legend(self):
+        """
+        hide the legend if it is not None
+        Returns:
+
+        """
+        if self.axes.legend() is not None:
+            # set visible to be False and re-draw
+            self.axes.legend().set_visible(False)
+            self.draw()
+
+        self._isLegendOn = False
+
+        return
+
+    def increase_legend_font_size(self):
+        """
+        reset the legend with the new font size
+        Returns:
+
+        """
+        self._legendFontSize += 1
+
+        self._setup_legend(font_size=self._legendFontSize)
+
+        return
 
     def setXYLimit(self, xmin, xmax, ymin, ymax):
         """
@@ -1341,6 +1369,22 @@ class Qt4MplCanvas(FigureCanvas):
 
         # Draw
         self.draw()
+
+        return
+
+    def show_legend(self):
+        """
+        show the legend if the legend is not None
+        Returns:
+
+        """
+        if self.axes.legend() is not None:
+            # set visible to be True and re-draw
+            self.axes.legend().set_visible(True)
+            self.draw()
+
+            # set flag on
+            self._isLegendOn = True
 
         return
 
