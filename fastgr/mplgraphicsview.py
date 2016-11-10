@@ -816,14 +816,6 @@ class MplGraphicsView(QtGui.QWidget):
 
         return
 
-    def get_canvas(self):
-        """
-        get canvas
-        Returns:
-
-        """
-        return self._myCanvas
-
     def get_current_plots(self):
         """
         Get the current plots on canvas
@@ -978,19 +970,8 @@ class Qt4MplCanvas(FigureCanvas):
 
         # legend and color bar
         self._colorBar = None
-        self._isLegendOn = False
-        self._legendFontSize = 8
 
         return
-
-    @property
-    def is_legend_on(self):
-        """
-        check whether the legend is shown or hide
-        Returns:
-        boolean
-        """
-        return self._isLegendOn
 
     def add_arrow(self, start_x, start_y, stop_x, stop_y):
         """
@@ -1065,7 +1046,7 @@ class Qt4MplCanvas(FigureCanvas):
         self.axes.set_aspect('auto')
 
         # set/update legend
-        self._setup_legend()
+        self._setupLegend()
 
         # Register
         line_key = self._lineIndex
@@ -1121,7 +1102,7 @@ class Qt4MplCanvas(FigureCanvas):
             self.axes2.set_ylabel(ylabel, fontsize=20)
 
         # set/update legend
-        self._setup_legend()
+        self._setupLegend()
 
         # Register
         line_key = -1
@@ -1213,7 +1194,7 @@ class Qt4MplCanvas(FigureCanvas):
                 except ValueError as e:
                     print "[Error] Plot %s is not in axes.lines which has %d lines. Error mesage: %s" % (
                         str(plot), len(self.axes.lines), str(e))
-                del self._lineDict[ikey]
+                self._lineDict[ikey] = None
             else:
                 # error bar
                 plot[0].remove()
@@ -1221,11 +1202,11 @@ class Qt4MplCanvas(FigureCanvas):
                     line.remove()
                 for line in plot[2]:
                     line.remove()
-                del self._lineDict[ikey]
+                self._lineDict[ikey] = None
             # ENDIF(plot)
         # ENDFOR
 
-        self._setup_legend()
+        self._setupLegend()
 
         self.draw()
 
@@ -1257,23 +1238,6 @@ class Qt4MplCanvas(FigureCanvas):
 
         return
 
-    def decrease_legend_font_size(self):
-        """
-        reset the legend with the new font size
-        Returns:
-
-        """
-        # minimum legend font size is 2! return if it already uses the smallest font size.
-        if self._legendFontSize <= 2:
-            return
-
-        self._legendFontSize -= 1
-        self._setup_legend(font_size=self._legendFontSize)
-
-        self.draw()
-
-        return
-
     def getLastPlotIndexKey(self):
         """ Get the index/key of the last added line
         """
@@ -1294,35 +1258,6 @@ class Qt4MplCanvas(FigureCanvas):
         """ Get limit of Y-axis
         """
         return self.axes.get_ylim()
-
-    def hide_legend(self):
-        """
-        hide the legend if it is not None
-        Returns:
-
-        """
-        if self.axes.legend() is not None:
-            # set visible to be False and re-draw
-            self.axes.legend().set_visible(False)
-            self.draw()
-
-        self._isLegendOn = False
-
-        return
-
-    def increase_legend_font_size(self):
-        """
-        reset the legend with the new font size
-        Returns:
-
-        """
-        self._legendFontSize += 1
-
-        self._setup_legend(font_size=self._legendFontSize)
-
-        self.draw()
-
-        return
 
     def setXYLimit(self, xmin, xmax, ymin, ymax):
         """
@@ -1362,36 +1297,17 @@ class Qt4MplCanvas(FigureCanvas):
         if plot_key in self._lineDict:
             try:
                 self.axes.lines.remove(self._lineDict[plot_key])
-            except ValueError as r_error:
-                error_message = 'Unable to remove to 1D line %s (ID=%d) due to %s.' % (str(self._lineDict[plot_key]),
-                                                                                       plot_key, str(r_error))
+            except RuntimeError as r_error:
+                error_message = 'Unable to remove to 1D line (ID=%d) due to %s.' % (plot_key, str(r_error))
                 raise RuntimeError(error_message)
-            # remove the plot key from dictionary
-            del self._lineDict[plot_key]
+            self._lineDict[plot_key] = None
         else:
             raise RuntimeError('Line with ID %s is not recorded.' % plot_key)
 
-        self._setup_legend(location='best', font_size=self._legendFontSize)
+        self._setupLegend(location='best')
 
         # Draw
         self.draw()
-
-        return
-
-    def show_legend(self):
-        """
-        show the legend if the legend is not None
-        Returns:
-
-        """
-        if self.axes.legend() is not None:
-            # set visible to be True and re-draw
-            # self.axes.legend().set_visible(True)
-            self._setup_legend(font_size=self._legendFontSize)
-            self.draw()
-
-            # set flag on
-            self._isLegendOn = True
 
         return
 
@@ -1410,6 +1326,9 @@ class Qt4MplCanvas(FigureCanvas):
         Returns:
 
         """
+
+
+
         line = self._lineDict[ikey]
 
         if vecx is not None and vecy is not None:
@@ -1431,8 +1350,7 @@ class Qt4MplCanvas(FigureCanvas):
         oldlabel = line.get_label()
         line.set_label(oldlabel)
 
-        # self.axes.legend()
-        self._setup_legend()
+        self.axes.legend()
 
         # commit
         self.draw()
@@ -1482,18 +1400,12 @@ class Qt4MplCanvas(FigureCanvas):
 
         return
 
-    def _setup_legend(self, location='best', font_size=10):
+    def _setupLegend(self, location='best'):
+        """ Set up legend
+        self.axes.legend()
+        Handler is a Line2D object. Lable maps to the line object
         """
-        Set up legend
-        self.axes.legend(): Handler is a Line2D object. Lable maps to the line object
-        Args:
-            location:
-            font_size:
-
-        Returns:
-
-        """
-        allowed_location_list = [
+        loclist = [
             "best",
             "upper right",
             "upper left",
@@ -1507,13 +1419,14 @@ class Qt4MplCanvas(FigureCanvas):
             "center"]
 
         # Check legend location valid or not
-        if location not in allowed_location_list:
+        if location not in loclist:
             location = 'best'
 
         handles, labels = self.axes.get_legend_handles_labels()
-        self.axes.legend(handles, labels, loc=location, fontsize=font_size)
-
-        self._isLegendOn = True
+        self.axes.legend(handles, labels, loc=location)
+        # print handles
+        # print labels
+        #self.axes.legend(self._myLegendHandlers, self._myLegentLabels)
 
         return
 
