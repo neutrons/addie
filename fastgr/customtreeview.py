@@ -21,6 +21,9 @@ class CustomizedTreeView(QtGui.QTreeView):
         # Enabled to select multiple items with shift key
         self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
 
+        self.setHorizontalScrollBar(QtGui.QScrollBar())
+        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+
         self.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
 
         # Data structure to control the items
@@ -79,7 +82,17 @@ class CustomizedTreeView(QtGui.QTreeView):
         for i_col in xrange(self._myNumCols):
             header = header_list[i_col]
             self.model().setHeaderData(0, QtCore.Qt.Horizontal, header)
+        # END-IF
         self._myHeaderList = header_list[:]
+
+        # Enable scroll bar
+        header = self.header()
+        assert isinstance(header, QtGui.QHeaderView), 'Header must be a QHeaderView instance.'
+        # header.setHorizontalScrollBar(QtGui.QScrollBar())
+
+        header.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerItem)
+        header.setResizeMode(QtGui.QHeaderView.ResizeToContents)
+        header.setStretchLastSection(False)
 
         return
 
