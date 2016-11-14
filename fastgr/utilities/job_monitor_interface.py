@@ -5,7 +5,7 @@ from fastgr.ui_jobStatus import Ui_MainWindow as UiMainWindow
 
 class JobMonitorInterface(QtGui.QMainWindow):
     
-    column_width = [150, 200]
+    column_width = [200, 250]
     
     def __init__(self, parent=None):
         self.parent = parent

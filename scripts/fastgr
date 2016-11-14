@@ -5,6 +5,7 @@ import os
 import itertools
 import psutil
 from fastgr.ipythondockwidget import IPythonDockWidget
+from PyQt4 import QtGui
 
 import fastgr.ui_mainWindow
 import fastgr.step1
@@ -1513,6 +1514,14 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 	    child.kill()
 #	    child.wait()
 	parent.kill()
+	
+	table_widget = self.job_monitor_interface.ui.tableWidget
+	table_widget.removeCellWidget(row, 2)
+	_item = QtGui.QTableWidgetItem('Killed')
+	table_widget.setItem(row, 2, _item)
+	job_row['status'] = "killed"
+	job_row['pid'] = None
+	self.job_list[row] = job_row
 	
     # tab1
     def select_current_folder_clicked(self):
