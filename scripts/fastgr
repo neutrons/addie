@@ -3,6 +3,7 @@
 import sys
 import os
 import itertools
+import psutil
 from fastgr.ipythondockwidget import IPythonDockWidget
 
 import fastgr.ui_mainWindow
@@ -61,6 +62,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     _mantid_thread_array = list(itertools.repeat(MantidThread(), 30))
     config_section_name = 'Configuration'
     job_monitor_interface = None
+    job_list = []
 
     o_help_autonom = None
     o_help_ndabs = None
@@ -1503,6 +1505,14 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 	                               script_to_run = script_to_run,
 	                               thread_index = thread_index)
 	job_handler.start()
+	
+    def kill_job(self, row=-1):
+	job_row = self.job_list[row]
+	parent = psutil.Process(job_row['pid'])
+	for child in parent.children(recursive=True):
+	    child.kill()
+#	    child.wait()
+	parent.kill()
 	
     # tab1
     def select_current_folder_clicked(self):
