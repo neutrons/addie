@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Mon Nov 14 15:04:48 2016
+# Created: Mon Nov 14 18:19:01 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -1198,6 +1198,8 @@ class Ui_MainWindow(object):
         self.menuEdit.setObjectName(_fromUtf8("menuEdit"))
         self.menuHelp = QtGui.QMenu(self.menubar)
         self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
+        self.menuTools = QtGui.QMenu(self.menubar)
+        self.menuTools.setObjectName(_fromUtf8("menuTools"))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(MainWindow)
         self.statusbar.setObjectName(_fromUtf8("statusbar"))
@@ -1223,6 +1225,8 @@ class Ui_MainWindow(object):
         self.actionLoad.setObjectName(_fromUtf8("actionLoad"))
         self.actionSave = QtGui.QAction(MainWindow)
         self.actionSave.setObjectName(_fromUtf8("actionSave"))
+        self.actionJob_Monitor = QtGui.QAction(MainWindow)
+        self.actionJob_Monitor.setObjectName(_fromUtf8("actionJob_Monitor"))
         self.menuLoad_Configuration.addAction(self.actionLoad)
         self.menuLoad_Configuration.addAction(self.actionSave)
         self.menuFile.addAction(self.action_preview_ascii)
@@ -1236,13 +1240,15 @@ class Ui_MainWindow(object):
         self.menuHelp.addAction(self.actionAbout)
         self.menuHelp.addSeparator()
         self.menuHelp.addAction(self.actionAdvanced)
+        self.menuTools.addAction(self.actionJob_Monitor)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuEdit.menuAction())
+        self.menubar.addAction(self.menuTools.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
         self.tabWidget_2.setCurrentIndex(1)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QObject.connect(self.diamond, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_edited)
         QtCore.QObject.connect(self.diamond_background, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_background_edited)
         QtCore.QObject.connect(self.vanadium, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.vanadium_edited)
@@ -1298,6 +1304,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.pushButton_4, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.help_button_clicked_scans)
         QtCore.QObject.connect(self.pushButton_2, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.help_button_clicked)
         QtCore.QObject.connect(self.pushButton_5, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.help_button_clicked_mantid)
+        QtCore.QObject.connect(self.actionJob_Monitor, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.window_job_monitor_clicked)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         MainWindow.setTabOrder(self.select_current_folder_button, self.diamond)
         MainWindow.setTabOrder(self.diamond, self.diamond_background)
@@ -1607,6 +1614,7 @@ class Ui_MainWindow(object):
         self.menuLoad_Configuration.setTitle(_translate("MainWindow", "Configuration", None))
         self.menuEdit.setTitle(_translate("MainWindow", "Edit", None))
         self.menuHelp.setTitle(_translate("MainWindow", "Help", None))
+        self.menuTools.setTitle(_translate("MainWindow", "Tools", None))
         self.actionReset_GSAS_tab.setText(_translate("MainWindow", "Reset GSAS-tab", None))
         self.actionReset_GofR_tab.setText(_translate("MainWindow", "Reset GofR-tab", None))
         self.actionQuit.setText(_translate("MainWindow", "Quit", None))
@@ -1617,6 +1625,7 @@ class Ui_MainWindow(object):
         self.actionSave_Configuration.setText(_translate("MainWindow", "Save Configuration ...", None))
         self.actionLoad.setText(_translate("MainWindow", "Load ...", None))
         self.actionSave.setText(_translate("MainWindow", "Save ...", None))
+        self.actionJob_Monitor.setText(_translate("MainWindow", "Job Monitor ...", None))
 
 from graphicviewlib import BraggView, SofQView, GofRView
 from ipythondockwidget import IPythonDockWidget

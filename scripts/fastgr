@@ -1497,6 +1497,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 	    _o_gui = Step2GuiHandler(parent = self)
 	    _o_gui.check_gui()
 
+    def window_job_monitor_clicked(self):
+	job_handler = JobStatusHandler(parent=self)
+
     def help_button_clicked(self, button_name='autonom'):
 	help_button_activator(parent=self, button_name=button_name)
 	

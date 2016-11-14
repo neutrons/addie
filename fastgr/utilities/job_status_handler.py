@@ -17,6 +17,9 @@ class JobStatusHandler(object):
             self.parent.job_monitor_interface.activateWindow()
             job_ui = self.parent.job_monitor_interface
 
+        if job_name == '':
+            return
+
         job_list = self.parent.job_list
         p = subprocess.Popen(script_to_run.split())
         new_job = {'job_name': job_name,
