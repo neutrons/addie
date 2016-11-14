@@ -103,7 +103,11 @@ class MakeExpIniFileAndRunAutonom(object):
         
         print("[LOG] running script:")
         print("[LOG] " + _script_to_run)
-        os.system(_script_to_run)
+
+        self.parent_no_ui.launch_job_manager(job_name = 'autoNOM',
+                                             script_to_run = _script_to_run)
+
+#        os.system(_script_to_run)
         self.parent.statusbar.showMessage("autoNOM script: DONE !")        
 
     def yes_no(self, condition):

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_jobStatus.ui'
 #
-# Created: Mon Nov 14 15:04:48 2016
+# Created: Mon Nov 14 16:29:36 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -43,6 +43,14 @@ class Ui_MainWindow(object):
         self.tableWidget.setHorizontalHeaderItem(2, item)
         self.tableWidget.horizontalHeader().setStretchLastSection(True)
         self.verticalLayout.addWidget(self.tableWidget)
+        self.horizontalLayout = QtGui.QHBoxLayout()
+        self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
+        self.clear_table = QtGui.QPushButton(self.centralwidget)
+        self.clear_table.setObjectName(_fromUtf8("clear_table"))
+        self.horizontalLayout.addWidget(self.clear_table)
+        spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem)
+        self.verticalLayout.addLayout(self.horizontalLayout)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 410, 20))
@@ -53,6 +61,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
+        QtCore.QObject.connect(self.clear_table, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.clear_table_clicked)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -63,4 +72,5 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Launch Time", None))
         item = self.tableWidget.horizontalHeaderItem(2)
         item.setText(_translate("MainWindow", "Action", None))
+        self.clear_table.setText(_translate("MainWindow", "Clear Table", None))
 

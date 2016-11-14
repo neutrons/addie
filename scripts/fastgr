@@ -16,6 +16,7 @@ from fastgr.configuration.import_configuration import ImportConfiguration
 
 from fastgr.general_handler.help_gui import HelpGui, help_button_activator
 
+from fastgr.utilities.job_status_handler import JobStatusHandler
 from fastgr.initialization.init_step1 import InitStep1
 from fastgr.step1_handler.step1_gui_handler import Step1GuiHandler
 from fastgr.step1_handler.run_step1 import RunStep1
@@ -59,6 +60,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     _run_thread = RunThread()
     _mantid_thread_array = list(itertools.repeat(MantidThread(), 30))
     config_section_name = 'Configuration'
+    job_monitor_interface = None
 
     o_help_autonom = None
     o_help_ndabs = None
@@ -1494,6 +1496,13 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
     def help_button_clicked(self, button_name='autonom'):
 	help_button_activator(parent=self, button_name=button_name)
+	
+    # job utility
+    def launch_job_manager(self, job_name='', script_to_run=None, thread_index=-1):
+	job_handler = JobStatusHandler(parent=self, job_name=job_name,
+	                               script_to_run = script_to_run,
+	                               thread_index = thread_index)
+	job_handler.start()
 	
     # tab1
     def select_current_folder_clicked(self):
