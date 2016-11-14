@@ -39,7 +39,7 @@ class RunSumScans(object):
             
         qmax_list = str(self.parent.pdf_qmax_line_edit.text()).strip()
         if not (qmax_list  == ""):
-            _script  += ' -q ' + qmax_list
+            _script  +=  ' -q ' + qmax_list
 
         return _script
 
@@ -74,6 +74,11 @@ class RunSumScans(object):
         [q_range_min, q_range_max]= o_gui_handler.get_q_range()
         if (q_range_min is not "") and (q_range_max is not ""):
             f.write("qrangeft {},{}\n".format(q_range_min, q_range_max))
+            
+        # rmax
+        rmax = str(self.parent.sum_scans_rmax.text()).strip()
+        if not (rmax == ""):
+            f.write("rmax {}\n".format(rmax))
         
         f.close()
         print("[LOG] created file %s" %_full_output_file_name)

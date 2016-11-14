@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1522</width>
+    <width>1358</width>
     <height>1058</height>
    </rect>
   </property>
@@ -52,7 +52,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1500</width>
+         <width>1336</width>
          <height>996</height>
         </rect>
        </property>
@@ -74,7 +74,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -1564,6 +1564,35 @@ p, li { white-space: pre-wrap; }
                         </widget>
                        </item>
                        <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_17">
+                         <item>
+                          <widget class="QLabel" name="label_19">
+                           <property name="text">
+                            <string>Rmax</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLineEdit" name="sum_scans_rmax">
+                           <property name="text">
+                            <string>50</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLabel" name="label_20">
+                           <property name="text">
+                            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Å&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                       <item>
                         <spacer name="verticalSpacer">
                          <property name="orientation">
                           <enum>Qt::Vertical</enum>
@@ -2898,7 +2927,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1522</width>
+     <width>1358</width>
      <height>20</height>
     </rect>
    </property>

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Thu Oct 20 12:44:32 2016
+# Created: Mon Nov 14 15:04:48 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(1522, 1058)
+        MainWindow.resize(1358, 1058)
         MainWindow.setMinimumSize(QtCore.QSize(0, 0))
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setMinimumSize(QtCore.QSize(0, 0))
@@ -40,7 +40,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
         self.scrollAreaWidgetContents = QtGui.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1500, 996))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1336, 996))
         self.scrollAreaWidgetContents.setMinimumSize(QtCore.QSize(0, 0))
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
         self.verticalLayout_44 = QtGui.QVBoxLayout(self.scrollAreaWidgetContents)
@@ -634,6 +634,18 @@ class Ui_MainWindow(object):
         self.label_17 = QtGui.QLabel(self.groupBox_3)
         self.label_17.setObjectName(_fromUtf8("label_17"))
         self.verticalLayout_5.addWidget(self.label_17)
+        self.horizontalLayout_17 = QtGui.QHBoxLayout()
+        self.horizontalLayout_17.setObjectName(_fromUtf8("horizontalLayout_17"))
+        self.label_19 = QtGui.QLabel(self.groupBox_3)
+        self.label_19.setObjectName(_fromUtf8("label_19"))
+        self.horizontalLayout_17.addWidget(self.label_19)
+        self.sum_scans_rmax = QtGui.QLineEdit(self.groupBox_3)
+        self.sum_scans_rmax.setObjectName(_fromUtf8("sum_scans_rmax"))
+        self.horizontalLayout_17.addWidget(self.sum_scans_rmax)
+        self.label_20 = QtGui.QLabel(self.groupBox_3)
+        self.label_20.setObjectName(_fromUtf8("label_20"))
+        self.horizontalLayout_17.addWidget(self.label_20)
+        self.verticalLayout_5.addLayout(self.horizontalLayout_17)
         spacerItem12 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
         self.verticalLayout_5.addItem(spacerItem12)
         self.label_3 = QtGui.QLabel(self.groupBox_3)
@@ -1171,7 +1183,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.scrollArea)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1522, 20))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1358, 20))
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -1229,7 +1241,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget_2.setCurrentIndex(0)
+        self.tabWidget_2.setCurrentIndex(1)
         self.tabWidget.setCurrentIndex(0)
         QtCore.QObject.connect(self.diamond, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_edited)
         QtCore.QObject.connect(self.diamond_background, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_background_edited)
@@ -1499,6 +1511,13 @@ class Ui_MainWindow(object):
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Å<span style=\" vertical-align:super;\">-1</span></p></body></html>", None))
         self.label_17.setText(_translate("MainWindow", "(ex: 20, 30, 40)", None))
+        self.label_19.setText(_translate("MainWindow", "Rmax", None))
+        self.sum_scans_rmax.setText(_translate("MainWindow", "50", None))
+        self.label_20.setText(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'Sans Serif\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Å</p></body></html>", None))
         self.label_3.setText(_translate("MainWindow", "Output File Name", None))
         self.label_18.setText(_translate("MainWindow", "sum_", None))
         self.sum_scans_output_file_name.setText(_translate("MainWindow", "sample_name", None))
