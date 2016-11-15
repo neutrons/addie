@@ -49,7 +49,7 @@ class JobMonitorInterface(QtGui.QMainWindow):
 	    #action
 	    if _row_job['status'] == 'processing':
 		_widget = QtGui.QPushButton()
-		_widget.setText("Aboard")
+		_widget.setText("Abort!")
 		QtCore.QObject.connect(_widget, QtCore.SIGNAL("clicked()"), lambda row=_row:
 		                       self.parent.kill_job(row))
 		self.ui.tableWidget.setCellWidget(_row, 2, _widget)

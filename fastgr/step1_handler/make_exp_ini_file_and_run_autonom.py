@@ -13,7 +13,7 @@ class MakeExpIniFileAndRunAutonom(object):
     title_optional = 'optional ' + _star
     list_mandatory = ['Dia', 'DiaBg', 'Vana', 'VanaBg', 'MTc']
     list_optional = ['recali', 'renorm', 'autotemp', 'scan1', 'scanl', 'Hz', '#']
-    script_to_run = "python /SNS/NOM/shared/autoNOM/stable/autoNOM.py -P /SNS/NOM/shared/autoNOM/stable/"
+    script_to_run = "python /SNS/NOM/shared/autoNOM/stable/autoNOM.py -l -P /SNS/NOM/shared/autoNOM/stable/"
     script_flag = ""
     
     def __init__(self, parent=None, folder=None):
