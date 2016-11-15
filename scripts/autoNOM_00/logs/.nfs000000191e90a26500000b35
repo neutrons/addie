@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/SNS/users/zjn/pytest/readtitles.py", line 283, in <module>
+  File "/SNS/users/zjn/pytest/readtitles.py", line 237, in readtitles
+IOError: [Errno 24] Too many open files: 'los.txt'
+Traceback (most recent call last):
+  File "/SNS/users/zjn/pytest/readtitles.py", line 283, in <module>
+  File "/SNS/users/zjn/pytest/readtitles.py", line 237, in readtitles
+IOError: [Errno 24] Too many open files: 'los.txt'
