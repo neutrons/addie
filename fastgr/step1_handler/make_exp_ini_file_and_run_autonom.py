@@ -101,7 +101,11 @@ class MakeExpIniFileAndRunAutonom(object):
         o_gui = Step1GuiHandler(parent = self.parent_no_ui)
         o_gui.set_main_window_title()
         
-        _pre_script = '~zjn/pytest/readtitles.py -a -s _diamond _diamond_background _vanadium _vanadium_background _sample_background'
+        _dict_mandatory = self._dict_mandatory
+        _pre_script = '~zjn/pytest/readtitles.py -a -s'
+        for _values in _dict_mandatory.values():
+            _pre_script += ' ' + _values
+
         print("[LOG] running pre-script")
         print("[LOG] " + _pre_script)
         os.system(_pre_script)
