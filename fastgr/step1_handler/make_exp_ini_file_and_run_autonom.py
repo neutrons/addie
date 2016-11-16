@@ -1,4 +1,6 @@
 import os
+import time
+
 from fastgr.step1_handler.step1_gui_handler import Step1GuiHandler
 
 
@@ -109,6 +111,9 @@ class MakeExpIniFileAndRunAutonom(object):
         print("[LOG] running pre-script")
         print("[LOG] " + _pre_script)
         os.system(_pre_script)
+        
+        while not os.path.isfile("./los.txt"):
+            time.sleep(1)
         
         print("[LOG] running script:")
         print("[LOG] " + _script_to_run)

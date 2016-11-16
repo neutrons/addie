@@ -1,6 +1,0 @@
-#Scan IPTS  time   starttime         PP's     PC/C          title
-79334 17426 32min 2016-09-07T02:21:48 115959 2.0 empty_instrument
-79335 17426 32min 2016-09-07T03:18:44 115719 2.0 V_rod_6mm
-79583 16513 41min 2016-09-09T10:06:28 147900 2.566 MT_6mm_Vcan_in_furnace_with_NMRinsert
-79584 16513 38min 2016-09-09T11:49:39 139275 2.407 Diamond_centered_25C
-80289 17118 24min 2016-09-12T12:10:55 86751 1.5 At RT
