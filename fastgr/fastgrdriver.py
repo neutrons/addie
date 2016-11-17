@@ -441,7 +441,7 @@ class FastGRDriver(object):
         """
         assert isinstance(ws_name, str)
         assert isinstance(file_name, str)
-        simpleapi.SaveAscii(InputWorkspace=ws_name, Filename=file_name)
+        simpleapi.SaveAscii(InputWorkspace=ws_name, Filename=file_name, Separator='Space')
 
         return
 
