@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Tue Nov 15 10:01:46 2016
+# Created: Mon Nov 21 10:35:37 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -283,6 +283,12 @@ class Ui_MainWindow(object):
         self.verticalLayout_7.addItem(spacerItem4)
         self.horizontalLayout_19 = QtGui.QHBoxLayout()
         self.horizontalLayout_19.setObjectName(_fromUtf8("horizontalLayout_19"))
+        self.create_exp_ini_button = QtGui.QPushButton(self.tab_5)
+        self.create_exp_ini_button.setEnabled(False)
+        self.create_exp_ini_button.setMinimumSize(QtCore.QSize(200, 0))
+        self.create_exp_ini_button.setMaximumSize(QtCore.QSize(200, 16777215))
+        self.create_exp_ini_button.setObjectName(_fromUtf8("create_exp_ini_button"))
+        self.horizontalLayout_19.addWidget(self.create_exp_ini_button)
         self.run_autonom_script = QtGui.QPushButton(self.tab_5)
         self.run_autonom_script.setEnabled(False)
         self.run_autonom_script.setObjectName(_fromUtf8("run_autonom_script"))
@@ -1305,6 +1311,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.pushButton_2, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.help_button_clicked)
         QtCore.QObject.connect(self.pushButton_5, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.help_button_clicked_mantid)
         QtCore.QObject.connect(self.actionJob_Monitor, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.window_job_monitor_clicked)
+        QtCore.QObject.connect(self.create_exp_ini_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.create_exp_ini_clicked)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         MainWindow.setTabOrder(self.select_current_folder_button, self.diamond)
         MainWindow.setTabOrder(self.diamond, self.diamond_background)
@@ -1445,6 +1452,7 @@ class Ui_MainWindow(object):
         self.auto_manual_folder.setText(_translate("MainWindow", "Automatic (autoNOM_##)", None))
         self.manual_output_folder.setText(_translate("MainWindow", "Manual", None))
         self.manual_output_folder_button.setText(_translate("MainWindow", "Select ...", None))
+        self.create_exp_ini_button.setText(_translate("MainWindow", "Create exp.ini File Only", None))
         self.run_autonom_script.setText(_translate("MainWindow", "Run autoNOM script", None))
         self.pushButton_2.setText(_translate("MainWindow", "?", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_5), _translate("MainWindow", "autoNOM", None))

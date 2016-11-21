@@ -633,6 +633,28 @@
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_19">
                 <item>
+                 <widget class="QPushButton" name="create_exp_ini_button">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>200</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>200</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Create exp.ini File Only</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
                  <widget class="QPushButton" name="run_autonom_script">
                   <property name="enabled">
                    <bool>false</bool>
@@ -3318,7 +3340,7 @@ p, li { white-space: pre-wrap; }
    <slot>run_autonom()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>181</x>
+     <x>400</x>
      <y>860</y>
     </hint>
     <hint type="destinationlabel">
@@ -3718,8 +3740,8 @@ p, li { white-space: pre-wrap; }
    <slot>mantid_browse_calibration_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>150</x>
-     <y>531</y>
+     <x>164</x>
+     <y>515</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -3734,8 +3756,8 @@ p, li { white-space: pre-wrap; }
    <slot>mantid_browse_characterization_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>197</x>
-     <y>605</y>
+     <x>211</x>
+     <y>519</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -3750,8 +3772,8 @@ p, li { white-space: pre-wrap; }
    <slot>mantid_output_directory_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>67</x>
-     <y>828</y>
+     <x>81</x>
+     <y>531</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -3767,7 +3789,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>242</x>
-     <y>531</y>
+     <y>515</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -3782,8 +3804,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>91</x>
-     <y>605</y>
+     <x>105</x>
+     <y>519</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -3798,8 +3820,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>279</x>
-     <y>678</y>
+     <x>142</x>
+     <y>523</y>
     </hint>
     <hint type="destinationlabel">
      <x>1</x>
@@ -3814,8 +3836,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>137</x>
-     <y>760</y>
+     <x>142</x>
+     <y>527</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -3830,8 +3852,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>437</x>
-     <y>760</y>
+     <x>142</x>
+     <y>527</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -3846,8 +3868,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>860</x>
-     <y>752</y>
+     <x>142</x>
+     <y>527</y>
     </hint>
     <hint type="destinationlabel">
      <x>1220</x>
@@ -3862,8 +3884,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>67</x>
-     <y>828</y>
+     <x>81</x>
+     <y>531</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -3878,8 +3900,8 @@ p, li { white-space: pre-wrap; }
    <slot>mantid_run_reduction()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1287</x>
-     <y>828</y>
+     <x>242</x>
+     <y>531</y>
     </hint>
     <hint type="destinationlabel">
      <x>1220</x>
@@ -4054,8 +4076,8 @@ p, li { white-space: pre-wrap; }
    <slot>help_button_clicked_mantid()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1313</x>
-     <y>828</y>
+     <x>62</x>
+     <y>531</y>
     </hint>
     <hint type="destinationlabel">
      <x>1225</x>
@@ -4076,6 +4098,22 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>678</x>
      <y>528</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>create_exp_ini_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>create_exp_ini_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>79</x>
+     <y>843</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>2</x>
+     <y>978</y>
     </hint>
    </hints>
   </connection>
@@ -4129,5 +4167,6 @@ p, li { white-space: pre-wrap; }
   <slot>help_button_clicked_scans()</slot>
   <slot>help_button_clicked_mantid()</slot>
   <slot>window_job_monitor_clicked()</slot>
+  <slot>create_exp_ini_clicked()</slot>
  </slots>
 </ui>

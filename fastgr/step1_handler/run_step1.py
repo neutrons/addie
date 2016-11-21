@@ -11,9 +11,10 @@ class RunStep1(object):
     folder = None
     auto_folder_base_name = 'autoNOM'
     
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, run_autonom=True):
         self.parent = parent.ui
         self.parent_no_ui = parent
+        self.run_autonom = run_autonom
         
     def create_folder(self):
         self._current_path = os.getcwd()
@@ -33,7 +34,8 @@ class RunStep1(object):
         
         _make_exp = MakeExpIniFileAndRunAutonom(parent=self.parent_no_ui, folder = self.folder)
         _make_exp.create()    
-        _make_exp.run_autonom()
+        if self.run_autonom:
+            _make_exp.run_autonom()
     
     def create_manual_folder(self):
         _folder_name = str(self.parent.manual_output_folder_field.text()).strip()
@@ -68,7 +70,10 @@ class RunStep1(object):
         self.folder = _full_path
 
         self._make_folder(_full_path)
-        self.parent.statusbar.showMessage("Created folder: " + _full_path + " and running autoNOM script !")
+        if self.run_autonom:
+            self.parent.statusbar.showMessage("Created folder: " + _full_path + " and running autoNOM script !")
+        else:
+            self.parent.statusbar.showMessage("Created folder: " + _full_path)
     
     def retrieve_last_incremented_index(self, list_folder):
         _list_index = []

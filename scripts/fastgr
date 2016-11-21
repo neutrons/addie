@@ -1577,6 +1577,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
     def help_button_clicked_autonom(self):
 	self.help_button_clicked(button_name = 'autonom')
+	
+    def create_exp_ini_clicked(self):
+	_run_autonom = RunStep1(parent = self, run_autonom=False)
+	_run_autonom.create_folder()
+	_run_autonom.create_exp_ini_file()
 
     # tab2
     def move_to_folder_clicked(self):

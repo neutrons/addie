@@ -26,13 +26,13 @@ class MakeExpIniFileAndRunAutonom(object):
     def create(self):
         self.retrieve_metadata()
         self.create_exp_ini_file()
-        self.retrieve_flags()
         
     def retrieve_flags(self):
         _postprocessing_flag = self.parent.postprocessing_yes.isChecked()
         self.script_flag += " -p %s" %_postprocessing_flag
 
     def run_autonom(self):
+        self.retrieve_flags()
         self.run_auto_nom_script()
 
     def retrieve_metadata(self):
