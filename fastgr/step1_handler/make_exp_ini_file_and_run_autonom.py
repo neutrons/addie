@@ -97,7 +97,7 @@ class MakeExpIniFileAndRunAutonom(object):
         print("[LOG] created file %s" %_full_file_name)
         
     def run_auto_nom_script(self):
-        _script_to_run = self.script_to_run + self.script_flag + " &"
+        _script_to_run = self.script_to_run + self.script_flag
         os.chdir(self.folder)
         
         o_gui = Step1GuiHandler(parent = self.parent_no_ui)
