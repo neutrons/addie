@@ -31,8 +31,16 @@ class JobStatusHandler(object):
 
         job_ui.refresh_table(job_list)
 
+    def get_local_time(self):
+        local_hour_offset = time.timezone / 3600.
+        _gmt_time = time.gmtime()
+        [year, month, day, hour, minute, seconds, _wday, _yday, _isds ] = _gmt_time
+        return [year, month, day, hour-local_hour_offset, minute, seconds]
+
     def get_launch_time(self):
-        return time.strftime("%d %b %Y %H:%M:%S", time.gmtime())
+        local_time = self.get_local_time()
+        return "%d %d %d %d:%d:%d" %(local_time[0], local_time[1], local_time[2],
+                                     local_time[3], local_time[4], local_time[5])
 
     def start(self):
         pass
