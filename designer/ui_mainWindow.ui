@@ -74,7 +74,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -1294,7 +1294,7 @@
                              </widget>
                             </item>
                             <item>
-                             <widget class="QRadioButton" name="radioButton_26">
+                             <widget class="QRadioButton" name="muscat_no">
                               <property name="text">
                                <string>No</string>
                               </property>
@@ -1329,7 +1329,7 @@
                              </widget>
                             </item>
                             <item>
-                             <widget class="QRadioButton" name="radioButton_27">
+                             <widget class="QRadioButton" name="scale_data_no">
                               <property name="text">
                                <string>No</string>
                               </property>
@@ -1364,7 +1364,7 @@
                              </widget>
                             </item>
                             <item>
-                             <widget class="QRadioButton" name="radioButton_28">
+                             <widget class="QRadioButton" name="run_rmc_no">
                               <property name="text">
                                <string>No</string>
                               </property>
@@ -3141,11 +3141,11 @@ p, li { white-space: pre-wrap; }
   <tabstop>q_range_max</tabstop>
   <tabstop>pushButton</tabstop>
   <tabstop>muscat_yes</tabstop>
-  <tabstop>radioButton_26</tabstop>
+  <tabstop>muscat_no</tabstop>
   <tabstop>scale_data_yes</tabstop>
-  <tabstop>radioButton_27</tabstop>
+  <tabstop>scale_data_no</tabstop>
   <tabstop>run_rmc_yes</tabstop>
-  <tabstop>radioButton_28</tabstop>
+  <tabstop>run_rmc_no</tabstop>
   <tabstop>run_ndabs_output_file_name</tabstop>
   <tabstop>run_ndabs_button</tabstop>
   <tabstop>pdf_qmax_line_edit</tabstop>

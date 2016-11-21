@@ -64,16 +64,28 @@ class ImportConfiguration(object):
         o_gui.dropdown_set_index(widget_id = self.parent.ui.frequency, index=frequency_index)
 
         recalibration = self.get_tag("recalibration", data_type="bool")
-        o_gui.radiobutton_set_state(widget_id= self.parent.ui.recalibration_yes, state = recalibration)
+        if recalibration:
+            o_gui.radiobutton_set_state(widget_id= self.parent.ui.recalibration_yes, state = True)
+        else:
+            o_gui.radiobutton_set_state(widget_id= self.parent.ui.recalibration_no, state = True)
 
         renormalization = self.get_tag("renormalization", data_type="bool")
-        o_gui.radiobutton_set_state(widget_id = self.parent.ui.renormalization_yes, state = renormalization)
+        if renormalization:
+            o_gui.radiobutton_set_state(widget_id = self.parent.ui.renormalization_yes, state = True)
+        else:
+            o_gui.radiobutton_set_state(widget_id = self.parent.ui.renormalization_no, state = True)
         
         autotemplate = self.get_tag("autotemplate", data_type = "bool")
-        o_gui.radiobutton_set_state(widget_id = self.parent.ui.autotemplate_yes, state = autotemplate)
-        
+        if autotemplate:
+            o_gui.radiobutton_set_state(widget_id = self.parent.ui.autotemplate_yes, state = True)
+        else:
+            o_gui.radiobutton_set_state(widget_id = self.parent.ui.autotemplate_no, state = True)
+            
         postprocessing = self.get_tag("postprocessing", data_type = "bool")
-        o_gui.radiobutton_set_state(widget_id = self.parent.ui.postprocessing_yes, state = postprocessing)
+        if postprocessing:
+            o_gui.radiobutton_set_state(widget_id = self.parent.ui.postprocessing_yes, state = True)
+        else:
+            o_gui.radiobutton_set_state(widget_id = self.parent.ui.postprocessing_no, state = True)
         
         comments = self.get_tag("comments")
         self.parent.ui.comments.setText(comments)
@@ -84,7 +96,11 @@ class ImportConfiguration(object):
         o_step1_handler.new_autonom_group_box(status=create_new_autonom_folder)
         
         auto_autonom_folder = self.get_tag("auto_autonom_folder", data_type="bool")
-        o_gui.radiobutton_set_state(widget_id = self.parent.ui.auto_manual_folder, state = auto_autonom_folder)
+        if auto_autonom_folder:
+            o_gui.radiobutton_set_state(widget_id = self.parent.ui.auto_manual_folder, state = True)
+        else:
+            o_gui.radiobutton_set_state(widget_id = self.parent.ui.manual_output_folder, state = True)
+            
         o_step1_handler.manual_output_folder_button_handler()
         
         manual_autonom_folder_name = self.get_tag("manual_autonom_folder_name")
@@ -101,7 +117,10 @@ class ImportConfiguration(object):
         o_gui_step2 = Step2GuiHandler(parent = self.parent)
 
         background_flag = self.get_tag("background_flag", data_type='bool')
-        o_gui.radiobutton_set_state(widget_id = self.parent.ui.background_no, state = background_flag)
+        if background_flag:
+            o_gui.radiobutton_set_state(widget_id = self.parent.ui.background_yes, state = True)
+        else:
+            o_gui.radiobutton_set_state(widget_id = self.parent.ui.background_no, state = True)
         o_gui_step2.step2_background_flag()
         
         background_no_field = self.get_tag("background_no_field")
@@ -128,13 +147,22 @@ class ImportConfiguration(object):
         self.parent.ui.plazcek_fit_range_max.setText(plazcek_fit_range_max)
         
         hydrogen_flag = self.get_tag("hydrogen_flag", data_type="bool")
-        o_gui.radiobutton_set_state(widget_id = self.parent.ui.hydrogen_yes, state = hydrogen_flag)
+        if hydrogen_flag:
+            o_gui.radiobutton_set_state(widget_id = self.parent.ui.hydrogen_yes, state = True)
+        else:
+            o_gui.radiobutton_set_state(widget_id = self.parent.ui.hydrogen_no, state = True)
         
         muscat_flag = self.get_tag("muscat_flag", data_type="bool")
-        o_gui.radiobutton_set_state(widget_id = self.parent.ui.muscat_yes, state = muscat_flag)
+        if muscat_flag:
+            o_gui.radiobutton_set_state(widget_id = self.parent.ui.muscat_yes, state = True)
+        else:
+            o_gui.radiobutton_set_state(widget_id = self.parent.ui.muscat_no, state = True)
         
         scale_data_flag = self.get_tag("scale_data_flag", data_type="bool")
-        o_gui.radiobutton_set_state(widget_id = self.parent.ui.scale_data_yes, state = scale_data_flag)
+        if scale_data_flag:
+            o_gui.radiobutton_set_state(widget_id = self.parent.ui.scale_data_yes, state = True)
+        else:
+            o_gui.radiobutton_set_state(widget_id = self.parent.ui.scale_data_no, state = True)
         
         #run_rmc_flag = self.get_tag("run_rmc_flag", data_type = "bool")
         #o_gui.radiobutton_set_state(widget_id = self.parent.ui.run_rmc_yes, state = run_rmc_flag)
@@ -144,6 +172,18 @@ class ImportConfiguration(object):
         
         pdf_qmax_line_edit = self.get_tag("pdf_qmax_line_edit")
         self.parent.ui.pdf_qmax_line_edit.setText(pdf_qmax_line_edit)
+        
+        try:
+            pdf_sum_scans_output_file_name = self.get_tag("pdf_sum_scans_output_file_name")
+            self.parent.ui.sum_scans_output_file_name.setText(pdf_sum_scans_output_file_name)
+        except ValueError:
+            pass
+        
+        try:
+            pdf_sum_scans_rmax = self.get_tag("psd_sum_scans_rmax")
+            self.parent.ui.sum_scans_rmax.setText(pdf_sum_scans_rmax)
+        except ValueError:
+            pass
         
         interactive_mode_flag = self.get_tag("interactive_mode_flag", data_type = "bool")
         o_gui.radiobutton_set_state(widget_id = self.parent.ui.interactive_mode_checkbox, state = interactive_mode_flag)
@@ -174,7 +214,10 @@ class ImportConfiguration(object):
     def get_tag(self, tag_name, data_type='string'):
         config = self.config
         _section_name = self.section_name
-        value = config.get(_section_name, tag_name)
+        try:
+            value = config.get(_section_name, tag_name)
+        except:
+            raise ValueError("Tag missing !")
         if data_type == 'string':
             return value
         if data_type == 'bool':
