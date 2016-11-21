@@ -106,6 +106,10 @@ class ExportConfiguration(object):
         # background No (flag)
         background_flag = o_gui_handler.radiobutton_get_state(widget_id  = self.parent.ui.background_yes)
         configuration['background_flag'] = background_flag
+
+        # background dropdown index
+        background_index = o_gui_handler.dropdown_get_index(widget_id= self.parent.ui.background_comboBox)
+        configuration['background_index'] = background_index
         
         # background no field
         background_no_field = self.parent.ui.background_no_field.text()

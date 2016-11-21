@@ -126,6 +126,9 @@ class ImportConfiguration(object):
         background_no_field = self.get_tag("background_no_field")
         self.parent.ui.background_no_field.setText(background_no_field)
         
+        background_index = self.get_tag("background_index", data_type='int')
+        self.parent.ui.background_comboBox.setCurrentIndex(background_index)
+        
         # PDF
         
         fourier_filter_min = self.get_tag("ndabs_fourier_filter_min")
