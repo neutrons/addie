@@ -4,7 +4,7 @@ from fastgr.utilities.job_status_handler import JobStatusHandler
 
 class RunNDabs(object):
     
-    script_to_run = 'python ~zjn/pytest/NDabs.py -f '
+    script_to_run = 'python /SNS/users/zjn/pytest/NDabs.py -f '
     
     def __init__(self, parent = None, list_sample_files=None):
         self.parent = parent
@@ -19,8 +19,9 @@ class RunNDabs(object):
         _script_to_run += ' ' + _str_list_sample_files
 
         job_handler = JobStatusHandler(parent = self.parent,
+                                       script_to_run=_script_to_run,
                                        job_name = 'NDabs')
-        job_handler.launch(script_to_run=_script_to_run)
+        # job_handler.launch(script_to_run=_script_to_run)
 
         #_run_thread = self.parent._run_thread
         #_run_thread.setup(script = _script_to_run)
