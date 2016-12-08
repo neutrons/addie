@@ -29,12 +29,6 @@ class GenerateSumthing(object):
             self.create_sum_inp_file_from_new_format(full_input_file_name_new_format)
             if self.is_sum_inp_file_not_empty():
                 return
-        
-        # try new format (csv) with comma separated but no scan column
-        if os.path.isfile(full_input_file_name_new_format):
-            self.create_sum_inp_file_from_new_format_2(full_input_file_name_new_format)
-            if self.is_sum_inp_file_not_empty():
-                return
 
         # try old format with space separated columns
         full_input_file_name_old_format = os.path.join(self.folder, self.input_file_old_format)
@@ -53,57 +47,9 @@ class GenerateSumthing(object):
         _file_contain = _o_file.file_contain
         if len(_file_contain) == 12:
             return False
-        return True        
+        return True
 
     def create_sum_inp_file_from_new_format(self,  full_input_file_name):
-        '''
-        Comma separated with scan column
-        '''
-        print("]LOG]  Format: comma separated, with scan infos")
-        print("[LOG] Reading %s" %full_input_file_name)
-        name_list = []
-        run_nums = defaultdict(list)
-        
-        with open(full_input_file_name, "r") as myfile:
-            data = myfile.readlines()
-                  
-        for i in range(len(data)):
-            if len(data[i].split(',')) == 8:
-#                if 'scan' in data[i].split(',') [6]:
-                word = data[i].split(',')[6]
-                run_num = int(data[i].split(',')[0])
-
-                temp_range = data[i].split(',')[7].replace("K", "").split('to')
-                from_temp = round(float(temp_range[0]))
-                temp_name = str(from_temp).replace(".0", "")
-
-                word = word.replace("(","")
-                word = word.replace(")","_")
-                word = word.replace(" ", "_")
-                word = word + "_" + temp_name + "K"
-                if word in name_list:
-                    run_nums[word].append(run_num)
-                else:
-                    name_list.append(word)
-                    run_nums[word].append(run_num)
-    
-        full_output_file_name = os.path.join(self.folder, self.output_inp_file)
-    
-        outfile = open(full_output_file_name, "w")
-        outfile.write("background \n")
-    
-        #print(">creating file %s" %full_output_file_name)
-        for key in sorted(run_nums.iterkeys()):
-            outbit = str(run_nums[key])
-            outbit = outbit.replace("[","")
-            outbit = outbit.replace("]","")
-            outbit = outbit.replace(" ","")
-            outfile.write(key + " " + outbit+"\n")
-    
-        outfile.close()
-        print("[LOG] Created %s" %full_output_file_name)
-
-    def create_sum_inp_file_from_new_format_2(self,  full_input_file_name):
         
         print("]LOG]  Format: comma separated, no scan infos")
         print("[LOG] Reading %s" %full_input_file_name)
@@ -116,10 +62,22 @@ class GenerateSumthing(object):
         data = data[1:]
         for _row in data:
             _row_split = _row.split(',')
-            
-            word = _row_split[-1].strip()
-            word = word.replace(":", "_")
-            word = word.replace(" ", "_")
+
+            if len(_row_split) == 8:
+                temp_range = _row_split[7].replace("K", "").split('to')
+                from_temp = round(float(temp_range[0]))
+                temp_name = str(from_temp).replace(".0", "")
+
+                word = _row_split[-2].strip()
+                word = word.replace(":", "_")
+                word = word.replace(" ", "_")
+
+                word = word + "_" + temp_name + "K"
+
+            else:
+                word = _row_split[-1].strip()
+                word = word.replace(":", "_")
+                word = word.replace(" ", "_")
             
             run_num = int(_row_split[0])
             

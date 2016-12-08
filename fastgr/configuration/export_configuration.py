@@ -104,8 +104,12 @@ class ExportConfiguration(object):
         configuration['table'] = table
         
         # background No (flag)
-        background_flag = o_gui_handler.radiobutton_get_state(widget_id  = self.parent.ui.background_no)
+        background_flag = o_gui_handler.radiobutton_get_state(widget_id  = self.parent.ui.background_yes)
         configuration['background_flag'] = background_flag
+
+        # background dropdown index
+        background_index = o_gui_handler.dropdown_get_index(widget_id= self.parent.ui.background_comboBox)
+        configuration['background_index'] = background_index
         
         # background no field
         background_no_field = self.parent.ui.background_no_field.text()
@@ -159,6 +163,14 @@ class ExportConfiguration(object):
         # Sum Scans Qmax
         pdf_qmax_line_edit = self.parent.ui.pdf_qmax_line_edit.text()
         configuration['pdf_qmax_line_edit'] = pdf_qmax_line_edit
+
+        # Sum Scans Rmax
+        pdf_sum_scans_rmax = self.parent.ui.sum_scans_rmax.text()
+        configuration['pdf_sum_scans_rmax'] = pdf_sum_scans_rmax
+
+        # Sum Scans output file name
+        pdf_sum_scans_output_file_name = self.parent.ui.sum_scans_output_file_name.text()
+        configuration['pdf_sum_scans_output_file_name'] = pdf_sum_scans_output_file_name
 
         # interactive mode (flag)
         interactive_mode_flag = o_gui_handler.radiobutton_get_state(widget_id = self.parent.ui.interactive_mode_checkbox)

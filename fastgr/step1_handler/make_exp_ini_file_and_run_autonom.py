@@ -1,4 +1,6 @@
 import os
+import time
+
 from fastgr.step1_handler.step1_gui_handler import Step1GuiHandler
 
 
@@ -13,7 +15,7 @@ class MakeExpIniFileAndRunAutonom(object):
     title_optional = 'optional ' + _star
     list_mandatory = ['Dia', 'DiaBg', 'Vana', 'VanaBg', 'MTc']
     list_optional = ['recali', 'renorm', 'autotemp', 'scan1', 'scanl', 'Hz', '#']
-    script_to_run = "python ~zjn/pytest/autoNOM.py "
+    script_to_run = "python /SNS/NOM/shared/autoNOM/stable/autoNOM.py -l -P /SNS/NOM/shared/autoNOM/stable/"
     script_flag = ""
     
     def __init__(self, parent=None, folder=None):
@@ -24,13 +26,13 @@ class MakeExpIniFileAndRunAutonom(object):
     def create(self):
         self.retrieve_metadata()
         self.create_exp_ini_file()
-        self.retrieve_flags()
         
     def retrieve_flags(self):
         _postprocessing_flag = self.parent.postprocessing_yes.isChecked()
         self.script_flag += " -p %s" %_postprocessing_flag
 
     def run_autonom(self):
+        self.retrieve_flags()
         self.run_auto_nom_script()
 
     def retrieve_metadata(self):
@@ -95,15 +97,30 @@ class MakeExpIniFileAndRunAutonom(object):
         print("[LOG] created file %s" %_full_file_name)
         
     def run_auto_nom_script(self):
-        _script_to_run = self.script_to_run + self.script_flag + " &"
+        _script_to_run = self.script_to_run + self.script_flag
         os.chdir(self.folder)
         
         o_gui = Step1GuiHandler(parent = self.parent_no_ui)
         o_gui.set_main_window_title()
         
+        _dict_mandatory = self._dict_mandatory
+        _pre_script = '~zjn/pytest/readtitles.py -a -s'
+        for _values in _dict_mandatory.values():
+            _pre_script += ' ' + _values
+
+        print("[LOG] running pre-script")
+        print("[LOG] " + _pre_script)
+        os.system(_pre_script)
+        
+        while not os.path.isfile("./los.txt"):
+            time.sleep(1)
+        
         print("[LOG] running script:")
         print("[LOG] " + _script_to_run)
-        os.system(_script_to_run)
+        self.parent_no_ui.launch_job_manager(job_name = 'autoNOM',
+                                             script_to_run = _script_to_run)
+
+#        os.system(_script_to_run)
         self.parent.statusbar.showMessage("autoNOM script: DONE !")        
 
     def yes_no(self, condition):

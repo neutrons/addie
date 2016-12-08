@@ -1,6 +1,6 @@
 import numpy as np
 
-from PyQt4 import QtCore
+from PyQt4 import QtCore, QtGui
 
 import mplgraphicsview as base
 
@@ -38,6 +38,11 @@ class BraggView(base.MplGraphicsView):
         self._gssColorList = ["black", "red", "blue", "green",
                               "cyan", "magenta", "yellow"]
         self._currColorIndex = 0
+
+        # define the dynamic menu
+        self._myCanvas.mpl_connect('button_press_event', self.on_mouse_press_event)
+        # self._myCanvas.mpl_connect('button_release_event', self.on_mouse_release_event)
+        # self._myCanvas.mpl_connect('motion_notify_event', self.on_mouse_motion)
 
         # records of the plots on canvas
         # workspaces' names (not bank, but original workspace) on canvas
@@ -134,6 +139,56 @@ class BraggView(base.MplGraphicsView):
 
         return plot_key
 
+    def on_mouse_press_event(self, event):
+        """
+        handle mouse pressing event
+        Returns:
+
+        """
+        # get the button and position information.
+        curr_x = event.xdata
+        curr_y = event.ydata
+        if curr_x is None or curr_y is None:
+            # outside of canvas
+            return
+
+        button = event.button
+        if button == 1:
+            # left button: no operation
+            pass
+
+        elif button == 3:
+            # right button:
+            # Pop-out menu
+            self.menu = QtGui.QMenu(self)
+            if self.get_canvas().is_legend_on:
+                # figure has legend: remove legend
+                action1 = QtGui.QAction('Hide legend', self)
+                action1.triggered.connect(self._myCanvas.hide_legend)
+
+                action2 = QtGui.QAction('Legend font larger', self)
+                action2.triggered.connect(self._myCanvas.increase_legend_font_size)
+
+                action3 = QtGui.QAction('Legend font smaller', self)
+                action3.triggered.connect(self._myCanvas.decrease_legend_font_size)
+
+                self.menu.addAction(action2)
+                self.menu.addAction(action3)
+
+            else:
+                # figure does not have legend: add legend
+                action1 = QtGui.QAction('Show legend', self)
+                action1.triggered.connect(self._myCanvas.show_legend)
+
+            self.menu.addAction(action1)
+
+            # pop up menu
+            self.menu.popup(QtGui.QCursor.pos())
+        # END-IF-ELSE
+        return
+
+
+
     def plot_banks(self, plot_bank_dict, unit):
         """
         Plot a few banks to canvas.  If the bank has been plot on canvas already,
@@ -162,7 +217,7 @@ class BraggView(base.MplGraphicsView):
                     bank_color = self.get_multi_gss_color()
                 vec_x, vec_y, vec_e = plot_bank_dict[ws_group][bank_id]
                 print '[DB...BAT] Plot ', ws_group, bank_id
-                plot_id = self.add_plot_1d(vec_x, vec_y, marker='.', color=bank_color,
+                plot_id = self.add_plot_1d(vec_x, vec_y, marker=None, color=bank_color,
                                            x_label=unit, y_label='I(%s)' % unit,
                                            label='%s Bank %d' % (ws_group, bank_id))
 
@@ -196,7 +251,7 @@ class BraggView(base.MplGraphicsView):
         self._workspaceSet.add(bragg_ws_name)
 
         # plot
-        plot_id = self.add_plot_1d(vec_x, vec_y, marker='.', color='black',
+        plot_id = self.add_plot_1d(vec_x, vec_y, marker=None, color='black',
                                    label=bragg_ws_name)
         self._plotScaleDict[plot_id] = (min(vec_y), max(vec_y))
 
@@ -343,6 +398,67 @@ class GofRView(base.MplGraphicsView):
         self._colorList = ['black', 'red', 'blue', 'green', 'brown', 'orange']
         self._colorIndex = 0
 
+        # define the event handlers to the mouse actions
+        self._myCanvas.mpl_connect('button_press_event', self.on_mouse_press_event)
+        # self._myCanvas.mpl_connect('button_release_event', self.on_mouse_release_event)
+        # self._myCanvas.mpl_connect('motion_notify_event', self.on_mouse_motion)
+
+        # variable
+        self._isLegendOn = False
+
+        return
+
+    def on_mouse_press_event(self, event):
+        """
+        Event handling for mouse press action
+        Args:
+            event:
+
+        Returns:
+
+        """
+        # get the button and position information.
+        curr_x = event.xdata
+        curr_y = event.ydata
+        if curr_x is None or curr_y is None:
+            # outside of canvas
+            return
+
+        button = event.button
+        if button == 1:
+            # left button: no operation
+            pass
+
+        elif button == 3:
+            # right button:
+            # Pop-out menu
+            self.menu = QtGui.QMenu(self)
+
+            if self.get_canvas().is_legend_on:
+                # figure has legend: remove legend
+                action1 = QtGui.QAction('Hide legend', self)
+                action1.triggered.connect(self._myCanvas.hide_legend)
+
+                action2 = QtGui.QAction('Legend font larger', self)
+                action2.triggered.connect(self._myCanvas.increase_legend_font_size)
+
+                action3 = QtGui.QAction('Legend font smaller', self)
+                action3.triggered.connect(self._myCanvas.decrease_legend_font_size)
+
+                self.menu.addAction(action2)
+                self.menu.addAction(action3)
+
+            else:
+                # figure does not have legend: add legend
+                action1 = QtGui.QAction('Show legend', self)
+                action1.triggered.connect(self._myCanvas.show_legend)
+
+            self.menu.addAction(action1)
+
+            # pop up menu
+            self.menu.popup(QtGui.QCursor.pos())
+        # END-IF-ELSE
+
         return
 
     def plot_gr(self, plot_key, vec_r, vec_g, vec_e=None, plot_error=False):
@@ -371,7 +487,7 @@ class GofRView(base.MplGraphicsView):
             self.add_plot_1d(vec_r, vec_g, vec_e)
             raise NotImplementedError('ASAP')
         else:
-            line_id = self.add_plot_1d(vec_r, vec_g, marker='.',
+            line_id = self.add_plot_1d(vec_r, vec_g, marker=None,
                                        color=self._colorList[self._colorIndex % len(self._colorList)],
                                        label=plot_key,
                                        x_label=r'r ($\AA$)')
@@ -611,12 +727,48 @@ class SofQView(base.MplGraphicsView):
 
     def on_mouse_press_event(self, event):
         """
-
+        Handle mouse pressing event
+        (1) left mouse: in show-boundary mode, check the action to select a boundary indicator
+        (2) right mouse: pop up the menu
         Returns
         -------
 
         """
-        # ignore if boundary is not shown
+        # get the button
+        button = event.button
+
+        if button == 3:
+            # right button:
+            # Pop-out menu
+            self.menu = QtGui.QMenu(self)
+
+            if self.get_canvas().is_legend_on:
+                # figure has legend: remove legend
+                action1 = QtGui.QAction('Hide legend', self)
+                action1.triggered.connect(self._myCanvas.hide_legend)
+
+                action2 = QtGui.QAction('Legend font larger', self)
+                action2.triggered.connect(self._myCanvas.increase_legend_font_size)
+
+                action3 = QtGui.QAction('Legend font smaller', self)
+                action3.triggered.connect(self._myCanvas.decrease_legend_font_size)
+
+                self.menu.addAction(action2)
+                self.menu.addAction(action3)
+
+            else:
+                # figure does not have legend: add legend
+                action1 = QtGui.QAction('Show legend', self)
+                action1.triggered.connect(self._myCanvas.show_legend)
+
+            self.menu.addAction(action1)
+            # pop up menu
+            self.menu.popup(QtGui.QCursor.pos())
+
+            return
+        # END-IF
+
+        # ignore if boundary is not shown and the pressed mouse button is left or middle
         if not self._showBoundary:
             return
 
@@ -690,7 +842,7 @@ class SofQView(base.MplGraphicsView):
 
         # plot
         plot_id = self.add_plot_1d(vec_q, vec_s, color=color, x_label='Q', y_label=sq_y_label,
-                                   marker=marker, label=sq_name)
+                                   marker=None, label=sq_name)
         self._sqLineDict[sq_name] = plot_id
 
         return
@@ -778,6 +930,9 @@ class SofQView(base.MplGraphicsView):
         # clear the image and reset the marker/color scheme
         self.clear_all_lines()
         self.reset_line_color_marker_index()
+
+        # clear the boundary flag
+        self._showBoundary = False
 
         return
 

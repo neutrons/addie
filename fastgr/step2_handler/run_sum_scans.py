@@ -23,12 +23,15 @@ class RunSumScans(object):
         _script_to_run = self.add_script_flags()
         _script_to_run += ' -f ' + self.full_output_file_name + ' &'
 
-        _run_thread = self.parent_no_ui._run_thread_sum_scans
-        _run_thread.setup(script = _script_to_run)
-        _run_thread.start()
+        self.parent_no_ui.launch_job_manager(job_name="SumScans",
+                                             script_to_run=_script_to_run)
+
+        #_run_thread = self.parent_no_ui._run_thread_sum_scans
+        #_run_thread.setup(script = _script_to_run)
+        #_run_thread.start()
         
 #        os.system(_script_to_run)
-        print("[LOG] executing in its own thread:")
+#        print("[LOG] executing in its own thread:")
         print("[LOG] " + _script_to_run)
         
     def add_script_flags(self):
@@ -39,7 +42,7 @@ class RunSumScans(object):
             
         qmax_list = str(self.parent.pdf_qmax_line_edit.text()).strip()
         if not (qmax_list  == ""):
-            _script  += ' -q ' + qmax_list
+            _script  +=  ' -q ' + qmax_list
 
         return _script
 
@@ -74,6 +77,11 @@ class RunSumScans(object):
         [q_range_min, q_range_max]= o_gui_handler.get_q_range()
         if (q_range_min is not "") and (q_range_max is not ""):
             f.write("qrangeft {},{}\n".format(q_range_min, q_range_max))
+            
+        # rmax
+        rmax = str(self.parent.sum_scans_rmax.text()).strip()
+        if not (rmax == ""):
+            f.write("rmax {}\n".format(rmax))
         
         f.close()
         print("[LOG] created file %s" %_full_output_file_name)

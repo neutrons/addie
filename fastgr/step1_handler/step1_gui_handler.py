@@ -18,8 +18,10 @@ class Step1GuiHandler(object):
     def check_go_button(self):
         if self.all_mandatory_fields_non_empty():
             self.parent.run_autonom_script.setEnabled(True)
+            self.parent.create_exp_ini_button.setEnabled(True)            
         else:
             self.parent.run_autonom_script.setEnabled(False)
+            self.parent.create_exp_ini_button.setEnabled(False)
         check_status(parent = self.parent_no_ui, button_name='autonom')
 
     def all_mandatory_fields_non_empty(self):

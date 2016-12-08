@@ -3,6 +3,7 @@ import os
 import fastgr.step2_handler.table_handler
 from fastgr.step2_handler.mantid_reduction_dialogbox import MantidReductionDialogbox
 from fastgr.step2_handler.mantid_reduction_view import MantidReductionView
+from fastgr.utilities.job_status_handler import JobStatusHandler
 
 
 class GlobalMantidReduction(object):
@@ -94,6 +95,8 @@ class GlobalMantidReduction(object):
             _o_mantid = self.parent._mantid_thread_array[index]
             _o_mantid.setup(runs = runs, parameters = self.parameters)
             _o_mantid.start()
+            
+            self.parent.launch_job_manager(job_name='Mantid', thread_index=index)
             
     def create_output_folder(self):
         output_folder = self.parameters['output_directory']
