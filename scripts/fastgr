@@ -1,6 +1,7 @@
-#!/usr/bin/env python
+ #!/usr/bin/env python
 
 import sys
+import numpy as np
 import os
 import itertools
 import psutil
@@ -64,6 +65,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     config_section_name = 'Configuration'
     job_monitor_interface = None
     job_list = []
+
+    init_height_main_gui = 1058
+    previous_splitter_height = -1
+    first_time_resizing_blocked = True
 
     o_help_autonom = None
     o_help_ndabs = None
@@ -206,6 +211,18 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         -------
 
         """
+	
+	#init_size_splitter = self.ui.splitter.size()
+	#self.init_size_splitter_height = init_size_splitter.height()
+	#init_width = self.size()
+	#self.init_width = init_width.width()
+	
+	self.ui.splitter.setStyleSheet("""
+	QSplitter::handle {
+	   image: url(':/MPL Toolbar/splitter_icon.png');
+	}
+	""")
+	
         self.ui.comboBox_xUnit.clear()
         self.ui.comboBox_xUnit.addItems(['TOF', 'dSpacing', 'Q'])
 
@@ -1584,6 +1601,33 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 	_run_autonom.create_exp_ini_file()
 
     # tab2
+    def resize_table_post_processing_tab(self, height, width):
+	pass
+	#width = self.size().width()
+	#cursor_position = QtGui.QCursor.pos().y()
+	#if self.previous_splitter_height == -1:
+	    #self.previous_splitter_height = height
+	#else:
+	    #if height == self.previous_splitter_height:
+		#if self.first_time_resizing_blocked:
+		    #self.offset = np.abs(cursor_position - height)
+		    #self.first_time_resizing_blocked = False
+		    #self.cursor_previous_position = cursor_position
+		    #self.previous_offset = self.offset
+		#else:
+		    #if cursor_position > self.cursor_previous_position:
+			#self.previous_offset += 1
+		    #else:
+			#self.previous_offset -= 1
+		    #height += self.previous_offset
+		#self.previous_splitter_height = height
+	    #else:
+		#self.previous_splitter_height = height
+		#self.first_time_resizing_blocked = True
+		    
+	#self.resize(width, cursor_position)
+##	self.resize(width, height + self.init_height_main_gui - self.init_size_splitter_height)
+	
     def move_to_folder_clicked(self):
         o_gui = Step2GuiHandler(parent = self)
         o_gui.move_to_folder()
