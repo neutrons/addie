@@ -112,7 +112,7 @@ class TableHandler(object):
         
         if (self.parent.table.rowCount() > 0):
             _duplicate_row = menu.addAction("Duplicate Row")
-            _remove_row = menu.addAction("Remove Top Row Selected")
+            _remove_row = menu.addAction("Remove Row(s)")
             menu.addSeparator()
             _refresh_table = menu.addAction("Refresh/Reset Table")
             _clear_table = menu.addAction("Clear Table")
@@ -131,7 +131,7 @@ class TableHandler(object):
         elif action == _new_row:
             self._new_row()
         elif action == _remove_row:
-            self._remove_row()
+            self._remove_selected_rows()
         elif action == _refresh_table:
             self._refresh_table()
         elif action == _clear_table:
@@ -292,10 +292,19 @@ class TableHandler(object):
         o_populate = fastgr.step2_handler.populate_master_table.PopulateMasterTable(parent = self.parent_no_ui)
         _metadata = o_populate.empty_metadata()
         o_populate.add_new_row(_metadata, row = _row)
+        
+    def _remove_selected_rows(self):
+        selected_range = self.parent_no_ui.ui.table.selectedRanges()
+        _top_row = selected_range[0].topRow()
+        _bottom_row = selected_range[0].bottomRow()
+        nbr_row = _bottom_row - _top_row + 1
+        for i in np.arange(nbr_row):
+            self._remove_row(row=_top_row)
     
-    def _remove_row(self):
-        _row = self.current_row
-        self.parent.table.removeRow(_row)
+    def _remove_row(self, row=-1):
+        if row == -1:
+            row = self.current_row
+        self.parent.table.removeRow(row)
         
         _o_gui = fastgr.step2_handler.step2_gui_handler.Step2GuiHandler(parent = self.parent_no_ui)
         _o_gui.check_gui()
