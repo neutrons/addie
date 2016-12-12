@@ -121,7 +121,7 @@ class MakeExpIniFileAndRunAutonom(object):
                                              script_to_run = _script_to_run)
 
 #        os.system(_script_to_run)
-        self.parent.statusbar.showMessage("autoNOM script: DONE !")        
+#        self.parent.statusbar.showMessage("autoNOM script: DONE !")        
 
     def yes_no(self, condition):
         if condition:
