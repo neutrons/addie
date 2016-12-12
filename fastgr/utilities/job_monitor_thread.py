@@ -1,7 +1,7 @@
 from PyQt4 import QtCore, QtGui
 import os
 import time
-
+import psutil
 
 class JobMonitorThread(QtCore.QThread):
     
@@ -25,9 +25,9 @@ class JobMonitorThread(QtCore.QThread):
     def _checking_status_of_jobs(self):
         _job_list= self.parent.job_list
         for _row, _job in enumerate(_job_list):
-            _pid = _job['subprocess']
-            stddata, stderr = _pid.communicate()
-            if _pid.returncode == 0:
+            _pid = _job['pid']
+            process = psutil.Process(_pid)
+            if not process.is_running() == 0:
                 self.job_monitor_interafce.ui.tableWidget.removeCellWidget(_row, 2)
                 _item = QtGui.QTableWidgetItem("Done!")
                 self.job_monitor_interafce.ui.tableWidget.setItem(_row, 2, _item)

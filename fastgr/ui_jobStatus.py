@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_jobStatus.ui'
 #
-# Created: Mon Nov 14 17:55:14 2016
+# Created: Mon Dec 12 14:00:09 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -50,6 +50,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.clear_table)
         spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
+        self.logbook = QtGui.QPushButton(self.centralwidget)
+        self.logbook.setObjectName(_fromUtf8("logbook"))
+        self.horizontalLayout.addWidget(self.logbook)
         self.verticalLayout.addLayout(self.horizontalLayout)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
@@ -62,6 +65,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QObject.connect(self.clear_table, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.clear_table_clicked)
+        QtCore.QObject.connect(self.logbook, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.logbook_clicked)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -73,4 +77,5 @@ class Ui_MainWindow(object):
         item = self.tableWidget.horizontalHeaderItem(2)
         item.setText(_translate("MainWindow", "Action", None))
         self.clear_table.setText(_translate("MainWindow", "Clear Table", None))
+        self.logbook.setText(_translate("MainWindow", "Logbook ...", None))
 

@@ -1,3 +1,4 @@
+from PyQt4 import QtGui
 
 import subprocess
 import time
@@ -13,6 +14,7 @@ class JobStatusHandler(object):
         if self.parent.job_monitor_interface is None:
             job_ui = JobMonitorInterface(parent = self.parent)
             job_ui.show()
+            QtGui.QApplication.processEvents()
             self.parent.job_monitor_interface  = job_ui
         else:
             self.parent.job_monitor_interface.activateWindow()
