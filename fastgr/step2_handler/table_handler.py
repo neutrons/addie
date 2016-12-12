@@ -301,6 +301,9 @@ class TableHandler(object):
         for i in np.arange(nbr_row):
             self._remove_row(row=_top_row)
     
+        _pop_back_wdg = PopulateBackgroundWidgets(parent=self.parent_no_ui)
+        _pop_back_wdg.run()
+    
     def _remove_row(self, row=-1):
         if row == -1:
             row = self.current_row
