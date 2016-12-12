@@ -20,7 +20,10 @@ from fastgr.configuration.import_configuration import ImportConfiguration
 from fastgr.general_handler.help_gui import HelpGui, help_button_activator
 
 from fastgr.utilities.job_status_handler import JobStatusHandler
+from fastgr.utilities.job_monitor_thread import JobMonitorThread
+
 from fastgr.initialization.init_step1 import InitStep1
+
 from fastgr.step1_handler.step1_gui_handler import Step1GuiHandler
 from fastgr.step1_handler.run_step1 import RunStep1
 
@@ -61,6 +64,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     table_selection_buffer = {}
     _run_thread_sum_scans = RunThread()
     _run_thread = RunThread()
+    job_monitor_thread = JobMonitorThread()
     _mantid_thread_array = list(itertools.repeat(MantidThread(), 30))
     config_section_name = 'Configuration'
     job_monitor_interface = None

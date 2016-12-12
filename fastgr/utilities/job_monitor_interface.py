@@ -1,7 +1,7 @@
 from PyQt4 import QtGui, QtCore
 
 from fastgr.ui_jobStatus import Ui_MainWindow as UiMainWindow
-
+from fastgr.utilities.job_monitor_thread import JobMonitorThread
 
 class JobMonitorInterface(QtGui.QMainWindow):
     
@@ -15,12 +15,19 @@ class JobMonitorInterface(QtGui.QMainWindow):
         self.ui.setupUi(self)
 	
 	self.init_table()
+	self.launch_table_update_thread()
+	
+    def launch_table_update_thread(self):
+	_run_thread = self.parent.job_monitor_thread
+	_run_thread.setup(parent = self.parent, job_monitor_interface=self)
+	_run_thread.start()	
 	
     def init_table(self):
 	for _index, _width in enumerate (self.column_width):
 	    self.ui.tableWidget.setColumnWidth(_index, _width)
         
     def closeEvent(self, event=None):
+	self.parent.job_monitor_thread	.stop()
 	self.parent.job_monitor_interface = None
 	
     def clear_table_clicked(self):
@@ -47,12 +54,18 @@ class JobMonitorInterface(QtGui.QMainWindow):
 	    self.ui.tableWidget.setItem(_row, 1, _item)
 
 	    #action
-	    if _row_job['status'] == 'processing':
-		_widget = QtGui.QPushButton()
-		_widget.setText("Abort!")
-		QtCore.QObject.connect(_widget, QtCore.SIGNAL("clicked()"), lambda row=_row:
-		                       self.parent.kill_job(row))
-		self.ui.tableWidget.setCellWidget(_row, 2, _widget)
-	    else:
-		_item = QtGui.QTableWidgetItem("Killed!")
+	    _pid = _row_job['subprocess']
+	    stdata, stderr = _pid.communicate()
+	    if _pid.returncode == 0:
+		_item = QtGui.QTableWidgetItem("Done!")
 		self.ui.tableWidget.setItem(_row, 2, _item)
+	    else:
+		if _row_job['status'] == 'processing':
+		    _widget = QtGui.QPushButton()
+		    _widget.setText("Abort!")
+		    QtCore.QObject.connect(_widget, QtCore.SIGNAL("clicked()"), lambda row=_row:
+		                           self.parent.kill_job(row))
+		    self.ui.tableWidget.setCellWidget(_row, 2, _widget)
+		else:
+		    _item = QtGui.QTableWidgetItem("Killed!")
+		    self.ui.tableWidget.setItem(_row, 2, _item)

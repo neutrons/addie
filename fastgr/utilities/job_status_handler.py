@@ -1,3 +1,4 @@
+
 import subprocess
 import time
 
@@ -22,10 +23,12 @@ class JobStatusHandler(object):
 
         job_list = self.parent.job_list
         p = subprocess.Popen(script_to_run.split())
+        
         new_job = {'job_name': job_name,
                    'time': self.get_launch_time(),
                    'status': 'processing',
-                   'pid': p.pid}
+                   'pid': p.pid,
+                   'subprocess': p}
         job_list.append(new_job)
         self.parent.job_list = job_list
 
