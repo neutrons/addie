@@ -21,17 +21,16 @@ class LogbookHandler(object):
         _number_of_log_files = self.max_number_of_log_files
         
         # get list of files that start by log
-        list_log_files = glob.glob(self.parent.current_folder + "/log*")
-
+        list_log_files = glob.glob(self.parent.current_folder + "/logs/log.*")
         if list_log_files == []:
             return
         
         # sort files by time stamp
         list_log_files.sort(key=lambda x: os.path.getmtime(x))
-                        
+
         # last x files
         if len(list_log_files) > _number_of_log_files:
-            self.last_files = list_log_files[_number_of_log_files: -1]
+            self.last_files = list_log_files[-_number_of_log_files: -1]
         else:
             self.last_files = list_log_files
             
@@ -42,15 +41,20 @@ class LogbookHandler(object):
 
     def display_log_files(self):
         list_files = self.last_files[::-1]
-        for _file in list_files:
-            _title = 'file -> {}'.format(_file)
-            _text =self._get_text(filename = _file)
-            _end = '#####################'
 
-            self.parent.job_monitor_interface.ui.logbook_text.setText(_title)
-            self.parent.job_monitor_interface.ui.logbook_text.append(_text)
-            self.parent.job_monitor_interface.ui.logbook_text.append(_end)
-            self.parent.job_monitor_interface.ui.logbook_text.append("################################")
+        if len(list_files) > 0:
+            for _index, _file in enumerate(list_files):
+                _title = 'LOG FILE => {}'.format(_file)
+                _text =self._get_text(filename = _file)
+                _end = '#####################'
+                
+                if _index == 0:
+                    self.parent.job_monitor_interface.ui.logbook_text.setText(_title)
+                else:
+                    self.parent.job_monitor_interface.ui.logbook_text.append(_title)                    
+                    
+                self.parent.job_monitor_interface.ui.logbook_text.append(_text)
+                self.parent.job_monitor_interface.ui.logbook_text.append(_end)
         
         else:
             _time = str(datetime.datetime.now())

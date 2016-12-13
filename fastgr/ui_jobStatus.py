@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_jobStatus.ui'
 #
-# Created: Tue Dec 13 17:07:37 2016
+# Created: Tue Dec 13 17:19:52 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -51,6 +51,10 @@ class Ui_MainWindow(object):
         spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
         self.verticalLayout.addLayout(self.horizontalLayout)
+        self.label = QtGui.QLabel(self.centralwidget)
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        self.label.setObjectName(_fromUtf8("label"))
+        self.verticalLayout.addWidget(self.label)
         self.logbook_text = QtGui.QTextEdit(self.centralwidget)
         self.logbook_text.setUndoRedoEnabled(False)
         self.logbook_text.setAcceptRichText(True)
@@ -79,4 +83,5 @@ class Ui_MainWindow(object):
         item = self.tableWidget.horizontalHeaderItem(2)
         item.setText(_translate("MainWindow", "Action", None))
         self.clear_table.setText(_translate("MainWindow", "Clear Table", None))
+        self.label.setText(_translate("MainWindow", "Logbooks", None))
 

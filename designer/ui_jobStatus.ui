@@ -62,6 +62,16 @@
      </layout>
     </item>
     <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Logbooks</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QTextEdit" name="logbook_text">
       <property name="undoRedoEnabled">
        <bool>false</bool>
