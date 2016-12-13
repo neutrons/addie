@@ -13,7 +13,6 @@ class FileHandler(object):
         file_contain = []
         with open(self.filename, 'r') as f:
             file_contain = f.read()
-            
         self.file_contain = file_contain
         
     def check_file_extension( self, ext_requested = 'txt'):

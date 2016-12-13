@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_jobStatus.ui'
 #
-# Created: Mon Dec 12 14:00:09 2016
+# Created: Tue Dec 13 17:07:37 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(577, 592)
+        MainWindow.resize(677, 733)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.verticalLayout = QtGui.QVBoxLayout(self.centralwidget)
@@ -50,13 +50,16 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.clear_table)
         spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
-        self.logbook = QtGui.QPushButton(self.centralwidget)
-        self.logbook.setObjectName(_fromUtf8("logbook"))
-        self.horizontalLayout.addWidget(self.logbook)
         self.verticalLayout.addLayout(self.horizontalLayout)
+        self.logbook_text = QtGui.QTextEdit(self.centralwidget)
+        self.logbook_text.setUndoRedoEnabled(False)
+        self.logbook_text.setAcceptRichText(True)
+        self.logbook_text.setTextInteractionFlags(QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
+        self.logbook_text.setObjectName(_fromUtf8("logbook_text"))
+        self.verticalLayout.addWidget(self.logbook_text)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 577, 20))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 677, 20))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(MainWindow)
@@ -65,7 +68,6 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QObject.connect(self.clear_table, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.clear_table_clicked)
-        QtCore.QObject.connect(self.logbook, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.logbook_clicked)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -77,5 +79,4 @@ class Ui_MainWindow(object):
         item = self.tableWidget.horizontalHeaderItem(2)
         item.setText(_translate("MainWindow", "Action", None))
         self.clear_table.setText(_translate("MainWindow", "Clear Table", None))
-        self.logbook.setText(_translate("MainWindow", "Logbook ...", None))
 

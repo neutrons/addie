@@ -16,6 +16,7 @@ class JobStatusHandler(object):
             job_ui.show()
             QtGui.QApplication.processEvents()
             self.parent.job_monitor_interface  = job_ui
+            job_ui.launch_logbook_thread()
         else:
             self.parent.job_monitor_interface.activateWindow()
             job_ui = self.parent.job_monitor_interface
@@ -35,6 +36,9 @@ class JobStatusHandler(object):
         self.parent.job_list = job_list
 
         job_ui.refresh_table(job_list)
+        
+    def update_logbook_text(self, text):
+        print(text)
 
     def get_local_time(self):
         local_hour_offset = time.timezone / 3600.

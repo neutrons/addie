@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_logbook.ui'
 #
-# Created: Mon Dec 12 14:00:09 2016
+# Created: Tue Dec 13 13:31:50 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -32,6 +32,7 @@ class Ui_MainWindow(object):
         self.verticalLayout = QtGui.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.logbook = QtGui.QTextEdit(self.centralwidget)
+        self.logbook.setTextInteractionFlags(QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
         self.logbook.setObjectName(_fromUtf8("logbook"))
         self.verticalLayout.addWidget(self.logbook)
         MainWindow.setCentralWidget(self.centralwidget)
@@ -47,5 +48,5 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Logbook", None))
 

@@ -1,30 +1,28 @@
 from PyQt4 import QtCore, QtGui
-import os
 import time
 
 
-class LoogbookThread(QtCore.QThread):
+class LogbookThread(QtCore.QThread):
+    
+    last_files = []
+    update_text = QtCore.pyqtSignal(str)
+    refresh_rate_s = 5
     
     def __init__(self):
         QtCore.QThread.__init__(self)
     
-    def setup(self, parent=None, logbook_interface=None, refresh_rate_s = 5):
+    def setup(self, parent=None):
         self.parent = parent
-        self.logbook_interface = logbook_interface
-        self.refresh_rate_s = refresh_rate_s
         
     def run(self):
         while(True):
-            time.sleep(self.refresh_rate_s)
-            self._checking_logbook()
-        
+            self._displaying_log_files()
+            time.sleep(self.refresh_rate_s)        
+    
     def stop(self):
         self.terminate()
 
-    def _checking_logbook(self):
-        _number_of_log_files = self.parent.number_of_last_log_files_to_display
-        
-                        
-            
-            
+    def _displaying_log_files(self):
+        self.update_text.emit('update list')
+
             

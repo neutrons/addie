@@ -21,7 +21,8 @@ from fastgr.general_handler.help_gui import HelpGui, help_button_activator
 
 from fastgr.utilities.job_status_handler import JobStatusHandler
 from fastgr.utilities.job_monitor_thread import JobMonitorThread
-from fastgr.utilities.logbook_thread import LoogbookThread
+from fastgr.utilities.logbook_thread import LogbookThread
+from fastgr.utilities.logbook_handler import LogbookHandler
 
 from fastgr.initialization.init_step1 import InitStep1
 
@@ -65,7 +66,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     table_selection_buffer = {}
     _run_thread_sum_scans = RunThread()
 
-    _logbook_thread = LoogbookThread()
+    logbook_thread = LogbookThread()
     number_of_last_log_files_to_display = 10
     
     _run_thread = RunThread()
@@ -212,8 +213,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         # help (refer to DGSPlanner and HFIR Powder reduction GUI)
         self._assistantProcess = QtCore.QProcess(self)
-
-        return
 
     def _init_widgets(self):
         """ Initialize widgets
@@ -1553,6 +1552,18 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 	job_row['pid'] = None
 	self.job_list[row] = job_row
 	
+    def start_refresh_text_thread(self):
+	_run_thread = self.logbook_thread
+	_run_thread.setup(parent = self)
+	_run_thread.update_text.connect(self.update_logbook)
+	_run_thread.start()	
+
+    def update_logbook(self, text):
+	if self.job_monitor_interface == None:
+	    self.logbook_thread.stop()
+	else:
+	    _logbook_handler = LogbookHandler(parent=self)
+
     # tab1
     def select_current_folder_clicked(self):
         o_gui = Step1GuiHandler(parent = self)
