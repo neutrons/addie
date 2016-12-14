@@ -65,6 +65,9 @@ class LogbookHandler(object):
                 self.parent.job_monitor_interface.ui.logbook_text.append(_text)
                 self.parent.job_monitor_interface.ui.logbook_text.append(_end)
         
+            _time_format = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            self.parent.job_monitor_interface.ui.last_logbook_time.setText(_time_format)
         else:
             _time = str(datetime.datetime.now())
             self.parent.job_monitor_interface.ui.logbook_text.setText("{}: No Log Files Located !".format(_time))
+            

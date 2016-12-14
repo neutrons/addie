@@ -27,10 +27,16 @@ class JobMonitorThread(QtCore.QThread):
         for _row, _job in enumerate(_job_list):
             _pid = _job['pid']
             process = psutil.Process(_pid)
-            if not process.is_running() == 0:
+            if process is None:
                 self.job_monitor_interafce.ui.tableWidget.removeCellWidget(_row, 2)
                 _item = QtGui.QTableWidgetItem("Done!")
                 self.job_monitor_interafce.ui.tableWidget.setItem(_row, 2, _item)
+            else:
+                print("status of job {} : {}".format(_pid, process.status()))
+                if not process.is_running() == 0:
+                    self.job_monitor_interafce.ui.tableWidget.removeCellWidget(_row, 2)
+                    _item = QtGui.QTableWidgetItem("Done!")
+                    self.job_monitor_interafce.ui.tableWidget.setItem(_row, 2, _item)
                 
             
             
