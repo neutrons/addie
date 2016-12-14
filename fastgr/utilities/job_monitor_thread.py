@@ -32,8 +32,7 @@ class JobMonitorThread(QtCore.QThread):
                 _item = QtGui.QTableWidgetItem("Done!")
                 self.job_monitor_interafce.ui.tableWidget.setItem(_row, 2, _item)
             else:
-                print("status of job {} : {}".format(_pid, process.status()))
-                if not process.is_running() == 0:
+                if not process.status() == 'sleeping':
                     self.job_monitor_interafce.ui.tableWidget.removeCellWidget(_row, 2)
                     _item = QtGui.QTableWidgetItem("Done!")
                     self.job_monitor_interafce.ui.tableWidget.setItem(_row, 2, _item)
