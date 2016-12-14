@@ -40,7 +40,16 @@ class LogbookHandler(object):
         return _file_handler.file_contain
 
     def display_log_files(self):
+
+        if self.parent.job_monitor_interface.ui.pause_refresh_logbook.isChecked():
+            return
+
         list_files = self.last_files[::-1]
+        if self.parent.previous_list_of_log_files == []:
+            self.parent.previous_list_of_log_files = list_files
+        else:
+            if self.parent.previous_list_of_log_files == list_files:
+                return
 
         if len(list_files) > 0:
             for _index, _file in enumerate(list_files):

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_jobStatus.ui'
 #
-# Created: Tue Dec 13 17:19:52 2016
+# Created: Wed Dec 14 08:54:20 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -61,6 +61,14 @@ class Ui_MainWindow(object):
         self.logbook_text.setTextInteractionFlags(QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
         self.logbook_text.setObjectName(_fromUtf8("logbook_text"))
         self.verticalLayout.addWidget(self.logbook_text)
+        self.horizontalLayout_2 = QtGui.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
+        spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem1)
+        self.pause_refresh_logbook = QtGui.QRadioButton(self.centralwidget)
+        self.pause_refresh_logbook.setObjectName(_fromUtf8("pause_refresh_logbook"))
+        self.horizontalLayout_2.addWidget(self.pause_refresh_logbook)
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 677, 20))
@@ -84,4 +92,5 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Action", None))
         self.clear_table.setText(_translate("MainWindow", "Clear Table", None))
         self.label.setText(_translate("MainWindow", "Logbooks", None))
+        self.pause_refresh_logbook.setText(_translate("MainWindow", "Pause Refresh Logbook", None))
 
