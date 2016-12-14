@@ -295,12 +295,17 @@ class TableHandler(object):
         
     def _remove_selected_rows(self):
         selected_range = self.parent_no_ui.ui.table.selectedRanges()
-        _top_row = selected_range[0].topRow()
-        _bottom_row = selected_range[0].bottomRow()
-        nbr_row = _bottom_row - _top_row + 1
-        for i in np.arange(nbr_row):
-            self._remove_row(row=_top_row)
-    
+        _nbr_row_removed = 0
+        _local_nbr_row_removed = 0
+        for _range in selected_range:
+            _top_row = _range.topRow()
+            _bottom_row = _range.bottomRow()
+            nbr_row = _bottom_row - _top_row + 1
+            for i in np.arange(nbr_row):
+                self._remove_row(row=_top_row - _nbr_row_removed)
+                _local_nbr_row_removed += 1
+            _nbr_row_removed = _local_nbr_row_removed    
+            
         _pop_back_wdg = PopulateBackgroundWidgets(parent=self.parent_no_ui)
         _pop_back_wdg.run()
     
