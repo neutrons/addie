@@ -9,6 +9,7 @@ reads in a los.txt file, writes out auto_sum.inp file
 from collections import defaultdict
 import sys
 import os.path
+import re
 from fastgr.utilities.file_handler import FileHandler
 
 
@@ -76,6 +77,9 @@ class GenerateSumthing(object):
 
             else:
                 word = _row_split[-1].strip()
+                # where we need to add the GUI checkbox for stripping "at temperature"
+                if True:
+                    word = re.sub(" at temperature.*$", "", word)
                 word = word.replace(":", "_")
                 word = word.replace(" ", "_")
             
