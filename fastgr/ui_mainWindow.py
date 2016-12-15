@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Mon Dec 12 14:00:08 2016
+# Created: Thu Dec 15 12:04:58 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -410,8 +410,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_62 = QtGui.QHBoxLayout()
         self.horizontalLayout_62.setObjectName(_fromUtf8("horizontalLayout_62"))
         self.background_no = QtGui.QRadioButton(self.groupBox_32)
-        self.background_no.setMinimumSize(QtCore.QSize(50, 0))
-        self.background_no.setMaximumSize(QtCore.QSize(50, 16777215))
+        self.background_no.setMinimumSize(QtCore.QSize(110, 0))
+        self.background_no.setMaximumSize(QtCore.QSize(110, 16777215))
         self.background_no.setChecked(True)
         self.background_no.setObjectName(_fromUtf8("background_no"))
         self.horizontalLayout_62.addWidget(self.background_no)
@@ -427,6 +427,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_63 = QtGui.QHBoxLayout()
         self.horizontalLayout_63.setObjectName(_fromUtf8("horizontalLayout_63"))
         self.background_yes = QtGui.QRadioButton(self.groupBox_32)
+        self.background_yes.setMinimumSize(QtCore.QSize(110, 0))
+        self.background_yes.setMaximumSize(QtCore.QSize(110, 16777215))
         self.background_yes.setObjectName(_fromUtf8("background_yes"))
         self.horizontalLayout_63.addWidget(self.background_yes)
         self.background_comboBox = QtGui.QComboBox(self.groupBox_32)
@@ -978,6 +980,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.treeWidget_braggWSList.sizePolicy().hasHeightForWidth())
         self.treeWidget_braggWSList.setSizePolicy(sizePolicy)
         self.treeWidget_braggWSList.setObjectName(_fromUtf8("treeWidget_braggWSList"))
+        self.treeWidget_braggWSList.headerItem().setText(0, _fromUtf8("1"))
         self.horizontalLayout_72.addWidget(self.treeWidget_braggWSList)
         self.tabWidget_2.addTab(self.tab_bragg, _fromUtf8(""))
         self.tab_gR = QtGui.QWidget()
@@ -1163,6 +1166,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.treeWidget_grWsList.sizePolicy().hasHeightForWidth())
         self.treeWidget_grWsList.setSizePolicy(sizePolicy)
         self.treeWidget_grWsList.setObjectName(_fromUtf8("treeWidget_grWsList"))
+        self.treeWidget_grWsList.headerItem().setText(0, _fromUtf8("1"))
         self.verticalLayout_43.addWidget(self.treeWidget_grWsList)
         self.gridLayout_3 = QtGui.QGridLayout()
         self.gridLayout_3.setObjectName(_fromUtf8("gridLayout_3"))
@@ -1275,7 +1279,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget_2.setCurrentIndex(0)
+        self.tabWidget_2.setCurrentIndex(1)
         self.tabWidget.setCurrentIndex(0)
         QtCore.QObject.connect(self.diamond, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_edited)
         QtCore.QObject.connect(self.diamond_background, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_background_edited)
@@ -1503,10 +1507,10 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Do Abs. Corr. ?", None))
         self.label_80.setText(_translate("MainWindow", "Sample formula example: H 2 O 1, 2H 2 O 1, 238U 1 O 2", None))
         self.groupBox_32.setTitle(_translate("MainWindow", "Background", None))
-        self.background_no.setText(_translate("MainWindow", "No", None))
+        self.background_no.setText(_translate("MainWindow", "Default", None))
         self.background_no_field.setText(_translate("MainWindow", "N/A", None))
         self.label_81.setText(_translate("MainWindow", "(from exp.ini file)", None))
-        self.background_yes.setText(_translate("MainWindow", "Yes", None))
+        self.background_yes.setText(_translate("MainWindow", "Manual Select", None))
         self.background_line_edit.setText(_translate("MainWindow", "N/A", None))
         self.q_range_group_box.setTitle(_translate("MainWindow", "Q range", None))
         self.label.setText(_translate("MainWindow", "Qmin", None))

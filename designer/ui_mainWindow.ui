@@ -80,7 +80,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -958,18 +958,18 @@
                         <widget class="QRadioButton" name="background_no">
                          <property name="minimumSize">
                           <size>
-                           <width>50</width>
+                           <width>110</width>
                            <height>0</height>
                           </size>
                          </property>
                          <property name="maximumSize">
                           <size>
-                           <width>50</width>
+                           <width>110</width>
                            <height>16777215</height>
                           </size>
                          </property>
                          <property name="text">
-                          <string>No</string>
+                          <string>Default</string>
                          </property>
                          <property name="checked">
                           <bool>true</bool>
@@ -1008,8 +1008,20 @@
                       <layout class="QHBoxLayout" name="horizontalLayout_63">
                        <item>
                         <widget class="QRadioButton" name="background_yes">
+                         <property name="minimumSize">
+                          <size>
+                           <width>110</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>110</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
                          <property name="text">
-                          <string>Yes</string>
+                          <string>Manual Select</string>
                          </property>
                         </widget>
                        </item>
@@ -2510,6 +2522,11 @@ p, li { white-space: pre-wrap; }
                 <property name="toolTip">
                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;List of workspace names.  Each workspace is an individual bank&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
+                <column>
+                 <property name="text">
+                  <string notr="true">1</string>
+                 </property>
+                </column>
                </widget>
               </item>
              </layout>
@@ -2896,6 +2913,11 @@ p, li { white-space: pre-wrap; }
                   <property name="toolTip">
                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;write click on the workspace name should give user the option to plot/over plot &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
+                  <column>
+                   <property name="text">
+                    <string notr="true">1</string>
+                   </property>
+                  </column>
                  </widget>
                 </item>
                 <item>
