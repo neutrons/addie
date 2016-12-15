@@ -287,21 +287,17 @@ class TableHandler(object):
         _o_gui.check_gui()
     
     def check_selection_status(self, state, row):
-        try:
-            bottom_row = self.parent.table.selectedRanges()[0].bottomRow()
-            top_row = self.parent.table.selectedRanges()[0].topRow()
+        list_ranges = self.parent.table.selectedRanges()
+        for _range in list_ranges:
+            bottom_row = _range.bottomRow()
+            top_row = _range.topRow()
             range_row = range(top_row, bottom_row + 1)
-            if not (row in range_row):
-                return
-            
+        
             for _row in range_row:
                 _widgets = self.parent.table.cellWidget(_row, 0).children()
                 if len(_widgets) > 0:
                     _selected_widget = self.parent.table.cellWidget(_row, 0).children()[1]
                     _selected_widget.setChecked(state)
-                    
-        except:
-            pass
                     
         _o_gui = fastgr.step2_handler.step2_gui_handler.Step2GuiHandler(parent = self.parent_no_ui)
         _o_gui.check_gui()
