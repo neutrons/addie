@@ -395,9 +395,9 @@ class TableHandler(object):
         if nbr_row == 0:
             return
 
-        _string = str(self.parent.name_search.text())        
+        _string = str(self.parent.name_search.text()).lower()        
         for _row in range(nbr_row):
-            _text_row = str(self.parent.table.item(_row, 1).text())
+            _text_row = str(self.parent.table.item(_row, 1).text()).lower()
             if _string in _text_row:
                 self.select_row(row=_row, status=True)
                 
