@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Thu Dec 15 12:04:58 2016
+# Created: Thu Dec 15 13:05:36 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -373,6 +373,7 @@ class Ui_MainWindow(object):
         self.table.setMinimumSize(QtCore.QSize(800, 0))
         self.table.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.table.setAlternatingRowColors(True)
+        self.table.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         self.table.setObjectName(_fromUtf8("table"))
         self.table.setColumnCount(9)
         self.table.setRowCount(0)
@@ -397,7 +398,7 @@ class Ui_MainWindow(object):
         self.table.horizontalHeader().setSortIndicatorShown(False)
         self.table.horizontalHeader().setStretchLastSection(True)
         self.table.verticalHeader().setVisible(False)
-        self.table.verticalHeader().setSortIndicatorShown(False)
+        self.table.verticalHeader().setSortIndicatorShown(True)
         self.table.verticalHeader().setStretchLastSection(False)
         self.verticalLayout_6.addWidget(self.table)
         self.label_80 = QtGui.QLabel(self.layoutWidget)
@@ -980,7 +981,6 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.treeWidget_braggWSList.sizePolicy().hasHeightForWidth())
         self.treeWidget_braggWSList.setSizePolicy(sizePolicy)
         self.treeWidget_braggWSList.setObjectName(_fromUtf8("treeWidget_braggWSList"))
-        self.treeWidget_braggWSList.headerItem().setText(0, _fromUtf8("1"))
         self.horizontalLayout_72.addWidget(self.treeWidget_braggWSList)
         self.tabWidget_2.addTab(self.tab_bragg, _fromUtf8(""))
         self.tab_gR = QtGui.QWidget()
@@ -1166,7 +1166,6 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.treeWidget_grWsList.sizePolicy().hasHeightForWidth())
         self.treeWidget_grWsList.setSizePolicy(sizePolicy)
         self.treeWidget_grWsList.setObjectName(_fromUtf8("treeWidget_grWsList"))
-        self.treeWidget_grWsList.headerItem().setText(0, _fromUtf8("1"))
         self.verticalLayout_43.addWidget(self.treeWidget_grWsList)
         self.gridLayout_3 = QtGui.QGridLayout()
         self.gridLayout_3.setObjectName(_fromUtf8("gridLayout_3"))
@@ -1487,6 +1486,7 @@ class Ui_MainWindow(object):
         self.import_button.setText(_translate("MainWindow", "Import Table ...", None))
         self.export_button.setText(_translate("MainWindow", "Export Table ...", None))
         self.populate_table.setText(_translate("MainWindow", "Reload List of Scans", None))
+        self.table.setSortingEnabled(False)
         item = self.table.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Select", None))
         item = self.table.horizontalHeaderItem(1)

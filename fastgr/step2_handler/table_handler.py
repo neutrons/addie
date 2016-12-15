@@ -104,8 +104,10 @@ class TableHandler(object):
             _paste.setEnabled(paste_status)
             _cut = menu.addAction("Clear")
             menu.addSeparator()
-            _select_all = menu.addAction("Select All")
-            _unselect_all = menu.addAction("Unselect All")
+            _select_all = menu.addAction("Check All")
+            _unselect_all = menu.addAction("Unchecked All")
+            menu.addSeparator()
+            _invert_selection = menu.addAction("Inverse Selection")
             menu.addSeparator()
         
         _new_row = menu.addAction("Insert Blank Row")
@@ -128,6 +130,8 @@ class TableHandler(object):
             self._cut()
         elif action == _duplicate_row:
             self._duplicate_row()
+        elif action == _invert_selection:
+            self._inverse_selection()
         elif action == _new_row:
             self._new_row()
         elif action == _remove_row:
@@ -239,6 +243,20 @@ class TableHandler(object):
                     
             index += 1
     
+    def _inverse_selection(self):
+        # select everything
+        nbr_row = self.parent.table.rowCount()
+        nbr_column = self.parent.table.columnCount()
+        selected_range = self.parent_no_ui.ui.table.selectedRanges()
+        _full_range = QtGui.QTableWidgetSelectionRange(0, 0, nbr_row-1, nbr_column-1)
+        self.parent.table.setRangeSelected(_full_range, True)
+        
+        # inverse selected rows
+        for _range in selected_range:
+            _range.leftColumn = 0
+            _range.rightColun = nbr_column-1
+            self.parent_no_ui.ui.table.setRangeSelected(_range, False)
+
     def select_all(self):
         self.select_first_column(status = True)
         
