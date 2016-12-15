@@ -827,6 +827,32 @@
                       </property>
                      </spacer>
                     </item>
+                    <item>
+                     <widget class="QLabel" name="label_21">
+                      <property name="text">
+                       <string>Name Search</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="name_search">
+                      <property name="minimumSize">
+                       <size>
+                        <width>200</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>200</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>equil</string>
+                      </property>
+                     </widget>
+                    </item>
                    </layout>
                   </item>
                   <item>
@@ -3453,8 +3479,8 @@ p, li { white-space: pre-wrap; }
    <slot>yes_background_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>88</x>
-     <y>431</y>
+     <x>113</x>
+     <y>427</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -3469,8 +3495,8 @@ p, li { white-space: pre-wrap; }
    <slot>background_combobox_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>566</x>
-     <y>432</y>
+     <x>707</x>
+     <y>428</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -3821,8 +3847,8 @@ p, li { white-space: pre-wrap; }
    <slot>mantid_browse_characterization_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>226</x>
-     <y>603</y>
+     <x>240</x>
+     <y>522</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -3837,8 +3863,8 @@ p, li { white-space: pre-wrap; }
    <slot>mantid_output_directory_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>97</x>
-     <y>825</y>
+     <x>111</x>
+     <y>534</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -3869,8 +3895,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>120</x>
-     <y>603</y>
+     <x>134</x>
+     <y>522</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -3885,8 +3911,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>266</x>
-     <y>675</y>
+     <x>142</x>
+     <y>526</y>
     </hint>
     <hint type="destinationlabel">
      <x>1</x>
@@ -3901,8 +3927,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>196</x>
-     <y>757</y>
+     <x>142</x>
+     <y>530</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -3917,8 +3943,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>424</x>
-     <y>757</y>
+     <x>142</x>
+     <y>530</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -3933,8 +3959,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>751</x>
-     <y>749</y>
+     <x>142</x>
+     <y>530</y>
     </hint>
     <hint type="destinationlabel">
      <x>1220</x>
@@ -3949,8 +3975,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>97</x>
-     <y>825</y>
+     <x>111</x>
+     <y>534</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -3965,8 +3991,8 @@ p, li { white-space: pre-wrap; }
    <slot>mantid_run_reduction()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1287</x>
-     <y>825</y>
+     <x>242</x>
+     <y>534</y>
     </hint>
     <hint type="destinationlabel">
      <x>1220</x>
@@ -4141,8 +4167,8 @@ p, li { white-space: pre-wrap; }
    <slot>help_button_clicked_mantid()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1313</x>
-     <y>825</y>
+     <x>62</x>
+     <y>534</y>
     </hint>
     <hint type="destinationlabel">
      <x>1225</x>
@@ -4195,6 +4221,22 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>678</x>
      <y>528</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>name_search</sender>
+   <signal>returnPressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>name_search_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1285</x>
+     <y>86</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1356</x>
+     <y>117</y>
     </hint>
    </hints>
   </connection>
@@ -4251,5 +4293,6 @@ p, li { white-space: pre-wrap; }
   <slot>create_exp_ini_clicked()</slot>
   <slot>resize_table_post_processing_tab()</slot>
   <slot>test_resizing_widget()</slot>
+  <slot>name_search_clicked()</slot>
  </slots>
 </ui>

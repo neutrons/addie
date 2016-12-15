@@ -262,6 +262,17 @@ class TableHandler(object):
         
     def unselect_all(self):
         self.select_first_column(status = False)
+
+    def select_row(self, row=-1, status=True):
+        nbr_column = self.parent.table.columnCount()
+        _range = QtGui.QTableWidgetSelectionRange(row, 0, row, nbr_column-1)
+        self.parent.table.setRangeSelected(_range, status)
+
+    def check_row(self, row=-1, status=True):
+        _widgets = self.parent.table.cellWidget(row, 0).children()
+        if len(_widgets) > 0:
+            _selected_widget = self.parent.table.cellWidget(row, 0).children()[1]
+            _selected_widget.setChecked(status)
         
     def select_first_column(self, status=True):
         for _row in range(self.parent.table.rowCount()):
@@ -379,4 +390,18 @@ class TableHandler(object):
         else:
             return str(_item.text())
 
-    
+    def name_search(self):
+        nbr_row = self.parent.table.rowCount()
+        if nbr_row == 0:
+            return
+
+        _string = str(self.parent.name_search.text())        
+        for _row in range(nbr_row):
+            _text_row = str(self.parent.table.item(_row, 1).text())
+            if _string in _text_row:
+                self.select_row(row=_row, status=True)
+                
+        
+        
+        
+        

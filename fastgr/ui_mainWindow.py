@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Thu Dec 15 13:05:36 2016
+# Created: Thu Dec 15 13:14:39 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -354,6 +354,14 @@ class Ui_MainWindow(object):
         self.horizontalLayout_60.addWidget(self.move_to_button)
         spacerItem5 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_60.addItem(spacerItem5)
+        self.label_21 = QtGui.QLabel(self.layoutWidget)
+        self.label_21.setObjectName(_fromUtf8("label_21"))
+        self.horizontalLayout_60.addWidget(self.label_21)
+        self.name_search = QtGui.QLineEdit(self.layoutWidget)
+        self.name_search.setMinimumSize(QtCore.QSize(200, 0))
+        self.name_search.setMaximumSize(QtCore.QSize(200, 16777215))
+        self.name_search.setObjectName(_fromUtf8("name_search"))
+        self.horizontalLayout_60.addWidget(self.name_search)
         self.verticalLayout_6.addLayout(self.horizontalLayout_60)
         self.horizontalLayout_14 = QtGui.QHBoxLayout()
         self.horizontalLayout_14.setObjectName(_fromUtf8("horizontalLayout_14"))
@@ -1338,6 +1346,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.actionJob_Monitor, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.window_job_monitor_clicked)
         QtCore.QObject.connect(self.create_exp_ini_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.create_exp_ini_clicked)
         QtCore.QObject.connect(self.splitter, QtCore.SIGNAL(_fromUtf8("splitterMoved(int,int)")), MainWindow.resize_table_post_processing_tab)
+        QtCore.QObject.connect(self.name_search, QtCore.SIGNAL(_fromUtf8("returnPressed()")), MainWindow.name_search_clicked)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         MainWindow.setTabOrder(self.select_current_folder_button, self.diamond)
         MainWindow.setTabOrder(self.diamond, self.diamond_background)
@@ -1483,6 +1492,8 @@ class Ui_MainWindow(object):
         self.pushButton_2.setText(_translate("MainWindow", "?", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_5), _translate("MainWindow", "autoNOM", None))
         self.move_to_button.setText(_translate("MainWindow", "Move to Folder and Refresh Table ...", None))
+        self.label_21.setText(_translate("MainWindow", "Name Search", None))
+        self.name_search.setText(_translate("MainWindow", "equil", None))
         self.import_button.setText(_translate("MainWindow", "Import Table ...", None))
         self.export_button.setText(_translate("MainWindow", "Export Table ...", None))
         self.populate_table.setText(_translate("MainWindow", "Reload List of Scans", None))
