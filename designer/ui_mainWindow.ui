@@ -3178,7 +3178,7 @@ p, li { white-space: pre-wrap; }
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Undo</string>
+    <string>Undo Table Edit</string>
    </property>
   </action>
   <action name="actionRedo">
@@ -3186,7 +3186,7 @@ p, li { white-space: pre-wrap; }
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Redo</string>
+    <string>Redo Table Edit</string>
    </property>
   </action>
  </widget>
@@ -3869,8 +3869,8 @@ p, li { white-space: pre-wrap; }
    <slot>mantid_browse_calibration_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>164</x>
-     <y>515</y>
+     <x>165</x>
+     <y>489</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -3885,8 +3885,8 @@ p, li { white-space: pre-wrap; }
    <slot>mantid_browse_characterization_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>240</x>
-     <y>522</y>
+     <x>241</x>
+     <y>493</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -3901,8 +3901,8 @@ p, li { white-space: pre-wrap; }
    <slot>mantid_output_directory_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>111</x>
-     <y>534</y>
+     <x>51</x>
+     <y>506</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -3917,8 +3917,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>242</x>
-     <y>515</y>
+     <x>243</x>
+     <y>489</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -3933,8 +3933,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>134</x>
-     <y>522</y>
+     <x>135</x>
+     <y>493</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -3949,8 +3949,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>142</x>
-     <y>526</y>
+     <x>91</x>
+     <y>497</y>
     </hint>
     <hint type="destinationlabel">
      <x>1</x>
@@ -3965,8 +3965,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>142</x>
-     <y>530</y>
+     <x>57</x>
+     <y>527</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -3981,8 +3981,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>142</x>
-     <y>530</y>
+     <x>68</x>
+     <y>527</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -3997,8 +3997,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>142</x>
-     <y>530</y>
+     <x>104</x>
+     <y>502</y>
     </hint>
     <hint type="destinationlabel">
      <x>1220</x>
@@ -4013,8 +4013,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_mantid_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>111</x>
-     <y>534</y>
+     <x>51</x>
+     <y>506</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -4029,8 +4029,8 @@ p, li { white-space: pre-wrap; }
    <slot>mantid_run_reduction()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>242</x>
-     <y>534</y>
+     <x>276</x>
+     <y>505</y>
     </hint>
     <hint type="destinationlabel">
      <x>1220</x>
@@ -4205,8 +4205,8 @@ p, li { white-space: pre-wrap; }
    <slot>help_button_clicked_mantid()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>62</x>
-     <y>534</y>
+     <x>123</x>
+     <y>505</y>
     </hint>
     <hint type="destinationlabel">
      <x>1225</x>
@@ -4294,6 +4294,38 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionUndo</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>action_undo_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>678</x>
+     <y>528</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionRedo</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>action_redo_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>678</x>
+     <y>528</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>diamond_edited()</slot>
@@ -4349,5 +4381,7 @@ p, li { white-space: pre-wrap; }
   <slot>test_resizing_widget()</slot>
   <slot>name_search_clicked()</slot>
   <slot>clear_name_search_clicked()</slot>
+  <slot>action_undo_clicked()</slot>
+  <slot>action_redo_clicked()</slot>
  </slots>
 </ui>

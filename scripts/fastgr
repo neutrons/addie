@@ -29,6 +29,7 @@ from fastgr.initialization.init_step1 import InitStep1
 from fastgr.step1_handler.step1_gui_handler import Step1GuiHandler
 from fastgr.step1_handler.run_step1 import RunStep1
 from fastgr.step2_handler.load_table_intermediate_step_interface import loadTableIntermediateStepInterface
+from fastgr.step2_handler.undo_handler import UndoHandler
 
 from fastgr.initialization.init_step2 import InitStep2
 from fastgr.step2_handler.populate_master_table import PopulateMasterTable
@@ -58,6 +59,11 @@ import fastgr.specify_plots_style as ps
 class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     """ Main FastGR window
     """
+
+    undo_table = []
+    max_undo_list = 10
+    undo_index = max_undo_list
+    
     debugging = False
     load_intermediate_step_ok = False
     remove_dynamic_temperature_flag = False
@@ -1511,6 +1517,14 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 	o_export_config = ExportConfiguration(parent = self)
 	o_export_config.run()
 
+    def action_undo_clicked(self):
+	o_undo = UndoHandler(parent=self)
+	o_undo.undo_table()
+
+    def action_redo_clicked(self):
+	o_undo = UndoHandler(parent=self)
+	o_undo.redo_table()
+
     def help_about_clicked(self):
         _about = AboutDialog(parent=self)
         _about.display()
@@ -1655,11 +1669,17 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 	
         _o_gui = Step2GuiHandler(parent = self)
         _o_gui.check_gui()
+	
+	o_undo = UndoHandler(parent = self)
+	o_undo.save_table()
 
     def import_table_clicked(self):
 	_o_table = TableHandler(parent = self)
 	_o_table._import()
 	self.name_search_clicked()
+
+	o_undo = UndoHandler(parent = self)
+	o_undo.save_table()
     
     def export_table_clicked(self):
 	_o_table = TableHandler(parent = self)
@@ -1693,6 +1713,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 	if column == 1:
 	    o_pop = PopulateBackgroundWidgets(parent=self)
 	    o_pop.refresh_contain()
+	    
+	o_undo = UndoHandler(parent = self)
+	o_undo.save_table()
 
     # PDF
 	

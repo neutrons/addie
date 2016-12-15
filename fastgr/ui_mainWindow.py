@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Thu Dec 15 16:13:00 2016
+# Created: Thu Dec 15 17:39:15 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -1362,6 +1362,8 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.splitter, QtCore.SIGNAL(_fromUtf8("splitterMoved(int,int)")), MainWindow.resize_table_post_processing_tab)
         QtCore.QObject.connect(self.name_search, QtCore.SIGNAL(_fromUtf8("returnPressed()")), MainWindow.name_search_clicked)
         QtCore.QObject.connect(self.clear_name_search, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.clear_name_search_clicked)
+        QtCore.QObject.connect(self.actionUndo, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.action_undo_clicked)
+        QtCore.QObject.connect(self.actionRedo, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.action_redo_clicked)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         MainWindow.setTabOrder(self.select_current_folder_button, self.diamond)
         MainWindow.setTabOrder(self.diamond, self.diamond_background)
@@ -1688,8 +1690,8 @@ class Ui_MainWindow(object):
         self.actionLoad.setText(_translate("MainWindow", "Load ...", None))
         self.actionSave.setText(_translate("MainWindow", "Save ...", None))
         self.actionJob_Monitor.setText(_translate("MainWindow", "Job Monitor ...", None))
-        self.actionUndo.setText(_translate("MainWindow", "Undo", None))
-        self.actionRedo.setText(_translate("MainWindow", "Redo", None))
+        self.actionUndo.setText(_translate("MainWindow", "Undo Table Edit", None))
+        self.actionRedo.setText(_translate("MainWindow", "Redo Table Edit", None))
 
 from graphicviewlib import BraggView, SofQView, GofRView
 from ipythondockwidget import IPythonDockWidget
