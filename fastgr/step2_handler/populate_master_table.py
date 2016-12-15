@@ -15,7 +15,8 @@ class PopulateMasterTable(object):
     def run(self):
 
         try:
-            o_generate = GenerateSumthing(folder= self.parent.current_folder)
+            o_generate = GenerateSumthing(parent = self.parent,
+                                          folder = self.parent.current_folder)
             o_generate.create_sum_inp_file()
         
             self.read_auto_sum_file()

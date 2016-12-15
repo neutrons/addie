@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Thu Dec 15 15:18:31 2016
+# Created: Thu Dec 15 16:13:00 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -1271,6 +1271,12 @@ class Ui_MainWindow(object):
         self.actionSave.setObjectName(_fromUtf8("actionSave"))
         self.actionJob_Monitor = QtGui.QAction(MainWindow)
         self.actionJob_Monitor.setObjectName(_fromUtf8("actionJob_Monitor"))
+        self.actionUndo = QtGui.QAction(MainWindow)
+        self.actionUndo.setEnabled(False)
+        self.actionUndo.setObjectName(_fromUtf8("actionUndo"))
+        self.actionRedo = QtGui.QAction(MainWindow)
+        self.actionRedo.setEnabled(False)
+        self.actionRedo.setObjectName(_fromUtf8("actionRedo"))
         self.menuLoad_Configuration.addAction(self.actionLoad)
         self.menuLoad_Configuration.addAction(self.actionSave)
         self.menuFile.addAction(self.action_preview_ascii)
@@ -1278,6 +1284,9 @@ class Ui_MainWindow(object):
         self.menuFile.addAction(self.menuLoad_Configuration.menuAction())
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionQuit)
+        self.menuEdit.addAction(self.actionUndo)
+        self.menuEdit.addAction(self.actionRedo)
+        self.menuEdit.addSeparator()
         self.menuEdit.addAction(self.actionReset_GSAS_tab)
         self.menuEdit.addAction(self.actionReset_GofR_tab)
         self.menuHelp.addAction(self.actionCheat_sheet)
@@ -1679,6 +1688,8 @@ class Ui_MainWindow(object):
         self.actionLoad.setText(_translate("MainWindow", "Load ...", None))
         self.actionSave.setText(_translate("MainWindow", "Save ...", None))
         self.actionJob_Monitor.setText(_translate("MainWindow", "Job Monitor ...", None))
+        self.actionUndo.setText(_translate("MainWindow", "Undo", None))
+        self.actionRedo.setText(_translate("MainWindow", "Redo", None))
 
 from graphicviewlib import BraggView, SofQView, GofRView
 from ipythondockwidget import IPythonDockWidget

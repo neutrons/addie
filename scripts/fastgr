@@ -28,6 +28,7 @@ from fastgr.initialization.init_step1 import InitStep1
 
 from fastgr.step1_handler.step1_gui_handler import Step1GuiHandler
 from fastgr.step1_handler.run_step1 import RunStep1
+from fastgr.step2_handler.load_table_intermediate_step_interface import loadTableIntermediateStepInterface
 
 from fastgr.initialization.init_step2 import InitStep2
 from fastgr.step2_handler.populate_master_table import PopulateMasterTable
@@ -58,6 +59,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     """ Main FastGR window
     """
     debugging = False
+    load_intermediate_step_ok = False
+    remove_dynamic_temperature_flag = False
     current_folder = os.getcwd()
     configuration_folder = current_folder
     calibration_folder = '/SNS/lustre/NOM/shared/CALIBRATION/2016_2_1B_CAL/'
@@ -1627,6 +1630,13 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 	pass
 	
     def move_to_folder_clicked(self):
+	o_load_table = loadTableIntermediateStepInterface(parent = self)
+	o_load_table.show()
+
+    def move_to_folder_step2(self):
+	if not self.load_intermediate_step_ok:
+	    return
+	
         o_gui = Step2GuiHandler(parent = self)
         o_gui.move_to_folder()
         self.populate_table_clicked()

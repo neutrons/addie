@@ -19,7 +19,8 @@ class GenerateSumthing(object):
     input_file_new_format = 'los.csv'
     output_inp_file = 'auto_sum.inp'
     
-    def __init__(self, folder=None):
+    def __init__(self, parent=None, folder=None):
+        self.parent = parent
         self.folder = folder
         
     def create_sum_inp_file(self):
@@ -52,8 +53,8 @@ class GenerateSumthing(object):
 
     def create_sum_inp_file_from_new_format(self,  full_input_file_name):
         
-        print("]LOG]  Format: comma separated, no scan infos")
-        print("[LOG] Reading %s" %full_input_file_name)
+#        print("]LOG]  Format: comma separated, no scan infos")
+#        print("[LOG] Reading %s" %full_input_file_name)
         name_list = []
         run_nums = defaultdict(list)
         
@@ -77,8 +78,9 @@ class GenerateSumthing(object):
 
             else:
                 word = _row_split[-1].strip()
-                # where we need to add the GUI checkbox for stripping "at temperature"
-                if True:
+
+                # stripping "at temperature" if True
+                if self.parent.remove_dynamic_temperature_flag:
                     word = re.sub(" at temperature.*$", "", word)
                 word = word.replace(":", "_")
                 word = word.replace(" ", "_")
@@ -94,12 +96,6 @@ class GenerateSumthing(object):
         outfile = open(full_output_file_name, "w")
         outfile.write("background \n")
     
-        print("run_nums")
-        print(run_nums)
-        
-        print('name_list')
-        print(name_list)
-    
         #print(">creating file %s" %full_output_file_name)
         for key in sorted(run_nums.iterkeys()):
             outbit = str(run_nums[key])
@@ -109,12 +105,12 @@ class GenerateSumthing(object):
             outfile.write(key + " " + outbit+"\n")
     
         outfile.close()
-        print("[LOG] Created %s" %full_output_file_name)
+#        print("[LOG] Created %s" %full_output_file_name)
 
     def create_sum_inp_file_from_old_format(self, full_input_file_name):
 
-        print("]LOG]  Format: space separated, with scan infos")
-        print("[LOG] Reading %s" %full_input_file_name)
+#        print("]LOG]  Format: space separated, with scan infos")
+#        print("[LOG] Reading %s" %full_input_file_name)
         name_list=[]
         run_nums=defaultdict(list)
         
