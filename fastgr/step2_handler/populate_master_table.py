@@ -72,6 +72,7 @@ class PopulateMasterTable(object):
             self.add_new_row(_metadata, row=_index)
             _index += 1
             
+        self.parent.ui.table.setSortingEnabled(True)            
         print("[LOG] Populated table")
                 
     def add_new_row(self, _metadata, row=0):

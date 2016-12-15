@@ -352,6 +352,7 @@ class TableHandler(object):
 
     def _clear_table(self):
         _number_of_row = self.parent.table.rowCount()
+        self.parent.table.setSortingEnabled(False)
         for _row in np.arange(_number_of_row):
             self.parent.table.removeRow(0)
         self.parent.background_line_edit.setText("")
