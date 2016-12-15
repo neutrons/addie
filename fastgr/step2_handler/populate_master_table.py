@@ -53,11 +53,15 @@ class PopulateMasterTable(object):
         print("[LOG] _data_table: " , _data_table)
 
     def populate_table(self):
+        '''
+        In this new version, the table will append the new entries
+        '''
         
-        o_table = fastgr.step2_handler.table_handler.TableHandler(parent = self.parent)
-        o_table._clear_table()
+        #o_table = fastgr.step2_handler.table_handler.TableHandler(parent = self.parent)
+        #o_table._clear_table()
         
         _index = 0
+        _columns_runs = self.get_columns_value(column = 2)
 
         for _entry in self._data_from_file:
             if _entry.strip() == "":
@@ -69,12 +73,28 @@ class PopulateMasterTable(object):
             _metadata['name'] = name
             _metadata['runs'] = value
                 
+            if self.runs_already_in_table(runs = value, table_runs = _columns_runs):
+                continue
+                
             self.add_new_row(_metadata, row=_index)
             _index += 1
             
         self.parent.ui.table.setSortingEnabled(True)            
         print("[LOG] Populated table")
                 
+    def get_columns_value(self, column=2):
+        column_values = []
+        nbr_row = self.parent.ui.table.rowCount()
+        for _row in range(nbr_row):
+            _value = str(self.parent.ui.table.item(_row, column).text())
+            column_values.append(_value)
+        return column_values
+
+    def runs_already_in_table(self, runs='', table_runs = []):
+        if runs in table_runs:
+            return True
+        return False
+
     def add_new_row(self, _metadata, row=0):
         
         self.parent.ui.table.insertRow(row)
