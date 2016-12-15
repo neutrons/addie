@@ -853,6 +853,25 @@
                       </property>
                      </widget>
                     </item>
+                    <item>
+                     <widget class="QPushButton" name="clear_name_search">
+                      <property name="minimumSize">
+                       <size>
+                        <width>20</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>20</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>X</string>
+                      </property>
+                     </widget>
+                    </item>
                    </layout>
                   </item>
                   <item>
@@ -4240,6 +4259,22 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>clear_name_search</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>clear_name_search_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1311</x>
+     <y>86</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1353</x>
+     <y>79</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>diamond_edited()</slot>
@@ -4294,5 +4329,6 @@ p, li { white-space: pre-wrap; }
   <slot>resize_table_post_processing_tab()</slot>
   <slot>test_resizing_widget()</slot>
   <slot>name_search_clicked()</slot>
+  <slot>clear_name_search_clicked()</slot>
  </slots>
 </ui>

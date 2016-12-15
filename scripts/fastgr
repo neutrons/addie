@@ -1625,30 +1625,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     # tab2
     def resize_table_post_processing_tab(self, height, width):
 	pass
-	#width = self.size().width()
-	#cursor_position = QtGui.QCursor.pos().y()
-	#if self.previous_splitter_height == -1:
-	    #self.previous_splitter_height = height
-	#else:
-	    #if height == self.previous_splitter_height:
-		#if self.first_time_resizing_blocked:
-		    #self.offset = np.abs(cursor_position - height)
-		    #self.first_time_resizing_blocked = False
-		    #self.cursor_previous_position = cursor_position
-		    #self.previous_offset = self.offset
-		#else:
-		    #if cursor_position > self.cursor_previous_position:
-			#self.previous_offset += 1
-		    #else:
-			#self.previous_offset -= 1
-		    #height += self.previous_offset
-		#self.previous_splitter_height = height
-	    #else:
-		#self.previous_splitter_height = height
-		#self.first_time_resizing_blocked = True
-		    
-	#self.resize(width, cursor_position)
-##	self.resize(width, height + self.init_height_main_gui - self.init_size_splitter_height)
 	
     def move_to_folder_clicked(self):
         o_gui = Step2GuiHandler(parent = self)
@@ -1665,13 +1641,15 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         
         _pop_back_wdg = PopulateBackgroundWidgets(parent = self)
         _pop_back_wdg.run()
-        
+	self.name_search_clicked()
+	
         _o_gui = Step2GuiHandler(parent = self)
         _o_gui.check_gui()
 
     def import_table_clicked(self):
 	_o_table = TableHandler(parent = self)
 	_o_table._import()
+	self.name_search_clicked()
     
     def export_table_clicked(self):
 	_o_table = TableHandler(parent = self)
@@ -1687,8 +1665,12 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 	_o_table_handler.check_selection_status(state, row)
 
     def name_search_clicked(self):
-	print("hererer")
 	o_table = TableHandler(parent = self)
+	o_table.name_search()
+	
+    def clear_name_search_clicked(self):
+	o_table = TableHandler(parent = self)
+	self.ui.name_search.setText('')
 	o_table.name_search()
 
     def check_step2_gui(self, row, column):

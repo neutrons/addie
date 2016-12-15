@@ -87,8 +87,8 @@ class TableHandler(object):
         _clear_table = -1
         _import = -1
         _export = -1
-        _select_all = -1
-        _unselect_all = -1
+        _check_all = -1
+        _uncheck_all = -1
 
         menu = QtGui.QMenu(self.parent_no_ui)
 
@@ -104,8 +104,8 @@ class TableHandler(object):
             _paste.setEnabled(paste_status)
             _cut = menu.addAction("Clear")
             menu.addSeparator()
-            _select_all = menu.addAction("Check All")
-            _unselect_all = menu.addAction("Unchecked All")
+            _check_all = menu.addAction("Check All")
+            _uncheck_all = menu.addAction("Unchecked All")
             menu.addSeparator()
             _invert_selection = menu.addAction("Inverse Selection")
             menu.addSeparator()
@@ -140,10 +140,10 @@ class TableHandler(object):
             self._refresh_table()
         elif action == _clear_table:
             self._clear_table()
-        elif action == _select_all:
-            self.select_all()
-        elif action == _unselect_all:
-            self.unselect_all()
+        elif action == _check_all:
+            self.check_all()
+        elif action == _uncheck_all:
+            self.uncheck_all()
             
     def _import(self):
         _current_folder = self.parent_no_ui.current_folder
@@ -244,23 +244,25 @@ class TableHandler(object):
             index += 1
     
     def _inverse_selection(self):
-        # select everything
-        nbr_row = self.parent.table.rowCount()
-        nbr_column = self.parent.table.columnCount()
-        selected_range = self.parent_no_ui.ui.table.selectedRanges()
-        _full_range = QtGui.QTableWidgetSelectionRange(0, 0, nbr_row-1, nbr_column-1)
-        self.parent.table.setRangeSelected(_full_range, True)
-        
+        self.select_all(status= True)
+
         # inverse selected rows
         for _range in selected_range:
             _range.leftColumn = 0
             _range.rightColun = nbr_column-1
             self.parent_no_ui.ui.table.setRangeSelected(_range, False)
 
-    def select_all(self):
+    def select_all(self, status=True):
+        nbr_row = self.parent.table.rowCount()
+        nbr_column = self.parent.table.columnCount()
+        selected_range = self.parent_no_ui.ui.table.selectedRanges()
+        _full_range = QtGui.QTableWidgetSelectionRange(0, 0, nbr_row-1, nbr_column-1)
+        self.parent.table.setRangeSelected(_full_range, status)
+
+    def check_all(self):
         self.select_first_column(status = True)
         
-    def unselect_all(self):
+    def uncheck_all(self):
         self.select_first_column(status = False)
 
     def select_row(self, row=-1, status=True):
@@ -396,10 +398,13 @@ class TableHandler(object):
             return
 
         _string = str(self.parent.name_search.text()).lower()        
-        for _row in range(nbr_row):
-            _text_row = str(self.parent.table.item(_row, 1).text()).lower()
-            if _string in _text_row:
-                self.select_row(row=_row, status=True)
+        if _string == '':
+            self.select_all(status= False)
+        else:
+            for _row in range(nbr_row):
+                _text_row = str(self.parent.table.item(_row, 1).text()).lower()
+                if _string in _text_row:
+                    self.select_row(row=_row, status=True)
                 
         
         
