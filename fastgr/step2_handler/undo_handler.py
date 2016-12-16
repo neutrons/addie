@@ -33,27 +33,22 @@ class UndoHandler(object):
         self.parent.undo_table = undo_table
         
     def undo_table(self):
-        
-        self.parent.ui.table.blockSignals(True)
-        
         if self.parent.undo_index == 0:
-            return
-        self.load_table()
-        
+            return        
         self.parent.undo_index -= 1
+        self.load_table()
         self.check_undo_widgets()
-
-        self.parent.ui.table.blockSignals(False)
             
     def redo_table(self):
         if self.parent.undo_index == self.parent.max_undo_list:
             return
-        self.load_table()
-        
         self.parent.undo_index += 1
+        self.load_table()
         self.check_undo_widgets()
         
     def load_table(self):
+        self.parent.ui.table.blockSignals(True)
+    
         _table_to_reload = self.parent.undo_table[str(self.parent.undo_index)]
     
         o_table = TableHandler(parent=self.parent)
@@ -66,7 +61,9 @@ class UndoHandler(object):
         
         _pop_back_wdg = PopulateBackgroundWidgets(parent = self.parent)
         _pop_back_wdg.run()        
-
+    
+        self.parent.ui.table.blockSignals(False)
+    
     def check_undo_widgets(self):
         _undo_index = self.parent.undo_index
         if _undo_index == 0:
@@ -75,6 +72,8 @@ class UndoHandler(object):
         elif _undo_index == 10:
             self.parent.ui.actionRedo.setEnabled(False)
             self.parent.ui.actionUndo.setEnabled(True)
+        elif not (str(_undo_index) in self.parent.undo_table.keys()):
+            self.parent.ui.actionUndo.setEnabled(False)
         else:
             self.parent.ui.actionRedo.setEnabled(True)
             self.parent.ui.actionUndo.setEnabled(True)
