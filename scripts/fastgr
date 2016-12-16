@@ -447,7 +447,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
             # self.ui.graphicsView_gr.plot_gr(key_plot, vec_r, vec_g, vec_ge, False)
 
             # add to tree
-            gr_param_str = 'Q: (%.3f, %.3f)' % (min_q, max_q)
+            gr_param_str = 'G(r) for Q(%.3f, %.3f)' % (min_q, max_q)
             self.ui.treeWidget_grWsList.add_gr(gr_param_str, gr_ws_name)
         # END-FOR
 
