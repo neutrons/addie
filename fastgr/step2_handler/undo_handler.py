@@ -10,7 +10,8 @@ class UndoHandler(object):
         self.parent = parent
         
     def save_table(self):
-        self.parent.ui.actionUndo.setEnabled(True)
+        #self.parent.ui.actionUndo.setEnabled(True)
+        self.parent.undo_button_enabled = True
         
         # retrieve table settings
         o_export_table = ExportTable(parent=self.parent)
@@ -66,19 +67,28 @@ class UndoHandler(object):
     
     def check_undo_widgets(self):
         _undo_index = self.parent.undo_index
+        
         if _undo_index == 0:
-            self.parent.ui.actionUndo.setEnabled(False)
-            self.parent.ui.actionRedo.setEnabled(True)
+            _undo_status = False
+            _redo_status = True
         elif _undo_index == 10:
-            self.parent.ui.actionRedo.setEnabled(False)
-            self.parent.ui.actionUndo.setEnabled(True)
-        elif not (str(_undo_index) in self.parent.undo_table.keys()):
-            self.parent.ui.actionUndo.setEnabled(False)
+            _undo_status = True
+            _redo_status = False
+        elif not (str(_undo_index-1) in self.parent.undo_table.keys()):
+            _undo_status = False
+            _redo_status = True
         else:
-            self.parent.ui.actionRedo.setEnabled(True)
-            self.parent.ui.actionUndo.setEnabled(True)
+            _undo_status = True
+            _redo_status = True
+          
+        # buttons in main gui (Edit menu bar) removed for now !  
+        #self.parent.ui.actionRedo.setEnabled(redo_status)
+        #self.parent.ui.actionUndo.setEnabled(undo_status)
+        
+        self.parent.undo_button_enabled = _undo_status
+        self.parent.redo_button_enabled = _redo_status
             
-            
+        
             
         
 

@@ -58,10 +58,6 @@ class ImportTable(object):
             pass
     
     def populate_gui(self):
-        print("in populate gui")
-        print(self.contain_parsed)
-
-
         _contain_parsed = self.contain_parsed
         for _row, _entry in enumerate(_contain_parsed):
             

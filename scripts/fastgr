@@ -63,6 +63,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     undo_table = {}
     max_undo_list = 10
     undo_index = max_undo_list
+    undo_button_enabled = False
+    redo_button_enabled = False
     
     debugging = False
     load_intermediate_step_ok = False
