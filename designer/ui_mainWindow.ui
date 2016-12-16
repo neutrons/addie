@@ -58,8 +58,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1336</width>
-         <height>996</height>
+         <width>1338</width>
+         <height>991</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -80,7 +80,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>3</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -2263,6 +2263,11 @@ p, li { white-space: pre-wrap; }
                           <verstretch>0</verstretch>
                          </sizepolicy>
                         </property>
+                        <property name="font">
+                         <font>
+                          <pointsize>10</pointsize>
+                         </font>
+                        </property>
                         <item>
                          <property name="text">
                           <string>TOF</string>
@@ -2555,6 +2560,18 @@ p, li { white-space: pre-wrap; }
                        </size>
                       </property>
                      </spacer>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_clearBraggCanvas">
+                      <property name="font">
+                       <font>
+                        <pointsize>10</pointsize>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>Clear Canvas</string>
+                      </property>
+                     </widget>
                     </item>
                    </layout>
                   </item>
@@ -2853,7 +2870,7 @@ p, li { white-space: pre-wrap; }
                      <double>1.000000000000000</double>
                     </property>
                     <property name="maximum">
-                     <double>50.000000000000000</double>
+                     <double>1000.000000000000000</double>
                     </property>
                     <property name="singleStep">
                      <double>0.500000000000000</double>
@@ -2939,7 +2956,7 @@ p, li { white-space: pre-wrap; }
                      <double>5.000000000000000</double>
                     </property>
                     <property name="maximum">
-                     <double>100.000000000000000</double>
+                     <double>1000.000000000000000</double>
                     </property>
                     <property name="value">
                      <double>20.000000000000000</double>
@@ -3058,7 +3075,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>1358</width>
-     <height>20</height>
+     <height>25</height>
     </rect>
    </property>
    <property name="sizePolicy">

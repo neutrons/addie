@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
+# Form implementation generated from reading ui file 'ui_mainWindow.ui'
 #
-# Created: Thu Dec 15 17:39:15 2016
-#      by: PyQt4 UI code generator 4.10.1
+# Created by: PyQt4 UI code generator 4.11.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -45,7 +44,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
         self.scrollAreaWidgetContents = QtGui.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1336, 996))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1338, 991))
         self.scrollAreaWidgetContents.setMinimumSize(QtCore.QSize(0, 0))
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
         self.verticalLayout_44 = QtGui.QVBoxLayout(self.scrollAreaWidgetContents)
@@ -344,7 +343,6 @@ class Ui_MainWindow(object):
         self.layoutWidget = QtGui.QWidget(self.splitter)
         self.layoutWidget.setObjectName(_fromUtf8("layoutWidget"))
         self.verticalLayout_6 = QtGui.QVBoxLayout(self.layoutWidget)
-        self.verticalLayout_6.setMargin(0)
         self.verticalLayout_6.setObjectName(_fromUtf8("verticalLayout_6"))
         self.horizontalLayout_60 = QtGui.QHBoxLayout()
         self.horizontalLayout_60.setObjectName(_fromUtf8("horizontalLayout_60"))
@@ -908,6 +906,9 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.comboBox_xUnit.sizePolicy().hasHeightForWidth())
         self.comboBox_xUnit.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.comboBox_xUnit.setFont(font)
         self.comboBox_xUnit.setObjectName(_fromUtf8("comboBox_xUnit"))
         self.comboBox_xUnit.addItem(_fromUtf8(""))
         self.comboBox_xUnit.addItem(_fromUtf8(""))
@@ -984,6 +985,12 @@ class Ui_MainWindow(object):
         self.verticalLayout_41.addWidget(self.pushButton_gsasColorStyle)
         spacerItem29 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
         self.verticalLayout_41.addItem(spacerItem29)
+        self.pushButton_clearBraggCanvas = QtGui.QPushButton(self.tab_bragg)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.pushButton_clearBraggCanvas.setFont(font)
+        self.pushButton_clearBraggCanvas.setObjectName(_fromUtf8("pushButton_clearBraggCanvas"))
+        self.verticalLayout_41.addWidget(self.pushButton_clearBraggCanvas)
         self.horizontalLayout_73.addLayout(self.verticalLayout_41)
         self.verticalLayout_39.addLayout(self.horizontalLayout_73)
         self.horizontalLayout_72.addLayout(self.verticalLayout_39)
@@ -1124,7 +1131,7 @@ class Ui_MainWindow(object):
         font.setPointSize(10)
         self.doubleSpinBoxQmax.setFont(font)
         self.doubleSpinBoxQmax.setMinimum(1.0)
-        self.doubleSpinBoxQmax.setMaximum(50.0)
+        self.doubleSpinBoxQmax.setMaximum(1000.0)
         self.doubleSpinBoxQmax.setSingleStep(0.5)
         self.doubleSpinBoxQmax.setObjectName(_fromUtf8("doubleSpinBoxQmax"))
         self.gridLayout_4.addWidget(self.doubleSpinBoxQmax, 1, 1, 1, 1)
@@ -1167,7 +1174,7 @@ class Ui_MainWindow(object):
         font.setPointSize(10)
         self.doubleSpinBoxRmax.setFont(font)
         self.doubleSpinBoxRmax.setMinimum(5.0)
-        self.doubleSpinBoxRmax.setMaximum(100.0)
+        self.doubleSpinBoxRmax.setMaximum(1000.0)
         self.doubleSpinBoxRmax.setProperty("value", 20.0)
         self.doubleSpinBoxRmax.setObjectName(_fromUtf8("doubleSpinBoxRmax"))
         self.gridLayout_5.addWidget(self.doubleSpinBoxRmax, 1, 2, 1, 1)
@@ -1227,7 +1234,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.scrollArea)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1358, 20))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1358, 25))
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -1300,7 +1307,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget_2.setCurrentIndex(1)
+        self.tabWidget_2.setCurrentIndex(3)
         self.tabWidget.setCurrentIndex(0)
         QtCore.QObject.connect(self.diamond, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_edited)
         QtCore.QObject.connect(self.diamond_background, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_background_edited)
@@ -1644,6 +1651,7 @@ class Ui_MainWindow(object):
         self.radioButton_multiGSS.setText(_translate("MainWindow", "Multiple GSAS", None))
         self.pushButton_rescaleGSAS.setText(_translate("MainWindow", "Rescale", None))
         self.pushButton_gsasColorStyle.setText(_translate("MainWindow", "Color/Style", None))
+        self.pushButton_clearBraggCanvas.setText(_translate("MainWindow", "Clear Canvas", None))
         self.treeWidget_braggWSList.setToolTip(_translate("MainWindow", "<html><head/><body><p>List of workspace names.  Each workspace is an individual bank</p></body></html>", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_bragg), _translate("MainWindow", "Bragg Peaks", None))
         self.pushButton_clearSofQ.setToolTip(_translate("MainWindow", "<html><head/><body><p>Clear S(Q) Canvas</p></body></html>", None))
@@ -1693,7 +1701,7 @@ class Ui_MainWindow(object):
         self.actionUndo.setText(_translate("MainWindow", "Undo Table Edit", None))
         self.actionRedo.setText(_translate("MainWindow", "Redo Table Edit", None))
 
-from graphicviewlib import BraggView, SofQView, GofRView
+from graphicviewlib import BraggView, GofRView, SofQView
 from ipythondockwidget import IPythonDockWidget
-from treelib import GofRTree, BraggTree
+from treelib import BraggTree, GofRTree
 import icons_rc

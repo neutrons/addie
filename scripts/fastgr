@@ -224,6 +224,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         # help (refer to DGSPlanner and HFIR Powder reduction GUI)
         self._assistantProcess = QtCore.QProcess(self)
 
+        return
+
     def _init_widgets(self):
         """ Initialize widgets
         Returns
@@ -270,6 +272,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         # set a constant item to combobox Sq
         self.ui.comboBox_SofQ.addItem('All')
+
+        # set the tab to 0
+        self.ui.tabWidget_2.setCurrentIndex(0)
 
         return
 
