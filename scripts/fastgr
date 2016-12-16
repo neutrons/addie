@@ -377,8 +377,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         -------
 
         """
-        self.ui.graphicsView_gr.clear_all_lines()
-        self.ui.graphicsView_gr.reset_color()
+        self.ui.graphicsView_gr.reset()
 
         return
 
@@ -389,8 +388,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         -------
 
         """
-        self.ui.graphicsView_sq.clear_all_lines()
-        self.ui.graphicsView_sq.reset_line_color_marker_index()
+        self.ui.graphicsView_sq.reset()
 
         return
 
