@@ -98,6 +98,11 @@ class TableHandler(object):
             paste_status = True
 
         if (self.parent.table.rowCount() > 0):
+            _undo = menu.addAction("Undo")
+            _undo.setEnabled(self.parent_no_ui.undo_button_enabled)
+            _redo = menu.addAction("Redo")
+            _redo.setEnabled(self.parent_no_ui.redo_button_enabled)
+            menu.addSeparator()
             _copy = menu.addAction("Copy")
             _paste = menu.addAction("Paste")
             self._paste_menu = _paste
@@ -122,7 +127,11 @@ class TableHandler(object):
         action = menu.exec_(QtGui.QCursor.pos())
         self.current_row = self.current_row()
             
-        if action == _copy:
+        if action == _undo:
+            self.parent_no_ui.action_undo_clicked()
+        elif action == _redo:
+            self.parent_no_ui.action_redo_clicked()
+        elif action == _copy:
             self._copy()
         elif action == _paste:
             self._paste()

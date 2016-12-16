@@ -2,7 +2,9 @@
 
 # Form implementation generated from reading ui file 'ui_mainWindow.ui'
 #
-# Created by: PyQt4 UI code generator 4.11.4
+# Created: Fri Dec 16 12:27:34 2016
+#      by: PyQt4 UI code generator 4.10.1
+
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -1291,9 +1293,6 @@ class Ui_MainWindow(object):
         self.menuFile.addAction(self.menuLoad_Configuration.menuAction())
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionQuit)
-        self.menuEdit.addAction(self.actionUndo)
-        self.menuEdit.addAction(self.actionRedo)
-        self.menuEdit.addSeparator()
         self.menuEdit.addAction(self.actionReset_GSAS_tab)
         self.menuEdit.addAction(self.actionReset_GofR_tab)
         self.menuHelp.addAction(self.actionCheat_sheet)

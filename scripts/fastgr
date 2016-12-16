@@ -60,9 +60,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     """ Main FastGR window
     """
 
-    undo_table = []
+    undo_table = {}
     max_undo_list = 10
     undo_index = max_undo_list
+    undo_button_enabled = False
+    redo_button_enabled = False
     
     debugging = False
     load_intermediate_step_ok = False
@@ -1713,6 +1715,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         self.populate_table_clicked()
         
     def populate_table_clicked(self):
+	
+	self.ui.table.blockSignals(True)
+	
         _pop_table = PopulateMasterTable(parent = self)
         _pop_table.run()
         _error_reported = _pop_table.error_reported
@@ -1730,7 +1735,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 	o_undo = UndoHandler(parent = self)
 	o_undo.save_table()
 
+	self.ui.table.blockSignals(False)
+
     def import_table_clicked(self):
+	self.ui.table.blockSignals(True)
+
 	_o_table = TableHandler(parent = self)
 	_o_table._import()
 	self.name_search_clicked()
@@ -1738,6 +1747,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 	o_undo = UndoHandler(parent = self)
 	o_undo.save_table()
     
+	self.ui.table.blockSignals(False)
+
     def export_table_clicked(self):
 	_o_table = TableHandler(parent = self)
 	_o_table._export()
