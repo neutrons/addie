@@ -149,12 +149,14 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         self.connect(self.ui.pushButton_gsasColorStyle, QtCore.SIGNAL('clicked()'),
                      self.do_set_bragg_color_marker)
+        self.connect(self.ui.pushButton_clearBraggCanvas, QtCore.SIGNAL('clicked()'),
+                     self.do_clear_bragg_canvas)
 
         # for tab G(R)
         self.connect(self.ui.pushButton_loadSQ, QtCore.SIGNAL('clicked()'),
                      self.do_load_sq)
         self.connect(self.ui.comboBox_SofQType, QtCore.SIGNAL('currentIndexChanged(int)'),
-                     self.evt_plot_sq)
+                     self.evt_change_sq_type)
         self.connect(self.ui.pushButton_clearSofQ, QtCore.SIGNAL('clicked()'),
                      self.do_clear_sq)
         self.connect(self.ui.pushButton_showQMinMax, QtCore.SIGNAL('clicked()'),
@@ -226,6 +228,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         # help (refer to DGSPlanner and HFIR Powder reduction GUI)
         self._assistantProcess = QtCore.QProcess(self)
 
+        return
+
     def _init_widgets(self):
         """ Initialize widgets
         Returns
@@ -272,6 +276,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         # set a constant item to combobox Sq
         self.ui.comboBox_SofQ.addItem('All')
+
+        # set the tab to 0
+        self.ui.tabWidget_2.setCurrentIndex(0)
 
         return
 
@@ -354,6 +361,17 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         return
 
+    def do_clear_bragg_canvas(self):
+        """
+        Clear all the plots on Bragg-canvas
+        Returns
+        -------
+
+        """
+        self.ui.graphicsView_bragg.reset()
+
+        return
+
     def do_clear_gr(self):
         """
         Clear G(r) canvas
@@ -361,8 +379,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         -------
 
         """
-        self.ui.graphicsView_gr.clear_all_lines()
-        self.ui.graphicsView_gr.reset_color()
+        self.ui.graphicsView_gr.reset()
 
         return
 
@@ -373,8 +390,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         -------
 
         """
-        self.ui.graphicsView_sq.clear_all_lines()
-        self.ui.graphicsView_sq.reset_line_color_marker_index()
+        self.ui.graphicsView_sq.reset()
 
         return
 
@@ -431,7 +447,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
             # self.ui.graphicsView_gr.plot_gr(key_plot, vec_r, vec_g, vec_ge, False)
 
             # add to tree
-            gr_param_str = 'Q: (%.3f, %.3f)' % (min_q, max_q)
+            gr_param_str = 'G(r) for Q(%.3f, %.3f)' % (min_q, max_q)
             self.ui.treeWidget_grWsList.add_gr(gr_param_str, gr_ws_name)
         # END-FOR
 
@@ -876,8 +892,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         self.ui.doubleSpinBoxQmin.setValue(q_min)
         self.ui.doubleSpinBoxQmax.setValue(q_max)
 
-        # plot the figure
-        self.evt_plot_sq()
+        # plot S(Q)
+        sq_name = self._myController.get_current_sq_name()
+        self.plot_sq(sq_name, clear_prev=False)
 
         # calculate and calculate G(R)
         self.do_generate_gr()
@@ -904,12 +921,45 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         # pop-up a dialog for the file to save
         default_dir = os.getcwd()
-        file_ext = 'Data (*.dat)'
-        gr_file_name = str(QtGui.QFileDialog.getSaveFileName(self, caption='Save G(r)',
-                                                             directory=default_dir, filter=file_ext))
+        caption = 'Save G(r)'
+
+        # FIXME/TODO/ISSUE/NEXT - Refactor the following part out to be a standard widget
+
+        # generate a dialog to get the file name to save G(r)
+        export_dialog = QtGui.QFileDialog()
+        export_dialog.setWindowTitle(caption)
+        export_dialog.setDirectory(default_dir)
+        export_dialog.setAcceptMode(QtGui.QFileDialog.AcceptSave)
+        export_dialog.setNameFilter('XYE (*.dat);;CSV XYE (*.csv);;GofR (*.gr)')
+
+        # quit if it is not accepted
+        if export_dialog.exec_() != QtGui.QFileDialog.Accepted:
+            return
+
+        # get the file name from dialog
+        gr_file_name = str(export_dialog.selectedFiles()[0])
+
+        # check the file extension
+        file_name, file_ext = os.path.splitext(gr_file_name)
+        gr_filter = str(export_dialog.selectedFilter())
+        if gr_filter.startswith('XYE'):
+            if file_ext.lower() != '.dat':
+                gr_file_name += '.dat'
+            gr_file_type = 'dat'
+        elif gr_filter.startswith('CSV'):
+            if file_ext.lower() != '.csv':
+                gr_file_name += '.csv'
+            gr_file_type = 'csv'
+        else:
+            if file_ext.lower() != 'gr':
+                gr_file_name += '.gr'
+            gr_file_type = 'gr'
+        # END-IF-ELSE
+
+        print 'FILE NAME: ', gr_file_name
 
         # save!
-        self._myController.save_ascii(gr_ws_name, gr_file_name)
+        self._myController.save_ascii(gr_ws_name, gr_file_name, gr_file_type)
 
         return
 
@@ -1194,17 +1244,24 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         return
 
-    def evt_plot_sq(self):
+    def evt_change_sq_type(self):
         """ Event handling to plot S(Q)
         Returns
         -------
 
         """
-        # get the raw S(Q)
-        sq_name = self._myController.get_current_sq_name()
+        # get the current S(Q) names
+        curr_sq_list = self.ui.graphicsView_sq.get_shown_sq_names()
+        if len(curr_sq_list) == 0:
+            return
 
-        # plot S(Q)
-        self.plot_sq(sq_name, clear_prev=True)
+        # reset the canvas
+        self.ui.graphicsView_sq.reset()
+
+        # re-plot
+        for sq_name in curr_sq_list:
+            # plot S(Q)
+            self.plot_sq(sq_name, clear_prev=False)
 
         return
 
@@ -1378,7 +1435,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         # remove
         if self.ui.graphicsView_sq.is_on_canvas(sq_name):
-            self.ui.graphicsView_sq.remove_sq(plot_key=sq_name)
+            self.ui.graphicsView_sq.remove_sq(sq_ws_name=sq_name)
 
         return
 

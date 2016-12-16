@@ -496,7 +496,7 @@ class GofRTree(base.CustomizedTreeView):
     def add_gr(self, gr_parameter, gr_ws_name):
         """
         Add a G(r) workspace with given Qmin and Qmax
-        :param gr_parameter: it might an ipts number or a directory
+        :param gr_parameter: the leaf name for the G(r) in the tree.
         :param gr_ws_name:
         :return:
         """
