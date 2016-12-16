@@ -1427,7 +1427,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         # remove
         if self.ui.graphicsView_sq.is_on_canvas(sq_name):
-            self.ui.graphicsView_sq.remove_sq(plot_key=sq_name)
+            self.ui.graphicsView_sq.remove_sq(sq_ws_name=sq_name)
 
         return
 

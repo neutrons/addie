@@ -580,6 +580,9 @@ class SofQView(base.MplGraphicsView):
         # dictionary to record all the plots, key: (usually) SofQ's name, value: plot ID
         self._sqLineDict = dict()
 
+        # list of SofQ that are plot on the canvas
+        self._shownSQNameList = list()
+
         # link signal
         # self.boundaryMoveSignal.connect(self._myParent.update_sq_boundary)
 
@@ -592,6 +595,15 @@ class SofQView(base.MplGraphicsView):
         self._prevCursorPos = None
 
         return
+
+    def get_shown_sq_names(self):
+        """
+        get the names of S(q) workspaces that are shown on the canvas
+        Returns
+        -------
+
+        """
+        return self._shownSQNameList[:]
 
     def is_boundary_shown(self):
         """
@@ -844,28 +856,8 @@ class SofQView(base.MplGraphicsView):
         plot_id = self.add_plot_1d(vec_q, vec_s, color=color, x_label='Q', y_label=sq_y_label,
                                    marker=None, label=sq_name)
         self._sqLineDict[sq_name] = plot_id
-
-        return
-
-    def remove_sq(self, plot_key):
-        """
-        Remove 1 S(q) line from canvas
-        Args:
-            plot_key:
-
-        Returns:
-
-        """
-        # check whether S(Q) does exist
-        assert isinstance(plot_key, str)
-        assert plot_key in self._sqLineDict, 'Plot key (SofQ name) %s does not exist on the S(Q) canvas.' % plot_key
-
-        # retrieve the plot and remove it from the dictionary
-        plot_id = self._sqLineDict[plot_key]
-        del self._sqLineDict[plot_key]
-
-        # delete from canvas
-        self.remove_line(plot_id)
+        if sq_name not in self._shownSQNameList:
+            self._shownSQNameList.append(sq_name)
 
         return
 
@@ -880,6 +872,50 @@ class SofQView(base.MplGraphicsView):
 
         # link signal
         self.boundaryMoveSignal.connect(self._mainApp.update_sq_boundary)
+
+        return
+
+    def remove_sq(self, sq_ws_name):
+        """
+        Remove 1 S(q) line from canvas
+        Args:
+            sq_ws_name: workspace name as plot key
+
+        Returns:
+
+        """
+        # check whether S(Q) does exist
+        assert isinstance(sq_ws_name, str)
+        assert sq_ws_name in self._sqLineDict, 'Plot key (SofQ name) %s does not exist on the S(Q) canvas.' % sq_ws_name
+
+        # retrieve the plot and remove it from the dictionary
+        plot_id = self._sqLineDict[sq_ws_name]
+        del self._sqLineDict[sq_ws_name]
+
+        # delete from canvas
+        self.remove_line(plot_id)
+
+        # delete from on-show S(q) list
+        self._shownSQNameList.remove(sq_ws_name)
+
+        return
+
+    def reset(self):
+        """
+        Reset the canvas including removing all the 1-D plots and boundary indicators
+        Returns:
+
+        """
+        # clear the dictionary and on-show Sq list
+        self._sqLineDict.clear()
+        self._shownSQNameList = list()
+
+        # clear the image and reset the marker/color scheme
+        self.clear_all_lines()
+        self.reset_line_color_marker_index()
+
+        # clear the boundary flag
+        self._showBoundary = False
 
         return
 
@@ -917,22 +953,3 @@ class SofQView(base.MplGraphicsView):
         # END-IF-ELSE (show boundary)
 
         return
-
-    def reset(self):
-        """
-        Reset the canvas including removing all the 1-D plots and boundary indicators
-        Returns:
-
-        """
-        # clear the dictionary
-        self._sqLineDict.clear()
-
-        # clear the image and reset the marker/color scheme
-        self.clear_all_lines()
-        self.reset_line_color_marker_index()
-
-        # clear the boundary flag
-        self._showBoundary = False
-
-        return
-
