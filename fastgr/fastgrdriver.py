@@ -429,19 +429,28 @@ class FastGRDriver(object):
         return ws_group_name, ws_list, angle_list
 
     @staticmethod
-    def save_ascii(ws_name, file_name):
+    def save_ascii(ws_name, file_name, gr_file_type):
         """
 
         Args:
             ws_name:
             file_name:
+            gr_file_type:
 
         Returns:
 
         """
         assert isinstance(ws_name, str)
         assert isinstance(file_name, str)
-        simpleapi.SaveAscii(InputWorkspace=ws_name, Filename=file_name, Separator='Space')
+        assert isinstance(gr_file_type, str) and gr_file_type in ['dat', 'csv', 'gr'],\
+            'GofR file type must be a supported string.'
+
+        if gr_file_type == 'dat':
+            simpleapi.SaveAscii(InputWorkspace=ws_name, Filename=file_name, Separator='Space')
+        elif gr_file_type == 'csv':
+            simpleapi.SaveAscii(InputWorkspace=ws_name, Filename=file_name, Separator='CSV')
+        else:
+            simpleapi.SavePDFGui(InputWorkspace=ws_name, Filename=file_name)
 
         return
 

@@ -920,12 +920,45 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         # pop-up a dialog for the file to save
         default_dir = os.getcwd()
-        file_ext = 'Data (*.dat)'
-        gr_file_name = str(QtGui.QFileDialog.getSaveFileName(self, caption='Save G(r)',
-                                                             directory=default_dir, filter=file_ext))
+        caption = 'Save G(r)'
+
+        # FIXME/TODO/ISSUE/NEXT - Refactor the following part out to be a standard widget
+
+        # generate a dialog to get the file name to save G(r)
+        export_dialog = QtGui.QFileDialog()
+        export_dialog.setWindowTitle(caption)
+        export_dialog.setDirectory(default_dir)
+        export_dialog.setAcceptMode(QtGui.QFileDialog.AcceptSave)
+        export_dialog.setNameFilter('XYE (*.dat);;CSV XYE (*.csv);;GofR (*.gr)')
+
+        # quit if it is not accepted
+        if export_dialog.exec_() != QtGui.QFileDialog.Accepted:
+            return
+
+        # get the file name from dialog
+        gr_file_name = str(export_dialog.selectedFiles()[0])
+
+        # check the file extension
+        file_name, file_ext = os.path.splitext(gr_file_name)
+        gr_filter = str(export_dialog.selectedFilter())
+        if gr_filter.startswith('XYE'):
+            if file_ext.lower() != '.dat':
+                gr_file_name += '.dat'
+            gr_file_type = 'dat'
+        elif gr_filter.startswith('CSV'):
+            if file_ext.lower() != '.csv':
+                gr_file_name += '.csv'
+            gr_file_type = 'csv'
+        else:
+            if file_ext.lower() != 'gr':
+                gr_file_name += '.gr'
+            gr_file_type = 'gr'
+        # END-IF-ELSE
+
+        print 'FILE NAME: ', gr_file_name
 
         # save!
-        self._myController.save_ascii(gr_ws_name, gr_file_name)
+        self._myController.save_ascii(gr_ws_name, gr_file_name, gr_file_type)
 
         return
 
