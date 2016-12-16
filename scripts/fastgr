@@ -154,7 +154,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         self.connect(self.ui.pushButton_loadSQ, QtCore.SIGNAL('clicked()'),
                      self.do_load_sq)
         self.connect(self.ui.comboBox_SofQType, QtCore.SIGNAL('currentIndexChanged(int)'),
-                     self.evt_plot_sq)
+                     self.evt_change_sq_type)
         self.connect(self.ui.pushButton_clearSofQ, QtCore.SIGNAL('clicked()'),
                      self.do_clear_sq)
         self.connect(self.ui.pushButton_showQMinMax, QtCore.SIGNAL('clicked()'),
@@ -892,8 +892,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         self.ui.doubleSpinBoxQmin.setValue(q_min)
         self.ui.doubleSpinBoxQmax.setValue(q_max)
 
-        # plot the figure
-        self.evt_plot_sq()
+        # plot S(Q)
+        sq_name = self._myController.get_current_sq_name()
+        self.plot_sq(sq_name, clear_prev=False)
 
         # calculate and calculate G(R)
         self.do_generate_gr()
@@ -1243,17 +1244,24 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         return
 
-    def evt_plot_sq(self):
+    def evt_change_sq_type(self):
         """ Event handling to plot S(Q)
         Returns
         -------
 
         """
-        # get the raw S(Q)
-        sq_name = self._myController.get_current_sq_name()
+        # get the current S(Q) names
+        curr_sq_list = self.ui.graphicsView_sq.get_shown_sq_names()
+        if len(curr_sq_list) == 0:
+            return
 
-        # plot S(Q)
-        self.plot_sq(sq_name, clear_prev=True)
+        # reset the canvas
+        self.ui.graphicsView_sq.reset()
+
+        # re-plot
+        for sq_name in curr_sq_list:
+            # plot S(Q)
+            self.plot_sq(sq_name, clear_prev=False)
 
         return
 
