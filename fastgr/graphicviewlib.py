@@ -79,6 +79,57 @@ class BraggView(base.MplGraphicsView):
 
         return new_plot_banks, to_remove_banks
 
+
+    def set_unit(self, x_unit):
+        """
+
+        Parameters
+        ----------
+        x_unit
+
+        Returns
+        -------
+
+        """
+        assert x_unit in ['TOF', 'MomentumTransfer', 'dSpacing']
+
+        self._unitX = x_unit
+
+    def evt_toolbar_home(self):
+        """
+        override the behavior if a tool bar's HOME button is pressed
+        Returns
+        -------
+
+        """
+        #
+        import time
+        time.sleep(0.1)
+
+        # call the super
+        super(BraggView, self).evt_toolbar_home()
+
+        # if it is first time in this region
+        if self._homeXYLimit is None:
+            if self._unitX == 'TOF':
+                self.setXYLimit(xmin=0, xmax=20000, ymin=None, ymax=None)
+            elif self._unitX == 'MomentumTransfer':
+                self.setXYLimit(xmin=0, xmax=20, ymin=None, ymax=None)
+            elif self._unitX == 'dSpacing':
+                self.setXYLimit(xmin=0, xmax=7, ymin=None, ymax=None)
+            else:
+                raise RuntimeError('Unit %s unknown' % self._unitX)
+        # END-IF
+        #
+        # # get the new limit
+        # left_x, right_x = self.getXLimit()
+        # home_left_x = self._homeXYLimit[0]
+        # home_right_x = self._homeXYLimit[1]
+        # print left_x, home_left_x, left_x == home_left_x
+        # print right_x, home_right_x, right_x == home_right_x
+
+        return
+
     def get_ws_name_on_canvas(self, bank_id):
         """
         Get workspace' names on canvas according to its bank ID

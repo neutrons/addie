@@ -277,6 +277,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         # set a constant item to combobox Sq
         self.ui.comboBox_SofQ.addItem('All')
 
+        # PDF filter
+        self.ui.comboBox_pdfCorrection.clear()
+        self.ui.comboBox_pdfCorrection.addItem('No Modification')
+        self.ui.comboBox_pdfCorrection.addItem('Lorch')
+
         # set the tab to 0
         self.ui.tabWidget_2.setCurrentIndex(0)
 
@@ -424,7 +429,13 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         min_q = float(self.ui.doubleSpinBoxQmin.value())
         max_q = float(self.ui.doubleSpinBoxQmax.value())
 
-        use_filter = self.ui.checkBox_pdfFilter.isChecked()
+        use_filter_str = str(self.ui.comboBox_pdfCorrection.currentText())
+        if use_filter_str == 'No Modification':
+            pdf_filter = None
+        elif use_filter_str == 'Lorch':
+            pdf_filter = 'lorch'
+        else:
+            raise RuntimeError('PDF filter {0} is not recognized.'.format(use_filter_str))
         rho0_str = str(self.ui.lineEdit_rho.text())
         if rho0_str.isdigit():
             rho0 = float(rho0_str)
@@ -438,7 +449,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         for sq_ws_name in sq_ws_name_list:
             # calculate G(r)
             gr_ws_name = self._myController.calculate_gr(sq_ws_name, pdf_type, min_r, delta_r, max_r,
-                                                         min_q, max_q, use_filter, rho0)
+                                                         min_q, max_q, pdf_filter, rho0)
 
             # plot G(R)
             # vec_r, vec_g, vec_ge = self._myController.get_gr(min_q, max_q)
@@ -1233,6 +1244,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         -------
 
         """
+        self.ui.graphicsView_bragg.set_unit(x_unit)
+
         if x_unit == 'TOF':
             self.ui.graphicsView_bragg.setXYLimit(xmin=0, xmax=20000, ymin=None, ymax=None)
         elif x_unit == 'MomentumTransfer':

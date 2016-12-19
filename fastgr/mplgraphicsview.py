@@ -2,7 +2,8 @@
 import os
 import numpy as np
 
-from PyQt4 import QtGui
+from PyQt4 import QtGui, QtCore
+from PyQt4.QtCore import pyqtSignal
 
 import matplotlib
 from matplotlib.figure import Figure
@@ -359,6 +360,11 @@ class MplGraphicsView(QtGui.QWidget):
         self._myCanvas = Qt4MplCanvas(self)
         self._myToolBar = MyNavigationToolbar(self, self._myCanvas)
 
+        # state of operation
+        self._isZoomed = False
+        # X and Y limit with home button
+        self._homeXYLimit = None
+
         # set up layout
         self._vBox = QtGui.QVBoxLayout(self)
         self._vBox.addWidget(self._myCanvas)
@@ -599,6 +605,10 @@ class MplGraphicsView(QtGui.QWidget):
         self._statDict.clear()
         self._my1DPlotDict.clear()
 
+        # about zoom
+        self._isZoomed = False
+        self._homeXYLimit = None
+
         return
 
     def clear_canvas(self):
@@ -608,12 +618,31 @@ class MplGraphicsView(QtGui.QWidget):
         self._statDict.clear()
         self._my1DPlotDict.clear()
 
+        # about zoom
+        self._isZoomed = False
+        self._homeXYLimit = None
+
         return self._myCanvas.clear_canvas()
 
     def draw(self):
         """ Draw to commit the change
         """
         return self._myCanvas.draw()
+
+    def evt_toolbar_home(self):
+        """
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
+        """
+        # turn off zoom mode
+        self._isZoomed = False
+
+        return
 
     def evt_view_updated(self):
         """ Event handling as canvas size updated
@@ -629,6 +658,24 @@ class MplGraphicsView(QtGui.QWidget):
             data_x, data_y = self._myIndicatorsManager.get_data(indicator_key)
             self.updateLine(canvas_line_id, data_x, data_y)
         # END-FOR
+
+        return
+
+    def evt_zoom_released(self):
+        """
+        event for zoom is release
+        Returns
+        -------
+
+        """
+        # record home XY limit if it is never zoomed
+        if self._isZoomed is False:
+            self._homeXYLimit = list(self.getXLimit())
+            self._homeXYLimit.extend(list(self.getYLimit()))
+        # END-IF
+
+        # set the state of being zoomed
+        self._isZoomed = True
 
         return
 
@@ -1533,21 +1580,46 @@ class MyNavigationToolbar(NavigationToolbar2):
     NAVIGATION_MODE_PAN = 1
     NAVIGATION_MODE_ZOOM = 2
 
+    # This defines a signal called 'home_button_pressed' that takes 1 boolean
+    # argument for being in zoomed state or not
+    home_button_pressed = pyqtSignal()
+
+    # This defines a signal called 'canvas_zoom_released'
+    canvas_zoom_released = pyqtSignal()
+
     def __init__(self, parent, canvas):
         """ Initialization
+        built-in methods
+        - drag_zoom(self, event): triggered during holding the mouse and moving
         """
         NavigationToolbar2.__init__(self, canvas, canvas)
 
+        # parent
         self._myParent = parent
-        self._navigationMode = MyNavigationToolbar.NAVIGATION_MODE_NONE
+        # tool bar mode
+        self._myMode = MyNavigationToolbar.NAVIGATION_MODE_NONE
+
+        # connect the events to parent
+        self.home_button_pressed.connect(self._myParent.evt_toolbar_home)
+        self.canvas_zoom_released.connect(self._myParent.evt_zoom_released)
 
         return
+
+    @property
+    def is_zoom_mode(self):
+        """
+        check whether the tool bar is in zoom mode
+        Returns
+        -------
+
+        """
+        return self._myMode == MyNavigationToolbar.NAVIGATION_MODE_ZOOM
 
     def get_mode(self):
         """
         :return: integer as none/pan/zoom mode
         """
-        return self._navigationMode
+        return self._myMode
 
     # Overriding base's methods
     def draw(self):
@@ -1561,6 +1633,25 @@ class MyNavigationToolbar(NavigationToolbar2):
 
         return
 
+    def home(self, *args):
+        """
+
+        Parameters
+        ----------
+        args
+
+        Returns
+        -------
+
+        """
+        # call super's home() method
+        NavigationToolbar2.home(self, args)
+
+        # send a signal to parent class for further operation
+        self.home_button_pressed.emit()
+
+        return
+
     def pan(self, *args):
         """
 
@@ -1569,12 +1660,14 @@ class MyNavigationToolbar(NavigationToolbar2):
         """
         NavigationToolbar2.pan(self, args)
 
-        if self._navigationMode == MyNavigationToolbar.NAVIGATION_MODE_PAN:
+        if self._myMode == MyNavigationToolbar.NAVIGATION_MODE_PAN:
             # out of pan mode
-            self._navigationMode = MyNavigationToolbar.NAVIGATION_MODE_NONE
+            self._myMode = MyNavigationToolbar.NAVIGATION_MODE_NONE
         else:
             # into pan mode
-            self._navigationMode = MyNavigationToolbar.NAVIGATION_MODE_PAN
+            self._myMode = MyNavigationToolbar.NAVIGATION_MODE_PAN
+
+        print 'PANNED'
 
         return
 
@@ -1586,12 +1679,29 @@ class MyNavigationToolbar(NavigationToolbar2):
         """
         NavigationToolbar2.zoom(self, args)
 
-        if self._navigationMode == MyNavigationToolbar.NAVIGATION_MODE_ZOOM:
+        if self._myMode == MyNavigationToolbar.NAVIGATION_MODE_ZOOM:
             # out of zoom mode
-            self._navigationMode = MyNavigationToolbar.NAVIGATION_MODE_NONE
+            self._myMode = MyNavigationToolbar.NAVIGATION_MODE_NONE
         else:
             # into zoom mode
-            self._navigationMode = MyNavigationToolbar.NAVIGATION_MODE_ZOOM
+            self._myMode = MyNavigationToolbar.NAVIGATION_MODE_ZOOM
+
+        return
+
+    def release_zoom(self, event):
+        """
+        override zoom released method
+        Parameters
+        ----------
+        event
+
+        Returns
+        -------
+
+        """
+        self.canvas_zoom_released.emit()
+
+        NavigationToolbar2.release_zoom(self, event)
 
         return
 

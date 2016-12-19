@@ -2,9 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_mainWindow.ui'
 #
-# Created: Fri Dec 16 12:27:34 2016
-#      by: PyQt4 UI code generator 4.10.1
-
+# Created by: PyQt4 UI code generator 4.11.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -1079,12 +1077,6 @@ class Ui_MainWindow(object):
         self.gridLayout_2.addWidget(self.comboBox_pdfType, 0, 1, 1, 1)
         self.horizontalLayout_18 = QtGui.QHBoxLayout()
         self.horizontalLayout_18.setObjectName(_fromUtf8("horizontalLayout_18"))
-        self.checkBox_pdfFilter = QtGui.QCheckBox(self.tab_gR)
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.checkBox_pdfFilter.setFont(font)
-        self.checkBox_pdfFilter.setObjectName(_fromUtf8("checkBox_pdfFilter"))
-        self.horizontalLayout_18.addWidget(self.checkBox_pdfFilter)
         self.label_4 = QtGui.QLabel(self.tab_gR)
         font = QtGui.QFont()
         font.setPointSize(10)
@@ -1095,7 +1087,7 @@ class Ui_MainWindow(object):
         self.label_4.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_4.setObjectName(_fromUtf8("label_4"))
         self.horizontalLayout_18.addWidget(self.label_4)
-        self.gridLayout_2.addLayout(self.horizontalLayout_18, 1, 0, 1, 1)
+        self.gridLayout_2.addLayout(self.horizontalLayout_18, 2, 0, 1, 1)
         self.lineEdit_rho = QtGui.QLineEdit(self.tab_gR)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Ignored, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -1103,7 +1095,19 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.lineEdit_rho.sizePolicy().hasHeightForWidth())
         self.lineEdit_rho.setSizePolicy(sizePolicy)
         self.lineEdit_rho.setObjectName(_fromUtf8("lineEdit_rho"))
-        self.gridLayout_2.addWidget(self.lineEdit_rho, 1, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.lineEdit_rho, 2, 1, 1, 1)
+        self.comboBox_pdfCorrection = QtGui.QComboBox(self.tab_gR)
+        self.comboBox_pdfCorrection.setObjectName(_fromUtf8("comboBox_pdfCorrection"))
+        self.gridLayout_2.addWidget(self.comboBox_pdfCorrection, 3, 1, 1, 1)
+        self.label_filter = QtGui.QLabel(self.tab_gR)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_filter.setFont(font)
+        self.label_filter.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_filter.setObjectName(_fromUtf8("label_filter"))
+        self.gridLayout_2.addWidget(self.label_filter, 3, 0, 1, 1)
         self.verticalLayout_42.addLayout(self.gridLayout_2)
         self.gridLayout_4 = QtGui.QGridLayout()
         self.gridLayout_4.setObjectName(_fromUtf8("gridLayout_4"))
@@ -1293,6 +1297,9 @@ class Ui_MainWindow(object):
         self.menuFile.addAction(self.menuLoad_Configuration.menuAction())
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionQuit)
+        self.menuEdit.addAction(self.actionUndo)
+        self.menuEdit.addAction(self.actionRedo)
+        self.menuEdit.addSeparator()
         self.menuEdit.addAction(self.actionReset_GSAS_tab)
         self.menuEdit.addAction(self.actionReset_GofR_tab)
         self.menuHelp.addAction(self.actionCheat_sheet)
@@ -1456,8 +1463,7 @@ class Ui_MainWindow(object):
         MainWindow.setTabOrder(self.comboBox_SofQType, self.comboBox_SofQ)
         MainWindow.setTabOrder(self.comboBox_SofQ, self.pushButton_generateGR)
         MainWindow.setTabOrder(self.pushButton_generateGR, self.comboBox_pdfType)
-        MainWindow.setTabOrder(self.comboBox_pdfType, self.checkBox_pdfFilter)
-        MainWindow.setTabOrder(self.checkBox_pdfFilter, self.lineEdit_rho)
+        MainWindow.setTabOrder(self.comboBox_pdfType, self.lineEdit_rho)
         MainWindow.setTabOrder(self.lineEdit_rho, self.pushButton_showQMinMax)
         MainWindow.setTabOrder(self.pushButton_showQMinMax, self.doubleSpinBoxQmin)
         MainWindow.setTabOrder(self.doubleSpinBoxQmin, self.doubleSpinBoxQmax)
@@ -1665,8 +1671,8 @@ class Ui_MainWindow(object):
         self.comboBox_SofQType.setItemText(2, _translate("MainWindow", "Q[S(Q)-1]", None))
         self.pushButton_generateGR.setText(_translate("MainWindow", "Generate GR", None))
         self.comboBox_pdfType.setToolTip(_translate("MainWindow", "<html><head/><body><p>PDF Type</p></body></html>", None))
-        self.checkBox_pdfFilter.setText(_translate("MainWindow", "Filter", None))
         self.label_4.setText(_translate("MainWindow", "rho0  ", None))
+        self.label_filter.setText(_translate("MainWindow", "Filter", None))
         self.labelQmin.setText(_translate("MainWindow", "Qmin", None))
         self.pushButton_showQMinMax.setToolTip(_translate("MainWindow", "<html><head/><body><p>Show or hide the vertical indicators for Qmin and Qmax</p></body></html>", None))
         self.pushButton_showQMinMax.setText(_translate("MainWindow", "Show Min/Max", None))
