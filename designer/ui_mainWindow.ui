@@ -58,8 +58,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1338</width>
-         <height>991</height>
+         <width>1336</width>
+         <height>996</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -80,7 +80,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>3</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -3083,7 +3083,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>1358</width>
-     <height>25</height>
+     <height>20</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -3113,9 +3113,6 @@ p, li { white-space: pre-wrap; }
     <property name="title">
      <string>Edit</string>
     </property>
-    <addaction name="actionUndo"/>
-    <addaction name="actionRedo"/>
-    <addaction name="separator"/>
     <addaction name="actionReset_GSAS_tab"/>
     <addaction name="actionReset_GofR_tab"/>
    </widget>

@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui_mainWindow.ui'
+# Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created by: PyQt4 UI code generator 4.11.4
+# Created: Mon Dec 19 15:03:58 2016
+#      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -44,7 +45,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
         self.scrollAreaWidgetContents = QtGui.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1338, 991))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1336, 996))
         self.scrollAreaWidgetContents.setMinimumSize(QtCore.QSize(0, 0))
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
         self.verticalLayout_44 = QtGui.QVBoxLayout(self.scrollAreaWidgetContents)
@@ -343,6 +344,7 @@ class Ui_MainWindow(object):
         self.layoutWidget = QtGui.QWidget(self.splitter)
         self.layoutWidget.setObjectName(_fromUtf8("layoutWidget"))
         self.verticalLayout_6 = QtGui.QVBoxLayout(self.layoutWidget)
+        self.verticalLayout_6.setMargin(0)
         self.verticalLayout_6.setObjectName(_fromUtf8("verticalLayout_6"))
         self.horizontalLayout_60 = QtGui.QHBoxLayout()
         self.horizontalLayout_60.setObjectName(_fromUtf8("horizontalLayout_60"))
@@ -1240,7 +1242,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.scrollArea)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1358, 25))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1358, 20))
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -1297,9 +1299,6 @@ class Ui_MainWindow(object):
         self.menuFile.addAction(self.menuLoad_Configuration.menuAction())
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionQuit)
-        self.menuEdit.addAction(self.actionUndo)
-        self.menuEdit.addAction(self.actionRedo)
-        self.menuEdit.addSeparator()
         self.menuEdit.addAction(self.actionReset_GSAS_tab)
         self.menuEdit.addAction(self.actionReset_GofR_tab)
         self.menuHelp.addAction(self.actionCheat_sheet)
@@ -1313,7 +1312,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget_2.setCurrentIndex(3)
+        self.tabWidget_2.setCurrentIndex(0)
         self.tabWidget.setCurrentIndex(0)
         QtCore.QObject.connect(self.diamond, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_edited)
         QtCore.QObject.connect(self.diamond_background, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_background_edited)
@@ -1706,7 +1705,7 @@ class Ui_MainWindow(object):
         self.actionUndo.setText(_translate("MainWindow", "Undo Table Edit", None))
         self.actionRedo.setText(_translate("MainWindow", "Redo Table Edit", None))
 
-from graphicviewlib import BraggView, GofRView, SofQView
+from graphicviewlib import BraggView, SofQView, GofRView
 from ipythondockwidget import IPythonDockWidget
-from treelib import BraggTree, GofRTree
+from treelib import GofRTree, BraggTree
 import icons_rc
