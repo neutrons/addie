@@ -1244,6 +1244,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         -------
 
         """
+        self.ui.graphicsView_bragg.set_unit(x_unit)
+
         if x_unit == 'TOF':
             self.ui.graphicsView_bragg.setXYLimit(xmin=0, xmax=20000, ymin=None, ymax=None)
         elif x_unit == 'MomentumTransfer':
