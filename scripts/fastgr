@@ -1746,7 +1746,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         _o_gui.check_gui()
 	
 	o_undo = UndoHandler(parent = self)
-	o_undo.save_table()
+	o_undo.save_table(first_save=True)
 
 	self.ui.table.blockSignals(False)
 
@@ -1758,7 +1758,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 	self.name_search_clicked()
 
 	o_undo = UndoHandler(parent = self)
-	o_undo.save_table()
+	o_undo.save_table(first_save=True)
     
 	self.ui.table.blockSignals(False)
 

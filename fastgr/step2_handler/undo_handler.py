@@ -9,9 +9,10 @@ class UndoHandler(object):
     def __init__(self, parent=None):
         self.parent = parent
         
-    def save_table(self):
-        #self.parent.ui.actionUndo.setEnabled(True)
-        self.parent.undo_button_enabled = True
+    def save_table(self, first_save=False):
+
+        if not first_save:
+            self.parent.undo_button_enabled = True
         
         # retrieve table settings
         o_export_table = ExportTable(parent=self.parent)
