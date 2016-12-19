@@ -253,6 +253,9 @@ class TableHandler(object):
             index += 1
     
     def _inverse_selection(self):
+        selected_range = self.parent_no_ui.ui.table.selectedRanges()
+        nbr_column = self.parent.table.columnCount()
+
         self.select_all(status= True)
 
         # inverse selected rows
