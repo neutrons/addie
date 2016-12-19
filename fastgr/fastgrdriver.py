@@ -36,7 +36,7 @@ class FastGRDriver(object):
 
         return
 
-    def calculate_gr(self, sq_ws_name, pdf_type, min_r, delta_r, max_r, min_q, max_q, use_filter, rho0):
+    def calculate_gr(self, sq_ws_name, pdf_type, min_r, delta_r, max_r, min_q, max_q, pdf_filter, rho0):
         """
         Calculate G(R)
         Parameters
@@ -48,7 +48,7 @@ class FastGRDriver(object):
         max_r
         min_q
         max_q
-        use_filter :: turn on the PDF filter
+        pdf_filter :: type of PDF filter
         rho0 :: average number density used for g(r) and RDF(r) conversions
 
         Returns
@@ -64,7 +64,7 @@ class FastGRDriver(object):
                                           '' % (delta_r, (max_r - min_r))
 
         assert min_q < max_q, 'Qmin must be less than Qmax (%f >= %f)' % (min_q, max_q)
-        assert isinstance(use_filter, bool)
+        assert isinstance(pdf_filter, str) or pdf_filter is None, 'PDF filter must be a string or None.'
         assert isinstance(rho0, float) or rho0 is None, 'rho0 must be either None or a float but not a %s.' \
                                                         '' % str(type(rho0))
 
@@ -88,6 +88,13 @@ class FastGRDriver(object):
             ws_seq_index = 0
             update_index = False
 
+        if pdf_filter is None:
+            pdf_filter = False
+        else:
+            pdf_filter = True
+            if pdf_filter != 'lorch':
+                print '[WARNING] PDF filter {0} is not supported.'.format(pdf_filter)
+
         gr_ws_name = '%s(R)_%s_%d' % (prefix, self._currSqWsName, ws_seq_index)
         kwargs = {'OutputWorkspace': gr_ws_name,
                   'Qmin': min_q,
@@ -95,7 +102,7 @@ class FastGRDriver(object):
                   'PDFType': pdf_type,
                   'DeltaR': delta_r,
                   'Rmax': max_r,
-                  'Filter': use_filter}
+                  'Filter': pdf_filter}
         if rho0 is not None:
             kwargs['rho0'] = rho0
 
