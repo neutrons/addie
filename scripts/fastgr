@@ -883,32 +883,34 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         # get the file
         ext = 'DAT (*.dat);;All (*.*)'
-        sq_file_name = str(QtGui.QFileDialog.getOpenFileName(self, 'Choose S(Q) File', default_dir, ext))
-        if sq_file_name is None or sq_file_name == '':
+        sq_file_names = QtGui.QFileDialog.getOpenFileNames(self, 'Choose S(Q) File', default_dir, ext)
+        if sq_file_names is None or sq_file_names == '':
             return
         else:
             # update current data directory
-            self._currDataDir = os.path.split(os.path.abspath(sq_file_name))[0]
+            self._currDataDir = os.path.split(os.path.abspath(sq_file_names[0]))[0]
             self.check_in_fixed_dir_structure('SofQ')
 
         # load S(q)
-        sq_ws_name, q_min, q_max = self._myController.load_sq(sq_file_name)
+        for sq_file_name in sq_file_names:
+            sq_file_name = str(sq_file_name)
+            sq_ws_name, q_min, q_max = self._myController.load_sq(sq_file_name)
 
-        # set to the tree and combo box
-        self.ui.treeWidget_grWsList.add_sq(sq_ws_name)
-        self.ui.comboBox_SofQ.addItem(sq_ws_name)
-        self.ui.comboBox_SofQ.setCurrentIndex(self.ui.comboBox_SofQ.count()-1)
+            # set to the tree and combo box
+            self.ui.treeWidget_grWsList.add_sq(sq_ws_name)
+            self.ui.comboBox_SofQ.addItem(sq_ws_name)
+            self.ui.comboBox_SofQ.setCurrentIndex(self.ui.comboBox_SofQ.count()-1)
 
-        # set the UI widgets
-        self.ui.doubleSpinBoxQmin.setValue(q_min)
-        self.ui.doubleSpinBoxQmax.setValue(q_max)
+            # set the UI widgets
+            self.ui.doubleSpinBoxQmin.setValue(q_min)
+            self.ui.doubleSpinBoxQmax.setValue(q_max)
 
-        # plot S(Q)
-        sq_name = self._myController.get_current_sq_name()
-        self.plot_sq(sq_name, clear_prev=False)
+            # plot S(Q)
+            sq_name = self._myController.get_current_sq_name()
+            self.plot_sq(sq_name, clear_prev=False)
 
-        # calculate and calculate G(R)
-        self.do_generate_gr()
+            # calculate and calculate G(R)
+            self.do_generate_gr()
 
         return
 
