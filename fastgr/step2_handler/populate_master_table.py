@@ -61,6 +61,9 @@ class PopulateMasterTable(object):
         #o_table = fastgr.step2_handler.table_handler.TableHandler(parent = self.parent)
         #o_table._clear_table()
         
+        # disable sorting
+        self.parent.ui.table.setSortingEnabled(False)
+        
         _index = 0
         _columns_runs = self.get_columns_value(column = 2)
 
@@ -75,13 +78,13 @@ class PopulateMasterTable(object):
             _metadata['runs'] = value
                 
             if self.runs_already_in_table(runs = value, table_runs = _columns_runs):
+                _index += 1
                 continue
                 
             self.add_new_row(_metadata, row=_index)
             _index += 1
             
         self.parent.ui.table.setSortingEnabled(True)            
-        print("[LOG] Populated table")
                 
     def get_columns_value(self, column=2):
         column_values = []
@@ -154,3 +157,4 @@ class PopulateMasterTable(object):
         _new_widget.setLayout(_layout)
         self.parent.ui.table.setCellWidget(row, 8, _new_widget)
 
+	

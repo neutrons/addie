@@ -1738,7 +1738,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         _error_reported = _pop_table.error_reported
         
         if _error_reported:
-            return
+	    self.ui.table.blockSignals(False)
+	    return
         
         _pop_back_wdg = PopulateBackgroundWidgets(parent = self)
         _pop_back_wdg.run()
