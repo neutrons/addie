@@ -23,6 +23,7 @@ from fastgr.utilities.job_status_handler import JobStatusHandler
 from fastgr.utilities.job_monitor_thread import JobMonitorThread
 from fastgr.utilities.logbook_thread import LogbookThread
 from fastgr.utilities.logbook_handler import LogbookHandler
+from fastgr.utilities.ipts_file_transfer_dialog import IptsFileTransferDialog
 
 from fastgr.initialization.init_step1 import InitStep1
 
@@ -1606,6 +1607,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
     def advanced_option_clicked(self):
 	_advanced = AdvancedWindow(parent = self)
 	_advanced.show()
+
+    def menu_ipts_file_transfer_clicked(self):
+	_o_ipts = IptsFileTransferDialog(parent=self)
+	_o_ipts.show()
 	
     def main_tab_widget_changed(self, tab_selected):
 	if tab_selected == 0:

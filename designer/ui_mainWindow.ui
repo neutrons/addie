@@ -80,7 +80,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -3130,6 +3130,7 @@ p, li { white-space: pre-wrap; }
      <string>Tools</string>
     </property>
     <addaction name="actionJob_Monitor"/>
+    <addaction name="actionIPTS_File_Transfer"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -3209,6 +3210,11 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="text">
     <string>Redo Table Edit</string>
+   </property>
+  </action>
+  <action name="actionIPTS_File_Transfer">
+   <property name="text">
+    <string>IPTS File Transfer ...</string>
    </property>
   </action>
  </widget>
@@ -4347,6 +4353,22 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionIPTS_File_Transfer</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>menu_ipts_file_transfer_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>678</x>
+     <y>528</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>diamond_edited()</slot>
@@ -4404,5 +4426,6 @@ p, li { white-space: pre-wrap; }
   <slot>clear_name_search_clicked()</slot>
   <slot>action_undo_clicked()</slot>
   <slot>action_redo_clicked()</slot>
+  <slot>menu_ipts_file_transfer_clicked()</slot>
  </slots>
 </ui>

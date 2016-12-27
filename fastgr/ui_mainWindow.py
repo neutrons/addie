@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Mon Dec 19 15:03:58 2016
+# Created: Tue Dec 27 10:23:00 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -1292,6 +1292,8 @@ class Ui_MainWindow(object):
         self.actionRedo = QtGui.QAction(MainWindow)
         self.actionRedo.setEnabled(False)
         self.actionRedo.setObjectName(_fromUtf8("actionRedo"))
+        self.actionIPTS_File_Transfer = QtGui.QAction(MainWindow)
+        self.actionIPTS_File_Transfer.setObjectName(_fromUtf8("actionIPTS_File_Transfer"))
         self.menuLoad_Configuration.addAction(self.actionLoad)
         self.menuLoad_Configuration.addAction(self.actionSave)
         self.menuFile.addAction(self.action_preview_ascii)
@@ -1306,13 +1308,14 @@ class Ui_MainWindow(object):
         self.menuHelp.addSeparator()
         self.menuHelp.addAction(self.actionAdvanced)
         self.menuTools.addAction(self.actionJob_Monitor)
+        self.menuTools.addAction(self.actionIPTS_File_Transfer)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuEdit.menuAction())
         self.menubar.addAction(self.menuTools.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget_2.setCurrentIndex(0)
+        self.tabWidget_2.setCurrentIndex(1)
         self.tabWidget.setCurrentIndex(0)
         QtCore.QObject.connect(self.diamond, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_edited)
         QtCore.QObject.connect(self.diamond_background, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_background_edited)
@@ -1376,6 +1379,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.clear_name_search, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.clear_name_search_clicked)
         QtCore.QObject.connect(self.actionUndo, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.action_undo_clicked)
         QtCore.QObject.connect(self.actionRedo, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.action_redo_clicked)
+        QtCore.QObject.connect(self.actionIPTS_File_Transfer, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.menu_ipts_file_transfer_clicked)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         MainWindow.setTabOrder(self.select_current_folder_button, self.diamond)
         MainWindow.setTabOrder(self.diamond, self.diamond_background)
@@ -1704,6 +1708,7 @@ class Ui_MainWindow(object):
         self.actionJob_Monitor.setText(_translate("MainWindow", "Job Monitor ...", None))
         self.actionUndo.setText(_translate("MainWindow", "Undo Table Edit", None))
         self.actionRedo.setText(_translate("MainWindow", "Redo Table Edit", None))
+        self.actionIPTS_File_Transfer.setText(_translate("MainWindow", "IPTS File Transfer ...", None))
 
 from graphicviewlib import BraggView, SofQView, GofRView
 from ipythondockwidget import IPythonDockWidget
