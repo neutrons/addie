@@ -147,6 +147,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="transfer_button">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="minimumSize">
         <size>
          <width>200</width>
@@ -186,8 +189,76 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>source_ipts_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>source_ipts_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>120</x>
+     <y>43</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>221</x>
+     <y>4</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>source_autonom_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>source_autonom_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>141</x>
+     <y>80</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>423</x>
+     <y>5</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>target_autonom_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>target_autonom_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>89</x>
+     <y>149</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>152</x>
+     <y>186</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>transfer_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>transfer_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>384</x>
+     <y>237</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>417</x>
+     <y>192</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>cancel_clicked()</slot>
+  <slot>source_ipts_clicked()</slot>
+  <slot>source_autonom_clicked()</slot>
+  <slot>target_autonom_clicked()</slot>
+  <slot>transfer_clicked()</slot>
  </slots>
 </ui>

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_iptsFileTransfer.ui'
 #
-# Created: Tue Dec 27 11:00:27 2016
+# Created: Tue Dec 27 11:35:10 2016
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -73,6 +73,7 @@ class Ui_Dialog(object):
         spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
         self.transfer_button = QtGui.QPushButton(Dialog)
+        self.transfer_button.setEnabled(False)
         self.transfer_button.setMinimumSize(QtCore.QSize(200, 0))
         self.transfer_button.setMaximumSize(QtCore.QSize(200, 16777215))
         self.transfer_button.setObjectName(_fromUtf8("transfer_button"))
@@ -81,6 +82,10 @@ class Ui_Dialog(object):
 
         self.retranslateUi(Dialog)
         QtCore.QObject.connect(self.cancel_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.cancel_clicked)
+        QtCore.QObject.connect(self.source_ipts_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.source_ipts_clicked)
+        QtCore.QObject.connect(self.source_autonom_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.source_autonom_clicked)
+        QtCore.QObject.connect(self.target_autonom_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.target_autonom_clicked)
+        QtCore.QObject.connect(self.transfer_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.transfer_clicked)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
