@@ -1,6 +1,7 @@
 from PyQt4 import QtGui, QtCore
 from fastgr.ui_iptsFileTransfer import Ui_Dialog as UiDialog
 from fastgr.utilities.job_status_handler import JobStatusHandler
+import os
 
 
 class IptsFileTransferDialog(QtGui.QDialog):
@@ -41,15 +42,17 @@ class IptsFileTransferDialog(QtGui.QDialog):
                                                       options=QtGui.QFileDialog.ShowDirsOnly)
         if _ipts_folder:
             self.ipts_folder = _ipts_folder
-            self.ui.source_ipts_value.setText(str(_ipts_folder))
+            _ipts_folder = os.path.basename(_ipts_folder)
+            _ipts_number = _ipts_folder.split('-')[1]
+            self.ui.source_ipts_value.setText(str(_ipts_number))
             self.check_status_transfer_button()
-
     
     def source_autonom_clicked(self):
         _autonom_folder = QtGui.QFileDialog.getExistingDirectory(caption="Select Input autoNOM Folder ...", 
                                                       directory=self.ipts_folder,
                                                       options=QtGui.QFileDialog.ShowDirsOnly)
         if _autonom_folder:
+            _autonom_folder = os.path.basename(_autonom_folder)
             self.ui.source_autonom_value.setText(str(_autonom_folder))
             self.check_status_transfer_button()
     
@@ -58,6 +61,7 @@ class IptsFileTransferDialog(QtGui.QDialog):
                                                       directory=self.parent.current_folder,
                                                       options=QtGui.QFileDialog.ShowDirsOnly)
         if _autonom_folder:
+            _autonom_folder = os.path.basename(_autonom_folder)
             self.ui.target_autonom_value.setText(str(_autonom_folder))
             self.check_status_transfer_button()
     
