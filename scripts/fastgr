@@ -1709,7 +1709,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         _run_autonom = RunStep1(parent = self)
         _run_autonom.create_folder()
         _run_autonom.create_exp_ini_file()
-
+	
     def help_button_clicked_autonom(self):
 	self.help_button_clicked(button_name = 'autonom')
 	
