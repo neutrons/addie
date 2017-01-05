@@ -15,7 +15,7 @@ class Step1GuiHandler(object):
         self.parent.name_of_output_folder.setEnabled(status)
         
     def set_main_window_title(self):
-        self.parent_no_ui.setWindowTitle(self.parent_no_ui.current_folder)
+        self.parent_no_ui.setWindowTitle("working folder: " + self.parent_no_ui.current_folder)
         
     def check_go_button(self):
         if self.all_mandatory_fields_non_empty():
