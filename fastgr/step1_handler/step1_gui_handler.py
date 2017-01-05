@@ -69,6 +69,9 @@ class Step1GuiHandler(object):
             self.parent_no_ui.current_folder = _new_folder
             o_gui = Step1GuiHandler(parent = self.parent_no_ui)
             o_gui.set_main_window_title()
+            
+            #move to new folder specifiy
+            os.chdir(_new_folder)
 
             o_auto_populate = AutoPopulateWidgets(parent = self.parent_no_ui)
             o_auto_populate.run()
