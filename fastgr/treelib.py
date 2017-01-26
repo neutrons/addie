@@ -350,7 +350,7 @@ class BraggTree(base.CustomizedTreeView):
         """
         Get the name of the current nodes that are selected
         The reason to put the method here is that it is assumed that the tree only has 2 level (main and leaf)
-        Returns: a list of strings as main nodes' names
+        Returns: 2-tuple: boolean, a list of strings as main nodes' names
 
         """
         # Get current index and item

@@ -1144,10 +1144,21 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         # END-IF-ELSE
 
         # get GSS data (group)
-        gss_group_list = self.ui.treeWidget_braggWSList.get_main_nodes()
-        gss_group_list.remove('workspaces')
+        if plot_multi_gss:
+            # multiple GSAS file/single bank mode: get GSAS group from tree
+            gss_group_list = self.ui.treeWidget_braggWSList.get_main_nodes()
+            gss_group_list.remove('workspaces')
 
-        # remove banks
+        else:
+            # single GSAS file mode
+            status, ret_obj = self.ui.treeWidget_braggWSList.get_current_main_nodes()
+            if status:
+                gss_group = ret_obj[0]
+            else:
+                raise RuntimeError('Unable to get current selected main node(s) due to {0}.'.format(ret_obj))
+            gss_group_list = [gss_group]
+
+        # remove banks from plot
         for gss_group_name in gss_group_list:
             self.ui.graphicsView_bragg.remove_gss_banks(gss_group_name, rm_bank_list)
 

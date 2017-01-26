@@ -79,7 +79,6 @@ class BraggView(base.MplGraphicsView):
 
         return new_plot_banks, to_remove_banks
 
-
     def set_unit(self, x_unit):
         """
 
@@ -237,8 +236,6 @@ class BraggView(base.MplGraphicsView):
             self.menu.popup(QtGui.QCursor.pos())
         # END-IF-ELSE
         return
-
-
 
     def plot_banks(self, plot_bank_dict, unit):
         """
@@ -741,7 +738,6 @@ class SofQView(base.MplGraphicsView):
             raise RuntimeError('Impossible to have selected boundary mode %d' % self._selectedBoundary)
 
         cursor_pos = event.xdata
-        print event.xdata
 
         # ignore if the cursor is out of canvas
         if cursor_pos is None:
