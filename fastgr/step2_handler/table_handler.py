@@ -1,4 +1,5 @@
 import os
+import glob
 import numpy as np
 from PyQt4.QtCore import Qt
 from PyQt4 import QtGui, QtCore
@@ -9,6 +10,7 @@ from fastgr.utilities.file_handler import FileHandler
 from fastgr.step2_handler.populate_background_widgets import PopulateBackgroundWidgets
 import fastgr.step2_handler.step2_gui_handler
 
+import matplotlib.pyplot as plt
 
 class TableHandler(object):
     
@@ -78,6 +80,7 @@ class TableHandler(object):
             
     def right_click(self, position = None):
         _duplicate_row = -1
+        _plot_row = -1
         _remove_row = -1
         _new_row = -1
         _copy = -1
@@ -121,6 +124,7 @@ class TableHandler(object):
         
         if (self.parent.table.rowCount() > 0):
             _duplicate_row = menu.addAction("Duplicate Row")
+            _plot_row = menu.addAction("Plot")
             _remove_row = menu.addAction("Remove Row(s)")
             menu.addSeparator()
             _refresh_table = menu.addAction("Refresh/Reset Table")
@@ -141,6 +145,8 @@ class TableHandler(object):
             self._cut()
         elif action == _duplicate_row:
             self._duplicate_row()
+        elif action == _plot_row:
+            self._plot_row()
         elif action == _invert_selection:
             self._inverse_selection()
         elif action == _new_row:
@@ -325,6 +331,33 @@ class TableHandler(object):
         metadata_to_copy = self._collect_metadata(row_index = _row)
         o_populate = fastgr.step2_handler.populate_master_table.PopulateMasterTable(parent = self.parent)
         o_populate.add_new_row(metadata_to_copy, row = _row)
+
+    def _plot_row(self):
+        _row = self.current_row
+        _row_runs = self._collect_metadata(row_index = _row)['runs'].split(',')
+
+        file_list = list()
+        for sofq in glob.glob('./SofQ/NOM_*'):
+            run = sofq.split('/')[-1].strip('NOM_').strip('SQ.dat')
+            if run in _row_runs:
+                file_list.append({'file':sofq, 'run':run})
+    
+        shifter = 0.0
+        fig = plt.figure()
+        ax = fig.add_subplot(1,1,1)
+        for sofq_file in file_list:
+            with open(sofq_file['file'],'r') as handle:
+                x, y, e = np.loadtxt(handle,unpack=True)
+                y += shifter
+                ax.plot(x,y,label=sofq_file['run'])
+                shifter += 1.0
+        box = ax.get_position()
+        ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+
+        handles, labels = ax.get_legend_handles_labels()
+        ax.legend(handles[::-1], labels[::-1], title='Runs', loc='center left',bbox_to_anchor=(1,0.5))
+        plt.show()
+        
     
     def _new_row(self):
         _row = self.current_row
