@@ -124,8 +124,9 @@ class TableHandler(object):
         
         if (self.parent.table.rowCount() > 0):
             _duplicate_row = menu.addAction("Duplicate Row")
-            _plot_row = menu.addAction("Plot")
             _remove_row = menu.addAction("Remove Row(s)")
+            menu.addSeparator()
+            _plot_row = menu.addAction("Plot ...")
             menu.addSeparator()
             _refresh_table = menu.addAction("Refresh/Reset Table")
             _clear_table = menu.addAction("Clear Table")
