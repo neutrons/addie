@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Tue Dec 27 10:23:00 2016
+# Created: Thu Feb 16 18:11:36 2017
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(1358, 1058)
+        MainWindow.resize(1361, 1058)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -45,7 +45,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
         self.scrollAreaWidgetContents = QtGui.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1336, 996))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1339, 996))
         self.scrollAreaWidgetContents.setMinimumSize(QtCore.QSize(0, 0))
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
         self.verticalLayout_44 = QtGui.QVBoxLayout(self.scrollAreaWidgetContents)
@@ -535,6 +535,16 @@ class Ui_MainWindow(object):
         self.horizontalLayout_66.addWidget(self.plazcek_fit_range_max)
         spacerItem6 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_66.addItem(spacerItem6)
+        self.horizontalLayout_22 = QtGui.QHBoxLayout()
+        self.horizontalLayout_22.setObjectName(_fromUtf8("horizontalLayout_22"))
+        self.label_23 = QtGui.QLabel(self.groupBox_34)
+        self.label_23.setObjectName(_fromUtf8("label_23"))
+        self.horizontalLayout_22.addWidget(self.label_23)
+        self.ndeg = QtGui.QSpinBox(self.groupBox_34)
+        self.ndeg.setMaximum(10)
+        self.ndeg.setObjectName(_fromUtf8("ndeg"))
+        self.horizontalLayout_22.addWidget(self.ndeg)
+        self.horizontalLayout_66.addLayout(self.horizontalLayout_22)
         self.verticalLayout_38.addLayout(self.horizontalLayout_66)
         self.horizontalLayout_15.addWidget(self.groupBox_34)
         spacerItem7 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
@@ -1242,7 +1252,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.scrollArea)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1358, 20))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1361, 20))
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -1315,7 +1325,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget_2.setCurrentIndex(1)
+        self.tabWidget_2.setCurrentIndex(0)
         self.tabWidget.setCurrentIndex(0)
         QtCore.QObject.connect(self.diamond, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_edited)
         QtCore.QObject.connect(self.diamond_background, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_background_edited)
@@ -1570,6 +1580,7 @@ class Ui_MainWindow(object):
         self.plazcek_fit_range_min.setText(_translate("MainWindow", "10", None))
         self.label_88.setText(_translate("MainWindow", ",", None))
         self.plazcek_fit_range_max.setText(_translate("MainWindow", "50", None))
+        self.label_23.setText(_translate("MainWindow", "Poly. degree", None))
         self.groupBox_4.setTitle(_translate("MainWindow", "Absolute Scale", None))
         self.fourier_filter_group_box.setTitle(_translate("MainWindow", "Fourier Filter", None))
         self.fourier_filter_from.setText(_translate("MainWindow", "1.5", None))

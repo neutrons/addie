@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1358</width>
+    <width>1361</width>
     <height>1058</height>
    </rect>
   </property>
@@ -58,7 +58,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1336</width>
+         <width>1339</width>
          <height>996</height>
         </rect>
        </property>
@@ -80,7 +80,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -1297,6 +1297,24 @@
                              </size>
                             </property>
                            </spacer>
+                          </item>
+                          <item>
+                           <layout class="QHBoxLayout" name="horizontalLayout_22">
+                            <item>
+                             <widget class="QLabel" name="label_23">
+                              <property name="text">
+                               <string>Poly. degree</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QSpinBox" name="ndeg">
+                              <property name="maximum">
+                               <number>10</number>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
                           </item>
                          </layout>
                         </item>
@@ -3082,7 +3100,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1358</width>
+     <width>1361</width>
      <height>20</height>
     </rect>
    </property>
@@ -3358,7 +3376,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>pushButton_5</tabstop>
  </tabstops>
  <resources>
-  <include location="../icons/icons.qrc"/>
+  <include location="../../FastGR/icons/icons.qrc"/>
  </resources>
  <connections>
   <connection>
