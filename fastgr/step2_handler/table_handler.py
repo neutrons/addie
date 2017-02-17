@@ -127,6 +127,7 @@ class TableHandler(object):
             _remove_row = menu.addAction("Remove Row(s)")
             menu.addSeparator()
             _plot_row = menu.addAction("Plot ...")
+            _plot_diff_row = menu.addAction("Plot Diff...")
             menu.addSeparator()
             _refresh_table = menu.addAction("Refresh/Reset Table")
             _clear_table = menu.addAction("Clear Table")
@@ -148,6 +149,8 @@ class TableHandler(object):
             self._duplicate_row()
         elif action == _plot_row:
             self._plot_row()
+        elif action == _plot_diff_row:
+            self._plot_diff_row()
         elif action == _invert_selection:
             self._inverse_selection()
         elif action == _new_row:
@@ -333,7 +336,7 @@ class TableHandler(object):
         o_populate = fastgr.step2_handler.populate_master_table.PopulateMasterTable(parent = self.parent)
         o_populate.add_new_row(metadata_to_copy, row = _row)
 
-    def _plot_row(self):
+    def _plot_fetch_files(self):
         _row = self.current_row
         _row_runs = self._collect_metadata(row_index = _row)['runs'].split(',')
 
@@ -342,22 +345,47 @@ class TableHandler(object):
             run = sofq.split('/')[-1].strip('NOM_').strip('SQ.dat')
             if run in _row_runs:
                 file_list.append({'file':sofq, 'run':run})
-    
-        shifter = 0.0
+
+        return sorted(file_list, key=lambda k: int(k['run']))
+
+    def _plot_fetch_data(self):
+        file_list = self._plot_fetch_files()
+        
+        for sofq in file_list:
+            with open(sofq['file'],'r') as handle:
+                x, y, e = np.loadtxt(handle,unpack=True)
+                sofq['x'] = x
+                sofq['y'] = y
+
+        return sorted(file_list, key=lambda k: int(k['run']))
+           
+    def _plot_datasets(self,sofq_datasets,shift_value=1.0): 
         fig = plt.figure()
         ax = fig.add_subplot(1,1,1)
-        for sofq_file in file_list:
-            with open(sofq_file['file'],'r') as handle:
-                x, y, e = np.loadtxt(handle,unpack=True)
-                y += shifter
-                ax.plot(x,y,label=sofq_file['run'])
-                shifter += 1.0
+        shifter = 0.0
+        for sofq in sofq_datasets:
+            with open(sofq['file'],'r') as handle:
+                sofq['y'] += shifter
+                ax.plot(sofq['x'],sofq['y'],label=sofq['run'])
+                shifter += shift_value
         box = ax.get_position()
         ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
-
         handles, labels = ax.get_legend_handles_labels()
         ax.legend(handles[::-1], labels[::-1], title='Runs', loc='center left',bbox_to_anchor=(1,0.5))
         plt.show()
+
+    def _plot_row(self):
+        sofq_datasets = self._plot_fetch_data()
+        self._plot_datasets(sofq_datasets)
+   
+    def _plot_diff_row(self):
+        sofq_datasets = self._plot_fetch_data()
+        sofq_base  = dict(sofq_datasets[0])
+
+        for sofq in sofq_datasets:
+            sofq['y'] = sofq['y'] - sofq_base['y']
+
+        self._plot_datasets(sofq_datasets,shift_value=0.2)
         
     
     def _new_row(self):
