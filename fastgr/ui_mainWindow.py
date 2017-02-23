@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Thu Feb 16 18:11:36 2017
+# Created: Thu Feb 23 11:13:40 2017
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -541,7 +541,7 @@ class Ui_MainWindow(object):
         self.label_23.setObjectName(_fromUtf8("label_23"))
         self.horizontalLayout_22.addWidget(self.label_23)
         self.ndeg = QtGui.QSpinBox(self.groupBox_34)
-        self.ndeg.setMaximum(10)
+        self.ndeg.setMaximum(2)
         self.ndeg.setObjectName(_fromUtf8("ndeg"))
         self.horizontalLayout_22.addWidget(self.ndeg)
         self.horizontalLayout_66.addLayout(self.horizontalLayout_22)
@@ -1325,7 +1325,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget_2.setCurrentIndex(0)
+        self.tabWidget_2.setCurrentIndex(1)
         self.tabWidget.setCurrentIndex(0)
         QtCore.QObject.connect(self.diamond, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_edited)
         QtCore.QObject.connect(self.diamond_background, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_background_edited)

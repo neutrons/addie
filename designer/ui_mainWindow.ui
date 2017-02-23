@@ -80,7 +80,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -1310,7 +1310,7 @@
                             <item>
                              <widget class="QSpinBox" name="ndeg">
                               <property name="maximum">
-                               <number>10</number>
+                               <number>2</number>
                               </property>
                              </widget>
                             </item>
