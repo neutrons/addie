@@ -73,6 +73,10 @@ class RunSumScans(object):
         if (plarange_min is not "") and (plarange_max is not ""):
             f.write("plarange {},{}\n".format(plarange_min, plarange_max))
         
+        # poly degree
+        poly_degree = str(self.parent.ndeg.value())
+        f.write("ndeg {}\n".format(poly_degree))
+        
         # qrangeft
         [q_range_min, q_range_max]= o_gui_handler.get_q_range()
         if (q_range_min is not "") and (q_range_max is not ""):
