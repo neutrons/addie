@@ -340,13 +340,14 @@ class TableHandler(object):
         _row = self.current_row
         _row_runs = self._collect_metadata(row_index = _row)['runs'].split(',')
 
-        file_list = list()
-        for sofq in glob.glob('./SofQ/NOM_*'):
-            run = sofq.split('/')[-1].strip('NOM_').strip('SQ.dat')
-            if run in _row_runs:
-                file_list.append({'file':sofq, 'run':run})
+        output_list = list()
+        file_list = [ sofq for sofq in glob.glob('./SofQ/NOM_*')]
+        for run in _row_runs:
+            sofq = './SofQ/NOM_'+str(run)+'SQ.dat'
+            if sofq in file_list:
+                output_list.append({'file':sofq, 'run':run})
 
-        return sorted(file_list, key=lambda k: int(k['run']))
+        return output_list
 
     def _plot_fetch_data(self):
         file_list = self._plot_fetch_files()
@@ -357,8 +358,8 @@ class TableHandler(object):
                 sofq['x'] = x
                 sofq['y'] = y
 
-        return sorted(file_list, key=lambda k: int(k['run']))
-           
+        return file_list
+ 
     def _plot_datasets(self,sofq_datasets,shift_value=1.0): 
         fig = plt.figure()
         ax = fig.add_subplot(1,1,1)
@@ -376,13 +377,13 @@ class TableHandler(object):
 
     def _plot_row(self):
         sofq_datasets = self._plot_fetch_data()
-        self._plot_datasets(sofq_datasets)
+        self._plot_datasets(sorted(sofq_datasets, key=lambda k: int(k['run'])))
    
     def _plot_diff_row(self):
         sofq_datasets = self._plot_fetch_data()
         sofq_base  = dict(sofq_datasets[0])
 
-        for sofq in sofq_datasets:
+        for sofq in sorted(sofq_datasets, key=lambda k: int(k['run'])):
             sofq['y'] = sofq['y'] - sofq_base['y']
 
         self._plot_datasets(sofq_datasets,shift_value=0.2)
