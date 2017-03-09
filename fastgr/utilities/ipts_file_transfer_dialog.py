@@ -7,7 +7,7 @@ import os
 class IptsFileTransferDialog(QtGui.QDialog):
     
     ipts_folder = '/SNS/NOM'
-    script = '/SNS/users/zjn/pytest/copystuff.py'
+    script = '/SNS/NOM/shared/autoNOM/stable/copystuff.py'
     
     def __init__(self, parent=None):
         self.parent = parent
