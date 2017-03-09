@@ -540,12 +540,65 @@
                 <item>
                  <widget class="QLabel" name="label_78">
                   <property name="text">
-                   <string>Comments:</string>
+                   <string>Comments</string>
                   </property>
                  </widget>
                 </item>
                 <item>
                  <widget class="QLineEdit" name="comments"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_23">
+                <item>
+                 <widget class="QLabel" name="label_24">
+                  <property name="text">
+                   <string>Sample Environment</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="sample_environment_comboBox">
+                  <item>
+                   <property name="text">
+                    <string>shifter</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>orange_cryostat</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>ILL_furnace</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>stick_furnace</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>aerodynamic_levitator</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_2">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
                 </item>
                </layout>
               </item>
@@ -1310,6 +1363,9 @@
                             <item>
                              <widget class="QSpinBox" name="ndeg">
                               <property name="maximum">
+                               <number>2</number>
+                              </property>
+                              <property name="value">
                                <number>2</number>
                               </property>
                              </widget>
