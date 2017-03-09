@@ -127,7 +127,8 @@ class TableHandler(object):
             _remove_row = menu.addAction("Remove Row(s)")
             menu.addSeparator()
             _plot_row = menu.addAction("Plot ...")
-            _plot_diff_row = menu.addAction("Plot Diff...")
+            _plot_diff_first_run_row = menu.addAction("Plot Diff (1st run)...")
+            _plot_diff_average_row = menu.addAction("Plot Diff (Avg.)...")
             menu.addSeparator()
             _refresh_table = menu.addAction("Refresh/Reset Table")
             _clear_table = menu.addAction("Clear Table")
@@ -149,8 +150,10 @@ class TableHandler(object):
             self._duplicate_row()
         elif action == _plot_row:
             self._plot_row()
-        elif action == _plot_diff_row:
-            self._plot_diff_row()
+        elif action == _plot_diff_first_run_row:
+            self._plot_diff_first_run_row()
+        elif action == _plot_diff_average_row:
+            self._plot_diff_average_row()
         elif action == _invert_selection:
             self._inverse_selection()
         elif action == _new_row:
@@ -379,7 +382,7 @@ class TableHandler(object):
         sofq_datasets = self._plot_fetch_data()
         self._plot_datasets(sorted(sofq_datasets, key=lambda k: int(k['run'])))
    
-    def _plot_diff_row(self):
+    def _plot_diff_first_run_row(self):
         sofq_datasets = self._plot_fetch_data()
         sofq_base  = dict(sofq_datasets[0])
 
@@ -388,7 +391,16 @@ class TableHandler(object):
 
         self._plot_datasets(sofq_datasets,shift_value=0.2)
         
-    
+    def _plot_diff_average_row(self):
+        sofq_datasets = self._plot_fetch_data()
+
+        sofq_data = [ sofq['y'] for sofq in sofq_datasets ]
+        sofq_avg = np.average(sofq_data,axis=0)
+        for sofq in sorted(sofq_datasets, key=lambda k: int(k['run'])):
+            sofq['y'] = sofq['y'] - sofq_avg
+
+        self._plot_datasets(sofq_datasets,shift_value=0.2)
+   
     def _new_row(self):
         _row = self.current_row
         if _row == -1:
