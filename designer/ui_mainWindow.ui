@@ -80,7 +80,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -553,6 +553,9 @@
                <layout class="QHBoxLayout" name="horizontalLayout_23">
                 <item>
                  <widget class="QLabel" name="label_24">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="text">
                    <string>Sample Environment</string>
                   </property>
@@ -560,6 +563,9 @@
                 </item>
                 <item>
                  <widget class="QComboBox" name="sample_environment_comboBox">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <item>
                    <property name="text">
                     <string>shifter</string>

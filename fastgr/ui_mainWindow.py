@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Thu Mar  9 11:03:28 2017
+# Created: Fri Mar 10 14:08:48 2017
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -255,9 +255,11 @@ class Ui_MainWindow(object):
         self.horizontalLayout_23 = QtGui.QHBoxLayout()
         self.horizontalLayout_23.setObjectName(_fromUtf8("horizontalLayout_23"))
         self.label_24 = QtGui.QLabel(self.tab_5)
+        self.label_24.setEnabled(False)
         self.label_24.setObjectName(_fromUtf8("label_24"))
         self.horizontalLayout_23.addWidget(self.label_24)
         self.sample_environment_comboBox = QtGui.QComboBox(self.tab_5)
+        self.sample_environment_comboBox.setEnabled(False)
         self.sample_environment_comboBox.setObjectName(_fromUtf8("sample_environment_comboBox"))
         self.sample_environment_comboBox.addItem(_fromUtf8(""))
         self.sample_environment_comboBox.addItem(_fromUtf8(""))
@@ -1342,7 +1344,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget_2.setCurrentIndex(1)
+        self.tabWidget_2.setCurrentIndex(0)
         self.tabWidget.setCurrentIndex(0)
         QtCore.QObject.connect(self.diamond, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_edited)
         QtCore.QObject.connect(self.diamond_background, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_background_edited)

@@ -336,7 +336,7 @@ class TableHandler(object):
     def _duplicate_row(self):
         _row = self.current_row
         metadata_to_copy = self._collect_metadata(row_index = _row)
-        o_populate = fastgr.step2_handler.populate_master_table.PopulateMasterTable(parent = self.parent)
+        o_populate = fastgr.step2_handler.populate_master_table.PopulateMasterTable(parent = self.parent_no_ui)
         o_populate.add_new_row(metadata_to_copy, row = _row)
 
     def _plot_fetch_files(self):

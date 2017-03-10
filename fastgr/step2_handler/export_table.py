@@ -107,6 +107,8 @@ class ExportTable(object):
         _o_file.create_ascii(contain = _output_text)
 
     def retrieve_abs_corr_state(self, row=0, column=8):
+        if self.parent.ui.table.cellWidget(row, 8) is None:
+            return "False"
         _widget = self.parent.ui.table.cellWidget(row, 8).children()[1]
         if (_widget.checkState() == Qt.Checked):
             return 'True'
@@ -115,12 +117,16 @@ class ExportTable(object):
 
     def retrieve_sample_shape(self, row=0, column=7):
         _widget = self.parent.ui.table.cellWidget(row, column)
+        if _widget is None:
+            return 'cylindrical'
         _selected_index = _widget.currentIndex()
         _sample_shape = str(_widget.itemText(_selected_index))
         return _sample_shape
             
     def retrieve_flag_state(self, row=0, column=0):
         _widget = self.parent.ui.table.cellWidget(row, column).children()[1]
+        if _widget is None:
+            return "False"
         if _widget.checkState() == Qt.Checked:
             return "True"
         else:
