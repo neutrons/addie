@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Fri Mar 10 14:08:48 2017
+# Created: Mon Apr 10 12:36:09 2017
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -1557,7 +1557,7 @@ class Ui_MainWindow(object):
         self.create_exp_ini_button.setText(_translate("MainWindow", "Create exp.ini File Only", None))
         self.run_autonom_script.setText(_translate("MainWindow", "Run autoNOM script", None))
         self.pushButton_2.setText(_translate("MainWindow", "?", None))
-        self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_5), _translate("MainWindow", "autoNOM", None))
+        self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_5), _translate("MainWindow", "Autoreduce", None))
         self.move_to_button.setText(_translate("MainWindow", "Move to Folder and Refresh Table ...", None))
         self.label_21.setText(_translate("MainWindow", "Name Search", None))
         self.name_search.setText(_translate("MainWindow", "equil", None))

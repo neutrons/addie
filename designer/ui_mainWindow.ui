@@ -84,7 +84,7 @@
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
-              <string>autoNOM</string>
+              <string>Autoreduce</string>
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_7">
               <item>
