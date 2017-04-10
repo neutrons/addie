@@ -5,6 +5,7 @@ import numpy as np
 import os
 import itertools
 import psutil
+
 from addie.ipythondockwidget import IPythonDockWidget
 from PyQt4 import QtGui
 
@@ -66,7 +67,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     undo_index = max_undo_list
     undo_button_enabled = False
     redo_button_enabled = False
-    
+
     debugging = False
     load_intermediate_step_ok = False
     remove_dynamic_temperature_flag = False
@@ -81,7 +82,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     logbook_thread = LogbookThread()
     number_of_last_log_files_to_display = 10
     previous_list_of_log_files = []
-    
+
     _run_thread = RunThread()
     job_monitor_thread = JobMonitorThread()
     _mantid_thread_array = list(itertools.repeat(MantidThread(), 30))
@@ -107,15 +108,15 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         # Base class
         QtGui.QMainWindow.__init__(self)
 
-	if self.debugging:
-	    self.calibration_folder = '/SNS/NOM/IPTS-17118/shared/'
-	    self.characterization_folder = '/SNS/NOM/shared/CALIBRATION/'
+        if self.debugging:
+            self.calibration_folder = '/SNS/NOM/IPTS-17118/shared/'
+            self.characterization_folder = '/SNS/NOM/shared/CALIBRATION/'
 
         # Initialize the UI widgets
         self.ui = addie.ui_mainWindow.Ui_MainWindow()
         self.ui.setupUi(self)
         self.ui.graphicsView_sq.set_main(self)
- 
+
         self.ui.dockWidget_ipython.setup()
 
         # set widgets
@@ -237,23 +238,23 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         -------
 
         """
-	
-	#init_size_splitter = self.ui.splitter.size()
-	#self.init_size_splitter_height = init_size_splitter.height()
-	#init_width = self.size()
-	#self.init_width = init_width.width()
-	
-	self.ui.splitter.setStyleSheet("""
+
+        #init_size_splitter = self.ui.splitter.size()
+        #self.init_size_splitter_height = init_size_splitter.height()
+        #init_width = self.size()
+        #self.init_width = init_width.width()
+
+        self.ui.splitter.setStyleSheet("""
 	QSplitter::handle {
 	   image: url(':/MPL Toolbar/splitter_icon.png');
 	}
 	""")
-	    
+
         self.ui.comboBox_xUnit.clear()
         self.ui.comboBox_xUnit.addItems(['TOF', 'dSpacing', 'Q'])
         index = self.ui.comboBox_xUnit.findText('dSpacing',QtCore.Qt.MatchFixedString)
         self.ui.comboBox_xUnit.setCurrentIndex(index)
-        
+
 
         self.ui.treeWidget_braggWSList.set_main_window(self)
         self.ui.treeWidget_braggWSList.add_main_item('workspaces', append=True, as_current_index=False)
@@ -542,7 +543,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         # clear the S(Q) combo box
         self.ui.comboBox_SofQ.clear()
         self.ui.comboBox_SofQ.addItem('All')
-        
+
 
         return
 
@@ -571,7 +572,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             # guess for the main workspace and delete
             gss_main_ws = gss_node_name.split('_group')[0]
             self._myController.delete_workspace(gss_main_ws, no_throw=True)
-            
+
         # END-FOR (gsas_group_node)
 
         # reset the GSAS tree
@@ -954,7 +955,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                                                                                return_item_text=True)
         if len(gr_name_list) != 1:
             err_msg = 'Error! Only 1 workspace of G(r) that can be selected.  So far %d is selected.' \
-                      'They are %s.' % (len(gr_name_list), str(gr_name_list))
+                'They are %s.' % (len(gr_name_list), str(gr_name_list))
             QtGui.QMessageBox.warning(self, 'Error', err_msg)
             return
         else:
@@ -1196,7 +1197,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             self.ui.graphicsView_bragg.set_to_single_gss(True)
             status, ws_name_list = self.ui.treeWidget_braggWSList.get_current_main_nodes()
             plot_data_dict = { ws_name_list[0] : plot_data_dict[ws_name_list[0]]  } 
-            
+
 
         # plot new
         self.ui.graphicsView_bragg.plot_banks(plot_data_dict, self._currBraggXUnit)
@@ -1248,8 +1249,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         # check
         assert len(bank_list) == 1 or len(ws_group_list) == 1, 'Must be either single bank (%d now) or ' \
-                                                               'single GSS (%d now).' % (len(bank_list),
-                                                                                         len(ws_group_list))
+               'single GSS (%d now).' % (len(bank_list),
+                                         len(ws_group_list))
 
         # get data and plot
         plot_data_dict = dict()
@@ -1385,7 +1386,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         """
         # check input
         assert isinstance(new_ws_list, list), 'Input workspace list must be a list of string' \
-                                              'but not %s.' % str(type(new_ws_list))
+               'but not %s.' % str(type(new_ws_list))
 
         # print 'current tab = ', self.ui.tabWidget_2.currentIndex(), self.ui.tabWidget_2.currentWidget(),
         # print self.ui.tabWidget_2.currentWidget().objectName()
@@ -1445,7 +1446,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         """
         # check
         assert isinstance(gss_group_name, str), 'GSS group workspace name must be a string but not %s.' \
-                                                '' % str(type(gss_group_name))
+               '' % str(type(gss_group_name))
         assert isinstance(gss_bank_ws_name_list, list) and len(gss_bank_ws_name_list) > 0
 
         # get bank IDs
@@ -1528,11 +1529,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         """
         # check
         assert isinstance(gss_group_name, str), 'GSS workspace group name is expected to be a string, but not' \
-                                                ' %s.' % str(type(gss_group_name))
+               ' %s.' % str(type(gss_group_name))
 
         # rule out the unsupported situation
         assert gss_group_name.endswith('_group'), 'GSAS workspace group\' name must be ends with _group, ' \
-                                                  'but not as %s.' % gss_group_name
+               'but not as %s.' % gss_group_name
         root_ws_name = gss_group_name.split('_group')[0]
 
         # process
@@ -1619,81 +1620,81 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         o_gui.browse_file()
 
     def action_load_configuration_clicked(self):
-	o_import_config = ImportConfiguration(parent = self)
-	o_import_config.run()
-	
+        o_import_config = ImportConfiguration(parent = self)
+        o_import_config.run()
+
     def action_save_configuration_clicked(self):
-	o_export_config = ExportConfiguration(parent = self)
-	o_export_config.run()
+        o_export_config = ExportConfiguration(parent = self)
+        o_export_config.run()
 
     def action_undo_clicked(self):
-	o_undo = UndoHandler(parent=self)
-	o_undo.undo_table()
+        o_undo = UndoHandler(parent=self)
+        o_undo.undo_table()
 
     def action_redo_clicked(self):
-	o_undo = UndoHandler(parent=self)
-	o_undo.redo_table()
+        o_undo = UndoHandler(parent=self)
+        o_undo.redo_table()
 
     def help_about_clicked(self):
         _about = AboutDialog(parent=self)
         _about.display()
 
     def advanced_option_clicked(self):
-	_advanced = AdvancedWindow(parent = self)
-	_advanced.show()
+        _advanced = AdvancedWindow(parent = self)
+        _advanced.show()
 
     def menu_ipts_file_transfer_clicked(self):
-	_o_ipts = IptsFileTransferDialog(parent=self)
-	_o_ipts.show()
-	
+        _o_ipts = IptsFileTransferDialog(parent=self)
+        _o_ipts.show()
+
     def main_tab_widget_changed(self, tab_selected):
-	if tab_selected == 0:
-	    o_gui = Step1GuiHandler(parent = self)
-	    self.check_step1_gui()
-	if tab_selected == 1:
-	    _o_gui = Step2GuiHandler(parent = self)
-	    _o_gui.check_gui()
+        if tab_selected == 0:
+            o_gui = Step1GuiHandler(parent = self)
+            self.check_step1_gui()
+        if tab_selected == 1:
+            _o_gui = Step2GuiHandler(parent = self)
+            _o_gui.check_gui()
 
     def window_job_monitor_clicked(self):
-	job_handler = JobStatusHandler(parent=self)
+        job_handler = JobStatusHandler(parent=self)
 
     def help_button_clicked(self, button_name='autonom'):
-	help_button_activator(parent=self, button_name=button_name)
-	
+        help_button_activator(parent=self, button_name=button_name)
+
     # job utility
     def launch_job_manager(self, job_name='', script_to_run=None, thread_index=-1):
-	job_handler = JobStatusHandler(parent=self, job_name=job_name,
-	                               script_to_run = script_to_run,
-	                               thread_index = thread_index)
-	job_handler.start()
-	
+        job_handler = JobStatusHandler(parent=self, job_name=job_name,
+                                       script_to_run = script_to_run,
+                                       thread_index = thread_index)
+        job_handler.start()
+
     def kill_job(self, row=-1):
-	job_row = self.job_list[row]
-	parent = psutil.Process(job_row['pid'])
-	for child in parent.children(recursive=True):
-	    child.kill()
+        job_row = self.job_list[row]
+        parent = psutil.Process(job_row['pid'])
+        for child in parent.children(recursive=True):
+            child.kill()
 #	    child.wait()
-	parent.kill()
-	
-	table_widget = self.job_monitor_interface.ui.tableWidget
-	table_widget.removeCellWidget(row, 2)
-	_item = QtGui.QTableWidgetItem('Killed')
-	table_widget.setItem(row, 2, _item)
-	job_row['status'] = "killed"
-	job_row['pid'] = None
-	self.job_list[row] = job_row
-	
+        parent.kill()
+
+        table_widget = self.job_monitor_interface.ui.tableWidget
+        table_widget.removeCellWidget(row, 2)
+        _item = QtGui.QTableWidgetItem('Killed')
+        table_widget.setItem(row, 2, _item)
+        job_row['status'] = "killed"
+        job_row['pid'] = None
+        self.job_list[row] = job_row
+
     def start_refresh_text_thread(self):
-	_run_thread = self.logbook_thread
-	_run_thread.setup(parent = self)
-	_run_thread.update_text.connect(self.update_logbook)
-	_run_thread.start()	
+        _run_thread = self.logbook_thread
+        _run_thread.setup(parent = self)
+        _run_thread.update_text.connect(self.update_logbook)
+        _run_thread.start()	
 
     def update_logbook(self, text):
-	if self.job_monitor_interface == None:
-	    self.logbook_thread.stop()
-	else:
-	    _logbook_handler = LogbookHandler(parent=self)
+        if self.job_monitor_interface == None:
+            self.logbook_thread.stop()
+        else:
+            _logbook_handler = LogbookHandler(parent=self)
 
     # tab1
     def select_current_folder_clicked(self):
@@ -1703,23 +1704,23 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     def diamond_edited(self):
         self.check_step1_gui()
-        
+
     def diamond_background_edited(self):
         self.check_step1_gui()
-        
+
     def vanadium_edited(self):
         self.check_step1_gui()
-        
+
     def vanadium_background_edited(self):
         self.check_step1_gui()
-        
+
     def sample_background_edited(self):
         self.check_step1_gui()
 
     def create_new_autonom_folder_button_clicked(self, status):
-	o_gui_handler = Step1GuiHandler(parent = self)
-	o_gui_handler.new_autonom_group_box(status = status)
-        
+        o_gui_handler = Step1GuiHandler(parent = self)
+        o_gui_handler.new_autonom_group_box(status = status)
+
     def output_folder_radio_buttons(self):
         o_gui_handler = Step1GuiHandler(parent=self)
         o_gui_handler.manual_output_folder_button_handler()
@@ -1732,138 +1733,138 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         o_gui = Step1GuiHandler(parent = self)
         o_gui.select_manual_output_folder()
         self.check_step1_gui()
-        
+
     def check_step1_gui(self):
         '''check the status of the step1 GUI in order to enable or not the GO BUTTON at the bottom'''
         o_gui_handler = Step1GuiHandler(parent=self)
         o_gui_handler.check_go_button()
-        
+
     def run_autonom(self):
         """Will first create the output folder, then create the exp.ini file"""
         _run_autonom = RunStep1(parent = self)
         _run_autonom.create_folder()
-	print(os.getcwd())
+        print(os.getcwd())
         _run_autonom.create_exp_ini_file()
 
-	
+
     def help_button_clicked_autonom(self):
-	self.help_button_clicked(button_name = 'autonom')
-	
+        self.help_button_clicked(button_name = 'autonom')
+
     def create_exp_ini_clicked(self):
-	_run_autonom = RunStep1(parent = self, run_autonom=False)
-	_run_autonom.create_folder()
-	_run_autonom.create_exp_ini_file()
+        _run_autonom = RunStep1(parent = self, run_autonom=False)
+        _run_autonom.create_folder()
+        _run_autonom.create_exp_ini_file()
 
     # tab2
     def resize_table_post_processing_tab(self, height, width):
-	pass
-	
+        pass
+
     def move_to_folder_clicked(self):
-	o_load_table = loadTableIntermediateStepInterface(parent = self)
-	o_load_table.show()
+        o_load_table = loadTableIntermediateStepInterface(parent = self)
+        o_load_table.show()
 
     def move_to_folder_step2(self):
-	if not self.load_intermediate_step_ok:
-	    return
-	
+        if not self.load_intermediate_step_ok:
+            return
+
         o_gui = Step2GuiHandler(parent = self)
         o_gui.move_to_folder()
         self.populate_table_clicked()
-        
+
     def populate_table_clicked(self):
-	
-	self.ui.table.blockSignals(True)
-	
+
+        self.ui.table.blockSignals(True)
+
         _pop_table = PopulateMasterTable(parent = self)
         _pop_table.run()
         _error_reported = _pop_table.error_reported
-        
+
         if _error_reported:
-	    self.ui.table.blockSignals(False)
-	    return
-        
+            self.ui.table.blockSignals(False)
+            return
+
         _pop_back_wdg = PopulateBackgroundWidgets(parent = self)
         _pop_back_wdg.run()
-	self.name_search_clicked()
-	
+        self.name_search_clicked()
+
         _o_gui = Step2GuiHandler(parent = self)
         _o_gui.check_gui()
-	
-	o_undo = UndoHandler(parent = self)
-	o_undo.save_table(first_save=True)
 
-	self.ui.table.blockSignals(False)
+        o_undo = UndoHandler(parent = self)
+        o_undo.save_table(first_save=True)
+
+        self.ui.table.blockSignals(False)
 
     def import_table_clicked(self):
-	self.ui.table.blockSignals(True)
+        self.ui.table.blockSignals(True)
 
-	_o_table = TableHandler(parent = self)
-	_o_table._import()
-	self.name_search_clicked()
+        _o_table = TableHandler(parent = self)
+        _o_table._import()
+        self.name_search_clicked()
 
-	o_undo = UndoHandler(parent = self)
-	o_undo.save_table(first_save=True)
-    
-	self.ui.table.blockSignals(False)
+        o_undo = UndoHandler(parent = self)
+        o_undo.save_table(first_save=True)
+
+        self.ui.table.blockSignals(False)
 
     def export_table_clicked(self):
-	_o_table = TableHandler(parent = self)
-	_o_table._export()
+        _o_table = TableHandler(parent = self)
+        _o_table._export()
 
     def table_select_state_changed(self, state, row):
-	_o_table_handler = TableHandler(parent=self)
-	_o_table_handler.check_selection_status(state, row)
+        _o_table_handler = TableHandler(parent=self)
+        _o_table_handler.check_selection_status(state, row)
 
         _o_gui = Step2GuiHandler(parent = self)
         _o_gui.check_gui()
-	_o_gui.define_new_ndabs_output_file_name()
-	_o_gui.define_new_sum_scans_output_file_name()
-	
+        _o_gui.define_new_ndabs_output_file_name()
+        _o_gui.define_new_sum_scans_output_file_name()
+
     def name_search_clicked(self):
-	o_table = TableHandler(parent = self)
-	o_table.name_search()
-	
+        o_table = TableHandler(parent = self)
+        o_table.name_search()
+
     def clear_name_search_clicked(self):
-	o_table = TableHandler(parent = self)
-	self.ui.name_search.setText('')
-	o_table.name_search()
+        o_table = TableHandler(parent = self)
+        self.ui.name_search.setText('')
+        o_table.name_search()
 
     def check_step2_gui(self, row, column):
         _o_gui = Step2GuiHandler(parent = self)
         _o_gui.check_gui()
-		
-	_o_gui.step2_background_flag()
-	_o_gui.step2_update_background_dropdown()
 
-	if column == 1:
-	    o_pop = PopulateBackgroundWidgets(parent=self)
-	    o_pop.refresh_contain()
-	    
-	o_undo = UndoHandler(parent = self)
-	o_undo.save_table()
+        _o_gui.step2_background_flag()
+        _o_gui.step2_update_background_dropdown()
+
+        if column == 1:
+            o_pop = PopulateBackgroundWidgets(parent=self)
+            o_pop.refresh_contain()
+
+        o_undo = UndoHandler(parent = self)
+        o_undo.save_table()
 
     # PDF
-	
+
     def check_q_range(self):
         _o_gui = Step2GuiHandler(parent = self)
         _o_gui.check_gui()
-            
+
     def hidrogen_clicked(self):
         o_gui = Step2GuiHandler(parent = self)
         o_gui.hidrogen_clicked()
-    
+
     def no_hidrogen_clicked(self):
         o_gui = Step2GuiHandler(parent = self)
         o_gui.no_hidrogen_clicked()
-    
+
     def yes_background_clicked(self):
         o_gui = Step2GuiHandler(parent = self)
         o_gui.yes_background_clicked()
-    
+
     def no_background_clicked(self):
         o_gui = Step2GuiHandler(parent = self)
         o_gui.no_background_clicked()
-        
+
     def background_combobox_changed(self, index):
         o_gui = Step2GuiHandler(parent = self)
         o_gui.background_index_changed(row_index = index)
@@ -1875,15 +1876,15 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     def run_ndabs_clicked(self):
         o_create_sample_files = CreateSampleFiles(parent = self)
         o_create_sample_files.run()
-        
+
         list_sample_files = o_create_sample_files.list_sample_files
-        
+
         o_create_ndsum_file = CreateNdsumFile(parent = self)
         o_create_ndsum_file.run()
 
         o_run_ndsum = RunNDabs(parent = self, list_sample_files = list_sample_files)
         o_run_ndsum.run()
-        
+
     def check_fourier_filter_widgets(self):
         o_gui = Step2GuiHandler(parent = self)
         o_gui.check_gui()
@@ -1891,7 +1892,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     def check_plazcek_widgets(self):
         o_gui = Step2GuiHandler(parent = self)
         o_gui.check_gui()
-        
+
     def table_right_click(self, position):
         _o_table = TableHandler(parent = self)
         _o_table.right_click(position = position)
@@ -1901,47 +1902,47 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         o_run_sum_scans.run()
 
     def output_file_name_changed(self):
-	o_gui = Step2GuiHandler(parent = self)
-	o_gui.check_gui()
+        o_gui = Step2GuiHandler(parent = self)
+        o_gui.check_gui()
 
     def pdf_qmax_line_edit_changed(self):
-	o_gui = Step2GuiHandler(parent = self)
-	o_gui.check_gui()	
+        o_gui = Step2GuiHandler(parent = self)
+        o_gui.check_gui()	
 
     def sum_scans_output_file_name_changed(self):
-	o_gui = Step2GuiHandler(parent = self)
-	o_gui.check_gui()	
-	
+        o_gui = Step2GuiHandler(parent = self)
+        o_gui.check_gui()	
+
     def help_button_clicked_ndabs(self):
-	self.help_button_clicked(button_name = 'ndabs')
-	
+        self.help_button_clicked(button_name = 'ndabs')
+
     def help_button_clicked_scans(self):
-	self.help_button_clicked(button_name = 'scans')
+        self.help_button_clicked(button_name = 'scans')
 
     # Rietveld
-    
+
     def mantid_browse_calibration_clicked(self):
-	o_mantid_gui = BrowseFileFolderHandler(parent = self)
-	o_mantid_gui.browse_file(type = 'calibration')
-    
+        o_mantid_gui = BrowseFileFolderHandler(parent = self)
+        o_mantid_gui.browse_file(type = 'calibration')
+
     def mantid_browse_characterization_clicked(self):
-	o_mantid_gui = BrowseFileFolderHandler(parent = self)
-	o_mantid_gui.browse_file(type = 'characterization')
+        o_mantid_gui = BrowseFileFolderHandler(parent = self)
+        o_mantid_gui.browse_file(type = 'characterization')
 
     def mantid_output_directory_clicked(self):
-	o_mantid_gui = BrowseFileFolderHandler(parent = self)
-	o_mantid_gui.browse_folder()
+        o_mantid_gui = BrowseFileFolderHandler(parent = self)
+        o_mantid_gui.browse_folder()
 
     def mantid_run_reduction(self):
-	o_mantid_run = GlobalMantidReduction(parent = self)
-	o_mantid_run.run()
+        o_mantid_run = GlobalMantidReduction(parent = self)
+        o_mantid_run.run()
 
     def check_mantid_gui(self):
-	o_gui = Step2GuiHandler(parent = self)
-	o_gui.check_gui()
+        o_gui = Step2GuiHandler(parent = self)
+        o_gui.check_gui()
 
     def help_button_clicked_mantid(self):
-	self.help_button_clicked(button_name = 'mantid')
+        self.help_button_clicked(button_name = 'mantid')
 
 def main():
     app = PyQt4.QtGui.QApplication(sys.argv)

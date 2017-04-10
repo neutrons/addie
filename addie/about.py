@@ -22,7 +22,7 @@ class AboutDialog(object):
         qt_version = QtCore.QT_VERSION_STR
         pyqt_version = pyqt_configuration().pyqt_version_str
         
-        message = ''' addie 
+        message = ''' Addie 
         
         version %s
         
