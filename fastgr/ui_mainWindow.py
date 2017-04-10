@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
 #
-# Created: Mon Apr 10 12:36:09 2017
+# Created: Mon Apr 10 12:39:14 2017
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -1677,7 +1677,7 @@ class Ui_MainWindow(object):
         self.mantid_output_directory_value.setText(_translate("MainWindow", "N/A", None))
         self.mantid_run_reduction.setText(_translate("MainWindow", "Run Reduction", None))
         self.pushButton_5.setText(_translate("MainWindow", "?", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Rietveld", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Bragg", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_6), _translate("MainWindow", "Post Processing", None))
         self.label_92.setText(_translate("MainWindow", "SNS Powder Reduction Configuration for NOMAD", None))
         self.comboBox_xUnit.setItemText(0, _translate("MainWindow", "TOF", None))

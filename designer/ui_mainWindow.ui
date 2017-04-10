@@ -1935,7 +1935,7 @@ p, li { white-space: pre-wrap; }
                  </widget>
                  <widget class="QWidget" name="tab_2">
                   <attribute name="title">
-                   <string>Rietveld</string>
+                   <string>Bragg</string>
                   </attribute>
                   <layout class="QVBoxLayout" name="verticalLayout_3">
                    <item>
