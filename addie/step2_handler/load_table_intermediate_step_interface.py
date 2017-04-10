@@ -1,7 +1,7 @@
 from PyQt4 import QtGui, QtCore
 
-from fastgr.ui_loadTableIntermediateStep import Ui_Dialog as UiDialog
-from fastgr.utilities.gui_handler import GuiHandler
+from addie.ui_loadTableIntermediateStep import Ui_Dialog as UiDialog
+from addie.utilities.gui_handler import GuiHandler
 
 
 class loadTableIntermediateStepInterface(QtGui.QDialog):

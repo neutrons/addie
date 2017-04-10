@@ -1,5 +1,5 @@
 from PyQt4.QtCore import Qt
-from fastgr.utilities.file_handler import FileHandler
+from addie.utilities.file_handler import FileHandler
 
 
 class ExportTable(object):

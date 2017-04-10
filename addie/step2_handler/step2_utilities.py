@@ -1,7 +1,7 @@
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt
 
-from fastgr.utilities.math_tools import is_int, is_float
+from addie.utilities.math_tools import is_int, is_float
 
 class Step2Utilities(object):
     

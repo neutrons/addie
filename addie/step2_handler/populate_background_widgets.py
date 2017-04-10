@@ -1,6 +1,6 @@
 import os
 from PyQt4 import QtGui, QtCore
-from fastgr.step2_handler.exp_ini_file_loader import ExpIniFileLoader
+from addie.step2_handler.exp_ini_file_loader import ExpIniFileLoader
 
 
 class PopulateBackgroundWidgets(object):

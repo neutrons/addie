@@ -164,7 +164,7 @@ class MantidIPythonWidget(RichIPythonWidget):
         Set the main application to the iPython widget to call
         Parameters
         ----------
-        main_app :: main FastGR application
+        main_app :: main addie application
 
         Returns
         -------

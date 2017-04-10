@@ -5,60 +5,60 @@ import numpy as np
 import os
 import itertools
 import psutil
-from fastgr.ipythondockwidget import IPythonDockWidget
+from addie.ipythondockwidget import IPythonDockWidget
 from PyQt4 import QtGui
 
-import fastgr.ui_mainWindow
-import fastgr.step1
-import fastgr.step2
+import addie.ui_mainWindow
+import addie.step1
+import addie.step2
 
-from fastgr.about import AboutDialog
-from fastgr.advanced_window_handler.advanced_window import AdvancedWindow
-from fastgr.configuration.export_configuration import ExportConfiguration
-from fastgr.configuration.import_configuration import ImportConfiguration
+from addie.about import AboutDialog
+from addie.advanced_window_handler.advanced_window import AdvancedWindow
+from addie.configuration.export_configuration import ExportConfiguration
+from addie.configuration.import_configuration import ImportConfiguration
 
-from fastgr.general_handler.help_gui import HelpGui, help_button_activator
+from addie.general_handler.help_gui import HelpGui, help_button_activator
 
-from fastgr.utilities.job_status_handler import JobStatusHandler
-from fastgr.utilities.job_monitor_thread import JobMonitorThread
-from fastgr.utilities.logbook_thread import LogbookThread
-from fastgr.utilities.logbook_handler import LogbookHandler
-from fastgr.utilities.ipts_file_transfer_dialog import IptsFileTransferDialog
+from addie.utilities.job_status_handler import JobStatusHandler
+from addie.utilities.job_monitor_thread import JobMonitorThread
+from addie.utilities.logbook_thread import LogbookThread
+from addie.utilities.logbook_handler import LogbookHandler
+from addie.utilities.ipts_file_transfer_dialog import IptsFileTransferDialog
 
-from fastgr.initialization.init_step1 import InitStep1
+from addie.initialization.init_step1 import InitStep1
 
-from fastgr.step1_handler.step1_gui_handler import Step1GuiHandler
-from fastgr.step1_handler.run_step1 import RunStep1
-from fastgr.step2_handler.load_table_intermediate_step_interface import loadTableIntermediateStepInterface
-from fastgr.step2_handler.undo_handler import UndoHandler
+from addie.step1_handler.step1_gui_handler import Step1GuiHandler
+from addie.step1_handler.run_step1 import RunStep1
+from addie.step2_handler.load_table_intermediate_step_interface import loadTableIntermediateStepInterface
+from addie.step2_handler.undo_handler import UndoHandler
 
-from fastgr.initialization.init_step2 import InitStep2
-from fastgr.step2_handler.populate_master_table import PopulateMasterTable
-from fastgr.step2_handler.populate_background_widgets import PopulateBackgroundWidgets
-from fastgr.step2_handler.step2_gui_handler import Step2GuiHandler
-from fastgr.step2_handler.table_handler import TableHandler
-from fastgr.step2_handler.create_sample_files import CreateSampleFiles
-from fastgr.step2_handler.create_ndsum_file import CreateNdsumFile
-from fastgr.step2_handler.run_ndabs import RunNDabs
-from fastgr.step2_handler.run_sum_scans import RunSumScans
-from fastgr.step2_handler.run_thread import RunThread
+from addie.initialization.init_step2 import InitStep2
+from addie.step2_handler.populate_master_table import PopulateMasterTable
+from addie.step2_handler.populate_background_widgets import PopulateBackgroundWidgets
+from addie.step2_handler.step2_gui_handler import Step2GuiHandler
+from addie.step2_handler.table_handler import TableHandler
+from addie.step2_handler.create_sample_files import CreateSampleFiles
+from addie.step2_handler.create_ndsum_file import CreateNdsumFile
+from addie.step2_handler.run_ndabs import RunNDabs
+from addie.step2_handler.run_sum_scans import RunSumScans
+from addie.step2_handler.run_thread import RunThread
 
-from fastgr.step3_handler.step3_gui_handler import Step3GuiHandler
+from addie.step3_handler.step3_gui_handler import Step3GuiHandler
 
-from fastgr.mantid_handler.browse_file_folder_handler import BrowseFileFolderHandler
-from fastgr.mantid_handler.mantid_reduction import GlobalMantidReduction
-from fastgr.mantid_handler.mantid_thread import MantidThread
+from addie.mantid_handler.browse_file_folder_handler import BrowseFileFolderHandler
+from addie.mantid_handler.mantid_reduction import GlobalMantidReduction
+from addie.mantid_handler.mantid_thread import MantidThread
 
 import PyQt4
 import PyQt4.QtCore as QtCore
 import PyQt4.QtGui as QtGui
 
-import fastgr.fastgrdriver as driver
-import fastgr.specify_plots_style as ps
+import addie.addiedriver as driver
+import addie.specify_plots_style as ps
 
 
-class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
-    """ Main FastGR window
+class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
+    """ Main addie window
     """
 
     undo_table = {}
@@ -112,7 +112,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 	    self.characterization_folder = '/SNS/NOM/shared/CALIBRATION/'
 
         # Initialize the UI widgets
-        self.ui = fastgr.ui_mainWindow.Ui_MainWindow()
+        self.ui = addie.ui_mainWindow.Ui_MainWindow()
         self.ui.setupUi(self)
         self.ui.graphicsView_sq.set_main(self)
  
@@ -209,7 +209,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
             self._braggBankWidgetRecords[bank_id] = checked
 
         # define the driver
-        self._myController = driver.FastGRDriver()
+        self._myController = driver.AddieDriver()
 
         # class variable for easy access
         self._gssGroupName = None
@@ -364,8 +364,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         self._assistantProcess.waitForFinished()
 
         # launch
-        # helper_url = QtCore.QUrl('fastgr_helper.html')
-        helper_url = QtCore.QUrl('https://neutrons.github.io/FastGR/index.html')
+        # helper_url = QtCore.QUrl('addie_helper.html')
+        helper_url = QtCore.QUrl('https://neutrons.github.io/addie/index.html')
         QtGui.QDesktopServices.openUrl(helper_url)
 
         return

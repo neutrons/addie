@@ -11,9 +11,9 @@ import mantid.simpleapi as simpleapi
 from mantid.api import AnalysisDataService
 
 
-class FastGRDriver(object):
+class AddieDriver(object):
     """
-    Driver for FastGR application
+    Driver for addie application
     """
     def __init__(self):
         """ Initialization

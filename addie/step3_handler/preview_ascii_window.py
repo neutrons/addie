@@ -1,6 +1,6 @@
 from PyQt4 import QtGui
 
-from fastgr.ui_preview_ascii import Ui_MainWindow as UiMainWindow
+from addie.ui_preview_ascii import Ui_MainWindow as UiMainWindow
 
 
 class PreviewAsciiWindow(QtGui.QMainWindow):

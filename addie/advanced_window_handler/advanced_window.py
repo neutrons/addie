@@ -1,6 +1,6 @@
 from PyQt4 import QtGui
 
-from fastgr.ui_advanced_window import Ui_MainWindow as UiMainWindow
+from addie.ui_advanced_window import Ui_MainWindow as UiMainWindow
 
 
 class AdvancedWindow(QtGui.QMainWindow):

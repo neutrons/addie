@@ -3,10 +3,10 @@ import os
 from PyQt4 import QtCore, QtGui
 import sys
 
-import fastgr.step1
-from fastgr.initialization.init_step1 import InitStep1
-from fastgr.step1_handler.gui_handler import GuiHandler
-from fastgr.step1_handler.run_step1 import RunStep1
+import addie.step1
+from addie.initialization.init_step1 import InitStep1
+from addie.step1_handler.gui_handler import GuiHandler
+from addie.step1_handler.run_step1 import RunStep1
 
 
 class MyApp(QtGui.QMainWindow, step1.Ui_MainWindow):

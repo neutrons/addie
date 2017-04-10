@@ -2,7 +2,7 @@ import glob
 import os
 import datetime
 
-from fastgr.utilities.file_handler import FileHandler
+from addie.utilities.file_handler import FileHandler
 
 
 class LogbookHandler(object):

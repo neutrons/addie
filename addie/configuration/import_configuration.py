@@ -1,12 +1,12 @@
 import ConfigParser
 import os
 
-from fastgr.configuration.config_file_name_handler import ConfigFileNameHandler
-from fastgr.utilities.conversion import str2bool
-from fastgr.utilities.gui_handler import GuiHandler
-from fastgr.step1_handler.step1_gui_handler import Step1GuiHandler
-from fastgr.step2_handler.import_table import ImportTable
-from fastgr.step2_handler.step2_gui_handler import Step2GuiHandler
+from addie.configuration.config_file_name_handler import ConfigFileNameHandler
+from addie.utilities.conversion import str2bool
+from addie.utilities.gui_handler import GuiHandler
+from addie.step1_handler.step1_gui_handler import Step1GuiHandler
+from addie.step2_handler.import_table import ImportTable
+from addie.step2_handler.step2_gui_handler import Step2GuiHandler
 
 
 class ImportConfiguration(object):

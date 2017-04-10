@@ -1,9 +1,9 @@
 import os
 
-import fastgr.step2_handler.table_handler
-from fastgr.step2_handler.mantid_reduction_dialogbox import MantidReductionDialogbox
-from fastgr.step2_handler.mantid_reduction_view import MantidReductionView
-from fastgr.utilities.job_status_handler import JobStatusHandler
+import addie.step2_handler.table_handler
+from addie.step2_handler.mantid_reduction_dialogbox import MantidReductionDialogbox
+from addie.step2_handler.mantid_reduction_view import MantidReductionView
+from addie.utilities.job_status_handler import JobStatusHandler
 
 
 class GlobalMantidReduction(object):
@@ -69,7 +69,7 @@ class GlobalMantidReduction(object):
         self.parameters = _parameters
         
     def collect_runs(self):
-        o_table_handler = fastgr.step2_handler.table_handler.TableHandler(parent = self.parent)
+        o_table_handler = addie.step2_handler.table_handler.TableHandler(parent = self.parent)
         o_table_handler.retrieve_list_of_selected_rows()
         list_of_selected_row = o_table_handler.list_selected_row
         runs = []

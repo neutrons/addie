@@ -6,4 +6,4 @@ if [ $1 ]; then
 else
     CMD=''
 fi
-PYTHONPATH=build/lib:$PYTHONPATH $CMD build/scripts-2.7/fastgr
+PYTHONPATH=build/lib:$PYTHONPATH $CMD build/scripts-2.7/addie

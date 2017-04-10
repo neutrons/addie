@@ -1,7 +1,7 @@
 from PyQt4 import QtGui
 
-from fastgr.ui_helpGui import Ui_MainWindow as UiMainWindow
-from fastgr.general_handler.help_gui_table_initialization import HelpGuiTableInitialization
+from addie.ui_helpGui import Ui_MainWindow as UiMainWindow
+from addie.general_handler.help_gui_table_initialization import HelpGuiTableInitialization
 
 
 class HelpGui(QtGui.QMainWindow):

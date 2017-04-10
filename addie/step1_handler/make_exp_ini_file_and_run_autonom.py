@@ -1,7 +1,7 @@
 import os
 import time
 
-from fastgr.step1_handler.step1_gui_handler import Step1GuiHandler
+from addie.step1_handler.step1_gui_handler import Step1GuiHandler
 
 
 class MakeExpIniFileAndRunAutonom(object):

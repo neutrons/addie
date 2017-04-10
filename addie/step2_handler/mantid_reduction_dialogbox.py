@@ -1,6 +1,6 @@
 from PyQt4 import QtGui
 
-from fastgr.ui_launchMantid import Ui_Dialog as UiDialog
+from addie.ui_launchMantid import Ui_Dialog as UiDialog
 
 
 class MantidReductionDialogbox(QtGui.QDialog):

@@ -3,7 +3,7 @@ from PyQt4 import QtGui
 import subprocess
 import time
 
-from fastgr.utilities.job_monitor_interface import JobMonitorInterface
+from addie.utilities.job_monitor_interface import JobMonitorInterface
 
 
 class JobStatusHandler(object):

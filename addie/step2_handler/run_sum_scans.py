@@ -1,6 +1,6 @@
 import os
 from PyQt4.QtCore import Qt
-from fastgr.step2_handler.step2_gui_handler import Step2GuiHandler
+from addie.step2_handler.step2_gui_handler import Step2GuiHandler
 
 
 class RunSumScans(object):

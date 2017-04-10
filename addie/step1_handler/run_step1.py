@@ -2,7 +2,7 @@ import os
 from PyQt4 import QtGui
 import glob
 
-from fastgr.step1_handler.make_exp_ini_file_and_run_autonom import MakeExpIniFileAndRunAutonom
+from addie.step1_handler.make_exp_ini_file_and_run_autonom import MakeExpIniFileAndRunAutonom
 
 
 class RunStep1(object):

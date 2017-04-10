@@ -5,7 +5,7 @@ from matplotlib import __version__ as matplotlib_version_str
 from PyQt4.pyqtconfig import Configuration as pyqt_configuration
 import mantid
 import sys
-import fastgr._version as fastgr_version
+import addie._version as addie_version
 
 
 class AboutDialog(object):
@@ -14,7 +14,7 @@ class AboutDialog(object):
         self.parent = parent
         
     def display(self):
-        fastgr_version = self.get_appli_version()
+        addie_version = self.get_appli_version()
         python_version = self.get_python_version()
         numpy_version = numpy_version_str
         mantid_version = mantid.__version__
@@ -22,7 +22,7 @@ class AboutDialog(object):
         qt_version = QtCore.QT_VERSION_STR
         pyqt_version = pyqt_configuration().pyqt_version_str
         
-        message = ''' FastGR 
+        message = ''' addie 
         
         version %s
         
@@ -33,7 +33,7 @@ class AboutDialog(object):
            - Matplotlib: %s
            - Qt: %s
            - PyQt: %s
-        ''' % (fastgr_version,
+        ''' % (addie_version,
                python_version,
                numpy_version,
                mantid_version,
@@ -41,10 +41,10 @@ class AboutDialog(object):
                qt_version,
                pyqt_version)
         
-        QtGui.QMessageBox.about(self.parent, "About FastGR", message)
+        QtGui.QMessageBox.about(self.parent, "About Addie", message)
         
     def get_appli_version(self):
-        _version = fastgr_version.get_versions()
+        _version = addie_version.get_versions()
         return str(_version['version'][0:5])
         
     def get_python_version(self):

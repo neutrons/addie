@@ -10,7 +10,7 @@ from collections import defaultdict
 import sys
 import os.path
 import re
-from fastgr.utilities.file_handler import FileHandler
+from addie.utilities.file_handler import FileHandler
 
 
 class GenerateSumthing(object):

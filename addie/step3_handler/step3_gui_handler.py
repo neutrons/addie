@@ -1,8 +1,8 @@
 from PyQt4 import QtGui, QtCore
 import os
 
-from fastgr.utilities.file_handler import FileHandler
-from fastgr.step3_handler.preview_ascii_window import PreviewAsciiWindow
+from addie.utilities.file_handler import FileHandler
+from addie.step3_handler.preview_ascii_window import PreviewAsciiWindow
 
 
 class Step3GuiHandler(object):

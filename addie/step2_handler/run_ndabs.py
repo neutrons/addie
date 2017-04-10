@@ -1,5 +1,5 @@
 import os
-from fastgr.utilities.job_status_handler import JobStatusHandler
+from addie.utilities.job_status_handler import JobStatusHandler
 
 
 class RunNDabs(object):

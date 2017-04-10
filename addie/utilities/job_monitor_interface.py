@@ -1,8 +1,8 @@
 from PyQt4 import QtGui, QtCore
 import psutil
 
-from fastgr.ui_jobStatus import Ui_MainWindow as UiMainWindow
-from fastgr.utilities.job_monitor_thread import JobMonitorThread
+from addie.ui_jobStatus import Ui_MainWindow as UiMainWindow
+from addie.utilities.job_monitor_thread import JobMonitorThread
 
 
 class JobMonitorInterface(QtGui.QMainWindow):

@@ -1,6 +1,6 @@
 from PyQt4 import QtGui, QtCore
-from fastgr.ui_iptsFileTransfer import Ui_Dialog as UiDialog
-from fastgr.utilities.job_status_handler import JobStatusHandler
+from addie.ui_iptsFileTransfer import Ui_Dialog as UiDialog
+from addie.utilities.job_status_handler import JobStatusHandler
 import os
 
 

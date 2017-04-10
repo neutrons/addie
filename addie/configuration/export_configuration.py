@@ -1,10 +1,10 @@
 from PyQt4 import QtGui
 import os
 
-from fastgr.utilities.gui_handler import GuiHandler
-from fastgr.step2_handler.export_table import ExportTable
-from fastgr.configuration.config_file_name_handler import ConfigFileNameHandler
-from fastgr.utilities.file_handler import FileHandler
+from addie.utilities.gui_handler import GuiHandler
+from addie.step2_handler.export_table import ExportTable
+from addie.configuration.config_file_name_handler import ConfigFileNameHandler
+from addie.utilities.file_handler import FileHandler
 
 
 class ExportConfiguration(object):

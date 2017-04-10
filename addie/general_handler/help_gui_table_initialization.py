@@ -1,7 +1,7 @@
 from PyQt4 import QtGui, QtCore
 
-from fastgr.step1_handler.step1_utilities import Step1Utilities
-from fastgr.step2_handler.step2_utilities import Step2Utilities
+from addie.step1_handler.step1_utilities import Step1Utilities
+from addie.step2_handler.step2_utilities import Step2Utilities
 
 
 class HelpGuiTableInitialization(object):

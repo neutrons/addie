@@ -1,4 +1,4 @@
-FastGR Helper
+Addie Helper
 =======================================
 
 .. contents:: Table of Contents
@@ -7,7 +7,7 @@ FastGR Helper
 Overview
 --------
 
-FastGr is ... ...
+Addie is ... ...
 
 How to process workspaces from iPython console
 ----------------------------------------------

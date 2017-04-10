@@ -1,5 +1,5 @@
 import os
-from fastgr.step2_handler.table_handler import TableHandler
+from addie.step2_handler.table_handler import TableHandler
 
 
 class CreateNdsumFile(object):

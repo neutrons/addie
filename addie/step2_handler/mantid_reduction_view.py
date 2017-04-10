@@ -1,8 +1,8 @@
 from PyQt4 import QtGui
 
-from fastgr.ui_previewMantid import Ui_MainWindow as UiMainWindow
-from fastgr.step2_handler.mantid_script_handler import MantidScriptHandler
-from fastgr.utilities.file_handler import FileHandler
+from addie.ui_previewMantid import Ui_MainWindow as UiMainWindow
+from addie.step2_handler.mantid_script_handler import MantidScriptHandler
+from addie.utilities.file_handler import FileHandler
 
 
 class MantidReductionView(QtGui.QMainWindow):

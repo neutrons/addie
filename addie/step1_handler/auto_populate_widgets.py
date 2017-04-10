@@ -1,6 +1,6 @@
 import os
-from fastgr.utilities.file_handler import FileHandler
-from fastgr.step1_handler.step1_widgets_handler import Step1WidgetsHandler
+from addie.utilities.file_handler import FileHandler
+from addie.step1_handler.step1_widgets_handler import Step1WidgetsHandler
 
 
 class AutoPopulateWidgets(object):

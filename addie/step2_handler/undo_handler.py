@@ -1,7 +1,7 @@
-from fastgr.step2_handler.export_table import ExportTable
-from fastgr.step2_handler.import_table import ImportTable
-from fastgr.step2_handler.table_handler import TableHandler
-from fastgr.step2_handler.populate_background_widgets import PopulateBackgroundWidgets
+from addie.step2_handler.export_table import ExportTable
+from addie.step2_handler.import_table import ImportTable
+from addie.step2_handler.table_handler import TableHandler
+from addie.step2_handler.populate_background_widgets import PopulateBackgroundWidgets
 
 
 class UndoHandler(object):

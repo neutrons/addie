@@ -1,7 +1,7 @@
 from PyQt4 import QtGui
 import os
 
-from fastgr.utilities.file_handler import FileHandler
+from addie.utilities.file_handler import FileHandler
 
 
 class ConfigFileNameHandler(object):
