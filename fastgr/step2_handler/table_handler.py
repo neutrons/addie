@@ -1,4 +1,5 @@
 import os
+import glob
 import numpy as np
 from PyQt4.QtCore import Qt
 from PyQt4 import QtGui, QtCore
@@ -9,6 +10,7 @@ from fastgr.utilities.file_handler import FileHandler
 from fastgr.step2_handler.populate_background_widgets import PopulateBackgroundWidgets
 import fastgr.step2_handler.step2_gui_handler
 
+import matplotlib.pyplot as plt
 
 class TableHandler(object):
     
@@ -78,6 +80,7 @@ class TableHandler(object):
             
     def right_click(self, position = None):
         _duplicate_row = -1
+        _plot_row = -1
         _remove_row = -1
         _new_row = -1
         _copy = -1
@@ -123,6 +126,10 @@ class TableHandler(object):
             _duplicate_row = menu.addAction("Duplicate Row")
             _remove_row = menu.addAction("Remove Row(s)")
             menu.addSeparator()
+            _plot_row = menu.addAction("Plot ...")
+            _plot_diff_first_run_row = menu.addAction("Plot Diff (1st run)...")
+            _plot_diff_average_row = menu.addAction("Plot Diff (Avg.)...")
+            menu.addSeparator()
             _refresh_table = menu.addAction("Refresh/Reset Table")
             _clear_table = menu.addAction("Clear Table")
         
@@ -141,6 +148,12 @@ class TableHandler(object):
             self._cut()
         elif action == _duplicate_row:
             self._duplicate_row()
+        elif action == _plot_row:
+            self._plot_row()
+        elif action == _plot_diff_first_run_row:
+            self._plot_diff_first_run_row()
+        elif action == _plot_diff_average_row:
+            self._plot_diff_average_row()
         elif action == _invert_selection:
             self._inverse_selection()
         elif action == _new_row:
@@ -323,9 +336,71 @@ class TableHandler(object):
     def _duplicate_row(self):
         _row = self.current_row
         metadata_to_copy = self._collect_metadata(row_index = _row)
-        o_populate = fastgr.step2_handler.populate_master_table.PopulateMasterTable(parent = self.parent)
+        o_populate = fastgr.step2_handler.populate_master_table.PopulateMasterTable(parent = self.parent_no_ui)
         o_populate.add_new_row(metadata_to_copy, row = _row)
-    
+
+    def _plot_fetch_files(self):
+        _row = self.current_row
+        _row_runs = self._collect_metadata(row_index = _row)['runs'].split(',')
+
+        output_list = list()
+        file_list = [ sofq for sofq in glob.glob('./SofQ/NOM_*')]
+        for run in _row_runs:
+            sofq = './SofQ/NOM_'+str(run)+'SQ.dat'
+            if sofq in file_list:
+                output_list.append({'file':sofq, 'run':run})
+
+        return output_list
+
+    def _plot_fetch_data(self):
+        file_list = self._plot_fetch_files()
+        
+        for sofq in file_list:
+            with open(sofq['file'],'r') as handle:
+                x, y, e = np.loadtxt(handle,unpack=True)
+                sofq['x'] = x
+                sofq['y'] = y
+
+        return file_list
+ 
+    def _plot_datasets(self,sofq_datasets,shift_value=1.0): 
+        fig = plt.figure()
+        ax = fig.add_subplot(1,1,1)
+        shifter = 0.0
+        for sofq in sofq_datasets:
+            with open(sofq['file'],'r') as handle:
+                sofq['y'] += shifter
+                ax.plot(sofq['x'],sofq['y'],label=sofq['run'])
+                shifter += shift_value
+        box = ax.get_position()
+        ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+        handles, labels = ax.get_legend_handles_labels()
+        ax.legend(handles[::-1], labels[::-1], title='Runs', loc='center left',bbox_to_anchor=(1,0.5))
+        plt.show()
+
+    def _plot_row(self):
+        sofq_datasets = self._plot_fetch_data()
+        self._plot_datasets(sorted(sofq_datasets, key=lambda k: int(k['run'])))
+   
+    def _plot_diff_first_run_row(self):
+        sofq_datasets = self._plot_fetch_data()
+        sofq_base  = dict(sofq_datasets[0])
+
+        for sofq in sorted(sofq_datasets, key=lambda k: int(k['run'])):
+            sofq['y'] = sofq['y'] - sofq_base['y']
+
+        self._plot_datasets(sofq_datasets,shift_value=0.2)
+        
+    def _plot_diff_average_row(self):
+        sofq_datasets = self._plot_fetch_data()
+
+        sofq_data = [ sofq['y'] for sofq in sofq_datasets ]
+        sofq_avg = np.average(sofq_data,axis=0)
+        for sofq in sorted(sofq_datasets, key=lambda k: int(k['run'])):
+            sofq['y'] = sofq['y'] - sofq_avg
+
+        self._plot_datasets(sofq_datasets,shift_value=0.2)
+   
     def _new_row(self):
         _row = self.current_row
         if _row == -1:

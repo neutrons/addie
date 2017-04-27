@@ -248,9 +248,12 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 	   image: url(':/MPL Toolbar/splitter_icon.png');
 	}
 	""")
-	
+	    
         self.ui.comboBox_xUnit.clear()
         self.ui.comboBox_xUnit.addItems(['TOF', 'dSpacing', 'Q'])
+        index = self.ui.comboBox_xUnit.findText('dSpacing',QtCore.Qt.MatchFixedString)
+        self.ui.comboBox_xUnit.setCurrentIndex(index)
+        
 
         self.ui.treeWidget_braggWSList.set_main_window(self)
         self.ui.treeWidget_braggWSList.add_main_item('workspaces', append=True, as_current_index=False)
@@ -375,6 +378,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         """
         self.ui.graphicsView_bragg.reset()
+        self.clear_bank_checkboxes()
+        self._onCanvasGSSBankList = list()
 
         return
 
@@ -572,16 +577,20 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         # reset the GSAS tree
         self.ui.treeWidget_braggWSList.reset_bragg_tree()
 
+        # clear checkboxes for banks
+        self.clear_bank_checkboxes()
+
         # clear the canvas
         self.ui.graphicsView_bragg.reset()
 
-        # clear the checkboxes for banks
+        return
+
+    def clear_bank_checkboxes(self):
         self._noEventBankWidgets = True
         for check_box in self._braggBankWidgets.values():
             check_box.setChecked(False)
         self._noEventBankWidgets = False
 
-        return
 
     def plot_bragg(self, bragg_ws_list,  clear_canvas=False):
         """
@@ -719,28 +728,41 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         else:
             default_dir = self.getDefaultDir(sub_dir='GSAS')
 
-        bragg_file_name = str(QtGui.QFileDialog.getOpenFileName(self, 'Choose Bragg File', default_dir, ext))
-        if bragg_file_name is None or bragg_file_name == '':
+        bragg_file_names = QtGui.QFileDialog.getOpenFileNames(self, 'Choose Bragg File', default_dir, ext)
+        if bragg_file_names is None or bragg_file_names == '':
             return
+        bragg_file_names = [ str(bragg_file_name) for bragg_file_name in bragg_file_names ]
 
         # update stored data directory
-        self._currDataDir = os.path.split(os.path.abspath(bragg_file_name))[0]
+        self._currDataDir = os.path.split(os.path.abspath(bragg_file_names[0]))[0]
         self.check_in_fixed_dir_structure(sub_dir='GSAS')
 
         # load file
-        gss_ws_name = self._myController.load_bragg_file(bragg_file_name)
+        gss_ws_names = list()
+        for bragg_file_name in bragg_file_names:
+            gss_ws_name = self._myController.load_bragg_file(bragg_file_name)
+            gss_ws_names.append(gss_ws_name)
+            # split
+            # FIXME - _gssGroupName may have an issie with multiple-GSS mode
+            gssGroupName, banks_list, bank_angles = self._myController.split_to_single_bank(gss_ws_name)
 
-        # split
-        # FIXME - _gssGroupName may have an issie with multiple-GSS mode
-        self._gssGroupName, banks_list, bank_angles = self._myController.split_to_single_bank(gss_ws_name)
-
-        # add to tree
-        self.ui.treeWidget_braggWSList.add_bragg_ws_group(self._gssGroupName, banks_list)
+            # add to tree
+            self.ui.treeWidget_braggWSList.add_bragg_ws_group(gssGroupName, banks_list)
 
         # get plot mode
-        single_gss_mode = self.ui.radioButton_multiBank.isChecked()
+        if len(bragg_file_names) == 1:
+            self.ui.graphicsView_bragg.set_to_single_gss(False)
+            self.ui.radioButton_multiBank.setChecked(True)
+            self.ui.radioButton_multiGSS.setChecked(False)
+        else:
+            self.ui.graphicsView_bragg.set_to_single_gss(False)
+            self.ui.radioButton_multiBank.setChecked(False)
+            self.ui.radioButton_multiGSS.setChecked(True)
 
-        if single_gss_mode:
+
+        multi_bank_mode = self.ui.radioButton_multiBank.isChecked()
+
+        if multi_bank_mode:
             # single-GSS/multi-bank mode
             # rename bank
             for bank_id in self._braggBankWidgets.keys():
@@ -757,25 +779,30 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
             # clear all previous lines
             self.ui.graphicsView_bragg.reset()
 
-            # banks
-            self._onCanvasGSSBankList = self.get_bragg_banks_selected()
-            if len(self._onCanvasGSSBankList) == 0:
-                # select bank 1 as default
-                self._noEventBankWidgets = True
-                self.ui.checkBox_bank1.setChecked(True)
-                self._noEventBankWidgets = False
-                self._onCanvasGSSBankList = self.get_bragg_banks_selected()
         # END-IF
+
+        # banks
+        self._onCanvasGSSBankList = self.get_bragg_banks_selected()
+        if len(self._onCanvasGSSBankList) == 0:
+            # select bank 1 as default
+            self._noEventBankWidgets = True
+            self.ui.checkBox_bank1.setChecked(True)
+            self._noEventBankWidgets = False
+            self._onCanvasGSSBankList = self.get_bragg_banks_selected()
+
         # while in multiple-gss mode, no change will be made on the canvas at all
 
         # prepare to plot new Bragg
         # change unit
         ws_data_dict = dict()
-        gss_group_name = gss_ws_name + '_group'
-        for bank_id in self._onCanvasGSSBankList:
-            vec_x, vec_y, vec_e = self._myController.get_bragg_data(gss_group_name, bank_id, self._currBraggXUnit)
-            ws_data_dict[bank_id] = (vec_x, vec_y, vec_e)
-        plot_data_dict = {gss_group_name: ws_data_dict}
+        plot_data_dict = dict()
+        for gss_ws_name in gss_ws_names:
+            gss_group_name = gss_ws_name + '_group'
+            for bank_id in self._onCanvasGSSBankList:
+                vec_x, vec_y, vec_e = self._myController.get_bragg_data(gss_group_name, bank_id, self._currBraggXUnit)
+                ws_data_dict[bank_id] = (vec_x, vec_y, vec_e)
+            plot_data_dict[gss_group_name] =  ws_data_dict
+
 
         # plot
         self.ui.graphicsView_bragg.plot_banks(plot_data_dict, self._currBraggXUnit)
@@ -1056,7 +1083,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
             # multiple GSAS mode. as currently there is one GSAS file that is plot, then the first bank
             # that is plotted will be kept on the canvas
             # assumption: switched from single-bank mode
-            assert len(self.ui.graphicsView_bragg.get_workspaces()) == 1
+            #assert len(self.ui.graphicsView_bragg.get_workspaces()) == 1
 
             # skip if there is one and only 1 bank that is selected
             if len(to_plot_bank_list) == 1:
@@ -1100,7 +1127,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         if self._noEventBankWidgets:
             return
         # check
-        assert self._gssGroupName is not None, 'GSAS group name cannot be None'
+        #assert self._gssGroupName is not None, 'GSAS group name cannot be None'
 
         # get mode for plotting
         plot_multi_gss = self.ui.radioButton_multiGSS.isChecked()
@@ -1108,6 +1135,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         # find the change of the banks
         current_bank_set = set(self.get_bragg_banks_selected())
         prev_bank_set = set(self._onCanvasGSSBankList)
+
 
         if plot_multi_gss:
             # multi-gss/single-bank mode
@@ -1177,12 +1205,18 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
             self.ui.graphicsView_bragg.set_to_single_gss(False)
         else:
             self.ui.graphicsView_bragg.set_to_single_gss(True)
+            status, ws_name_list = self.ui.treeWidget_braggWSList.get_current_main_nodes()
+            plot_data_dict = { ws_name_list[0] : plot_data_dict[ws_name_list[0]]  } 
+            
 
         # plot new
         self.ui.graphicsView_bragg.plot_banks(plot_data_dict, self._currBraggXUnit)
 
         # reset
         self.reset_bragg_data_range(self._currBraggXUnit)
+
+        # rescale
+        self.do_rescale_bragg()
 
         return
 

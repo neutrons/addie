@@ -104,7 +104,7 @@ class MakeExpIniFileAndRunAutonom(object):
         o_gui.set_main_window_title()
         
         _dict_mandatory = self._dict_mandatory
-        _pre_script = '~zjn/pytest/readtitles.py -a -s'
+        _pre_script = '/SNS/NOM/shared/autoNOM/stable/readtitles.py -a -s'
         for _values in _dict_mandatory.values():
             _pre_script += ' ' + _values
 

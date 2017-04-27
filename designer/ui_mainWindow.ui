@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1358</width>
+    <width>1361</width>
     <height>1058</height>
    </rect>
   </property>
@@ -58,7 +58,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1336</width>
+         <width>1339</width>
          <height>996</height>
         </rect>
        </property>
@@ -80,11 +80,11 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
-              <string>autoNOM</string>
+              <string>Autoreduce</string>
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_7">
               <item>
@@ -540,12 +540,71 @@
                 <item>
                  <widget class="QLabel" name="label_78">
                   <property name="text">
-                   <string>Comments:</string>
+                   <string>Comments</string>
                   </property>
                  </widget>
                 </item>
                 <item>
                  <widget class="QLineEdit" name="comments"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_23">
+                <item>
+                 <widget class="QLabel" name="label_24">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Sample Environment</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="sample_environment_comboBox">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>shifter</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>orange_cryostat</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>ILL_furnace</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>stick_furnace</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>aerodynamic_levitator</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_2">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
                 </item>
                </layout>
               </item>
@@ -1298,6 +1357,27 @@
                             </property>
                            </spacer>
                           </item>
+                          <item>
+                           <layout class="QHBoxLayout" name="horizontalLayout_22">
+                            <item>
+                             <widget class="QLabel" name="label_23">
+                              <property name="text">
+                               <string>Poly. degree</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QSpinBox" name="ndeg">
+                              <property name="maximum">
+                               <number>2</number>
+                              </property>
+                              <property name="value">
+                               <number>2</number>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
+                          </item>
                          </layout>
                         </item>
                        </layout>
@@ -1855,7 +1935,7 @@ p, li { white-space: pre-wrap; }
                  </widget>
                  <widget class="QWidget" name="tab_2">
                   <attribute name="title">
-                   <string>Rietveld</string>
+                   <string>Bragg</string>
                   </attribute>
                   <layout class="QVBoxLayout" name="verticalLayout_3">
                    <item>
@@ -3082,7 +3162,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1358</width>
+     <width>1361</width>
      <height>20</height>
     </rect>
    </property>
@@ -3358,7 +3438,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>pushButton_5</tabstop>
  </tabstops>
  <resources>
-  <include location="../icons/icons.qrc"/>
+  <include location="../../FastGR/icons/icons.qrc"/>
  </resources>
  <connections>
   <connection>

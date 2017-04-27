@@ -5,7 +5,7 @@ from fastgr.step2_handler.step2_gui_handler import Step2GuiHandler
 
 class RunSumScans(object):
     
-    script = 'python  /SNS/users/zjn/pytest/sumscans.py '
+    script = 'python  /SNS/NOM/shared/autoNOM/stable/sumscans.py '
     output_file = ''
     
     def __init__(self, parent=None):
@@ -72,6 +72,10 @@ class RunSumScans(object):
         [plarange_min, plarange_max] = o_gui_handler.get_plazcek_range()
         if (plarange_min is not "") and (plarange_max is not ""):
             f.write("plarange {},{}\n".format(plarange_min, plarange_max))
+        
+        # poly degree
+        poly_degree = str(self.parent.ndeg.value())
+        f.write("ndeg {}\n".format(poly_degree))
         
         # qrangeft
         [q_range_min, q_range_max]= o_gui_handler.get_q_range()
