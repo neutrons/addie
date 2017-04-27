@@ -33,7 +33,7 @@ class BraggView(base.MplGraphicsView):
                                3: 'blue',
                                4: 'green',
                                5: 'brown',
-                               6: 'yellow'}
+                               6: 'orange'}
 
         self._gssColorList = ["black", "red", "blue", "green",
                               "cyan", "magenta", "yellow"]
