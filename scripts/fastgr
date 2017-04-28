@@ -170,6 +170,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
                      self.do_save_gr)
         self.connect(self.ui.pushButton_clearGrCanvas, QtCore.SIGNAL('clicked()'),
                      self.do_clear_gr)
+        self.connect(self.ui.pushButton_saveSQ, QtCore.SIGNAL('clicked()'),
+                     self.do_save_sq)
+        self.connect(self.ui.pushButton_generateSQ, QtCore.SIGNAL('clicked()'),
+                     self.do_generate_sq)  # https://github.com/neutrons/FastGR/issues/91
 
         self.connect(self.ui.doubleSpinBoxQmin, QtCore.SIGNAL('valueChanged(double)'),
                      self.evt_qmin_changed)
@@ -460,6 +464,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
             # plot G(R)
             # vec_r, vec_g, vec_ge = self._myController.get_gr(min_q, max_q)
             # key_plot = gr_ws_name
+            # FIXME/ISSUE/NOW - Add a color manager to this!!!  Loop around color and line style
             self.plot_gr([gr_ws_name])
             # self.ui.graphicsView_gr.plot_gr(key_plot, vec_r, vec_g, vec_ge, False)
 
@@ -591,6 +596,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
             check_box.setChecked(False)
         self._noEventBankWidgets = False
 
+        return
 
     def plot_bragg(self, bragg_ws_list,  clear_canvas=False):
         """
@@ -759,7 +765,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
             self.ui.radioButton_multiBank.setChecked(False)
             self.ui.radioButton_multiGSS.setChecked(True)
 
-
         multi_bank_mode = self.ui.radioButton_multiBank.isChecked()
 
         if multi_bank_mode:
@@ -778,7 +783,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
             # clear all previous lines
             self.ui.graphicsView_bragg.reset()
-
         # END-IF
 
         # banks
@@ -801,10 +805,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
             for bank_id in self._onCanvasGSSBankList:
                 vec_x, vec_y, vec_e = self._myController.get_bragg_data(gss_group_name, bank_id, self._currBraggXUnit)
                 ws_data_dict[bank_id] = (vec_x, vec_y, vec_e)
-            plot_data_dict[gss_group_name] =  ws_data_dict
-
+            plot_data_dict[gss_group_name] = ws_data_dict
 
         # plot
+        # FIXME/ISSUE/NOW - get a summary on calling to plot_banks
         self.ui.graphicsView_bragg.plot_banks(plot_data_dict, self._currBraggXUnit)
 
         # reset unit
@@ -824,7 +828,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
             default_dir = self.getDefaultDir('gofr')
 
         # pop out file
-        file_filter = 'Data Files (*.data);;All Files (*.*)'
+        file_filter = 'Data Files (*.dat);;All Files (*.*)'
         g_file_name = str(QtGui.QFileDialog.getOpenFileName(self, 'Open a G(r) file', default_dir, file_filter))
 
         # return if operation is cancelled
@@ -949,6 +953,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         -------
 
         """
+        # TODO/ISSUE/NOW - Look at https://github.com/neutrons/FastGR/issues/28
+        #                  for more format!
         # read the selected item from the tree
         gr_name_list = self.ui.treeWidget_grWsList.get_selected_items_of_level(2, excluded_parent='SofQ',
                                                                                return_item_text=True)
@@ -991,16 +997,82 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
             if file_ext.lower() != '.csv':
                 gr_file_name += '.csv'
             gr_file_type = 'csv'
-        else:
+        elif gr_filter.startswith('GR'):
             if file_ext.lower() != 'gr':
                 gr_file_name += '.gr'
             gr_file_type = 'gr'
+        elif gr_filter.startswith('DAT'):
+            blabla
+
         # END-IF-ELSE
 
         print 'FILE NAME: ', gr_file_name
 
         # save!
         self._myController.save_ascii(gr_ws_name, gr_file_name, gr_file_type)
+
+        return
+
+    def do_save_sq(self):
+        """
+        Save the selected the G(r) from menu to ASCII file
+        Returns
+        -------
+
+        """
+        # TODO/ISSUE/NOW - Look at https://github.com/neutrons/FastGR/issues/28
+        #                  for more format!
+        # read the selected item from the tree
+        gr_name_list = self.ui.treeWidget_grWsList.get_selected_items_of_level(2, excluded_parent='SofQ',
+                                                                               return_item_text=True)
+        if len(gr_name_list) != 1:
+            err_msg = 'Error! Only 1 workspace of G(r) that can be selected.  So far %d is selected.' \
+                      'They are %s.' % (len(gr_name_list), str(gr_name_list))
+            QtGui.QMessageBox.warning(self, 'Error', err_msg)
+            return
+        else:
+            gr_ws_name = gr_name_list[0]
+
+        # pop-up a dialog for the file to save
+        default_dir = os.getcwd()
+        caption = 'Save G(r)'
+
+        # FIXME/TODO/ISSUE/NEXT - Refactor the following part out to be a standard widget
+
+        # generate a dialog to get the file name to save G(r)
+        export_dialog = QtGui.QFileDialog()
+        export_dialog.setWindowTitle(caption)
+        export_dialog.setDirectory(default_dir)
+        export_dialog.setAcceptMode(QtGui.QFileDialog.AcceptSave)
+        export_dialog.setNameFilter('XYE (*.dat);;CSV XYE (*.csv);;GofR (*.gr)')
+
+        # quit if it is not accepted
+        if export_dialog.exec_() != QtGui.QFileDialog.Accepted:
+            return
+
+        # get the file name from dialog
+        gr_file_name = str(export_dialog.selectedFiles()[0])
+
+        # check the file extension
+        file_name, file_ext = os.path.splitext(gr_file_name)
+        gr_filter = str(export_dialog.selectedFilter())
+        if gr_filter.startswith('XYE'):
+            if file_ext.lower() != '.dat':
+                gr_file_name += '.dat'
+            gr_file_type = 'dat'
+        elif gr_filter.startswith('CSV'):
+            if file_ext.lower() != '.csv':
+                gr_file_name += '.csv'
+            gr_file_type = 'csv'
+        elif gr_filter.startswith('DAT'):
+            blabla
+
+        # END-IF-ELSE
+
+        print 'FILE NAME: ', gr_file_name
+
+        # save!
+        self._myController.save_ascii(gr_ws_name, gr_file_name, sq_)file_type)
 
         return
 
@@ -1207,7 +1279,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
             self.ui.graphicsView_bragg.set_to_single_gss(True)
             status, ws_name_list = self.ui.treeWidget_braggWSList.get_current_main_nodes()
             plot_data_dict = { ws_name_list[0] : plot_data_dict[ws_name_list[0]]  } 
-            
 
         # plot new
         self.ui.graphicsView_bragg.plot_banks(plot_data_dict, self._currBraggXUnit)
