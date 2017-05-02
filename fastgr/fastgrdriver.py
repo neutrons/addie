@@ -150,6 +150,55 @@ class FastGRDriver(object):
 
         return
 
+    # RMCProfile format. The 1st column tells how many X,Y pairs,
+    # the second is a comment line with information regarding the data
+    # (title, multiplier for data, etc.), and then the X,Y pairs for G(r) or S(Q) data.
+
+    @staticmethod
+    def export_to_rmcprofile(ws_name, output_file_name, comment='', ws_index=0):
+        """ Export a workspace 2D to a 2 column data for RMCProfile
+        """
+        # check inputs
+        assert isinstance(ws_name, str), 'Workspace name {0} must be a string but not a {1}.'.format(ws_name,
+                                                                                                     str(ws_name))
+        assert isinstance(output_file_name, str), 'Output file name {0} must be a string but not a {1}.'.format(
+            output_file_name, type(output_file_name))
+        assert isinstance(comment, str), 'Comment {0} must be a string but not a {1}.'.format(comment, type(comment))
+        assert isinstance(ws_idnex, int), 'Workspace index must be an integer but not a {1}.'
+        format(ws_index, type(ws_index))
+
+        # convert to point data from histogram
+        simpleapi.ConvertToPointData(InputWorkspace=ws_name, OutputWorkspace=ws_name)
+
+        # get workspace for vecX and vecY
+        if AnalysisDataService.doesExist(ws_name):
+            workspace = AnalysisDataService.retrieve(ws_name)
+        else:
+            raise RuntimeError('Workspace {0} does not exist in ADS.'.format(ws_name))
+        if not 0 <= ws_index < workspace.getNumberHistograms():
+            raise RuntimeError('Workspace index {0} is out of range.'.format(ws_index))
+
+        vec_x = workspace.readX(0)
+        vec_y = workspace.readY(0)
+
+        # write to buffer
+        wbuf = ''
+        wbuf += '{0}\n'.format(len(vec_x))
+        wbuf += '{0}\n'.format(comment)
+        for index in range(len(vec_x)):
+            wbuf += ' {0} {1}\n'.format(vec_x[index], vec_y[index])
+
+        # write to file
+        try:
+            ofile = open(output_file_name, 'w')
+            ofile.write(wbuf)
+            ofile.close()
+        except IOError as io_err:
+            raise RuntimeError(
+                'Unable to export data to file {0} in RMCProfile format due to {1}.'.format(output_file_name, io_err))
+
+        return
+
     def get_bragg_data(self, ws_group_name, bank_id, x_unit):
         """ Get Bragg diffraction data of 1 bank
         Args:
@@ -436,13 +485,14 @@ class FastGRDriver(object):
         return ws_group_name, ws_list, angle_list
 
     @staticmethod
-    def save_ascii(ws_name, file_name, gr_file_type):
+    def save_ascii(ws_name, file_name, gr_file_type, comment=''):
         """
 
         Args:
             ws_name:
             file_name:
             gr_file_type:
+            comment: user comment to the file
 
         Returns:
 
@@ -452,12 +502,17 @@ class FastGRDriver(object):
         assert isinstance(gr_file_type, str) and gr_file_type in ['dat', 'csv', 'gr'],\
             'GofR file type must be a supported string.'
 
-        if gr_file_type == 'dat':
+        if gr_file_type == 'xye':
             simpleapi.SaveAscii(InputWorkspace=ws_name, Filename=file_name, Separator='Space')
         elif gr_file_type == 'csv':
             simpleapi.SaveAscii(InputWorkspace=ws_name, Filename=file_name, Separator='CSV')
-        else:
+        elif gr_file_type == 'rmcprofile':
+            FastGRDriver.export_to_rmcprofile(ws_name, file_name, comment=comment)
+        elif gr_file_type == '':
             simpleapi.SavePDFGui(InputWorkspace=ws_name, Filename=file_name)
+        else:
+            # non-supported type
+            raise RuntimeError('G(r) file type {0} is not supported.'.format(gr_file_type))
 
         return
 

@@ -173,7 +173,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         self.connect(self.ui.pushButton_saveSQ, QtCore.SIGNAL('clicked()'),
                      self.do_save_sq)
         self.connect(self.ui.pushButton_generateSQ, QtCore.SIGNAL('clicked()'),
-                     self.do_generate_sq)  # https://github.com/neutrons/FastGR/issues/91
+                     self.do_generate_sq)
 
         self.connect(self.ui.doubleSpinBoxQmin, QtCore.SIGNAL('valueChanged(double)'),
                      self.evt_qmin_changed)
@@ -946,6 +946,57 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         return
 
+    def do_generate_sq(self):
+        """
+        generate S(Q) from G(r) by PDFFourierTransform
+        :return:
+        """
+        # get setup
+        min_r = float(self.ui.doubleSpinBoxRmin.value())
+        max_r = float(self.ui.doubleSpinBoxRmax.value())
+        min_q = self.ui.doubleSpinBoxQmin.value()
+        max_q = self.ui.doubleSpinBoxQmax.value()
+
+        # launch the dialog box
+        if self._generateSofQDialog is None:
+            self._generateSofQDialog = blabla
+
+        self._generateSofQDialog.set_r_range(min_r, max_r)
+        self._generateSofQDialog.set_q_range(min_q, max_q)
+
+        self._generateSofQDialog.show()
+
+        return
+
+    def signal_generate_sq(self, arg_dict):
+        """
+        signal handling method to generate S(q)
+        Note:  https://github.com/neutrons/FastGR/issues/91
+        :return:
+        """
+        # TODO/ISSUE/FUTURE - Wait for Pete to implement this
+
+        # check input
+        assert isinstance(arg_dict, dict), 'Input arguments {0} must be given in a dictionary but not a {1}.' \
+                                           ''.format(arg_dict, type(arg_dict))
+
+        # determine the selected G(r)
+        selected_gr_list = self.ui.treeWidget_grWsList.get_selected_items()
+        # TODO/TEST - Find out the type of the return
+        print '[DB] Selected G(r) have {0} items.'.format(len(selected_gr_list))
+        for gr in selected_gr_list:
+            print '[DB] G(r) {0} of type {1}.'.format(gr, type(gr))
+
+        # check the arguments
+        for required_param in ['Qmin', 'Qmax', 'Rmin', 'Rmax', 'DeltaR']:
+            if required_param not in arg_dict.keys():
+                raise RuntimeError('Not sufficient parameter (missing {0}) to generate S(Q) from G(r).'
+                                   ''.format(required_param))
+
+        # TODO/FIXME/FUTURE - Call Mantid algorithm to calculate S(Q)
+
+        return
+
     def do_save_gr(self):
         """
         Save the selected the G(r) from menu to ASCII file
@@ -953,8 +1004,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         -------
 
         """
-        # TODO/ISSUE/NOW - Look at https://github.com/neutrons/FastGR/issues/28
-        #                  for more format!
+        # TODO/ISSUE/CHECK - Look at https://github.com/neutrons/FastGR/issues/28
         # read the selected item from the tree
         gr_name_list = self.ui.treeWidget_grWsList.get_selected_items_of_level(2, excluded_parent='SofQ',
                                                                                return_item_text=True)
@@ -990,23 +1040,33 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         file_name, file_ext = os.path.splitext(gr_file_name)
         gr_filter = str(export_dialog.selectedFilter())
         if gr_filter.startswith('XYE'):
-            if file_ext.lower() != '.dat':
-                gr_file_name += '.dat'
-            gr_file_type = 'dat'
+            # XYE format
+            if file_ext.lower() != '.xye':
+                gr_file_name += '.xye'
+            gr_file_type = 'xye'
+
         elif gr_filter.startswith('CSV'):
+            # cvs file format
             if file_ext.lower() != '.csv':
                 gr_file_name += '.csv'
             gr_file_type = 'csv'
+
         elif gr_filter.startswith('GR'):
+            # g(r) format
             if file_ext.lower() != 'gr':
                 gr_file_name += '.gr'
             gr_file_type = 'gr'
+
         elif gr_filter.startswith('DAT'):
-            blabla
+            # write to RMCProfile format
+            if file_ext.lower() != 'dat':
+                gr_file_name += '.dat'
+            gr_file_type = 'rmcprofile'
+        else:
+            # unsupported
+            raise RuntimeError('G(r) file type {0} is not supported.'.format(gr_filter))
 
         # END-IF-ELSE
-
-        print 'FILE NAME: ', gr_file_name
 
         # save!
         self._myController.save_ascii(gr_ws_name, gr_file_name, gr_file_type)
@@ -1020,18 +1080,16 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         -------
 
         """
-        # TODO/ISSUE/NOW - Look at https://github.com/neutrons/FastGR/issues/28
-        #                  for more format!
         # read the selected item from the tree
-        gr_name_list = self.ui.treeWidget_grWsList.get_selected_items_of_level(2, excluded_parent='SofQ',
+        sq_name_list = self.ui.treeWidget_grWsList.get_selected_items_of_level(2, excluded_parent='GofR',
                                                                                return_item_text=True)
-        if len(gr_name_list) != 1:
-            err_msg = 'Error! Only 1 workspace of G(r) that can be selected.  So far %d is selected.' \
+        if len(sq_name_list) != 1:
+            err_msg = 'Error! Only 1 workspace of G(r) that can be selected for saving.  So far %d is selected.' \
                       'They are %s.' % (len(gr_name_list), str(gr_name_list))
             QtGui.QMessageBox.warning(self, 'Error', err_msg)
             return
         else:
-            gr_ws_name = gr_name_list[0]
+            sq_name_list = sq_name_list[0]
 
         # pop-up a dialog for the file to save
         default_dir = os.getcwd()
@@ -1044,7 +1102,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         export_dialog.setWindowTitle(caption)
         export_dialog.setDirectory(default_dir)
         export_dialog.setAcceptMode(QtGui.QFileDialog.AcceptSave)
-        export_dialog.setNameFilter('XYE (*.dat);;CSV XYE (*.csv);;GofR (*.gr)')
+        export_dialog.setNameFilter('XYE (*.xye);;CSV XYE (*.csv);;GofR (*.sq)')
 
         # quit if it is not accepted
         if export_dialog.exec_() != QtGui.QFileDialog.Accepted:
@@ -1072,7 +1130,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         print 'FILE NAME: ', gr_file_name
 
         # save!
-        self._myController.save_ascii(gr_ws_name, gr_file_name, sq_)file_type)
+        self._myController.save_ascii(gr_ws_name, gr_file_name, sq_file_type)
 
         return
 

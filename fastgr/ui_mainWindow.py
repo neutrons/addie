@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'designer/ui_mainWindow.ui'
+# Form implementation generated from reading ui file 'ui_mainWindow.ui'
 #
-# Created: Mon Apr 10 12:39:14 2017
-#      by: PyQt4 UI code generator 4.10.1
+# Created: Fri Apr 28 22:41:47 2017
+#      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -45,7 +45,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
         self.scrollAreaWidgetContents = QtGui.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1339, 996))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1335, 989))
         self.scrollAreaWidgetContents.setMinimumSize(QtCore.QSize(0, 0))
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
         self.verticalLayout_44 = QtGui.QVBoxLayout(self.scrollAreaWidgetContents)
@@ -1050,6 +1050,14 @@ class Ui_MainWindow(object):
         self.verticalLayout_42.setObjectName(_fromUtf8("verticalLayout_42"))
         self.gridLayout_18 = QtGui.QGridLayout()
         self.gridLayout_18.setObjectName(_fromUtf8("gridLayout_18"))
+        self.pushButton_saveSQ = QtGui.QPushButton(self.tab_gR)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.pushButton_saveSQ.setFont(font)
+        self.pushButton_saveSQ.setObjectName(_fromUtf8("pushButton_saveSQ"))
+        self.gridLayout_18.addWidget(self.pushButton_saveSQ, 6, 0, 1, 1)
         self.pushButton_clearSofQ = QtGui.QPushButton(self.tab_gR)
         font = QtGui.QFont()
         font.setPointSize(10)
@@ -1074,6 +1082,8 @@ class Ui_MainWindow(object):
         self.pushButton_sqColorStyle.setFont(font)
         self.pushButton_sqColorStyle.setObjectName(_fromUtf8("pushButton_sqColorStyle"))
         self.gridLayout_18.addWidget(self.pushButton_sqColorStyle, 5, 1, 1, 1)
+        spacerItem31 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        self.gridLayout_18.addItem(spacerItem31, 3, 1, 1, 1)
         self.pushButton_rescaleSq = QtGui.QPushButton(self.tab_gR)
         font = QtGui.QFont()
         font.setPointSize(10)
@@ -1086,8 +1096,9 @@ class Ui_MainWindow(object):
         self.comboBox_SofQType.addItem(_fromUtf8(""))
         self.comboBox_SofQType.addItem(_fromUtf8(""))
         self.gridLayout_18.addWidget(self.comboBox_SofQType, 1, 1, 1, 1)
-        spacerItem31 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.gridLayout_18.addItem(spacerItem31, 3, 1, 1, 1)
+        self.pushButton_6 = QtGui.QPushButton(self.tab_gR)
+        self.pushButton_6.setObjectName(_fromUtf8("pushButton_6"))
+        self.gridLayout_18.addWidget(self.pushButton_6, 7, 0, 1, 1)
         self.verticalLayout_42.addLayout(self.gridLayout_18)
         spacerItem32 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Preferred)
         self.verticalLayout_42.addItem(spacerItem32)
@@ -1254,6 +1265,14 @@ class Ui_MainWindow(object):
         self.pushButton_grColorStyle.setFont(font)
         self.pushButton_grColorStyle.setObjectName(_fromUtf8("pushButton_grColorStyle"))
         self.gridLayout_3.addWidget(self.pushButton_grColorStyle, 1, 1, 1, 1)
+        self.pushButton_generateSQ = QtGui.QPushButton(self.tab_gR)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.pushButton_generateSQ.setFont(font)
+        self.pushButton_generateSQ.setObjectName(_fromUtf8("pushButton_generateSQ"))
+        self.gridLayout_3.addWidget(self.pushButton_generateSQ, 2, 0, 1, 1)
         self.verticalLayout_43.addLayout(self.gridLayout_3)
         self.gridLayout.addLayout(self.verticalLayout_43, 1, 1, 1, 1)
         self.tabWidget_2.addTab(self.tab_gR, _fromUtf8(""))
@@ -1271,7 +1290,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.scrollArea)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1361, 20))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1361, 22))
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -1344,7 +1363,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget_2.setCurrentIndex(0)
+        self.tabWidget_2.setCurrentIndex(2)
         self.tabWidget.setCurrentIndex(0)
         QtCore.QObject.connect(self.diamond, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_edited)
         QtCore.QObject.connect(self.diamond_background, QtCore.SIGNAL(_fromUtf8("editingFinished()")), MainWindow.diamond_background_edited)
@@ -1698,6 +1717,7 @@ class Ui_MainWindow(object):
         self.pushButton_clearBraggCanvas.setText(_translate("MainWindow", "Clear Canvas", None))
         self.treeWidget_braggWSList.setToolTip(_translate("MainWindow", "<html><head/><body><p>List of workspace names.  Each workspace is an individual bank</p></body></html>", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_bragg), _translate("MainWindow", "Bragg Peaks", None))
+        self.pushButton_saveSQ.setText(_translate("MainWindow", "Save S(Q)", None))
         self.pushButton_clearSofQ.setToolTip(_translate("MainWindow", "<html><head/><body><p>Clear S(Q) Canvas</p></body></html>", None))
         self.pushButton_clearSofQ.setText(_translate("MainWindow", "Clear S(Q)", None))
         self.pushButton_loadSQ.setToolTip(_translate("MainWindow", "<html><head/><body><p>Load S(Q) from the reduction tab. Plot S(Q), S(Q)-1 or Q[S(Q)-1] according to the selected radio buttons below.</p><p><span style=\" font-weight:600;\">Use regular file loader at this phase.</span></p><p>Duplicate the function in FastGR/scripts/fastgr</p><p>149     def read_SQ_file(self):</p><p><br/></p></body></html>", None))
@@ -1708,6 +1728,7 @@ class Ui_MainWindow(object):
         self.comboBox_SofQType.setItemText(0, _translate("MainWindow", "S(Q)", None))
         self.comboBox_SofQType.setItemText(1, _translate("MainWindow", "S(Q)-1", None))
         self.comboBox_SofQType.setItemText(2, _translate("MainWindow", "Q[S(Q)-1]", None))
+        self.pushButton_6.setText(_translate("MainWindow", "Edit S(Q)", None))
         self.pushButton_generateGR.setText(_translate("MainWindow", "Generate GR", None))
         self.comboBox_pdfType.setToolTip(_translate("MainWindow", "<html><head/><body><p>PDF Type</p></body></html>", None))
         self.label_4.setText(_translate("MainWindow", "rho0  ", None))
@@ -1725,6 +1746,7 @@ class Ui_MainWindow(object):
         self.pushButton_clearGrCanvas.setText(_translate("MainWindow", "Clear G(r)", None))
         self.pushButton_rescaleGr.setText(_translate("MainWindow", "Rescale", None))
         self.pushButton_grColorStyle.setText(_translate("MainWindow", "Color/Style", None))
+        self.pushButton_generateSQ.setText(_translate("MainWindow", "Generate S(Q)", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_gR), _translate("MainWindow", "Calculate G(R)", None))
         self.menuFile.setTitle(_translate("MainWindow", "File", None))
         self.menuLoad_Configuration.setTitle(_translate("MainWindow", "Configuration", None))
