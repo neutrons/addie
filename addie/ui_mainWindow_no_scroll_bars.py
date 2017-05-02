@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'designer/ui_mainWindow_no_scroll_bars.ui'
 #
-# Created: Thu Sep 15 10:00:56 2016
+# Created: Tue May  2 09:12:39 2017
 #      by: PyQt4 UI code generator 4.10.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -1098,7 +1098,7 @@ class Ui_MainWindow(object):
         self.radioButton_multiGSS.setText(_translate("MainWindow", "Multiple GSS", None))
         self.treeWidget_braggWSList.setToolTip(_translate("MainWindow", "<html><head/><body><p>List of workspace names.  Each workspace is an individual bank</p></body></html>", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_bragg), _translate("MainWindow", "Bragg Peaks", None))
-        self.pushButton_loadSQ.setToolTip(_translate("MainWindow", "<html><head/><body><p>Load S(Q) from the reduction tab. Plot S(Q), S(Q)-1 or Q[S(Q)-1] according to the selected radio buttons below.</p><p><span style=\" font-weight:600;\">Use regular file loader at this phase.</span></p><p>Duplicate the function in FastGR/scripts/fastgr</p><p>149     def read_SQ_file(self):</p><p><br/></p></body></html>", None))
+        self.pushButton_loadSQ.setToolTip(_translate("MainWindow", "<html><head/><body><p>Load S(Q) from the reduction tab. Plot S(Q), S(Q)-1 or Q[S(Q)-1] according to the selected radio buttons below.</p><p><span style=\" font-weight:600;\">Use regular file loader at this phase.</span></p><p>Duplicate the function in FastGR/scripts/addie</p><p>149     def read_SQ_file(self):</p><p><br/></p></body></html>", None))
         self.pushButton_loadSQ.setText(_translate("MainWindow", "Load SQ", None))
         self.radioButton_sq.setText(_translate("MainWindow", "S(Q)", None))
         self.radioButton_sqm1.setText(_translate("MainWindow", "S(Q)-1", None))
