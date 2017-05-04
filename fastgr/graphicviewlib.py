@@ -39,8 +39,9 @@ class BraggView(base.MplGraphicsView):
         self._gssColorList = ["black", "red", "blue", "green",
                               "cyan", "magenta", "yellow"]
         self._gssLineStyleList = ['-', '--', '-.']
-        self._gssLineMarkers = [". (point         )", "x (x             )", "o (circle        )",
-                                "s (square        )", "D (diamond       )"]
+        self._gssLineMarkers = ['.', 'D', 'o', 's', 'x']
+        # self._gssLineMarkers = [". (point         )", "x (x             )", "o (circle        )",
+        #                         "s (square        )", "D (diamond       )"]
 
         self._gssLineDict = dict()
 
@@ -168,6 +169,8 @@ class BraggView(base.MplGraphicsView):
         num_style = len(self._gssLineStyleList)
         num_color = len(self._gssColorList)
 
+        print '[DB] Index = ', self._currColorIndex
+
         # get color
         color_index = self._currColorIndex / (num_style * num_marker)
         style_index = self._currColorIndex % (num_style * num_marker) / num_marker
@@ -283,14 +286,28 @@ class BraggView(base.MplGraphicsView):
 
             for bank_id in plot_bank_dict[ws_group]:
                 # add the new plot
-                if self._singleGSSMode:
-                    bank_color = self._bankColorDict[bank_id]
-                else:
-                    bank_color = self.get_multi_gss_color()
                 vec_x, vec_y, vec_e = plot_bank_dict[ws_group][bank_id]
-                print '[DB...BAT] Plot ', ws_group, bank_id
-                plot_id = self.add_plot_1d(vec_x, vec_y, marker=None, color=bank_color,
-                                           x_label=unit, y_label='I(%s)' % unit,
+
+                # determine the color/marker/style of the line
+                if self._singleGSSMode:
+                    # single bank mode
+                    bank_color = self._bankColorDict[bank_id]
+                    marker = None
+                    style = None
+                else:
+                    # multiple bank mode
+                    bank_color, style, marker = self.get_multi_gss_color()
+                # END-IF-ELSE
+
+                print '[DB...BAT] Plot Mode (singel bank) = {0}, group = {1}, bank = {2}, color = {3}, marker = {4},' \
+                      'style = {5}' \
+                      ''.format(self._singleGSSMode, ws_group, bank_id, bank_color, marker, style)
+
+                # plot
+                plot_id = self.add_plot_1d(vec_x, vec_y, marker=marker, color=bank_color,
+                                           line_style=style,
+                                           x_label=unit,
+                                           y_label='I({0})'.format(unit),
                                            label='%s Bank %d' % (ws_group, bank_id))
 
                 # plot key

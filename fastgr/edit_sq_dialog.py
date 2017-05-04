@@ -9,8 +9,8 @@ class EditSofQDialog(QtGui.QDialog):
     """
     Extended dialog class to edit S(Q)
     """
-    MyEditSignal = QtCore.SIGNAL(float, float, str)
-    MySaveSignal = QtCore.SIGNAL(str)
+    MyEditSignal = QtCore.pyqtSignal(float, float, str)
+    MySaveSignal = QtCore.pyqtSignal(str)
 
     def __init__(self, parent_window):
         """
@@ -38,14 +38,14 @@ class EditSofQDialog(QtGui.QDialog):
                      self.do_save)
 
         # connect widgets' events with methods
-        self.connect(self.ui.lineEdit_scaleFactor, QtCore.SIGNAL('blabla'),
+        self.connect(self.ui.lineEdit_scaleFactor, QtCore.SIGNAL('textChanged(QString)'),
                      self.event_cal_sq)
-        self.connect(self.ui.lineEdit_shift, QtCore.SIGNAL('blabla'),
+        self.connect(self.ui.lineEdit_shift, QtCore.SIGNAL('textChanged(QString)'),
                      self.event_cal_sq)
 
         # connect signals
-        self.MyEditSignal.connect(self._myParentWindow.blabla)
-        self.MySaveSignal.connect()
+        self.MyEditSignal.connect(self._myParentWindow.edit_sq)
+        self.MySaveSignal.connect(self._myParentWindow.do_save_sq)
 
         return
 
@@ -99,18 +99,26 @@ class EditSofQDialog(QtGui.QDialog):
         handling the events such that a new S(Q) will be calculated
         :return:
         """
+        print '[DB...BAT] Shift = {0} Scale Factor = {1}'.format(self.ui.lineEdit_shift.text(),
+                                                                 self.ui.lineEdit_scaleFactor.text())
+
         # get the workspace name
         workspace_name = str(self.ui.comboBox_workspaces.currentText())
         if len(workspace_name) == 0:
+            print '[DB...BAT] No workspace is selected'
             return
 
+        # TODO/ISSUE/NOW - Implement ASAP
         try:
+            shift_str = blabla
+            if len(shift_str) == 0:
+                blabla
             shift = float(self.ui.lineEdit_shift.text())
-            scaler = float(self.ui.lineEdit_scaleFactor.text())
+            scale_factor = float(self.ui.lineEdit_scaleFactor.text())
         except ValueError as val_error:
             print '[ERROR] Shift or Scaler cannot be converted to float.'
             return
 
-        self.MyEditSignal.emit(workspace_name, shift, scaler)
+        self.MyEditSignal.emit(workspace_name, scale_factor, shift)
 
         return

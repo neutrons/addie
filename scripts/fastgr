@@ -172,6 +172,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
                      self.do_clear_gr)
         self.connect(self.ui.pushButton_saveSQ, QtCore.SIGNAL('clicked()'),
                      self.do_save_sq)
+        self.connect(self.ui.pushButton_editSofQ, QtCore.SIGNAL('clicked()'),
+                     self.do_edit_sq)
         self.connect(self.ui.pushButton_generateSQ, QtCore.SIGNAL('clicked()'),
                      self.do_generate_sq)
 
@@ -219,7 +221,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         self._gssGroupName = None
         self._currDataDir = None
         self._inFixedDirectoryStructure = False
-
 
         # some controlling variables
         self._currBraggXUnit = str(self.ui.comboBox_xUnit.currentText())
@@ -624,7 +625,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         # plot all workspsaces
         for bragg_ws_name in bragg_ws_list:
-
             # get the last section of the workspace name: _bank%d
             postfix = bragg_ws_name.split('_')[-1]
 
@@ -647,6 +647,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
                 self.ui.graphicsView_bragg.plot_banks(plot_data_dict, curr_unit)
 
             else:
+                # plot arbitrary data
+                print '[DB] Switch to multi-GSAS mode.  Re-plot {0}'.format(bragg_ws_name)
                 vec_x, vec_y, vec_e = self._myController.get_ws_data(bragg_ws_name)
                 self.ui.graphicsView_bragg.plot_general_ws(bragg_ws_name, vec_x, vec_y, vec_e)
 
@@ -757,7 +759,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         # get plot mode
         if len(bragg_file_names) == 1:
-            self.ui.graphicsView_bragg.set_to_single_gss(False)
+            self.ui.graphicsView_bragg.set_to_single_gss(True)
             self.ui.radioButton_multiBank.setChecked(True)
             self.ui.radioButton_multiGSS.setChecked(False)
         else:
@@ -946,6 +948,23 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         return
 
+    def do_edit_sq(self):
+        """
+        edit S(Q) by shift and scaling
+        Returns
+        -------
+
+        """
+        # TODO/ISSUE/NOW -- Implement ASAP
+
+        import fastgr.edit_sq_dialog
+
+        self._editSqDialog = fastgr.edit_sq_dialog.EditSofQDialog(self)
+
+        self._editSqDialog.show()
+
+        return
+
     def do_generate_sq(self):
         """
         generate S(Q) from G(r) by PDFFourierTransform
@@ -1080,57 +1099,58 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         -------
 
         """
+        # TODO/ISSUE/NOW - Implement for S(Q) ASAP ... now with debug information
         # read the selected item from the tree
         sq_name_list = self.ui.treeWidget_grWsList.get_selected_items_of_level(2, excluded_parent='GofR',
                                                                                return_item_text=True)
-        if len(sq_name_list) != 1:
-            err_msg = 'Error! Only 1 workspace of G(r) that can be selected for saving.  So far %d is selected.' \
-                      'They are %s.' % (len(gr_name_list), str(gr_name_list))
-            QtGui.QMessageBox.warning(self, 'Error', err_msg)
-            return
-        else:
-            sq_name_list = sq_name_list[0]
-
-        # pop-up a dialog for the file to save
-        default_dir = os.getcwd()
-        caption = 'Save G(r)'
-
-        # FIXME/TODO/ISSUE/NEXT - Refactor the following part out to be a standard widget
-
-        # generate a dialog to get the file name to save G(r)
-        export_dialog = QtGui.QFileDialog()
-        export_dialog.setWindowTitle(caption)
-        export_dialog.setDirectory(default_dir)
-        export_dialog.setAcceptMode(QtGui.QFileDialog.AcceptSave)
-        export_dialog.setNameFilter('XYE (*.xye);;CSV XYE (*.csv);;GofR (*.sq)')
-
-        # quit if it is not accepted
-        if export_dialog.exec_() != QtGui.QFileDialog.Accepted:
-            return
-
-        # get the file name from dialog
-        gr_file_name = str(export_dialog.selectedFiles()[0])
-
-        # check the file extension
-        file_name, file_ext = os.path.splitext(gr_file_name)
-        gr_filter = str(export_dialog.selectedFilter())
-        if gr_filter.startswith('XYE'):
-            if file_ext.lower() != '.dat':
-                gr_file_name += '.dat'
-            gr_file_type = 'dat'
-        elif gr_filter.startswith('CSV'):
-            if file_ext.lower() != '.csv':
-                gr_file_name += '.csv'
-            gr_file_type = 'csv'
-        elif gr_filter.startswith('DAT'):
-            blabla
-
-        # END-IF-ELSE
-
-        print 'FILE NAME: ', gr_file_name
-
-        # save!
-        self._myController.save_ascii(gr_ws_name, gr_file_name, sq_file_type)
+        # if len(sq_name_list) != 1:
+        #     err_msg = 'Error! Only 1 workspace of G(r) that can be selected for saving.  So far %d is selected.' \
+        #               'They are %s.' % (len(gr_name_list), str(gr_name_list))
+        #     QtGui.QMessageBox.warning(self, 'Error', err_msg)
+        #     return
+        # else:
+        #     sq_name_list = sq_name_list[0]
+        #
+        # # pop-up a dialog for the file to save
+        # default_dir = os.getcwd()
+        # caption = 'Save G(r)'
+        #
+        # # FIXME/TODO/ISSUE/NEXT - Refactor the following part out to be a standard widget
+        #
+        # # generate a dialog to get the file name to save G(r)
+        # export_dialog = QtGui.QFileDialog()
+        # export_dialog.setWindowTitle(caption)
+        # export_dialog.setDirectory(default_dir)
+        # export_dialog.setAcceptMode(QtGui.QFileDialog.AcceptSave)
+        # export_dialog.setNameFilter('XYE (*.xye);;CSV XYE (*.csv);;GofR (*.sq)')
+        #
+        # # quit if it is not accepted
+        # if export_dialog.exec_() != QtGui.QFileDialog.Accepted:
+        #     return
+        #
+        # # get the file name from dialog
+        # gr_file_name = str(export_dialog.selectedFiles()[0])
+        #
+        # # check the file extension
+        # file_name, file_ext = os.path.splitext(gr_file_name)
+        # gr_filter = str(export_dialog.selectedFilter())
+        # if gr_filter.startswith('XYE'):
+        #     if file_ext.lower() != '.dat':
+        #         gr_file_name += '.dat'
+        #     gr_file_type = 'dat'
+        # elif gr_filter.startswith('CSV'):
+        #     if file_ext.lower() != '.csv':
+        #         gr_file_name += '.csv'
+        #     gr_file_type = 'csv'
+        # elif gr_filter.startswith('DAT'):
+        #     blabla
+        #
+        # # END-IF-ELSE
+        #
+        # print 'FILE NAME: ', gr_file_name
+        #
+        # # save!
+        # self._myController.save_ascii(gr_ws_name, gr_file_name, sq_file_type)
 
         return
 
@@ -1164,6 +1184,21 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
 
         return bank_id_list
 
+    def edit_sq(self, sq_name, scale_factor, shift):
+        """
+
+        Parameters
+        ----------
+        sq_name
+        scale_factor
+        shift
+
+        Returns
+        -------
+
+        """
+        # TODO/ISSUE/NOW - Implement ASAP
+
     def evt_change_gss_mode(self):
         """
         switch between multi-gss/single-bank mode and singl-gss/multiple-bank mode
@@ -1173,7 +1208,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
         """
         # check the mode (multiple bank or multiple GSS)
         single_gss_mode = self.ui.radioButton_multiBank.isChecked()
-        assert single_gss_mode != self.ui.radioButton_multiGSS.isChecked()
+        assert single_gss_mode != self.ui.radioButton_multiGSS.isChecked(), 'blabla'
 
         # get the banks that are selected
         to_plot_bank_list = self.get_bragg_banks_selected()
@@ -1213,10 +1248,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, fastgr.ui_mainWindow.Ui_MainWindow):
             # multiple GSAS mode. as currently there is one GSAS file that is plot, then the first bank
             # that is plotted will be kept on the canvas
             # assumption: switched from single-bank mode
-            #assert len(self.ui.graphicsView_bragg.get_workspaces()) == 1
 
             # skip if there is one and only 1 bank that is selected
             if len(to_plot_bank_list) == 1:
+                # TODO/FIXME/ISSUE - Need to re-plot with correct color!
                 return
             else:
                 # choose first bank
