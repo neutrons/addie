@@ -35,8 +35,15 @@ class BraggView(base.MplGraphicsView):
                                5: 'brown',
                                6: 'orange'}
 
+        # color sequence for multiple GSAS mode
         self._gssColorList = ["black", "red", "blue", "green",
                               "cyan", "magenta", "yellow"]
+        self._gssLineStyleList = ['-', '--', '-.']
+        self._gssLineMarkers = [". (point         )", "x (x             )", "o (circle        )",
+                                "s (square        )", "D (diamond       )"]
+
+        self._gssLineDict = dict()
+
         self._currColorIndex = 0
 
         # define the dynamic menu
@@ -47,6 +54,9 @@ class BraggView(base.MplGraphicsView):
         # records of the plots on canvas
         # workspaces' names (not bank, but original workspace) on canvas
         self._workspaceSet = set()
+
+        # unit
+        self._unitX = None
 
         return
 
@@ -93,6 +103,8 @@ class BraggView(base.MplGraphicsView):
         assert x_unit in ['TOF', 'MomentumTransfer', 'dSpacing']
 
         self._unitX = x_unit
+
+        return
 
     def evt_toolbar_home(self):
         """
@@ -148,16 +160,28 @@ class BraggView(base.MplGraphicsView):
 
     def get_multi_gss_color(self):
         """
-        Get the present color in multiple-GSS mode
+        Get the present color and line style in multiple-GSS mode
         Returns:
-
         """
-        color = self._gssColorList[self._currColorIndex]
+        # get basic statistic
+        num_marker = len(self._gssLineMarkers)
+        num_style = len(self._gssLineStyleList)
+        num_color = len(self._gssColorList)
+
+        # get color
+        color_index = self._currColorIndex / (num_style * num_marker)
+        style_index = self._currColorIndex % (num_style * num_marker) / num_marker
+        marker_index = self._currColorIndex % (num_style * num_marker) % num_marker
+
+        color = self._gssColorList[color_index]
+        style = self._gssLineStyleList[style_index]
+        marker = self._gssLineMarkers[marker_index]
+
         self._currColorIndex += 1
-        if self._currColorIndex == len(self._gssColorList):
+        if self._currColorIndex == num_color * num_style * num_marker:
             self._currColorIndex = 0
 
-        return color
+        return color, style, marker
 
     def get_workspaces(self):
         """
@@ -423,9 +447,14 @@ class BraggView(base.MplGraphicsView):
         Returns:
 
         """
-        assert isinstance(mode_on, bool)
+        assert isinstance(mode_on, bool), 'Single GSAS mode {0} must be a boolean but not a {1}.' \
+                                          ''.format(mode_on, type(mode_on))
 
         self._singleGSSMode = mode_on
+
+        if mode_on is False:
+            # set to multiple GSAS mode
+            self._currColorIndex = 0
 
         return
 
