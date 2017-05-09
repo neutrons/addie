@@ -1,9 +1,8 @@
 # Dialog to edit S(Q)
-
-
 from PyQt4 import QtGui, QtCore
 
 import ui_editSq
+
 
 class EditSofQDialog(QtGui.QDialog):
     """
@@ -105,20 +104,31 @@ class EditSofQDialog(QtGui.QDialog):
         # get the workspace name
         workspace_name = str(self.ui.comboBox_workspaces.currentText())
         if len(workspace_name) == 0:
-            print '[DB...BAT] No workspace is selected'
+            print '[INFO] No workspace is selected'
             return
 
-        # TODO/ISSUE/NOW - Implement ASAP
+        shift_str = str(self.ui.lineEdit_shift.text())
+        scale_str = str(self.ui.lineEdit_scaleFactor.text())
         try:
-            shift_str = blabla
+            # parse shift
             if len(shift_str) == 0:
-                blabla
-            shift = float(self.ui.lineEdit_shift.text())
-            scale_factor = float(self.ui.lineEdit_scaleFactor.text())
+                shift = 0
+                self.ui.lineEdit_shift.setText('0.')
+            else:
+                shift = float(self.ui.lineEdit_shift.text())
+
+            # parse scaling factor
+            if len(scale_str) == 0:
+                scale_factor = 1.
+                self.ui.lineEdit_scaleFactor.setText('1.')
+            else:
+                scale_factor = float(scale_str)
         except ValueError as val_error:
-            print '[ERROR] Shift or Scaler cannot be converted to float.'
+            print '[ERROR] Shift {0} or scale factor {1} cannot be converted to float due to {2}.' \
+                  ''.format(shift_str, scale_str, val_error)
             return
 
+        # set out the signal
         self.MyEditSignal.emit(workspace_name, scale_factor, shift)
 
         return

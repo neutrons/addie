@@ -1,4 +1,5 @@
 import numpy as np
+import time
 
 from PyQt4 import QtCore, QtGui
 
@@ -40,17 +41,15 @@ class BraggView(base.MplGraphicsView):
                               "cyan", "magenta", "yellow"]
         self._gssLineStyleList = ['-', '--', '-.']
         self._gssLineMarkers = ['.', 'D', 'o', 's', 'x']
-        # self._gssLineMarkers = [". (point         )", "x (x             )", "o (circle        )",
-        #                         "s (square        )", "D (diamond       )"]
 
-        self._gssLineDict = dict()
+        # a dictionary to manage the GSAS plot's color and marker
+        self._gssLineDict = dict()  # key: GSAS workspace name. value:
+        self._gssLineColorMarkerDict = dict()
 
-        self._currColorIndex = 0
+        self._currColorStyleMarkerIndex = 0
 
         # define the dynamic menu
         self._myCanvas.mpl_connect('button_press_event', self.on_mouse_press_event)
-        # self._myCanvas.mpl_connect('button_release_event', self.on_mouse_release_event)
-        # self._myCanvas.mpl_connect('motion_notify_event', self.on_mouse_motion)
 
         # records of the plots on canvas
         # workspaces' names (not bank, but original workspace) on canvas
@@ -92,7 +91,7 @@ class BraggView(base.MplGraphicsView):
 
     def set_unit(self, x_unit):
         """
-
+        set the unit of the powder diffraction pattern
         Parameters
         ----------
         x_unit
@@ -101,7 +100,10 @@ class BraggView(base.MplGraphicsView):
         -------
 
         """
-        assert x_unit in ['TOF', 'MomentumTransfer', 'dSpacing']
+        assert isinstance(x_unit, str), 'Unit of X-axis {0} must be a string but not a {1}.' \
+                                        ''.format(x_unit, type(x_unit))
+        if x_unit not in ['TOF', 'MomentumTransfer', 'dSpacing']:
+            raise RuntimeError('Unit {0} of X-axis is not recognized.'.format(x_unit))
 
         self._unitX = x_unit
 
@@ -114,8 +116,6 @@ class BraggView(base.MplGraphicsView):
         -------
 
         """
-        #
-        import time
         time.sleep(0.1)
 
         # call the super
@@ -132,13 +132,6 @@ class BraggView(base.MplGraphicsView):
             else:
                 raise RuntimeError('Unit %s unknown' % self._unitX)
         # END-IF
-        #
-        # # get the new limit
-        # left_x, right_x = self.getXLimit()
-        # home_left_x = self._homeXYLimit[0]
-        # home_right_x = self._homeXYLimit[1]
-        # print left_x, home_left_x, left_x == home_left_x
-        # print right_x, home_right_x, right_x == home_right_x
 
         return
 
@@ -169,20 +162,22 @@ class BraggView(base.MplGraphicsView):
         num_style = len(self._gssLineStyleList)
         num_color = len(self._gssColorList)
 
-        print '[DB] Index = ', self._currColorIndex
+        print '[DB] Index = ', self._currColorStyleMarkerIndex
 
-        # get color
-        color_index = self._currColorIndex / (num_style * num_marker)
-        style_index = self._currColorIndex % (num_style * num_marker) / num_marker
-        marker_index = self._currColorIndex % (num_style * num_marker) % num_marker
+        # get color with current color index
+        marker_index = self._currColorStyleMarkerIndex / (num_style * num_color)
+        style_index = self._currColorStyleMarkerIndex % (num_style * num_color) / num_color
+        color_index = self._currColorStyleMarkerIndex % (num_style * num_color) % num_color
 
         color = self._gssColorList[color_index]
         style = self._gssLineStyleList[style_index]
         marker = self._gssLineMarkers[marker_index]
 
-        self._currColorIndex += 1
-        if self._currColorIndex == num_color * num_style * num_marker:
-            self._currColorIndex = 0
+        # advance to next index but reset if reaches limit
+        self._currColorStyleMarkerIndex += 1
+        # reset
+        if self._currColorStyleMarkerIndex == num_color * num_style * num_marker:
+            self._currColorStyleMarkerIndex = 0
 
         return color, style, marker
 
@@ -426,12 +421,12 @@ class BraggView(base.MplGraphicsView):
 
     def reset_color(self):
         """
-        Reset color index
+        Reset color, line style and marker index
         Returns
         -------
 
         """
-        self._currColorIndex = 0
+        self._currColorStyleMarkerIndex = 0
 
     def scale_auto(self):
         """ Scale automatically for the plots on the canvas
@@ -471,7 +466,7 @@ class BraggView(base.MplGraphicsView):
 
         if mode_on is False:
             # set to multiple GSAS mode
-            self._currColorIndex = 0
+            self._currColorStyleMarkerIndex = 0
 
         return
 
@@ -673,6 +668,7 @@ class SofQView(base.MplGraphicsView):
 
         # dictionary to record all the plots, key: (usually) SofQ's name, value: plot ID
         self._sqLineDict = dict()
+        self._sqLineColorDict = dict()
 
         # list of SofQ that are plot on the canvas
         self._shownSQNameList = list()
@@ -920,7 +916,7 @@ class SofQView(base.MplGraphicsView):
 
         return
 
-    def plot_sq(self, sq_name, vec_q, vec_s, vec_e, sq_y_label, reset_color_mark):
+    def plot_sq(self, sq_name, vec_q, vec_s, vec_e, sq_y_label, reset_color_mark, color_marker=None):
         """
         Plot S(Q)
         Parameters
@@ -937,18 +933,24 @@ class SofQView(base.MplGraphicsView):
 
         """
         # check
-        assert isinstance(vec_q, np.ndarray) and isinstance(vec_s, np.ndarray)
-        assert isinstance(sq_y_label, str)
+        assert isinstance(vec_q, np.ndarray) and isinstance(vec_s, np.ndarray),\
+            'Q-vector ({0}) and S-vector ({1}) must be numpy arrays.'.format(type(vec_q), type(vec_s))
+        assert isinstance(sq_y_label, str), 'S(Q) label {0} must be a string but not a {1}.' \
+                                            ''.format(sq_y_label, type(sq_y_label))
 
         # define color
-        if reset_color_mark:
-            self.reset_line_color_marker_index()
-        marker, color = self.getNextLineMarkerColorCombo()
+        if color is None:
+            if reset_color_mark:
+                self.reset_line_color_marker_index()
+            marker, color = self.getNextLineMarkerColorCombo()
+        else:
+            color, marker = color_marker
 
         # plot
         plot_id = self.add_plot_1d(vec_q, vec_s, color=color, x_label='Q', y_label=sq_y_label,
                                    marker=None, label=sq_name)
         self._sqLineDict[sq_name] = plot_id
+        self._sqLineColorDict[sq_name] = color, marker
         if sq_name not in self._shownSQNameList:
             self._shownSQNameList.append(sq_name)
 
@@ -978,12 +980,17 @@ class SofQView(base.MplGraphicsView):
 
         """
         # check whether S(Q) does exist
-        assert isinstance(sq_ws_name, str)
-        assert sq_ws_name in self._sqLineDict, 'Plot key (SofQ name) %s does not exist on the S(Q) canvas.' % sq_ws_name
+        assert isinstance(sq_ws_name, str), 'S(Q) workspace name {0} must be a string but not a {1}.' \
+                                            ''.format(sq_ws_name, type(sq_ws_name))
+        if sq_ws_name not in self._sqLineDict:
+            raise RuntimeError('key (SofQ name) {0} does not exist on the S(Q) canvas.'.format(sq_ws_name))
 
         # retrieve the plot and remove it from the dictionary
         plot_id = self._sqLineDict[sq_ws_name]
+        sq_color, sq_marker = self._sqLineColorDict[sq_ws_name]
+
         del self._sqLineDict[sq_ws_name]
+        del self._sqLineColorDict[sq_ws_name]
 
         # delete from canvas
         self.remove_line(plot_id)
@@ -991,7 +998,7 @@ class SofQView(base.MplGraphicsView):
         # delete from on-show S(q) list
         self._shownSQNameList.remove(sq_ws_name)
 
-        return
+        return sq_color, sq_marker
 
     def reset(self):
         """
@@ -1001,6 +1008,7 @@ class SofQView(base.MplGraphicsView):
         """
         # clear the dictionary and on-show Sq list
         self._sqLineDict.clear()
+        self._sqLineColorDict.clear()
         self._shownSQNameList = list()
 
         # clear the image and reset the marker/color scheme
