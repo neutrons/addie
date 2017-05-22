@@ -1929,7 +1929,7 @@
             <item>
              <widget class="QPushButton" name="pushButton_loadSQ">
               <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Load S(Q) from the reduction tab. Plot S(Q), S(Q)-1 or Q[S(Q)-1] according to the selected radio buttons below.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Use regular file loader at this phase.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Duplicate the function in FastGR/scripts/fastgr&lt;/p&gt;&lt;p&gt;149     def read_SQ_file(self):&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Load S(Q) from the reduction tab. Plot S(Q), S(Q)-1 or Q[S(Q)-1] according to the selected radio buttons below.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Use regular file loader at this phase.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Duplicate the function in FastGR/scripts/addie&lt;/p&gt;&lt;p&gt;149     def read_SQ_file(self):&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="text">
                <string>Load SQ</string>

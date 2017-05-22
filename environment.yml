@@ -1,4 +1,4 @@
-name: fastgr
+name: addie
 dependencies:
 - cycler=0.10.0=py27_0
 - freetype=2.5.5=0
