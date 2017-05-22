@@ -1,4 +1,5 @@
 import os
+import re
 import glob
 import numpy as np
 from PyQt4.QtCore import Qt
@@ -8,9 +9,12 @@ from fastgr.step2_handler.export_table import ExportTable
 from fastgr.step2_handler.import_table import ImportTable
 from fastgr.utilities.file_handler import FileHandler
 from fastgr.step2_handler.populate_background_widgets import PopulateBackgroundWidgets
+from fastgr.step2_handler.sample_environment_handler import SampleEnvironmentHandler
 import fastgr.step2_handler.step2_gui_handler
 
 import matplotlib.pyplot as plt
+import matplotlib.colors as colors
+import matplotlib.cm as cm
 
 class TableHandler(object):
     
@@ -80,7 +84,7 @@ class TableHandler(object):
             
     def right_click(self, position = None):
         _duplicate_row = -1
-        _plot_row = -1
+        _plot_sofq = -1
         _remove_row = -1
         _new_row = -1
         _copy = -1
@@ -125,10 +129,19 @@ class TableHandler(object):
         if (self.parent.table.rowCount() > 0):
             _duplicate_row = menu.addAction("Duplicate Row")
             _remove_row = menu.addAction("Remove Row(s)")
+
             menu.addSeparator()
-            _plot_row = menu.addAction("Plot ...")
-            _plot_diff_first_run_row = menu.addAction("Plot Diff (1st run)...")
-            _plot_diff_average_row = menu.addAction("Plot Diff (Avg.)...")
+            _plot_menu =  menu.addMenu('Plot')
+            _plot_sofq = _plot_menu.addAction("S(Q) ...")
+            _plot_sofq_diff_first_run_row = _plot_menu.addAction("S(Q) Diff (1st run)...")
+            _plot_sofq_diff_average_row = _plot_menu.addAction("S(Q) Diff (Avg.)...")
+
+            _temp_menu = _plot_menu.addMenu("Temperature")
+            _plot_cryostat = _temp_menu.addAction("Cyrostat...")
+            _plot_furnace  = _temp_menu.addAction("Furnace...")
+            
+            
+
             menu.addSeparator()
             _refresh_table = menu.addAction("Refresh/Reset Table")
             _clear_table = menu.addAction("Clear Table")
@@ -148,12 +161,16 @@ class TableHandler(object):
             self._cut()
         elif action == _duplicate_row:
             self._duplicate_row()
-        elif action == _plot_row:
-            self._plot_row()
-        elif action == _plot_diff_first_run_row:
-            self._plot_diff_first_run_row()
-        elif action == _plot_diff_average_row:
-            self._plot_diff_average_row()
+        elif action == _plot_sofq:
+            self._plot_sofq()
+        elif action == _plot_sofq_diff_first_run_row:
+            self._plot_sofq_diff_first_run_row()
+        elif action == _plot_sofq_diff_average_row:
+            self._plot_sofq_diff_average_row()
+        elif action == _plot_cryostat:
+            self._plot_temperature(samp_env_choice='cryostat')
+        elif action == _plot_furnace:
+            self._plot_temperature(samp_env_choice='furnace')
         elif action == _invert_selection:
             self._inverse_selection()
         elif action == _new_row:
@@ -339,59 +356,86 @@ class TableHandler(object):
         o_populate = fastgr.step2_handler.populate_master_table.PopulateMasterTable(parent = self.parent_no_ui)
         o_populate.add_new_row(metadata_to_copy, row = _row)
 
-    def _plot_fetch_files(self):
+    def _plot_fetch_files(self, file_type='SofQ'):
+        if file_type == 'SofQ':
+            search_dir='./SofQ'
+            prefix='NOM_'
+            suffix='SQ.dat'
+        elif file_type == 'nexus':
+            cwd = os.getcwd()
+            search_dir=cwd[:cwd.find('shared')]+'/nexus'
+            prefix='NOM_'
+            suffix='.nxs.h5'
+            ipts = int(re.search(r"IPTS-(\d*)\/",os.getcwd()).group(1))
+            
+
         _row = self.current_row
         _row_runs = self._collect_metadata(row_index = _row)['runs'].split(',')
 
         output_list = list()
-        file_list = [ sofq for sofq in glob.glob('./SofQ/NOM_*')]
+        file_list = [ a_file for a_file in glob.glob(search_dir+'/'+prefix+'*')]
         for run in _row_runs:
-            sofq = './SofQ/NOM_'+str(run)+'SQ.dat'
-            if sofq in file_list:
-                output_list.append({'file':sofq, 'run':run})
+            the_file = search_dir+'/'+prefix+str(run)+suffix
+            if the_file in file_list:
+                output_list.append({'file':the_file, 'run':run})
 
         return output_list
 
     def _plot_fetch_data(self):
-        file_list = self._plot_fetch_files()
+        file_list = self._plot_fetch_files(file_type='SofQ')
         
-        for sofq in file_list:
-            with open(sofq['file'],'r') as handle:
+        for data in file_list:
+            with open(data['file'],'r') as handle:
                 x, y, e = np.loadtxt(handle,unpack=True)
-                sofq['x'] = x
-                sofq['y'] = y
+                data['x'] = x
+                data['y'] = y
 
         return file_list
  
-    def _plot_datasets(self,sofq_datasets,shift_value=1.0): 
+    def _plot_datasets(self,datasets,shift_value=1.0,cmap_choice='inferno',title=None):
         fig = plt.figure()
         ax = fig.add_subplot(1,1,1)
+
+        # configure plot
+        cmap = plt.get_cmap(cmap_choice)
+        cNorm = colors.Normalize(vmin=0, vmax=len(datasets) )
+        scalarMap = cm.ScalarMappable(norm=cNorm, cmap=cmap)
+        mrks=[0,-1]
+
+        # plot data
         shifter = 0.0
-        for sofq in sofq_datasets:
-            with open(sofq['file'],'r') as handle:
-                sofq['y'] += shifter
-                ax.plot(sofq['x'],sofq['y'],label=sofq['run'])
-                shifter += shift_value
+        for idx, data in enumerate(datasets):
+            data['y'] += shifter
+
+            colorVal = scalarMap.to_rgba(idx)
+
+            if 'linestyle' in data:
+                ax.plot(data['x'],data['y'],data['linestyle']+'o',label=data['run'],color=colorVal,markevery=mrks,)
+            else:
+                ax.plot(data['x'],data['y'],label=data['run'],color=colorVal,markevery=mrks)
+            shifter += shift_value
         box = ax.get_position()
         ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
         handles, labels = ax.get_legend_handles_labels()
         ax.legend(handles[::-1], labels[::-1], title='Runs', loc='center left',bbox_to_anchor=(1,0.5))
+        if title:
+            fig.suptitle(title)
         plt.show()
 
-    def _plot_row(self):
+    def _plot_sofq(self):
         sofq_datasets = self._plot_fetch_data()
-        self._plot_datasets(sorted(sofq_datasets, key=lambda k: int(k['run'])))
+        self._plot_datasets(sorted(sofq_datasets, key=lambda k: int(k['run'])),title='S(Q)')
    
-    def _plot_diff_first_run_row(self):
+    def _plot_sofq_diff_first_run_row(self):
         sofq_datasets = self._plot_fetch_data()
         sofq_base  = dict(sofq_datasets[0])
 
         for sofq in sorted(sofq_datasets, key=lambda k: int(k['run'])):
             sofq['y'] = sofq['y'] - sofq_base['y']
 
-        self._plot_datasets(sofq_datasets,shift_value=0.2)
+        self._plot_datasets(sofq_datasets,shift_value=0.2,title='S(Q) - S(Q) for run '+sofq_base['run'])
         
-    def _plot_diff_average_row(self):
+    def _plot_sofq_diff_average_row(self):
         sofq_datasets = self._plot_fetch_data()
 
         sofq_data = [ sofq['y'] for sofq in sofq_datasets ]
@@ -399,8 +443,23 @@ class TableHandler(object):
         for sofq in sorted(sofq_datasets, key=lambda k: int(k['run'])):
             sofq['y'] = sofq['y'] - sofq_avg
 
-        self._plot_datasets(sofq_datasets,shift_value=0.2)
+        self._plot_datasets(sofq_datasets,shift_value=0.2,title='S(Q) - <S(Q)>')
    
+    def _plot_temperature(self,samp_env_choice=None):
+        file_list = self._plot_fetch_files(file_type='nexus')
+        samp_env = SampleEnvironmentHandler(samp_env_choice)
+       
+        datasets = list()
+        for data in file_list:
+            samp_x, samp_y = samp_env.getDataFromFile(data['file'],'samp')
+            envi_x, envi_y = samp_env.getDataFromFile(data['file'],'envi')
+
+            print data['file']
+            datasets.append( { 'run' : data['run'] + '_samp', 'x' : samp_x, 'y' : samp_y, 'linestyle' : '-' } )
+            datasets.append( { 'run' : None, 'x' : envi_x, 'y' : envi_y, 'linestyle' : '--' } )
+    
+        self._plot_datasets(sorted(datasets, key=lambda k: k['run']), shift_value=0.0,title='Temperature: '+samp_env_choice)
+
     def _new_row(self):
         _row = self.current_row
         if _row == -1:
