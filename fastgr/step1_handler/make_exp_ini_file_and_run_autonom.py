@@ -1,5 +1,7 @@
 import os
 import time
+import json
+from datetime import datetime
 
 from fastgr.step1_handler.step1_gui_handler import Step1GuiHandler
 
@@ -70,7 +72,59 @@ class MakeExpIniFileAndRunAutonom(object):
         
         self._dict_mandatory = _dict_mandatory
         self._dict_optional = _dict_optional
+       
+    def launch_mantid_calibration(self):
+        _year=datetime.now().date().strftime("%Y")
+        _month=datetime.now().date().strftime("%m")
+        if int(_month) <= 6:
+            _cycle = 1
+        else:
+            _cycle = 2
+        _calpath="/SNS/NOM/shared/CALIBRATION/%s_%d_1B_CAL/" % (_year,_cycle)
+
+        _samp_env = str(self.parent.sample_environment_comboBox.currentText())
+        _diamond = self._dict_mandatory['Dia'] 
+
+        found=False
+        old_found=False
+        cal_list = [ os.path.splitext(filename) for filename in os.listdir(_calpath) ]
+        for basename, file_extension in cal_list:
+            if '.h5' in file_extension:
+                _pulled_run = basename.split('_')[1]
+                _pulled_samp_env = basename.split('_')[-1]
+
+                old_found=True
+                old_cal = _calpath+"/"+basename+file_extension
+                if _pulled_run == 'd'+_diamond and _pulled_samp_env == _samp_env:
+                    found = True
+
+
+        if not found:
+            if not old_found:
+                if _cycle == 1:
+                    _old_year = int(year) - 1
+                    _calpath="/SNS/NOM/shared/CALIBRATION/%s_%d_1B_CAL/" % (_old_year,2)
+                else:
+                    _calpath="/SNS/NOM/shared/CALIBRATION/%s_%d_1B_CAL/" % (_year,)
+                
+            _today=datetime.now().date().strftime("%Y_%m_%d")
+            _vanadium = self._dict_mandatory['Vana'] 
+            _cal_input = { "sample": _diamond,
+                          "vanadium": _vanadium,
+                          "date": _today,
+                          "sample_environment": _samp_env,
+                          "oldCal": old_cal
+                        }
+    
+            with open("calibration_creation.json",'w') as handle:
+                json.dump(_cal_input, handle)
+            _script_to_run = "/SNS/NOM/shared/scripts/calibration_creation.py calibration_creation.json"
+            os.system(_script_to_run)
+            
+                
         
+        print _month, _year, _samp_env, _calpath
+ 
     def create_exp_ini_file(self):
         
         _full_file_name = os.path.join(self.folder, self.EXP_INI_FILENAME)
@@ -107,6 +161,10 @@ class MakeExpIniFileAndRunAutonom(object):
         _pre_script = '/SNS/NOM/shared/autoNOM/stable/readtitles.py -a -s'
         for _values in _dict_mandatory.values():
             _pre_script += ' ' + _values
+
+        print("[LOG] testing Mantid calibration")
+        self.launch_mantid_calibration()
+        exit()
 
         print("[LOG] running pre-script")
         print("[LOG] " + _pre_script)
