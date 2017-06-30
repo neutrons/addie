@@ -1,5 +1,6 @@
 import os
 from addie.step2_handler.table_handler import TableHandler
+from addie.step2_handler.step2_gui_handler import Step2GuiHandler
 
 
 class CreateNdsumFile(object):
@@ -35,6 +36,9 @@ class CreateNdsumFile(object):
         _gui_settings['bfil_from'] = str(self.parent.ui.fourier_filter_from.text())
         _gui_settings['bfil_to'] = str(self.parent.ui.fourier_filter_to.text())
         _gui_settings['platype']= self.parent.ui.hydrogen_yes.isChecked()
+
+        o_gui_handler = Step2GuiHandler(parent = self.parent)
+        _gui_settings['qrangeft']=o_gui_handler.get_q_range()
         self.gui_settings = _gui_settings
 
     def _create_sto_output_file(self):
@@ -67,6 +71,10 @@ class CreateNdsumFile(object):
         else:
             _scale_data = "No"
         _text.append("scale_data \t%s\n" %_scale_data)
+
+        if _gui_settings['qrangeft']:
+            qmin, qmax = _gui_settings['qrangeft']
+            _text.append("qrangeft {},{}\n".format(qmin, qmax))
         
         #if _gui_settings['run_rmc_flag']:
             #_run_rmc = "Yes"
