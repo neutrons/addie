@@ -137,7 +137,7 @@ class MakeExpIniFileAndRunAutonom(object):
             os.mkdir(_calpath)
            
         # Check current cycle for calibration
-        found_in_current_cycle, same_sample_env_dict, current_cal_file = check_calfiles_in_dir(calpath=_calpath,
+        found_in_current_cycle, same_sample_env_dict, current_cal_file = check_calfiles_in_calpath(calpath=_calpath,
                                                                              calibrant=_diamond,
                                                                              samp_env=_samp_env,
                                                                              same_samp_env_dict=None,
@@ -145,7 +145,7 @@ class MakeExpIniFileAndRunAutonom(object):
         
         # Check previous cycle for calibration
         _calpath = getPreviousCycleCalPath(_cycle,_year)
-        found_in_previous_cycle, same_sample_env_dict, old_cal_file = check_calfiles_in_dir(calpath=_calpath,
+        found_in_previous_cycle, same_sample_env_dict, old_cal_file = check_calfiles_in_calpath(calpath=_calpath,
                                                                               calibrant=_diamond,
                                                                               samp_env=_samp_env,
                                                                               same_samp_env_dict=same_sample_env_dict,
@@ -218,12 +218,13 @@ class MakeExpIniFileAndRunAutonom(object):
         for _values in _dict_mandatory.values():
             _pre_script += ' ' + _values
 
+        '''
         print("[LOG] testing Mantid calibration")
         _run_cali, _mantid_calibration, _script_to_run = self.setup_mantid_calibration()
         if _run_cali:
             self.parent_no_ui.launch_job_manager(job_name = 'Mantid calibration',
                                                  script_to_run = _script_to_run)
-        exit()
+        '''
 
         print("[LOG] running pre-script")
         print("[LOG] " + _pre_script)
