@@ -56,6 +56,8 @@ import PyQt4.QtGui as QtGui
 
 import addie.addiedriver as driver
 import addie.specify_plots_style as ps
+import addie.edit_sq_dialog
+
 
 
 class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
@@ -222,6 +224,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self._gssGroupName = None
         self._currDataDir = None
         self._inFixedDirectoryStructure = False
+        self._currWorkDir = os.getcwd()
 
         # some controlling variables
         self._currBraggXUnit = str(self.ui.comboBox_xUnit.currentText())
@@ -234,6 +237,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         # help (refer to DGSPlanner and HFIR Powder reduction GUI)
         self._assistantProcess = QtCore.QProcess(self)
+
+        # a collection of sub window
+        self._editSqDialog = None
 
         return
 
@@ -903,6 +909,41 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         return default_dir
 
+    @staticmethod
+    def get_file_names_from_dialog(default_dir, filter_filter):
+        """
+        get the file name from a dialog
+        :param default_dir:
+        :param filter_filter:
+        :return:
+        """
+        # TODO/ISSUE/NOW - Find out what this method can get!!!
+        # check input
+        assert isinstance(default_dir, str), 'Default directory {0} must be a string but not a {1}.' \
+                                             ''.format(default_dir, type(default_dir))
+        assert isinstance(filter_filter, str), 'File filter {0} must be a string but not a {1}.' \
+                                               ''.format(filter_filter, type(filter_filter))
+
+        # generate a dialog to get the file name to save G(r)
+        export_dialog = QtGui.QFileDialog()
+        export_dialog.setWindowTitle(caption)
+        export_dialog.setDirectory(default_dir)
+        export_dialog.setAcceptMode(QtGui.QFileDialog.AcceptSave)
+        export_dialog.setNameFilter(file_filter)
+
+        # quit if it is not accepted
+        if export_dialog.exec_() != QtGui.QFileDialog.Accepted:
+            return None
+        elif len(export_dialog.selectedFiles()) == 0:
+            return None
+
+        # get the file name from dialog
+        file_name_list = list()
+        for file_name in export_dialog.selectedFiles():
+            file_name_list.append(str(file_name))
+
+        return file_name_list
+
     def do_load_sq(self):
         """
         Load S(Q) from file
@@ -951,15 +992,13 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     def do_edit_sq(self):
         """
-        edit S(Q) by shift and scaling
+        Launch a dialog box to edit S(Q) by shift and scaling.
         Returns
         -------
 
         """
-        # TODO/ISSUE/NOW -- Implement ASAP
-        import addie.edit_sq_dialog
-
-        self._editSqDialog = addie.edit_sq_dialog.EditSofQDialog(self)
+        if self._editSqDialog is None:
+            self._editSqDialog = addie.edit_sq_dialog.EditSofQDialog(self)
 
         self._editSqDialog.show()
 
@@ -993,17 +1032,14 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         Note:  https://github.com/neutrons/FastGR/issues/91
         :return:
         """
-        # TODO/ISSUE/FUTURE - Wait for Pete to implement this
-
         # check input
         assert isinstance(arg_dict, dict), 'Input arguments {0} must be given in a dictionary but not a {1}.' \
                                            ''.format(arg_dict, type(arg_dict))
 
         # determine the selected G(r)
-        selected_gr_list = self.ui.treeWidget_grWsList.get_selected_items()
-        # TODO/TEST - Find out the type of the return
-        print '[DB] Selected G(r) have {0} items.'.format(len(selected_gr_list))
-        for gr in selected_gr_list:
+        gr_ws_name_list = self.ui.treeWidget_grWsList.get_workspaces()
+        print '[DB] Selected G(r) workspaces have {0} items.'.format(len(gr_ws_name_list))
+        for gr in gr_ws_name_list:
             print '[DB] G(r) {0} of type {1}.'.format(gr, type(gr))
 
         # check the arguments
@@ -1013,6 +1049,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                                    ''.format(required_param))
 
         # TODO/FIXME/FUTURE - Call Mantid algorithm to calculate S(Q)
+        raise NotImplementedError('Implement this in future.')
 
         return
 
@@ -1023,7 +1060,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         -------
 
         """
-        # TODO/ISSUE/CHECK - Look at https://github.com/neutrons/FastGR/issues/28
+        # TEST/ISSUE/NOW - Look at https://github.com/neutrons/FastGR/issues/28
+
         # read the selected item from the tree
         gr_name_list = self.ui.treeWidget_grWsList.get_selected_items_of_level(2, excluded_parent='SofQ',
                                                                                return_item_text=True)
@@ -1039,21 +1077,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         default_dir = os.getcwd()
         caption = 'Save G(r)'
 
-        # FIXME/TODO/ISSUE/NEXT - Refactor the following part out to be a standard widget
-
-        # generate a dialog to get the file name to save G(r)
-        export_dialog = QtGui.QFileDialog()
-        export_dialog.setWindowTitle(caption)
-        export_dialog.setDirectory(default_dir)
-        export_dialog.setAcceptMode(QtGui.QFileDialog.AcceptSave)
-        export_dialog.setNameFilter('XYE (*.dat);;CSV XYE (*.csv);;GofR (*.gr)')
-
-        # quit if it is not accepted
-        if export_dialog.exec_() != QtGui.QFileDialog.Accepted:
-            return
-
-        # get the file name from dialog
-        gr_file_name = str(export_dialog.selectedFiles()[0])
+        # TEST/ISSUE/NOW - Refactor the following part out to be a standard widget
+        file_filter_str = 'XYE (*.dat);;CSV XYE (*.csv);;GofR (*.gr)'
+        gr_file_name = self.get_file_names_from_dialog(default_dir, file_filter_str, caption)[0]
 
         # check the file extension
         file_name, file_ext = os.path.splitext(gr_file_name)
@@ -1099,58 +1125,40 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         -------
 
         """
-        # TODO/ISSUE/NOW - Implement for S(Q) ASAP ... now with debug information
-        # read the selected item from the tree
+        # TEST/ISSUE/NOW
+
+        # read the selected item from the tree... return if nothing is selected
         sq_name_list = self.ui.treeWidget_grWsList.get_selected_items_of_level(2, excluded_parent='GofR',
                                                                                return_item_text=True)
-        # if len(sq_name_list) != 1:
-        #     err_msg = 'Error! Only 1 workspace of G(r) that can be selected for saving.  So far %d is selected.' \
-        #               'They are %s.' % (len(gr_name_list), str(gr_name_list))
-        #     QtGui.QMessageBox.warning(self, 'Error', err_msg)
-        #     return
-        # else:
-        #     sq_name_list = sq_name_list[0]
-        #
-        # # pop-up a dialog for the file to save
-        # default_dir = os.getcwd()
-        # caption = 'Save G(r)'
-        #
-        # # FIXME/TODO/ISSUE/NEXT - Refactor the following part out to be a standard widget
-        #
-        # # generate a dialog to get the file name to save G(r)
-        # export_dialog = QtGui.QFileDialog()
-        # export_dialog.setWindowTitle(caption)
-        # export_dialog.setDirectory(default_dir)
-        # export_dialog.setAcceptMode(QtGui.QFileDialog.AcceptSave)
-        # export_dialog.setNameFilter('XYE (*.xye);;CSV XYE (*.csv);;GofR (*.sq)')
-        #
-        # # quit if it is not accepted
-        # if export_dialog.exec_() != QtGui.QFileDialog.Accepted:
-        #     return
-        #
-        # # get the file name from dialog
-        # gr_file_name = str(export_dialog.selectedFiles()[0])
-        #
-        # # check the file extension
-        # file_name, file_ext = os.path.splitext(gr_file_name)
-        # gr_filter = str(export_dialog.selectedFilter())
-        # if gr_filter.startswith('XYE'):
-        #     if file_ext.lower() != '.dat':
-        #         gr_file_name += '.dat'
-        #     gr_file_type = 'dat'
-        # elif gr_filter.startswith('CSV'):
-        #     if file_ext.lower() != '.csv':
-        #         gr_file_name += '.csv'
-        #     gr_file_type = 'csv'
-        # elif gr_filter.startswith('DAT'):
-        #     blabla
-        #
-        # # END-IF-ELSE
-        #
-        # print 'FILE NAME: ', gr_file_name
-        #
-        # # save!
-        # self._myController.save_ascii(gr_ws_name, gr_file_name, sq_file_type)
+        if len(sq_name_list) == 0:
+            return
+
+        # loop the SofQ name to save
+        file_filter = 'XYE (*.xye);;CSV XYE (*.csv);;SofQ (*.sq)'
+
+        for sq_name in sq_name_list:
+            # get the output file name first
+            out_file_name = QtGui.QFileDialog.getSaveFileName(self, 'Input File Name to Save S(Q) {0}'.format(sq_name),
+                                                              self._currWorkDir, file_filter)
+            if out_file_name is None or len(out_file_name) == 0:
+                # skip if the user cancel the operation on this S(Q)
+                continue
+
+            # get the directory, file name and extension
+            self._currWorkDir = os.path.dirname(out_file_name)
+            file_name, file_ext = os.path.splitext(out_file_name)
+            if file_ext.lower().startswith('xye'):
+                sq_file_type = 'dat'
+            elif file_ext.lower().startswith('csv'):
+                sq_file_type = 'csv'
+            elif file_ext.lower().startswith('sq'):
+                sq_file_type = 'dat'
+            else:
+                raise RuntimeError('File type {0} cannot be recognized.'.format(file_ext))
+
+            # save file
+            self._myController.save_ascii(sq_name, out_file_name, sq_file_type)
+        # END-FOR
 
         return
 
@@ -1186,7 +1194,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     def edit_sq(self, sq_name, scale_factor, shift):
         """
-
+        Edit S(Q) in workspace with scale_factor * Y[i] + shift
         Parameters
         ----------
         sq_name
@@ -1197,7 +1205,22 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         -------
 
         """
-        # TODO/ISSUE/NOW - Implement ASAP
+        # check inputs
+        assert isinstance(sq_name, str), 'S(Q) workspace name {0} must be a string but not a {1}.' \
+                                         ''.format(sq_name, type(sq_name))
+        assert isinstance(scale_factor, float), 'Scale factor {0} must be a float but not a {1}.' \
+                                                ''.format(scale_factor, type(scale_factor))
+        assert isinstance(shift, float), 'Shift {0} must be a float but not a {1}.'.format(shift, type(shift))
+
+        # call the controller
+        self._myController.edit_matrix_workspace(sq_name, scale_factor, shift)
+
+        # re-plot
+        sq_color_marker = self.ui.graphicsView_sq.remove_sq(sq_name)
+        self.ui.graphicsView_sq.plot_sq(sq_name, vec_q, vec_s, sq_y_label=sq_name, reset_color_mark=False,
+                                        color_marker=sq_color_marker)
+
+        return
 
     def evt_change_gss_mode(self):
         """
@@ -1250,12 +1273,12 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             # assumption: switched from single-bank mode
 
             # skip if there is one and only 1 bank that is selected
-            if len(to_plot_bank_list) == 1:
-                # TODO/FIXME/ISSUE - Need to re-plot with correct color!
-                return
-            else:
-                # choose first bank
-                bank_on_canvas = to_plot_bank_list[0]
+            # if len(to_plot_bank_list) == 1:
+            # TEST/ISSUE/NOW - Need to re-plot with correct color!
+            #     return
+            # else:
+            # choose first bank
+            bank_on_canvas = to_plot_bank_list[0]
 
             # disable all the banks except the one to plot. Notice the mutex must be on
             self._noEventBankWidgets = True
@@ -1667,6 +1690,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     def set_bragg_banks_selected(self, bank_id_list, status):
         """
         set the status of selected bank IDs
+        Note: mutex on Bragg Bank selection widgets is not turned on!!!
         Parameters
         ----------
         bank_id_list
@@ -1676,11 +1700,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         -------
 
         """
-        # check ...
-        # TODO/NOW - finish it
-
-        #
-        print '[DB...BAT] Banks ', bank_id_list, ' are set to ', status, ' without mutex locked'
+        # check inputs
+        assert isinstance(bank_id_list, list), 'Bank IDs {0} must be given in a list but not a {1}.' \
+                                               ''.format(bank_id_list, type(bank_id_list))
+        assert isinstance(status, bool), 'Selection status {0} must be a boolean but not a {1}.' \
+                                         ''.format(status, type(status))
 
         # set
         for bank_id in bank_id_list:

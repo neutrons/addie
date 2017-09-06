@@ -150,6 +150,27 @@ class AddieDriver(object):
 
         return
 
+    @staticmethod
+    def edit_matrix_workspace(sq_name, scale_factor, shift):
+        """
+        Edit the matrix workspace of S(Q) by scaling and shift
+        :param sq_name: name of the SofQ workspace
+        :param scale_factor:
+        :param shift:
+        :return:
+        """
+        # get the workspace
+        if AnalysisDataService.doesExist(sq_name) is False:
+            raise RuntimeError('S(Q) workspace {0} cannot be found in ADS.'.format(sq_name))
+        else:
+            sq_ws = AnalysisDataService.retrieve(sq_name)
+
+        # get the vector of Y
+        vec_y = sq_ws.dataY(0)
+        vec_y += scale_factor * vec_y + shift
+
+        return
+
     # RMCProfile format. The 1st column tells how many X,Y pairs,
     # the second is a comment line with information regarding the data
     # (title, multiplier for data, etc.), and then the X,Y pairs for G(r) or S(Q) data.
