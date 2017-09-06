@@ -957,10 +957,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         """
         # TODO/ISSUE/NOW -- Implement ASAP
-
         import addie.edit_sq_dialog
 
-        self._editSqDialog = fastgr.edit_sq_dialog.EditSofQDialog(self)
+        self._editSqDialog = addie.edit_sq_dialog.EditSofQDialog(self)
 
         self._editSqDialog.show()
 
