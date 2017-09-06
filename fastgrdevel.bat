@@ -13,4 +13,4 @@ python setup.py build
 :: python.exe
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 set PYTHONPATH=build\lib\python-2.7\;%PYTHONPATH%
-C:\MantidInstall\bin\mantidpython build\scripts\fastgr
+C:\MantidInstall\bin\mantidpython build\scripts\addie

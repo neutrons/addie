@@ -1,12 +1,12 @@
 #!/bin/sh
 python setup.py bdist_rpm --spec-only
-patch dist/fastgr.spec fastgr.spec.patch
+patch dist/addie.spec addie.spec.patch
 
 python setup.py pyuic
 python setup.py sdist
 mkdir -p ~/rpmbuild/SOURCES/
-cp dist/fastgr-*.tar.gz ~/rpmbuild/SOURCES/
+cp dist/addie-*.tar.gz ~/rpmbuild/SOURCES/
 
-rpmbuild -ba dist/fastgr.spec
-cp ~/rpmbuild/SRPMS/fastgr-*.src.rpm dist/
-cp ~/rpmbuild/RPMS/noarch/fastgr-*.noarch.rpm dist/
+rpmbuild -ba dist/addie.spec
+cp ~/rpmbuild/SRPMS/addie-*.src.rpm dist/
+cp ~/rpmbuild/RPMS/noarch/addie-*.noarch.rpm dist/
