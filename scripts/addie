@@ -9,6 +9,7 @@ import psutil
 from addie.ipythondockwidget import IPythonDockWidget
 from PyQt4 import QtGui
 
+
 import addie.ui_mainWindow
 import addie.step1
 import addie.step2
@@ -744,12 +745,15 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             default_dir = self.getDefaultDir(sub_dir='GSAS')
 
         bragg_file_names = QtGui.QFileDialog.getOpenFileNames(self, 'Choose Bragg File', default_dir, ext)
-        if bragg_file_names is None or bragg_file_names == '':
+        if bragg_file_names is None or bragg_file_names == '' or len(bragg_file_names) == 0:
             return
         bragg_file_names = [ str(bragg_file_name) for bragg_file_name in bragg_file_names ]
 
         # update stored data directory
-        self._currDataDir = os.path.split(os.path.abspath(bragg_file_names[0]))[0]
+        try:
+            self._currDataDir = os.path.split(os.path.abspath(bragg_file_names[0]))[0]
+        except IndexError as index_err:
+            err_msg = 'Unable to get absolute path of {0} due to {1}'.format(bragg_file_names, index_err)
         self.check_in_fixed_dir_structure(sub_dir='GSAS')
 
         # load file
