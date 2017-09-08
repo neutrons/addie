@@ -474,6 +474,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             # vec_r, vec_g, vec_ge = self._myController.get_gr(min_q, max_q)
             # key_plot = gr_ws_name
             # FIXME/ISSUE/NOW - Add a color manager to this!!!  Loop around color and line style
+            # TODO/ISSUE/NOWNOW : Need to assign the color, line style and alpha as it is created.
             self.plot_gr([gr_ws_name])
             # self.ui.graphicsView_gr.plot_gr(key_plot, vec_r, vec_g, vec_ge, False)
 
@@ -680,6 +681,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         for gr_ws_name in gr_ws_name_list:
             vec_r, vec_g, vec_ge = self._myController.get_ws_data(gr_ws_name)
             key_plot = gr_ws_name
+            #
+            line_style = ['solid', '--', '.']
+
             self.ui.graphicsView_gr.plot_gr(key_plot, vec_r, vec_g, vec_ge, False)
 
         return
@@ -725,7 +729,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             reset = True
         else:
             reset = False
-        self.ui.graphicsView_sq.plot_sq(sq_ws_name, vec_q, vec_y, vec_se, sq_unit, reset)
+        self.ui.graphicsView_sq.plot_sq(sq_ws_name, vec_q, vec_y, vec_se, sq_unit, reset,
+                                        color=None, color_marker=None)
 
         return
 
@@ -1222,7 +1227,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         # re-plot
         sq_color_marker = self.ui.graphicsView_sq.remove_sq(sq_name)
         self.ui.graphicsView_sq.plot_sq(sq_name, vec_q, vec_s, sq_y_label=sq_name, reset_color_mark=False,
-                                        color_marker=sq_color_marker)
+                                        color=None, color_marker=sq_color_marker)
 
         return
 

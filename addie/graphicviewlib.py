@@ -576,10 +576,15 @@ class GofRView(base.MplGraphicsView):
             self.add_plot_1d(vec_r, vec_g, vec_e)
             raise NotImplementedError('ASAP')
         else:
+            q_min = 10.
+            q_max = 50.
+            alpha = 1. - (q_now - q_min)/(q_max - q_min)
+
+
             line_id = self.add_plot_1d(vec_r, vec_g, marker=None,
                                        color=self._colorList[self._colorIndex % len(self._colorList)],
                                        label=plot_key,
-                                       x_label=r'r ($\AA$)')
+                                       x_label=r'r ($\AA$)', alpha=alpha)
             self._colorIndex += 1
             self._grDict[plot_key] = line_id
 
@@ -916,21 +921,17 @@ class SofQView(base.MplGraphicsView):
 
         return
 
-    def plot_sq(self, sq_name, vec_q, vec_s, vec_e, sq_y_label, reset_color_mark, color_marker=None):
-        """
-        Plot S(Q)
-        Parameters
-        ----------
-        sq_name:
-        vec_q
-        vec_s
-        vec_e
-        sq_y_label :: label for Y-axis
-        reset_color_mark : boolean to reset color marker
-
-        Returns
-        -------
-
+    def plot_sq(self, sq_name, vec_q, vec_s, vec_e, sq_y_label, reset_color_mark, color=None, color_marker=None):
+        """Plot S(Q)
+        :param sq_name:
+        :param vec_q:
+        :param vec_s:
+        :param vec_e:
+        :param sq_y_label: label for Y-axis
+        :param reset_color_mark:  boolean to reset color marker
+        :param color:
+        :param color_marker:
+        :return:
         """
         # check
         assert isinstance(vec_q, np.ndarray) and isinstance(vec_s, np.ndarray),\
