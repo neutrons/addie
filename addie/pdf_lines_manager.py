@@ -37,7 +37,7 @@ class PDFPlotManager(object):
                 self._currLineColorIndex = 0
 
         # existing workspace
-        color = LineColorBase[self._currLineColorIndex]
+        color = LineColorBase[self._sofqInfoDict[sq_ws_name]]
 
         return color
 
@@ -54,14 +54,16 @@ class PDFPlotManager(object):
             line_style = LineStyleBase[1]
             alpha = 1.
 
-            self._currStandaloneGofRColorIndex %=  len(LineColorBase)
+            self._currStandaloneGofRColorIndex %= len(LineColorBase)
 
         elif sq_ws_name not in self._sofqInfoDict:
             raise RuntimeError('S(Q) workspace {0} has not been added. It is not allowed!'.format(sq_ws_name))
 
         else:
             # G(r) from parent
-            color = self._sofqInfoDict[sq_ws_name]
+            assert isinstance(curr_q_max, float), 'Current Q Max {0} must be a float but  not a {1}' \
+                                                  ''.format(curr_q_max, type(curr_q_max))
+            color = LineColorBase[self._sofqInfoDict[sq_ws_name]]
             line_style = LineStyleBase[0]
             alpha = ((curr_q_max - Q_MIN) / (Q_MAX - Q_MIN) + 1.) * 0.5
 
@@ -70,3 +72,11 @@ class PDFPlotManager(object):
         self._gofrInfoDict[gr_ws_name] = color, line_style, alpha
 
         return color, line_style, alpha
+
+    def get_gr_line(self, gr_ws_name):
+        """
+        get color, style and alpha for a G(r) line
+        :param gr_ws_name:
+        :return:
+        """
+        return self._gofrInfoDict[gr_ws_name]

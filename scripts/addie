@@ -59,6 +59,8 @@ import addie.addiedriver as driver
 import addie.specify_plots_style as ps
 import addie.edit_sq_dialog
 
+from addie.pdf_lines_manager import PDFPlotManager
+
 
 
 class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
@@ -241,6 +243,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         # a collection of sub window
         self._editSqDialog = None
+
+        # color management
+        self._pdfColorManager = PDFPlotManager()
 
         return
 
@@ -471,12 +476,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                                                          min_q, max_q, pdf_filter, rho0)
 
             # plot G(R)
-            # vec_r, vec_g, vec_ge = self._myController.get_gr(min_q, max_q)
-            # key_plot = gr_ws_name
-            # FIXME/ISSUE/NOW - Add a color manager to this!!!  Loop around color and line style
-            # TODO/ISSUE/NOWNOW : Need to assign the color, line style and alpha as it is created.
-            self.plot_gr([gr_ws_name])
-            # self.ui.graphicsView_gr.plot_gr(key_plot, vec_r, vec_g, vec_ge, False)
+            gr_color, gr_style, gr_alpha = self._pdfColorManager.add_gofr(sq_ws_name, gr_ws_name, max_q)
+            self.plot_gr([gr_ws_name], [gr_color], [gr_style], [gr_alpha])
 
             # add to tree
             gr_param_str = 'G(r) for Q(%.3f, %.3f)' % (min_q, max_q)
@@ -657,48 +658,70 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
             else:
                 # plot arbitrary data
-                print '[DB] Switch to multi-GSAS mode.  Re-plot {0}'.format(bragg_ws_name)
+                # print '[DB] Switch to multi-GSAS mode.  Re-plot {0}'.format(bragg_ws_name)
                 vec_x, vec_y, vec_e = self._myController.get_ws_data(bragg_ws_name)
                 self.ui.graphicsView_bragg.plot_general_ws(bragg_ws_name, vec_x, vec_y, vec_e)
 
         return
 
-    def plot_gr(self, gr_ws_name_list):
+    def plot_gr(self, gr_ws_name_list, gr_line_colors, gr_line_styles, gr_line_alpha, auto=False):
         """
-        Plot G(r) by their names (workspace as protocol)
-        Parameters
-        ----------
-        gr_ws_name_list: list of G(r) workspaces
-
-        Returns
-        -------
-
+        Plot G(r) by their names (workspace as protocol
+        :param gr_ws_name_list:  list of G(r) workspaces
+        :param gr_line_colors:
+        :param gr_line_styles:
+        :param gr_line_alpha:
+        :param auto:
+        :return:
         """
         # check
-        assert isinstance(gr_ws_name_list, list) and len(gr_ws_name_list) > 0
+        assert isinstance(gr_ws_name_list, list), 'blabla'
+        if len(gr_ws_name_list) == 0:
+            raise RuntimeError('List of GofR workspace names is emmpty.')
+
+        # get color, style, alpha from PDF manager
+        if auto:
+            gr_line_colors = list()
+            gr_line_styles = list()
+            gr_line_alpha = list()
+
+            for gr_ws_name in gr_ws_name_list:
+                color_i, style_i, alpha_i = self._pdfColorManager.get_gr_line(gr_ws_name)
+                gr_line_colors.append(color_i)
+                gr_line_styles.append(style_i)
+                gr_line_alpha.append(alpha_i)
+            # END-FOR
+        # END-IF (auto)
+
+        assert isinstance(gr_line_colors, list), 'blabla'
+        assert isinstance(gr_line_styles, list), 'blabla'
+        assert isinstance(gr_line_alpha, list), 'blabla'
+
+        if len(gr_ws_name_list) == 0 or len(gr_ws_name_list) != len(gr_line_colors) \
+                or len(gr_ws_name_list) != len(gr_line_styles) or len(gr_ws_name_list) != len(gr_line_alpha):
+            raise RuntimeError('blabla')
 
         # plot G(R)
-        for gr_ws_name in gr_ws_name_list:
+        for index, gr_ws_name in enumerate(gr_ws_name_list):
             vec_r, vec_g, vec_ge = self._myController.get_ws_data(gr_ws_name)
             key_plot = gr_ws_name
-            #
-            line_style = ['solid', '--', '.']
 
-            self.ui.graphicsView_gr.plot_gr(key_plot, vec_r, vec_g, vec_ge, False)
+            gr_color = gr_line_colors[index]
+            gr_style = gr_line_styles[index]
+            gr_alpha = gr_line_alpha[index]
+
+            self.ui.graphicsView_gr.plot_gr(key_plot, vec_r, vec_g, vec_ge, False, gr_color, gr_style, gr_alpha)
+        # END-FOR
 
         return
 
-    def plot_sq(self, sq_ws_name, clear_prev):
+    def plot_sq(self, sq_ws_name, sq_color, clear_prev):
         """
         Plot S(Q)
-        Parameters
-        ----------
-        sq_ws_name
-        clear_prev
-
-        Returns
-        -------
-
+        :param sq_ws_name:
+        :param sq_color: color of S(Q).  If None, then try to find it from PDF color manager
+        :param clear_prev:
+        :return:
         """
         # clear previous lines
         if clear_prev:
@@ -729,8 +752,13 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             reset = True
         else:
             reset = False
+
+        # get color
+        if sq_color is None:
+            sq_color = self._pdfColorManager.add_sofq(sq_ws_name)
+
         self.ui.graphicsView_sq.plot_sq(sq_ws_name, vec_q, vec_y, vec_se, sq_unit, reset,
-                                        color=None, color_marker=None)
+                                        color=sq_color)
 
         return
 
@@ -868,7 +896,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             gr_ws_name = ret_obj
 
         # plot
-        self.plot_gr([gr_ws_name])
+        gr_color, gr_style, gr_alpha = self._pdfColorManager.add_gofr(None, gr_ws_name, None)
+
+        self.plot_gr([gr_ws_name], [gr_color], [gr_style], [gr_alpha])
 
         # put the loaded G(r) workspace to tree 'workspaces'
         self.ui.treeWidget_grWsList.add_child_main_item('workspaces', gr_ws_name)
@@ -980,6 +1010,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         for sq_file_name in sq_file_names:
             sq_file_name = str(sq_file_name)
             sq_ws_name, q_min, q_max = self._myController.load_sq(sq_file_name)
+            # add to color management
+            sq_color = self._pdfColorManager.add_sofq(sq_ws_name)
 
             # set to the tree and combo box
             self.ui.treeWidget_grWsList.add_sq(sq_ws_name)
@@ -992,7 +1024,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
             # plot S(Q)
             sq_name = self._myController.get_current_sq_name()
-            self.plot_sq(sq_name, clear_prev=False)
+
+            self.plot_sq(sq_name, sq_color=sq_color, clear_prev=False)
 
             # calculate and calculate G(R)
             self.do_generate_gr()
@@ -1047,9 +1080,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         # determine the selected G(r)
         gr_ws_name_list = self.ui.treeWidget_grWsList.get_workspaces()
-        print '[DB] Selected G(r) workspaces have {0} items.'.format(len(gr_ws_name_list))
-        for gr in gr_ws_name_list:
-            print '[DB] G(r) {0} of type {1}.'.format(gr, type(gr))
+        # print '[DB] Selected G(r) workspaces have {0} items.'.format(len(gr_ws_name_list))
+        # for gr in gr_ws_name_list:
+        #     print '[DB] G(r) {0} of type {1}.'.format(gr, type(gr))
 
         # check the arguments
         for required_param in ['Qmin', 'Qmax', 'Rmin', 'Rmax', 'DeltaR']:
@@ -1225,9 +1258,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self._myController.edit_matrix_workspace(sq_name, scale_factor, shift)
 
         # re-plot
-        sq_color_marker = self.ui.graphicsView_sq.remove_sq(sq_name)
+        sq_color, sq_marker = self.ui.graphicsView_sq.remove_sq(sq_name)
         self.ui.graphicsView_sq.plot_sq(sq_name, vec_q, vec_s, sq_y_label=sq_name, reset_color_mark=False,
-                                        color=None, color_marker=sq_color_marker)
+                                        color=None, marker=sq_marker)
 
         return
 
@@ -1353,7 +1386,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             # set the current on canvas
             self._onCanvasGSSBankList = new_bank_list
 
-            print '[DB...BAT] Multi-GSS-Mode: New ... ', new_bank_list, '; Remove... ', rm_bank_list
+            # print '[DB...BAT] Multi-GSS-Mode: New ... ', new_bank_list, '; Remove... ', rm_bank_list
 
         else:
             # single-gss/multi-bank mode
@@ -1361,7 +1394,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             new_bank_list = list(current_bank_set - prev_bank_set)
             rm_bank_list = list(prev_bank_set - current_bank_set)
 
-            print '[DB...BAT] Single-GSS-Mode: New ... ', new_bank_list, '; Remove... ', rm_bank_list
+            # print '[DB...BAT] Single-GSS-Mode: New ... ', new_bank_list, '; Remove... ', rm_bank_list
 
             # set the current on-canvas
             self._onCanvasGSSBankList = list(current_bank_set)
@@ -1518,7 +1551,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         # re-plot
         for sq_name in curr_sq_list:
             # plot S(Q)
-            self.plot_sq(sq_name, clear_prev=False)
+            self.plot_sq(sq_name, sq_color=None, clear_prev=False)
 
         return
 

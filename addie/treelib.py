@@ -766,10 +766,10 @@ class GofRTree(base.CustomizedTreeView):
             raise NotImplementedError('Main window has not been set up!')
 
         if len(gr_list) > 0:
-            self._mainWindow.plot_gr(gr_list)
+            self._mainWindow.plot_gr(gr_list, None, None, None, auto=True)
 
         for sq_name in sq_list:
-            self._mainWindow.plot_sq(sq_name, False)
+            self._mainWindow.plot_sq(sq_name, None, False)
 
         return
 
@@ -824,8 +824,10 @@ class GofRTree(base.CustomizedTreeView):
         try:
             value_str = str(current_item.text())
             run = int(value_str)
-        except ValueError:
-            return False, 'Unable to convert %s to run number as integer.' % value_str
+        except ValueError as value_error:
+            return False, 'Unable to convert {0} to run number as integer due to {1}.' \
+                          ''.format(current_item.text(), value_error)
+        # END-TRY
 
         return True, run
 
@@ -842,9 +844,10 @@ class GofRTree(base.CustomizedTreeView):
         """ Override event handling method
         """
         status, current_run = self.get_current_run()
+        print '[INFO] Status = {0}; Current run number = {1}'.format(status, current_run)
 
-        if self._mainWindow is not None:
-            self._mainWindow.set_run(current_run)
+        # if self._mainWindow is not None:
+        #     self._mainWindow.set_run(current_run)
 
         return
 

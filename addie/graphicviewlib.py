@@ -550,18 +550,18 @@ class GofRView(base.MplGraphicsView):
 
         return
 
-    def plot_gr(self, plot_key, vec_r, vec_g, vec_e=None, plot_error=False):
+    def plot_gr(self, plot_key, vec_r, vec_g, vec_e=None, plot_error=False, color='black', style='.', alpha=1.):
         """
         Plot G(r)
-        Parameters
-        -------
-        plot_key: a key to the current plot
-        vec_r: numpy array for R
-        vec_g: numpy array for G(r)
-        vec_e: numpy array for G(r) error
-        Returns
-        -------
-
+        :param plot_key: a key to the current plot
+        :param vec_r: numpy array for R
+        :param vec_g: numpy array for G(r)
+        :param vec_e: numpy array for G(r) error
+        :param plot_error:
+        :param color:
+        :param style:
+        :param alpha:
+        :return:
         """
         # check
         assert isinstance(plot_key, str), 'Key for the plot must be a string but not %s.' \
@@ -576,17 +576,18 @@ class GofRView(base.MplGraphicsView):
             self.add_plot_1d(vec_r, vec_g, vec_e)
             raise NotImplementedError('ASAP')
         else:
-            q_min = 10.
-            q_max = 50.
-            alpha = 1. - (q_now - q_min)/(q_max - q_min)
+            # q_min = 10.
+            # q_max = 50.
+            # alpha = 1. - (q_now - q_min)/(q_max - q_min)
 
+            print '[DB..]', color, style, alpha
 
             line_id = self.add_plot_1d(vec_r, vec_g, marker=None,
-                                       color=self._colorList[self._colorIndex % len(self._colorList)],
-                                       label=plot_key,
-                                       x_label=r'r ($\AA$)', alpha=alpha)
+                                       color=color, line_style=style, alpha=alpha,
+                                       label=plot_key, x_label=r'r ($\AA$)')
             self._colorIndex += 1
             self._grDict[plot_key] = line_id
+        # END-IF-ELSE
 
         return
 
@@ -921,7 +922,7 @@ class SofQView(base.MplGraphicsView):
 
         return
 
-    def plot_sq(self, sq_name, vec_q, vec_s, vec_e, sq_y_label, reset_color_mark, color=None, color_marker=None):
+    def plot_sq(self, sq_name, vec_q, vec_s, vec_e, sq_y_label, reset_color_mark, color=None):
         """Plot S(Q)
         :param sq_name:
         :param vec_q:
@@ -939,17 +940,19 @@ class SofQView(base.MplGraphicsView):
         assert isinstance(sq_y_label, str), 'S(Q) label {0} must be a string but not a {1}.' \
                                             ''.format(sq_y_label, type(sq_y_label))
 
+        print '[DB...BAT] Input color: ', color
+
         # define color
         if color is None:
             if reset_color_mark:
                 self.reset_line_color_marker_index()
             marker, color = self.getNextLineMarkerColorCombo()
         else:
-            color, marker = color_marker
+            marker = None
 
         # plot
         plot_id = self.add_plot_1d(vec_q, vec_s, color=color, x_label='Q', y_label=sq_y_label,
-                                   marker=None, label=sq_name)
+                                   marker=marker, label=sq_name)
         self._sqLineDict[sq_name] = plot_id
         self._sqLineColorDict[sq_name] = color, marker
         if sq_name not in self._shownSQNameList:

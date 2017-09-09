@@ -429,7 +429,7 @@ class MplGraphicsView(QtGui.QWidget):
         return key_list
 
     def add_plot_1d(self, vec_x, vec_y, y_err=None, color=None, label='', x_label=None, y_label=None,
-                    marker=None, line_style=None, line_width=1, show_legend=True):
+                    marker=None, line_style=None, line_width=1, alpha=1., show_legend=True):
         """
         Add a 1-D plot to canvas
         :param vec_x:
@@ -442,11 +442,12 @@ class MplGraphicsView(QtGui.QWidget):
         :param marker:
         :param line_style:
         :param line_width:
+        :param alpha:
         :param show_legend:
         :return:
         """
         line_key = self._myCanvas.add_plot_1d(vec_x, vec_y, y_err, color, label, x_label, y_label, marker, line_style,
-                                              line_width, show_legend)
+                                              line_width, alpha, show_legend)
 
         # record min/max
         self._statDict[line_key] = min(vec_x), max(vec_x), min(vec_y), max(vec_y)
@@ -1090,7 +1091,7 @@ class Qt4MplCanvas(FigureCanvas):
         return
 
     def add_plot_1d(self, vec_x, vec_y, y_err=None, color=None, label="", x_label=None, y_label=None,
-                    marker=None, line_style=None, line_width=1, show_legend=True):
+                    marker=None, line_style=None, line_width=1, alpha=1., show_legend=True):
         """
 
         :param vec_x: numpy array X
@@ -1103,6 +1104,7 @@ class Qt4MplCanvas(FigureCanvas):
         :param marker:
         :param line_style:
         :param line_width:
+        :param alpha:
         :param show_legend:
         :return: new key
         """
@@ -1140,10 +1142,10 @@ class Qt4MplCanvas(FigureCanvas):
         if plot_error is False:
             # return: list of matplotlib.lines.Line2D object
             r = self.axes.plot(vec_x, vec_y, color=color, marker=marker, markersize=1, linestyle=line_style,
-                               label=label, linewidth=line_width)
+                               label=label, linewidth=line_width, alpha=alpha)
         else:
             r = self.axes.errorbar(vec_x, vec_y, yerr=y_err, color=color, marker=marker, linestyle=line_style,
-                                   label=label, linewidth=line_width)
+                                   label=label, linewidth=line_width, alpha=alpha)
 
         self.axes.set_aspect('auto')
 
