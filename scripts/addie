@@ -477,7 +477,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
             # plot G(R)
             gr_color, gr_style, gr_marker, gr_alpha = self._pdfColorManager.add_gofr(sq_ws_name, gr_ws_name, max_q)
-            self.plot_gr([gr_ws_name], [gr_color], [gr_style], [gr_alpha])
+            self.plot_gr([gr_ws_name], [gr_color], [gr_style], [gr_marker], [gr_alpha])
 
             # add to tree
             gr_param_str = 'G(r) for Q(%.3f, %.3f)' % (min_q, max_q)
@@ -901,7 +901,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         # plot
         gr_color, gr_style, gr_marker, gr_alpha = self._pdfColorManager.add_gofr(None, gr_ws_name, None)
 
-        self.plot_gr([gr_ws_name], [gr_color], [gr_style], [gr_alpha])
+        self.plot_gr([gr_ws_name], [gr_color], [gr_style], [gr_marker], [gr_alpha])
 
         # put the loaded G(r) workspace to tree 'workspaces'
         self.ui.treeWidget_grWsList.add_child_main_item('workspaces', gr_ws_name)

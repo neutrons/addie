@@ -40,7 +40,7 @@ class PDFPlotManager(object):
                 self._currLineColorIndex = 0
 
         # existing workspace
-        color = LineColorBase[self._sofqInfoDict[sq_ws_name]]
+        color = LineColorBase[self._sofqInfoDict[sq_ws_name][0]]
 
         return color
 
