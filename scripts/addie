@@ -477,7 +477,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
             # plot G(R)
             gr_color, gr_style, gr_marker, gr_alpha = self._pdfColorManager.add_gofr(sq_ws_name, gr_ws_name, max_q)
-            self.plot_gr([gr_ws_name], [gr_color], [gr_style], [gr_marker], [gr_alpha])
+            gr_label = '{0} Q: ({1}, {2})'.format(sq_ws_name, min_q, max_q)
+            self.plot_gr([gr_ws_name], [gr_color], [gr_style], [gr_marker], [gr_alpha], [gr_label])
 
             # add to tree
             gr_param_str = 'G(r) for Q(%.3f, %.3f)' % (min_q, max_q)
@@ -664,12 +665,14 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         return
 
-    def plot_gr(self, gr_ws_name_list, gr_line_colors, gr_line_styles, gr_line_marker, gr_line_alpha, auto=False):
+    def plot_gr(self, gr_ws_name_list, gr_line_colors, gr_line_styles, gr_line_marker, gr_line_alpha, gr_line_label,
+                auto=False):
         """
         Plot G(r) by their names (workspace as protocol
         :param gr_ws_name_list:  list of G(r) workspaces
         :param gr_line_colors:
         :param gr_line_styles:
+        :param gr_line_marker: string for line marker
         :param gr_line_alpha:
         :param auto:
         :return:
@@ -697,6 +700,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         assert isinstance(gr_line_styles, list), 'blabla'
         assert isinstance(gr_line_alpha, list), 'blabla'
         assert isinstance(gr_line_marker, list), 'blabla3'
+        assert isinstance(gr_line_label, list), 'blabla4'
 
         if len(gr_ws_name_list) == 0 or len(gr_ws_name_list) != len(gr_line_colors) \
                 or len(gr_ws_name_list) != len(gr_line_styles) or len(gr_ws_name_list) != len(gr_line_alpha):
@@ -711,9 +715,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             gr_style = gr_line_styles[index]
             gr_alpha = gr_line_alpha[index]
             gr_marker = gr_line_marker[index]
+            gr_label = gr_line_label[index]
 
             self.ui.graphicsView_gr.plot_gr(key_plot, vec_r, vec_g, vec_ge, False,
-                                            gr_color, gr_style, gr_marker, gr_alpha)
+                                            gr_color, gr_style, gr_marker, gr_alpha, gr_label)
         # END-FOR
 
         return
@@ -900,8 +905,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         # plot
         gr_color, gr_style, gr_marker, gr_alpha = self._pdfColorManager.add_gofr(None, gr_ws_name, None)
+        gr_label = gr_ws_name
 
-        self.plot_gr([gr_ws_name], [gr_color], [gr_style], [gr_marker], [gr_alpha])
+        self.plot_gr([gr_ws_name], [gr_color], [gr_style], [gr_marker], [gr_alpha], [gr_label])
 
         # put the loaded G(r) workspace to tree 'workspaces'
         self.ui.treeWidget_grWsList.add_child_main_item('workspaces', gr_ws_name)

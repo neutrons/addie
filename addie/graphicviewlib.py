@@ -551,7 +551,7 @@ class GofRView(base.MplGraphicsView):
         return
 
     def plot_gr(self, plot_key, vec_r, vec_g, vec_e=None, plot_error=False, color='black', style='.', marker=None,
-                alpha=1.):
+                alpha=1., label=None):
         """
         Plot G(r)
         :param plot_key: a key to the current plot
@@ -563,6 +563,7 @@ class GofRView(base.MplGraphicsView):
         :param style:
         :param marker:
         :param alpha:
+        :param label: label for the line to plot
         :return:
         """
         # check
@@ -578,15 +579,15 @@ class GofRView(base.MplGraphicsView):
             self.add_plot_1d(vec_r, vec_g, vec_e)
             raise NotImplementedError('ASAP')
         else:
-            # q_min = 10.
-            # q_max = 50.
+            # add a plot without error
+            # q_min = 10., q_max = 50.
             # alpha = 1. - (q_now - q_min)/(q_max - q_min)
-
-            print '[DB..]', color, style, alpha
+            if label is None:
+                label = plot_key
 
             line_id = self.add_plot_1d(vec_r, vec_g, marker=marker,
                                        color=color, line_style=style, alpha=alpha,
-                                       label=plot_key, x_label=r'r ($\AA$)')
+                                       label=label, x_label=r'r ($\AA$)')
             self._colorIndex += 1
             self._grDict[plot_key] = line_id
         # END-IF-ELSE
