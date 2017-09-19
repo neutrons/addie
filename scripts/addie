@@ -1374,7 +1374,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         current_bank_set = set(self.get_bragg_banks_selected())
         prev_bank_set = set(self._onCanvasGSSBankList)
 
-
         if plot_multi_gss:
             # multi-gss/single-bank mode
             # get the banks to remove
@@ -1652,6 +1651,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                         is_gr = False
                         # add to combo box
                         self.ui.comboBox_SofQ.addItem(new_ws)
+                        self.ui.treeWidget_grWsList.add_sq(new_ws)
+                        # plot generated S(Q)
+                        self.plot_sq(sq_ws_name=new_ws, sq_color=None, clear_prev=False)
                     # END-IF
                     self.ui.treeWidget_grWsList.add_arb_gr(new_ws, is_gr)
 

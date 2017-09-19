@@ -78,6 +78,7 @@ class PDFPlotManager(object):
             self._currStandaloneGofRColorIndex %= len(LineColorBase)
 
         elif sq_ws_name not in self._sofqInfoDict:
+            # it is possible that a S(Q) never been plotted???
             raise RuntimeError('S(Q) workspace {0} has not been added. It is not allowed!'.format(sq_ws_name))
 
         else:
