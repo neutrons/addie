@@ -550,7 +550,8 @@ class GofRView(base.MplGraphicsView):
 
         return
 
-    def plot_gr(self, plot_key, vec_r, vec_g, vec_e=None, plot_error=False, color='black', style='.', alpha=1.):
+    def plot_gr(self, plot_key, vec_r, vec_g, vec_e=None, plot_error=False, color='black', style='.', marker=None,
+                alpha=1.):
         """
         Plot G(r)
         :param plot_key: a key to the current plot
@@ -560,6 +561,7 @@ class GofRView(base.MplGraphicsView):
         :param plot_error:
         :param color:
         :param style:
+        :param marker:
         :param alpha:
         :return:
         """
@@ -582,7 +584,7 @@ class GofRView(base.MplGraphicsView):
 
             print '[DB..]', color, style, alpha
 
-            line_id = self.add_plot_1d(vec_r, vec_g, marker=None,
+            line_id = self.add_plot_1d(vec_r, vec_g, marker=marker,
                                        color=color, line_style=style, alpha=alpha,
                                        label=plot_key, x_label=r'r ($\AA$)')
             self._colorIndex += 1

@@ -379,7 +379,7 @@ class AddieDriver(object):
         # load with different file type
         base_file_name = os.path.basename(file_name).lower()
         gss_ws_name = os.path.basename(file_name).split('.')[0]
-        if base_file_name.endswith('.gss') or base_file_name.endswith('.gsa'):
+        if base_file_name.endswith('.gss') or base_file_name.endswith('.gsa') or base_file_name.endswith('.gda'):
             simpleapi.LoadGSS(Filename=file_name,
                         OutputWorkspace=gss_ws_name)
         elif base_file_name.endswith('.dat'):
