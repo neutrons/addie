@@ -1141,11 +1141,12 @@ class Qt4MplCanvas(FigureCanvas):
         # color must be RGBA (4-tuple)
         if plot_error is False:
             # return: list of matplotlib.lines.Line2D object
-            r = self.axes.plot(vec_x, vec_y, color=color, marker=marker, markersize=1, linestyle=line_style,
-                               label=label, linewidth=line_width, alpha=alpha)
+            r = self.axes.plot(vec_x, vec_y, color=color, marker=marker, markersize=2, linestyle=line_style,
+                               label=label, linewidth=line_width, alpha=alpha,)
         else:
             r = self.axes.errorbar(vec_x, vec_y, yerr=y_err, color=color, marker=marker, linestyle=line_style,
-                                   label=label, linewidth=line_width, alpha=alpha)
+                                   label=label, linewidth=line_width, alpha=alpha,
+                                   markersize=40)
 
         self.axes.set_aspect('auto')
 

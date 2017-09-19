@@ -3,8 +3,8 @@
 
 
 LineColorBase = ['black', 'red', 'blue', 'green', 'brown', 'orange']
-LineStyleBase = ['-', '--', '.']
-LineMarkerBase = [None, '.', 'o', 'D', 's']
+LineStyleBase = ['-', '--', '-.']
+LineMarkerBase = [None, 'o', '.', 'D', 's']
 
 Q_MIN = 10.
 Q_MAX = 50.
@@ -56,8 +56,8 @@ class PDFPlotManager(object):
         -------
 
         """
-        marker_index = style_marker_index / len(LineColorBase)
-        style_index = style_marker_index % len(LineColorBase)
+        marker_index = style_marker_index / len(LineStyleBase)
+        style_index = style_marker_index % len(LineStyleBase)
 
         return LineStyleBase[style_index], LineMarkerBase[marker_index]
 
@@ -71,7 +71,7 @@ class PDFPlotManager(object):
         if sq_ws_name is None:
             # standalone G(r) which might come from a GofR data file
             color = self._currStandaloneGofRColorIndex
-            line_style = '-.'
+            line_style = ':'
             alpha = 1.
             line_marker = None
 
