@@ -303,7 +303,7 @@ class BraggTree(base.CustomizedTreeView):
 
         out_gss_ws = os.path.basename(new_gss_file_name).split('.')[0]
         # write all the banks to a GSAS file
-        self._mainWindow.get_workflow.write_gss_file(ws_name_list=bank_ws_list, gss_file_name=new_gss_file_name)
+        self._mainWindow.get_workflow().write_gss_file(ws_name_list=bank_ws_list, gss_file_name=new_gss_file_name)
 
         return
 
