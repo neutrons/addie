@@ -1204,12 +1204,17 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             # get the directory, file name and extension
             self._currWorkDir = os.path.dirname(out_file_name)
             file_name, file_ext = os.path.splitext(out_file_name)
-            if file_ext.lower().startswith('xye'):
+            if file_ext.lower().startswith('.xye'):
                 sq_file_type = 'dat'
-            elif file_ext.lower().startswith('csv'):
+            elif file_ext.lower().startswith('.csv'):
                 sq_file_type = 'csv'
-            elif file_ext.lower().startswith('sq'):
+            elif file_ext.lower().startswith('.sq'):
                 sq_file_type = 'dat'
+            elif file_ext.lower().startswith('.dat'):
+                sq_file_type = 'dat'
+            elif len(file_ext.strip()) == 0:
+                raise RuntimeError('There is no extension of file {0}. Unable to determine file type.'
+                                   ''.format(out_file_name))
             else:
                 raise RuntimeError('File type {0} cannot be recognized.'.format(file_ext))
 
