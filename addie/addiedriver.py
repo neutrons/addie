@@ -302,21 +302,20 @@ class AddieDriver(object):
         return gr_ws.readX(0), gr_ws.readY(0), gr_ws.readE(0)
 
     def get_sq(self, sq_name=None):
-        """
-        Get S(Q)
-        Returns
-        -------
-        3-tuple of numpy array as Q, S(Q) and Sigma(Q)
+        """Get S(Q)
+        :param sq_name:
+        :return: 3-tuple of numpy array as Q, S(Q) and Sigma(Q)
         """
         # check
-        assert isinstance(sq_name, str) or sq_name is None
+        assert isinstance(sq_name, str) or sq_name is None, 'Input S(Q) must either a string or None but not {0}.' \
+                                                            ''.format(type(sq_name))
 
         # set up default
         if sq_name is None:
             sq_name = self._currSqWsName
 
-        assert AnalysisDataService.doesExist(sq_name), 'S(Q) matrix workspace %s does not exist.' \
-                                                       '' % sq_name
+        if not AnalysisDataService.doesExist(sq_name):
+            raise RuntimeError('S(Q) matrix workspace {0} does not exist.'.format(sq_name))
 
         # access output workspace and return vector X, Y, E
         out_ws = AnalysisDataService.retrieve(sq_name)

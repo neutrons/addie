@@ -80,6 +80,22 @@ class EditSofQDialog(QtGui.QDialog):
 
         return
 
+    def add_sq_by_name(self, sq_name_list):
+        """
+        add a list of S(Q) by workspace name
+        :param sq_name_list:
+        :return:
+        """
+        # check
+        assert isinstance(sq_name_list, list), 'S(Q) workspace names {0} must be given by list but not {1}' \
+                                               ''.format(sq_name_list, type(sq_name_list))
+
+        # add
+        for sq_ws_name in sq_name_list:
+            self.add_workspace(sq_ws_name)
+
+        return
+
     def add_workspace(self, ws_name):
         """
         add workspace name

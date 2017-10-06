@@ -700,11 +700,17 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             # END-FOR
         # END-IF (auto)
 
-        assert isinstance(gr_line_colors, list), 'blabla'
-        assert isinstance(gr_line_styles, list), 'blabla'
-        assert isinstance(gr_line_alpha, list), 'blabla'
-        assert isinstance(gr_line_marker, list), 'blabla3'
-        assert isinstance(gr_line_label, list), 'blabla4'
+        # check input type
+        assert isinstance(gr_line_colors, list), 'G(r) line colors must be given by list but not {0}.' \
+                                                 ''.format(type(gr_line_colors))
+        assert isinstance(gr_line_styles, list), 'G(r) line styles must be given by list but not {0}.' \
+                                                 ''.format(type(gr_line_styles))
+        assert isinstance(gr_line_alpha, list), 'G(r) line alpha must be given by list but not {0}.' \
+                                                ''.format(type(gr_line_alpha))
+        assert isinstance(gr_line_marker, list), 'G(r) line markers must be given by list but not {0}.' \
+                                                 ''.format(type(gr_line_marker))
+        assert isinstance(gr_line_label, list), 'G(r) line label must be given by list but not {0}.' \
+                                                ''.format(type(gr_line_label))
 
         if len(gr_ws_name_list) == 0 or len(gr_ws_name_list) != len(gr_line_colors) \
                 or len(gr_ws_name_list) != len(gr_line_styles) or len(gr_ws_name_list) != len(gr_line_alpha):
@@ -960,19 +966,20 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         return default_dir
 
     @staticmethod
-    def get_file_names_from_dialog(default_dir, filter_filter):
+    def get_file_names_from_dialog(default_dir, file_filter, caption):
         """
         get the file name from a dialog
         :param default_dir:
-        :param filter_filter:
+        :param file_filter:
+        :param caption
         :return:
         """
-        # TODO/ISSUE/NOW - Find out what this method can get!!!
+        # TODO/TEST/NOW - Find out what this method can get!!!
         # check input
         assert isinstance(default_dir, str), 'Default directory {0} must be a string but not a {1}.' \
                                              ''.format(default_dir, type(default_dir))
-        assert isinstance(filter_filter, str), 'File filter {0} must be a string but not a {1}.' \
-                                               ''.format(filter_filter, type(filter_filter))
+        assert isinstance(file_filter, str), 'File filter {0} must be a string but not a {1}.' \
+                                               ''.format(file_filter, type(file_filter))
 
         # generate a dialog to get the file name to save G(r)
         export_dialog = QtGui.QFileDialog()
@@ -1046,16 +1053,23 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     def do_edit_sq(self):
         """
         Launch a dialog box to edit S(Q) by shift and scaling.
-        Returns
-        -------
-
+        :return:
         """
+        # create dialog instance if it does not exist
         if self._editSqDialog is None:
             self._editSqDialog = addie.edit_sq_dialog.EditSofQDialog(self)
 
-        # TODO/ISSUE/NOWNOW - Implement how to set up the dialog!
-        # setup_blabla() ...
+        # get current S(Q) list and add to dialog
+        sq_name_list = list()
+        num_sq = self.ui.comboBox_SofQ.count()
+        for isq in range(num_sq):
+            sq_name = str(self.ui.comboBox_SofQ.itemText(isq))
+            sq_name_list.append(sq_name)
+        # END-FOR
 
+        self._editSqDialog.add_sq_by_name(sq_name_list)
+
+        # show
         self._editSqDialog.show()
 
         return
@@ -1065,6 +1079,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         generate S(Q) from G(r) by PDFFourierTransform
         :return:
         """
+        # TODO/ISSUE/NOW - Need to implement!
+        raise NotImplementedError('Dialog box for generating S(Q) has not been implemented yet.')
         # get setup
         min_r = float(self.ui.doubleSpinBoxRmin.value())
         max_r = float(self.ui.doubleSpinBoxRmax.value())
@@ -1072,7 +1088,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         max_q = self.ui.doubleSpinBoxQmax.value()
 
         # launch the dialog box
-        # TODO/ISSUE/NOW - Need to implement!
         if self._generateSofQDialog is None:
             self._generateSofQDialog = blabla
 
@@ -1113,9 +1128,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     def do_save_gr(self):
         """
         Save the selected the G(r) from menu to ASCII file
-        Returns
-        -------
-
+        :return:
         """
         # TEST/ISSUE/NOW - Look at https://github.com/neutrons/FastGR/issues/28
 
@@ -1138,37 +1151,19 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         file_filter_str = 'XYE (*.dat);;CSV XYE (*.csv);;GofR (*.gr)'
         gr_file_name = self.get_file_names_from_dialog(default_dir, file_filter_str, caption)[0]
 
-        # check the file extension
+        # check the file extension and use the file extension to determine G(r) file type
         file_name, file_ext = os.path.splitext(gr_file_name)
-        gr_filter = str(export_dialog.selectedFilter())
-        if gr_filter.startswith('XYE'):
-            # XYE format
-            if file_ext.lower() != '.xye':
-                gr_file_name += '.xye'
+        if file_ext.lower().startswith('.xye'):
             gr_file_type = 'xye'
-
-        elif gr_filter.startswith('CSV'):
-            # cvs file format
-            if file_ext.lower() != '.csv':
-                gr_file_name += '.csv'
+        elif file_ext.lower().startswith('.csv'):
             gr_file_type = 'csv'
-
-        elif gr_filter.startswith('GR'):
-            # g(r) format
-            if file_ext.lower() != 'gr':
-                gr_file_name += '.gr'
+        elif file_ext.lower().startswith('.gr'):
             gr_file_type = 'gr'
-
-        elif gr_filter.startswith('DAT'):
-            # write to RMCProfile format
-            if file_ext.lower() != 'dat':
-                gr_file_name += '.dat'
+        elif file_ext.lower().startswith('.dat'):
             gr_file_type = 'rmcprofile'
         else:
             # unsupported
-            raise RuntimeError('G(r) file type {0} is not supported.'.format(gr_filter))
-
-        # END-IF-ELSE
+            raise RuntimeError('G(r) file with extension {0} is not supported.'.format(file_ext))
 
         # save!
         self._myController.save_ascii(gr_ws_name, gr_file_name, gr_file_type)
@@ -1176,13 +1171,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         return
 
     def do_save_sq(self):
+        """Save the selected the G(r) from menu to ASCII file
+        :return:
         """
-        Save the selected the G(r) from menu to ASCII file
-        Returns
-        -------
-
-        """
-        # TEST/ISSUE/NOW
+        # TEST/ISSUE/NOW - Test!
 
         # read the selected item from the tree... return if nothing is selected
         sq_name_list = self.ui.treeWidget_grWsList.get_selected_items_of_level(2, excluded_parent='GofR',
@@ -1227,9 +1219,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     def do_show_sq_bound(self):
         """
         Show or hide the left and right boundary of the S(Q)
-        Returns
-        -------
-
+        :return:
         """
         q_left = self.ui.doubleSpinBoxQmin.value()
         q_right = self.ui.doubleSpinBoxQmax.value()
@@ -1255,17 +1245,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         return bank_id_list
 
     def edit_sq(self, sq_name, scale_factor, shift):
-        """
-        Edit S(Q) in workspace with scale_factor * Y[i] + shift
-        Parameters
-        ----------
-        sq_name
-        scale_factor
-        shift
-
-        Returns
-        -------
-
+        """Edit S(Q) in workspace with scale_factor * Y[i] + shift
+        :param sq_name:
+        :param scale_factor:
+        :param shift:
+        :return:
         """
         # check inputs
         assert isinstance(sq_name, str), 'S(Q) workspace name {0} must be a string but not a {1}.' \
@@ -1278,7 +1262,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self._myController.edit_matrix_workspace(sq_name, scale_factor, shift)
 
         # re-plot
-        # TODO/ISSUE/NOWNOW - Implement from here!
+        vec_q, vec_s, vec_e = self._myController.get_sq(sq_name)
+
         sq_color, sq_marker = self.ui.graphicsView_sq.remove_sq(sq_name)
         self.ui.graphicsView_sq.plot_sq(sq_name, vec_q, vec_s, sq_y_label=sq_name, reset_color_mark=False,
                                         color=None, marker=sq_marker)
@@ -1286,15 +1271,13 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         return
 
     def evt_change_gss_mode(self):
-        """
-        switch between multi-gss/single-bank mode and singl-gss/multiple-bank mode
-        Returns
-        -------
-
+        """ switch between multi-gss/single-bank mode and singl-gss/multiple-bank mode
+        :return:
         """
         # check the mode (multiple bank or multiple GSS)
         single_gss_mode = self.ui.radioButton_multiBank.isChecked()
-        assert single_gss_mode != self.ui.radioButton_multiGSS.isChecked(), 'blabla'
+        assert single_gss_mode != self.ui.radioButton_multiGSS.isChecked(),\
+            'Multi bank and multi GSS cannot be checked simultaneously.'
 
         # get the banks that are selected
         to_plot_bank_list = self.get_bragg_banks_selected()
@@ -1616,9 +1599,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         """
         Get default data directory
         Returns:
-
         """
-        # FIXME/TODO/NOW - Whether this method has ever been called???
         return self._currDataDir
 
     def get_workflow(self):
