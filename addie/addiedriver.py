@@ -167,7 +167,9 @@ class AddieDriver(object):
 
         # get the vector of Y
         vec_y = sq_ws.dataY(0)
-        vec_y += scale_factor * vec_y + shift
+        vec_y += scale_factor * vec_y
+        vec_x = sq_ws.dataX(0)
+        vec_x += shift
 
         return
 
@@ -185,7 +187,7 @@ class AddieDriver(object):
         assert isinstance(output_file_name, str), 'Output file name {0} must be a string but not a {1}.'.format(
             output_file_name, type(output_file_name))
         assert isinstance(comment, str), 'Comment {0} must be a string but not a {1}.'.format(comment, type(comment))
-        assert isinstance(ws_idnex, int), 'Workspace index must be an integer but not a {1}.'
+        # assert isinstance(ws_idnex, int), 'Workspace index must be an integer but not a {1}.'
         format(ws_index, type(ws_index))
 
         # convert to point data from histogram
@@ -517,10 +519,10 @@ class AddieDriver(object):
         Returns:
 
         """
-        assert isinstance(ws_name, str)
-        assert isinstance(file_name, str)
+        assert isinstance(ws_name, str), 'blabla'
+        assert isinstance(file_name, str), 'blabla'
         assert isinstance(gr_file_type, str) and gr_file_type in ['dat', 'csv', 'gr'],\
-            'GofR file type must be a supported string.'
+            'GofR file type {0} must be a supported string.'.format(gr_file_type)
 
         if gr_file_type == 'xye':
             simpleapi.SaveAscii(InputWorkspace=ws_name, Filename=file_name, Separator='Space')

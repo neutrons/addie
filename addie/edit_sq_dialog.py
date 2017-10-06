@@ -8,7 +8,7 @@ class EditSofQDialog(QtGui.QDialog):
     """
     Extended dialog class to edit S(Q)
     """
-    MyEditSignal = QtCore.pyqtSignal(float, float, str)
+    MyEditSignal = QtCore.pyqtSignal(str, float, float)
     MySaveSignal = QtCore.pyqtSignal(str)
 
     def __init__(self, parent_window):
@@ -92,7 +92,9 @@ class EditSofQDialog(QtGui.QDialog):
 
         # add
         for sq_ws_name in sq_name_list:
-            self.add_workspace(sq_ws_name)
+            # TODO - Need to make this one work! (ALL)
+            if sq_ws_name != 'All':
+                self.add_workspace(sq_ws_name)
 
         return
 

@@ -1251,6 +1251,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         :param shift:
         :return:
         """
+        # convert
+        sq_name = str(sq_name)
+
         # check inputs
         assert isinstance(sq_name, str), 'S(Q) workspace name {0} must be a string but not a {1}.' \
                                          ''.format(sq_name, type(sq_name))
@@ -1265,7 +1268,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         vec_q, vec_s, vec_e = self._myController.get_sq(sq_name)
 
         sq_color, sq_marker = self.ui.graphicsView_sq.remove_sq(sq_name)
-        self.ui.graphicsView_sq.plot_sq(sq_name, vec_q, vec_s, sq_y_label=sq_name, reset_color_mark=False,
+        self.ui.graphicsView_sq.plot_sq(sq_name, vec_q, vec_s, vec_e, sq_y_label=sq_name, reset_color_mark=False,
                                         color=None, marker=sq_marker)
 
         return

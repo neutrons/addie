@@ -925,7 +925,7 @@ class SofQView(base.MplGraphicsView):
 
         return
 
-    def plot_sq(self, sq_name, vec_q, vec_s, vec_e, sq_y_label, reset_color_mark, color=None):
+    def plot_sq(self, sq_name, vec_q, vec_s, vec_e, sq_y_label, reset_color_mark, color=None, marker=None):
         """Plot S(Q)
         :param sq_name:
         :param vec_q:
