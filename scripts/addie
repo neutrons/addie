@@ -448,6 +448,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             # selected S(Q) is a single S(Q) name
             sq_ws_name_list = [selected_sq]
 
+        # TODO/ISSUE/NOW - Refactor from here to generate_gr(sq_name_list)
+
         # get r-range and q-range
         min_r = float(self.ui.doubleSpinBoxRmin.value())
         max_r = float(self.ui.doubleSpinBoxRmax.value())
@@ -484,6 +486,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             self.plot_gr([gr_ws_name], [gr_color], [gr_style], [gr_marker], [gr_alpha], [gr_label])
 
             # add to tree
+            # TODO/ISSUE/NOW - Need to find out the name of the
             gr_param_str = 'G(r) for Q(%.3f, %.3f)' % (min_q, max_q)
             self.ui.treeWidget_grWsList.add_gr(gr_param_str, gr_ws_name)
         # END-FOR
@@ -1261,13 +1264,15 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         assert isinstance(shift, float), 'Shift {0} must be a float but not a {1}.'.format(shift, type(shift))
 
         # call the controller
-        self._myController.edit_matrix_workspace(sq_name, scale_factor, shift)
+        edit_sq_name = sq_name + '_Edit'
+        self._myController.edit_matrix_workspace(sq_name, scale_factor, shift, edit_sq_name)
 
         # re-plot
         vec_q, vec_s, vec_e = self._myController.get_sq(sq_name)
 
         sq_color, sq_marker = self.ui.graphicsView_sq.remove_sq(sq_name)
-        self.ui.graphicsView_sq.plot_sq(sq_name, vec_q, vec_s, vec_e, sq_y_label=sq_name, reset_color_mark=False,
+        self.ui.graphicsView_sq.plot_sq(edit_sq_name, vec_q, vec_s, vec_e, sq_y_label=sq_name + ' In Edit',
+                                        reset_color_mark=False,
                                         color=None, marker=sq_marker)
 
         # calculate G(r) too

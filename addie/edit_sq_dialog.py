@@ -22,6 +22,15 @@ class EditSofQDialog(QtGui.QDialog):
 
         self._myParentWindow = parent_window
 
+        # initialize class variables
+        self._scaleMin = None
+        self._scaleMax = None
+        self._shiftMin = None
+        self._shiftMax = None
+
+        self._shiftSlideMutex = False
+        self._scaleSlideMutex = False
+
         # set up UI
         self.ui = ui_editSq.Ui_Dialog()
         self.ui.setupUi(self)
@@ -39,12 +48,8 @@ class EditSofQDialog(QtGui.QDialog):
         # connect widgets' events with methods
         self.connect(self.ui.pushButton_editSQ, QtCore.SIGNAL('clicked()'),
                      self.do_edit_sq)
-
-        # TODO/NOW - replace by 'set' button
-        # self.connect(self.ui.lineEdit_scaleFactor, QtCore.SIGNAL('textChanged(QString)'),
-        #              self.event_cal_sq)
-        # self.connect(self.ui.lineEdit_shift, QtCore.SIGNAL('textChanged(QString)'),
-        #              self.event_cal_sq)
+        self.connect(self.ui.pushButton_cache, QtCore.SIGNAL('clicked()'),
+                     self.do_cache_edited_sq)
 
         self.connect(self.ui.pushButton_setScaleRange, QtCore.SIGNAL('clicked()'),
                      self.do_set_scale_range)
@@ -52,23 +57,14 @@ class EditSofQDialog(QtGui.QDialog):
                      self.do_set_shift_range)
 
         # connect q-slide
-        self.connect(self.ui.horizontalSlider_scale, QtCore.SIGNAL('valueChanged()'),
+        self.connect(self.ui.horizontalSlider_scale, QtCore.SIGNAL('valueChanged(int)'),
                      self.event_cal_sq)
-        self.connect(self.ui.horizontalSlider_shift, QtCore.SIGNAL('valueChanged()'),
+        self.connect(self.ui.horizontalSlider_shift, QtCore.SIGNAL('valueChanged(int)'),
                      self.event_cal_sq)
 
         # connect signals
         self.MyEditSignal.connect(self._myParentWindow.edit_sq)
         self.MySaveSignal.connect(self._myParentWindow.do_save_sq)
-
-        # initialize class variables
-        self._scaleMin = None
-        self._scaleMax = None
-        self._shiftMin = None
-        self._shiftMax = None
-
-        self._shiftSlideMutex = False
-        self._scaleSlideMutex = True
 
         return
 
@@ -99,6 +95,28 @@ class EditSofQDialog(QtGui.QDialog):
         self.ui.horizontalSlider_shift.setMaximum(100)
         self.ui.horizontalSlider_shift.setValue(49)
         self._shiftSlideMutex = False
+
+        return
+
+    def do_cache_edited_sq(self):
+        # cache the current edited S(Q)
+
+        # TODO/ISSUE/NOW
+        # get the current shift and scale factor
+
+        # convert them to string with 16 precision float %.16f % ()
+
+        # check whether any workspace has these key: shift_str/scale_str
+
+        # if yes: no operation
+
+        # if no:
+
+        # get the name of current S(Q) with random sequence
+
+        # clone current workspace to new name, add to tree and combo box
+
+        # clone G(r) to new name and add to tree
 
         return
 
@@ -139,8 +157,8 @@ class EditSofQDialog(QtGui.QDialog):
         self._shiftSlideMutex = True
 
         # set sliders
-        self.set_scale_value(scale_factor)
-        self.set_shift_value(shift)
+        self.set_slider_scale_value(scale_factor)
+        self.set_slider_shift_value(shift)
 
         # disable mutex
         self._scaleSlideMutex = False
@@ -200,6 +218,72 @@ class EditSofQDialog(QtGui.QDialog):
 
         return
 
+    def do_set_scale_range(self):
+        """set the range of scale factor slider bar
+        :return:
+        """
+        # get new scale range
+        min_scale = float(self.ui.lineEdit_scaleMin.text())
+        max_scale = float(self.ui.lineEdit_scaleMax.text())
+
+        # check valid or not!
+        if min_scale >= max_scale:
+            # if not valid: set the values back to stored original
+            print '[ERROR] Minimum scale factor value {0} cannot exceed maximum scale factor value {1}.' \
+                  ''.format(min_scale, max_scale)
+            return
+        else:
+            # re-set the class variable as the new min/max is accepted
+            self._scaleMin = min_scale
+            self._scaleMax = max_scale
+
+        # otherwise, re-set the slider
+        current_scale_factor = float(self.ui.lineEdit_scaleFactor.text())
+        if current_scale_factor < min_scale:
+            current_scale_factor = min_scale
+        elif current_scale_factor > max_scale:
+            current_scale_factor = max_scale
+
+        # TODO/ISSUE/NOW - clean up to multiple steps and check!
+        scale_factor_int = int(current_scale_factor/(max_scale - min_scale) *
+                               (self.ui.horizontalSlider_scale.maximum() - self.ui.horizontalSlider_scale.minimum()))
+        self.ui.horizontalSlider_scale.setValue(scale_factor_int)
+
+        return
+
+    def do_set_shift_range(self):
+        """set the new range of shift slider
+        :return:
+        """
+        # get new scale range
+        min_shift = float(self.ui.lineEdit_shiftMin.text())
+        max_shift = float(self.ui.lineEdit_shiftMax.text())
+
+        # check valid or not!
+        if min_shift >= max_shift:
+            # if not valid: set the values back to stored original
+            print '[ERROR] Minimum scale factor value {0} cannot exceed maximum scale factor value {1}.' \
+                  ''.format(min_shift, max_shift)
+            return
+        else:
+            # re-set the class variable as the new min/max is accepted
+            self._shiftMin = min_shift
+            self._shiftMax = max_shift
+
+        # otherwise, re-set the slider
+        curr_shift = float(self.ui.lineEdit_shift.text())
+        if curr_shift < min_shift:
+            curr_shift = min_shift
+        elif curr_shift > max_shift:
+            curr_shift = max_shift
+
+        # TODO/ISSUE/NOW - clean up to multiple steps and check!
+        shift_int = int(curr_shift/(max_shift - min_shift) *
+                        (self.ui.horizontalSlider_shift.maximum() - self.ui.horizontalSlider_shift.minimum()))
+        self.ui.horizontalSlider_shift.setValue(shift_int)
+
+        return
+
     def event_cal_sq(self):
         """handling the events from a moving sliding bar such that a new S(Q) will be calculated
         :return:
@@ -210,14 +294,18 @@ class EditSofQDialog(QtGui.QDialog):
             return
 
         # read the value of sliders
+        # note: change is [min, max].  and the default is [0, 100]
         shift_int = self.ui.horizontalSlider_shift.value()
         scale_int = self.ui.horizontalSlider_scale.value()
 
         # convert to double
-        shift = shift_int * ((self._shiftMax - self._shiftMin)/(self.ui.horizontalSlider_shift.maximum() -
-                                                                self.ui.horizontalSlider_shift.minimum()))
-        scale = scale_int * ((self._scaleMax - self._scaleMin)/(self.ui.horizontalSlider_scale.maximum() -
-                                                                self.ui.horizontalSlider_scale.minimum()))
+        delta_shift = self._shiftMax - self._shiftMin
+        delta_shift_slider = self.ui.horizontalSlider_shift.maximum() - self.ui.horizontalSlider_shift.minimum()
+        shift = self._shiftMin + float(shift_int) / delta_shift_slider * delta_shift
+
+        delta_scale = self._scaleMax - self._scaleMin
+        delta_scale_slider = self.ui.horizontalSlider_scale.maximum() - self.ui.horizontalSlider_scale.minimum()
+        scale = self._scaleMin + float(scale_int) / delta_scale_slider * delta_scale
 
         # call edit_sq()
         self.edit_sq(shift, scale)
@@ -255,69 +343,14 @@ class EditSofQDialog(QtGui.QDialog):
             return
 
         # set out the signal
-        # TODO/NOW - parent class shall edit S(Q) and calculate G(r) again!
         self.MyEditSignal.emit(workspace_name, scale_factor, shift)
 
         return
 
-    def do_set_scale_range(self):
-        """set the range of scale factor slider bar
-        :return:
-        """
-        # get new scale range
-        min_scale = float(self.ui.lineEdit_scaleMin.text())
-        max_scale = float(self.ui.lineEdit_scaleMax.text())
-
-        # check valid or not!
-        if min_scale >= max_scale:
-            # if not valid: set the values back to stored original
-            print '[ERROR] Minimum scale factor value {0} cannot exceed maximum scale factor value {1}.' \
-                  ''.format(min_scale, max_scale)
-            return
-        else:
-            # re-set the class variable as the new min/max is accepted
-            self._scaleMin = min_scale
-            self._scaleMax = max_scale
-
-        # otherwise, re-set the slider
-        current_scale_factor = float(self.ui.lineEdit_scaleFactor.text())
-        if current_scale_factor < min_scale:
-            current_scale_factor = min_scale
-        elif current_scale_factor > max_scale:
-            current_scale_factor = max_scale
-
-        scale_factor_int = int(current_scale_factor/(max_scale - min_scale)*(self.ui.horizontalSlider_scale.maximum() - self.ui.horizontalSlider_scale.minimum()))
-        self.ui.horizontalSlider_scale.setValue(scale_factor_int)
-
+    def set_slider_scale_value(self, scale_factor):
+        # TODO/ISSUE/NOW
         return
 
-    def do_set_shift_range(self):
-        """set the new range of shift slider
-        :return:
-        """
-        # get new scale range
-        min_shift = float(self.ui.lineEdit_shiftMin.text())
-        max_shift = float(self.ui.lineEdit_shiftMax.text())
-
-        # check valid or not!
-        if min_shift >= max_shift:
-            # if not valid: set the values back to stored original
-            print '[ERROR] Minimum scale factor value {0} cannot exceed maximum scale factor value {1}.' \
-                  ''.format(min_shift, max_shift)
-            return
-        else:
-            # re-set the class variable as the new min/max is accepted
-            self._shiftMin = min_shift
-            self._shiftMax = max_shift
-
-        # otherwise, re-set the slider
-        curr_shift = float(self.ui.lineEdit_shift.text())
-        if curr_shift < min_shift:
-            curr_shift = min_shift
-        elif curr_shift > max_shift:
-            curr_shift = max_shift
-
-        shift_int = int(curr_shift/(max_shift - min_shift)*(self.ui.horizontalSlider_shift.maximum() - self.ui.horizontalSlider_shift.minimum()))
-        self.ui.horizontalSlider_shift.setValue(shift_int)
-
+    def set_slider_shift_value(self, shift):
+        # TODO/ISSUE/NOW
         return

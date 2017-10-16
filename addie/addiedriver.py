@@ -151,7 +151,7 @@ class AddieDriver(object):
         return
 
     @staticmethod
-    def edit_matrix_workspace(sq_name, scale_factor, shift):
+    def edit_matrix_workspace(sq_name, scale_factor, shift, edited_sq_name=None):
         """
         Edit the matrix workspace of S(Q) by scaling and shift
         :param sq_name: name of the SofQ workspace
@@ -162,6 +162,10 @@ class AddieDriver(object):
         # get the workspace
         if AnalysisDataService.doesExist(sq_name) is False:
             raise RuntimeError('S(Q) workspace {0} cannot be found in ADS.'.format(sq_name))
+
+        if edited_sq_name is not None:
+            simpleapi.CloneWorkspace(InputWorkspace=sq_name, OutputWorkspace=edited_sq_name)
+            sq_ws = AnalysisDataService.retrieve(edited_sq_name)
         else:
             sq_ws = AnalysisDataService.retrieve(sq_name)
 
