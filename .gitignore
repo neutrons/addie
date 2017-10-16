@@ -67,3 +67,7 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+# Test data and local backup
+LocalBackup/
+test_data/

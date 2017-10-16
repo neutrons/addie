@@ -272,7 +272,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         index = self.ui.comboBox_xUnit.findText('dSpacing',QtCore.Qt.MatchFixedString)
         self.ui.comboBox_xUnit.setCurrentIndex(index)
 
-
         self.ui.treeWidget_braggWSList.set_main_window(self)
         self.ui.treeWidget_braggWSList.add_main_item('workspaces', append=True, as_current_index=False)
 
@@ -1270,6 +1269,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         sq_color, sq_marker = self.ui.graphicsView_sq.remove_sq(sq_name)
         self.ui.graphicsView_sq.plot_sq(sq_name, vec_q, vec_s, vec_e, sq_y_label=sq_name, reset_color_mark=False,
                                         color=None, marker=sq_marker)
+
+        # calculate G(r) too
+        self.do_generate_gr()
 
         return
 
