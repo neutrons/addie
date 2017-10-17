@@ -1,5 +1,6 @@
 # Dialog to edit S(Q)
 from PyQt4 import QtGui, QtCore
+import random
 
 import ui_editSq
 
@@ -21,6 +22,7 @@ class EditSofQDialog(QtGui.QDialog):
         assert parent_window is not None, 'Parent window cannot be None.'
 
         self._myParentWindow = parent_window
+        self._myDriver = parent_window.controller()
 
         # initialize class variables
         self._scaleMin = None
@@ -66,6 +68,9 @@ class EditSofQDialog(QtGui.QDialog):
         self.MyEditSignal.connect(self._myParentWindow.edit_sq)
         self.MySaveSignal.connect(self._myParentWindow.do_save_sq)
 
+        # random number
+        random.seed(1)
+
         return
 
     def _init_widgets(self):
@@ -99,24 +104,34 @@ class EditSofQDialog(QtGui.QDialog):
         return
 
     def do_cache_edited_sq(self):
-        # cache the current edited S(Q)
-
-        # TODO/ISSUE/NOW
+        """
+        cache the currently edited S(Q)
+        :return:
+        """
         # get the current shift and scale factor
+        shift_value = float(self.ui.lineEdit_shift.text())
+        scale_factor = float(self.ui.lineEdit_scaleFactor.text())
 
         # convert them to string with 16 precision float %.16f % ()
+        key_shift = '%.16f' % shift_value
+        key_scale = '%.16f' % scale_factor
+        curr_ws_name = str(self.ui.comboBox_workspaces.currentIndex())
 
         # check whether any workspace has these key: shift_str/scale_str
-
-        # if yes: no operation
-
-        # if no:
+        if self._myParentWindow.has_edit_sofq(curr_ws_name, key_shift, key_scale):
+            print ('Workspace {0} with shift = {1} and scale factor = {2} has already been cached.'
+                   ''.format(curr_ws_name, key_shift, key_scale))
+            return
 
         # get the name of current S(Q) with random sequence
+        new_sq_ws_name = curr_ws_name + '_edit_{0}'.format(random.randint(1000, 9999))
 
         # clone current workspace to new name, add to tree and combo box
+        self._myDriver.clone_workspace(curr_ws_name, new_sq_ws_name)
+        self._myParentWindow.add_edited_sofq(curr_ws_name, new_sq_ws_name, key_shift, key_scale)
 
         # clone G(r) to new name and add to tree
+        self._myParentWindow.generate_gr(new_sq_ws_name)
 
         return
 

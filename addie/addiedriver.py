@@ -126,6 +126,21 @@ class AddieDriver(object):
         return gr_ws_name
 
     @staticmethod
+    def clone_workspace(src_name, target_name):
+        """clone workspace
+        :param src_name:
+        :param target_name:
+        :return:
+        """
+        # check
+        assert isinstance(src_name, str)
+        assert isinstance(target_name, str)
+
+        simpleapi.CloneWorkspace(InputWorkspace=src_name, OutputWorkspace=target_name)
+
+        return
+
+    @staticmethod
     def delete_workspace(workspace_name, no_throw=False):
         """
         Delete a workspace from Mantid's AnalysisDataService

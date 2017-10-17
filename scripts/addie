@@ -243,6 +243,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         # a collection of sub window
         self._editSqDialog = None
+        self._editedSofQDict = dict()
 
         # color management
         self._pdfColorManager = PDFPlotManager()
@@ -311,6 +312,14 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self.ui.doubleSpinBoxQmin.setMinimum(1.E-10)
 
         return
+
+    @property
+    def controller(self):
+        """
+        get handler of controller
+        :return:
+        """
+        return self._myController
 
     def do_set_bragg_color_marker(self):
         """
@@ -1670,16 +1679,13 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         return
 
     def remove_gr_from_plot(self, gr_name):
-        """
-        Remove a GofR line from GofR canvas
-        Args:
-            gr_name: supposed to the G(r) name that is same as workspace name and plot key on canvas as well
-
-        Returns:
-
+        """Remove a GofR line from GofR canvas
+        :param gr_name: supposed to the G(r) name that is same as workspace name and plot key on canvas as well
+        :return:
         """
         # check
-        assert isinstance(gr_name, str)
+        assert isinstance(gr_name, str), 'G(r) plot key {0} must be a string but not a {1}' \
+                                         ''.format(gr_name, type(gr_name))
 
         # remove
         self.ui.graphicsView_gr.remove_gr(plot_key=gr_name)
@@ -1687,20 +1693,19 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         return
 
     def remove_gss_from_plot(self, gss_group_name, gss_bank_ws_name_list):
-        """
-        Remove a GSAS group from canvas if they exits
-
-        Args:
-            gss_group_name: name of the GSS node, i.e., GSS workspace group's name
-            gss_bank_ws_name_list: list of names of GSS single banks' workspace name
-
-        Returns:
-
+        """Remove a GSAS group from canvas if they exits
+        :param gss_group_name: name of the GSS node, i.e., GSS workspace group's name
+        :param gss_bank_ws_name_list: list of names of GSS single banks' workspace name
+        :return:
         """
         # check
         assert isinstance(gss_group_name, str), 'GSS group workspace name must be a string but not %s.' \
                '' % str(type(gss_group_name))
-        assert isinstance(gss_bank_ws_name_list, list) and len(gss_bank_ws_name_list) > 0
+        assert isinstance(gss_bank_ws_name_list, list), 'GSAS-single-bank workspace names {0} must be given by ' \
+                                                        'list but not {1}.'.format(gss_bank_ws_name_list,
+                                                                                   type(gss_bank_ws_name_list))
+        if len(gss_bank_ws_name_list) == 0:
+            raise RuntimeError('GSAS-single-bank workspace name list is empty!')
 
         # get bank IDs
         bank_ids = list()
@@ -1844,15 +1849,16 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         return
 
     def update_sq_boundary(self, boundary_index, new_position):
-        """
-        Update the S(Q) range at the main app inputs
-        Returns
-        -------
-
+        """Update the S(Q) range at the main app inputs
+        :param boundary_index:
+        :param new_position:
+        :return:
         """
         # check
-        assert isinstance(boundary_index, int)
-        assert isinstance(new_position, float)
+        assert isinstance(boundary_index, int), 'Boundary index {0} must be an integer but not {1}.' \
+                                                ''.format(boundary_index, type(boundary_index))
+        assert isinstance(new_position, float), 'New position {0} must be a float but not {1}.' \
+                                                ''.format(new_position, type(new_position))
 
         # set value
         if boundary_index == 1:
@@ -1867,6 +1873,44 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                                'supported.' % new_position)
 
         return
+
+    def add_edited_sofq(self, sofq_name, edited_sq_name, shift_value, scale_factor_value):
+        """add an edited S(Q) to cached dictionary
+        :param sofq_name:
+        :param edited_sq_name:
+        :param shift_value:
+        :param scale_factor_value:
+        :return:
+        """
+        # check
+        assert isinstance(sofq_name, str), 'SofQ workspace name {0} must be a string but not a {1}.' \
+                                           ''.format(sofq_name, type(sofq_name))
+        assert isinstance(edited_sq_name, str), 'Edited S(Q) workspace name {0} must be a string but not a {1}.' \
+                                                ''.format(edited_sq_name, type(edited_sq_name))
+
+        # add the entry for the original S(Q) if not done yet
+        if sofq_name not in self._editedSofQDict:
+            self._editedSofQDict[sofq_name] = dict()
+
+        # add entry
+        self._editedSofQDict[sofq_name][shift_value, scale_factor_value] = edited_sq_name
+
+        return
+
+    def has_edit_sofq(self, raw_sofq_name, shift_value, scale_factor_value):
+        """ check whether an edited S(Q) has been cached already
+        :param raw_sofq_name:
+        :param shift_value:
+        :param scale_factor_value:
+        :return:
+        """
+        # check
+        assert isinstance(raw_sofq_name, str)
+
+        if raw_sofq_name not in self._editedSofQDict:
+            return False
+
+        return (shift_value, scale_factor_value) in self._editedSofQDict[raw_sofq_name]
 
     # menu
     def action_preview_ascii_clicked(self):
