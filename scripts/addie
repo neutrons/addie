@@ -436,11 +436,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         return
 
     def do_generate_gr(self):
-        """
-        Generate G(r) by the present user-setup
-        Returns
-        -------
-
+        """ Handling event from push button 'Generate G(r)' by generating G(r) of selected workspaces
+        :return:
         """
         # get S(Q) workspace
         selected_sq = str(self.ui.comboBox_SofQ.currentText())
@@ -457,7 +454,22 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             # selected S(Q) is a single S(Q) name
             sq_ws_name_list = [selected_sq]
 
-        # TODO/ISSUE/NOW - Refactor from here to generate_gr(sq_name_list)
+        # generate G(r)
+        self.generate_gr(sq_ws_name_list=sq_ws_name_list, update=False)
+
+        return
+
+    def generate_gr(self, sq_ws_name_list, update):
+        """Generate G(r) from specified S(Q) workspaces
+        :param sq_ws_name_list:
+        :param update: if it is an update, then the original plot won't be removed but updated
+        :return:
+        """
+        # check inputs
+        assert isinstance(sq_ws_name_list, list), 'S(Q) workspaces {0} must be given by list but not {1}.' \
+                                                  ''.format(sq_ws_name_list, type(sq_ws_name_list))
+        if len(sq_ws_name_list) == 0:
+            raise RuntimeError('User specified an empty list of S(Q)')
 
         # get r-range and q-range
         min_r = float(self.ui.doubleSpinBoxRmin.value())
@@ -490,9 +502,14 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                                                          min_q, max_q, pdf_filter, rho0)
 
             # plot G(R)
-            gr_color, gr_style, gr_marker, gr_alpha = self._pdfColorManager.add_gofr(sq_ws_name, gr_ws_name, max_q)
-            gr_label = '{0} Q: ({1}, {2})'.format(sq_ws_name, min_q, max_q)
-            self.plot_gr([gr_ws_name], [gr_color], [gr_style], [gr_marker], [gr_alpha], [gr_label])
+            if not update:
+                # a new line
+                gr_color, gr_style, gr_marker, gr_alpha = self._pdfColorManager.add_gofr(sq_ws_name, gr_ws_name, max_q)
+                gr_label = '{0} Q: ({1}, {2})'.format(sq_ws_name, min_q, max_q)
+                self.plot_gr([gr_ws_name], [gr_color], [gr_style], [gr_marker], [gr_alpha], [gr_label], is_update=update)
+            else:
+                self.plot_gr([gr_ws_name], [gr_color], [gr_style], [gr_marker], [gr_alpha], [gr_label],
+                             is_update=update)
 
             # add to tree
             # TODO/ISSUE/NOW - Need to find out the name of the
@@ -680,40 +697,37 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         return
 
-    def plot_gr(self, gr_ws_name_list, gr_line_colors, gr_line_styles, gr_line_marker, gr_line_alpha, gr_line_label,
+    def plot_gr(self, gr_ws_name, gr_line_color, gr_line_style, gr_line_marker, gr_line_alpha, gr_line_label,
                 auto=False):
-        """
-        Plot G(r) by their names (workspace as protocol
-        :param gr_ws_name_list:  list of G(r) workspaces
-        :param gr_line_colors:
-        :param gr_line_styles:
-        :param gr_line_marker: string for line marker
+        """Plot G(r) by their names (workspace as protocol)
+        :param gr_ws_name:
+        :param gr_line_color:
+        :param gr_line_style:
+        :param gr_line_marker:
         :param gr_line_alpha:
+        :param gr_line_label:
         :param auto:
         :return:
         """
         # check
-        assert isinstance(gr_ws_name_list, list), 'blabla'
-        if len(gr_ws_name_list) == 0:
-            raise RuntimeError('List of GofR workspace names is emmpty.')
+        assert isinstance(gr_ws_name, str), 'G(r) workspace name {0} must be a string but not a {1}.' \
+                                            ''.format(gr_ws_name, type(gr_ws_name))
 
-        # get color, style, alpha from PDF manager
-        if auto:
-            gr_line_colors = list()
-            gr_line_styles = list()
-            gr_line_alpha = list()
+        # get the value
+        vec_r, vec_g, vec_ge = self._myController.get_ws_data(gr_ws_name)
 
-            for gr_ws_name in gr_ws_name_list:
-                color_i, style_i, alpha_i = self._pdfColorManager.get_gr_line(gr_ws_name)
-                gr_line_colors.append(color_i)
-                gr_line_styles.append(style_i)
-                gr_line_alpha.append(alpha_i)
-            # END-FOR
-        # END-IF (auto)
+        # check whether the workspace is on the figure
+        if self.ui.graphicsView_gr.has_plot(gr_ws_name):
+            # update G(r) value of an existing plot
+            self.ui.graphicsView_gr.update_gr(gr_ws_name, vec_r, vec_g, vec_ge)
+        else:
+            # a new g(r) plot
+            if auto:
+                gr_line_color, gr_line_style, gr_line_alpha = self._pdfColorManager.get_gr_line(gr_ws_name)
 
-        # check input type
-        assert isinstance(gr_line_colors, list), 'G(r) line colors must be given by list but not {0}.' \
-                                                 ''.format(type(gr_line_colors))
+            # check
+            assert isinstance(gr_line_color, str), 'G(r) line colors {0} must be a string but not {1}.' \
+                                                   ''.format(gr_line_color ,type(gr_line_color))
         assert isinstance(gr_line_styles, list), 'G(r) line styles must be given by list but not {0}.' \
                                                  ''.format(type(gr_line_styles))
         assert isinstance(gr_line_alpha, list), 'G(r) line alpha must be given by list but not {0}.' \
@@ -722,6 +736,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                                                  ''.format(type(gr_line_marker))
         assert isinstance(gr_line_label, list), 'G(r) line label must be given by list but not {0}.' \
                                                 ''.format(type(gr_line_label))
+
+
+        # check input type
+
 
         if len(gr_ws_name_list) == 0 or len(gr_ws_name_list) != len(gr_line_colors) \
                 or len(gr_ws_name_list) != len(gr_line_styles) or len(gr_ws_name_list) != len(gr_line_alpha):
