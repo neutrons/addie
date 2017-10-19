@@ -726,38 +726,20 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                 gr_line_color, gr_line_style, gr_line_alpha = self._pdfColorManager.get_gr_line(gr_ws_name)
 
             # check
-            assert isinstance(gr_line_color, str), 'G(r) line colors {0} must be a string but not {1}.' \
+            assert isinstance(gr_line_color, str), 'G(r) line color {0} must be a string but not {1}.' \
                                                    ''.format(gr_line_color ,type(gr_line_color))
-        assert isinstance(gr_line_styles, list), 'G(r) line styles must be given by list but not {0}.' \
-                                                 ''.format(type(gr_line_styles))
-        assert isinstance(gr_line_alpha, list), 'G(r) line alpha must be given by list but not {0}.' \
-                                                ''.format(type(gr_line_alpha))
-        assert isinstance(gr_line_marker, list), 'G(r) line markers must be given by list but not {0}.' \
-                                                 ''.format(type(gr_line_marker))
-        assert isinstance(gr_line_label, list), 'G(r) line label must be given by list but not {0}.' \
-                                                ''.format(type(gr_line_label))
+            assert isinstance(gr_line_style, str), 'G(r) line style {0} must be given by str but not {1}.' \
+                                                   ''.format(gr_line_style, type(gr_line_style))
+            assert isinstance(gr_line_alpha, str), 'G(r) line alpha {0} must be given by str but not {1}.' \
+                                                   ''.format(gr_line_alpha, type(gr_line_alpha))
+            assert isinstance(gr_line_marker, str), 'G(r) line marker {0} must be given by str but not {1}.' \
+                                                    ''.format(gr_line_marker, type(gr_line_marker))
+            assert isinstance(gr_line_label, str), 'G(r) line label {0} must be given by list but not {1}.' \
+                                                   ''.format(gr_line_label, type(gr_line_label))
 
-
-        # check input type
-
-
-        if len(gr_ws_name_list) == 0 or len(gr_ws_name_list) != len(gr_line_colors) \
-                or len(gr_ws_name_list) != len(gr_line_styles) or len(gr_ws_name_list) != len(gr_line_alpha):
-            raise RuntimeError('blabla')
-
-        # plot G(R)
-        for index, gr_ws_name in enumerate(gr_ws_name_list):
-            vec_r, vec_g, vec_ge = self._myController.get_ws_data(gr_ws_name)
-            key_plot = gr_ws_name
-
-            gr_color = gr_line_colors[index]
-            gr_style = gr_line_styles[index]
-            gr_alpha = gr_line_alpha[index]
-            gr_marker = gr_line_marker[index]
-            gr_label = gr_line_label[index]
-
-            self.ui.graphicsView_gr.plot_gr(key_plot, vec_r, vec_g, vec_ge, False,
-                                            gr_color, gr_style, gr_marker, gr_alpha, gr_label)
+            # plot G(R)
+            self.ui.graphicsView_gr.plot_gr(gr_ws_name, vec_r, vec_g, vec_ge, False,
+                                            gr_line_color, gr_line_style, gr_line_marker, gr_line_alpha, gr_line_label)
         # END-FOR
 
         return

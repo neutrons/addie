@@ -594,16 +594,17 @@ class GofRView(base.MplGraphicsView):
 
         return
 
-    def remove_gr(self, plot_key):
+    def has_plot(self, gr_ws_name):
+        """Check whether a plot of G(r) exists on the canvas
+        :param gr_ws_name:
+        :return:
         """
+        return self._grDict.has_key(gr_ws_name)
 
-        Parameters
-        ----------
-        plot_key :: key to locate the 1-D plot on canvas
-
-        Returns :: boolean, string (as error message)
-        -------
-
+    def remove_gr(self, plot_key):
+        """Remove a plotted G(r) from canvas
+        :param plot_key: key to locate the 1-D plot on canvas
+        :return: boolean, string (as error message)
         """
         # check
         assert isinstance(plot_key, str), 'Key for the plot must be a string but not %s.' % str(type(plot_key))
@@ -622,11 +623,8 @@ class GofRView(base.MplGraphicsView):
         return
 
     def reset_color(self):
-        """
-        Reset color scheme
-        Returns
-        -------
-
+        """Reset color scheme
+        :return:
         """
         self._colorIndex = 0
 
@@ -634,7 +632,6 @@ class GofRView(base.MplGraphicsView):
         """
         Reset the canvas by deleting all lines and clean the dictionary
         Returns:
-
         """
         # remove all lines and reset marker/color default sequence
         self.clear_all_lines()
@@ -643,6 +640,25 @@ class GofRView(base.MplGraphicsView):
 
         # clean dictionary
         self._grDict.clear()
+
+        return
+
+    def update_gr(self, plot_key, vec_r, vec_g, vec_ge):
+        """update the value of an existing G(r)
+        :param plot_key:
+        :param vec_r:
+        :param vec_g:
+        :param vec_ge:
+        :return:
+        """
+        # check existence
+        if not self._grDict.has_key(plot_key):
+            raise RuntimeError('Plot with key/workspace name {0} does not exist on plot.  Current plots are '
+                               '{1}'.format(plot_key, self._grDict.keys()))
+
+        # update
+        line_key = self._grDict[plot_key]
+        self.updateLine(ikey=plot_key, vecx=vec_r, vecy=vec_g)
 
         return
 
@@ -940,26 +956,33 @@ class SofQView(base.MplGraphicsView):
         # check
         assert isinstance(vec_q, np.ndarray) and isinstance(vec_s, np.ndarray),\
             'Q-vector ({0}) and S-vector ({1}) must be numpy arrays.'.format(type(vec_q), type(vec_s))
-        assert isinstance(sq_y_label, str), 'S(Q) label {0} must be a string but not a {1}.' \
-                                            ''.format(sq_y_label, type(sq_y_label))
 
-        print '[DB...BAT] Input color: ', color
-
-        # define color
-        if color is None:
-            if reset_color_mark:
-                self.reset_line_color_marker_index()
-            marker, color = self.getNextLineMarkerColorCombo()
+        # check whether it is a new plot or an update
+        if sq_name in self._sqLineDict:
+            # exiting S(q) workspace, do update
+            sq_key = self._sqLineDict[sq_name]
+            self.updateLine(ikey=sq_key, vecx=vec_q, vecy=vec_s)
         else:
-            marker = None
+            # new S(Q) plot on the canvas
+            assert isinstance(sq_y_label, str), 'S(Q) label {0} must be a string but not a {1}.' \
+                                                ''.format(sq_y_label, type(sq_y_label))
 
-        # plot
-        plot_id = self.add_plot_1d(vec_q, vec_s, color=color, x_label='Q', y_label=sq_y_label,
-                                   marker=marker, label=sq_name)
-        self._sqLineDict[sq_name] = plot_id
-        self._sqLineColorDict[sq_name] = color, marker
-        if sq_name not in self._shownSQNameList:
-            self._shownSQNameList.append(sq_name)
+            # define color
+            if color is None:
+                if reset_color_mark:
+                    self.reset_line_color_marker_index()
+                marker, color = self.getNextLineMarkerColorCombo()
+            else:
+                marker = None
+
+            # plot
+            plot_id = self.add_plot_1d(vec_q, vec_s, color=color, x_label='Q', y_label=sq_y_label,
+                                       marker=marker, label=sq_name)
+            self._sqLineDict[sq_name] = plot_id
+            self._sqLineColorDict[sq_name] = color, marker
+            if sq_name not in self._shownSQNameList:
+                self._shownSQNameList.append(sq_name)
+        # END-IF-ELSE
 
         return
 
