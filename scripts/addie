@@ -501,15 +501,18 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             gr_ws_name = self._myController.calculate_gr(sq_ws_name, pdf_type, min_r, delta_r, max_r,
                                                          min_q, max_q, pdf_filter, rho0)
 
+            # check update
+            if not update and self.ui.graphicsView_gr.has_plot(gr_ws_name):
+                raise NotImplementedError('G(r) {0} does exist. Why not update!')
+
             # plot G(R)
             if not update:
                 # a new line
                 gr_color, gr_style, gr_marker, gr_alpha = self._pdfColorManager.add_gofr(sq_ws_name, gr_ws_name, max_q)
                 gr_label = '{0} Q: ({1}, {2})'.format(sq_ws_name, min_q, max_q)
-                self.plot_gr([gr_ws_name], [gr_color], [gr_style], [gr_marker], [gr_alpha], [gr_label], is_update=update)
+                self.plot_gr(gr_ws_name, gr_color, gr_style, gr_marker, gr_alpha, gr_label)
             else:
-                self.plot_gr([gr_ws_name], [gr_color], [gr_style], [gr_marker], [gr_alpha], [gr_label],
-                             is_update=update)
+                self.plot_gr(gr_ws_name, gr_color=None, gr_style=None, gr_marker=None, gr_alpha=None, gr_label=None)
 
             # add to tree
             # TODO/ISSUE/NOW - Need to find out the name of the
@@ -730,10 +733,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                                                    ''.format(gr_line_color ,type(gr_line_color))
             assert isinstance(gr_line_style, str), 'G(r) line style {0} must be given by str but not {1}.' \
                                                    ''.format(gr_line_style, type(gr_line_style))
-            assert isinstance(gr_line_alpha, str), 'G(r) line alpha {0} must be given by str but not {1}.' \
+            assert isinstance(gr_line_alpha, float), 'G(r) line alpha {0} must be given by float but not {1}.' \
                                                    ''.format(gr_line_alpha, type(gr_line_alpha))
-            assert isinstance(gr_line_marker, str), 'G(r) line marker {0} must be given by str but not {1}.' \
-                                                    ''.format(gr_line_marker, type(gr_line_marker))
+            assert isinstance(gr_line_marker, str) or gr_line_marker is None,\
+                'G(r) line marker {0} must be given by str or None but not {1}.' \
+                ''.format(gr_line_marker, type(gr_line_marker))
             assert isinstance(gr_line_label, str), 'G(r) line label {0} must be given by list but not {1}.' \
                                                    ''.format(gr_line_label, type(gr_line_label))
 
@@ -1277,15 +1281,14 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self._myController.edit_matrix_workspace(sq_name, scale_factor, shift, edit_sq_name)
 
         # re-plot
-        vec_q, vec_s, vec_e = self._myController.get_sq(sq_name)
-
-        sq_color, sq_marker = self.ui.graphicsView_sq.remove_sq(sq_name)
+        vec_q, vec_s, vec_e = self._myController.get_sq(edit_sq_name)
+        # TODO/DISCUSS - How to set up the color, marker and whatever for edited S(Q)
         self.ui.graphicsView_sq.plot_sq(edit_sq_name, vec_q, vec_s, vec_e, sq_y_label=sq_name + ' In Edit',
                                         reset_color_mark=False,
-                                        color=None, marker=sq_marker)
+                                        color=None, marker=None)
 
         # calculate G(r) too
-        self.do_generate_gr()
+        self.generate_gr([edit_sq_name], update=False)
 
         return
 

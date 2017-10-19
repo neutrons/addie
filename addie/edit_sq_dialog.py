@@ -22,7 +22,7 @@ class EditSofQDialog(QtGui.QDialog):
         assert parent_window is not None, 'Parent window cannot be None.'
 
         self._myParentWindow = parent_window
-        self._myDriver = parent_window.controller()
+        self._myDriver = parent_window.controller
 
         # initialize class variables
         self._scaleMin = None

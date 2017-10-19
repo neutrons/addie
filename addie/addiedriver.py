@@ -133,10 +133,14 @@ class AddieDriver(object):
         :return:
         """
         # check
-        assert isinstance(src_name, str)
-        assert isinstance(target_name, str)
+        assert isinstance(src_name, str), 'blabla'
+        assert isinstance(target_name, str), 'blabla'
 
-        simpleapi.CloneWorkspace(InputWorkspace=src_name, OutputWorkspace=target_name)
+        # check existence
+        if AnalysisDataService.doesExist(src_name):
+            simpleapi.CloneWorkspace(InputWorkspace=src_name, OutputWorkspace=target_name)
+        else:
+            raise RuntimeError('Workspace with name {0} does not exist in ADS. CloneWorkspace fails!'.format(src_name))
 
         return
 
@@ -185,10 +189,8 @@ class AddieDriver(object):
             sq_ws = AnalysisDataService.retrieve(sq_name)
 
         # get the vector of Y
-        vec_y = sq_ws.dataY(0)
-        vec_y += scale_factor * vec_y
-        vec_x = sq_ws.dataX(0)
-        vec_x += shift
+        sq_ws *= scale_factor
+        sq_ws += shift
 
         return
 
@@ -300,21 +302,16 @@ class AddieDriver(object):
         return AnalysisDataService.getObjectNames()
 
     def get_gr(self, min_q, max_q):
-        """ Get G(r)
-        Parameters
-        ----------
-        min_r
-        delta_r
-        max_r
+        """Get G(r)
 
-        Returns
-        -------
-        3-tuple for numpy.array
+        :param min_q:
+        :param max_q:
+        :return: 3-tuple for numpy.array
         """
         # check... find key in dictionary
         error_msg = 'R-range and delta R are not support. Current stored G(R) parameters are %s.' \
                     '' % str(self._grWsNameDict.keys())
-        assert ((min_q, max_q)) in self._grWsNameDict, error_msg
+        assert (min_q, max_q) in self._grWsNameDict, error_msg
 
         # get the workspace
         gr_ws_name = self._grWsNameDict[(min_q, max_q)]
