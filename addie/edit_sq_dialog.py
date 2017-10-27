@@ -367,5 +367,21 @@ class EditSofQDialog(QtGui.QDialog):
         return
 
     def set_slider_shift_value(self, shift):
-        # TODO/ISSUE/NOW
+        """
+        set the new shift value to the slide bar
+        :param shift:
+        :return:
+        """
+        # check input
+        assert isinstance(shift, float) or isinstance(shift, int), 'Shift value {0} must be an integer or float,' \
+                                                                   'but not a {1}.'.format(shift, type(shift))
+
+        # convert from user-interface shift value to slider integer value
+        ratio_float = (shift - self._shiftMin) / (self._shiftMax - self._shiftMin)
+        slider_range = self.ui.horizontalSlider_shift.maximum() - self.ui.horizontalSlider_shift.minimum()
+        slide_value = int(ratio_float * slider_range)
+
+        # set the shift value
+        self.ui.horizontalSlider_shift.setValue(slide_value)
+
         return

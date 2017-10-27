@@ -176,6 +176,7 @@ class AddieDriver(object):
         :param sq_name: name of the SofQ workspace
         :param scale_factor:
         :param shift:
+        :param edited_sq_name: workspace for the edited S(Q)
         :return:
         """
         # get the workspace
@@ -189,8 +190,14 @@ class AddieDriver(object):
             sq_ws = AnalysisDataService.retrieve(sq_name)
 
         # get the vector of Y
-        sq_ws *= scale_factor
-        sq_ws += shift
+        sq_ws = sq_ws * scale_factor
+        sq_ws = sq_ws + shift
+        if sq_ws.name() != edited_sq_name:
+            simpleapi.DeleteWorkspace(Workspace=edited_sq_name)
+            simpleapi.RenameWorkspace(InputWorkspace=sq_ws, OutputWorkspace=edited_sq_name)
+
+        assert sq_ws is not None, 'S(Q) workspace cannot be None.'
+        print '[DB...BAT] S(Q) workspace that is edit is {0}'.format(sq_ws)
 
         return
 

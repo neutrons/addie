@@ -693,7 +693,8 @@ class SofQView(base.MplGraphicsView):
 
         # dictionary to record all the plots, key: (usually) SofQ's name, value: plot ID
         self._sqLineDict = dict()
-        self._sqLineColorDict = dict()
+        # S(Q) plot's information including color, marker and etc.
+        self._sqPlotInfoDict = dict()
 
         # list of SofQ that are plot on the canvas
         self._shownSQNameList = list()
@@ -710,6 +711,21 @@ class SofQView(base.MplGraphicsView):
         self._prevCursorPos = None
 
         return
+
+    def get_plot_info(self, sofq_name):
+        """
+        get the information of a plot including color, marker and etc.
+        :param sofq_name:
+        :return:
+        """
+        # check
+        assert isinstance(sofq_name, str), 'SofQ {0} must be a string but not a {1}'.format(sofq_name, type(sofq_name))
+
+        if sofq_name not in self._sqPlotInfoDict:
+            raise RuntimeError('SofQ-view does not have S(Q) plot {0}'.format(sofq_name))
+
+        # return
+        return self._sqPlotInfoDict[sofq_name]
 
     def get_shown_sq_names(self):
         """
@@ -924,10 +940,10 @@ class SofQView(base.MplGraphicsView):
 
     def on_mouse_release_event(self, event):
         """
-
-        Returns
-        -------
-
+        handling the event that mouse is released
+        The operations include setting some flags' values
+        :param event:
+        :return:
         """
         # ignore if boundary is not shown
         if not self._showBoundary:
@@ -979,7 +995,7 @@ class SofQView(base.MplGraphicsView):
             plot_id = self.add_plot_1d(vec_q, vec_s, color=color, x_label='Q', y_label=sq_y_label,
                                        marker=marker, label=sq_name)
             self._sqLineDict[sq_name] = plot_id
-            self._sqLineColorDict[sq_name] = color, marker
+            self._sqPlotInfoDict[sq_name] = color, marker
             if sq_name not in self._shownSQNameList:
                 self._shownSQNameList.append(sq_name)
         # END-IF-ELSE
@@ -1017,10 +1033,10 @@ class SofQView(base.MplGraphicsView):
 
         # retrieve the plot and remove it from the dictionary
         plot_id = self._sqLineDict[sq_ws_name]
-        sq_color, sq_marker = self._sqLineColorDict[sq_ws_name]
+        sq_color, sq_marker = self._sqPlotInfoDict[sq_ws_name]
 
         del self._sqLineDict[sq_ws_name]
-        del self._sqLineColorDict[sq_ws_name]
+        del self._sqPlotInfoDict[sq_ws_name]
 
         # delete from canvas
         self.remove_line(plot_id)
@@ -1038,7 +1054,7 @@ class SofQView(base.MplGraphicsView):
         """
         # clear the dictionary and on-show Sq list
         self._sqLineDict.clear()
-        self._sqLineColorDict.clear()
+        self._sqPlotInfoDict.clear()
         self._shownSQNameList = list()
 
         # clear the image and reset the marker/color scheme

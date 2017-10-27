@@ -459,10 +459,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         return
 
-    def generate_gr(self, sq_ws_name_list, update):
+    def generate_gr(self, sq_ws_name_list):
         """Generate G(r) from specified S(Q) workspaces
         :param sq_ws_name_list:
-        :param update: if it is an update, then the original plot won't be removed but updated
         :return:
         """
         # check inputs
@@ -501,9 +500,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             gr_ws_name = self._myController.calculate_gr(sq_ws_name, pdf_type, min_r, delta_r, max_r,
                                                          min_q, max_q, pdf_filter, rho0)
 
-            # check update
-            if not update and self.ui.graphicsView_gr.has_plot(gr_ws_name):
-                raise NotImplementedError('G(r) {0} does exist. Why not update!')
+            # check whether G(r) is on GofR plot or not in order to determine this is an update or new plot
+            update = not self.ui.graphicsView_gr.has_plot(gr_ws_name)
 
             # plot G(R)
             if not update:
@@ -512,7 +510,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                 gr_label = '{0} Q: ({1}, {2})'.format(sq_ws_name, min_q, max_q)
                 self.plot_gr(gr_ws_name, gr_color, gr_style, gr_marker, gr_alpha, gr_label)
             else:
-                self.plot_gr(gr_ws_name, gr_color=None, gr_style=None, gr_marker=None, gr_alpha=None, gr_label=None)
+                self.plot_gr(gr_ws_name, gr_line_color=None, gr_line_style=None, gr_line_marker=None,
+                             gr_line_alpha=None, gr_line_label=None)
 
             # add to tree
             # TODO/ISSUE/NOW - Need to find out the name of the
@@ -523,8 +522,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         return
 
     def do_rescale_bragg(self):
-        """
-
+        """ Rescale the figure of Bragg diffraction data
         :return:
         """
         min_y_value = self.ui.graphicsView_bragg.get_y_min()
@@ -539,8 +537,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         return
 
     def do_rescale_sofq(self):
-        """
-
+        """ Rescale the figure of S(Q)
         :return:
         """
         min_y_value = self.ui.graphicsView_sq.get_y_min()
@@ -555,8 +552,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         return
 
     def do_rescale_gofr(self):
-        """
-
+        """ Rescale the figure of G(r)
         :return:
         """
         min_y_value = self.ui.graphicsView_gr.get_y_min()
@@ -1279,16 +1275,20 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         # call the controller
         edit_sq_name = sq_name + '_Edit'
         self._myController.edit_matrix_workspace(sq_name, scale_factor, shift, edit_sq_name)
+        # add new S(Q)
+        self._pdfColorManager.add_sofq(edit_sq_name)
+
+        color, marker = self.ui.graphicsView_sq.get_plot_info(sq_name)
+        print '[DB...BAT] Original SofQ {0} has color {0} marker {1}'.format(color, marker)
 
         # re-plot
         vec_q, vec_s, vec_e = self._myController.get_sq(edit_sq_name)
-        # TODO/DISCUSS - How to set up the color, marker and whatever for edited S(Q)
         self.ui.graphicsView_sq.plot_sq(edit_sq_name, vec_q, vec_s, vec_e, sq_y_label=sq_name + ' In Edit',
                                         reset_color_mark=False,
-                                        color=None, marker=None)
+                                        color=color, marker=marker)
 
         # calculate G(r) too
-        self.generate_gr([edit_sq_name], update=False)
+        self.generate_gr([edit_sq_name])
 
         return
 
