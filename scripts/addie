@@ -455,7 +455,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             sq_ws_name_list = [selected_sq]
 
         # generate G(r)
-        self.generate_gr(sq_ws_name_list=sq_ws_name_list, update=False)
+        self.generate_gr(sq_ws_name_list=sq_ws_name_list)
 
         return
 
@@ -501,7 +501,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                                                          min_q, max_q, pdf_filter, rho0)
 
             # check whether G(r) is on GofR plot or not in order to determine this is an update or new plot
-            update = not self.ui.graphicsView_gr.has_plot(gr_ws_name)
+            update = self.ui.graphicsView_gr.has_gr(gr_ws_name)
 
             # plot G(R)
             if not update:
@@ -716,7 +716,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         vec_r, vec_g, vec_ge = self._myController.get_ws_data(gr_ws_name)
 
         # check whether the workspace is on the figure
-        if self.ui.graphicsView_gr.has_plot(gr_ws_name):
+        print '[DB...BAT] G(r) graphic has plot {0} is {1}. Keys are {2}' \
+              ''.format(gr_ws_name, self.ui.graphicsView_gr.has_gr(gr_ws_name),
+                        self.ui.graphicsView_gr.get_current_grs())
+
+        if self.ui.graphicsView_gr.has_gr(gr_ws_name):
             # update G(r) value of an existing plot
             self.ui.graphicsView_gr.update_gr(gr_ws_name, vec_r, vec_g, vec_ge)
         else:
@@ -1897,6 +1901,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         # add entry
         self._editedSofQDict[sofq_name][shift_value, scale_factor_value] = edited_sq_name
+
+        # add the line and color manager
+        self._pdfColorManager.add_sofq(edited_sq_name)
 
         return
 

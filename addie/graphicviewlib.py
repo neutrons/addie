@@ -429,11 +429,8 @@ class BraggView(base.MplGraphicsView):
         self._currColorStyleMarkerIndex = 0
 
     def scale_auto(self):
-        """ Scale automatically for the plots on the canvas
-        Args:
-
-        Returns: None
-
+        """Scale automatically for the plots on the canvas
+        :return: None
         """
         # get Y min and Y max
         y_min = 0
@@ -491,6 +488,10 @@ class GofRView(base.MplGraphicsView):
         self._myCanvas.mpl_connect('button_press_event', self.on_mouse_press_event)
         # self._myCanvas.mpl_connect('button_release_event', self.on_mouse_release_event)
         # self._myCanvas.mpl_connect('motion_notify_event', self.on_mouse_motion)
+
+        # class variable
+        self._minY = None
+        self._maxY = None
 
         # variable
         self._isLegendOn = False
@@ -592,14 +593,59 @@ class GofRView(base.MplGraphicsView):
             self._grDict[plot_key] = line_id
         # END-IF-ELSE
 
+        # check the low/max
+        self.auto_scale_y()
+
         return
 
-    def has_plot(self, gr_ws_name):
+    def _reset_y_range(self, vec_gr):
+        """
+        reset the Y range
+        :param vec_gr:
+        :return:
+        """
+        this_min = min(vec_gr)
+        this_max = max(vec_gr)
+
+        if self._minY is None or this_min < self._minY:
+            self._minY = this_min
+
+        if self._maxY is None or this_max > self._maxY:
+            self._maxY = this_max
+
+        return
+
+    def _auto_rescale_y(self):
+        """
+
+        :return:
+        """
+        if self._minY is None or self._maxY is None:
+            return
+
+        delta_y = self._maxY - self._minY
+
+        lower_boundary = self._minY - delta_y * 0.05
+        upper_boundary = self._maxY + delta_y * 0.05
+
+        self.setXYLimit(ymin=lower_boundary, ymax=upper_boundary)
+
+        return
+
+
+    def has_gr(self, gr_ws_name):
         """Check whether a plot of G(r) exists on the canvas
         :param gr_ws_name:
         :return:
         """
-        return self._grDict.has_key(gr_ws_name)
+        return gr_ws_name in self._grDict
+
+    def get_current_grs(self):
+        """
+        list all the G(r) plotted on the figure now
+        :return:
+        """
+        return self._grDict.keys()
 
     def remove_gr(self, plot_key):
         """Remove a plotted G(r) from canvas
@@ -619,6 +665,10 @@ class GofRView(base.MplGraphicsView):
 
         # clean G(r) plot
         del self._grDict[plot_key]
+
+        # reset min and max
+        self._minY = None
+        self._maxY = None
 
         return
 
@@ -652,13 +702,16 @@ class GofRView(base.MplGraphicsView):
         :return:
         """
         # check existence
-        if not self._grDict.has_key(plot_key):
+        if plot_key not in self._grDict:
             raise RuntimeError('Plot with key/workspace name {0} does not exist on plot.  Current plots are '
                                '{1}'.format(plot_key, self._grDict.keys()))
 
         # update
         line_key = self._grDict[plot_key]
-        self.updateLine(ikey=plot_key, vecx=vec_r, vecy=vec_g)
+        self.updateLine(ikey=line_key, vecx=vec_r, vecy=vec_g)
+
+        # update range
+        self.auto_scale_y()
 
         return
 
@@ -676,9 +729,7 @@ class SofQView(base.MplGraphicsView):
     def __init__(self, parent):
         """
         Initialization
-        Parameters
-        ----------
-        parent
+        :param parent:t
         """
         self._myParent = parent
 
@@ -999,6 +1050,9 @@ class SofQView(base.MplGraphicsView):
             if sq_name not in self._shownSQNameList:
                 self._shownSQNameList.append(sq_name)
         # END-IF-ELSE
+
+        # auto scale
+        self.auto_scale_y(room_percent=0.05, lower_boundary=0.)
 
         return
 

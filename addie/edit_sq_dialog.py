@@ -83,13 +83,13 @@ class EditSofQDialog(QtGui.QDialog):
         self.ui.lineEdit_shift.setText('0.')
 
         # slider limit
-        self.ui.lineEdit_scaleMin.setText('0')
+        self.ui.lineEdit_scaleMin.setText('0.0000')
         self.ui.lineEdit_scaleMax.setText('5')
         self.ui.lineEdit_shiftMin.setText('-5')
         self.ui.lineEdit_shiftMax.setText('5')
 
         # set up class variable
-        self._scaleMin = 0
+        self._scaleMin = 0.0000000001
         self._scaleMax = 5
         self._shiftMin = -5
         self._shiftMax = 5
@@ -100,6 +100,13 @@ class EditSofQDialog(QtGui.QDialog):
         self.ui.horizontalSlider_shift.setMaximum(100)
         self.ui.horizontalSlider_shift.setValue(49)
         self._shiftSlideMutex = False
+
+        # set up the scale
+        self._scaleSlideMutex = True
+        self.ui.horizontalSlider_scale.setMinimum(0)
+        self.ui.horizontalSlider_scale.setMaximum(100)
+        self.ui.horizontalSlider_scale.setValue(20)
+        self._scaleSlideMutex = False
 
         return
 
@@ -115,7 +122,8 @@ class EditSofQDialog(QtGui.QDialog):
         # convert them to string with 16 precision float %.16f % ()
         key_shift = '%.16f' % shift_value
         key_scale = '%.16f' % scale_factor
-        curr_ws_name = str(self.ui.comboBox_workspaces.currentIndex())
+        # only the raw workspace name is in the combo box.  What wee need is the 'edited' version
+        curr_ws_name = str(self.ui.comboBox_workspaces.currentText()) + '_Edit'
 
         # check whether any workspace has these key: shift_str/scale_str
         if self._myParentWindow.has_edit_sofq(curr_ws_name, key_shift, key_scale):
@@ -131,7 +139,7 @@ class EditSofQDialog(QtGui.QDialog):
         self._myParentWindow.add_edited_sofq(curr_ws_name, new_sq_ws_name, key_shift, key_scale)
 
         # clone G(r) to new name and add to tree
-        self._myParentWindow.generate_gr(new_sq_ws_name)
+        self._myParentWindow.generate_gr([new_sq_ws_name])
 
         return
 
@@ -330,8 +338,8 @@ class EditSofQDialog(QtGui.QDialog):
         self._scaleSlideMutex = True
 
         # edit line edits for shift and scale
-        self.ui.lineEdit_scaleFactor.setText('{0}'.format(scale))
-        self.ui.lineEdit_shift.setText('{0}'.format(shift))
+        self.ui.lineEdit_scaleFactor.setText('%.7f' % scale)
+        self.ui.lineEdit_shift.setText('%.7f' % shift)
 
         # disable mutex
         self._shiftSlideMutex = False

@@ -37,23 +37,17 @@ class AddieDriver(object):
         return
 
     def calculate_gr(self, sq_ws_name, pdf_type, min_r, delta_r, max_r, min_q, max_q, pdf_filter, rho0):
-        """
-        Calculate G(R)
-        Parameters
-        ----------
-        sq_ws_name :: workspace name of S(q)
-        pdf_type :: type of PDF as G(r), g(r) and RDF(r)
-        min_r :: R_min
-        delta_r :: delta R
-        max_r
-        min_q
-        max_q
-        pdf_filter :: type of PDF filter
-        rho0 :: average number density used for g(r) and RDF(r) conversions
-
-        Returns
-        -------
-        string as G(r) workspace's name
+        """ Calculate G(R)
+        :param sq_ws_name: workspace name of S(q)
+        :param pdf_type: type of PDF as G(r), g(r) and RDF(r)
+        :param min_r: R_min
+        :param delta_r: delta R
+        :param max_r:
+        :param min_q:
+        :param max_q:
+        :param pdf_filter: type of PDF filter
+        :param rho0: average number density used for g(r) and RDF(r) conversions
+        :return: string as G(r) workspace's name
         """
         # check
         assert isinstance(sq_ws_name, str) and AnalysisDataService.doesExist(sq_ws_name)

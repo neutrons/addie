@@ -383,6 +383,8 @@ class MplGraphicsView(QtGui.QWidget):
 
         # records for all the lines that are plot on the canvas
         self._my1DPlotDict = dict()
+        self._my1DPlotMinYDict = dict()
+        self._my1DPlotMaxYDict = dict()
 
         # Declaration of class variables
         self._indicatorKey = None
@@ -452,6 +454,9 @@ class MplGraphicsView(QtGui.QWidget):
         # record min/max
         self._statDict[line_key] = min(vec_x), max(vec_x), min(vec_y), max(vec_y)
         self._my1DPlotDict[line_key] = label
+
+        self._my1DPlotMinYDict[line_key] = np.min(vec_y)
+        self._my1DPlotMaxYDict[line_key] = np.max(vec_y)
 
         return line_key
 
@@ -614,6 +619,37 @@ class MplGraphicsView(QtGui.QWidget):
 
         return
 
+    def auto_scale_y(self, room_percent=0.05, lower_boundary=None, upper_boundary=None):
+        """
+        auto scale along Y axis by checking all the min/max value of current plotted Y values
+        :param room_percent ::  percentage of the room left
+        :return:
+        """
+        # min and max list
+        min_y_list = list()
+        max_y_list = list()
+        for plot_key in self._my1DPlotMinYDict.keys():
+            min_y_list.append(self._my1DPlotMinYDict[plot_key])
+            max_y_list.append(self._my1DPlotMaxYDict[plot_key])
+
+        # find min and max
+        min_y = np.min(np.array(min_y_list))
+        max_y = np.max(np.array(max_y_list))
+        delta_y = max_y - min_y
+
+        # find out lower and upper boundaries
+        low_y_boundary = min_y - room_percent * delta_y
+        upp_y_boundary = max_y + room_percent * delta_y
+        if lower_boundary is not None and lower_boundary < low_y_boundary:
+            low_y_boundary = lower_boundary
+        if upper_boundary is not None and upper_boundary:
+            upp_y_boundary = upper_boundary
+
+        # scale to set y limits
+        self.setXYLimit(ymin=low_y_boundary, ymax=upp_y_boundary)
+
+        return
+
     def canvas(self):
         """ Get the canvas
         :return:
@@ -629,6 +665,9 @@ class MplGraphicsView(QtGui.QWidget):
         self._statDict.clear()
         self._my1DPlotDict.clear()
 
+        self._my1DPlotMinYDict.clear()
+        self._my1DPlotMaxYDict.clear()
+
         # about zoom
         self._isZoomed = False
         self._homeXYLimit = None
@@ -636,15 +675,10 @@ class MplGraphicsView(QtGui.QWidget):
         return
 
     def clear_canvas(self):
-        """ Clear canvas
+        """ Clear canvas: it includes clear_all_lines()
         """
         # clear all the records
-        self._statDict.clear()
-        self._my1DPlotDict.clear()
-
-        # about zoom
-        self._isZoomed = False
-        self._homeXYLimit = None
+        self.clear_all_lines()
 
         return self._myCanvas.clear_canvas()
 
@@ -654,14 +688,8 @@ class MplGraphicsView(QtGui.QWidget):
         return self._myCanvas.draw()
 
     def evt_toolbar_home(self):
-        """
-
-        Parameters
-        ----------
-
-        Returns
-        -------
-
+        """ event for homing key of tool bar
+        :return:
         """
         # turn off zoom mode
         self._isZoomed = False
@@ -806,6 +834,8 @@ class MplGraphicsView(QtGui.QWidget):
         if line_id in self._statDict:
             del self._statDict[line_id]
             del self._my1DPlotDict[line_id]
+            del self._my1DPlotMinYDict[line_id]
+            del self._my1DPlotMaxYDict[line_id]
         else:
             del self._statRightPlotDict[line_id]
 
@@ -837,33 +867,29 @@ class MplGraphicsView(QtGui.QWidget):
 
         return
 
-    def removePlot(self, ikey):
-        """
-        """
-        return self._myCanvas.remove_plot_1d(ikey)
-
     def updateLine(self, ikey, vecx=None, vecy=None, linestyle=None, linecolor=None, marker=None, markercolor=None):
-        """
-        update a line's set up
-        Parameters
-        ----------
-        ikey
-        vecx
-        vecy
-        linestyle
-        linecolor
-        marker
-        markercolor
-
-        Returns
-        -------
-
+        """update a line's set up
+        :param ikey:
+        :param vecx:
+        :param vecy:
+        :param linestyle:
+        :param linecolor:
+        :param marker:
+        :param markercolor:
+        :return:
         """
         # check
         assert isinstance(ikey, int), 'Line key must be an integer.'
         assert ikey in self._my1DPlotDict, 'Line with ID %d is not on canvas. ' % ikey
 
-        return self._myCanvas.updateLine(ikey, vecx, vecy, linestyle, linecolor, marker, markercolor)
+        # update line
+        self._myCanvas.updateLine(ikey, vecx, vecy, linestyle, linecolor, marker, markercolor)
+
+        # update record
+        self._my1DPlotMinYDict[ikey] = np.min(vecy)
+        self._my1DPlotMaxYDict[ikey] = np.max(vecy)
+
+        return
 
     def update_indicator(self, i_key, color):
         """
@@ -1548,17 +1574,14 @@ class Qt4MplCanvas(FigureCanvas):
     def updateLine(self, ikey, vecx=None, vecy=None, linestyle=None, linecolor=None, marker=None, markercolor=None):
         """
         Update a plot line or a series plot line
-        Args:
-            ikey:
-            vecx:
-            vecy:
-            linestyle:
-            linecolor:
-            marker:
-            markercolor:
-
-        Returns:
-
+        :param ikey:
+        :param vecx:
+        :param vecy:
+        :param linestyle:
+        :param linecolor:
+        :param marker:
+        :param markercolor:
+        :return: None
         """
         line = self._lineDict[ikey]
         if line is None:
