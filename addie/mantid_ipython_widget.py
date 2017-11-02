@@ -7,7 +7,7 @@ import os
 sys.path.append('/opt/mantid38/bin/')
 # sys.path.append('/opt/mantidnightly/bin/')
 # sys.path.append(os.path.join(os.path.expanduser('~/MantidBuild/debug/bin/')))
-sys.path.append('/Users/wzz/MantidBuild/debug-mantid2/bin/')
+sys.path.append('/Users/wzz/MantidBuild/debug-stable/bin/')
 
 # IPython monkey patches the  pygments.lexer.RegexLexer.get_tokens_unprocessed method
 # and breaks Sphinx when running within MantidPlot.

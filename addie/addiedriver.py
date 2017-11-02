@@ -5,7 +5,7 @@ import numpy as np
 
 # add a python path for local development
 sys.path.append('/opt/mantid38/bin/')
-sys.path.append('/Users/wzz/MantidBuild/debug-mantid2/bin/')
+sys.path.append('/Users/wzz/MantidBuild/debug-stable/bin/')
 
 import mantid.simpleapi as simpleapi
 from mantid.api import AnalysisDataService
@@ -37,23 +37,17 @@ class AddieDriver(object):
         return
 
     def calculate_gr(self, sq_ws_name, pdf_type, min_r, delta_r, max_r, min_q, max_q, pdf_filter, rho0):
-        """
-        Calculate G(R)
-        Parameters
-        ----------
-        sq_ws_name :: workspace name of S(q)
-        pdf_type :: type of PDF as G(r), g(r) and RDF(r)
-        min_r :: R_min
-        delta_r :: delta R
-        max_r
-        min_q
-        max_q
-        pdf_filter :: type of PDF filter
-        rho0 :: average number density used for g(r) and RDF(r) conversions
-
-        Returns
-        -------
-        string as G(r) workspace's name
+        """ Calculate G(R)
+        :param sq_ws_name: workspace name of S(q)
+        :param pdf_type: type of PDF as G(r), g(r) and RDF(r)
+        :param min_r: R_min
+        :param delta_r: delta R
+        :param max_r:
+        :param min_q:
+        :param max_q:
+        :param pdf_filter: type of PDF filter
+        :param rho0: average number density used for g(r) and RDF(r) conversions
+        :return: string as G(r) workspace's name
         """
         # check
         assert isinstance(sq_ws_name, str) and AnalysisDataService.doesExist(sq_ws_name)
@@ -126,6 +120,25 @@ class AddieDriver(object):
         return gr_ws_name
 
     @staticmethod
+    def clone_workspace(src_name, target_name):
+        """clone workspace
+        :param src_name:
+        :param target_name:
+        :return:
+        """
+        # check
+        assert isinstance(src_name, str), 'blabla'
+        assert isinstance(target_name, str), 'blabla'
+
+        # check existence
+        if AnalysisDataService.doesExist(src_name):
+            simpleapi.CloneWorkspace(InputWorkspace=src_name, OutputWorkspace=target_name)
+        else:
+            raise RuntimeError('Workspace with name {0} does not exist in ADS. CloneWorkspace fails!'.format(src_name))
+
+        return
+
+    @staticmethod
     def delete_workspace(workspace_name, no_throw=False):
         """
         Delete a workspace from Mantid's AnalysisDataService
@@ -147,6 +160,87 @@ class AddieDriver(object):
             simpleapi.DeleteWorkspace(Workspace=workspace_name)
         elif not no_throw:
             raise RuntimeError('Workspace %s does not exist.' % workspace_name)
+
+        return
+
+    @staticmethod
+    def edit_matrix_workspace(sq_name, scale_factor, shift, edited_sq_name=None):
+        """
+        Edit the matrix workspace of S(Q) by scaling and shift
+        :param sq_name: name of the SofQ workspace
+        :param scale_factor:
+        :param shift:
+        :param edited_sq_name: workspace for the edited S(Q)
+        :return:
+        """
+        # get the workspace
+        if AnalysisDataService.doesExist(sq_name) is False:
+            raise RuntimeError('S(Q) workspace {0} cannot be found in ADS.'.format(sq_name))
+
+        if edited_sq_name is not None:
+            simpleapi.CloneWorkspace(InputWorkspace=sq_name, OutputWorkspace=edited_sq_name)
+            sq_ws = AnalysisDataService.retrieve(edited_sq_name)
+        else:
+            sq_ws = AnalysisDataService.retrieve(sq_name)
+
+        # get the vector of Y
+        sq_ws = sq_ws * scale_factor
+        sq_ws = sq_ws + shift
+        if sq_ws.name() != edited_sq_name:
+            simpleapi.DeleteWorkspace(Workspace=edited_sq_name)
+            simpleapi.RenameWorkspace(InputWorkspace=sq_ws, OutputWorkspace=edited_sq_name)
+
+        assert sq_ws is not None, 'S(Q) workspace cannot be None.'
+        print '[DB...BAT] S(Q) workspace that is edit is {0}'.format(sq_ws)
+
+        return
+
+    # RMCProfile format. The 1st column tells how many X,Y pairs,
+    # the second is a comment line with information regarding the data
+    # (title, multiplier for data, etc.), and then the X,Y pairs for G(r) or S(Q) data.
+
+    @staticmethod
+    def export_to_rmcprofile(ws_name, output_file_name, comment='', ws_index=0):
+        """ Export a workspace 2D to a 2 column data for RMCProfile
+        """
+        # check inputs
+        assert isinstance(ws_name, str), 'Workspace name {0} must be a string but not a {1}.'.format(ws_name,
+                                                                                                     str(ws_name))
+        assert isinstance(output_file_name, str), 'Output file name {0} must be a string but not a {1}.'.format(
+            output_file_name, type(output_file_name))
+        assert isinstance(comment, str), 'Comment {0} must be a string but not a {1}.'.format(comment, type(comment))
+        # assert isinstance(ws_idnex, int), 'Workspace index must be an integer but not a {1}.'
+        format(ws_index, type(ws_index))
+
+        # convert to point data from histogram
+        simpleapi.ConvertToPointData(InputWorkspace=ws_name, OutputWorkspace=ws_name)
+
+        # get workspace for vecX and vecY
+        if AnalysisDataService.doesExist(ws_name):
+            workspace = AnalysisDataService.retrieve(ws_name)
+        else:
+            raise RuntimeError('Workspace {0} does not exist in ADS.'.format(ws_name))
+        if not 0 <= ws_index < workspace.getNumberHistograms():
+            raise RuntimeError('Workspace index {0} is out of range.'.format(ws_index))
+
+        vec_x = workspace.readX(0)
+        vec_y = workspace.readY(0)
+
+        # write to buffer
+        wbuf = ''
+        wbuf += '{0}\n'.format(len(vec_x))
+        wbuf += '{0}\n'.format(comment)
+        for index in range(len(vec_x)):
+            wbuf += ' {0} {1}\n'.format(vec_x[index], vec_y[index])
+
+        # write to file
+        try:
+            ofile = open(output_file_name, 'w')
+            ofile.write(wbuf)
+            ofile.close()
+        except IOError as io_err:
+            raise RuntimeError(
+                'Unable to export data to file {0} in RMCProfile format due to {1}.'.format(output_file_name, io_err))
 
         return
 
@@ -209,21 +303,16 @@ class AddieDriver(object):
         return AnalysisDataService.getObjectNames()
 
     def get_gr(self, min_q, max_q):
-        """ Get G(r)
-        Parameters
-        ----------
-        min_r
-        delta_r
-        max_r
+        """Get G(r)
 
-        Returns
-        -------
-        3-tuple for numpy.array
+        :param min_q:
+        :param max_q:
+        :return: 3-tuple for numpy.array
         """
         # check... find key in dictionary
         error_msg = 'R-range and delta R are not support. Current stored G(R) parameters are %s.' \
                     '' % str(self._grWsNameDict.keys())
-        assert ((min_q, max_q)) in self._grWsNameDict, error_msg
+        assert (min_q, max_q) in self._grWsNameDict, error_msg
 
         # get the workspace
         gr_ws_name = self._grWsNameDict[(min_q, max_q)]
@@ -232,21 +321,20 @@ class AddieDriver(object):
         return gr_ws.readX(0), gr_ws.readY(0), gr_ws.readE(0)
 
     def get_sq(self, sq_name=None):
-        """
-        Get S(Q)
-        Returns
-        -------
-        3-tuple of numpy array as Q, S(Q) and Sigma(Q)
+        """Get S(Q)
+        :param sq_name:
+        :return: 3-tuple of numpy array as Q, S(Q) and Sigma(Q)
         """
         # check
-        assert isinstance(sq_name, str) or sq_name is None
+        assert isinstance(sq_name, str) or sq_name is None, 'Input S(Q) must either a string or None but not {0}.' \
+                                                            ''.format(type(sq_name))
 
         # set up default
         if sq_name is None:
             sq_name = self._currSqWsName
 
-        assert AnalysisDataService.doesExist(sq_name), 'S(Q) matrix workspace %s does not exist.' \
-                                                       '' % sq_name
+        if not AnalysisDataService.doesExist(sq_name):
+            raise RuntimeError('S(Q) matrix workspace {0} does not exist.'.format(sq_name))
 
         # access output workspace and return vector X, Y, E
         out_ws = AnalysisDataService.retrieve(sq_name)
@@ -309,7 +397,7 @@ class AddieDriver(object):
         # load with different file type
         base_file_name = os.path.basename(file_name).lower()
         gss_ws_name = os.path.basename(file_name).split('.')[0]
-        if base_file_name.endswith('.gss') or base_file_name.endswith('.gsa'):
+        if base_file_name.endswith('.gss') or base_file_name.endswith('.gsa') or base_file_name.endswith('.gda'):
             simpleapi.LoadGSS(Filename=file_name,
                         OutputWorkspace=gss_ws_name)
         elif base_file_name.endswith('.dat'):
@@ -436,28 +524,34 @@ class AddieDriver(object):
         return ws_group_name, ws_list, angle_list
 
     @staticmethod
-    def save_ascii(ws_name, file_name, gr_file_type):
+    def save_ascii(ws_name, file_name, gr_file_type, comment=''):
         """
 
         Args:
             ws_name:
             file_name:
             gr_file_type:
+            comment: user comment to the file
 
         Returns:
 
         """
-        assert isinstance(ws_name, str)
-        assert isinstance(file_name, str)
+        assert isinstance(ws_name, str), 'blabla'
+        assert isinstance(file_name, str), 'blabla'
         assert isinstance(gr_file_type, str) and gr_file_type in ['dat', 'csv', 'gr'],\
-            'GofR file type must be a supported string.'
+            'GofR file type {0} must be a supported string.'.format(gr_file_type)
 
-        if gr_file_type == 'dat':
+        if gr_file_type == 'xye':
             simpleapi.SaveAscii(InputWorkspace=ws_name, Filename=file_name, Separator='Space')
         elif gr_file_type == 'csv':
             simpleapi.SaveAscii(InputWorkspace=ws_name, Filename=file_name, Separator='CSV')
-        else:
+        elif gr_file_type == 'rmcprofile':
+            FastGRDriver.export_to_rmcprofile(ws_name, file_name, comment=comment)
+        elif gr_file_type == '':
             simpleapi.SavePDFGui(InputWorkspace=ws_name, Filename=file_name)
+        else:
+            # non-supported type
+            raise RuntimeError('G(r) file type {0} is not supported.'.format(gr_file_type))
 
         return
 

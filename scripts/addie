@@ -9,6 +9,7 @@ import psutil
 from addie.ipythondockwidget import IPythonDockWidget
 from PyQt4 import QtGui
 
+
 import addie.ui_mainWindow
 import addie.step1
 import addie.step2
@@ -56,6 +57,10 @@ import PyQt4.QtGui as QtGui
 
 import addie.addiedriver as driver
 import addie.specify_plots_style as ps
+import addie.edit_sq_dialog
+
+from addie.pdf_lines_manager import PDFPlotManager
+
 
 
 class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
@@ -171,6 +176,12 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                      self.do_save_gr)
         self.connect(self.ui.pushButton_clearGrCanvas, QtCore.SIGNAL('clicked()'),
                      self.do_clear_gr)
+        self.connect(self.ui.pushButton_saveSQ, QtCore.SIGNAL('clicked()'),
+                     self.do_save_sq)
+        self.connect(self.ui.pushButton_editSofQ, QtCore.SIGNAL('clicked()'),
+                     self.do_edit_sq)
+        self.connect(self.ui.pushButton_generateSQ, QtCore.SIGNAL('clicked()'),
+                     self.do_generate_sq)
 
         self.connect(self.ui.doubleSpinBoxQmin, QtCore.SIGNAL('valueChanged(double)'),
                      self.evt_qmin_changed)
@@ -216,7 +227,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self._gssGroupName = None
         self._currDataDir = None
         self._inFixedDirectoryStructure = False
-
+        self._currWorkDir = os.getcwd()
 
         # some controlling variables
         self._currBraggXUnit = str(self.ui.comboBox_xUnit.currentText())
@@ -229,6 +240,13 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         # help (refer to DGSPlanner and HFIR Powder reduction GUI)
         self._assistantProcess = QtCore.QProcess(self)
+
+        # a collection of sub window
+        self._editSqDialog = None
+        self._editedSofQDict = dict()
+
+        # color management
+        self._pdfColorManager = PDFPlotManager()
 
         return
 
@@ -254,7 +272,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self.ui.comboBox_xUnit.addItems(['TOF', 'dSpacing', 'Q'])
         index = self.ui.comboBox_xUnit.findText('dSpacing',QtCore.Qt.MatchFixedString)
         self.ui.comboBox_xUnit.setCurrentIndex(index)
-
 
         self.ui.treeWidget_braggWSList.set_main_window(self)
         self.ui.treeWidget_braggWSList.add_main_item('workspaces', append=True, as_current_index=False)
@@ -290,7 +307,19 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         # set the tab to 0
         self.ui.tabWidget_2.setCurrentIndex(0)
 
+        # set the lower limit on Qmin
+        self.ui.doubleSpinBoxQmin.setDecimals(6)
+        self.ui.doubleSpinBoxQmin.setMinimum(1.E-10)
+
         return
+
+    @property
+    def controller(self):
+        """
+        get handler of controller
+        :return:
+        """
+        return self._myController
 
     def do_set_bragg_color_marker(self):
         """
@@ -407,11 +436,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         return
 
     def do_generate_gr(self):
-        """
-        Generate G(r) by the present user-setup
-        Returns
-        -------
-
+        """ Handling event from push button 'Generate G(r)' by generating G(r) of selected workspaces
+        :return:
         """
         # get S(Q) workspace
         selected_sq = str(self.ui.comboBox_SofQ.currentText())
@@ -427,6 +453,22 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         else:
             # selected S(Q) is a single S(Q) name
             sq_ws_name_list = [selected_sq]
+
+        # generate G(r)
+        self.generate_gr(sq_ws_name_list=sq_ws_name_list)
+
+        return
+
+    def generate_gr(self, sq_ws_name_list):
+        """Generate G(r) from specified S(Q) workspaces
+        :param sq_ws_name_list:
+        :return:
+        """
+        # check inputs
+        assert isinstance(sq_ws_name_list, list), 'S(Q) workspaces {0} must be given by list but not {1}.' \
+                                                  ''.format(sq_ws_name_list, type(sq_ws_name_list))
+        if len(sq_ws_name_list) == 0:
+            raise RuntimeError('User specified an empty list of S(Q)')
 
         # get r-range and q-range
         min_r = float(self.ui.doubleSpinBoxRmin.value())
@@ -458,13 +500,21 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             gr_ws_name = self._myController.calculate_gr(sq_ws_name, pdf_type, min_r, delta_r, max_r,
                                                          min_q, max_q, pdf_filter, rho0)
 
+            # check whether G(r) is on GofR plot or not in order to determine this is an update or new plot
+            update = self.ui.graphicsView_gr.has_gr(gr_ws_name)
+
             # plot G(R)
-            # vec_r, vec_g, vec_ge = self._myController.get_gr(min_q, max_q)
-            # key_plot = gr_ws_name
-            self.plot_gr([gr_ws_name])
-            # self.ui.graphicsView_gr.plot_gr(key_plot, vec_r, vec_g, vec_ge, False)
+            if not update:
+                # a new line
+                gr_color, gr_style, gr_marker, gr_alpha = self._pdfColorManager.add_gofr(sq_ws_name, gr_ws_name, max_q)
+                gr_label = '{0} Q: ({1}, {2})'.format(sq_ws_name, min_q, max_q)
+                self.plot_gr(gr_ws_name, gr_color, gr_style, gr_marker, gr_alpha, gr_label)
+            else:
+                self.plot_gr(gr_ws_name, gr_line_color=None, gr_line_style=None, gr_line_marker=None,
+                             gr_line_alpha=None, gr_line_label=None)
 
             # add to tree
+            # TODO/ISSUE/NOW - Need to find out the name of the
             gr_param_str = 'G(r) for Q(%.3f, %.3f)' % (min_q, max_q)
             self.ui.treeWidget_grWsList.add_gr(gr_param_str, gr_ws_name)
         # END-FOR
@@ -472,8 +522,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         return
 
     def do_rescale_bragg(self):
-        """
-
+        """ Rescale the figure of Bragg diffraction data
         :return:
         """
         min_y_value = self.ui.graphicsView_bragg.get_y_min()
@@ -488,8 +537,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         return
 
     def do_rescale_sofq(self):
-        """
-
+        """ Rescale the figure of S(Q)
         :return:
         """
         min_y_value = self.ui.graphicsView_sq.get_y_min()
@@ -504,8 +552,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         return
 
     def do_rescale_gofr(self):
-        """
-
+        """ Rescale the figure of G(r)
         :return:
         """
         min_y_value = self.ui.graphicsView_gr.get_y_min()
@@ -592,6 +639,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             check_box.setChecked(False)
         self._noEventBankWidgets = False
 
+        return
 
     def plot_bragg(self, bragg_ws_list,  clear_canvas=False):
         """
@@ -619,7 +667,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         # plot all workspsaces
         for bragg_ws_name in bragg_ws_list:
-
             # get the last section of the workspace name: _bank%d
             postfix = bragg_ws_name.split('_')[-1]
 
@@ -642,44 +689,72 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                 self.ui.graphicsView_bragg.plot_banks(plot_data_dict, curr_unit)
 
             else:
+                # plot arbitrary data
+                # print '[DB] Switch to multi-GSAS mode.  Re-plot {0}'.format(bragg_ws_name)
                 vec_x, vec_y, vec_e = self._myController.get_ws_data(bragg_ws_name)
                 self.ui.graphicsView_bragg.plot_general_ws(bragg_ws_name, vec_x, vec_y, vec_e)
 
         return
 
-    def plot_gr(self, gr_ws_name_list):
-        """
-        Plot G(r) by their names (workspace as protocol)
-        Parameters
-        ----------
-        gr_ws_name_list: list of G(r) workspaces
-
-        Returns
-        -------
-
+    def plot_gr(self, gr_ws_name, gr_line_color, gr_line_style, gr_line_marker, gr_line_alpha, gr_line_label,
+                auto=False):
+        """Plot G(r) by their names (workspace as protocol)
+        :param gr_ws_name:
+        :param gr_line_color:
+        :param gr_line_style:
+        :param gr_line_marker:
+        :param gr_line_alpha:
+        :param gr_line_label:
+        :param auto:
+        :return:
         """
         # check
-        assert isinstance(gr_ws_name_list, list) and len(gr_ws_name_list) > 0
+        assert isinstance(gr_ws_name, str), 'G(r) workspace name {0} must be a string but not a {1}.' \
+                                            ''.format(gr_ws_name, type(gr_ws_name))
 
-        # plot G(R)
-        for gr_ws_name in gr_ws_name_list:
-            vec_r, vec_g, vec_ge = self._myController.get_ws_data(gr_ws_name)
-            key_plot = gr_ws_name
-            self.ui.graphicsView_gr.plot_gr(key_plot, vec_r, vec_g, vec_ge, False)
+        # get the value
+        vec_r, vec_g, vec_ge = self._myController.get_ws_data(gr_ws_name)
+
+        # check whether the workspace is on the figure
+        print '[DB...BAT] G(r) graphic has plot {0} is {1}. Keys are {2}' \
+              ''.format(gr_ws_name, self.ui.graphicsView_gr.has_gr(gr_ws_name),
+                        self.ui.graphicsView_gr.get_current_grs())
+
+        if self.ui.graphicsView_gr.has_gr(gr_ws_name):
+            # update G(r) value of an existing plot
+            self.ui.graphicsView_gr.update_gr(gr_ws_name, vec_r, vec_g, vec_ge)
+        else:
+            # a new g(r) plot
+            if auto:
+                gr_line_color, gr_line_style, gr_line_alpha = self._pdfColorManager.get_gr_line(gr_ws_name)
+
+            # check
+            assert isinstance(gr_line_color, str), 'G(r) line color {0} must be a string but not {1}.' \
+                                                   ''.format(gr_line_color ,type(gr_line_color))
+            assert isinstance(gr_line_style, str), 'G(r) line style {0} must be given by str but not {1}.' \
+                                                   ''.format(gr_line_style, type(gr_line_style))
+            assert isinstance(gr_line_alpha, float), 'G(r) line alpha {0} must be given by float but not {1}.' \
+                                                   ''.format(gr_line_alpha, type(gr_line_alpha))
+            assert isinstance(gr_line_marker, str) or gr_line_marker is None,\
+                'G(r) line marker {0} must be given by str or None but not {1}.' \
+                ''.format(gr_line_marker, type(gr_line_marker))
+            assert isinstance(gr_line_label, str), 'G(r) line label {0} must be given by list but not {1}.' \
+                                                   ''.format(gr_line_label, type(gr_line_label))
+
+            # plot G(R)
+            self.ui.graphicsView_gr.plot_gr(gr_ws_name, vec_r, vec_g, vec_ge, False,
+                                            gr_line_color, gr_line_style, gr_line_marker, gr_line_alpha, gr_line_label)
+        # END-FOR
 
         return
 
-    def plot_sq(self, sq_ws_name, clear_prev):
+    def plot_sq(self, sq_ws_name, sq_color, clear_prev):
         """
         Plot S(Q)
-        Parameters
-        ----------
-        sq_ws_name
-        clear_prev
-
-        Returns
-        -------
-
+        :param sq_ws_name:
+        :param sq_color: color of S(Q).  If None, then try to find it from PDF color manager
+        :param clear_prev:
+        :return:
         """
         # clear previous lines
         if clear_prev:
@@ -710,7 +785,13 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             reset = True
         else:
             reset = False
-        self.ui.graphicsView_sq.plot_sq(sq_ws_name, vec_q, vec_y, vec_se, sq_unit, reset)
+
+        # get color
+        if sq_color is None:
+            sq_color = self._pdfColorManager.add_sofq(sq_ws_name)
+
+        self.ui.graphicsView_sq.plot_sq(sq_ws_name, vec_q, vec_y, vec_se, sq_unit, reset,
+                                        color=sq_color)
 
         return
 
@@ -730,12 +811,15 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             default_dir = self.getDefaultDir(sub_dir='GSAS')
 
         bragg_file_names = QtGui.QFileDialog.getOpenFileNames(self, 'Choose Bragg File', default_dir, ext)
-        if bragg_file_names is None or bragg_file_names == '':
+        if bragg_file_names is None or bragg_file_names == '' or len(bragg_file_names) == 0:
             return
         bragg_file_names = [ str(bragg_file_name) for bragg_file_name in bragg_file_names ]
 
         # update stored data directory
-        self._currDataDir = os.path.split(os.path.abspath(bragg_file_names[0]))[0]
+        try:
+            self._currDataDir = os.path.split(os.path.abspath(bragg_file_names[0]))[0]
+        except IndexError as index_err:
+            err_msg = 'Unable to get absolute path of {0} due to {1}'.format(bragg_file_names, index_err)
         self.check_in_fixed_dir_structure(sub_dir='GSAS')
 
         # load file
@@ -752,14 +836,13 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         # get plot mode
         if len(bragg_file_names) == 1:
-            self.ui.graphicsView_bragg.set_to_single_gss(False)
+            self.ui.graphicsView_bragg.set_to_single_gss(True)
             self.ui.radioButton_multiBank.setChecked(True)
             self.ui.radioButton_multiGSS.setChecked(False)
         else:
             self.ui.graphicsView_bragg.set_to_single_gss(False)
             self.ui.radioButton_multiBank.setChecked(False)
             self.ui.radioButton_multiGSS.setChecked(True)
-
 
         multi_bank_mode = self.ui.radioButton_multiBank.isChecked()
 
@@ -779,7 +862,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
             # clear all previous lines
             self.ui.graphicsView_bragg.reset()
-
         # END-IF
 
         # banks
@@ -802,10 +884,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             for bank_id in self._onCanvasGSSBankList:
                 vec_x, vec_y, vec_e = self._myController.get_bragg_data(gss_group_name, bank_id, self._currBraggXUnit)
                 ws_data_dict[bank_id] = (vec_x, vec_y, vec_e)
-            plot_data_dict[gss_group_name] =  ws_data_dict
-
+            plot_data_dict[gss_group_name] = ws_data_dict
 
         # plot
+        # FIXME/ISSUE/NOW - get a summary on calling to plot_banks
         self.ui.graphicsView_bragg.plot_banks(plot_data_dict, self._currBraggXUnit)
 
         # reset unit
@@ -825,7 +907,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             default_dir = self.getDefaultDir('gofr')
 
         # pop out file
-        file_filter = 'Data Files (*.data);;All Files (*.*)'
+        file_filter = 'Data Files (*.dat);;All Files (*.*)'
         g_file_name = str(QtGui.QFileDialog.getOpenFileName(self, 'Open a G(r) file', default_dir, file_filter))
 
         # return if operation is cancelled
@@ -847,12 +929,13 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             gr_ws_name = ret_obj
 
         # plot
-        self.plot_gr([gr_ws_name])
+        gr_color, gr_style, gr_marker, gr_alpha = self._pdfColorManager.add_gofr(None, gr_ws_name, None)
+        gr_label = gr_ws_name
+
+        self.plot_gr([gr_ws_name], [gr_color], [gr_style], [gr_marker], [gr_alpha], [gr_label])
 
         # put the loaded G(r) workspace to tree 'workspaces'
         self.ui.treeWidget_grWsList.add_child_main_item('workspaces', gr_ws_name)
-
-
 
         return
 
@@ -897,6 +980,42 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         return default_dir
 
+    @staticmethod
+    def get_file_names_from_dialog(default_dir, file_filter, caption):
+        """
+        get the file name from a dialog
+        :param default_dir:
+        :param file_filter:
+        :param caption
+        :return:
+        """
+        # TODO/TEST/NOW - Find out what this method can get!!!
+        # check input
+        assert isinstance(default_dir, str), 'Default directory {0} must be a string but not a {1}.' \
+                                             ''.format(default_dir, type(default_dir))
+        assert isinstance(file_filter, str), 'File filter {0} must be a string but not a {1}.' \
+                                               ''.format(file_filter, type(file_filter))
+
+        # generate a dialog to get the file name to save G(r)
+        export_dialog = QtGui.QFileDialog()
+        export_dialog.setWindowTitle(caption)
+        export_dialog.setDirectory(default_dir)
+        export_dialog.setAcceptMode(QtGui.QFileDialog.AcceptSave)
+        export_dialog.setNameFilter(file_filter)
+
+        # quit if it is not accepted
+        if export_dialog.exec_() != QtGui.QFileDialog.Accepted:
+            return None
+        elif len(export_dialog.selectedFiles()) == 0:
+            return None
+
+        # get the file name from dialog
+        file_name_list = list()
+        for file_name in export_dialog.selectedFiles():
+            file_name_list.append(str(file_name))
+
+        return file_name_list
+
     def do_load_sq(self):
         """
         Load S(Q) from file
@@ -924,6 +1043,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         for sq_file_name in sq_file_names:
             sq_file_name = str(sq_file_name)
             sq_ws_name, q_min, q_max = self._myController.load_sq(sq_file_name)
+            # add to color management
+            sq_color = self._pdfColorManager.add_sofq(sq_ws_name)
 
             # set to the tree and combo box
             self.ui.treeWidget_grWsList.add_sq(sq_ws_name)
@@ -936,20 +1057,96 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
             # plot S(Q)
             sq_name = self._myController.get_current_sq_name()
-            self.plot_sq(sq_name, clear_prev=False)
+
+            self.plot_sq(sq_name, sq_color=sq_color, clear_prev=False)
 
             # calculate and calculate G(R)
             self.do_generate_gr()
 
         return
 
+    def do_edit_sq(self):
+        """
+        Launch a dialog box to edit S(Q) by shift and scaling.
+        :return:
+        """
+        # create dialog instance if it does not exist
+        if self._editSqDialog is None:
+            self._editSqDialog = addie.edit_sq_dialog.EditSofQDialog(self)
+
+        # get current S(Q) list and add to dialog
+        sq_name_list = list()
+        num_sq = self.ui.comboBox_SofQ.count()
+        for isq in range(num_sq):
+            sq_name = str(self.ui.comboBox_SofQ.itemText(isq))
+            sq_name_list.append(sq_name)
+        # END-FOR
+
+        self._editSqDialog.add_sq_by_name(sq_name_list)
+
+        # show
+        self._editSqDialog.show()
+
+        return
+
+    def do_generate_sq(self):
+        """
+        generate S(Q) from G(r) by PDFFourierTransform
+        :return:
+        """
+        # TODO/ISSUE/NOW - Need to implement!
+        raise NotImplementedError('Dialog box for generating S(Q) has not been implemented yet.')
+        # get setup
+        min_r = float(self.ui.doubleSpinBoxRmin.value())
+        max_r = float(self.ui.doubleSpinBoxRmax.value())
+        min_q = self.ui.doubleSpinBoxQmin.value()
+        max_q = self.ui.doubleSpinBoxQmax.value()
+
+        # launch the dialog box
+        if self._generateSofQDialog is None:
+            self._generateSofQDialog = blabla
+
+        self._generateSofQDialog.set_r_range(min_r, max_r)
+        self._generateSofQDialog.set_q_range(min_q, max_q)
+
+        self._generateSofQDialog.show()
+
+        return
+
+    def signal_generate_sq(self, arg_dict):
+        """
+        signal handling method to generate S(q)
+        Note:  https://github.com/neutrons/FastGR/issues/91
+        :return:
+        """
+        # check input
+        assert isinstance(arg_dict, dict), 'Input arguments {0} must be given in a dictionary but not a {1}.' \
+                                           ''.format(arg_dict, type(arg_dict))
+
+        # determine the selected G(r)
+        gr_ws_name_list = self.ui.treeWidget_grWsList.get_workspaces()
+        # print '[DB] Selected G(r) workspaces have {0} items.'.format(len(gr_ws_name_list))
+        # for gr in gr_ws_name_list:
+        #     print '[DB] G(r) {0} of type {1}.'.format(gr, type(gr))
+
+        # check the arguments
+        for required_param in ['Qmin', 'Qmax', 'Rmin', 'Rmax', 'DeltaR']:
+            if required_param not in arg_dict.keys():
+                raise RuntimeError('Not sufficient parameter (missing {0}) to generate S(Q) from G(r).'
+                                   ''.format(required_param))
+
+        # TODO/FIXME/FUTURE - Call Mantid algorithm to calculate S(Q)
+        raise NotImplementedError('Implement this in future.')
+
+        return
+
     def do_save_gr(self):
         """
         Save the selected the G(r) from menu to ASCII file
-        Returns
-        -------
-
+        :return:
         """
+        # TEST/ISSUE/NOW - Look at https://github.com/neutrons/FastGR/issues/28
+
         # read the selected item from the tree
         gr_name_list = self.ui.treeWidget_grWsList.get_selected_items_of_level(2, excluded_parent='SofQ',
                                                                                return_item_text=True)
@@ -965,52 +1162,79 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         default_dir = os.getcwd()
         caption = 'Save G(r)'
 
-        # FIXME/TODO/ISSUE/NEXT - Refactor the following part out to be a standard widget
+        # TEST/ISSUE/NOW - Refactor the following part out to be a standard widget
+        file_filter_str = 'XYE (*.dat);;CSV XYE (*.csv);;GofR (*.gr)'
+        gr_file_name = self.get_file_names_from_dialog(default_dir, file_filter_str, caption)[0]
 
-        # generate a dialog to get the file name to save G(r)
-        export_dialog = QtGui.QFileDialog()
-        export_dialog.setWindowTitle(caption)
-        export_dialog.setDirectory(default_dir)
-        export_dialog.setAcceptMode(QtGui.QFileDialog.AcceptSave)
-        export_dialog.setNameFilter('XYE (*.dat);;CSV XYE (*.csv);;GofR (*.gr)')
-
-        # quit if it is not accepted
-        if export_dialog.exec_() != QtGui.QFileDialog.Accepted:
-            return
-
-        # get the file name from dialog
-        gr_file_name = str(export_dialog.selectedFiles()[0])
-
-        # check the file extension
+        # check the file extension and use the file extension to determine G(r) file type
         file_name, file_ext = os.path.splitext(gr_file_name)
-        gr_filter = str(export_dialog.selectedFilter())
-        if gr_filter.startswith('XYE'):
-            if file_ext.lower() != '.dat':
-                gr_file_name += '.dat'
-            gr_file_type = 'dat'
-        elif gr_filter.startswith('CSV'):
-            if file_ext.lower() != '.csv':
-                gr_file_name += '.csv'
+        if file_ext.lower().startswith('.xye'):
+            gr_file_type = 'xye'
+        elif file_ext.lower().startswith('.csv'):
             gr_file_type = 'csv'
-        else:
-            if file_ext.lower() != 'gr':
-                gr_file_name += '.gr'
+        elif file_ext.lower().startswith('.gr'):
             gr_file_type = 'gr'
-        # END-IF-ELSE
-
-        print 'FILE NAME: ', gr_file_name
+        elif file_ext.lower().startswith('.dat'):
+            gr_file_type = 'rmcprofile'
+        else:
+            # unsupported
+            raise RuntimeError('G(r) file with extension {0} is not supported.'.format(file_ext))
 
         # save!
         self._myController.save_ascii(gr_ws_name, gr_file_name, gr_file_type)
 
         return
 
+    def do_save_sq(self):
+        """Save the selected the G(r) from menu to ASCII file
+        :return:
+        """
+        # TEST/ISSUE/NOW - Test!
+
+        # read the selected item from the tree... return if nothing is selected
+        sq_name_list = self.ui.treeWidget_grWsList.get_selected_items_of_level(2, excluded_parent='GofR',
+                                                                               return_item_text=True)
+        if len(sq_name_list) == 0:
+            return
+
+        # loop the SofQ name to save
+        file_filter = 'XYE (*.xye);;CSV XYE (*.csv);;SofQ (*.sq)'
+
+        for sq_name in sq_name_list:
+            # get the output file name first
+            out_file_name = QtGui.QFileDialog.getSaveFileName(self, 'Input File Name to Save S(Q) {0}'.format(sq_name),
+                                                              self._currWorkDir, file_filter)
+            if out_file_name is None or len(out_file_name) == 0:
+                # skip if the user cancel the operation on this S(Q)
+                continue
+
+            # get the directory, file name and extension
+            self._currWorkDir = os.path.dirname(out_file_name)
+            file_name, file_ext = os.path.splitext(out_file_name)
+            if file_ext.lower().startswith('.xye'):
+                sq_file_type = 'dat'
+            elif file_ext.lower().startswith('.csv'):
+                sq_file_type = 'csv'
+            elif file_ext.lower().startswith('.sq'):
+                sq_file_type = 'dat'
+            elif file_ext.lower().startswith('.dat'):
+                sq_file_type = 'dat'
+            elif len(file_ext.strip()) == 0:
+                raise RuntimeError('There is no extension of file {0}. Unable to determine file type.'
+                                   ''.format(out_file_name))
+            else:
+                raise RuntimeError('File type {0} cannot be recognized.'.format(file_ext))
+
+            # save file
+            self._myController.save_ascii(sq_name, out_file_name, sq_file_type)
+        # END-FOR
+
+        return
+
     def do_show_sq_bound(self):
         """
         Show or hide the left and right boundary of the S(Q)
-        Returns
-        -------
-
+        :return:
         """
         q_left = self.ui.doubleSpinBoxQmin.value()
         q_right = self.ui.doubleSpinBoxQmax.value()
@@ -1035,16 +1259,51 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         return bank_id_list
 
-    def evt_change_gss_mode(self):
+    def edit_sq(self, sq_name, scale_factor, shift):
+        """Edit S(Q) in workspace with scale_factor * Y[i] + shift
+        :param sq_name:
+        :param scale_factor:
+        :param shift:
+        :return:
         """
-        switch between multi-gss/single-bank mode and singl-gss/multiple-bank mode
-        Returns
-        -------
+        # convert
+        sq_name = str(sq_name)
 
+        # check inputs
+        assert isinstance(sq_name, str), 'S(Q) workspace name {0} must be a string but not a {1}.' \
+                                         ''.format(sq_name, type(sq_name))
+        assert isinstance(scale_factor, float), 'Scale factor {0} must be a float but not a {1}.' \
+                                                ''.format(scale_factor, type(scale_factor))
+        assert isinstance(shift, float), 'Shift {0} must be a float but not a {1}.'.format(shift, type(shift))
+
+        # call the controller
+        edit_sq_name = sq_name + '_Edit'
+        self._myController.edit_matrix_workspace(sq_name, scale_factor, shift, edit_sq_name)
+        # add new S(Q)
+        self._pdfColorManager.add_sofq(edit_sq_name)
+
+        color, marker = self.ui.graphicsView_sq.get_plot_info(sq_name)
+        print '[DB...BAT] Original SofQ {0} has color {0} marker {1}'.format(color, marker)
+
+        # re-plot
+        vec_q, vec_s, vec_e = self._myController.get_sq(edit_sq_name)
+        self.ui.graphicsView_sq.plot_sq(edit_sq_name, vec_q, vec_s, vec_e, sq_y_label=sq_name + ' In Edit',
+                                        reset_color_mark=False,
+                                        color=color, marker=marker)
+
+        # calculate G(r) too
+        self.generate_gr([edit_sq_name])
+
+        return
+
+    def evt_change_gss_mode(self):
+        """ switch between multi-gss/single-bank mode and singl-gss/multiple-bank mode
+        :return:
         """
         # check the mode (multiple bank or multiple GSS)
         single_gss_mode = self.ui.radioButton_multiBank.isChecked()
-        assert single_gss_mode != self.ui.radioButton_multiGSS.isChecked()
+        assert single_gss_mode != self.ui.radioButton_multiGSS.isChecked(),\
+            'Multi bank and multi GSS cannot be checked simultaneously.'
 
         # get the banks that are selected
         to_plot_bank_list = self.get_bragg_banks_selected()
@@ -1084,14 +1343,14 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             # multiple GSAS mode. as currently there is one GSAS file that is plot, then the first bank
             # that is plotted will be kept on the canvas
             # assumption: switched from single-bank mode
-            #assert len(self.ui.graphicsView_bragg.get_workspaces()) == 1
 
             # skip if there is one and only 1 bank that is selected
-            if len(to_plot_bank_list) == 1:
-                return
-            else:
-                # choose first bank
-                bank_on_canvas = to_plot_bank_list[0]
+            # if len(to_plot_bank_list) == 1:
+            # TEST/ISSUE/NOW - Need to re-plot with correct color!
+            #     return
+            # else:
+            # choose first bank
+            bank_on_canvas = to_plot_bank_list[0]
 
             # disable all the banks except the one to plot. Notice the mutex must be on
             self._noEventBankWidgets = True
@@ -1137,7 +1396,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         current_bank_set = set(self.get_bragg_banks_selected())
         prev_bank_set = set(self._onCanvasGSSBankList)
 
-
         if plot_multi_gss:
             # multi-gss/single-bank mode
             # get the banks to remove
@@ -1157,7 +1415,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             # set the current on canvas
             self._onCanvasGSSBankList = new_bank_list
 
-            print '[DB...BAT] Multi-GSS-Mode: New ... ', new_bank_list, '; Remove... ', rm_bank_list
+            # print '[DB...BAT] Multi-GSS-Mode: New ... ', new_bank_list, '; Remove... ', rm_bank_list
 
         else:
             # single-gss/multi-bank mode
@@ -1165,7 +1423,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             new_bank_list = list(current_bank_set - prev_bank_set)
             rm_bank_list = list(prev_bank_set - current_bank_set)
 
-            print '[DB...BAT] Single-GSS-Mode: New ... ', new_bank_list, '; Remove... ', rm_bank_list
+            # print '[DB...BAT] Single-GSS-Mode: New ... ', new_bank_list, '; Remove... ', rm_bank_list
 
             # set the current on-canvas
             self._onCanvasGSSBankList = list(current_bank_set)
@@ -1173,10 +1431,21 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         # END-IF-ELSE
 
         # get GSS data (group)
-        gss_group_list = self.ui.treeWidget_braggWSList.get_main_nodes()
-        gss_group_list.remove('workspaces')
+        if plot_multi_gss:
+            # multiple GSAS file/single bank mode: get GSAS group from tree
+            gss_group_list = self.ui.treeWidget_braggWSList.get_main_nodes()
+            gss_group_list.remove('workspaces')
 
-        # remove banks
+        else:
+            # single GSAS file mode
+            status, ret_obj = self.ui.treeWidget_braggWSList.get_current_main_nodes()
+            if status:
+                gss_group = ret_obj[0]
+            else:
+                raise RuntimeError('Unable to get current selected main node(s) due to {0}.'.format(ret_obj))
+            gss_group_list = [gss_group]
+
+        # remove banks from plot
         for gss_group_name in gss_group_list:
             self.ui.graphicsView_bragg.remove_gss_banks(gss_group_name, rm_bank_list)
 
@@ -1197,7 +1466,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             self.ui.graphicsView_bragg.set_to_single_gss(True)
             status, ws_name_list = self.ui.treeWidget_braggWSList.get_current_main_nodes()
             plot_data_dict = { ws_name_list[0] : plot_data_dict[ws_name_list[0]]  } 
-
 
         # plot new
         self.ui.graphicsView_bragg.plot_banks(plot_data_dict, self._currBraggXUnit)
@@ -1312,7 +1580,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         # re-plot
         for sq_name in curr_sq_list:
             # plot S(Q)
-            self.plot_sq(sq_name, clear_prev=False)
+            self.plot_sq(sq_name, sq_color=None, clear_prev=False)
 
         return
 
@@ -1357,9 +1625,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         """
         Get default data directory
         Returns:
-
         """
-        # FIXME/TODO/NOW - Whether this method has ever been called???
         return self._currDataDir
 
     def get_workflow(self):
@@ -1405,6 +1671,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                         is_gr = False
                         # add to combo box
                         self.ui.comboBox_SofQ.addItem(new_ws)
+                        self.ui.treeWidget_grWsList.add_sq(new_ws)
+                        # plot generated S(Q)
+                        self.plot_sq(sq_ws_name=new_ws, sq_color=None, clear_prev=False)
                     # END-IF
                     self.ui.treeWidget_grWsList.add_arb_gr(new_ws, is_gr)
 
@@ -1417,16 +1686,13 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         return
 
     def remove_gr_from_plot(self, gr_name):
-        """
-        Remove a GofR line from GofR canvas
-        Args:
-            gr_name: supposed to the G(r) name that is same as workspace name and plot key on canvas as well
-
-        Returns:
-
+        """Remove a GofR line from GofR canvas
+        :param gr_name: supposed to the G(r) name that is same as workspace name and plot key on canvas as well
+        :return:
         """
         # check
-        assert isinstance(gr_name, str)
+        assert isinstance(gr_name, str), 'G(r) plot key {0} must be a string but not a {1}' \
+                                         ''.format(gr_name, type(gr_name))
 
         # remove
         self.ui.graphicsView_gr.remove_gr(plot_key=gr_name)
@@ -1434,20 +1700,19 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         return
 
     def remove_gss_from_plot(self, gss_group_name, gss_bank_ws_name_list):
-        """
-        Remove a GSAS group from canvas if they exits
-
-        Args:
-            gss_group_name: name of the GSS node, i.e., GSS workspace group's name
-            gss_bank_ws_name_list: list of names of GSS single banks' workspace name
-
-        Returns:
-
+        """Remove a GSAS group from canvas if they exits
+        :param gss_group_name: name of the GSS node, i.e., GSS workspace group's name
+        :param gss_bank_ws_name_list: list of names of GSS single banks' workspace name
+        :return:
         """
         # check
         assert isinstance(gss_group_name, str), 'GSS group workspace name must be a string but not %s.' \
                '' % str(type(gss_group_name))
-        assert isinstance(gss_bank_ws_name_list, list) and len(gss_bank_ws_name_list) > 0
+        assert isinstance(gss_bank_ws_name_list, list), 'GSAS-single-bank workspace names {0} must be given by ' \
+                                                        'list but not {1}.'.format(gss_bank_ws_name_list,
+                                                                                   type(gss_bank_ws_name_list))
+        if len(gss_bank_ws_name_list) == 0:
+            raise RuntimeError('GSAS-single-bank workspace name list is empty!')
 
         # get bank IDs
         bank_ids = list()
@@ -1493,6 +1758,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     def set_bragg_banks_selected(self, bank_id_list, status):
         """
         set the status of selected bank IDs
+        Note: mutex on Bragg Bank selection widgets is not turned on!!!
         Parameters
         ----------
         bank_id_list
@@ -1502,11 +1768,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         -------
 
         """
-        # check ...
-        # TODO/NOW - finish it
-
-        #
-        print '[DB...BAT] Banks ', bank_id_list, ' are set to ', status, ' without mutex locked'
+        # check inputs
+        assert isinstance(bank_id_list, list), 'Bank IDs {0} must be given in a list but not a {1}.' \
+                                               ''.format(bank_id_list, type(bank_id_list))
+        assert isinstance(status, bool), 'Selection status {0} must be a boolean but not a {1}.' \
+                                         ''.format(status, type(status))
 
         # set
         for bank_id in bank_id_list:
@@ -1590,15 +1856,16 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         return
 
     def update_sq_boundary(self, boundary_index, new_position):
-        """
-        Update the S(Q) range at the main app inputs
-        Returns
-        -------
-
+        """Update the S(Q) range at the main app inputs
+        :param boundary_index:
+        :param new_position:
+        :return:
         """
         # check
-        assert isinstance(boundary_index, int)
-        assert isinstance(new_position, float)
+        assert isinstance(boundary_index, int), 'Boundary index {0} must be an integer but not {1}.' \
+                                                ''.format(boundary_index, type(boundary_index))
+        assert isinstance(new_position, float), 'New position {0} must be a float but not {1}.' \
+                                                ''.format(new_position, type(new_position))
 
         # set value
         if boundary_index == 1:
@@ -1613,6 +1880,47 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                                'supported.' % new_position)
 
         return
+
+    def add_edited_sofq(self, sofq_name, edited_sq_name, shift_value, scale_factor_value):
+        """add an edited S(Q) to cached dictionary
+        :param sofq_name:
+        :param edited_sq_name:
+        :param shift_value:
+        :param scale_factor_value:
+        :return:
+        """
+        # check
+        assert isinstance(sofq_name, str), 'SofQ workspace name {0} must be a string but not a {1}.' \
+                                           ''.format(sofq_name, type(sofq_name))
+        assert isinstance(edited_sq_name, str), 'Edited S(Q) workspace name {0} must be a string but not a {1}.' \
+                                                ''.format(edited_sq_name, type(edited_sq_name))
+
+        # add the entry for the original S(Q) if not done yet
+        if sofq_name not in self._editedSofQDict:
+            self._editedSofQDict[sofq_name] = dict()
+
+        # add entry
+        self._editedSofQDict[sofq_name][shift_value, scale_factor_value] = edited_sq_name
+
+        # add the line and color manager
+        self._pdfColorManager.add_sofq(edited_sq_name)
+
+        return
+
+    def has_edit_sofq(self, raw_sofq_name, shift_value, scale_factor_value):
+        """ check whether an edited S(Q) has been cached already
+        :param raw_sofq_name:
+        :param shift_value:
+        :param scale_factor_value:
+        :return:
+        """
+        # check
+        assert isinstance(raw_sofq_name, str)
+
+        if raw_sofq_name not in self._editedSofQDict:
+            return False
+
+        return (shift_value, scale_factor_value) in self._editedSofQDict[raw_sofq_name]
 
     # menu
     def action_preview_ascii_clicked(self):

@@ -1,4 +1,5 @@
 import numpy as np
+import time
 
 from PyQt4 import QtCore, QtGui
 
@@ -33,20 +34,29 @@ class BraggView(base.MplGraphicsView):
                                3: 'blue',
                                4: 'green',
                                5: 'brown',
-                               6: 'yellow'}
+                               6: 'orange'}
 
+        # color sequence for multiple GSAS mode
         self._gssColorList = ["black", "red", "blue", "green",
                               "cyan", "magenta", "yellow"]
-        self._currColorIndex = 0
+        self._gssLineStyleList = ['-', '--', '-.']
+        self._gssLineMarkers = ['.', 'D', 'o', 's', 'x']
+
+        # a dictionary to manage the GSAS plot's color and marker
+        self._gssLineDict = dict()  # key: GSAS workspace name. value:
+        self._gssLineColorMarkerDict = dict()
+
+        self._currColorStyleMarkerIndex = 0
 
         # define the dynamic menu
         self._myCanvas.mpl_connect('button_press_event', self.on_mouse_press_event)
-        # self._myCanvas.mpl_connect('button_release_event', self.on_mouse_release_event)
-        # self._myCanvas.mpl_connect('motion_notify_event', self.on_mouse_motion)
 
         # records of the plots on canvas
         # workspaces' names (not bank, but original workspace) on canvas
         self._workspaceSet = set()
+
+        # unit
+        self._unitX = None
 
         return
 
@@ -79,10 +89,9 @@ class BraggView(base.MplGraphicsView):
 
         return new_plot_banks, to_remove_banks
 
-
     def set_unit(self, x_unit):
         """
-
+        set the unit of the powder diffraction pattern
         Parameters
         ----------
         x_unit
@@ -91,9 +100,14 @@ class BraggView(base.MplGraphicsView):
         -------
 
         """
-        assert x_unit in ['TOF', 'MomentumTransfer', 'dSpacing']
+        assert isinstance(x_unit, str), 'Unit of X-axis {0} must be a string but not a {1}.' \
+                                        ''.format(x_unit, type(x_unit))
+        if x_unit not in ['TOF', 'MomentumTransfer', 'dSpacing']:
+            raise RuntimeError('Unit {0} of X-axis is not recognized.'.format(x_unit))
 
         self._unitX = x_unit
+
+        return
 
     def evt_toolbar_home(self):
         """
@@ -102,8 +116,6 @@ class BraggView(base.MplGraphicsView):
         -------
 
         """
-        #
-        import time
         time.sleep(0.1)
 
         # call the super
@@ -120,13 +132,6 @@ class BraggView(base.MplGraphicsView):
             else:
                 raise RuntimeError('Unit %s unknown' % self._unitX)
         # END-IF
-        #
-        # # get the new limit
-        # left_x, right_x = self.getXLimit()
-        # home_left_x = self._homeXYLimit[0]
-        # home_right_x = self._homeXYLimit[1]
-        # print left_x, home_left_x, left_x == home_left_x
-        # print right_x, home_right_x, right_x == home_right_x
 
         return
 
@@ -149,16 +154,32 @@ class BraggView(base.MplGraphicsView):
 
     def get_multi_gss_color(self):
         """
-        Get the present color in multiple-GSS mode
+        Get the present color and line style in multiple-GSS mode
         Returns:
-
         """
-        color = self._gssColorList[self._currColorIndex]
-        self._currColorIndex += 1
-        if self._currColorIndex == len(self._gssColorList):
-            self._currColorIndex = 0
+        # get basic statistic
+        num_marker = len(self._gssLineMarkers)
+        num_style = len(self._gssLineStyleList)
+        num_color = len(self._gssColorList)
 
-        return color
+        print '[DB] Index = ', self._currColorStyleMarkerIndex
+
+        # get color with current color index
+        marker_index = self._currColorStyleMarkerIndex / (num_style * num_color)
+        style_index = self._currColorStyleMarkerIndex % (num_style * num_color) / num_color
+        color_index = self._currColorStyleMarkerIndex % (num_style * num_color) % num_color
+
+        color = self._gssColorList[color_index]
+        style = self._gssLineStyleList[style_index]
+        marker = self._gssLineMarkers[marker_index]
+
+        # advance to next index but reset if reaches limit
+        self._currColorStyleMarkerIndex += 1
+        # reset
+        if self._currColorStyleMarkerIndex == num_color * num_style * num_marker:
+            self._currColorStyleMarkerIndex = 0
+
+        return color, style, marker
 
     def get_workspaces(self):
         """
@@ -238,8 +259,6 @@ class BraggView(base.MplGraphicsView):
         # END-IF-ELSE
         return
 
-
-
     def plot_banks(self, plot_bank_dict, unit):
         """
         Plot a few banks to canvas.  If the bank has been plot on canvas already,
@@ -262,14 +281,28 @@ class BraggView(base.MplGraphicsView):
 
             for bank_id in plot_bank_dict[ws_group]:
                 # add the new plot
-                if self._singleGSSMode:
-                    bank_color = self._bankColorDict[bank_id]
-                else:
-                    bank_color = self.get_multi_gss_color()
                 vec_x, vec_y, vec_e = plot_bank_dict[ws_group][bank_id]
-                print '[DB...BAT] Plot ', ws_group, bank_id
-                plot_id = self.add_plot_1d(vec_x, vec_y, marker=None, color=bank_color,
-                                           x_label=unit, y_label='I(%s)' % unit,
+
+                # determine the color/marker/style of the line
+                if self._singleGSSMode:
+                    # single bank mode
+                    bank_color = self._bankColorDict[bank_id]
+                    marker = None
+                    style = None
+                else:
+                    # multiple bank mode
+                    bank_color, style, marker = self.get_multi_gss_color()
+                # END-IF-ELSE
+
+                print '[DB...BAT] Plot Mode (singel bank) = {0}, group = {1}, bank = {2}, color = {3}, marker = {4},' \
+                      'style = {5}' \
+                      ''.format(self._singleGSSMode, ws_group, bank_id, bank_color, marker, style)
+
+                # plot
+                plot_id = self.add_plot_1d(vec_x, vec_y, marker=marker, color=bank_color,
+                                           line_style=style,
+                                           x_label=unit,
+                                           y_label='I({0})'.format(unit),
                                            label='%s Bank %d' % (ws_group, bank_id))
 
                 # plot key
@@ -388,19 +421,16 @@ class BraggView(base.MplGraphicsView):
 
     def reset_color(self):
         """
-        Reset color index
+        Reset color, line style and marker index
         Returns
         -------
 
         """
-        self._currColorIndex = 0
+        self._currColorStyleMarkerIndex = 0
 
     def scale_auto(self):
-        """ Scale automatically for the plots on the canvas
-        Args:
-
-        Returns: None
-
+        """Scale automatically for the plots on the canvas
+        :return: None
         """
         # get Y min and Y max
         y_min = 0
@@ -426,9 +456,14 @@ class BraggView(base.MplGraphicsView):
         Returns:
 
         """
-        assert isinstance(mode_on, bool)
+        assert isinstance(mode_on, bool), 'Single GSAS mode {0} must be a boolean but not a {1}.' \
+                                          ''.format(mode_on, type(mode_on))
 
         self._singleGSSMode = mode_on
+
+        if mode_on is False:
+            # set to multiple GSAS mode
+            self._currColorStyleMarkerIndex = 0
 
         return
 
@@ -453,6 +488,10 @@ class GofRView(base.MplGraphicsView):
         self._myCanvas.mpl_connect('button_press_event', self.on_mouse_press_event)
         # self._myCanvas.mpl_connect('button_release_event', self.on_mouse_release_event)
         # self._myCanvas.mpl_connect('motion_notify_event', self.on_mouse_motion)
+
+        # class variable
+        self._minY = None
+        self._maxY = None
 
         # variable
         self._isLegendOn = False
@@ -512,18 +551,21 @@ class GofRView(base.MplGraphicsView):
 
         return
 
-    def plot_gr(self, plot_key, vec_r, vec_g, vec_e=None, plot_error=False):
+    def plot_gr(self, plot_key, vec_r, vec_g, vec_e=None, plot_error=False, color='black', style='.', marker=None,
+                alpha=1., label=None):
         """
         Plot G(r)
-        Parameters
-        -------
-        plot_key: a key to the current plot
-        vec_r: numpy array for R
-        vec_g: numpy array for G(r)
-        vec_e: numpy array for G(r) error
-        Returns
-        -------
-
+        :param plot_key: a key to the current plot
+        :param vec_r: numpy array for R
+        :param vec_g: numpy array for G(r)
+        :param vec_e: numpy array for G(r) error
+        :param plot_error:
+        :param color:
+        :param style:
+        :param marker:
+        :param alpha:
+        :param label: label for the line to plot
+        :return:
         """
         # check
         assert isinstance(plot_key, str), 'Key for the plot must be a string but not %s.' \
@@ -538,25 +580,77 @@ class GofRView(base.MplGraphicsView):
             self.add_plot_1d(vec_r, vec_g, vec_e)
             raise NotImplementedError('ASAP')
         else:
-            line_id = self.add_plot_1d(vec_r, vec_g, marker=None,
-                                       color=self._colorList[self._colorIndex % len(self._colorList)],
-                                       label=plot_key,
-                                       x_label=r'r ($\AA$)')
+            # add a plot without error
+            # q_min = 10., q_max = 50.
+            # alpha = 1. - (q_now - q_min)/(q_max - q_min)
+            if label is None:
+                label = plot_key
+
+            line_id = self.add_plot_1d(vec_r, vec_g, marker=marker,
+                                       color=color, line_style=style, alpha=alpha,
+                                       label=label, x_label=r'r ($\AA$)')
             self._colorIndex += 1
             self._grDict[plot_key] = line_id
+        # END-IF-ELSE
+
+        # check the low/max
+        self.auto_scale_y()
 
         return
 
-    def remove_gr(self, plot_key):
+    def _reset_y_range(self, vec_gr):
+        """
+        reset the Y range
+        :param vec_gr:
+        :return:
+        """
+        this_min = min(vec_gr)
+        this_max = max(vec_gr)
+
+        if self._minY is None or this_min < self._minY:
+            self._minY = this_min
+
+        if self._maxY is None or this_max > self._maxY:
+            self._maxY = this_max
+
+        return
+
+    def _auto_rescale_y(self):
         """
 
-        Parameters
-        ----------
-        plot_key :: key to locate the 1-D plot on canvas
+        :return:
+        """
+        if self._minY is None or self._maxY is None:
+            return
 
-        Returns :: boolean, string (as error message)
-        -------
+        delta_y = self._maxY - self._minY
 
+        lower_boundary = self._minY - delta_y * 0.05
+        upper_boundary = self._maxY + delta_y * 0.05
+
+        self.setXYLimit(ymin=lower_boundary, ymax=upper_boundary)
+
+        return
+
+
+    def has_gr(self, gr_ws_name):
+        """Check whether a plot of G(r) exists on the canvas
+        :param gr_ws_name:
+        :return:
+        """
+        return gr_ws_name in self._grDict
+
+    def get_current_grs(self):
+        """
+        list all the G(r) plotted on the figure now
+        :return:
+        """
+        return self._grDict.keys()
+
+    def remove_gr(self, plot_key):
+        """Remove a plotted G(r) from canvas
+        :param plot_key: key to locate the 1-D plot on canvas
+        :return: boolean, string (as error message)
         """
         # check
         assert isinstance(plot_key, str), 'Key for the plot must be a string but not %s.' % str(type(plot_key))
@@ -572,14 +666,15 @@ class GofRView(base.MplGraphicsView):
         # clean G(r) plot
         del self._grDict[plot_key]
 
+        # reset min and max
+        self._minY = None
+        self._maxY = None
+
         return
 
     def reset_color(self):
-        """
-        Reset color scheme
-        Returns
-        -------
-
+        """Reset color scheme
+        :return:
         """
         self._colorIndex = 0
 
@@ -587,7 +682,6 @@ class GofRView(base.MplGraphicsView):
         """
         Reset the canvas by deleting all lines and clean the dictionary
         Returns:
-
         """
         # remove all lines and reset marker/color default sequence
         self.clear_all_lines()
@@ -596,6 +690,28 @@ class GofRView(base.MplGraphicsView):
 
         # clean dictionary
         self._grDict.clear()
+
+        return
+
+    def update_gr(self, plot_key, vec_r, vec_g, vec_ge):
+        """update the value of an existing G(r)
+        :param plot_key:
+        :param vec_r:
+        :param vec_g:
+        :param vec_ge:
+        :return:
+        """
+        # check existence
+        if plot_key not in self._grDict:
+            raise RuntimeError('Plot with key/workspace name {0} does not exist on plot.  Current plots are '
+                               '{1}'.format(plot_key, self._grDict.keys()))
+
+        # update
+        line_key = self._grDict[plot_key]
+        self.updateLine(ikey=line_key, vecx=vec_r, vecy=vec_g)
+
+        # update range
+        self.auto_scale_y()
 
         return
 
@@ -613,9 +729,7 @@ class SofQView(base.MplGraphicsView):
     def __init__(self, parent):
         """
         Initialization
-        Parameters
-        ----------
-        parent
+        :param parent:t
         """
         self._myParent = parent
 
@@ -630,6 +744,8 @@ class SofQView(base.MplGraphicsView):
 
         # dictionary to record all the plots, key: (usually) SofQ's name, value: plot ID
         self._sqLineDict = dict()
+        # S(Q) plot's information including color, marker and etc.
+        self._sqPlotInfoDict = dict()
 
         # list of SofQ that are plot on the canvas
         self._shownSQNameList = list()
@@ -646,6 +762,21 @@ class SofQView(base.MplGraphicsView):
         self._prevCursorPos = None
 
         return
+
+    def get_plot_info(self, sofq_name):
+        """
+        get the information of a plot including color, marker and etc.
+        :param sofq_name:
+        :return:
+        """
+        # check
+        assert isinstance(sofq_name, str), 'SofQ {0} must be a string but not a {1}'.format(sofq_name, type(sofq_name))
+
+        if sofq_name not in self._sqPlotInfoDict:
+            raise RuntimeError('SofQ-view does not have S(Q) plot {0}'.format(sofq_name))
+
+        # return
+        return self._sqPlotInfoDict[sofq_name]
 
     def get_shown_sq_names(self):
         """
@@ -741,7 +872,6 @@ class SofQView(base.MplGraphicsView):
             raise RuntimeError('Impossible to have selected boundary mode %d' % self._selectedBoundary)
 
         cursor_pos = event.xdata
-        print event.xdata
 
         # ignore if the cursor is out of canvas
         if cursor_pos is None:
@@ -861,10 +991,10 @@ class SofQView(base.MplGraphicsView):
 
     def on_mouse_release_event(self, event):
         """
-
-        Returns
-        -------
-
+        handling the event that mouse is released
+        The operations include setting some flags' values
+        :param event:
+        :return:
         """
         # ignore if boundary is not shown
         if not self._showBoundary:
@@ -878,37 +1008,51 @@ class SofQView(base.MplGraphicsView):
 
         return
 
-    def plot_sq(self, sq_name, vec_q, vec_s, vec_e, sq_y_label, reset_color_mark):
-        """
-        Plot S(Q)
-        Parameters
-        ----------
-        sq_name:
-        vec_q
-        vec_s
-        vec_e
-        sq_y_label :: label for Y-axis
-        reset_color_mark : boolean to reset color marker
-
-        Returns
-        -------
-
+    def plot_sq(self, sq_name, vec_q, vec_s, vec_e, sq_y_label, reset_color_mark, color=None, marker=None):
+        """Plot S(Q)
+        :param sq_name:
+        :param vec_q:
+        :param vec_s:
+        :param vec_e:
+        :param sq_y_label: label for Y-axis
+        :param reset_color_mark:  boolean to reset color marker
+        :param color:
+        :param color_marker:
+        :return:
         """
         # check
-        assert isinstance(vec_q, np.ndarray) and isinstance(vec_s, np.ndarray)
-        assert isinstance(sq_y_label, str)
+        assert isinstance(vec_q, np.ndarray) and isinstance(vec_s, np.ndarray),\
+            'Q-vector ({0}) and S-vector ({1}) must be numpy arrays.'.format(type(vec_q), type(vec_s))
 
-        # define color
-        if reset_color_mark:
-            self.reset_line_color_marker_index()
-        marker, color = self.getNextLineMarkerColorCombo()
+        # check whether it is a new plot or an update
+        if sq_name in self._sqLineDict:
+            # exiting S(q) workspace, do update
+            sq_key = self._sqLineDict[sq_name]
+            self.updateLine(ikey=sq_key, vecx=vec_q, vecy=vec_s)
+        else:
+            # new S(Q) plot on the canvas
+            assert isinstance(sq_y_label, str), 'S(Q) label {0} must be a string but not a {1}.' \
+                                                ''.format(sq_y_label, type(sq_y_label))
 
-        # plot
-        plot_id = self.add_plot_1d(vec_q, vec_s, color=color, x_label='Q', y_label=sq_y_label,
-                                   marker=None, label=sq_name)
-        self._sqLineDict[sq_name] = plot_id
-        if sq_name not in self._shownSQNameList:
-            self._shownSQNameList.append(sq_name)
+            # define color
+            if color is None:
+                if reset_color_mark:
+                    self.reset_line_color_marker_index()
+                marker, color = self.getNextLineMarkerColorCombo()
+            else:
+                marker = None
+
+            # plot
+            plot_id = self.add_plot_1d(vec_q, vec_s, color=color, x_label='Q', y_label=sq_y_label,
+                                       marker=marker, label=sq_name)
+            self._sqLineDict[sq_name] = plot_id
+            self._sqPlotInfoDict[sq_name] = color, marker
+            if sq_name not in self._shownSQNameList:
+                self._shownSQNameList.append(sq_name)
+        # END-IF-ELSE
+
+        # auto scale
+        self.auto_scale_y(room_percent=0.05, lower_boundary=0.)
 
         return
 
@@ -936,12 +1080,17 @@ class SofQView(base.MplGraphicsView):
 
         """
         # check whether S(Q) does exist
-        assert isinstance(sq_ws_name, str)
-        assert sq_ws_name in self._sqLineDict, 'Plot key (SofQ name) %s does not exist on the S(Q) canvas.' % sq_ws_name
+        assert isinstance(sq_ws_name, str), 'S(Q) workspace name {0} must be a string but not a {1}.' \
+                                            ''.format(sq_ws_name, type(sq_ws_name))
+        if sq_ws_name not in self._sqLineDict:
+            raise RuntimeError('key (SofQ name) {0} does not exist on the S(Q) canvas.'.format(sq_ws_name))
 
         # retrieve the plot and remove it from the dictionary
         plot_id = self._sqLineDict[sq_ws_name]
+        sq_color, sq_marker = self._sqPlotInfoDict[sq_ws_name]
+
         del self._sqLineDict[sq_ws_name]
+        del self._sqPlotInfoDict[sq_ws_name]
 
         # delete from canvas
         self.remove_line(plot_id)
@@ -949,7 +1098,7 @@ class SofQView(base.MplGraphicsView):
         # delete from on-show S(q) list
         self._shownSQNameList.remove(sq_ws_name)
 
-        return
+        return sq_color, sq_marker
 
     def reset(self):
         """
@@ -959,6 +1108,7 @@ class SofQView(base.MplGraphicsView):
         """
         # clear the dictionary and on-show Sq list
         self._sqLineDict.clear()
+        self._sqPlotInfoDict.clear()
         self._shownSQNameList = list()
 
         # clear the image and reset the marker/color scheme
