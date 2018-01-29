@@ -16,10 +16,10 @@ from pygments.lexer import RegexLexer
 # Monkeypatch!
 RegexLexer.get_tokens_unprocessed_unpatched = RegexLexer.get_tokens_unprocessed
 
-from IPython.qt.console.rich_ipython_widget import RichIPythonWidget
-#from qtconsole.rich_ipython_widget import RichIPythonWidget
-from IPython.qt.inprocess import QtInProcessKernelManager
-#import qtconsole.inprocess
+#from IPython.qt.console.rich_ipython_widget import RichIPythonWidget
+from qtconsole.rich_ipython_widget import RichIPythonWidget
+#from IPython.qt.inprocess import QtInProcessKernelManager
+import qtconsole.inprocess
 
 from mantid.api import AnalysisDataService as mtd
 
