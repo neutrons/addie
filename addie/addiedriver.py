@@ -209,8 +209,7 @@ class AddieDriver(object):
         assert isinstance(output_file_name, str), 'Output file name {0} must be a string but not a {1}.'.format(
             output_file_name, type(output_file_name))
         assert isinstance(comment, str), 'Comment {0} must be a string but not a {1}.'.format(comment, type(comment))
-        # assert isinstance(ws_idnex, int), 'Workspace index must be an integer but not a {1}.'
-        format(ws_index, type(ws_index))
+        assert isinstance(ws_index, int), 'Workspace index must be an integer but not a {1}.'.format(ws_index, type(ws_index))
 
         # convert to point data from histogram
         simpleapi.ConvertToPointData(InputWorkspace=ws_name, OutputWorkspace=ws_name)
@@ -223,8 +222,8 @@ class AddieDriver(object):
         if not 0 <= ws_index < workspace.getNumberHistograms():
             raise RuntimeError('Workspace index {0} is out of range.'.format(ws_index))
 
-        vec_x = workspace.readX(0)
-        vec_y = workspace.readY(0)
+        vec_x = workspace.readX(ws_index)
+        vec_y = workspace.readY(ws_index)
 
         # write to buffer
         wbuf = ''
@@ -523,14 +522,13 @@ class AddieDriver(object):
 
         return ws_group_name, ws_list, angle_list
 
-    @staticmethod
-    def save_ascii(ws_name, file_name, gr_file_type, comment=''):
+    def save_ascii(self, ws_name, file_name, gr_file_type, comment=''):
         """
-
+        save ascii for G(r) or S(Q)
         Args:
             ws_name:
             file_name:
-            gr_file_type:
+            gr_file_type: xye, csv, rmcprofile, dat
             comment: user comment to the file
 
         Returns:
@@ -538,20 +536,19 @@ class AddieDriver(object):
         """
         assert isinstance(ws_name, str), 'blabla'
         assert isinstance(file_name, str), 'blabla'
-        assert isinstance(gr_file_type, str) and gr_file_type in ['dat', 'csv', 'gr'],\
-            'GofR file type {0} must be a supported string.'.format(gr_file_type)
+        assert isinstance(gr_file_type, str), 'GofR file type {0} must be a supported string.'.format(gr_file_type)
 
         if gr_file_type == 'xye':
             simpleapi.SaveAscii(InputWorkspace=ws_name, Filename=file_name, Separator='Space')
         elif gr_file_type == 'csv':
             simpleapi.SaveAscii(InputWorkspace=ws_name, Filename=file_name, Separator='CSV')
-        elif gr_file_type == 'rmcprofile':
-            FastGRDriver.export_to_rmcprofile(ws_name, file_name, comment=comment)
-        elif gr_file_type == '':
+        elif gr_file_type == 'rmcprofile' or gr_file_type == 'dat':
+            self.export_to_rmcprofile(ws_name, file_name, comment=comment)
+        elif gr_file_type == 'gr':
             simpleapi.SavePDFGui(InputWorkspace=ws_name, Filename=file_name)
         else:
             # non-supported type
-            raise RuntimeError('G(r) file type {0} is not supported.'.format(gr_file_type))
+            raise RuntimeError('G(r) or S(Q) file type {0} is not supported.'.format(gr_file_type))
 
         return
 
