@@ -1163,7 +1163,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         caption = 'Save G(r)'
 
         # TEST/ISSUE/NOW - Refactor the following part out to be a standard widget
-        file_filter_str = 'XYE (*.dat);;CSV XYE (*.csv);;GofR (*.gr)'
+        file_filter_str = 'XYE (*.xye);;CSV XYE (*.csv);;PDFgui (*.gr);;RMCProfile (*.dat)'
         gr_file_name = self.get_file_names_from_dialog(default_dir, file_filter_str, caption)[0]
 
         # check the file extension and use the file extension to determine G(r) file type
@@ -1202,8 +1202,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         for sq_name in sq_name_list:
             # get the output file name first
-            out_file_name = QtGui.QFileDialog.getSaveFileName(self, 'Input File Name to Save S(Q) {0}'.format(sq_name),
-                                                              self._currWorkDir, file_filter)
+            out_file_name = str(QtGui.QFileDialog.getSaveFileName(self, 
+                'Input File Name to Save S(Q) {0}'.format(sq_name), self._currWorkDir, file_filter))
             if out_file_name is None or len(out_file_name) == 0:
                 # skip if the user cancel the operation on this S(Q)
                 continue
@@ -1212,7 +1212,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             self._currWorkDir = os.path.dirname(out_file_name)
             file_name, file_ext = os.path.splitext(out_file_name)
             if file_ext.lower().startswith('.xye'):
-                sq_file_type = 'dat'
+                sq_file_type = 'xye'
             elif file_ext.lower().startswith('.csv'):
                 sq_file_type = 'csv'
             elif file_ext.lower().startswith('.sq'):
