@@ -16,13 +16,10 @@ from pygments.lexer import RegexLexer
 # Monkeypatch!
 RegexLexer.get_tokens_unprocessed_unpatched = RegexLexer.get_tokens_unprocessed
 
-wz_linux = True
-if wz_linux:
-    from IPython.qt.console.rich_ipython_widget import RichIPythonWidget
-    from IPython.qt.inprocess import QtInProcessKernelManager
-else:
-    from qtconsole.rich_ipython_widget import RichIPythonWidget
-    from qtconsole.inprocess import QtInProcessKernelManager
+# from IPython.qt.console.rich_ipython_widget import RichIPythonWidget
+# from IPython.qt.inprocess import QtInProcessKernelManager
+from qtconsole.rich_ipython_widget import RichIPythonWidget
+from qtconsole.inprocess import QtInProcessKernelManager
 
 from mantid.api import AnalysisDataService as mtd
 
