@@ -15,6 +15,9 @@ class AdvancedWindow(QtGui.QMainWindow):
         self.setWindowTitle("Advanced Window for Super User Only !")
         
     def post_processing_clicked(self):
-        pass
-        #if self.ui.idl_post_processing_button.isClicked():
-        #    self.parent.
+        if self.ui.idl_post_processing_button.isChecked():
+            _index = 0
+        else:
+            _index = 1
+
+        self.parent.ui.stackedWidget.setCurrentIndex(_index)
