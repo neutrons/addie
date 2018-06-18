@@ -132,7 +132,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         # hide mantid tab by default
         self.ui.mantid_tab.setVisible(False)
 
-
         # define the event handling methods
 
         # bragg diffraction tab
@@ -309,7 +308,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self.ui.comboBox_pdfCorrection.addItem('Lorch')
 
         # set the tab to 0
-        self.ui.tabWidget_2.setCurrentIndex(0)
+        self.ui.main_tab.setCurrentIndex(0)
 
         # set the lower limit on Qmin
         self.ui.doubleSpinBoxQmin.setDecimals(6)
