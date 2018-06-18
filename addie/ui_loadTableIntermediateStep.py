@@ -2,47 +2,60 @@
 
 # Form implementation generated from reading ui file 'designer/ui_loadTableIntermediateStep.ui'
 #
-# Created by: PyQt5 UI code generator 5.6
+# Created by: PyQt4 UI code generator 4.11.4
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt4 import QtCore, QtGui
+
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
-        Dialog.setObjectName("Dialog")
+        Dialog.setObjectName(_fromUtf8("Dialog"))
         Dialog.resize(325, 93)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(Dialog.sizePolicy().hasHeightForWidth())
         Dialog.setSizePolicy(sizePolicy)
-        self.verticalLayout = QtWidgets.QVBoxLayout(Dialog)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.remove_temperature_checkbox = QtWidgets.QCheckBox(Dialog)
-        self.remove_temperature_checkbox.setObjectName("remove_temperature_checkbox")
+        self.verticalLayout = QtGui.QVBoxLayout(Dialog)
+        self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
+        self.remove_temperature_checkbox = QtGui.QCheckBox(Dialog)
+        self.remove_temperature_checkbox.setObjectName(_fromUtf8("remove_temperature_checkbox"))
         self.verticalLayout.addWidget(self.remove_temperature_checkbox)
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.cancel = QtWidgets.QPushButton(Dialog)
-        self.cancel.setObjectName("cancel")
+        self.horizontalLayout = QtGui.QHBoxLayout()
+        self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
+        self.cancel = QtGui.QPushButton(Dialog)
+        self.cancel.setObjectName(_fromUtf8("cancel"))
         self.horizontalLayout.addWidget(self.cancel)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
-        self.ok = QtWidgets.QPushButton(Dialog)
-        self.ok.setObjectName("ok")
+        self.ok = QtGui.QPushButton(Dialog)
+        self.ok.setObjectName(_fromUtf8("ok"))
         self.horizontalLayout.addWidget(self.ok)
         self.verticalLayout.addLayout(self.horizontalLayout)
 
         self.retranslateUi(Dialog)
-        self.ok.clicked.connect(Dialog.ok_clicked)
-        self.cancel.clicked.connect(Dialog.cancel_clicked)
+        QtCore.QObject.connect(self.ok, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.ok_clicked)
+        QtCore.QObject.connect(self.cancel, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.cancel_clicked)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Loading Table ..."))
-        self.remove_temperature_checkbox.setText(_translate("Dialog", "Remove Dynamic Temperature from Name"))
-        self.cancel.setText(_translate("Dialog", "Cancel"))
-        self.ok.setText(_translate("Dialog", "OK"))
+        Dialog.setWindowTitle(_translate("Dialog", "Loading Table ...", None))
+        self.remove_temperature_checkbox.setText(_translate("Dialog", "Remove Dynamic Temperature from Name", None))
+        self.cancel.setText(_translate("Dialog", "Cancel", None))
+        self.ok.setText(_translate("Dialog", "OK", None))
 
