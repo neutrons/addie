@@ -72,6 +72,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     undo_index = max_undo_list
     undo_button_enabled = False
     redo_button_enabled = False
+    post_processing = 'idl'  # or 'mantid'
 
     debugging = False
     load_intermediate_step_ok = False
