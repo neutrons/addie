@@ -14,11 +14,11 @@ if sys.argv[-1] == 'pyuic':
     for inname in files:
         outname = inname.replace('.ui', '.py')
         outname = outname.replace(indir, outdir)
-        if os.path.exists(outname):
-            if os.stat(inname).st_mtime < os.stat(outname).st_mtime:
-                continue
+        #if os.path.exists(outname):
+        #    if os.stat(inname).st_mtime < os.stat(outname).st_mtime:
+        #        continue
         print("Converting '%s' to '%s'" % (inname, outname))
-        command = "pyuic4 %s -o %s"  % (inname, outname)
+        command = "pyuic5 %s -o %s"  % (inname, outname)
         os.system(command)
         done += 1
     if not done:

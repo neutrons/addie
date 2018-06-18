@@ -2,45 +2,57 @@
 
 # Form implementation generated from reading ui file 'designer/ui_advanced_window.ui'
 #
-# Created: Thu Sep  8 16:50:53 2016
-#      by: PyQt4 UI code generator 4.10.1
+# Created by: PyQt5 UI code generator 5.6
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt4 import QtCore, QtGui
-
-try:
-    _fromUtf8 = QtCore.QString.fromUtf8
-except AttributeError:
-    def _fromUtf8(s):
-        return s
-
-try:
-    _encoding = QtGui.QApplication.UnicodeUTF8
-    def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig, _encoding)
-except AttributeError:
-    def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig)
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(800, 600)
-        self.centralwidget = QtGui.QWidget(MainWindow)
-        self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(672, 498)
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralwidget)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
+        self.groupBox.setObjectName("groupBox")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.groupBox)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.idl_post_processing_button = QtWidgets.QRadioButton(self.groupBox)
+        self.idl_post_processing_button.setChecked(True)
+        self.idl_post_processing_button.setObjectName("idl_post_processing_button")
+        self.verticalLayout.addWidget(self.idl_post_processing_button)
+        self.mantid_post_processing_button = QtWidgets.QRadioButton(self.groupBox)
+        self.mantid_post_processing_button.setObjectName("mantid_post_processing_button")
+        self.verticalLayout.addWidget(self.mantid_post_processing_button)
+        self.horizontalLayout.addWidget(self.groupBox)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem)
+        self.verticalLayout_2.addLayout(self.horizontalLayout)
+        spacerItem1 = QtWidgets.QSpacerItem(20, 346, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_2.addItem(spacerItem1)
         MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 20))
-        self.menubar.setObjectName(_fromUtf8("menubar"))
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 672, 20))
+        self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtGui.QStatusBar(MainWindow)
-        self.statusbar.setObjectName(_fromUtf8("statusbar"))
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
+        self.idl_post_processing_button.clicked.connect(MainWindow.post_processing_clicked)
+        self.mantid_post_processing_button.clicked.connect(MainWindow.post_processing_clicked)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.groupBox.setTitle(_translate("MainWindow", "Post Processing"))
+        self.idl_post_processing_button.setText(_translate("MainWindow", "IDL"))
+        self.mantid_post_processing_button.setText(_translate("MainWindow", "Mantid"))
 

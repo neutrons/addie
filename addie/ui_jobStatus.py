@@ -2,103 +2,89 @@
 
 # Form implementation generated from reading ui file 'designer/ui_jobStatus.ui'
 #
-# Created: Wed Dec 14 10:05:39 2016
-#      by: PyQt4 UI code generator 4.10.1
+# Created by: PyQt5 UI code generator 5.6
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt4 import QtCore, QtGui
-
-try:
-    _fromUtf8 = QtCore.QString.fromUtf8
-except AttributeError:
-    def _fromUtf8(s):
-        return s
-
-try:
-    _encoding = QtGui.QApplication.UnicodeUTF8
-    def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig, _encoding)
-except AttributeError:
-    def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig)
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName(_fromUtf8("MainWindow"))
+        MainWindow.setObjectName("MainWindow")
         MainWindow.resize(677, 733)
-        self.centralwidget = QtGui.QWidget(MainWindow)
-        self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
-        self.verticalLayout = QtGui.QVBoxLayout(self.centralwidget)
-        self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
-        self.tableWidget = QtGui.QTableWidget(self.centralwidget)
-        self.tableWidget.setObjectName(_fromUtf8("tableWidget"))
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
+        self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(3)
         self.tableWidget.setRowCount(0)
-        item = QtGui.QTableWidgetItem()
+        item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(0, item)
-        item = QtGui.QTableWidgetItem()
+        item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(1, item)
-        item = QtGui.QTableWidgetItem()
+        item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(2, item)
         self.tableWidget.horizontalHeader().setStretchLastSection(True)
         self.verticalLayout.addWidget(self.tableWidget)
-        self.horizontalLayout = QtGui.QHBoxLayout()
-        self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
-        self.clear_table = QtGui.QPushButton(self.centralwidget)
-        self.clear_table.setObjectName(_fromUtf8("clear_table"))
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.clear_table = QtWidgets.QPushButton(self.centralwidget)
+        self.clear_table.setObjectName("clear_table")
         self.horizontalLayout.addWidget(self.clear_table)
-        spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
         self.verticalLayout.addLayout(self.horizontalLayout)
-        self.label = QtGui.QLabel(self.centralwidget)
+        self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
-        self.label.setObjectName(_fromUtf8("label"))
+        self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
-        self.logbook_text = QtGui.QTextEdit(self.centralwidget)
+        self.logbook_text = QtWidgets.QTextEdit(self.centralwidget)
         self.logbook_text.setUndoRedoEnabled(False)
         self.logbook_text.setAcceptRichText(True)
         self.logbook_text.setTextInteractionFlags(QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
-        self.logbook_text.setObjectName(_fromUtf8("logbook_text"))
+        self.logbook_text.setObjectName("logbook_text")
         self.verticalLayout.addWidget(self.logbook_text)
-        self.horizontalLayout_2 = QtGui.QHBoxLayout()
-        self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
-        self.label_2 = QtGui.QLabel(self.centralwidget)
-        self.label_2.setObjectName(_fromUtf8("label_2"))
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setObjectName("label_2")
         self.horizontalLayout_2.addWidget(self.label_2)
-        self.last_logbook_time = QtGui.QLabel(self.centralwidget)
-        self.last_logbook_time.setObjectName(_fromUtf8("last_logbook_time"))
+        self.last_logbook_time = QtWidgets.QLabel(self.centralwidget)
+        self.last_logbook_time.setObjectName("last_logbook_time")
         self.horizontalLayout_2.addWidget(self.last_logbook_time)
-        spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem1)
-        self.pause_refresh_logbook = QtGui.QRadioButton(self.centralwidget)
-        self.pause_refresh_logbook.setObjectName(_fromUtf8("pause_refresh_logbook"))
+        self.pause_refresh_logbook = QtWidgets.QRadioButton(self.centralwidget)
+        self.pause_refresh_logbook.setObjectName("pause_refresh_logbook")
         self.horizontalLayout_2.addWidget(self.pause_refresh_logbook)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtGui.QMenuBar(MainWindow)
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 677, 20))
-        self.menubar.setObjectName(_fromUtf8("menubar"))
+        self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtGui.QStatusBar(MainWindow)
-        self.statusbar.setObjectName(_fromUtf8("statusbar"))
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        QtCore.QObject.connect(self.clear_table, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.clear_table_clicked)
+        self.clear_table.clicked.connect(MainWindow.clear_table_clicked)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         item = self.tableWidget.horizontalHeaderItem(0)
-        item.setText(_translate("MainWindow", "Job Name", None))
+        item.setText(_translate("MainWindow", "Job Name"))
         item = self.tableWidget.horizontalHeaderItem(1)
-        item.setText(_translate("MainWindow", "Launch Time", None))
+        item.setText(_translate("MainWindow", "Launch Time"))
         item = self.tableWidget.horizontalHeaderItem(2)
-        item.setText(_translate("MainWindow", "Action", None))
-        self.clear_table.setText(_translate("MainWindow", "Clear Table", None))
-        self.label.setText(_translate("MainWindow", "Logbooks", None))
-        self.label_2.setText(_translate("MainWindow", "Last Logbook modified at:", None))
-        self.last_logbook_time.setText(_translate("MainWindow", "N/A", None))
-        self.pause_refresh_logbook.setText(_translate("MainWindow", "Pause Refresh Logbook", None))
+        item.setText(_translate("MainWindow", "Action"))
+        self.clear_table.setText(_translate("MainWindow", "Clear Table"))
+        self.label.setText(_translate("MainWindow", "Logbooks"))
+        self.label_2.setText(_translate("MainWindow", "Last Logbook modified at:"))
+        self.last_logbook_time.setText(_translate("MainWindow", "N/A"))
+        self.pause_refresh_logbook.setText(_translate("MainWindow", "Pause Refresh Logbook"))
 

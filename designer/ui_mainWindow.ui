@@ -58,8 +58,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1341</width>
-         <height>991</height>
+         <width>1339</width>
+         <height>996</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -72,7 +72,7 @@
         <item>
          <layout class="QGridLayout" name="gridLayout_14">
           <item row="1" column="0">
-           <widget class="QTabWidget" name="tabWidget_2">
+           <widget class="QTabWidget" name="main_tab">
             <property name="minimumSize">
              <size>
               <width>500</width>
@@ -80,7 +80,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>2</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -816,9 +816,9 @@
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="tab_6">
+            <widget class="QWidget" name="idl_tab">
              <attribute name="title">
-              <string>Post Processing</string>
+              <string>Post Processing (IDL)</string>
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_8">
               <item>
@@ -2289,6 +2289,11 @@ p, li { white-space: pre-wrap; }
               </item>
              </layout>
             </widget>
+            <widget class="QWidget" name="mantid_tab">
+             <attribute name="title">
+              <string>Post Processing (Mantid)</string>
+             </attribute>
+            </widget>
             <widget class="QWidget" name="tab_bragg">
              <attribute name="title">
               <string>Bragg Peaks</string>
@@ -3203,7 +3208,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>1361</width>
-     <height>25</height>
+     <height>20</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -3472,13 +3477,13 @@ p, li { white-space: pre-wrap; }
   <tabstop>pushButton_rescaleGr</tabstop>
   <tabstop>pushButton_grColorStyle</tabstop>
   <tabstop>sum_scans_output_file_name</tabstop>
-  <tabstop>tabWidget_2</tabstop>
+  <tabstop>main_tab</tabstop>
   <tabstop>pushButton_3</tabstop>
   <tabstop>pushButton_4</tabstop>
   <tabstop>pushButton_5</tabstop>
  </tabstops>
  <resources>
-  <include location="../icons/icons.qrc"/>
+  <include location="../../addie_dev/icons/icons.qrc"/>
  </resources>
  <connections>
   <connection>
@@ -4282,7 +4287,7 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>tabWidget_2</sender>
+   <sender>main_tab</sender>
    <signal>currentChanged(int)</signal>
    <receiver>MainWindow</receiver>
    <slot>main_tab_widget_changed()</slot>
