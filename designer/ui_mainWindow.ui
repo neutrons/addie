@@ -80,7 +80,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -203,14 +203,14 @@
                    <item row="0" column="0">
                     <widget class="QLabel" name="label_65">
                      <property name="text">
-                      <string>Diamond</string>
+                      <string>Calibration</string>
                      </property>
                     </widget>
                    </item>
                    <item row="4" column="0">
                     <widget class="QLabel" name="label_72">
                      <property name="text">
-                      <string>Sample background</string>
+                      <string>Container</string>
                      </property>
                     </widget>
                    </item>
@@ -261,14 +261,14 @@
                    <item row="2" column="0">
                     <widget class="QLabel" name="label_66">
                      <property name="text">
-                      <string>Vanadium</string>
+                      <string>Normalization</string>
                      </property>
                     </widget>
                    </item>
                    <item row="3" column="0">
                     <widget class="QLabel" name="label_64">
                      <property name="text">
-                      <string>Vanadium background</string>
+                      <string>Normalization Background</string>
                      </property>
                     </widget>
                    </item>
@@ -297,7 +297,7 @@
                    <item row="1" column="0">
                     <widget class="QLabel" name="label_71">
                      <property name="text">
-                      <string>Diamond background</string>
+                      <string>Calibration Background</string>
                      </property>
                     </widget>
                    </item>
@@ -824,7 +824,7 @@
               <item>
                <widget class="QStackedWidget" name="stackedWidget">
                 <property name="currentIndex">
-                 <number>1</number>
+                 <number>0</number>
                 </property>
                 <widget class="QWidget" name="idl">
                  <layout class="QHBoxLayout" name="horizontalLayout_24">
@@ -1958,357 +1958,6 @@ p, li { white-space: pre-wrap; }
                              </layout>
                             </item>
                            </layout>
-                          </widget>
-                         </item>
-                        </layout>
-                       </item>
-                      </layout>
-                     </widget>
-                     <widget class="QWidget" name="tab_2">
-                      <attribute name="title">
-                       <string>Bragg</string>
-                      </attribute>
-                      <layout class="QVBoxLayout" name="verticalLayout_3">
-                       <item>
-                        <layout class="QHBoxLayout" name="horizontalLayout_8">
-                         <item>
-                          <widget class="QPushButton" name="mantid_browse_calibration_button">
-                           <property name="minimumSize">
-                            <size>
-                             <width>200</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="text">
-                            <string>Browse Calibration ...</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QLabel" name="mantid_calibration_value">
-                           <property name="sizePolicy">
-                            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                             <horstretch>0</horstretch>
-                             <verstretch>0</verstretch>
-                            </sizepolicy>
-                           </property>
-                           <property name="text">
-                            <string>N/A</string>
-                           </property>
-                          </widget>
-                         </item>
-                        </layout>
-                       </item>
-                       <item>
-                        <layout class="QHBoxLayout" name="horizontalLayout_9">
-                         <item>
-                          <widget class="QPushButton" name="mantid_browse_characterization_button">
-                           <property name="minimumSize">
-                            <size>
-                             <width>200</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="text">
-                            <string>Browse Characterization ...</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QLabel" name="mantid_characterization_value">
-                           <property name="sizePolicy">
-                            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                             <horstretch>0</horstretch>
-                             <verstretch>0</verstretch>
-                            </sizepolicy>
-                           </property>
-                           <property name="text">
-                            <string>N/A</string>
-                           </property>
-                          </widget>
-                         </item>
-                        </layout>
-                       </item>
-                       <item>
-                        <layout class="QHBoxLayout" name="horizontalLayout_7">
-                         <item>
-                          <widget class="QLabel" name="label_9">
-                           <property name="text">
-                            <string>Number of Bins:</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QLineEdit" name="mantid_number_of_bins">
-                           <property name="sizePolicy">
-                            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                             <horstretch>0</horstretch>
-                             <verstretch>0</verstretch>
-                            </sizepolicy>
-                           </property>
-                           <property name="text">
-                            <string>-6000</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QLabel" name="label_7">
-                           <property name="text">
-                            <string>(&quot;-&quot; for log binning)</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <spacer name="horizontalSpacer_12">
-                           <property name="orientation">
-                            <enum>Qt::Horizontal</enum>
-                           </property>
-                           <property name="sizeHint" stdset="0">
-                            <size>
-                             <width>40</width>
-                             <height>20</height>
-                            </size>
-                           </property>
-                          </spacer>
-                         </item>
-                        </layout>
-                       </item>
-                       <item>
-                        <layout class="QHBoxLayout" name="horizontalLayout_12">
-                         <item>
-                          <widget class="QGroupBox" name="groupBox_2">
-                           <property name="title">
-                            <string>Crop Wavelength</string>
-                           </property>
-                           <layout class="QHBoxLayout" name="horizontalLayout_3">
-                            <item>
-                             <widget class="QLabel" name="label_15">
-                              <property name="text">
-                               <string>Min</string>
-                              </property>
-                             </widget>
-                            </item>
-                            <item>
-                             <widget class="QLineEdit" name="mantid_min_crop_wavelength">
-                              <property name="text">
-                               <string>.1</string>
-                              </property>
-                             </widget>
-                            </item>
-                            <item>
-                             <widget class="QLabel" name="label_16">
-                              <property name="text">
-                               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&amp;#8491;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                              </property>
-                             </widget>
-                            </item>
-                            <item>
-                             <spacer name="horizontalSpacer_10">
-                              <property name="orientation">
-                               <enum>Qt::Horizontal</enum>
-                              </property>
-                              <property name="sizeHint" stdset="0">
-                               <size>
-                                <width>40</width>
-                                <height>20</height>
-                               </size>
-                              </property>
-                             </spacer>
-                            </item>
-                            <item>
-                             <widget class="QLabel" name="label_14">
-                              <property name="text">
-                               <string>Max</string>
-                              </property>
-                             </widget>
-                            </item>
-                            <item>
-                             <widget class="QLineEdit" name="mantid_max_crop_wavelength">
-                              <property name="text">
-                               <string>2.9</string>
-                              </property>
-                             </widget>
-                            </item>
-                            <item>
-                             <widget class="QLabel" name="label_13">
-                              <property name="text">
-                               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&amp;#8491;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                              </property>
-                             </widget>
-                            </item>
-                            <item>
-                             <spacer name="horizontalSpacer_13">
-                              <property name="orientation">
-                               <enum>Qt::Horizontal</enum>
-                              </property>
-                              <property name="sizeHint" stdset="0">
-                               <size>
-                                <width>40</width>
-                                <height>20</height>
-                               </size>
-                              </property>
-                             </spacer>
-                            </item>
-                           </layout>
-                          </widget>
-                         </item>
-                         <item>
-                          <layout class="QHBoxLayout" name="horizontalLayout_13">
-                           <item>
-                            <widget class="QLabel" name="label_8">
-                             <property name="text">
-                              <string>Vanadium Radius:</string>
-                             </property>
-                            </widget>
-                           </item>
-                           <item>
-                            <widget class="QLineEdit" name="mantid_vanadium_radius">
-                             <property name="text">
-                              <string>0.58</string>
-                             </property>
-                            </widget>
-                           </item>
-                           <item>
-                            <widget class="QLabel" name="label_10">
-                             <property name="text">
-                              <string>?units?</string>
-                             </property>
-                            </widget>
-                           </item>
-                          </layout>
-                         </item>
-                         <item>
-                          <spacer name="horizontalSpacer_14">
-                           <property name="orientation">
-                            <enum>Qt::Horizontal</enum>
-                           </property>
-                           <property name="sizeHint" stdset="0">
-                            <size>
-                             <width>40</width>
-                             <height>20</height>
-                            </size>
-                           </property>
-                          </spacer>
-                         </item>
-                        </layout>
-                       </item>
-                       <item>
-                        <layout class="QHBoxLayout" name="horizontalLayout_11">
-                         <item>
-                          <layout class="QHBoxLayout" name="horizontalLayout_10">
-                           <item>
-                            <widget class="QPushButton" name="mantid_output_directoy_button">
-                             <property name="text">
-                              <string>Output Directory ...</string>
-                             </property>
-                            </widget>
-                           </item>
-                           <item>
-                            <widget class="QLabel" name="mantid_output_directory_value">
-                             <property name="sizePolicy">
-                              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                               <horstretch>0</horstretch>
-                               <verstretch>0</verstretch>
-                              </sizepolicy>
-                             </property>
-                             <property name="text">
-                              <string>N/A</string>
-                             </property>
-                            </widget>
-                           </item>
-                          </layout>
-                         </item>
-                         <item>
-                          <spacer name="horizontalSpacer_11">
-                           <property name="orientation">
-                            <enum>Qt::Horizontal</enum>
-                           </property>
-                           <property name="sizeHint" stdset="0">
-                            <size>
-                             <width>40</width>
-                             <height>20</height>
-                            </size>
-                           </property>
-                          </spacer>
-                         </item>
-                         <item>
-                          <widget class="QPushButton" name="mantid_run_reduction">
-                           <property name="enabled">
-                            <bool>false</bool>
-                           </property>
-                           <property name="minimumSize">
-                            <size>
-                             <width>200</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="text">
-                            <string>Run Reduction</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QPushButton" name="pushButton_5">
-                           <property name="minimumSize">
-                            <size>
-                             <width>20</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="maximumSize">
-                            <size>
-                             <width>20</width>
-                             <height>16777215</height>
-                            </size>
-                           </property>
-                           <property name="palette">
-                            <palette>
-                             <active>
-                              <colorrole role="ButtonText">
-                               <brush brushstyle="SolidPattern">
-                                <color alpha="255">
-                                 <red>255</red>
-                                 <green>0</green>
-                                 <blue>0</blue>
-                                </color>
-                               </brush>
-                              </colorrole>
-                             </active>
-                             <inactive>
-                              <colorrole role="ButtonText">
-                               <brush brushstyle="SolidPattern">
-                                <color alpha="255">
-                                 <red>255</red>
-                                 <green>0</green>
-                                 <blue>0</blue>
-                                </color>
-                               </brush>
-                              </colorrole>
-                             </inactive>
-                             <disabled>
-                              <colorrole role="ButtonText">
-                               <brush brushstyle="SolidPattern">
-                                <color alpha="255">
-                                 <red>128</red>
-                                 <green>128</green>
-                                 <blue>128</blue>
-                                </color>
-                               </brush>
-                              </colorrole>
-                             </disabled>
-                            </palette>
-                           </property>
-                           <property name="text">
-                            <string>?</string>
-                           </property>
                           </widget>
                          </item>
                         </layout>
@@ -5019,14 +4668,6 @@ p, li { white-space: pre-wrap; }
   <tabstop>pdf_qmax_line_edit</tabstop>
   <tabstop>interactive_mode_checkbox</tabstop>
   <tabstop>run_sum_scans_button</tabstop>
-  <tabstop>mantid_browse_calibration_button</tabstop>
-  <tabstop>mantid_browse_characterization_button</tabstop>
-  <tabstop>mantid_number_of_bins</tabstop>
-  <tabstop>mantid_min_crop_wavelength</tabstop>
-  <tabstop>mantid_max_crop_wavelength</tabstop>
-  <tabstop>mantid_vanadium_radius</tabstop>
-  <tabstop>mantid_output_directoy_button</tabstop>
-  <tabstop>mantid_run_reduction</tabstop>
   <tabstop>graphicsView_bragg</tabstop>
   <tabstop>comboBox_xUnit</tabstop>
   <tabstop>pushButton_loadBraggFile</tabstop>
@@ -5068,7 +4709,6 @@ p, li { white-space: pre-wrap; }
   <tabstop>main_tab</tabstop>
   <tabstop>pushButton_3</tabstop>
   <tabstop>pushButton_4</tabstop>
-  <tabstop>pushButton_5</tabstop>
  </tabstops>
  <resources>
   <include location="../../addie_dev/icons/icons.qrc"/>
@@ -5699,182 +5339,6 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>mantid_browse_calibration_button</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>mantid_browse_calibration_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>165</x>
-     <y>489</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>4</x>
-     <y>833</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mantid_browse_characterization_button</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>mantid_browse_characterization_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>241</x>
-     <y>493</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>2</x>
-     <y>736</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mantid_output_directoy_button</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>mantid_output_directory_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>51</x>
-     <y>506</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>3</x>
-     <y>860</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mantid_browse_calibration_button</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>check_mantid_gui()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>243</x>
-     <y>489</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>3</x>
-     <y>576</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mantid_browse_characterization_button</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>check_mantid_gui()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>135</x>
-     <y>493</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>2</x>
-     <y>620</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mantid_number_of_bins</sender>
-   <signal>editingFinished()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>check_mantid_gui()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>91</x>
-     <y>497</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1</x>
-     <y>674</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mantid_min_crop_wavelength</sender>
-   <signal>editingFinished()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>check_mantid_gui()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>57</x>
-     <y>527</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>2</x>
-     <y>800</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mantid_max_crop_wavelength</sender>
-   <signal>editingFinished()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>check_mantid_gui()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>68</x>
-     <y>527</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>5</x>
-     <y>717</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mantid_output_directoy_button</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>check_mantid_gui()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>51</x>
-     <y>506</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>5</x>
-     <y>771</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mantid_vanadium_radius</sender>
-   <signal>editingFinished()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>check_mantid_gui()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>104</x>
-     <y>502</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1220</x>
-     <y>658</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mantid_run_reduction</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>mantid_run_reduction()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>276</x>
-     <y>505</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1220</x>
-     <y>860</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>pdf_qmax_line_edit</sender>
    <signal>editingFinished()</signal>
    <receiver>MainWindow</receiver>
@@ -5999,22 +5463,6 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>966</x>
      <y>808</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton_5</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>help_button_clicked_mantid()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>123</x>
-     <y>505</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1225</x>
-     <y>724</y>
     </hint>
    </hints>
   </connection>
