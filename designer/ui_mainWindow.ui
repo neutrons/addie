@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1402</width>
-    <height>1164</height>
+    <width>1711</width>
+    <height>1007</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -58,8 +58,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1380</width>
-         <height>1102</height>
+         <width>1689</width>
+         <height>945</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -2651,6 +2651,18 @@ p, li { white-space: pre-wrap; }
                         <layout class="QHBoxLayout" name="horizontalLayout_27">
                          <item>
                           <widget class="QLabel" name="label_37">
+                           <property name="minimumSize">
+                            <size>
+                             <width>80</width>
+                             <height>0</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>80</width>
+                             <height>16777215</height>
+                            </size>
+                           </property>
                            <property name="text">
                             <string>Instrument: </string>
                            </property>
@@ -2720,10 +2732,22 @@ p, li { white-space: pre-wrap; }
                              <height>0</height>
                             </size>
                            </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>200</width>
+                             <height>16777215</height>
+                            </size>
+                           </property>
                           </widget>
                          </item>
                          <item row="0" column="2">
                           <widget class="QLabel" name="label_41">
+                           <property name="maximumSize">
+                            <size>
+                             <width>25</width>
+                             <height>16777215</height>
+                            </size>
+                           </property>
                            <property name="text">
                             <string>or</string>
                            </property>
@@ -2795,6 +2819,12 @@ p, li { white-space: pre-wrap; }
                          </item>
                          <item row="1" column="2">
                           <widget class="QLabel" name="label_39">
+                           <property name="maximumSize">
+                            <size>
+                             <width>25</width>
+                             <height>16777215</height>
+                            </size>
+                           </property>
                            <property name="text">
                             <string>or</string>
                            </property>
@@ -2867,10 +2897,22 @@ p, li { white-space: pre-wrap; }
                              <height>0</height>
                             </size>
                            </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>200</width>
+                             <height>16777215</height>
+                            </size>
+                           </property>
                           </widget>
                          </item>
                          <item row="0" column="2">
                           <widget class="QLabel" name="label_40">
+                           <property name="maximumSize">
+                            <size>
+                             <width>25</width>
+                             <height>16777215</height>
+                            </size>
+                           </property>
                            <property name="text">
                             <string>or</string>
                            </property>
@@ -2924,6 +2966,12 @@ p, li { white-space: pre-wrap; }
                             <size>
                              <width>250</width>
                              <height>0</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>200</width>
+                             <height>16777215</height>
                             </size>
                            </property>
                           </widget>
@@ -4747,7 +4795,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1402</width>
+     <width>1711</width>
      <height>20</height>
     </rect>
    </property>
