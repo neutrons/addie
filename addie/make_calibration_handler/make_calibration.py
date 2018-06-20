@@ -26,5 +26,18 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         self.ui = UiMainWindow()
         self.ui.setupUi(self)
 
+    def master_browse_button_clicked(self):
+        print("master button clicked")
+
+    def remove_row_button_clicked(self):
+        print("remove row")
+
+    def add_row_button_clicked(self):
+        print("add row")
+
+    def run_calibration_button_clicked(self):
+        print("run calibration")
+
     def closeEvent(self, c):
         self.parent.make_calibration_ui = None
+
