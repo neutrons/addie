@@ -72,8 +72,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     undo_button_enabled = False
     redo_button_enabled = False
     post_processing = 'idl'  # or 'mantid'
-    cache_folder = '' # defined in the advanced window
-    output_folder = '' # defined in the advanced window
+    cache_folder = './' # defined in the advanced window
+    output_folder = './' # defined in the advanced window
 
     debugging = False
     load_intermediate_step_ok = False

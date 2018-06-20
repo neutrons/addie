@@ -42,17 +42,17 @@ class AdvancedWindow(QtGui.QMainWindow):
 
     def cache_dir_button_clicked(self):
         _cache_folder = QtGui.QFileDialog.getExistingDirectory(caption="Select Cache Folder ...",
-                                                              directory=self.parent.ipts_folder,
+                                                              directory=self.parent.cache_folder,
                                                               options=QtGui.QFileDialog.ShowDirsOnly)
         if _cache_folder:
-            self.ui.cache_folder_label.setText(str(_cache_folder))
+            self.ui.cache_dir_label.setText(str(_cache_folder))
             self.parent.cache_folder = str(_cache_folder)
 
     def output_dir_button_clicked(self):
         _output_folder = QtGui.QFileDialog.getExistingDirectory(caption="Select Output Folder ...",
-                                                              directory=self.parent.ipts_folder,
+                                                              directory=self.parent.output_folder,
                                                               options=QtGui.QFileDialog.ShowDirsOnly)
         if _output_folder:
-            self.ui.output_folder_label.setText(str(_output_folder))
+            self.ui.output_dir_label.setText(str(_output_folder))
             self.parent.output_folder = str(_output_folder)
 

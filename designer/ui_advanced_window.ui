@@ -119,6 +119,12 @@
       </item>
       <item>
        <widget class="QPushButton" name="cache_dir_button">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
           <width>80</width>
@@ -162,6 +168,12 @@
       </item>
       <item>
        <widget class="QPushButton" name="output_dir_button">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
           <width>80</width>
