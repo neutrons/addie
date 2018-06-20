@@ -27,7 +27,11 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         self.ui.setupUi(self)
 
     def master_browse_button_clicked(self):
-        print("master button clicked")
+        _master_folder = QtGui.QFileDialog.getExistingDirectory(caption="Select Output Folder ...",
+                                                                directory=self.parent.output_folder,
+                                                                options=QtGui.QFileDialog.ShowDirsOnly)
+        if _master_folder:
+            self.ui.master_output_directory_label.setText(str(_master_folder))
 
     def remove_row_button_clicked(self):
         print("remove row")
