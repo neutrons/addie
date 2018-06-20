@@ -25,7 +25,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="comboBox">
+       <widget class="QComboBox" name="instrument_comboBox">
         <item>
          <property name="text">
           <string>Nomad</string>
@@ -118,7 +118,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="cache_dir_button">
         <property name="maximumSize">
          <size>
           <width>80</width>
@@ -131,7 +131,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="cache_dir_label">
         <property name="text">
          <string>N/A</string>
         </property>
@@ -161,7 +161,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="output_dir_button">
         <property name="maximumSize">
          <size>
           <width>80</width>
@@ -174,7 +174,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_5">
+       <widget class="QLabel" name="output_dir_label">
         <property name="text">
          <string>N/A</string>
         </property>
@@ -218,8 +218,8 @@
    <slot>post_processing_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>60</x>
-     <y>71</y>
+     <x>136</x>
+     <y>104</y>
     </hint>
     <hint type="destinationlabel">
      <x>194</x>
@@ -243,8 +243,59 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>instrument_comboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>instrument_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>129</x>
+     <y>41</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>50</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cache_dir_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>cache_dir_button_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>160</x>
+     <y>137</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>562</x>
+     <y>109</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>output_dir_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>output_dir_button_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>122</x>
+     <y>180</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>124</x>
+     <y>209</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>post_processing_clicked()</slot>
+  <slot>instrument_changed()</slot>
+  <slot>cache_dir_button_clicked()</slot>
+  <slot>output_dir_button_clicked()</slot>
  </slots>
 </ui>
