@@ -3,6 +3,20 @@ from PyQt4 import QtGui
 from addie.ui_advanced_window import Ui_MainWindow as UiMainWindow
 
 
+class AdvancedWindowLauncher(object):
+
+    def __init__(self, parent=None):
+        self.parent = parent
+
+        if self.parent.advanced_window_ui is None:
+            _advanced = AdvancedWindow(parent=self.parent)
+            _advanced.show()
+            self.parent.advanced_window_ui = _advanced
+        else:
+            self.parent.advanced_window_ui.setFocus()
+            self.parent.advanced_window_ui.activateWindow()
+
+
 class AdvancedWindow(QtGui.QMainWindow):
     
     def __init__(self, parent=None):
@@ -55,4 +69,7 @@ class AdvancedWindow(QtGui.QMainWindow):
         if _output_folder:
             self.ui.output_dir_label.setText(str(_output_folder))
             self.parent.output_folder = str(_output_folder)
+
+    def closeEvent(self, c):
+        self.parent.advanced_window_ui = None
 

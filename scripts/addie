@@ -15,7 +15,7 @@ import addie.step1
 import addie.step2
 
 from addie.about import AboutDialog
-from addie.advanced_window_handler.advanced_window import AdvancedWindow
+from addie.advanced_window_handler.advanced_window import AdvancedWindowLauncher
 from addie.configuration.export_configuration import ExportConfiguration
 from addie.configuration.import_configuration import ImportConfiguration
 
@@ -65,6 +65,9 @@ from addie.pdf_lines_manager import PDFPlotManager
 class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     """ Main addie window
     """
+
+    # external ui
+    advanced_window_ui = None
 
     undo_table = {}
     max_undo_list = 10
@@ -1950,8 +1953,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         _about.display()
 
     def advanced_option_clicked(self):
-        _advanced = AdvancedWindow(parent = self)
-        _advanced.show()
+        _advanced = AdvancedWindowLauncher(parent = self)
 
     def menu_ipts_file_transfer_clicked(self):
         _o_ipts = IptsFileTransferDialog(parent=self)
@@ -2253,6 +2255,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     def help_button_clicked_mantid(self):
         self.help_button_clicked(button_name = 'mantid')
+
+
+    def closeEvent(self, c):
+        if self.advanced_window_ui:
+            self.advanced_window_ui.closeEvent(c)
 
 def main():
     app = PyQt4.QtGui.QApplication(sys.argv)
