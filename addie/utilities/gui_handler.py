@@ -26,3 +26,11 @@ class GuiHandler(object):
     
     def radiobutton_set_state(self, widget_id = None, state = True):
         widget_id.setChecked(state)
+
+class TableHandler(object):
+
+    def __init__(self, table_ui=None):
+        self.table_ui = table_ui
+
+    def get_current_row(self):
+        return self.table_ui.currentRow()

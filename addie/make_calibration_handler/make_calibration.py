@@ -1,6 +1,7 @@
 from PyQt4 import QtGui
 
 from addie.ui_make_calibration import Ui_MainWindow as UiMainWindow
+from addie.utilities.gui_handler import TableHandler
 
 
 class MakeCalibrationLauncher(object):
@@ -37,7 +38,16 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         print("remove row")
 
     def add_row_button_clicked(self):
-        print("add row")
+        o_gui = TableHandler(table_ui=self.ui.tableWidget)
+        row_selected = o_gui.get_current_row()
+        self.__insert_new_row(row=row_selected+1)
+
+    def __insert_new_row(self, row=-1):
+        self.ui.tableWidget.insertRow(row=row)
+
+        
+
+
 
     def run_calibration_button_clicked(self):
         print("run calibration")
