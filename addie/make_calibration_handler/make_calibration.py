@@ -20,12 +20,21 @@ class MakeCalibrationLauncher(object):
 
 class MakeCalibrationWindow(QtGui.QMainWindow):
 
+    table_column_width = [200, 200, 60, 300]
+    table_row_height = 40
+
     def __init__(self, parent=None):
         self.parent = parent
 
         QtGui.QMainWindow.__init__(self, parent=parent)
         self.ui = UiMainWindow()
         self.ui.setupUi(self)
+
+        self.init_widgets()
+
+    def init_widgets(self):
+        for index_col, col_size in enumerate(self.table_column_width):
+            self.ui.tableWidget.setColumnWidth(index_col, col_size)
 
     def master_browse_button_clicked(self):
         _master_folder = QtGui.QFileDialog.getExistingDirectory(caption="Select Output Folder ...",
@@ -43,10 +52,20 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         self.__insert_new_row(row=row_selected+1)
 
     def __insert_new_row(self, row=-1):
-        self.ui.tableWidget.insertRow(row=row)
+        self.ui.tableWidget.insertRow(row)
+        self.ui.tableWidget.setRowHeight(row, self.table_row_height)
 
-        
-
+        #column 1
+        label = QtGui.QLabel("Run #:")
+        value = QtGui.QLineEdit("")
+        button = QtGui.QPushButton("Browse ...")
+        hori_layout = QtGui.QHBoxLayout()
+        hori_layout.addWidget(label)
+        hori_layout.addWidget(value)
+        hori_layout.addWidget(button)
+        col1_widget = QtGui.QWidget()
+        col1_widget.setLayout(hori_layout)
+        self.ui.tableWidget.setCellWidget(row, 0, col1_widget)
 
 
     def run_calibration_button_clicked(self):
