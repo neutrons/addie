@@ -20,7 +20,7 @@ class MakeCalibrationLauncher(object):
 
 class MakeCalibrationWindow(QtGui.QMainWindow):
 
-    table_column_width = [200, 200, 60, 300]
+    table_column_width = [250, 250, 80, 300]
     table_row_height = 40
 
     def __init__(self, parent=None):
@@ -55,10 +55,14 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         self.ui.tableWidget.insertRow(row)
         self.ui.tableWidget.setRowHeight(row, self.table_row_height)
 
-        #column 1
+        button_width = 80
+
+        #column 0 - calibration
         label = QtGui.QLabel("Run #:")
         value = QtGui.QLineEdit("")
         button = QtGui.QPushButton("Browse ...")
+        button.setMinimumWidth(button_width)
+        button.setMaximumWidth(button_width)
         hori_layout = QtGui.QHBoxLayout()
         hori_layout.addWidget(label)
         hori_layout.addWidget(value)
@@ -66,6 +70,38 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         col1_widget = QtGui.QWidget()
         col1_widget.setLayout(hori_layout)
         self.ui.tableWidget.setCellWidget(row, 0, col1_widget)
+
+        #column 1 - Vanadium
+        label = QtGui.QLabel("Run #:")
+        value = QtGui.QLineEdit("")
+        button = QtGui.QPushButton("Browse ...")
+        button.setMinimumWidth(button_width)
+        button.setMaximumWidth(button_width)
+        hori_layout = QtGui.QHBoxLayout()
+        hori_layout.addWidget(label)
+        hori_layout.addWidget(value)
+        hori_layout.addWidget(button)
+        col1_widget = QtGui.QWidget()
+        col1_widget.setLayout(hori_layout)
+        self.ui.tableWidget.setCellWidget(row, 1, col1_widget)
+
+        #column 2 - date
+        date = QtGui.QDateEdit()
+        self.ui.tableWidget.setCellWidget(row, 2, date)
+
+        #column 3 - output dir
+        label = QtGui.QLabel("N/A")
+        button = QtGui.QPushButton("Browse...")
+        button.setMinimumWidth(button_width)
+        button.setMaximumWidth(button_width)
+        hori_layout = QtGui.QHBoxLayout()
+        hori_layout.addWidget(label)
+        hori_layout.addWidget(button)
+        col3_widget = QtGui.QWidget()
+        col3_widget.setLayout(hori_layout)
+        self.ui.tableWidget.setCellWidget(row, 3, col3_widget)
+
+
 
 
     def run_calibration_button_clicked(self):

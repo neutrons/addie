@@ -2162,7 +2162,7 @@ p, li { white-space: pre-wrap; }
                     </column>
                     <column>
                      <property name="text">
-                      <string>Do Abs. Corr. ?</string>
+                      <string>Abs. Corr.</string>
                      </property>
                     </column>
                     <column>
