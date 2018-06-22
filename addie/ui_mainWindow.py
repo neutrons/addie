@@ -2111,7 +2111,7 @@ class Ui_MainWindow(object):
         item = self.table_2.horizontalHeaderItem(8)
         item.setText(_translate("MainWindow", "Sample Shape", None))
         item = self.table_2.horizontalHeaderItem(9)
-        item.setText(_translate("MainWindow", "Do Abs. Corr. ?", None))
+        item.setText(_translate("MainWindow", "Abs. Corr.", None))
         item = self.table_2.horizontalHeaderItem(10)
         item.setText(_translate("MainWindow", "Mult. Scat. Corr.", None))
         item = self.table_2.horizontalHeaderItem(11)
