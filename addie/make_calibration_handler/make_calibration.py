@@ -78,11 +78,14 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         row_selected = o_gui.get_current_row()
         self.__insert_new_row(row=row_selected+1)
 
-    def vanadium_browse_clicked(self, entry=-1):
+    def vanadium_browse_clicked(self, entry=""):
         print("vanadium: {}".format(entry))
 
-    def calibration_browse_clicked(self, entry=-1):
+    def calibration_browse_clicked(self, entry=""):
         print("calibration: {}".format(entry))
+
+    def local_output_dir_clicked(self, entry=""):
+        pass
 
     def __insert_new_row(self, row=-1):
         self.ui.tableWidget.insertRow(row)
@@ -93,8 +96,8 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         #column0 - entry
         _name = str(self.entry_level+1)
         self.entry_level += 1
-        label = QtGui.QLabel(_name)
-        self.ui.tableWidget.setCellWidget(row, 0, label)
+        item = QtGui.QTableWidgetItem(str(_name))
+        self.ui.tableWidget.setItem(row, 0, item)
 
         #column 1 - calibration
         label = QtGui.QLabel("Run #:")
@@ -135,6 +138,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         browse_button = QtGui.QPushButton("Browse...")
         browse_button.setMinimumWidth(button_width)
         browse_button.setMaximumWidth(button_width)
+        browse_button.clicked.connect(lambda state, entry=_name: self.local_output_dir_clicked(entry))
         value = QtGui.QLabel(self.master_folder)
         reset = QtGui.QPushButton("Reset")
         reset.setMinimumWidth(button_width)
@@ -147,12 +151,12 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         widget.setLayout(hori_layout)
         self.ui.tableWidget.setCellWidget(row, 4, widget)
 
-        list_local_ui = self.local_list_ui(calibration_browse=cali_button,
+        list_local_ui = self.local_list_ui(calibration_browser=cali_button,
                                            calibration_value=cali_value,
                                            vanadium_browser=vana_button,
                                            vanadium_value=vana_value,
                                            date=date,
-                                           output_dir_browse=browse_button,
+                                           output_dir_browser=browse_button,
                                            output_dir_value=value)
         self.master_list_ui[_name] = list_local_ui
 
