@@ -34,8 +34,10 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
                                                  "calibration_value",
                                                  "calibration_browser",
                                                  "calibration_browser_value"
-                                                 "vanadium_browser",
+                                                 "vanadium_run_radio_button",
                                                  "vanadium_value",
+                                                 "vanadium_browser",
+                                                 "vanadium_browser_value",
                                                  "date",
                                                  "output_dir_browser",
                                                  "output_dir_value",
@@ -163,18 +165,30 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         self.ui.tableWidget.setCellWidget(row, 1, col1_widget)
 
         #column 2 - Vanadium
+        # first row
+        vana_run_radio_button = QtGui.QRadioButton()
+        vana_run_radio_button.setChecked(True)
         label = QtGui.QLabel("Run #:")
         vana_value = QtGui.QLineEdit("")
-        vana_button = QtGui.QPushButton("Browse...")
-        vana_button.setMinimumWidth(button_width)
-        vana_button.setMaximumWidth(button_width)
-        vana_button.clicked.connect(lambda state, entry=_name:  self.vanadium_browse_clicked(entry))
-        hori_layout = QtGui.QHBoxLayout()
-        hori_layout.addWidget(label)
-        hori_layout.addWidget(vana_value)
-        hori_layout.addWidget(vana_button)
+        # second row
+        vana_browse_radio_button = QtGui.QRadioButton()
+        vana_browse_button = QtGui.QPushButton("Browse...")
+        vana_browse_button.setMinimumWidth(button_width)
+        vana_browse_button.setMaximumWidth(button_width)
+        vana_browse_button.clicked.connect(lambda state, entry=_name:  self.vanadium_browse_clicked(entry))
+        vana_browse_button_value = QtGui.QLabel("N/A")
+
+        grid_layout = QtGui.QGridLayout()
+        grid_layout.addWidget(vana_run_radio_button, 0, 0)
+        grid_layout.addWidget(label, 0, 1)
+        grid_layout.addWidget(vana_value, 0, 2)
+
+        grid_layout.addWidget(vana_browse_radio_button, 1, 0)
+        grid_layout.addWidget(vana_browse_button, 1, 1)
+        grid_layout.addWidget(vana_browse_button_value, 1, 2)
+
         col1_widget = QtGui.QWidget()
-        col1_widget.setLayout(hori_layout)
+        col1_widget.setLayout(grid_layout)
         self.ui.tableWidget.setCellWidget(row, 2, col1_widget)
 
         #column 3 - date
@@ -204,8 +218,10 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
                                            calibration_value=cali_value,
                                            calibration_browser=cali_browse_button,
                                            calibration_browse_value=cali_browse_button_value,
-                                           vanadium_browser=vana_button,
+                                           vanadium_run_radio_button=vana_run_radio_button,
                                            vanadium_value=vana_value,
+                                           vanadium_browser=vana_browse_button,
+                                           vanadium_browse_value=vana_browse_button_value,
                                            date=date,
                                            output_dir_browser=browse_button,
                                            output_dir_value=value,
