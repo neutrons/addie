@@ -22,16 +22,18 @@ class MakeCalibrationLauncher(object):
 
 class MakeCalibrationWindow(QtGui.QMainWindow):
 
-    table_column_width = [60, 250, 250, 90, 300]
-    table_row_height = 40
+    table_column_width = [60, 350, 350, 90, 300]
+    table_row_height = 85
     entry_level =  0
 
     master_date = None  #QtCore.QDate()
     master_folder = 'N/A'
 
     # will keep record of all the ui
-    local_list_ui = namedtuple("local_list_ui", ["calibration_browser",
+    local_list_ui = namedtuple("local_list_ui", ["calibration_run_radio_button",
                                                  "calibration_value",
+                                                 "calibration_browser",
+                                                 "calibration_browser_value"
                                                  "vanadium_browser",
                                                  "vanadium_value",
                                                  "date",
@@ -134,18 +136,30 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         self.ui.tableWidget.setItem(row, 0, item)
 
         #column 1 - calibration
+        # first row
+        cali_run_radio_button = QtGui.QRadioButton()
+        cali_run_radio_button.setChecked(True)
         label = QtGui.QLabel("Run #:")
         cali_value = QtGui.QLineEdit("")
-        cali_button = QtGui.QPushButton("Browse...")
-        cali_button.setMinimumWidth(button_width)
-        cali_button.setMaximumWidth(button_width)
-        cali_button.clicked.connect(lambda state, entry=_name:  self.calibration_browse_clicked(entry))
-        hori_layout = QtGui.QHBoxLayout()
-        hori_layout.addWidget(label)
-        hori_layout.addWidget(cali_value)
-        hori_layout.addWidget(cali_button)
+        # second row
+        cali_browse_radio_button = QtGui.QRadioButton()
+        cali_browse_button = QtGui.QPushButton("Browse...")
+        cali_browse_button.setMinimumWidth(button_width)
+        cali_browse_button.setMaximumWidth(button_width)
+        cali_browse_button.clicked.connect(lambda state, entry=_name:  self.calibration_browse_clicked(entry))
+        cali_browse_button_value = QtGui.QLabel("N/A")
+
+        grid_layout = QtGui.QGridLayout()
+        grid_layout.addWidget(cali_run_radio_button, 0, 0)
+        grid_layout.addWidget(label, 0, 1)
+        grid_layout.addWidget(cali_value, 0, 2)
+
+        grid_layout.addWidget(cali_browse_radio_button, 1, 0)
+        grid_layout.addWidget(cali_browse_button, 1, 1)
+        grid_layout.addWidget(cali_browse_button_value, 1, 2)
+
         col1_widget = QtGui.QWidget()
-        col1_widget.setLayout(hori_layout)
+        col1_widget.setLayout(grid_layout)
         self.ui.tableWidget.setCellWidget(row, 1, col1_widget)
 
         #column 2 - Vanadium
@@ -186,8 +200,10 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         widget.setLayout(hori_layout)
         self.ui.tableWidget.setCellWidget(row, 4, widget)
 
-        list_local_ui = self.local_list_ui(calibration_browser=cali_button,
+        list_local_ui = self.local_list_ui(calibration_run_radio_button=cali_run_radio_button,
                                            calibration_value=cali_value,
+                                           calibration_browser=cali_browse_button,
+                                           calibration_browse_value=cali_browse_button_value,
                                            vanadium_browser=vana_button,
                                            vanadium_value=vana_value,
                                            date=date,
