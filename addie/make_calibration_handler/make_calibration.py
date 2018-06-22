@@ -1,5 +1,6 @@
 from PyQt4 import QtGui, QtCore
 import datetime
+from collections import namedtuple
 
 from addie.ui_make_calibration import Ui_MainWindow as UiMainWindow
 from addie.utilities.gui_handler import TableHandler
@@ -21,11 +22,22 @@ class MakeCalibrationLauncher(object):
 
 class MakeCalibrationWindow(QtGui.QMainWindow):
 
-    table_column_width = [50, 250, 250, 80, 300]
+    table_column_width = [60, 250, 250, 90, 300]
     table_row_height = 40
     entry_level =  0
 
     master_date = None  #QtCore.QDate()
+    master_folder = 'N/A'
+
+    # will keep record of all the ui
+    local_list_ui = namedtuple("local_list_ui", ["calibration_browser",
+                                                 "calibration_value",
+                                                 "vanadium_browser",
+                                                 "vanadium_value",
+                                                 "date",
+                                                 "output_dir_browser",
+                                                 "output_dir_value"])
+    master_list_ui = {}
 
     def __init__(self, parent=None):
         self.parent = parent
@@ -86,49 +98,63 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
 
         #column 1 - calibration
         label = QtGui.QLabel("Run #:")
-        value = QtGui.QLineEdit("")
-        button = QtGui.QPushButton("Browse ...")
-        button.setMinimumWidth(button_width)
-        button.setMaximumWidth(button_width)
-        button.clicked.connect(lambda state, entry=_name:  self.calibration_browse_clicked(entry))
+        cali_value = QtGui.QLineEdit("")
+        cali_button = QtGui.QPushButton("Browse...")
+        cali_button.setMinimumWidth(button_width)
+        cali_button.setMaximumWidth(button_width)
+        cali_button.clicked.connect(lambda state, entry=_name:  self.calibration_browse_clicked(entry))
         hori_layout = QtGui.QHBoxLayout()
         hori_layout.addWidget(label)
-        hori_layout.addWidget(value)
-        hori_layout.addWidget(button)
+        hori_layout.addWidget(cali_value)
+        hori_layout.addWidget(cali_button)
         col1_widget = QtGui.QWidget()
         col1_widget.setLayout(hori_layout)
         self.ui.tableWidget.setCellWidget(row, 1, col1_widget)
 
         #column 2 - Vanadium
         label = QtGui.QLabel("Run #:")
-        value = QtGui.QLineEdit("")
-        button = QtGui.QPushButton("Browse ...")
-        button.setMinimumWidth(button_width)
-        button.setMaximumWidth(button_width)
-        button.clicked.connect(lambda state, entry=_name:  self.vanadium_browse_clicked(entry))
+        vana_value = QtGui.QLineEdit("")
+        vana_button = QtGui.QPushButton("Browse...")
+        vana_button.setMinimumWidth(button_width)
+        vana_button.setMaximumWidth(button_width)
+        vana_button.clicked.connect(lambda state, entry=_name:  self.vanadium_browse_clicked(entry))
         hori_layout = QtGui.QHBoxLayout()
         hori_layout.addWidget(label)
-        hori_layout.addWidget(value)
-        hori_layout.addWidget(button)
+        hori_layout.addWidget(vana_value)
+        hori_layout.addWidget(vana_button)
         col1_widget = QtGui.QWidget()
         col1_widget.setLayout(hori_layout)
         self.ui.tableWidget.setCellWidget(row, 2, col1_widget)
 
         #column 3 - date
         date = QtGui.QDateEdit()
+        date.setDate(self.master_date)
         self.ui.tableWidget.setCellWidget(row, 3, date)
 
         #column 4 - output dir
-        label = QtGui.QLabel("N/A")
-        button = QtGui.QPushButton("Browse...")
-        button.setMinimumWidth(button_width)
-        button.setMaximumWidth(button_width)
+        browse_button = QtGui.QPushButton("Browse...")
+        browse_button.setMinimumWidth(button_width)
+        browse_button.setMaximumWidth(button_width)
+        value = QtGui.QLabel(self.master_folder)
+        reset = QtGui.QPushButton("Reset")
+        reset.setMinimumWidth(button_width)
+        reset.setMaximumWidth(button_width)
         hori_layout = QtGui.QHBoxLayout()
-        hori_layout.addWidget(label)
-        hori_layout.addWidget(button)
-        col3_widget = QtGui.QWidget()
-        col3_widget.setLayout(hori_layout)
-        self.ui.tableWidget.setCellWidget(row, 4, col3_widget)
+        hori_layout.addWidget(browse_button)
+        hori_layout.addWidget(value)
+        hori_layout.addWidget(reset)
+        widget = QtGui.QWidget()
+        widget.setLayout(hori_layout)
+        self.ui.tableWidget.setCellWidget(row, 4, widget)
+
+        list_local_ui = self.local_list_ui(calibration_browse=cali_button,
+                                           calibration_value=cali_value,
+                                           vanadium_browser=vana_button,
+                                           vanadium_value=vana_value,
+                                           date=date,
+                                           output_dir_browse=browse_button,
+                                           output_dir_value=value)
+        self.master_list_ui[_name] = list_local_ui
 
     def run_calibration_button_clicked(self):
         print("run calibration")
