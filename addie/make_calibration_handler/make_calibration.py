@@ -48,6 +48,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
 
         self.init_widgets()
         self.init_date()
+        self.update_add_remove_widgets()
 
     def init_date(self):
         """will initialize the master date using today's date"""
@@ -63,6 +64,14 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         for index_col, col_size in enumerate(self.table_column_width):
             self.ui.tableWidget.setColumnWidth(index_col, col_size)
 
+    def update_add_remove_widgets(self):
+        nbr_row = self.ui.tableWidget.rowCount()
+        if nbr_row > 0:
+            _status = True
+        else:
+            _status = False
+        self.ui.remove_row_button.setEnabled(_status)
+
     def master_browse_button_clicked(self):
         _master_folder = QtGui.QFileDialog.getExistingDirectory(caption="Select Output Folder ...",
                                                                 directory=self.parent.output_folder,
@@ -71,12 +80,24 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
             self.ui.master_output_directory_label.setText(str(_master_folder))
 
     def remove_row_button_clicked(self):
-        print("remove row")
+        o_gui = TableHandler(table_ui=self.ui.tableWidget)
+        row_selected = o_gui.get_current_row()
+
+        # no row selected
+        if row_selected == -1:
+            return
+
+        entry = str(self.ui.tableWidget.item(row_selected, 0).text())
+        self.ui.tableWidget.removeRow(row_selected)
+        # remove list of ui from this row
+        del self.master_list_ui[entry]
+        self.update_add_remove_widgets()
 
     def add_row_button_clicked(self):
         o_gui = TableHandler(table_ui=self.ui.tableWidget)
         row_selected = o_gui.get_current_row()
         self.__insert_new_row(row=row_selected+1)
+        self.update_add_remove_widgets()
 
     def vanadium_browse_clicked(self, entry=""):
         print("vanadium: {}".format(entry))
