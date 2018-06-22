@@ -1,4 +1,5 @@
-from PyQt4 import QtGui
+from PyQt4 import QtGui, QtCore
+import datetime
 
 from addie.ui_make_calibration import Ui_MainWindow as UiMainWindow
 from addie.utilities.gui_handler import TableHandler
@@ -24,6 +25,8 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
     table_row_height = 40
     entry_level =  0
 
+    master_date = None  #QtCore.QDate()
+
     def __init__(self, parent=None):
         self.parent = parent
 
@@ -32,6 +35,17 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         self.ui.setupUi(self)
 
         self.init_widgets()
+        self.init_date()
+
+    def init_date(self):
+        """will initialize the master date using today's date"""
+        now = datetime.datetime.now()
+        day = now.day
+        month = now.month
+        year = now.year
+        today = QtCore.QDate(year, month, day)
+        self.master_date = today
+        self.ui.master_date.setDate(today)
 
     def init_widgets(self):
         for index_col, col_size in enumerate(self.table_column_width):
@@ -53,10 +67,10 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         self.__insert_new_row(row=row_selected+1)
 
     def vanadium_browse_clicked(self, entry=-1):
-        print(entry)
+        print("vanadium: {}".format(entry))
 
-    def calibration_browse_clicked(self):
-        pass
+    def calibration_browse_clicked(self, entry=-1):
+        print("calibration: {}".format(entry))
 
     def __insert_new_row(self, row=-1):
         self.ui.tableWidget.insertRow(row)
@@ -76,6 +90,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         button = QtGui.QPushButton("Browse ...")
         button.setMinimumWidth(button_width)
         button.setMaximumWidth(button_width)
+        button.clicked.connect(lambda state, entry=_name:  self.calibration_browse_clicked(entry))
         hori_layout = QtGui.QHBoxLayout()
         hori_layout.addWidget(label)
         hori_layout.addWidget(value)
