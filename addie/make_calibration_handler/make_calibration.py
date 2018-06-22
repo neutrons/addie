@@ -36,7 +36,8 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
                                                  "vanadium_value",
                                                  "date",
                                                  "output_dir_browser",
-                                                 "output_dir_value"])
+                                                 "output_dir_value",
+                                                 "output_reset"])
     master_list_ui = {}
 
     def __init__(self, parent=None):
@@ -78,6 +79,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
                                                                 options=QtGui.QFileDialog.ShowDirsOnly)
         if _master_folder:
             self.ui.master_output_directory_label.setText(str(_master_folder))
+            self.master_folder = _master_folder
 
     def remove_row_button_clicked(self):
         o_gui = TableHandler(table_ui=self.ui.tableWidget)
@@ -106,7 +108,18 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         print("calibration: {}".format(entry))
 
     def local_output_dir_clicked(self, entry=""):
-        pass
+        _local_folder = QtGui.QFileDialog.getExistingDirectory(caption="Select Output Folder ...",
+                                                                directory=self.master_folder,
+                                                                options=QtGui.QFileDialog.ShowDirsOnly)
+        if _local_folder:
+            _master_list_ui = self.master_list_ui[entry]
+            _local_label = _master_list_ui.output_dir_value
+            _local_label.setText(str(_local_folder))
+
+    def local_reset_dir_clicked(self, entry=""):
+        _master_list_ui = self.master_list_ui[entry]
+        _local_label = _master_list_ui.output_dir_value
+        _local_label.setText(str(self.master_folder))
 
     def __insert_new_row(self, row=-1):
         self.ui.tableWidget.insertRow(row)
@@ -164,6 +177,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         reset = QtGui.QPushButton("Reset")
         reset.setMinimumWidth(button_width)
         reset.setMaximumWidth(button_width)
+        reset.clicked.connect(lambda state, entry=_name: self.local_reset_dir_clicked(entry))
         hori_layout = QtGui.QHBoxLayout()
         hori_layout.addWidget(browse_button)
         hori_layout.addWidget(value)
@@ -178,7 +192,8 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
                                            vanadium_value=vana_value,
                                            date=date,
                                            output_dir_browser=browse_button,
-                                           output_dir_value=value)
+                                           output_dir_value=value,
+                                           output_reset=reset)
         self.master_list_ui[_name] = list_local_ui
 
     def run_calibration_button_clicked(self):
