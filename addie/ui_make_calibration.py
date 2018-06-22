@@ -69,7 +69,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addWidget(self.groupBox)
         self.tableWidget = QtGui.QTableWidget(self.centralwidget)
         self.tableWidget.setAlternatingRowColors(True)
-        self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.NoSelection)
+        self.tableWidget.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
         self.tableWidget.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         self.tableWidget.setObjectName(_fromUtf8("tableWidget"))
         self.tableWidget.setColumnCount(5)
