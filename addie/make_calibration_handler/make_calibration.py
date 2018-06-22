@@ -221,7 +221,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
                                            vanadium_run_radio_button=vana_run_radio_button,
                                            vanadium_value=vana_value,
                                            vanadium_browser=vana_browse_button,
-                                           vanadium_browse_value=vana_browse_button_value,
+                                           vanadium_browser_value=vana_browse_button_value,
                                            date=date,
                                            output_dir_browser=browse_button,
                                            output_dir_value=value,
