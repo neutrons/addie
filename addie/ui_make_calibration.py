@@ -143,7 +143,7 @@ class Ui_MainWindow(object):
         self.master_output_directory_button.setText(_translate("MainWindow", "Browse ...", None))
         self.master_output_directory_label.setText(_translate("MainWindow", "N/A", None))
         item = self.tableWidget.horizontalHeaderItem(0)
-        item.setText(_translate("MainWindow", "Entry", None))
+        item.setText(_translate("MainWindow", "Entry #", None))
         item = self.tableWidget.horizontalHeaderItem(1)
         item.setText(_translate("MainWindow", "Calibration", None))
         item = self.tableWidget.horizontalHeaderItem(2)
