@@ -140,7 +140,7 @@
       </attribute>
       <column>
        <property name="text">
-        <string>Entry</string>
+        <string>Entry #</string>
        </property>
       </column>
       <column>

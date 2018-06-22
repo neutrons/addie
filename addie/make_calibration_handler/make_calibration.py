@@ -20,7 +20,7 @@ class MakeCalibrationLauncher(object):
 
 class MakeCalibrationWindow(QtGui.QMainWindow):
 
-    table_column_width = [250, 250, 80, 300]
+    table_column_width = [50, 250, 250, 80, 300]
     table_row_height = 40
     entry_level =  0
 
@@ -52,8 +52,8 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         row_selected = o_gui.get_current_row()
         self.__insert_new_row(row=row_selected+1)
 
-    def vanadium_browse_clicked(self, row=-1):
-        print(row)
+    def vanadium_browse_clicked(self, entry=-1):
+        print(entry)
 
     def calibration_browse_clicked(self):
         pass
@@ -68,7 +68,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         _name = str(self.entry_level+1)
         self.entry_level += 1
         label = QtGui.QLabel(_name)
-        self.ui.tableWidget.setCellWidget(label)
+        self.ui.tableWidget.setCellWidget(row, 0, label)
 
         #column 1 - calibration
         label = QtGui.QLabel("Run #:")
@@ -90,7 +90,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         button = QtGui.QPushButton("Browse ...")
         button.setMinimumWidth(button_width)
         button.setMaximumWidth(button_width)
-        button.clicked.connect(lambda state, row=row: self.vanadium_browse_clicked(row))
+        button.clicked.connect(lambda state, entry=_name:  self.vanadium_browse_clicked(entry))
         hori_layout = QtGui.QHBoxLayout()
         hori_layout.addWidget(label)
         hori_layout.addWidget(value)
