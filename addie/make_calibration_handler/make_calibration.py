@@ -35,6 +35,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
                                                  "calibration_value",
                                                  "calibration_browser",
                                                  "calibration_browser_value",
+                                                 "calibration_browser_radio_button",
                                                  "vanadium_run_radio_button",
                                                  "vanadium_value",
                                                  "vanadium_browser_radio_button",
@@ -109,22 +110,43 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         self.__insert_new_row(row=row_selected+1)
         self.update_add_remove_widgets()
 
-    def vanadium_browser_clicked(self, entry=""):
+    def _general_browser_clicked(self,
+                                 sample_type='',
+                                 browser_radio_button_ui=None,
+                                 value_ui=None):
         _file = QtGui.QFileDialog.getOpenFileName(parent=self,
-                                                  caption="Select Vanadium File ...",
+                                                  caption="Select {} File ...".format(sample_type),
                                                   directory=self.master_folder,
                                                   filter="NeXus (*.nxs);; All (*.*)")
         if _file:
             # enable the radio button
-            browser_radio_button_ui = self.master_list_ui[entry].vanadium_browser_radio_button
             browser_radio_button_ui.setChecked(True)
             # display base name of file selected (without path)
-            vanadium_value_ui = self.master_list_ui[entry].vanadium_browser_value
-            vanadium_value_ui.setText(os.path.basename(_file))
+            value_ui.setText(os.path.basename(_file))
+            return _file
+
+
+    def vanadium_browser_clicked(self, entry=""):
+        sample_type = "Vanadium"
+        browser_radio_button_ui = self.master_list_ui[entry].vanadium_browser_radio_button
+        value_ui = self.master_list_ui[entry].vanadium_browser_value
+
+        _file = self._general_browser_clicked(sample_type=sample_type,
+                                              browser_radio_button_ui=browser_radio_button_ui,
+                                              value_ui=value_ui)
+        if _file:
             self.master_list_value[entry]["vanadium_browser"] = _file
 
     def calibration_browser_clicked(self, entry=""):
-        print("calibration: {}".format(entry))
+        sample_type = "Calibration"
+        browser_radio_button_ui = self.master_list_ui[entry].calibration_browser_radio_button
+        value_ui = self.master_list_ui[entry].calibration_browser_value
+
+        _file = self._general_browser_clicked(sample_type=sample_type,
+                                              browser_radio_button_ui=browser_radio_button_ui,
+                                              value_ui=value_ui)
+        if _file:
+            self.master_list_value[entry]["calibration_browser"] = _file
 
     def local_output_dir_clicked(self, entry=""):
         _local_folder = QtGui.QFileDialog.getExistingDirectory(caption="Select Output Folder ...",
@@ -235,6 +257,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
                                            calibration_value=cali_value,
                                            calibration_browser=cali_browser_button,
                                            calibration_browser_value=cali_browser_button_value,
+                                           calibration_browser_radio_button=cali_browser_radio_button,
                                            vanadium_run_radio_button=vana_run_radio_button,
                                            vanadium_value=vana_value,
                                            vanadium_browser_radio_button=vana_browser_radio_button,
