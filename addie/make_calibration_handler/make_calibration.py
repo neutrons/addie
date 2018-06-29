@@ -33,7 +33,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
     local_list_ui = namedtuple("local_list_ui", ["calibration_run_radio_button",
                                                  "calibration_value",
                                                  "calibration_browser",
-                                                 "calibration_browser_value"
+                                                 "calibration_browser_value",
                                                  "vanadium_run_radio_button",
                                                  "vanadium_value",
                                                  "vanadium_browser",
@@ -105,10 +105,10 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         self.__insert_new_row(row=row_selected+1)
         self.update_add_remove_widgets()
 
-    def vanadium_browse_clicked(self, entry=""):
+    def vanadium_browser_clicked(self, entry=""):
         print("vanadium: {}".format(entry))
 
-    def calibration_browse_clicked(self, entry=""):
+    def calibration_browser_clicked(self, entry=""):
         print("calibration: {}".format(entry))
 
     def local_output_dir_clicked(self, entry=""):
@@ -144,21 +144,21 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         label = QtGui.QLabel("Run #:")
         cali_value = QtGui.QLineEdit("")
         # second row
-        cali_browse_radio_button = QtGui.QRadioButton()
-        cali_browse_button = QtGui.QPushButton("Browse...")
-        cali_browse_button.setMinimumWidth(button_width)
-        cali_browse_button.setMaximumWidth(button_width)
-        cali_browse_button.clicked.connect(lambda state, entry=_name:  self.calibration_browse_clicked(entry))
-        cali_browse_button_value = QtGui.QLabel("N/A")
+        cali_browser_radio_button = QtGui.QRadioButton()
+        cali_browser_button = QtGui.QPushButton("Browse...")
+        cali_browser_button.setMinimumWidth(button_width)
+        cali_browser_button.setMaximumWidth(button_width)
+        cali_browser_button.clicked.connect(lambda state, entry=_name:  self.calibration_browser_clicked(entry))
+        cali_browser_button_value = QtGui.QLabel("N/A")
 
         grid_layout = QtGui.QGridLayout()
         grid_layout.addWidget(cali_run_radio_button, 0, 0)
         grid_layout.addWidget(label, 0, 1)
         grid_layout.addWidget(cali_value, 0, 2)
 
-        grid_layout.addWidget(cali_browse_radio_button, 1, 0)
-        grid_layout.addWidget(cali_browse_button, 1, 1)
-        grid_layout.addWidget(cali_browse_button_value, 1, 2)
+        grid_layout.addWidget(cali_browser_radio_button, 1, 0)
+        grid_layout.addWidget(cali_browser_button, 1, 1)
+        grid_layout.addWidget(cali_browser_button_value, 1, 2)
 
         col1_widget = QtGui.QWidget()
         col1_widget.setLayout(grid_layout)
@@ -171,21 +171,21 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         label = QtGui.QLabel("Run #:")
         vana_value = QtGui.QLineEdit("")
         # second row
-        vana_browse_radio_button = QtGui.QRadioButton()
-        vana_browse_button = QtGui.QPushButton("Browse...")
-        vana_browse_button.setMinimumWidth(button_width)
-        vana_browse_button.setMaximumWidth(button_width)
-        vana_browse_button.clicked.connect(lambda state, entry=_name:  self.vanadium_browse_clicked(entry))
-        vana_browse_button_value = QtGui.QLabel("N/A")
+        vana_browser_radio_button = QtGui.QRadioButton()
+        vana_browser_button = QtGui.QPushButton("Browse...")
+        vana_browser_button.setMinimumWidth(button_width)
+        vana_browser_button.setMaximumWidth(button_width)
+        vana_browser_button.clicked.connect(lambda state, entry=_name:  self.vanadium_browser_clicked(entry))
+        vana_browser_button_value = QtGui.QLabel("N/A")
 
         grid_layout = QtGui.QGridLayout()
         grid_layout.addWidget(vana_run_radio_button, 0, 0)
         grid_layout.addWidget(label, 0, 1)
         grid_layout.addWidget(vana_value, 0, 2)
 
-        grid_layout.addWidget(vana_browse_radio_button, 1, 0)
-        grid_layout.addWidget(vana_browse_button, 1, 1)
-        grid_layout.addWidget(vana_browse_button_value, 1, 2)
+        grid_layout.addWidget(vana_browser_radio_button, 1, 0)
+        grid_layout.addWidget(vana_browser_button, 1, 1)
+        grid_layout.addWidget(vana_browser_button_value, 1, 2)
 
         col1_widget = QtGui.QWidget()
         col1_widget.setLayout(grid_layout)
@@ -197,17 +197,17 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         self.ui.tableWidget.setCellWidget(row, 3, date)
 
         #column 4 - output dir
-        browse_button = QtGui.QPushButton("Browse...")
-        browse_button.setMinimumWidth(button_width)
-        browse_button.setMaximumWidth(button_width)
-        browse_button.clicked.connect(lambda state, entry=_name: self.local_output_dir_clicked(entry))
+        browser_button = QtGui.QPushButton("Browse...")
+        browser_button.setMinimumWidth(button_width)
+        browser_button.setMaximumWidth(button_width)
+        browser_button.clicked.connect(lambda state, entry=_name: self.local_output_dir_clicked(entry))
         value = QtGui.QLabel(self.master_folder)
-        reset = QtGui.QPushButton("Reset")
+        reset = QtGui.QPushButton("Use Master")
         reset.setMinimumWidth(button_width)
         reset.setMaximumWidth(button_width)
         reset.clicked.connect(lambda state, entry=_name: self.local_reset_dir_clicked(entry))
         hori_layout = QtGui.QHBoxLayout()
-        hori_layout.addWidget(browse_button)
+        hori_layout.addWidget(browser_button)
         hori_layout.addWidget(value)
         hori_layout.addWidget(reset)
         widget = QtGui.QWidget()
@@ -216,14 +216,14 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
 
         list_local_ui = self.local_list_ui(calibration_run_radio_button=cali_run_radio_button,
                                            calibration_value=cali_value,
-                                           calibration_browser=cali_browse_button,
-                                           calibration_browse_value=cali_browse_button_value,
+                                           calibration_browser=cali_browser_button,
+                                           calibration_browser_value=cali_browser_button_value,
                                            vanadium_run_radio_button=vana_run_radio_button,
                                            vanadium_value=vana_value,
-                                           vanadium_browser=vana_browse_button,
-                                           vanadium_browser_value=vana_browse_button_value,
+                                           vanadium_browser=vana_browser_button,
+                                           vanadium_browser_value=vana_browser_button_value,
                                            date=date,
-                                           output_dir_browser=browse_button,
+                                           output_dir_browser=browser_button,
                                            output_dir_value=value,
                                            output_reset=reset)
         self.master_list_ui[_name] = list_local_ui
