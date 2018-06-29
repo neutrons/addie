@@ -1,6 +1,7 @@
 from PyQt4 import QtGui, QtCore
 import datetime
 from collections import namedtuple
+import os
 
 from addie.ui_make_calibration import Ui_MainWindow as UiMainWindow
 from addie.utilities.gui_handler import TableHandler
@@ -36,6 +37,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
                                                  "calibration_browser_value",
                                                  "vanadium_run_radio_button",
                                                  "vanadium_value",
+                                                 "vanadium_browser_radio_button",
                                                  "vanadium_browser",
                                                  "vanadium_browser_value",
                                                  "date",
@@ -106,6 +108,17 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         self.update_add_remove_widgets()
 
     def vanadium_browser_clicked(self, entry=""):
+        _file = QtGui.QFileDialog.getOpenFileName(parent=self,
+                                                  caption="Select Vanadium File ...",
+                                                  directory=self.master_folder,
+                                                  filter="NeXus (*.nxs);; All (*.*)")
+        if _file:
+            # enable the radio button
+            browser_radio_button_ui = self.master_list_ui[entry].vanadium_browser_radio_button
+            browser_radio_button_ui.setChecked(True)
+            vanadium_value_ui = self.master_list_ui[entry].vanadium_browser_value
+            vanadium_value_ui.setText(os.path.basename(_file))
+
         print("vanadium: {}".format(entry))
 
     def calibration_browser_clicked(self, entry=""):
@@ -131,9 +144,11 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
 
         button_width = 80
 
+        new_entry_level = self.entry_level + 1
+        self.entry_level = new_entry_level
+
         #column0 - entry
-        _name = str(self.entry_level+1)
-        self.entry_level += 1
+        _name = str(new_entry_level)
         item = QtGui.QTableWidgetItem(str(_name))
         self.ui.tableWidget.setItem(row, 0, item)
 
@@ -220,6 +235,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
                                            calibration_browser_value=cali_browser_button_value,
                                            vanadium_run_radio_button=vana_run_radio_button,
                                            vanadium_value=vana_value,
+                                           vanadium_browser_radio_button=vana_browser_radio_button,
                                            vanadium_browser=vana_browser_button,
                                            vanadium_browser_value=vana_browser_button_value,
                                            date=date,
