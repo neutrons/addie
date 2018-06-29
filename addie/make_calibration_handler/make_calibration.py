@@ -1,6 +1,7 @@
 from PyQt4 import QtGui, QtCore
 import datetime
 from collections import namedtuple
+import numpy as np
 import os
 
 from addie.ui_make_calibration import Ui_MainWindow as UiMainWindow
@@ -81,6 +82,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         else:
             _status = False
         self.ui.remove_row_button.setEnabled(_status)
+        self.check_run_calibration_status()
 
     def master_browse_button_clicked(self):
         _master_folder = QtGui.QFileDialog.getExistingDirectory(caption="Select Output Folder ...",
@@ -89,6 +91,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         if _master_folder:
             self.ui.master_output_directory_label.setText(str(_master_folder))
             self.master_folder = _master_folder
+            self.check_run_calibration_status()
 
     def remove_row_button_clicked(self):
         o_gui = TableHandler(table_ui=self.ui.tableWidget)
@@ -125,6 +128,8 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
             value_ui.setText(os.path.basename(_file))
             return _file
 
+    def run_entered(self, entry=""):
+        self.check_run_calibration_status()
 
     def vanadium_browser_clicked(self, entry=""):
         sample_type = "Vanadium"
@@ -136,6 +141,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
                                               value_ui=value_ui)
         if _file:
             self.master_list_value[entry]["vanadium_browser"] = _file
+            self.check_run_calibration_status()
 
     def calibration_browser_clicked(self, entry=""):
         sample_type = "Calibration"
@@ -147,6 +153,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
                                               value_ui=value_ui)
         if _file:
             self.master_list_value[entry]["calibration_browser"] = _file
+            self.check_run_calibration_status()
 
     def local_output_dir_clicked(self, entry=""):
         _local_folder = QtGui.QFileDialog.getExistingDirectory(caption="Select Output Folder ...",
@@ -156,11 +163,15 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
             _master_list_ui = self.master_list_ui[entry]
             _local_label = _master_list_ui.output_dir_value
             _local_label.setText(str(_local_folder))
+            self.check_run_calibration_status()
 
     def local_reset_dir_clicked(self, entry=""):
         _master_list_ui = self.master_list_ui[entry]
         _local_label = _master_list_ui.output_dir_value
         _local_label.setText(str(self.master_folder))
+        self.check_run_calibration_status()
+
+    ## helper functions
 
     def __insert_new_row(self, row=-1):
         self.ui.tableWidget.insertRow(row)
@@ -182,6 +193,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         cali_run_radio_button.setChecked(True)
         label = QtGui.QLabel("Run #:")
         cali_value = QtGui.QLineEdit("")
+        cali_value.returnPressed.connect(lambda entry=_name: self.run_entered(entry))
         # second row
         cali_browser_radio_button = QtGui.QRadioButton()
         cali_browser_button = QtGui.QPushButton("Browse...")
@@ -209,6 +221,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         vana_run_radio_button.setChecked(True)
         label = QtGui.QLabel("Run #:")
         vana_value = QtGui.QLineEdit("")
+        vana_value.returnPressed.connect(lambda entry=_name: self.run_entered(entry))
         # second row
         vana_browser_radio_button = QtGui.QRadioButton()
         vana_browser_button = QtGui.QPushButton("Browse...")
@@ -240,14 +253,15 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         browser_button.setMinimumWidth(button_width)
         browser_button.setMaximumWidth(button_width)
         browser_button.clicked.connect(lambda state, entry=_name: self.local_output_dir_clicked(entry))
-        value = QtGui.QLabel(self.master_folder)
+        browser_value = QtGui.QLabel(self.master_folder)
+        print("Bowser value is {}".format(browser_value))
         reset = QtGui.QPushButton("Use Master")
         reset.setMinimumWidth(button_width)
         reset.setMaximumWidth(button_width)
         reset.clicked.connect(lambda state, entry=_name: self.local_reset_dir_clicked(entry))
         hori_layout = QtGui.QHBoxLayout()
         hori_layout.addWidget(browser_button)
-        hori_layout.addWidget(value)
+        hori_layout.addWidget(browser_value)
         hori_layout.addWidget(reset)
         widget = QtGui.QWidget()
         widget.setLayout(hori_layout)
@@ -265,7 +279,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
                                            vanadium_browser_value=vana_browser_button_value,
                                            date=date,
                                            output_dir_browser=browser_button,
-                                           output_dir_value=value,
+                                           output_dir_value=browser_value,
                                            output_reset=reset)
         self.master_list_ui[_name] = list_local_ui
 
@@ -275,8 +289,68 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
                                calibration_browser="")
         self.master_list_value[_name] = list_local_name
 
+    def _check_local_column(self, run_radio_button=None, run_value=None, browser_value=None):
+        if run_radio_button.isChecked():
+            _runs = str(run_value.text())
+            if _runs.strip() == "":
+                return False
+            else:
+                return True
+        else:
+            _file_name = str(browser_value.text())
+            if _file_name == 'N/A':
+                return False
+            else:
+                return True
+
+    def _check_status_of_row(self, row=-1):
+        _entry = str(self.ui.tableWidget.item(row, 0).text())
+        local_list_ui = self.master_list_ui[_entry]
+
+        # Calibration column
+        if not self._check_local_column(run_radio_button = local_list_ui.calibration_run_radio_button,
+                                        run_value = local_list_ui.calibration_value,
+                                        browser_value = local_list_ui.calibration_browser_value):
+            return False
+
+        # Vanadium column
+        if not self._check_local_column(run_radio_button=local_list_ui.vanadium_run_radio_button,
+                                        run_value=local_list_ui.vanadium_value,
+                                        browser_value=local_list_ui.vanadium_browser_value):
+            return False
+
+        # output dir
+        browse_label = self.local_list_ui.output_dir_value
+        print(browse_label.text())
+        if browse_label.text() == 'N/A':
+            return False
+
+        return True
+
+    def _check_status_of_widgets(self):
+        # table is empty
+        nbr_row = self.ui.tableWidget.rowCount()
+        if nbr_row == 0:
+            return False
+
+        for _row in np.arange(nbr_row):
+            _status_row = self._check_status_of_row(row=_row)
+            if _status_row:
+                continue
+
+            # if a row has missing infos, no need to continue
+            return False
+
+        return True
+
+    def check_run_calibration_status(self):
+        """Disable the Run Calibration button if any of the infos is missing"""
+        print("checking status of run calibration button")
+        _status = self._check_status_of_widgets()
+        self.ui.run_calibration_button.setEnabled(_status)
+
     def run_calibration_button_clicked(self):
-        print("run calibration")
+        print("running calibration")
 
     def closeEvent(self, c):
         self.parent.make_calibration_ui = None
