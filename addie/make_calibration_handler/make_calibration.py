@@ -44,7 +44,9 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
                                                  "output_dir_browser",
                                                  "output_dir_value",
                                                  "output_reset"])
+
     master_list_ui = {}
+    master_list_value = {}
 
     def __init__(self, parent=None):
         self.parent = parent
@@ -116,10 +118,10 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
             # enable the radio button
             browser_radio_button_ui = self.master_list_ui[entry].vanadium_browser_radio_button
             browser_radio_button_ui.setChecked(True)
+            # display base name of file selected (without path)
             vanadium_value_ui = self.master_list_ui[entry].vanadium_browser_value
             vanadium_value_ui.setText(os.path.basename(_file))
-
-        print("vanadium: {}".format(entry))
+            self.master_list_value[entry]["vanadium_browser"] = _file
 
     def calibration_browser_clicked(self, entry=""):
         print("calibration: {}".format(entry))
@@ -243,6 +245,12 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
                                            output_dir_value=value,
                                            output_reset=reset)
         self.master_list_ui[_name] = list_local_ui
+
+        list_local_name = dict(vanadium_run_number="",
+                               vanadium_browser="",
+                               calibration_run_number="",
+                               calibration_browser="")
+        self.master_list_value[_name] = list_local_name
 
     def run_calibration_button_clicked(self):
         print("run calibration")
