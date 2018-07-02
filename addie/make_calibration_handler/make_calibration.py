@@ -31,6 +31,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
     master_date = None  #QtCore.QDate()
     master_folder = 'N/A'
 
+
     # will keep record of all the ui
     local_list_ui = namedtuple("local_list_ui", ["sample_environment_value"
                                                  "sample_environment_reset",
