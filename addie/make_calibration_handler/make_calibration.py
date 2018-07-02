@@ -32,7 +32,8 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
     master_folder = 'N/A'
 
     # will keep record of all the ui
-    local_list_ui = namedtuple("local_list_ui", ["sample_name_value",
+    local_list_ui = namedtuple("local_list_ui", ["sample_environment_value"
+                                                 "sample_environment_reset",
                                                  "calibration_run_radio_button",
                                                  "calibration_value",
                                                  "calibration_browser",
@@ -276,7 +277,9 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         widget.setLayout(hori_layout)
         self.ui.tableWidget.setCellWidget(row, col, widget)
 
-        list_local_ui = self.local_list_ui(calibration_run_radio_button=cali_run_radio_button,
+        list_local_ui = self.local_list_ui(sample_environment_value=None,
+                                           sample_environment_reset=None,
+                                           calibration_run_radio_button=cali_run_radio_button,
                                            calibration_value=cali_value,
                                            calibration_browser=cali_browser_button,
                                            calibration_browser_value=cali_browser_button_value,
