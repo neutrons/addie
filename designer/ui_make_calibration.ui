@@ -145,6 +145,11 @@
       </column>
       <column>
        <property name="text">
+        <string>Sample Name</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
         <string>Calibration</string>
        </property>
       </column>

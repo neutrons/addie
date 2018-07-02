@@ -24,7 +24,7 @@ class MakeCalibrationLauncher(object):
 
 class MakeCalibrationWindow(QtGui.QMainWindow):
 
-    table_column_width = [60, 350, 350, 90, 300]
+    table_column_width = [60, 250, 350, 350, 90, 300]
     table_row_height = 85
     entry_level =  0
 
@@ -32,7 +32,8 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
     master_folder = 'N/A'
 
     # will keep record of all the ui
-    local_list_ui = namedtuple("local_list_ui", ["calibration_run_radio_button",
+    local_list_ui = namedtuple("local_list_ui", ["sample_name_value",
+                                                 "calibration_run_radio_button",
                                                  "calibration_value",
                                                  "calibration_browser",
                                                  "calibration_browser_value",
@@ -183,11 +184,16 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         self.entry_level = new_entry_level
 
         #column0 - entry
+        col=0
         _name = str(new_entry_level)
         item = QtGui.QTableWidgetItem(str(_name))
-        self.ui.tableWidget.setItem(row, 0, item)
+        self.ui.tableWidget.setItem(row, col, item)
 
-        #column 1 - calibration
+        #new column - sample name
+        col = 1
+
+        # new column - calibration
+        col = 2
         # first row
         cali_run_radio_button = QtGui.QRadioButton()
         cali_run_radio_button.setChecked(True)
@@ -213,9 +219,10 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
 
         col1_widget = QtGui.QWidget()
         col1_widget.setLayout(grid_layout)
-        self.ui.tableWidget.setCellWidget(row, 1, col1_widget)
+        self.ui.tableWidget.setCellWidget(row, col, col1_widget)
 
-        #column 2 - Vanadium
+        # new column - Vanadium
+        col = 3
         # first row
         vana_run_radio_button = QtGui.QRadioButton()
         vana_run_radio_button.setChecked(True)
@@ -241,14 +248,16 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
 
         col1_widget = QtGui.QWidget()
         col1_widget.setLayout(grid_layout)
-        self.ui.tableWidget.setCellWidget(row, 2, col1_widget)
+        self.ui.tableWidget.setCellWidget(row, col, col1_widget)
 
-        #column 3 - date
+        # new column - date
+        col = 4
         date = QtGui.QDateEdit()
         date.setDate(self.master_date)
-        self.ui.tableWidget.setCellWidget(row, 3, date)
+        self.ui.tableWidget.setCellWidget(row, col, date)
 
-        #column 4 - output dir
+        # new column - output dir
+        col = 5
         browser_button = QtGui.QPushButton("Browse...")
         browser_button.setMinimumWidth(button_width)
         browser_button.setMaximumWidth(button_width)
@@ -265,7 +274,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         hori_layout.addWidget(reset)
         widget = QtGui.QWidget()
         widget.setLayout(hori_layout)
-        self.ui.tableWidget.setCellWidget(row, 4, widget)
+        self.ui.tableWidget.setCellWidget(row, col, widget)
 
         list_local_ui = self.local_list_ui(calibration_run_radio_button=cali_run_radio_button,
                                            calibration_value=cali_value,
