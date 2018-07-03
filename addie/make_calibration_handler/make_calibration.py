@@ -3,6 +3,7 @@ import datetime
 from collections import namedtuple
 import numpy as np
 import os
+import json
 
 from addie.ui_make_calibration import Ui_MainWindow as UiMainWindow
 from addie.utilities.gui_handler import TableHandler
@@ -31,6 +32,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
     master_date = None  #QtCore.QDate()
     master_folder = 'N/A'
 
+    addie_config_file = "addie/config.json"
 
     # will keep record of all the ui
     local_list_ui = namedtuple("local_list_ui", ["sample_environment_value"
@@ -77,6 +79,14 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
     def init_widgets(self):
         for index_col, col_size in enumerate(self.table_column_width):
             self.ui.tableWidget.setColumnWidth(index_col, col_size)
+
+        # list of sample environment
+        config_file = self.addie_config_file
+        data = None
+        with open(config_file) as f:
+            data = json.load(f)
+        list_environment = data['sample_environment']
+        self.ui.sample_environment_combobox.addItems(list_environment)
 
     def update_add_remove_widgets(self):
         nbr_row = self.ui.tableWidget.rowCount()
