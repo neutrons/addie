@@ -182,7 +182,7 @@
       </column>
       <column>
        <property name="text">
-        <string>Sample Name</string>
+        <string>Sample Environment</string>
        </property>
       </column>
       <column>

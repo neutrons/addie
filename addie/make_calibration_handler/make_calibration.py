@@ -35,16 +35,11 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
     addie_config_file = "addie/config.json"
 
     # will keep record of all the ui
-    local_list_ui = namedtuple("local_list_ui", ["sample_environment_value"
-                                                 "sample_environment_reset",
-                                                 "calibration_run_radio_button",
+    local_list_ui = namedtuple("local_list_ui", ["sample_environment_value",
                                                  "calibration_value",
                                                  "calibration_browser",
                                                  "calibration_browser_value",
-                                                 "calibration_browser_radio_button",
-                                                 "vanadium_run_radio_button",
                                                  "vanadium_value",
-                                                 "vanadium_browser_radio_button",
                                                  "vanadium_browser",
                                                  "vanadium_browser_value",
                                                  "date",
@@ -82,11 +77,17 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
 
         # list of sample environment
         config_file = self.addie_config_file
-        data = None
         with open(config_file) as f:
             data = json.load(f)
         list_environment = data['sample_environment']
         self.ui.sample_environment_combobox.addItems(list_environment)
+
+    def get_master_list_sample_environment(self):
+        nbr_entry = self.ui.sample_environment_combobox.count()
+        list_entry = []
+        for _row in np.arange(nbr_entry):
+            list_entry.append(str(self.ui.sample_environment_combobox.itemText(_row)))
+        return list_entry
 
     def update_add_remove_widgets(self):
         nbr_row = self.ui.tableWidget.rowCount()
@@ -201,65 +202,74 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         item = QtGui.QTableWidgetItem(str(_name))
         self.ui.tableWidget.setItem(row, col, item)
 
-        #new column - sample name
+        #new column - sample environment
         col = 1
+        sample_combobox = QtGui.QComboBox()
+        sample_combobox.setEditable(True)
+        sample_combobox.setMaximumHeight(40)
+        master_list_sample_environment = self.get_master_list_sample_environment()
+        sample_combobox.addItems(master_list_sample_environment)
+        master_list_sample_environment_index_selected = self.ui.sample_environment_combobox.currentIndex()
+        sample_combobox.setCurrentIndex(master_list_sample_environment_index_selected)
+        label = QtGui.QLabel("Select or Edit!")
+        verti_layout = QtGui.QVBoxLayout()
+        verti_layout.addWidget(sample_combobox)
+        verti_layout.addWidget(label)
+        widget = QtGui.QWidget()
+        widget.setLayout(verti_layout)
+        self.ui.tableWidget.setCellWidget(row, col, widget)
 
         # new column - calibration
         col = 2
         # first row
-        cali_run_radio_button = QtGui.QRadioButton()
-        cali_run_radio_button.setChecked(True)
         label = QtGui.QLabel("Run #:")
         cali_value = QtGui.QLineEdit("")
         cali_value.returnPressed.connect(lambda entry=_name: self.run_entered(entry))
-        # second row
-        cali_browser_radio_button = QtGui.QRadioButton()
         cali_browser_button = QtGui.QPushButton("Browse...")
         cali_browser_button.setMinimumWidth(button_width)
         cali_browser_button.setMaximumWidth(button_width)
         cali_browser_button.clicked.connect(lambda state, entry=_name:  self.calibration_browser_clicked(entry))
+        first_row = QtGui.QHBoxLayout()
+        first_row.addWidget(label)
+        first_row.addWidget(cali_value)
+        first_row.addWidget(cali_browser_button)
+        first_row_widget = QtGui.QWidget()
+        first_row_widget.setLayout(first_row)
+        # second row
         cali_browser_button_value = QtGui.QLabel("N/A")
 
-        grid_layout = QtGui.QGridLayout()
-        grid_layout.addWidget(cali_run_radio_button, 0, 0)
-        grid_layout.addWidget(label, 0, 1)
-        grid_layout.addWidget(cali_value, 0, 2)
-
-        grid_layout.addWidget(cali_browser_radio_button, 1, 0)
-        grid_layout.addWidget(cali_browser_button, 1, 1)
-        grid_layout.addWidget(cali_browser_button_value, 1, 2)
-
+        verti_layout = QtGui.QVBoxLayout()
+        verti_layout.addWidget(first_row_widget)
+        verti_layout.addWidget(cali_browser_button_value)
         col1_widget = QtGui.QWidget()
-        col1_widget.setLayout(grid_layout)
+        col1_widget.setLayout(verti_layout)
         self.ui.tableWidget.setCellWidget(row, col, col1_widget)
 
         # new column - Vanadium
         col = 3
         # first row
-        vana_run_radio_button = QtGui.QRadioButton()
-        vana_run_radio_button.setChecked(True)
+        # first row
         label = QtGui.QLabel("Run #:")
         vana_value = QtGui.QLineEdit("")
         vana_value.returnPressed.connect(lambda entry=_name: self.run_entered(entry))
-        # second row
-        vana_browser_radio_button = QtGui.QRadioButton()
         vana_browser_button = QtGui.QPushButton("Browse...")
         vana_browser_button.setMinimumWidth(button_width)
         vana_browser_button.setMaximumWidth(button_width)
         vana_browser_button.clicked.connect(lambda state, entry=_name:  self.vanadium_browser_clicked(entry))
+        first_row = QtGui.QHBoxLayout()
+        first_row.addWidget(label)
+        first_row.addWidget(vana_value)
+        first_row.addWidget(vana_browser_button)
+        first_row_widget = QtGui.QWidget()
+        first_row_widget.setLayout(first_row)
+        # second row
         vana_browser_button_value = QtGui.QLabel("N/A")
 
-        grid_layout = QtGui.QGridLayout()
-        grid_layout.addWidget(vana_run_radio_button, 0, 0)
-        grid_layout.addWidget(label, 0, 1)
-        grid_layout.addWidget(vana_value, 0, 2)
-
-        grid_layout.addWidget(vana_browser_radio_button, 1, 0)
-        grid_layout.addWidget(vana_browser_button, 1, 1)
-        grid_layout.addWidget(vana_browser_button_value, 1, 2)
-
+        verti_layout = QtGui.QVBoxLayout()
+        verti_layout.addWidget(first_row_widget)
+        verti_layout.addWidget(vana_browser_button_value)
         col1_widget = QtGui.QWidget()
-        col1_widget.setLayout(grid_layout)
+        col1_widget.setLayout(verti_layout)
         self.ui.tableWidget.setCellWidget(row, col, col1_widget)
 
         # new column - date
@@ -288,16 +298,11 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         widget.setLayout(hori_layout)
         self.ui.tableWidget.setCellWidget(row, col, widget)
 
-        list_local_ui = self.local_list_ui(sample_environment_value=None,
-                                           sample_environment_reset=None,
-                                           calibration_run_radio_button=cali_run_radio_button,
+        list_local_ui = self.local_list_ui(sample_environment_value=sample_combobox,
                                            calibration_value=cali_value,
                                            calibration_browser=cali_browser_button,
                                            calibration_browser_value=cali_browser_button_value,
-                                           calibration_browser_radio_button=cali_browser_radio_button,
-                                           vanadium_run_radio_button=vana_run_radio_button,
                                            vanadium_value=vana_value,
-                                           vanadium_browser_radio_button=vana_browser_radio_button,
                                            vanadium_browser=vana_browser_button,
                                            vanadium_browser_value=vana_browser_button_value,
                                            date=date,
@@ -312,34 +317,23 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
                                calibration_browser="")
         self.master_list_value[_name] = list_local_name
 
-    def _check_local_column(self, run_radio_button=None, run_value=None, browser_value=None):
-        if run_radio_button.isChecked():
-            _runs = str(run_value.text())
-            if _runs.strip() == "":
-                return False
-            else:
-                return True
+    def _check_local_column(self, run_value=None):
+        _runs = str(run_value.text())
+        if _runs.strip() == "":
+            return False
         else:
-            _file_name = str(browser_value.text())
-            if _file_name == 'N/A':
-                return False
-            else:
-                return True
+            return True
 
     def _check_status_of_row(self, row=-1):
         _entry = str(self.ui.tableWidget.item(row, 0).text())
         local_list_ui = self.master_list_ui[_entry]
 
         # Calibration column
-        if not self._check_local_column(run_radio_button = local_list_ui.calibration_run_radio_button,
-                                        run_value = local_list_ui.calibration_value,
-                                        browser_value = local_list_ui.calibration_browser_value):
+        if not self._check_local_column(run_value = local_list_ui.calibration_value):
             return False
 
         # Vanadium column
-        if not self._check_local_column(run_radio_button=local_list_ui.vanadium_run_radio_button,
-                                        run_value=local_list_ui.vanadium_value,
-                                        browser_value=local_list_ui.vanadium_browser_value):
+        if not self._check_local_column(run_value=local_list_ui.vanadium_value):
             return False
 
         # output dir
