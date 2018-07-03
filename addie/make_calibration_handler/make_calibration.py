@@ -4,6 +4,7 @@ from collections import namedtuple
 import numpy as np
 import os
 import json
+import re
 
 from addie.ui_make_calibration import Ui_MainWindow as UiMainWindow
 from addie.utilities.gui_handler import TableHandler
@@ -129,44 +130,59 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
 
     def _general_browser_clicked(self,
                                  sample_type='',
-                                 browser_radio_button_ui=None,
                                  value_ui=None):
         _file = QtGui.QFileDialog.getOpenFileName(parent=self,
                                                   caption="Select {} File ...".format(sample_type),
                                                   directory=self.master_folder,
-                                                  filter="NeXus (*.nxs);; All (*.*)")
+                                                  filter="NeXus (*.nxs*);; All (*.*)")
         if _file:
-            # enable the radio button
-            browser_radio_button_ui.setChecked(True)
             # display base name of file selected (without path)
             value_ui.setText(os.path.basename(_file))
-            return _file
+            # find run number
+            base_nexus = os.path.basename(_file)
+            run_number = self.get_run_number_from_nexus_file_name(base_nexus_name=base_nexus)
+            return [_file, run_number]
 
     def run_entered(self, entry=""):
         self.check_run_calibration_status()
 
+    def get_run_number_from_nexus_file_name(self, base_nexus_name=''):
+        if base_nexus_name == '':
+            return None
+
+        #nxs_ext = '.nxs'
+        h5_ext = '.h5'
+
+        [base_file_name, ext] = os.path.splitext(base_nexus_name)
+        if ext == h5_ext:
+            [base_file_name, _] = os.path.splitext(base_file_name)
+
+        nexus_regex = re.compile("\w+_(\d+)")
+        result = nexus_regex.match(base_file_name)
+        if result:
+            return result.group(1)
+        return NoNe
+
     def vanadium_browser_clicked(self, entry=""):
         sample_type = "Vanadium"
-        browser_radio_button_ui = self.master_list_ui[entry].vanadium_browser_radio_button
         value_ui = self.master_list_ui[entry].vanadium_browser_value
 
-        _file = self._general_browser_clicked(sample_type=sample_type,
-                                              browser_radio_button_ui=browser_radio_button_ui,
-                                              value_ui=value_ui)
+        [_file, run_number] = self._general_browser_clicked(sample_type=sample_type,
+                                                            value_ui=value_ui)
         if _file:
             self.master_list_value[entry]["vanadium_browser"] = _file
+            self.master_list_ui[entry].vanadium_value.setText(str(run_number))
             self.check_run_calibration_status()
 
     def calibration_browser_clicked(self, entry=""):
         sample_type = "Calibration"
-        browser_radio_button_ui = self.master_list_ui[entry].calibration_browser_radio_button
         value_ui = self.master_list_ui[entry].calibration_browser_value
 
-        _file = self._general_browser_clicked(sample_type=sample_type,
-                                              browser_radio_button_ui=browser_radio_button_ui,
-                                              value_ui=value_ui)
+        [_file, run_number] = self._general_browser_clicked(sample_type=sample_type,
+                                                            value_ui=value_ui)
         if _file:
             self.master_list_value[entry]["calibration_browser"] = _file
+            self.master_list_ui[entry].calibration_value.setText(str(run_number))
             self.check_run_calibration_status()
 
     def local_output_dir_clicked(self, entry=""):
@@ -285,7 +301,6 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         browser_button.setMaximumWidth(button_width)
         browser_button.clicked.connect(lambda state, entry=_name: self.local_output_dir_clicked(entry))
         browser_value = QtGui.QLabel(self.master_folder)
-        print("Bowser value is {}".format(browser_value))
         reset = QtGui.QPushButton("Use Master")
         reset.setMinimumWidth(button_width)
         reset.setMaximumWidth(button_width)
@@ -338,7 +353,6 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
 
         # output dir
         browse_label = self.local_list_ui.output_dir_value
-        print(browse_label.text())
         if browse_label.text() == 'N/A':
             return False
 
