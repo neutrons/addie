@@ -383,8 +383,52 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         self.ui.run_calibration_button.setEnabled(_status)
 
     def run_calibration_button_clicked(self):
-        print("running calibration")
+        # make dictionary of all infos
+        o_dict = MakeCalibrationDictionary(parent=self)
+        import pprint
+        pprint.pprint(o_dict.dictionary)
 
     def closeEvent(self, c):
         self.parent.make_calibration_ui = None
+
+
+class MakeCalibrationDictionary:
+    """Class that will create the dictionary of all the infos requested in the UI"""
+
+    dictionary = {}
+
+    def __init__(self, parent=None):
+        self.parent=parent
+
+        self.built_dict()
+
+    def built_dict(self):
+
+        dictionary = {}
+
+        # CalDirectory
+        master_output = str(self.parent.ui.master_output_directory_label.text())
+        dictionary['CalDirectory'] = master_output
+
+        # SampleEnvironment
+        master_sample_env = str(self.parent.ui.sample_environment_combobox.currentText())
+        dictionary['SampleEnvironment'] = master_sample_env
+
+        # Date
+        master_date = self.parent.ui.master_date.date()
+        [year, month, day] =master_date.getDate()
+        dictionary['date'] = "{}_{:02}_{:02}".format(year, month, day)
+
+
+
+
+
+
+
+        self.dictionary = dictionary
+
+
+
+
+
 
