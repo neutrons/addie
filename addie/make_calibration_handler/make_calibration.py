@@ -443,14 +443,26 @@ class MakeCalibrationDictionary:
             else:
                 vana_filename = None
 
-            # record data
+            # local date
+            _date = local_list_ui.date.date()
+            [year, month, day] = _date.getDate()
+            vanadium_date = "{}_{:02}_{:02}".format(year, month, day)
+
+            # local sample
+            local_sample_env = str(local_list_ui.sample_environment_value.currentText())
+
+            # local output dir
+            local_output_dir = str(local_list_ui.output_dir_value.text())
+
+            # save data in vanadium dict
             vanadium_dict = {}
             vanadium_dict["RunNumber"] = vana_run_number
             if vana_filename:
                 vanadium_dict["Filename"] = vana_filename
 
-
-
+            vanadium_dict["Date"] = vanadium_date
+            vanadium_dict["SampleEnvironment"] = local_sample_env
+            vanadium_dict["CalDirectory"] = local_output_dir
 
             cali_dict = {}
             cali_dict["Vanadium"] = vanadium_dict
