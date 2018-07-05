@@ -352,7 +352,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
             return False
 
         # output dir
-        browse_label = self.local_list_ui.output_dir_value
+        browse_label = local_list_ui.output_dir_value
         if browse_label.text() == 'N/A':
             return False
 
@@ -379,7 +379,6 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
 
     def check_run_calibration_status(self):
         """Disable the Run Calibration button if any of the infos is missing"""
-        print("checking status of run calibration button")
         _status = self._check_status_of_widgets()
         self.ui.run_calibration_button.setEnabled(_status)
 
