@@ -150,6 +150,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.remove_row_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.remove_row_button_clicked)
         QtCore.QObject.connect(self.add_row_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.add_row_button_clicked)
         QtCore.QObject.connect(self.run_calibration_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.run_calibration_button_clicked)
+        QtCore.QObject.connect(self.master_date, QtCore.SIGNAL(_fromUtf8("dateTimeChanged(QDateTime)")), MainWindow.master_date_changed)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -163,7 +164,7 @@ class Ui_MainWindow(object):
         item = self.tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Entry #", None))
         item = self.tableWidget.horizontalHeaderItem(1)
-        item.setText(_translate("MainWindow", "Sample Name", None))
+        item.setText(_translate("MainWindow", "Sample Environment", None))
         item = self.tableWidget.horizontalHeaderItem(2)
         item.setText(_translate("MainWindow", "Calibration", None))
         item = self.tableWidget.horizontalHeaderItem(3)
