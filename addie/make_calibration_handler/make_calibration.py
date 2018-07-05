@@ -419,11 +419,47 @@ class MakeCalibrationDictionary:
         [year, month, day] =master_date.getDate()
         dictionary['date'] = "{}_{:02}_{:02}".format(year, month, day)
 
+        calibrants = {}
+        for _key in self.parent.master_list_ui.keys():
+
+            local_list_ui = self.parent.master_list_ui[_key]
+            local_list_value = self.parent.master_list_value[_key]
+
+            # calibration run number
+            cali_run_number = str(local_list_ui.calibration_value.text())
+
+            # calibration full file name (if any)
+            if str(local_list_ui.calibration_browser_value.text()) != "N/A":
+                cali_filename = str(local_list_value["calibration_browser"])
+            else:
+                cali_filename = None
+
+            # vanadium run number
+            vana_run_number = str(local_list_ui.vanadium_value.text())
+
+            # vanadium full file name (if any)
+            if str(local_list_ui.vanadium_browser.text()) != "N/A":
+                vana_filename = str(local_list_value["vanadium_browser"])
+            else:
+                vana_filename = None
+
+            # record data
+            vanadium_dict = {}
+            vanadium_dict["RunNumber"] = vana_run_number
+            if vana_filename:
+                vanadium_dict["Filename"] = vana_filename
 
 
 
 
+            cali_dict = {}
+            cali_dict["Vanadium"] = vanadium_dict
+            if cali_filename:
+                cali_dict["Filename"] = cali_filename
 
+            calibrants[cali_run_number] = cali_dict
+
+        dictionary['Calibrants'] = calibrants
 
         self.dictionary = dictionary
 
