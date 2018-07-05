@@ -374,6 +374,9 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
 
         return True
 
+    def master_time_changed(self, date):
+        self.master_date = date
+
     def check_run_calibration_status(self):
         """Disable the Run Calibration button if any of the infos is missing"""
         print("checking status of run calibration button")

@@ -309,7 +309,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>61</x>
-     <y>469</y>
+     <y>437</y>
     </hint>
     <hint type="destinationlabel">
      <x>128</x>
@@ -324,8 +324,8 @@
    <slot>add_row_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>432</x>
-     <y>464</y>
+     <x>1569</x>
+     <y>432</y>
     </hint>
     <hint type="destinationlabel">
      <x>354</x>
@@ -341,11 +341,27 @@
    <hints>
     <hint type="sourcelabel">
      <x>192</x>
-     <y>505</y>
+     <y>473</y>
     </hint>
     <hint type="destinationlabel">
      <x>200</x>
-     <y>525</y>
+     <y>514</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>master_date</sender>
+   <signal>dateTimeChanged(QDateTime)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>master_date_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>113</x>
+     <y>67</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>257</x>
+     <y>22</y>
     </hint>
    </hints>
   </connection>
@@ -355,5 +371,6 @@
   <slot>remove_row_button_clicked()</slot>
   <slot>add_row_button_clicked()</slot>
   <slot>run_calibration_button_clicked()</slot>
+  <slot>master_date_changed()</slot>
  </slots>
 </ui>
