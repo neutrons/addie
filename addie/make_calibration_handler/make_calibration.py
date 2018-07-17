@@ -385,7 +385,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
     def run_calibration_button_clicked(self):
         # make dictionary of all infos
         o_dict = MakeCalibrationDictionary(parent=self)
-        _file = QtGui.QFileDialog.getSaveFileName(git parent=self,
+        _file = QtGui.QFileDialog.getSaveFileName(parent=self,
                                                   caption="Select where and name of json file to create...",
                                                   directory = '/SNS/users/ntm/')
         if _file:
