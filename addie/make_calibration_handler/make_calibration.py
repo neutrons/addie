@@ -33,7 +33,8 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
     master_date = None  #QtCore.QDate()
     master_folder = 'N/A'
 
-    addie_config_file = "addie/config.json"
+    current_path = os.path.dirname(os.path.dirname(__file__))
+    addie_config_file = os.path.join(current_path, "config.json")
 
     # will keep record of all the ui
     local_list_ui = namedtuple("local_list_ui", ["sample_environment_value",
