@@ -1993,6 +1993,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.name_search, QtCore.SIGNAL(_fromUtf8("returnPressed()")), MainWindow.name_search_clicked)
         QtCore.QObject.connect(self.clear_name_search, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.clear_name_search_clicked)
         QtCore.QObject.connect(self.pushButton_7, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.make_calibration_clicked)
+        QtCore.QObject.connect(self.pushButton_5, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.personalization_table_clicked)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         MainWindow.setTabOrder(self.select_current_folder_button, self.diamond)
         MainWindow.setTabOrder(self.diamond, self.diamond_background)
