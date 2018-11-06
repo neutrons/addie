@@ -58,7 +58,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1689</width>
+         <width>1691</width>
          <height>945</height>
         </rect>
        </property>
@@ -80,7 +80,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>2</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -3527,6 +3527,390 @@ p, li { white-space: pre-wrap; }
                   </item>
                  </layout>
                 </widget>
+                <widget class="QWidget" name="page">
+                 <widget class="QTableWidget" name="table_3">
+                  <property name="geometry">
+                   <rect>
+                    <x>70</x>
+                    <y>110</y>
+                    <width>1241</width>
+                    <height>281</height>
+                   </rect>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>800</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="contextMenuPolicy">
+                   <enum>Qt::CustomContextMenu</enum>
+                  </property>
+                  <property name="alternatingRowColors">
+                   <bool>true</bool>
+                  </property>
+                  <property name="selectionBehavior">
+                   <enum>QAbstractItemView::SelectRows</enum>
+                  </property>
+                  <property name="sortingEnabled">
+                   <bool>false</bool>
+                  </property>
+                  <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+                   <bool>false</bool>
+                  </attribute>
+                  <attribute name="horizontalHeaderStretchLastSection">
+                   <bool>true</bool>
+                  </attribute>
+                  <attribute name="verticalHeaderVisible">
+                   <bool>false</bool>
+                  </attribute>
+                  <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+                   <bool>true</bool>
+                  </attribute>
+                  <attribute name="verticalHeaderStretchLastSection">
+                   <bool>false</bool>
+                  </attribute>
+                  <column>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>Runs</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>Background Runs</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>Background Background Runs</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>Material</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>Runs</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>Background Runs</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>Background Background Runs</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>Material</string>
+                   </property>
+                  </column>
+                 </widget>
+                 <widget class="QTableWidget" name="tableWidget">
+                  <property name="geometry">
+                   <rect>
+                    <x>70</x>
+                    <y>80</y>
+                    <width>1241</width>
+                    <height>25</height>
+                   </rect>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>25</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>25</height>
+                   </size>
+                  </property>
+                  <column>
+                   <property name="text">
+                    <string>Title</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>Sample</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>Vanadium</string>
+                   </property>
+                  </column>
+                 </widget>
+                 <widget class="QTreeWidget" name="treeWidget">
+                  <property name="geometry">
+                   <rect>
+                    <x>1330</x>
+                    <y>80</y>
+                    <width>281</width>
+                    <height>311</height>
+                   </rect>
+                  </property>
+                  <column>
+                   <property name="text">
+                    <string>Item</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>New Column</string>
+                   </property>
+                  </column>
+                  <item>
+                   <property name="text">
+                    <string>Title</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Sample</string>
+                   </property>
+                   <item>
+                    <property name="text">
+                     <string>Runs</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>Background</string>
+                    </property>
+                    <item>
+                     <property name="text">
+                      <string>Runs</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Background Runs</string>
+                     </property>
+                    </item>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>Material</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </item>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Vanadium</string>
+                   </property>
+                   <item>
+                    <property name="text">
+                     <string>Runs</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>Background</string>
+                    </property>
+                    <item>
+                     <property name="text">
+                      <string>Runs</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>Background Runs</string>
+                     </property>
+                    </item>
+                   </item>
+                  </item>
+                 </widget>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="tab_2">
+             <attribute name="title">
+              <string>Page</string>
+             </attribute>
+             <layout class="QVBoxLayout" name="verticalLayout_15">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_3">
+                <item>
+                 <spacer name="horizontalSpacer_6">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButton_5">
+                  <property name="text">
+                   <string>Personalization ...</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QFrame" name="frame">
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_3">
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_14">
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QTableWidget" name="h1_table">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                     <property name="horizontalScrollBarPolicy">
+                      <enum>Qt::ScrollBarAlwaysOff</enum>
+                     </property>
+                     <property name="autoScroll">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QTableWidget" name="h2_table">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                     <property name="horizontalScrollBarPolicy">
+                      <enum>Qt::ScrollBarAlwaysOff</enum>
+                     </property>
+                     <column>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Runs</string>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Background</string>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Packing Fraction</string>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Geometry</string>
+                      </property>
+                     </column>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QTableWidget" name="h3_table">
+                     <property name="baseSize">
+                      <size>
+                       <width>0</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="contextMenuPolicy">
+                      <enum>Qt::CustomContextMenu</enum>
+                     </property>
+                     <property name="alternatingRowColors">
+                      <bool>true</bool>
+                     </property>
+                     <column>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Runs</string>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Background Runs</string>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Shape</string>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Radius</string>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Height</string>
+                      </property>
+                     </column>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
                </widget>
               </item>
              </layout>
