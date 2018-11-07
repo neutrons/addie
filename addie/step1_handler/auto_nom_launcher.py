@@ -1,4 +1,4 @@
-import addie.setp1_handler.autoNOM
+import addie.step1_handler.autoNOM
 import numpy as np
 import os
 from PyQt4 import QtCore, QtGui
