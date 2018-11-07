@@ -1,6 +1,8 @@
 from collections import OrderedDict
 import copy
 
+column_default_width = 90
+
 h_index = {'h1': None,
                'h2': None,
                'h3': None}
