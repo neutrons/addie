@@ -2,9 +2,11 @@ from addie.ui_table_tree import Ui_Dialog as UiDialog
 
 try:
     from PyQt4.QtGui import QDialog, QTreeWidgetItem
+    from PyQt4 import QtCore
 except ImportError:
     try:
         from PyQt5.QtWidgets import QDialog, QTreeWidgetItem
+        from PyQt5 import QtCore
     except ImportError:
         raise ImportError("Requires PyQt4 or PyQt5")
 
