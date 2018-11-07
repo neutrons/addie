@@ -53,6 +53,9 @@ from addie.mantid_handler.browse_file_folder_handler import BrowseFileFolderHand
 from addie.mantid_handler.mantid_reduction import GlobalMantidReduction
 from addie.mantid_handler.mantid_thread import MantidThread
 
+from addie.master_table.table_tree_handler import TableTreeHandler
+from addie.master_table.tree_definition import *
+
 import PyQt4
 import PyQt4.QtCore as QtCore
 import PyQt4.QtGui as QtGui
@@ -68,9 +71,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     """ Main addie window
     """
 
-    # external ui
+    # external ui (use to make sure there is only one open at a time
     advanced_window_ui = None
     make_calibration_ui = None
+    table_tree_ui = None
 
     undo_table = {}
     max_undo_list = 10
@@ -136,6 +140,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self._init_widgets()
         init_step1 = InitStep1(parent=self)
         init_step2 = InitStep2(parent=self)
+        self.init_master_table()
 
         # define the event handling methods
 
@@ -257,6 +262,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self._pdfColorManager = PDFPlotManager()
 
         return
+
+    def init_master_table(self):
+        self.tree_dict = tree_dict
 
     def _init_widgets(self):
         """ Initialize widgets
@@ -2266,15 +2274,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     # new tab with advanced table
 
     def personalization_table_clicked(self):
-        pass
-
-
-
-
-
-
-
-
+        o_master_table_tree = TableTreeHandler(parent=self)
 
     def closeEvent(self, c):
         if self.advanced_window_ui:

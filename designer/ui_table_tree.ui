@@ -40,11 +40,6 @@
        <height>16777215</height>
       </size>
      </property>
-     <column>
-      <property name="text">
-       <string>Columns Visibility</string>
-      </property>
-     </column>
     </widget>
    </item>
   </layout>
