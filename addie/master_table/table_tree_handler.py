@@ -50,6 +50,14 @@ class TableInitialization:
 
         self.save_parameters()
 
+    def init_signals(self):
+        self.parent.h1_header_table.sectionResized.connect(self.parent.resizing_h1)
+        self.parent.h2_header_table.sectionResized.connect(self.parent.resizing_h2)
+        self.parent.h3_header_table.sectionResized.connect(self.parent.resizing_h3)
+
+        self.parent.ui.h1_table.horizontalScrollBar().valueChanged.connect(self.parent.scroll_h1_table)
+        self.parent.ui.h2_table.horizontalScrollBar().valueChanged.connect(self.parent.scroll_h2_table)
+
     def save_parameters(self):
 
         self.parent.h1_header_table = self.h1_header_table
@@ -62,6 +70,7 @@ class TableInitialization:
         self.parent.table_headers = self.table_headers
 
         self.parent.tree_dict = self.tree_dict
+
 
     def make_tree_of_column_references(self):
         """
@@ -206,6 +215,7 @@ class TableInitialization:
         for _index, _text in enumerate(list_items):
             item = QTableWidgetItem(_text)
             table_ui.setHorizontalHeaderItem(_index, item)
+
 
 
 class TableTreeHandler:
