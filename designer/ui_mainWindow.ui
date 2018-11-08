@@ -5946,6 +5946,22 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>h3_table</sender>
+   <signal>customContextMenuRequested(QPoint)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>h3_table_right_click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>887</x>
+     <y>456</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1710</x>
+     <y>538</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>diamond_edited()</slot>
@@ -6006,5 +6022,6 @@ p, li { white-space: pre-wrap; }
   <slot>menu_ipts_file_transfer_clicked()</slot>
   <slot>make_calibration_clicked()</slot>
   <slot>personalization_table_clicked()</slot>
+  <slot>h3_table_right_click()</slot>
  </slots>
 </ui>

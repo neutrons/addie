@@ -11,11 +11,11 @@ import psutil
 from addie.ipythondockwidget import IPythonDockWidget
 
 try:
-    from PyQt4.QtGui import QDialog, QTreeWidgetItem, QTableWidgetItem
+    from PyQt4.QtGui import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu
     from PyQt4 import QtCore, QtGui
 except ImportError:
     try:
-        from PyQt5.QtWidgets import QDialog, QTreeWidgetItem, QTableWidgetItem
+        from PyQt5.QtWidgets import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu
         from PyQt5 import QtCore, QtGui
     except ImportError:
         raise ImportError("Requires PyQt4 or PyQt5")
@@ -65,6 +65,7 @@ from addie.mantid_handler.mantid_thread import MantidThread
 
 from addie.master_table.table_tree_handler import TableTreeHandler, TableInitialization
 from addie.master_table.tree_definition import *
+from addie.ui_table_tree_save_config import Ui_Dialog as UiDialogSave
 
 import PyQt4
 import PyQt4.QtCore as QtCore
@@ -76,6 +77,9 @@ import addie.edit_sq_dialog
 
 from addie.pdf_lines_manager import PDFPlotManager
 
+user_home = expanduser("~")
+CONFIG_FILE = os.path.join(user_home, '.addie_config.cfg')
+
 
 class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     """ Main addie window
@@ -85,6 +89,12 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     advanced_window_ui = None
     make_calibration_ui = None
     table_tree_ui = None
+
+    # configuration of master table
+    config_dict = OrderedDict()
+    reset_config_dict = OrderedDict()
+    active_config_name = ''
+    list_config_displayed = []
 
     table_headers = {'h1': [],
                      'h2': [],
@@ -294,7 +304,20 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         # color management
         self._pdfColorManager = PDFPlotManager()
 
+        self.save_raw_config()
+
         return
+
+    def save_raw_config(self):
+        '''this will allow the user to reset the full table and get it back in its initial state'''
+        o_current_table_config = TableConfig(parent=self)
+        current_config = o_current_table_config.get_current_config()
+
+        inside_dict = OrderedDict()
+        inside_dict['table'] = current_config
+        inside_dict['active'] = False
+
+        self.reset_config_dict = inside_dict
 
     def init_master_table(self):
         o_table = TableInitialization(parent=self)
@@ -2390,6 +2413,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     def update_tree_dict_and_tree(self, config_to_load={}):
         '''This method will update the tree_dict dictionary as well as the state of the tree'''
+
+        if self.table_tree_ui is None:
+            return
 
         def from_boolean_to_ui_status(visible):
             if visible:
