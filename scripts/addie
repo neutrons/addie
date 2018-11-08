@@ -2365,6 +2365,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     # master table
     def personalization_table_clicked(self):
         o_master_table_tree = TableTreeHandler(parent=self)
+        self.update_tree_dict_and_tree(config_to_load=self.config_dict[self.active_config_name])
 
     def closeEvent(self, c):
         if self.advanced_window_ui:
@@ -2415,6 +2416,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         '''This method will update the tree_dict dictionary as well as the state of the tree'''
 
         if self.table_tree_ui is None:
+            return
+
+        if config_to_load == {}:
             return
 
         def from_boolean_to_ui_status(visible):
