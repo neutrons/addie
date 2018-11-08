@@ -57,6 +57,7 @@ class TableInitialization:
 
         self.parent.ui.h1_table.horizontalScrollBar().valueChanged.connect(self.parent.scroll_h1_table)
         self.parent.ui.h2_table.horizontalScrollBar().valueChanged.connect(self.parent.scroll_h2_table)
+        self.parent.ui.h3_table.horizontalScrollBar().valueChanged.connect(self.parent.scroll_h3_table)
 
     def save_parameters(self):
 
@@ -246,7 +247,7 @@ class TableTree(QDialog):
         # fill the self.ui.treeWidget
         # self.addItems(self.ui.treeWidget.invisibleRootItem())
         self.addItems(self.ui.treeWidget.invisibleRootItem())
-        self.ui.treeWidget.itemChanged.connect(self.tree_item_changed)
+        self.ui.treeWidget.itemChanged.connect(self.parent.tree_item_changed)
 
     def addParent(self, parent, title, name):
         item = QTreeWidgetItem(parent, [title])
@@ -338,10 +339,6 @@ class TableTree(QDialog):
             h3_index += 1
 
             self.tree_ui = tree_ui
-
-    def tree_item_changed(self, item, _):
-        pass
-
 
     def closeEvent(self):
         self.parent.table_tree_ui = None
