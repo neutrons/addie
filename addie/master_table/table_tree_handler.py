@@ -346,3 +346,288 @@ class TableTree(QDialog):
         self.parent.table_tree_ui = None
         self.parent.table_tree_ui_position = self.pos()
 
+class SaveConfigInterface(QDialog):
+
+    # config_dict = {}
+
+    def __init__(self, parent=None, grand_parent=None):
+        self.parent = parent
+        self.grand_parent = grand_parent
+
+        QDialog.__init__(self, parent=grand_parent)
+        self.ui = UiDialogSave()
+        self.ui.setupUi(self)
+
+        self.ui.save_as_value.setPlaceholderText("undefined")
+
+    def get_defined_name_config(self):
+        return str(self.ui.save_as_value.text())
+
+    def ok_clicked(self):
+        name_config = self.get_defined_name_config()
+        if name_config:
+            self.parent.save_as_config_name_selected(name=name_config)
+            self.grand_parent.ui.statusbar.showMessage("New configuration saved ({})".format(name_config), 8000)
+            self.grand_parent.ui.statusbar.setStyleSheet("color: green")
+            self.close()
+
+    def cancel_clicked(self):
+        self.close()
+
+
+class ConfigHandler:
+    '''This class takes care of the config dictionary manipulations'''
+
+    @staticmethod
+    def activate_this_config(key="", config={}):
+        for _key in config:
+            if _key == key:
+                config[_key]['active'] = True
+                break
+        return config
+
+    @staticmethod
+    def deactivate_all_config(config={}):
+        for _key in config:
+            config[_key]['active'] = False
+        return config
+
+    @staticmethod
+    def lazy_export_config(config_dict={}):
+        with open(CONFIG_FILE, 'wb') as handle:
+            full_config = {}
+            full_config['configurations'] = config_dict
+            pickle.dump(full_config,
+                        handle,
+                        protocol=pickle.HIGHEST_PROTOCOL)
+
+    @staticmethod
+    def remove_this_config(key="", config={}):
+        new_config = OrderedDict()
+        for _key in config:
+            if _key == key:
+                pass
+            else:
+                new_config[_key] = config[_key]
+        return new_config
+
+
+class H3TableHandler:
+    # object that takes care of handling the config object
+    o_save_config = None
+    config_dict = {}
+
+    def __init__(self, parent=None):
+        self.parent = parent
+
+    def retrieve_previous_configurations(self):
+        if os.path.exists(CONFIG_FILE):
+            with open(CONFIG_FILE, 'rb') as handle:
+                _cfg = pickle.load(handle)
+
+                try:
+                    config_dict = _cfg['configurations']
+                except KeyError:
+                    return
+
+            self.parent.config_dict = config_dict
+
+    def save_as_config(self):
+        o_save_config = SaveConfigInterface(parent=self,
+                                            grand_parent=self.parent)
+        o_save_config.show()
+        self.o_save_config = o_save_config
+
+    def save_as_config_name_selected(self, name=''):
+        self.create_config_dict(name=name)
+        self.export_config()
+
+    def create_config_dict(self, name=''):
+        if name == '':
+            name = 'undefined'
+
+        o_current_table_config = TableConfig(parent=self.parent)
+        current_config = o_current_table_config.get_current_config()
+
+        inside_dict = OrderedDict()
+        inside_dict['table'] = current_config
+        inside_dict['active'] = True
+
+        # retrieve previous config file
+        previous_config_dict = self.parent.config_dict
+        if previous_config_dict == {}:
+            # first time
+            new_full_config = OrderedDict()
+            new_full_config[name] = inside_dict
+        else:
+            self.deactivate_all_config()
+            old_full_config = self.parent.config_dict
+            # list_keys = old_full_config.keys()
+            old_full_config[name] = inside_dict
+            new_full_config = old_full_config
+
+        self.config_dict = new_full_config
+
+    def deactivate_all_config(self):
+        old_full_config = self.parent.config_dict
+        for _key in old_full_config:
+            old_full_config[_key]['active'] = False
+        self.parent.config_dict = old_full_config
+
+    def export_config(self):
+        config_dict = self.config_dict
+        with open(CONFIG_FILE, 'wb') as handle:
+            full_config = {}
+            full_config['configurations'] = config_dict
+            pickle.dump(full_config,
+                        handle,
+                        protocol=pickle.HIGHEST_PROTOCOL)
+
+    def save_config(self):
+        active_config_name = self.parent.active_config_name
+        self.save_as_config_name_selected(name=active_config_name)
+
+    def reset_table(self):
+        config_dict = self.parent.config_dict
+        if not ("FULL_RESET" in config_dict):
+            config_dict['FULL_RESET'] = self.parent.reset_config_dict
+            self.parent.config_dict = config_dict
+
+        ConfigHandler.lazy_export_config(config_dict=self.parent.config_dict)
+        self.parent.load_this_config(key='FULL_RESET', resize=True)
+
+    def right_click(self):
+        self.retrieve_previous_configurations()
+        previous_config = self.parent.config_dict
+
+        if previous_config == {}:
+            list_configs = []
+        else:
+            list_configs = previous_config.keys()
+
+        top_menu = QMenu(self.parent)
+
+        menu = top_menu.addMenu("Menu")
+        config = menu.addMenu("Configuration ...")
+
+        _save = config.addAction("Save")
+
+        _save_as = config.addAction("Save As ...")
+
+        list_signal_config_files = []
+        list_signal_remove_config = []
+        list_config_displayed = []
+
+        save_state = False
+        if not list_configs == []:
+            config.addSeparator()
+            for _label in list_configs:
+
+                if _label == "FULL_RESET":
+                    continue
+
+                this_one_is_active = False
+
+                if previous_config[_label]['active']:
+                    self.parent.active_config_name = _label
+                    _full_label = u"\u2713 " + _label
+                    save_state = True
+                    this_one_is_active = True
+
+                else:
+                    _full_label = u"\u200b   \u200b " + _label
+
+                list_config_displayed.append(_label)
+                temp = config.addMenu(_full_label)
+                if not this_one_is_active:
+                    temp_select = temp.addAction("Select")
+                else:
+                    temp_select = temp.addAction("Reload")
+                list_signal_config_files.append(temp_select)
+
+                temp_remove = temp.addAction("Remove")
+                list_signal_remove_config.append(temp_remove)
+
+        # disable "save" button if we don't have any config activated
+        _save.setEnabled(save_state)
+
+        self.parent.list_config_displayed = list_config_displayed
+        menu.addSeparator()
+        _reset = menu.addAction("Full Reset Table/Tree")
+
+        action = menu.exec_(QtGui.QCursor.pos())
+
+        if action == _save_as:
+            self.save_as_config()
+            return
+
+        elif action == _save:
+            self.save_config()
+            return
+
+        elif action == _reset:
+            self.reset_table()
+            return
+
+        if not (list_signal_config_files == []):
+
+            # user clicked to select config
+            for _index, _signal in enumerate(list_signal_config_files):
+                if action == _signal:
+                    self.activate_this_config(config=list_config_displayed[_index])
+
+        if not (list_signal_remove_config == []):
+
+            # user clicked to remove config
+            for _index, _signal in enumerate(list_signal_remove_config):
+                if action == _signal:
+                    self.remove_this_config(config=list_config_displayed[_index])
+
+    def remove_this_config(self, config):
+        config_dict = ConfigHandler.remove_this_config(config=self.parent.config_dict,
+                                                       key=config)
+        self.parent.config_dict = config_dict
+        # import pprint
+        # pprint.pprint(config_dict)
+        ConfigHandler.lazy_export_config(config_dict=config_dict)
+
+    def activate_this_config(self, config):
+        config_dict = ConfigHandler.deactivate_all_config(config=self.parent.config_dict)
+        config_dict = ConfigHandler.activate_this_config(config=config_dict,
+                                                         key=config)
+        self.parent.config_dict = config_dict
+        ConfigHandler.lazy_export_config(config_dict=config_dict)
+        self.parent.load_this_config(key=config)
+
+
+class TableConfig:
+    '''This class will look at the h1, h2 and h3 table to create the config use width and visibility of each column'''
+
+    def __init__(self, parent=None):
+        self.parent = parent
+
+    def get_current_config(self):
+        current_config_dict = {}
+        current_config_dict['h1'] = self.__get_current_table_config(table='h1')
+        current_config_dict['h2'] = self.__get_current_table_config(table='h2')
+        current_config_dict['h3'] = self.__get_current_table_config(table='h3')
+        return current_config_dict
+
+    def __get_current_table_config(self, table='h1'):
+
+        if table == 'h1':
+            table_ui = self.parent.ui.h1_table
+        elif table == 'h2':
+            table_ui = self.parent.ui.h2_table
+        else:
+            table_ui = self.parent.ui.h3_table
+
+        nbr_column = table_ui.columnCount()
+        _dict = {}
+        for _col in np.arange(nbr_column):
+            _width = table_ui.columnWidth(_col)
+            _visible = not table_ui.isColumnHidden(_col)
+            _dict[_col] = {'width': _width,
+                           'visible': _visible}
+
+        return _dict

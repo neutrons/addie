@@ -64,7 +64,8 @@ from addie.mantid_handler.browse_file_folder_handler import BrowseFileFolderHand
 from addie.mantid_handler.mantid_reduction import GlobalMantidReduction
 from addie.mantid_handler.mantid_thread import MantidThread
 
-from addie.master_table.table_tree_handler import TableTreeHandler, TableInitialization
+from addie.master_table.table_tree_handler import TableTreeHandler, TableInitialization, TableConfig, H3TableHandler
+from addie.master_table.table_tree_handler import SaveConfigInterface, TableTree
 from addie.master_table.tree_definition import *
 from addie.ui_table_tree_save_config import Ui_Dialog as UiDialogSave
 
@@ -2351,10 +2352,16 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         if self.table_tree_ui:
             self.table_tree_ui.closeEvent(c)
 
+    # events of the table and the tree
+    # def resizing_h1
+    # def resizing_h2
+    # def resizing_h3
 
+    # def scroll_h1_table
+    # def scroll_h2_table
+    # def scroll_h3_table
 
-
-
+    # h3_table_right_click
 
 
 
@@ -2365,37 +2372,37 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     # This part takes care of the master table and will have to be moved into its own file !!!
     # FIXME
-    def resizing_h1(self, index_column, old_size, new_size):
-#        print("resizing h1 column {}".format(index_column))
-
-        self.block_table_ui()
-
-        h2_children = self.get_h2_children_from_h1(h1=index_column)
-        # print("h2 children: {}".format(h2_children))
-
-        last_h2_visible = self.get_last_h2_visible(list_h2=h2_children)
-        # print("last h2 visible: {}".format(last_h2_visible))
-
-        list_h3 = self.get_h3_children_from_h2(h2=last_h2_visible)
-        # print("h3 children: {}".format(list_h3))
-
-        last_h3_visible = self.get_last_h3_visible(list_h3=list_h3)
-        # print("Last h3 visible: {}".format(last_h3_visible))
-
-        size_diff = new_size - old_size
-
-        # add this size_diff to last_h2 and last_h3
-        last_h3_visible_size = self.get_size_column(h3=last_h3_visible)
-        if (last_h3_visible_size < self.minimum_col_width) and \
-                (new_size < old_size):
-            self.set_size_column(h1=index_column, width=old_size)
-        else:
-            last_h2_visible_size = self.get_size_column(h2=last_h2_visible)
-            self.set_size_column(h2=last_h2_visible, width=last_h2_visible_size+size_diff)
-            self.set_size_column(h3=last_h3_visible, width=last_h3_visible_size+size_diff)
-
-        self.block_table_ui(unblock_all=True)
-        # print("")
+#     def resizing_h1(self, index_column, old_size, new_size):
+# #        print("resizing h1 column {}".format(index_column))
+#
+#         self.block_table_ui()
+#
+#         h2_children = self.get_h2_children_from_h1(h1=index_column)
+#         # print("h2 children: {}".format(h2_children))
+#
+#         last_h2_visible = self.get_last_h2_visible(list_h2=h2_children)
+#         # print("last h2 visible: {}".format(last_h2_visible))
+#
+#         list_h3 = self.get_h3_children_from_h2(h2=last_h2_visible)
+#         # print("h3 children: {}".format(list_h3))
+#
+#         last_h3_visible = self.get_last_h3_visible(list_h3=list_h3)
+#         # print("Last h3 visible: {}".format(last_h3_visible))
+#
+#         size_diff = new_size - old_size
+#
+#         # add this size_diff to last_h2 and last_h3
+#         last_h3_visible_size = self.get_size_column(h3=last_h3_visible)
+#         if (last_h3_visible_size < self.minimum_col_width) and \
+#                 (new_size < old_size):
+#             self.set_size_column(h1=index_column, width=old_size)
+#         else:
+#             last_h2_visible_size = self.get_size_column(h2=last_h2_visible)
+#             self.set_size_column(h2=last_h2_visible, width=last_h2_visible_size+size_diff)
+#             self.set_size_column(h3=last_h3_visible, width=last_h3_visible_size+size_diff)
+#
+#         self.block_table_ui(unblock_all=True)
+#         # print("")
 
 
     def load_this_config(self, key='', resize=False):
