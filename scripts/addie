@@ -2368,6 +2368,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
 
 
+
+
     def load_this_config(self, key='', resize=False):
         if key == '':
             return
@@ -2509,7 +2511,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     def resizing_h1(self, index_column, old_size, new_size):
         # print("resizing h1 column {}".format(index_column))
 
-        self.block_table_ui()
+        o_table = TableConfig(parent=self)
+        o_table.block_table_ui()
+        #self.block_table_ui()
 
         h2_children = self.get_h2_children_from_h1(h1=index_column)
         # print("h2 children: {}".format(h2_children))
@@ -2535,13 +2539,15 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             self.set_size_column(h2=last_h2_visible, width=last_h2_visible_size + size_diff)
             self.set_size_column(h3=last_h3_visible, width=last_h3_visible_size + size_diff)
 
-        self.block_table_ui(unblock_all=True)
-        # print("")
+        #self.block_table_ui(unblock_all=True)
+        o_table.block_table_ui(unblock_all=True)
 
     def resizing_h2(self, index_column, old_size, new_size):
         # print("resizing h2 column {}".format(index_column))
 
-        self.block_table_ui()
+        #self.block_table_ui()
+        o_table = TableConfig(parent=self)
+        o_table.block_table_ui()
 
         h1_parent = self.get_h1_parent_from_h2(h2=index_column)
         # print("h1_parent: {}".format(h1_parent))
@@ -2564,7 +2570,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             self.set_size_column(h1=h1_parent, width=parent_size + size_diff)
             self.set_size_column(h3=last_h3_visible, width=last_h3_visible_size + size_diff)
 
-        self.block_table_ui(unblock_all=True)
+        o_table.block_table_ui(unblock_all=True)
+        # self.block_table_ui(unblock_all=True)
 
     def resizing_h1_using_all_visible_h2(self, h1=None):
         '''automatically resize the h1 using all its h2 visible '''
@@ -2583,7 +2590,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     def resizing_h3(self, index_column, old_size, new_size):
         # print("resizing h3 column {}".format(index_column))
 
-        self.block_table_ui()
+        #self.block_table_ui()
+        o_table = TableConfig(parent=self)
+        o_table.block_table_ui()
 
         [h1_parent, h2_parent] = self.get_h1_h2_parent_from_h3(h3=index_column)
         # print("h1_parent, h2_parent: {},{}".format(h1_parent, h2_parent))
@@ -2596,7 +2605,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         h2_parent_size = self.get_size_column(h2=h2_parent)
         self.set_size_column(h2=h2_parent, width=h2_parent_size + size_diff)
 
-        self.block_table_ui(unblock_all=True)
+        o_table.block_table_ui(unblock_all=True)
+        # self.block_table_ui(unblock_all=True)
 
     def resizing_h2_using_all_visible_h3(self, h2=None):
         '''automatically resizing the h2 using all its h3 visible'''

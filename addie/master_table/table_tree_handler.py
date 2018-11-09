@@ -634,3 +634,41 @@ class TableConfig:
                            'visible': _visible}
 
         return _dict
+
+    def block_table_ui(self, block_all=True,
+                       unblock_all=False,
+                       block_h1=False,
+                       block_h2=False,
+                       block_h3=False):
+
+        if block_all:
+            block_h1 = True
+            block_h2 = True
+            block_h3 = True
+
+        if unblock_all:
+            block_h1 = False
+            block_h2 = False
+            block_h3 = False
+
+        if block_h1:
+            self.parent.h1_header_table.sectionResized.disconnect(self.parent.resizing_h1)
+        else:
+            self.parent.h1_header_table.sectionResized.connect(self.parent.resizing_h1)
+
+        if block_h2:
+            self.parent.h2_header_table.sectionResized.disconnect(self.parent.resizing_h2)
+        else:
+            self.parent.h2_header_table.sectionResized.connect(self.parent.resizing_h2)
+
+        if block_h3:
+            self.parent.h3_header_table.sectionResized.disconnect(self.parent.resizing_h3)
+        else:
+            self.parent.h3_header_table.sectionResized.connect(self.parent.resizing_h3)
+
+
+
+
+
+
+
