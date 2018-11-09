@@ -2518,7 +2518,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         else:
             self.h3_header_table.sectionResized.connect(self.resizing_h3)
 
-
     def resizing_h1(self, index_column, old_size, new_size):
         # print("resizing h1 column {}".format(index_column))
 
@@ -2782,12 +2781,13 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         return [None, None]
 
-    def resizing_table(self, tree_dict={}):
+    def resizing_table(self, tree_dict={}, block_ui=True):
         '''updating the size of the columns using visibility of the various elements of the tree'''
         if tree_dict == {}:
             return
 
-        self.block_table_ui()
+        if block_ui:
+            self.block_table_ui()
 
         # if user disabled or enabled at the h1 level, nothing to do as all the columns will be automatically
         # resized the right way
@@ -2848,7 +2848,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                     # if h1 parent is not visible, done !
                     pass
 
-        self.block_table_ui(unblock_all=True)
+        if block_ui:
+            self.block_table_ui(unblock_all=True)
 
     def init_headers(self):
         td = self.tree_dict
@@ -3001,7 +3002,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                                state=item.checkState(0))
 
         self.update_table_columns_visibility()
-        self.resizing_table(tree_dict=h_columns_affected)
+        self.resizing_table(tree_dict=h_columns_affected, block_ui=False)
 
         self.h1_header_table.blockSignals(False)
         self.h2_header_table.blockSignals(False)
