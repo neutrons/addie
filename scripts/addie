@@ -7,6 +7,7 @@ import itertools
 import pickle
 from os.path import expanduser
 import psutil
+import pprint
 
 from addie.ipythondockwidget import IPythonDockWidget
 
@@ -2377,6 +2378,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         if key == '':
             return
 
+        print("in load this config")
+        pprint.pprint(self.config_dict[key])
+
         config_to_load = self.config_dict[key]['table']
 
         h1_dict = config_to_load['h1']
@@ -3613,8 +3617,10 @@ class H3TableHandler:
         self.save_as_config_name_selected(name=active_config_name)
 
     def reset_table(self):
+        print("in reset table")
         config_dict = self.parent.config_dict
         if not ("FULL_RESET" in config_dict):
+            print("no full reset found")
             config_dict['FULL_RESET'] = self.parent.reset_config_dict
             self.parent.config_dict = config_dict
 
