@@ -224,8 +224,8 @@ class TableTreeHandler:
     def __init__(self, parent=None):
 
         if parent.table_tree_ui == None:
-            table_tree_ui = TableTree(parent=parent)
-            table_tree_ui.show()
+            parent.table_tree_ui = TableTree(parent=parent)
+            parent.table_tree_ui.show()
         else:
             parent.table_tree_ui.activateWindow()
             parent.table_tree_ui.setFocus()
@@ -339,7 +339,8 @@ class TableTree(QDialog):
             h3_index += 1
 
             self.tree_ui = tree_ui
+            self.parent.tree_ui = tree_ui
 
-    def closeEvent(self):
+    def closeEvent(self, c):
         self.parent.table_tree_ui = None
 

@@ -113,6 +113,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                            }
 
     tree_dict = None
+    tree_ui = None
     minimum_col_width = 10
 
     # headers from master table
@@ -2330,7 +2331,21 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     def make_calibration_clicked(self):
         _make = MakeCalibrationLauncher(parent=self)
 
-    # new tab with advanced table
+    # New tab with advanced table
+
+    # master table
+    def personalization_table_clicked(self):
+        o_master_table_tree = TableTreeHandler(parent=self)
+        _table_config = TableConfig(parent=self)
+        current_config = _table_config.get_current_config()
+        self.update_tree_dict_and_tree(config_to_load=current_config)
+
+    def closeEvent(self, c):
+        if self.advanced_window_ui:
+            self.advanced_window_ui.closeEvent(c)
+        if self.make_calibration_ui:
+            self.make_calibration_ui.closeEvent(c)
+
     def resizing_h1(self, index_column, old_size, new_size):
         print("resizing h1 column {}".format(index_column))
 
@@ -2363,16 +2378,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self.block_table_ui(unblock_all=True)
         # print("")
 
-    # master table
-    def personalization_table_clicked(self):
-        o_master_table_tree = TableTreeHandler(parent=self)
-        self.update_tree_dict_and_tree(config_to_load=self.config_dict[self.active_config_name])
-
-    def closeEvent(self, c):
-        if self.advanced_window_ui:
-            self.advanced_window_ui.closeEvent(c)
-        if self.make_calibration_ui:
-            self.make_calibration_ui.closeEvent(c)
 
     def load_this_config(self, key='', resize=False):
         if key == '':
