@@ -635,7 +635,27 @@ class TableConfig:
 
         return _dict
 
-    def block_table_ui(self, block_all=True,
+    def block_table_header_ui(self, block_all=True,
+                       unblock_all=False,
+                       block_h1=False,
+                       block_h2=False,
+                       block_h3=False):
+
+        if block_all:
+            block_h1 = True
+            block_h2 = True
+            block_h3 = True
+
+        if unblock_all:
+            block_h1 = False
+            block_h2 = False
+            block_h3 = False
+
+        self.parent.h1_header_table.blockSignals(block_h1)
+        self.parent.h2_header_table.blockSignals(block_h2)
+        self.parent.h3_header_table.blockSignals(block_h3)
+
+    def disconnect_table_ui(self, block_all=True,
                        unblock_all=False,
                        block_h1=False,
                        block_h2=False,
@@ -666,9 +686,613 @@ class TableConfig:
         else:
             self.parent.h3_header_table.sectionResized.connect(self.parent.resizing_h3)
 
+    def get_h2_children_from_h1(self, h1=-1):
+        if h1 == -1:
+            return None
 
+        table_columns_links = self.parent.table_columns_links
+        list_h2_values = table_columns_links['h2']
 
+        return list_h2_values[h1]
 
+    def get_last_h2_visible(self, list_h2=[]):
+        if list_h2 == []:
+            return None
 
+        for _h2 in list_h2[::-1]:
+            if self.parent.ui.h2_table.isColumnHidden(_h2):
+                continue
+            else:
+                return _h2
 
+        return None
 
+    def get_h3_children_from_h2(self, h2=-1):
+        if h2 == -1:
+            return None
+
+        table_columns_links = self.parent.table_columns_links
+        list_h3_values = table_columns_links['h3']
+        list_h2_values = table_columns_links['h2']
+
+        index_h2 = -1
+        index_h1 = 0
+        for h2_values in list_h2_values:
+            if h2 in h2_values:
+                index_h2 = h2_values.index(h2)
+                break
+            index_h1 += 1
+
+        if index_h2 == -1:
+            return []
+
+        return list_h3_values[index_h1][index_h2]
+
+    def get_last_h3_visible(self, list_h3=[]):
+        if list_h3 == []:
+            return None
+
+        for _h3 in list_h3[::-1]:
+            if self.parent.ui.h3_table.isColumnHidden(_h3):
+                continue
+            else:
+                return _h3
+
+        return None
+
+    def get_size_column(self, h1=None, h2=None, h3=None):
+        table_ui = self.get_table_ui(h1=h1, h2=h2, h3=h3)
+        h = self.get_master_h(h1=h1, h2=h2, h3=h3)
+        return table_ui.columnWidth(h)
+
+    def get_table_ui(self, h1=None, h2=None, h3=None):
+        '''h1, h2 or h3 are column indexes'''
+        if not h1 is None:
+            table_ui = self.parent.ui.h1_table
+        elif not h2 is None:
+            table_ui = self.parent.ui.h2_table
+        elif not h3 is None:
+            table_ui = self.parent.ui.h3_table
+        else:
+            table_ui = None
+        return table_ui
+
+    def get_master_h(self, h1=None, h2=None, h3=None):
+        '''return the only defined column index from h1, h2 or h3 table'''
+        if not h1 is None:
+            return h1
+        elif not h2 is None:
+            return h2
+        elif not h3 is None:
+            return h3
+        else:
+            return None
+
+    def set_size_column(self, h1=None, h2=None, h3=None, width=None):
+        if width is None:
+            return
+
+        table_ui = self.get_table_ui(h1=h1, h2=h2, h3=h3)
+        h = self.get_master_h(h1=h1, h2=h2, h3=h3)
+        table_ui.setColumnWidth(h, width)
+
+    def get_h1_parent_from_h2(self, h2=-1):
+        if h2 == -1:
+            return None
+
+        table_columns_links = self.parent.table_columns_links
+        list_h2_values = table_columns_links['h2']
+
+        h1_parent_index = 0
+        for h2_values in list_h2_values:
+            if h2 in h2_values:
+                return h1_parent_index
+            h1_parent_index += 1
+
+        return None
+
+    def resizing_h1_using_all_visible_h2(self, h1=None):
+        '''automatically resize the h1 using all its h2 visible '''
+        h2_children = self.get_h2_children_from_h1(h1=h1)
+        list_visible_h2 = self.get_all_h2_visible(list_h2=h2_children)
+
+        if list_visible_h2 is None:
+            return
+
+        full_size_h2 = 0
+        for _h2 in list_visible_h2:
+            full_size_h2 += self.get_size_column(h2=_h2)
+
+        self.parent.ui.h1_table.setColumnWidth(h1, full_size_h2)
+
+    def get_h_columns_from_item_name(self, item_name=None):
+        # h_columns_affected = {'h1': [],
+        #                       'h2': [],
+        #                       'h3': [],
+        #                       'list_tree_ui': [],
+        #                       'list_parent_ui': []}
+
+        if item_name == None:
+            return
+
+        h1_columns = []
+        h2_columns = []
+        h3_columns = []
+        list_tree_ui = []
+        list_parent_ui = []
+
+        h1_global_counter = 0
+        h2_global_counter = 0
+        h3_global_counter = 0
+
+        td = self.parent.tree_dict
+        for h1_global_counter, _key_h1 in enumerate(td.keys()):
+
+            if item_name == _key_h1:
+                # get all h2 and h3 of this h1
+
+                if td[_key_h1]['children']:
+
+                    for _key_h2 in td[_key_h1]['children']:
+
+                        if td[_key_h1]['children'][_key_h2]['children']:
+
+                            list_tree_ui.append(td[_key_h1]['children'][_key_h2]['ui'])
+                            for _key_h3 in td[_key_h1]['children'][_key_h2]['children'].keys():
+                                h3_columns.append(h3_global_counter)
+                                list_tree_ui.append(td[_key_h1]['children'][_key_h2]['children'][_key_h3]['ui'])
+                                h3_global_counter += 1
+
+                        else:
+
+                            h2_columns.append(h2_global_counter)
+                            list_tree_ui.append(td[_key_h1]['children'][_key_h2]['ui'])
+                            h3_columns.append(h3_global_counter)
+
+                            h2_global_counter += 1
+                            h3_global_counter += 1
+
+                    return {'h1': [h1_global_counter],
+                            'h2': h2_columns,
+                            'h3': h3_columns,
+                            'list_tree_ui': list_tree_ui,
+                            'list_parent_ui': list_parent_ui}
+
+                else:
+
+                    list_tree_ui.append(td[_key_h1]['ui'])
+                    return {'h1': [h1_global_counter],
+                            'h2': [h2_global_counter],
+                            'h3': [h3_global_counter],
+                            'list_tree_ui': list_tree_ui,
+                            'list_parent_ui': list_parent_ui}
+
+            else:
+                # start looking into the h2 layer if it has children
+
+                if td[_key_h1]['children']:
+
+                    for _key_h2 in td[_key_h1]['children'].keys():
+
+                        if item_name == _key_h2:
+                            # get all h3 for this h2 and we are done
+
+                            if td[_key_h1]['children'][_key_h2]['children']:
+                                # if key_h2 has children
+
+                                # list all h3 leaves for this h2
+                                for _key_h3 in td[_key_h1]['children'][_key_h2]['children'].keys():
+                                    h3_columns.append(h3_global_counter)
+                                    list_tree_ui.append(td[_key_h1]['children'][_key_h2]['children'][_key_h3]['ui'])
+                                    h3_global_counter += 1
+
+                            else:
+                                h3_columns = [h3_global_counter]
+
+                            list_tree_ui.append(td[_key_h1]['children'][_key_h2]['ui'])
+                            list_parent_ui.append(td[_key_h1]['ui'])
+                            return {'h1': [],
+                                    'h2': [h2_global_counter],
+                                    'h3': h3_columns,
+                                    'list_tree_ui': list_tree_ui,
+                                    'list_parent_ui': list_parent_ui}
+
+                        else:
+                            # we did not find the item name yet
+
+                            # start looking into all the h2 children (if any)
+                            if td[_key_h1]['children'][_key_h2]['children']:
+
+                                # loop through all the h3 and look for item_name. If found
+                                # we are done
+                                for _key_h3 in td[_key_h1]['children'][_key_h2]['children'].keys():
+
+                                    if item_name == _key_h3:
+                                        # we found the item name at the h3 layer,
+                                        # no leaf below, so we are done
+
+                                        list_parent_ui.append(td[_key_h1]['ui'])
+                                        list_parent_ui.append(td[_key_h1]['children'][_key_h2]['ui'])
+                                        return {'h1': [],
+                                                'h2': [],
+                                                'h3': [h3_global_counter],
+                                                'list_tree_ui': list_tree_ui,
+                                                'list_parent_ui': list_parent_ui}
+
+                                    else:
+
+                                        h3_global_counter += 1
+
+                                h2_global_counter += 1
+
+                            else:
+                                # no children, we just keep going to the next h2 (and h3)
+
+                                h2_global_counter += 1
+                                h3_global_counter += 1
+
+                else:
+                    # no children and item_name has not been found yet, so
+                    # just keep going and move on to the next h1
+                    h2_global_counter += 1
+                    h3_global_counter += 1
+
+        return {'h1': h1_columns,
+                'h2': h2_columns,
+                'h3': h3_columns,
+                'list_tree_ui': list_tree_ui,
+                'list_parent_ui': list_parent_ui}
+
+    def get_item_name(self, item):
+        td = self.parent.tree_dict
+
+        for _key_h1 in td.keys():
+
+            if item == td[_key_h1]['ui']:
+                return _key_h1
+
+            if td[_key_h1]['children']:
+
+                for _key_h2 in td[_key_h1]['children'].keys():
+
+                    if item == td[_key_h1]['children'][_key_h2]['ui']:
+                        return _key_h2
+
+                    if td[_key_h1]['children'][_key_h2]['children']:
+
+                        for _key_h3 in td[_key_h1]['children'][_key_h2]['children'].keys():
+
+                            if item == td[_key_h1]['children'][_key_h2]['children'][_key_h3]['ui']:
+                                return _key_h3
+
+        return None
+
+    def change_state_tree(self, list_ui=[], list_parent_ui=[], state=0):
+        """
+        Will transfer the state of the parent to the children. We also need to make sure that if all the children
+        are disabled, the parent gets disable as well.
+
+        :param list_ui:
+        :param list_parent_ui:
+        :param state:
+        :return:
+        """
+
+        self.parent.ui.treeWidget.blockSignals(True)
+
+        for _ui in list_ui:
+            _ui.setCheckState(0, state)
+
+        # if the leaf is enabled, we need to make sure all the parents are enabled as well.
+        if state == QtCore.Qt.Checked:
+            for _ui in list_parent_ui:
+                _ui.setCheckState(0, state)
+
+        self.update_full_tree_status()
+        self.parent.ui.treeWidget.blockSignals(False)
+
+    def update_full_tree_status(self):
+        """this will update the tree_dict dictionary with the status of all the leaves"""
+        td = self.parent.tree_dict
+
+        # clean tree
+        # if all h3 of an h2 are disabled, h2 should be disabled
+        # if all h2 of a h1 are disabled, h1 should be disabled
+        for _key_h1 in td.keys():
+
+            if td[_key_h1]['children']:
+
+                all_h2_disabled = True
+
+                for _key_h2 in td[_key_h1]['children'].keys():
+
+                    if td[_key_h1]['children'][_key_h2]['children']:
+
+                        all_h3_disabled = True
+                        for _key_h3 in td[_key_h1]['children'][_key_h2]['children'].keys():
+
+                            if td[_key_h1]['children'][_key_h2]['children'][_key_h3]['ui'].checkState(0):
+                                all_h3_disabled = False
+                                all_h2_disabled = False
+                                break
+
+                        if all_h3_disabled:
+                            # we need to make sure the h2 is disabled as well
+                            td[_key_h1]['children'][_key_h2]['ui'].setCheckState(0, QtCore.Qt.Unchecked)
+
+                    else:
+
+                        if td[_key_h1]['children'][_key_h2]['ui'].checkState(0):
+                            all_h2_disabled = False
+
+                if all_h2_disabled:
+                    # we need to make sure the h1 is disabled as well then
+                    td[_key_h1]['ui'].setCheckState(0, QtCore.Qt.Unchecked)
+
+        # record full tree state
+        for _key_h1 in td.keys():
+
+            td[_key_h1]['state'] = td[_key_h1]['ui'].checkState(0)
+
+            if td[_key_h1]['children']:
+
+                for _key_h2 in td[_key_h1]['children'].keys():
+
+                    td[_key_h1]['children'][_key_h2]['state'] = td[_key_h1]['children'][_key_h2]['ui'].checkState(0)
+
+                    if td[_key_h1]['children'][_key_h2]['children']:
+
+                        for _key_h3 in td[_key_h1]['children'][_key_h2]['children'].keys():
+                            td[_key_h1]['children'][_key_h2]['children'][_key_h3]['state'] = \
+                                td[_key_h1]['children'][_key_h2]['children'][_key_h3]['ui'].checkState(0)
+
+        self.parent.tree_dict = td
+
+    def update_table_columns_visibility(self):
+        # will update the table by hiding or not the columns
+
+        def set_column_visibility(column=-1, table_ui=None, visible=0):
+            table_ui.setColumnHidden(column, not visible)
+
+        def get_boolean_state(key=None):
+            status = key['state']
+            if status == QtCore.Qt.Checked:
+                return True
+            else:
+                return False
+
+        h2_counter = 0
+        h3_counter = 0
+
+        td = self.parent.tree_dict
+        for h1_counter, _key_h1 in enumerate(td.keys()):
+
+            _h1_boolean_status = get_boolean_state(td[_key_h1])
+
+            set_column_visibility(column=h1_counter,
+                                  table_ui=self.parent.ui.h1_table,
+                                  visible=_h1_boolean_status)
+
+            if td[_key_h1]['children']:
+
+                for _key_h2 in td[_key_h1]['children'].keys():
+
+                    _h2_boolean_status = get_boolean_state(td[_key_h1]['children'][_key_h2])
+                    set_column_visibility(column=h2_counter,
+                                          table_ui=self.parent.ui.h2_table,
+                                          visible=_h2_boolean_status)
+
+                    if td[_key_h1]['children'][_key_h2]['children']:
+
+                        for _key_h3 in td[_key_h1]['children'][_key_h2]['children'].keys():
+                            _h3_boolean_status = get_boolean_state(
+                                td[_key_h1]['children'][_key_h2]['children'][_key_h3])
+                            set_column_visibility(column=h3_counter,
+                                                  table_ui=self.parent.ui.h3_table,
+                                                  visible=_h3_boolean_status)
+                            h3_counter += 1
+
+                    else:
+
+                        set_column_visibility(column=h3_counter,
+                                              table_ui=self.parent.ui.h3_table,
+                                              visible=_h2_boolean_status)
+                        h3_counter += 1
+
+                    h2_counter += 1
+
+            else:
+
+                # h2 and h3 should have the same status as h1
+                set_column_visibility(column=h2_counter,
+                                      table_ui=self.parent.ui.h2_table,
+                                      visible=_h1_boolean_status)
+                set_column_visibility(column=h3_counter,
+                                      table_ui=self.parent.ui.h3_table,
+                                      visible=_h1_boolean_status)
+
+                h2_counter += 1
+                h3_counter += 1
+
+    def resizing_table(self, tree_dict={}, block_ui=True):
+        '''updating the size of the columns using visibility of the various elements of the tree'''
+        if tree_dict == {}:
+            return
+
+        if block_ui:
+            self.disconnect_table_ui()
+
+        # if user disabled or enabled at the h1 level, nothing to do as all the columns will be automatically
+        # resized the right way
+        h1 = tree_dict['h1']
+        h2 = tree_dict['h2']
+        h3 = tree_dict['h3']
+        if not h1 == []:
+            pass
+
+        # if user clicked at the h2 level
+        elif not h2 == []:
+
+            h2 = h2[0]
+
+            h1_parent = self.get_h1_parent_from_h2(h2=h2)
+            is_h1_parent_visible = self.is_h_visible(h1=h1_parent)
+
+            if is_h1_parent_visible:
+                # resize h2 using all visible h3
+                self.resizing_h2_using_all_visible_h3(h2=h2)
+
+                # if h1 parent is visible, re-sized h1 parent using all visible h2
+                self.resizing_h1_using_all_visible_h2(h1=h1_parent)
+
+            else:
+                # if h1 parent is not visible, done !
+                pass
+
+        # if user clicked at the h3 level
+        elif not h3 == []:
+
+            h3 = h3[0]
+
+            [h1_parent, h2_parent] = self.get_h1_h2_parent_from_h3(h3=h3)
+            is_h2_parent_visible = self.is_h_visible(h2=h2_parent)
+
+            if is_h2_parent_visible:
+                # if we have more h3 siblings visible
+                # - we need to resize h2_parent using visible h3 siblings
+                # - we need to resize h1_parent using all visible h2
+                self.resizing_h2_using_all_visible_h3(h2=h2_parent)
+                self.resizing_h1_using_all_visible_h2(h1=h1_parent)
+
+            else:
+                # if there are no more h3 siblings then
+                #      if h1_parent visible -> resize h1_parent using all h2 visible
+                #      if h1_parent not visible -> Done !
+                h2 = h2_parent
+
+                h1_parent = self.get_h1_parent_from_h2(h2=h2)
+                is_h1_parent_visible = self.is_h_visible(h1=h1_parent)
+
+                if is_h1_parent_visible:
+                    # if h1 parent is visible, resized h1 parent using all visible h2
+                    self.resizing_h1_using_all_visible_h2(h1=h1_parent)
+
+                else:
+                    # if h1 parent is not visible, done !
+                    pass
+
+        if block_ui:
+            self.disconnect_table_ui(unblock_all=True)
+
+    def is_h_visible(self, h1=None, h2=None, h3=None):
+        table_ui = self.get_table_ui(h1=h1, h2=h2, h3=h3)
+        master_h = self.get_master_h(h1=h1, h2=h2, h3=h3)
+        return not table_ui.isColumnHidden(master_h)
+
+    def resizing_h2_using_all_visible_h3(self, h2=None):
+        '''automatically resizing the h2 using all its h3 visible'''
+        h3_children = self.get_h3_children_from_h2(h2=h2)
+        list_visible_h3 = self.get_all_h3_visible(list_h3=h3_children)
+
+        if list_visible_h3 is None:
+            return
+
+        full_size_h3 = 0
+        for _h3 in list_visible_h3:
+            full_size_h3 += self.get_size_column(h3=_h3)
+
+        self.parent.ui.h2_table.setColumnWidth(h2, full_size_h3)
+
+    def get_all_h2_visible(self, list_h2=[]):
+        '''return the list of all the visible h2 from the list of h2 given'''
+        if list_h2 == []:
+            return None
+
+        list_h2_visible = [_h2 for _h2 in list_h2 if not self.parent.ui.h2_table.isColumnHidden(_h2)]
+        return list_h2_visible
+
+    def get_all_h3_visible(self, list_h3=[]):
+        '''return the list of all the visible h3 from the list of h3 given'''
+        if list_h3 == []:
+            return None
+
+        list_h3_visible = [_h3 for _h3 in list_h3 if not self.parent.ui.h3_table.isColumnHidden(_h3)]
+        return list_h3_visible
+
+    def get_h1_h2_parent_from_h3(self, h3=-1):
+        if h3 == -1:
+            return [None, None]
+
+        table_columns_links = self.parent.table_columns_links
+        list_h3_values = table_columns_links['h3']
+
+        h1_parent_index = 0
+        h2_parent_index = 0
+
+        for h3_values in list_h3_values:
+            for local_h3 in h3_values:
+                if h3 in local_h3:
+                    return [h1_parent_index, h2_parent_index]
+                h2_parent_index += 1
+            h1_parent_index += 1
+
+        return [None, None]
+
+    def update_tree_dict_and_tree(self, config_to_load={}):
+        '''This method will update the tree_dict dictionary as well as the state of the tree'''
+
+        if self.parent.table_tree_ui is None:
+            return
+
+        if config_to_load == {}:
+            return
+
+        def from_boolean_to_ui_status(visible):
+            if visible:
+                return QtCore.Qt.Checked
+            else:
+                return QtCore.Qt.Unchecked
+
+        def change_state_tree_widgets(list_tree_ui, list_h_columns):
+            for _ui, _key in zip(list_tree_ui, list_h_columns):
+                if _ui is None:
+                    continue
+                else:
+                    _config = list_h_columns[_key]
+                    _visibility = _config['visible']
+                    _state = from_boolean_to_ui_status(_visibility)
+                    _ui.setCheckState(0, _state)
+
+        self.parent.ui.treeWidget.blockSignals(True)
+
+        # print("config_to_load")
+        # pprint.pprint(config_to_load)
+
+        tree_ui = self.parent.tree_ui
+
+        # working with h1
+        list_h1_columns = config_to_load['h1']
+        list_h1_tree_ui = tree_ui['h1']
+        change_state_tree_widgets(list_h1_tree_ui, list_h1_columns)
+
+        # working with h2
+        list_h2_columns = config_to_load['h2']
+        list_h2_tree_ui = tree_ui['h2']
+        change_state_tree_widgets(list_h2_tree_ui, list_h2_columns)
+
+        # working with h3
+        list_h3_columns = config_to_load['h3']
+        list_h3_tree_ui = tree_ui['h3']
+        change_state_tree_widgets(list_h3_tree_ui, list_h3_columns)
+
+        self.parent.ui.treeWidget.blockSignals(False)
+
+    def set_visibility_column(self, h1=None, h2=None, h3=None, visibility=True):
+        table_ui = self.get_table_ui(h1=h1, h2=h2, h3=h3)
+        h = self.get_master_h(h1=h1, h2=h2, h3=h3)
+        table_ui.setColumnHidden(h, not visibility)
+
+    def set_size_and_visibility_column(self, h1=None, h2=None, h3=None, width=None, visibility=True, resize=False):
+        if resize:
+            self.set_size_column(h1=h1, h2=h2, h3=h3, width=width)
+        self.set_visibility_column(h1=h1, h2=h2, h3=h3, visibility=visibility)
