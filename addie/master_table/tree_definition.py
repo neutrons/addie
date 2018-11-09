@@ -1,5 +1,10 @@
 from collections import OrderedDict
 import copy
+from os.path import expanduser
+import os
+
+user_home = expanduser("~")
+CONFIG_FILE = os.path.join(user_home, '.addie_config.cfg')
 
 column_default_width = 90
 

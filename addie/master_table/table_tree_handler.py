@@ -1,17 +1,20 @@
 import numpy as np
+import os
+import pickle
+
 
 try:
-    from PyQt4.QtGui import QDialog, QTreeWidgetItem, QTableWidgetItem
-    from PyQt4 import QtCore
+    from PyQt4.QtGui import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu
+    from PyQt4 import QtCore, QtGui
 except ImportError:
     try:
-        from PyQt5.QtWidgets import QDialog, QTreeWidgetItem, QTableWidgetItem
-        from PyQt5 import QtCore
+        from PyQt5.QtWidgets import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu
+        from PyQt5 import QtCore, QtGui
     except ImportError:
         raise ImportError("Requires PyQt4 or PyQt5")
 
 from addie.ui_table_tree import Ui_Dialog as UiDialog
-from addie.master_table.tree_definition import tree_dict, column_default_width
+from addie.master_table.tree_definition import tree_dict, column_default_width, CONFIG_FILE
 
 
 class TableInitialization:
