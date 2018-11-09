@@ -2384,7 +2384,10 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         if key == '':
             return
 
-        config_to_load = self.config_dict[key]['table']
+        if key == 'FULL_RESET':
+            config_to_load = self.reset_config_dict['table']
+        else:
+            config_to_load = self.config_dict[key]['table']
 
         h1_dict = config_to_load['h1']
         h2_dict = config_to_load['h2']
@@ -2514,6 +2517,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             self.h3_header_table.sectionResized.disconnect(self.resizing_h3)
         else:
             self.h3_header_table.sectionResized.connect(self.resizing_h3)
+
 
     def resizing_h1(self, index_column, old_size, new_size):
         # print("resizing h1 column {}".format(index_column))
