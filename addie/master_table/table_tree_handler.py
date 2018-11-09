@@ -232,7 +232,6 @@ class TableTreeHandler:
             parent.table_tree_ui.activateWindow()
             parent.table_tree_ui.setFocus()
 
-
 class TableTree(QDialog):
 
     tree_column = 0
@@ -346,3 +345,4 @@ class TableTree(QDialog):
     def closeEvent(self, c):
         self.parent.table_tree_ui = None
         self.parent.table_tree_ui_position = self.pos()
+

@@ -2339,6 +2339,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         o_master_table_tree = TableTreeHandler(parent=self)
         _table_config = TableConfig(parent=self)
         current_config = _table_config.get_current_config()
+#        o_master_table = MasterTableHandler(parent=self)
+#        o_master_table.update_tree_dict_and_tree(config_to_load=current_config)
         self.update_tree_dict_and_tree(config_to_load=current_config)
 
     def closeEvent(self, c):
@@ -2346,7 +2348,23 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             self.advanced_window_ui.closeEvent(c)
         if self.make_calibration_ui:
             self.make_calibration_ui.closeEvent(c)
+        if self.table_tree_ui:
+            self.table_tree_ui.closeEvent(c)
 
+
+
+
+
+
+
+
+
+
+
+
+
+    # This part takes care of the master table and will have to be moved into its own file !!!
+    # FIXME
     def resizing_h1(self, index_column, old_size, new_size):
 #        print("resizing h1 column {}".format(index_column))
 
