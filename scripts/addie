@@ -2361,15 +2361,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     # h3_table_right_click
 
 
-
-
-
-
-
-
-
-
-
     def load_this_config(self, key='', resize=False):
         if key == '':
             return
@@ -2390,7 +2381,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         # print()
         # pprint.pprint(self.tree_dict.keys())
 
-        self.block_table_ui()
+#        self.block_table_ui()
+        o_table = TableConfig(parent=self)
+        o_table.block_table_ui()
 
         for _col in h1_dict:
             _visible = h1_dict[_col]['visible']
@@ -2410,7 +2403,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self.update_tree_dict_and_tree(config_to_load)
         # self.update_full_tree_status()
 
-        self.block_table_ui(unblock_all=True)
+
+        o_table.block_table_ui(unblock_all=True)
+        #self.block_table_ui(unblock_all=True)
 
     def update_tree_dict_and_tree(self, config_to_load={}):
         '''This method will update the tree_dict dictionary as well as the state of the tree'''
@@ -2477,36 +2472,36 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self.ui.h1_table.horizontalScrollBar().setValue(value)
         self.ui.h2_table.horizontalScrollBar().setValue(value)
 
-    def block_table_ui(self, block_all=True,
-                       unblock_all=False,
-                       block_h1=False,
-                       block_h2=False,
-                       block_h3=False):
-
-        if block_all:
-            block_h1 = True
-            block_h2 = True
-            block_h3 = True
-
-        if unblock_all:
-            block_h1 = False
-            block_h2 = False
-            block_h3 = False
-
-        if block_h1:
-            self.h1_header_table.sectionResized.disconnect(self.resizing_h1)
-        else:
-            self.h1_header_table.sectionResized.connect(self.resizing_h1)
-
-        if block_h2:
-            self.h2_header_table.sectionResized.disconnect(self.resizing_h2)
-        else:
-            self.h2_header_table.sectionResized.connect(self.resizing_h2)
-
-        if block_h3:
-            self.h3_header_table.sectionResized.disconnect(self.resizing_h3)
-        else:
-            self.h3_header_table.sectionResized.connect(self.resizing_h3)
+    # def block_table_ui(self, block_all=True,
+    #                    unblock_all=False,
+    #                    block_h1=False,
+    #                    block_h2=False,
+    #                    block_h3=False):
+    #
+    #     if block_all:
+    #         block_h1 = True
+    #         block_h2 = True
+    #         block_h3 = True
+    #
+    #     if unblock_all:
+    #         block_h1 = False
+    #         block_h2 = False
+    #         block_h3 = False
+    #
+    #     if block_h1:
+    #         self.h1_header_table.sectionResized.disconnect(self.resizing_h1)
+    #     else:
+    #         self.h1_header_table.sectionResized.connect(self.resizing_h1)
+    #
+    #     if block_h2:
+    #         self.h2_header_table.sectionResized.disconnect(self.resizing_h2)
+    #     else:
+    #         self.h2_header_table.sectionResized.connect(self.resizing_h2)
+    #
+    #     if block_h3:
+    #         self.h3_header_table.sectionResized.disconnect(self.resizing_h3)
+    #     else:
+    #         self.h3_header_table.sectionResized.connect(self.resizing_h3)
 
     def resizing_h1(self, index_column, old_size, new_size):
         # print("resizing h1 column {}".format(index_column))
