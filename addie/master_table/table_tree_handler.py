@@ -226,6 +226,8 @@ class TableTreeHandler:
         if parent.table_tree_ui == None:
             parent.table_tree_ui = TableTree(parent=parent)
             parent.table_tree_ui.show()
+            if parent.table_tree_ui_position:
+                parent.table_tree_ui.move(parent.table_tree_ui_position)
         else:
             parent.table_tree_ui.activateWindow()
             parent.table_tree_ui.setFocus()
@@ -343,4 +345,4 @@ class TableTree(QDialog):
 
     def closeEvent(self, c):
         self.parent.table_tree_ui = None
-
+        self.parent.table_tree_ui_position = self.pos()

@@ -90,6 +90,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     advanced_window_ui = None
     make_calibration_ui = None
     table_tree_ui = None
+    table_tree_ui_position = None
 
     # configuration of master table
     config_dict = OrderedDict()
