@@ -19,6 +19,10 @@ base_dict = {'ui': None,
                       }
 
 tree_dict = OrderedDict()
+
+tree_dict['activate'] = copy.deepcopy(base_dict)
+tree_dict['activate']['name'] = 'Activate'
+
 tree_dict['title'] = copy.deepcopy(base_dict)
 tree_dict['title']['name'] = "Title"
 
