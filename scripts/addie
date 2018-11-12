@@ -2489,6 +2489,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         o_table.block_table_header_ui(unblock_all=True)
 
+    def master_table_select_state_changed(self, state, row):
+        print("master table selection changed at row {} and state{}".format(row, state))
+
     def apply_clicked(self):
         # do stuff
         self.close()

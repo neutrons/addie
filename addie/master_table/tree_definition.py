@@ -9,14 +9,14 @@ CONFIG_FILE = os.path.join(user_home, '.addie_config.cfg')
 column_default_width = 90
 
 h_index = {'h1': None,
-               'h2': None,
-               'h3': None}
+           'h2': None,
+           'h3': None}
 
 base_dict = {'ui': None,
-                      'name': "Title",
-                      'children': None,
-                      'h_index': copy.deepcopy(h_index),
-                      }
+             'name': "Title",
+             'children': None,
+             'h_index': copy.deepcopy(h_index),
+             }
 
 tree_dict = OrderedDict()
 

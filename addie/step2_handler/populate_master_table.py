@@ -108,6 +108,7 @@ class PopulateMasterTable(object):
         _widget.setEnabled(True)
         _layout.addWidget(_widget)
         _layout.addStretch()
+
         _new_widget = QtGui.QWidget()
         _new_widget.setLayout(_layout)
         
