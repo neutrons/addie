@@ -503,7 +503,7 @@ class H3TableHandler:
         rows_paste = rows.addAction("Paste")
         rows.addSeparator()
         rows_insert = rows.addMenu("Insert")
-        rows_insert_run_number = rows_insert.addAction("Run Number ...")
+        rows_insert_run_number = rows_insert.addAction("Via Run Number ...")
         rows_insert_blank = rows_insert.addAction("Blank")
         rows_remove = rows.addAction("Remove")
 

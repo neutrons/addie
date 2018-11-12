@@ -1,3 +1,5 @@
+import numpy as np
+
 try:
     from PyQt4.QtGui import QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem
     from PyQt4 import QtCore, QtGui
@@ -19,6 +21,13 @@ class TableRowHandler:
         row = self._calculate_insert_row()
         self.insert_row(row=row)
 
+    def sample_shape_changed(self, shape='Cylindrical'):
+        pass
+
+    def activated_row_changed(self, state=None):
+        pass
+
+
     def insert_row(self, row=-1):
         self.table_ui.insertRow(row)
 
@@ -27,7 +36,6 @@ class TableRowHandler:
         _widget = QtGui.QCheckBox()
         _widget.setCheckState(QtCore.Qt.Checked)
         _widget.setEnabled(True)
-
         _spacer = QSpacerItem(40, 20,
                               QSizePolicy.Expanding,
                               QSizePolicy.Minimum)
@@ -38,8 +46,8 @@ class TableRowHandler:
         _new_widget = QtGui.QWidget()
         _new_widget.setLayout(_layout)
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("stateChanged(int)"),
-                               lambda state=0,
-                               row=row: self.parent.master_table_select_state_changed(state, row))
+                               lambda state=0:
+                               self.parent.master_table_select_state_changed(state))
         self.table_ui.setCellWidget(row, 0, _new_widget)
 
         # column 1 - title
@@ -70,8 +78,8 @@ class TableRowHandler:
         _widget = QtGui.QComboBox()
         _shape_default_value = 'Cylindrical'
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-                               lambda value=_shape_default_value, row=row:
-                               self.parent.master_table_sample_shape_changed(value, row))
+                               lambda value=_shape_default_value:
+                               self.parent.master_table_sample_shape_changed(value))
         _widget.addItem("cylindrical")
         _widget.addItem("spherical")
         self.table_ui.setCellWidget(row, 7, _widget)
@@ -106,6 +114,8 @@ class TableRowHandler:
         # column 11 - multi. scattering correction
 
         # column 12 - inelastic correction
+
+
 
 
 

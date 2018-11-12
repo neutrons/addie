@@ -67,6 +67,7 @@ from addie.master_table.table_tree_handler import TableTreeHandler, TableInitial
 from addie.master_table.table_tree_handler import SaveConfigInterface, TableTree
 from addie.master_table.tree_definition import *
 from addie.ui_table_tree_save_config import Ui_Dialog as UiDialogSave
+from addie.master_table.table_row_handler import TableRowHandler
 
 import PyQt4
 import PyQt4.QtCore as QtCore
@@ -110,7 +111,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                            'h2': [],
                            'h3': [],
                            }
-
     tree_dict = None
     tree_ui = None
     minimum_col_width = 10
@@ -2489,11 +2489,13 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         o_table.block_table_header_ui(unblock_all=True)
 
-    def master_table_select_state_changed(self, state, row):
-        print("master table selection changed at row {} and state{}".format(row, state))
+    def master_table_select_state_changed(self, state):
+        o_table = TableRowHandler(parent=self)
+        o_table.activated_row_changed(state=state)
 
-    def master_table_sample_shape_changed(self, text, row):
-        print("master table sam ple shape changed: {} at {}".format(text, row))
+    def master_table_sample_shape_changed(self, text):
+        o_table = TableRowHandler(parent=self)
+        o_table.sample_shape_changed(shape=text)
 
     def apply_clicked(self):
         # do stuff
