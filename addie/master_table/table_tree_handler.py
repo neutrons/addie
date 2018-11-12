@@ -555,8 +555,8 @@ class H3TableHandler:
         _save.setEnabled(save_state)
 
         self.parent.list_config_displayed = list_config_displayed
-        menu.addSeparator()
-        _reset = menu.addAction("Full Reset Table/Tree")
+        config.addSeparator()
+        _reset = config.addAction("Show All")
 
         action = menu.exec_(QtGui.QCursor.pos())
 

@@ -2452,7 +2452,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         o_table = TableConfig(parent=self)
         o_table.disconnect_table_ui()
 
-        [h1_parent, h2_parent] = o_tableget_h1_h2_parent_from_h3(h3=index_column)
+        [h1_parent, h2_parent] = o_table.get_h1_h2_parent_from_h3(h3=index_column)
 
         size_diff = new_size - old_size
 
