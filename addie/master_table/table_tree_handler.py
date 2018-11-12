@@ -15,6 +15,7 @@ except ImportError:
 
 from addie.ui_table_tree import Ui_Dialog as UiDialog
 from addie.master_table.tree_definition import tree_dict, column_default_width, CONFIG_FILE
+from addie.master_table.table_row_handler import TableRowHandler
 
 
 class TableInitialization:
@@ -692,7 +693,8 @@ class H3TableHandler:
 
     def insert_row_blank(self):
         '''insert a blank row'''
-        pass
+        o_row = TableRowHandler(parent=self.parent)
+        o_row.insert_blank_row()
 
     def save_as_config(self):
         o_save_config = SaveConfigInterface(parent=self,
