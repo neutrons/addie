@@ -435,16 +435,6 @@ class H3TableHandler:
 
             self.parent.config_dict = config_dict
 
-    def save_as_config(self):
-        o_save_config = SaveConfigInterface(parent=self,
-                                            grand_parent=self.parent)
-        o_save_config.show()
-        self.o_save_config = o_save_config
-
-    def save_as_config_name_selected(self, name=''):
-        self.create_config_dict(name=name)
-        self.export_config()
-
     def create_config_dict(self, name=''):
         if name == '':
             name = 'undefined'
@@ -477,28 +467,7 @@ class H3TableHandler:
             old_full_config[_key]['active'] = False
         self.parent.config_dict = old_full_config
 
-    def export_config(self):
-        config_dict = self.config_dict
-        with open(CONFIG_FILE, 'wb') as handle:
-            full_config = {}
-            full_config['configurations'] = config_dict
-            pickle.dump(full_config,
-                        handle,
-                        protocol=pickle.HIGHEST_PROTOCOL)
-
-    def save_config(self):
-        active_config_name = self.parent.active_config_name
-        self.save_as_config_name_selected(name=active_config_name)
-
-    def reset_table(self):
-        config_dict = self.parent.config_dict
-        if not ("FULL_RESET" in config_dict):
-            config_dict['FULL_RESET'] = self.parent.reset_config_dict
-            self.parent.config_dict = config_dict
-
-        ConfigHandler.lazy_export_config(config_dict=self.parent.config_dict)
-        self.parent.load_this_config(key='FULL_RESET', resize=True)
-
+    # Right click
     def right_click(self):
         self.retrieve_previous_configurations()
         previous_config = self.parent.config_dict
@@ -511,16 +480,44 @@ class H3TableHandler:
         top_menu = QMenu(self.parent)
 
         menu = top_menu.addMenu("Menu")
-        config = menu.addMenu("Configuration ...")
 
-        _save = config.addAction("Save")
+        # Selection
+        activate = menu.addMenu("Activate")
+        activate_check_all = activate.addAction("Check All")
+        activate_uncheck_all = activate.addAction("Uncheck All")
+        activate.addSeparator()
+        activate_inverse = activate.addAction("Inverse")
 
-        _save_as = config.addAction("Save As ...")
+        menu.addSeparator()
 
+        # Cells
+        cells = menu.addMenu("Cell(s)")
+        cells_copy = cells.addAction("Copy")
+        cells_paste = cells.addAction("Paste")
+        cells_clear = cells.addAction("Clear")
+
+        # Rows
+        rows = menu.addMenu("Row(s)")
+        rows_copy = rows.addAction("Copy")
+        rows_paste = rows.addAction("Paste")
+        rows.addSeparator()
+        rows_insert = rows.addMenu("Insert")
+        rows_insert_run_number = rows_insert.addAction("Run Number ...")
+        rows_insert_blank = rows_insert.addAction("Blank")
+        rows_remove = rows.addAction("Remove")
+
+        # Table
+        table = menu.addMenu("Table")
+        table_reset = table.addAction("Reset")
+        table_clear = table.addAction("Clear")
+
+        # configuration
+        config = menu.addMenu("Columns Configuration")
+        configuration_save = config.addAction("Save")
+        configuration_save_as = config.addAction("Save As ...")
         list_signal_config_files = []
         list_signal_remove_config = []
         list_config_displayed = []
-
         save_state = False
         if not list_configs == []:
             config.addSeparator()
@@ -552,25 +549,70 @@ class H3TableHandler:
                 list_signal_remove_config.append(temp_remove)
 
         # disable "save" button if we don't have any config activated
-        _save.setEnabled(save_state)
-
+        configuration_save.setEnabled(save_state)
         self.parent.list_config_displayed = list_config_displayed
         config.addSeparator()
-        _reset = config.addAction("Show All")
+        _reset = config.addAction("Show All Columns")
+
+        menu.addSeparator()
+
+        # Plot
+        _plot_menu = menu.addMenu('Plot')
+        _plot_sofq = _plot_menu.addAction("S(Q) ...")
+        _plot_sofq_diff_first_run_row = _plot_menu.addAction("S(Q) Diff (1st run)...")
+        _plot_sofq_diff_average_row = _plot_menu.addAction("S(Q) Diff (Avg.)...")
+
+        _temp_menu = _plot_menu.addMenu("Temperature")
+        _plot_cryostat = _temp_menu.addAction("Cyrostat...")
+        _plot_furnace = _temp_menu.addAction("Furnace...")
 
         action = menu.exec_(QtGui.QCursor.pos())
 
-        if action == _save_as:
-            self.save_as_config()
-            return
+        # selection
+        if action == activate_check_all:
+            self.check_all()
+        elif action == activate_uncheck_all:
+            self.uncheck_all()
+        elif action == activate_inverse:
+            self.inverse_activated_rows()
+        #FIXME
 
-        elif action == _save:
+        # cells
+        elif action == cells_copy:
+            self.cells_copy()
+        elif action == cells_paste:
+            self.cells_paste()
+        elif action == cells_clear:
+            self.cells_clear()
+
+        # rows
+        elif action == rows_copy:
+            self.rows_copy()
+        elif action == rows_paste:
+            self.rows_paste()
+        elif action == rows_remove:
+            self.rows_remove()
+
+        # insert rows
+        elif action == rows_insert_run_number:
+            self.insert_row_run_number()
+        elif action == rows_insert_blank:
+            self.insert_row_blank()
+
+        # table
+        elif action == table_reset:
+            self.refresh_table()
+        elif action == table_clear:
+            self.clear_table()
+
+        # configuration
+        if action == configuration_save_as:
+            self.save_as_config()
+        elif action == configuration_save:
             self.save_config()
-            return
 
         elif action == _reset:
             self.reset_table()
-            return
 
         if not (list_signal_config_files == []):
 
@@ -585,6 +627,82 @@ class H3TableHandler:
             for _index, _signal in enumerate(list_signal_remove_config):
                 if action == _signal:
                     self.remove_this_config(config=list_config_displayed[_index])
+
+        # plot
+        elif action == _plot_sofq:
+            self._plot_sofq()
+        elif action == _plot_sofq_diff_first_run_row:
+            self._plot_sofq_diff_first_run_row()
+        elif action == _plot_sofq_diff_average_row:
+            self._plot_sofq_diff_average_row()
+
+        # temperature
+        elif action == _plot_cryostat:
+            self._plot_temperature(samp_env_choice='cryostat')
+        elif action == _plot_furnace:
+            self._plot_temperature(samp_env_choice='furnace')
+
+    def check_all(self):
+        '''Activate (check box in first column) all the selected rows'''
+        pass
+
+    def uncheck_all(self):
+        '''Deactivate (check box in first column) all the selected rows'''
+        pass
+
+    def inverse_activated_rows(self):
+        '''Deactivate currently activated rows, and activate currently deactivated rows'''
+        pass
+
+    def cells_copy(self):
+        '''copy selected cells'''
+        pass
+
+    def cells_paste(self):
+        '''paste contain of cells in new selection (only if same number of cells per row'''
+        pass
+
+    def cells_clear(self):
+        '''clear contain of selected cells'''
+        pass
+
+    def rows_copy(self):
+        '''copy entire row'''
+        pass
+
+    def rows_paste(self):
+        '''paste entire row'''
+        pass
+
+    def rows_remove(self):
+        '''remove selected rows'''
+        pass
+
+    def refresh_table(self):
+        '''reload the initial file'''
+        pass
+
+    def clear_table(self):
+        '''clean up table'''
+        pass
+
+    def insert_row_run_number(self):
+        '''insert row using run number information and OnCat'''
+        pass
+
+    def insert_row_blank(self):
+        '''insert a blank row'''
+        pass
+
+    def save_as_config(self):
+        o_save_config = SaveConfigInterface(parent=self,
+                                            grand_parent=self.parent)
+        o_save_config.show()
+        self.o_save_config = o_save_config
+
+    def save_as_config_name_selected(self, name=''):
+        self.create_config_dict(name=name)
+        self.export_config()
 
     def remove_this_config(self, config):
         config_dict = ConfigHandler.remove_this_config(config=self.parent.config_dict,
@@ -601,6 +719,28 @@ class H3TableHandler:
         self.parent.config_dict = config_dict
         ConfigHandler.lazy_export_config(config_dict=config_dict)
         self.parent.load_this_config(key=config)
+
+    def export_config(self):
+        config_dict = self.config_dict
+        with open(CONFIG_FILE, 'wb') as handle:
+            full_config = {}
+            full_config['configurations'] = config_dict
+            pickle.dump(full_config,
+                        handle,
+                        protocol=pickle.HIGHEST_PROTOCOL)
+
+    def save_config(self):
+        active_config_name = self.parent.active_config_name
+        self.save_as_config_name_selected(name=active_config_name)
+
+    def reset_table(self):
+        config_dict = self.parent.config_dict
+        if not ("FULL_RESET" in config_dict):
+            config_dict['FULL_RESET'] = self.parent.reset_config_dict
+            self.parent.config_dict = config_dict
+
+        ConfigHandler.lazy_export_config(config_dict=self.parent.config_dict)
+        self.parent.load_this_config(key='FULL_RESET', resize=True)
 
 
 class TableConfig:
