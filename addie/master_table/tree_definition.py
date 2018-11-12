@@ -52,10 +52,10 @@ sample_children_2['sample_geometry_shape'] = copy.deepcopy(base_dict)
 sample_children_2['sample_geometry_shape']['name'] = "Shape"
 
 sample_children_2['sample_geometry_radius'] = copy.deepcopy(base_dict)
-sample_children_2['sample_geometry_radius']['name'] = "Radius"
+sample_children_2['sample_geometry_radius']['name'] = "Radius (cm)"
 
 sample_children_2['sample_geometry_Height'] = copy.deepcopy(base_dict)
-sample_children_2['sample_geometry_Height']['name'] = "Height"
+sample_children_2['sample_geometry_Height']['name'] = "Height (cm)"
 
 sample_children_1['sample_geometry'] = copy.deepcopy(base_dict)
 sample_children_1['sample_geometry']['name'] = "Geometry"
@@ -100,10 +100,10 @@ vanadium_children_2['vanadium_geometry_shape'] = copy.deepcopy(base_dict)
 vanadium_children_2['vanadium_geometry_shape']['name'] = 'Shape'
 
 vanadium_children_2['vanadium_geometry_radius'] = copy.deepcopy(base_dict)
-vanadium_children_2['vanadium_geometry_radius']['name'] = 'Radius'
+vanadium_children_2['vanadium_geometry_radius']['name'] = 'Radius (cm)'
 
 vanadium_children_2['vanadium_geometry_Height'] = copy.deepcopy(base_dict)
-vanadium_children_2['vanadium_geometry_Height']['name'] = 'Height'
+vanadium_children_2['vanadium_geometry_Height']['name'] = 'Height (cm)'
 
 vanadium_children_1['vanadium_geometry'] = copy.deepcopy(base_dict)
 vanadium_children_1['vanadium_geometry']['name'] = 'Geometry'
