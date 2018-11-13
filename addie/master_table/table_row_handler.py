@@ -24,10 +24,18 @@ class TableRowHandler:
 
     def sample_shape_changed(self, shape='Cylindrical', key=None):
         absorption_correction_ui = self.parent.master_table_list_ui[key]['abs_correction']
+
+        # looking at previously item selected to select it again (if present)
+        prev_item_selected = absorption_correction_ui.currentText()
+
         absorption_correction_ui.clear()
         list_abs_correction = self.get_absorption_correction_list(shape=shape)
         for _item in list_abs_correction:
             absorption_correction_ui.addItem(_item)
+
+        new_index_of_prev_item_selected = absorption_correction_ui.findText(prev_item_selected)
+        if new_index_of_prev_item_selected != -1:
+            absorption_correction_ui.setCurrentIndex(new_index_of_prev_item_selected)
 
     def activated_row_changed(self, state=None):
         pass
