@@ -13,10 +13,10 @@ from addie.ui_placzek import Ui_MainWindow as UiMainWindow
 
 class PlaczekHandler:
 
-    def __init__(self, parent=None, key=None):
+    def __init__(self, parent=None, key=None, data_type='sample'):
 
         if parent.placzek_ui == None:
-            parent.placzek_ui = PlaczekWindow(parent=parent, key=key)
+            parent.placzek_ui = PlaczekWindow(parent=parent, key=key, data_type=data_type)
             parent.placzek_ui.show()
         else:
             parent.placzek_ui.activateWindow()
@@ -24,9 +24,15 @@ class PlaczekHandler:
 
 class PlaczekWindow(QMainWindow):
 
-    def __init__(self, parent=None, key=None):
+    parent = None
+    data_type = None
+    key = None
+
+    def __init__(self, parent=None, key=None, data_type='sample'):
         self.parent = parent
+        self.data_type = data_type
         self.key = key
+
         QMainWindow.__init__(self, parent=parent)
         self.ui = UiMainWindow()
         self.ui.setupUi(self)
@@ -36,11 +42,11 @@ class PlaczekWindow(QMainWindow):
     def init_widgets(self):
         '''initialize the widgets in the state we left them last time (for the same row)'''
         master_table_list_ui = self.parent.master_table_list_ui[self.key]
-        if master_table_list_ui['sample']['placzek_infos'] == None:
+        if master_table_list_ui[self.data_type]['placzek_infos'] == None:
             return
 
         # initialize the widgets using previous values set
-        info_dict = master_table_list_ui['sample']['placzek_infos']
+        info_dict = master_table_list_ui[self.data_type]['placzek_infos']
 
         order_index = info_dict['order_index']
         self.ui.order_comboBox.setCurrentIndex(order_index)
@@ -101,7 +107,7 @@ class PlaczekWindow(QMainWindow):
                      'lambda_calc_max': lambda_calc_max,
                      'lambda_calc_delta': lambda_calc_delta}
 
-        master_table_list_ui['sample']['placzek_infos'] = info_dict
+        master_table_list_ui[self.data_type]['placzek_infos'] = info_dict
         self.parent.master_table_list_ui[self.key] = master_table_list_ui
 
     def ok_pressed(self):
