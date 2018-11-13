@@ -76,7 +76,6 @@ class TableInitialization:
 
         self.parent.tree_dict = self.tree_dict
 
-
     def make_tree_of_column_references(self):
         """
         table_columns_links = {'h1': [], 'h2': [], 'h3': []}

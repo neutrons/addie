@@ -2480,7 +2480,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         """this will change the way the big table will look like by hidding or showing columns"""
 
         o_table = TableConfig(parent=self)
-        o_table.block_table_header_ui(block_all=True)
+        o_table.block_table_header_ui(block_all=False,
+                                      block_h1=True,
+                                      block_h2=True)
 
         h_columns_affected = o_table.get_h_columns_from_item_name(item_name=o_table.get_item_name(item))
 
