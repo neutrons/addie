@@ -1,4 +1,5 @@
 import numpy as np
+import random
 
 try:
     from PyQt4.QtGui import QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem
@@ -21,21 +22,37 @@ class TableRowHandler:
         row = self._calculate_insert_row()
         self.insert_row(row=row)
 
-    def sample_shape_changed(self, shape='Cylindrical'):
-        pass
+    def sample_shape_changed(self, shape='Cylindrical', key=None):
+        absorption_correction_ui = self.parent.master_table_list_ui[key]['abs_correction']
+        absorption_correction_ui.clear()
+        list_abs_correction = self.get_absorption_correction_list(shape=shape)
+        for _item in list_abs_correction:
+            absorption_correction_ui.addItem(_item)
 
     def activated_row_changed(self, state=None):
         pass
 
+    def generate_random_key(self):
+        return random.randint(0, 1e5)
 
     def insert_row(self, row=-1):
         self.table_ui.insertRow(row)
+
+        list_of_ui_signals_to_unlock = []
+
+        _master_table_row_ui = {'active': None,
+                                'shape': None,
+                                'abs_correction': None,
+                                }
+
+        random_key = self.generate_random_key()
 
         # column 0 (active or not checkBox)
         _layout = QtGui.QHBoxLayout()
         _widget = QtGui.QCheckBox()
         _widget.setCheckState(QtCore.Qt.Checked)
         _widget.setEnabled(True)
+        _master_table_row_ui['active'] = _widget
         _spacer = QSpacerItem(40, 20,
                               QSizePolicy.Expanding,
                               QSizePolicy.Minimum)
@@ -46,8 +63,10 @@ class TableRowHandler:
         _new_widget = QtGui.QWidget()
         _new_widget.setLayout(_layout)
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("stateChanged(int)"),
-                               lambda state=0:
-                               self.parent.master_table_select_state_changed(state))
+                               lambda state=0, key=random_key:
+                               self.parent.master_table_select_state_changed(state, key))
+        _widget.blockSignals(True)
+        list_of_ui_signals_to_unlock.append(_widget)
         self.table_ui.setCellWidget(row, 0, _new_widget)
 
         # column 1 - title
@@ -78,10 +97,14 @@ class TableRowHandler:
         _widget = QtGui.QComboBox()
         _shape_default_value = 'Cylindrical'
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-                               lambda value=_shape_default_value:
-                               self.parent.master_table_sample_shape_changed(value))
+                               lambda value=_shape_default_value,
+                               key=random_key:
+                               self.parent.master_table_sample_shape_changed(value, key))
+        _widget.blockSignals(True)
+        list_of_ui_signals_to_unlock.append(_widget)
         _widget.addItem("cylindrical")
         _widget.addItem("spherical")
+        _master_table_row_ui['shape'] = _widget
         self.table_ui.setCellWidget(row, 7, _widget)
 
         # column 8 - radius
@@ -94,21 +117,10 @@ class TableRowHandler:
 
         # column 10 - abs. correction
         _widget = QtGui.QComboBox()
-        if _shape_default_value == 'Cylindrical':
-            list_abs_correction = ['None',
-                                   'Carpenter',
-                                   'Mayers',
-                                   'Podman & Pings',
-                                   'Monte Carlo',
-                                   'Numerical']
-        else:
-            list_abs_correction.remove('Carpenter')
-            list_abs_correction.remove('Mayers')
-            list_abs_correction.remove('Podman & Pings')
-            list_abs_correction.remove('Numerical')
-
+        list_abs_correction = self.get_absorption_correction_list(shape=_shape_default_value)
         for _item in list_abs_correction:
             _widget.addItem(_item)
+        _master_table_row_ui['abs_correction'] = _widget
         self.table_ui.setCellWidget(row, 10, _widget)
 
         # column 11 - multi. scattering correction
@@ -118,8 +130,29 @@ class TableRowHandler:
 
 
 
+        self.parent.master_table_list_ui[random_key] = _master_table_row_ui
+        self.unlock_signals_ui(list_ui=list_of_ui_signals_to_unlock)
 
+    def unlock_signals_ui(self, list_ui=[]):
+        if list_ui == []:
+            return
 
+        for _ui in list_ui:
+            _ui.blockSignals(False)
+
+    def get_absorption_correction_list(self, shape='cylindrical'):
+        if shape.lower() == 'cylindrical':
+            return ['None',
+                    'Carpenter',
+                    'Mayers',
+                    'Podman & Pings',
+                    'Monte Carlo',
+                    'Numerical',
+                    ]
+        else:
+            return ['None',
+                    'Monte Carlo',
+                    ]
 
     def _calculate_insert_row(self):
         selection = self.parent.ui.h3_table.selectedRanges()
