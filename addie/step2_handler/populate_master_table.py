@@ -29,13 +29,13 @@ class PopulateMasterTable(object):
         
     def empty_metadata(self):
         _metadata = {'name': "",
-                          'runs': "",
-                          'sample_formula': "",
-                          'mass_density': "",
-                          'radius': "",
-                          'packing_fraction': "",
-                          'sample_shape': "",
-                          'do_abs_correction': ""}
+                     'runs': "",
+                     'sample_formula': "",
+                     'mass_density': "",
+                     'radius': "",
+                     'packing_fraction': "",
+                     'sample_shape': "",
+                     'do_abs_correction': ""}
         return _metadata
 
     def read_auto_sum_file(self):

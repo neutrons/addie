@@ -11,6 +11,9 @@ except ImportError:
     except ImportError:
         raise ImportError("Requires PyQt4 or PyQt5")
 
+# from qtpy.QWidgets import QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton, QWidget, QComboBox
+# from qtpy import QtCore, QtGui
+
 from addie.master_table.placzek_handler import PlaczekHandler
 
 
@@ -46,12 +49,12 @@ class TableRowHandler:
                 ui.setCurrentIndex(new_index_of_prev_item_selected)
 
         # abs. correction
-        absorption_correction_ui = self.parent.master_table_list_ui[key]['abs_correction']
+        absorption_correction_ui = self.parent.master_table_list_ui[key]['sample']['abs_correction']
         list_abs_correction = self.get_absorption_correction_list(shape=shape)
         update_ui(ui=absorption_correction_ui, new_list=list_abs_correction)
 
         # mult. scat. correction
-        mult_scat_correction_ui = self.parent.master_table_list_ui[key]['mult_scat_correction']
+        mult_scat_correction_ui = self.parent.master_table_list_ui[key]['sample']['mult_scat_correction']
         list_mult_scat_correction = self.get_multi_scat_correction_list(shape=shape)
         update_ui(ui=mult_scat_correction_ui, new_list=list_mult_scat_correction)
 
@@ -60,7 +63,7 @@ class TableRowHandler:
         if value.lower() == 'none':
             show_button = False
 
-        _ui = self.parent.master_table_list_ui[key]['placzek_button']
+        _ui = self.parent.master_table_list_ui[key]['sample']['placzek_button']
         _ui.setVisible(show_button)
 
     def placzek_button_pressed(self, key=None):
@@ -76,12 +79,20 @@ class TableRowHandler:
         self.table_ui.insertRow(row)
 
         _master_table_row_ui = {'active': None,
-                                'shape': None,
-                                'abs_correction': None,
-                                'mult_scat_correction': None,
-                                'inelastic_correction': None,
-                                'placzek_button': None,
-                                'placzek_infos': None,
+                                'sample': {'shape': None,
+                                           'abs_correction': None,
+                                           'mult_scat_correction': None,
+                                           'inelastic_correction': None,
+                                           'placzek_button': None,
+                                           'placzek_infos': None,
+                                            },
+                                'normalization': {'shape': None,
+                                           'abs_correction': None,
+                                           'mult_scat_correction': None,
+                                           'inelastic_correction': None,
+                                           'placzek_button': None,
+                                           'placzek_infos': None,
+                                            },
                                 }
 
         random_key = self.generate_random_key()
@@ -143,7 +154,7 @@ class TableRowHandler:
         _widget.blockSignals(True)
         _widget.addItem("cylindrical")
         _widget.addItem("spherical")
-        _master_table_row_ui['shape'] = _widget
+        _master_table_row_ui['sample']['shape'] = _widget
         _layout.addWidget(_widget)
         _w = QWidget()
         _w.setLayout(_layout)
@@ -164,7 +175,7 @@ class TableRowHandler:
         list_abs_correction = self.get_absorption_correction_list(shape=_shape_default_value)
         for _item in list_abs_correction:
             _widget.addItem(_item)
-        _master_table_row_ui['abs_correction'] = _widget
+        _master_table_row_ui['sample']['abs_correction'] = _widget
         _layout.addWidget(_widget)
         _w = QWidget()
         _w.setLayout(_layout)
@@ -177,7 +188,7 @@ class TableRowHandler:
         list_multi_scat_correction = self.get_multi_scat_correction_list(shape=_shape_default_value)
         for _item in list_multi_scat_correction:
             _widget.addItem(_item)
-        _master_table_row_ui['mult_scat_correction'] = _widget
+        _master_table_row_ui['sample']['mult_scat_correction'] = _widget
         _layout.addWidget(_widget)
         _w = QWidget()
         _w.setLayout(_layout)
@@ -191,15 +202,15 @@ class TableRowHandler:
         list_inelastic_correction = self.get_inelastic_scattering_list(shape=_shape_default_value)
         for _item in list_inelastic_correction:
                 _widget1.addItem(_item)
-        _master_table_row_ui['inelastic_correction'] = _widget1
+        _master_table_row_ui['sample']['inelastic_correction'] = _widget1
         _button = QPushButton("...")
         QtCore.QObject.connect(_button, QtCore.SIGNAL("pressed()"),
                                lambda key=random_key:
-                               self.parent.master_table_placzek_button_pressed(key))
-        _master_table_row_ui['placzek_button'] = _button
+                               self.parent.master_table_sample_placzek_button_pressed(key))
+        _master_table_row_ui['sample']['placzek_button'] = _button
         _button.setFixedWidth(35)
         _button.setVisible(False)
-        _master_table_row_ui['placzek_button'] = _button
+        _master_table_row_ui['sample']['placzek_button'] = _button
         _layout.addWidget(_widget1)
         _layout.addWidget(_button)
         _widget = QWidget()
@@ -208,21 +219,33 @@ class TableRowHandler:
         QtCore.QObject.connect(_widget1, QtCore.SIGNAL("currentIndexChanged(QString)"),
                                lambda value=_default_value,
                                key=random_key:
-                               self.parent.master_table_inelastic_correction_changed(value, key))
+                               self.parent.master_table_sample_inelastic_correction_changed(value, key))
         _widget.blockSignals(True)
         self.table_ui.setCellWidget(row, 12, _widget)
 
+        list_ui = self._get_list_ui_from_master_table_row_ui(_master_table_row_ui)
         self.parent.master_table_list_ui[random_key] = _master_table_row_ui
-        self.unlock_signals_ui(list_ui=_master_table_row_ui)
+        self.unlock_signals_ui(list_ui=list_ui)
+
+    def _get_list_ui_from_master_table_row_ui(self, master_table_row_ui):
+        list_ui = []
+        if master_table_row_ui['active']:
+            list_ui.append(master_table_row_ui['active'])
+
+        for _root in ['sample', 'normalization']:
+            _sub_root = master_table_row_ui[_root]
+            for _key in _sub_root.keys():
+                _ui = _sub_root[_key]
+                if _ui:
+                    list_ui.append(_ui)
+
+        return list_ui
 
     def unlock_signals_ui(self, list_ui=[]):
-        if list_ui == {}:
+        if list_ui == []:
             return
 
-        for _key in list_ui.keys():
-            _ui = list_ui[_key]
-            if _ui is None:
-                continue
+        for _ui in list_ui:
             _ui.blockSignals(False)
 
     def get_multi_scat_correction_list(self, shape='cylindrical'):

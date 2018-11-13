@@ -36,11 +36,11 @@ class PlaczekWindow(QMainWindow):
     def init_widgets(self):
         '''initialize the widgets in the state we left them last time (for the same row)'''
         master_table_list_ui = self.parent.master_table_list_ui[self.key]
-        if master_table_list_ui['placzek_infos'] == None:
+        if master_table_list_ui['sample']['placzek_infos'] == None:
             return
 
         # initialize the widgets using previous values set
-        info_dict = master_table_list_ui['placzek_infos']
+        info_dict = master_table_list_ui['sample']['placzek_infos']
 
         order_index = info_dict['order_index']
         self.ui.order_comboBox.setCurrentIndex(order_index)
@@ -101,7 +101,7 @@ class PlaczekWindow(QMainWindow):
                      'lambda_calc_max': lambda_calc_max,
                      'lambda_calc_delta': lambda_calc_delta}
 
-        master_table_list_ui['placzek_infos'] = info_dict
+        master_table_list_ui['sample']['placzek_infos'] = info_dict
         self.parent.master_table_list_ui[self.key] = master_table_list_ui
 
     def ok_pressed(self):

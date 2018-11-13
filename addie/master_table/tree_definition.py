@@ -119,5 +119,5 @@ vanadium_children_1['vanadium_inelastic_correction'] = copy.deepcopy(base_dict)
 vanadium_children_1['vanadium_inelastic_correction']['name'] = "Inelastic Correction"
 
 tree_dict['vanadium'] = copy.deepcopy(base_dict)
-tree_dict['vanadium']['name'] = 'Vanadium'
+tree_dict['vanadium']['name'] = 'Normalization'
 tree_dict['vanadium']['children'] = vanadium_children_1
