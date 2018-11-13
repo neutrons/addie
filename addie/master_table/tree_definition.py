@@ -121,3 +121,9 @@ vanadium_children_1['vanadium_inelastic_correction']['name'] = "Inelastic Correc
 tree_dict['vanadium'] = copy.deepcopy(base_dict)
 tree_dict['vanadium']['name'] = 'Normalization'
 tree_dict['vanadium']['children'] = vanadium_children_1
+
+tree_dict['input_grouping'] = copy.deepcopy(base_dict)
+tree_dict['input_grouping']['name'] = "Input Grouping"
+
+tree_dict['output_grouping'] = copy.deepcopy(base_dict)
+tree_dict['output_grouping']['name'] = "Output Grouping"
