@@ -23,19 +23,35 @@ class TableRowHandler:
         self.insert_row(row=row)
 
     def sample_shape_changed(self, shape='Cylindrical', key=None):
+
+        def update_ui(ui=None, new_list=[]):
+            '''repopulate the ui with the new list and select old item selected
+            if this item is in the new list as well'''
+
+            # saving prev. item selected
+            prev_item_selected = ui.currentText()
+
+            # clean up
+            ui.clear()
+
+            # update list
+            for _item in new_list:
+                ui.addItem(_item)
+
+            # re-select the same item (if still there)
+            new_index_of_prev_item_selected = ui.findText(prev_item_selected)
+            if new_index_of_prev_item_selected != -1:
+                ui.setCurrentIndex(new_index_of_prev_item_selected)
+
+        # abs. correction
         absorption_correction_ui = self.parent.master_table_list_ui[key]['abs_correction']
-
-        # looking at previously item selected to select it again (if present)
-        prev_item_selected = absorption_correction_ui.currentText()
-
-        absorption_correction_ui.clear()
         list_abs_correction = self.get_absorption_correction_list(shape=shape)
-        for _item in list_abs_correction:
-            absorption_correction_ui.addItem(_item)
+        update_ui(ui=absorption_correction_ui, new_list=list_abs_correction)
 
-        new_index_of_prev_item_selected = absorption_correction_ui.findText(prev_item_selected)
-        if new_index_of_prev_item_selected != -1:
-            absorption_correction_ui.setCurrentIndex(new_index_of_prev_item_selected)
+        # mult. scat. correction
+        mult_scat_correction_ui = self.parent.master_table_list_ui[key]['mult_scat_correction']
+        list_mult_scat_correction = self.get_multi_scat_correction_list(shape=shape)
+        update_ui(ui=mult_scat_correction_ui, new_list=list_mult_scat_correction)
 
     def activated_row_changed(self, state=None):
         pass
@@ -51,6 +67,7 @@ class TableRowHandler:
         _master_table_row_ui = {'active': None,
                                 'shape': None,
                                 'abs_correction': None,
+                                'mult_scat_correction': None,
                                 }
 
         random_key = self.generate_random_key()
@@ -132,6 +149,12 @@ class TableRowHandler:
         self.table_ui.setCellWidget(row, 10, _widget)
 
         # column 11 - multi. scattering correction
+        _widget = QtGui.QComboBox()
+        list_multi_scat_correction = self.get_multi_scat_correction_list(shape=_shape_default_value)
+        for _item in list_multi_scat_correction:
+            _widget.addItem(_item)
+            _master_table_row_ui['mult_scat_correction'] = _widget
+        self.table_ui.setCellWidget(row, 11, _widget)
 
         # column 12 - inelastic correction
 
@@ -147,6 +170,14 @@ class TableRowHandler:
 
         for _ui in list_ui:
             _ui.blockSignals(False)
+
+    def get_multi_scat_correction_list(self, shape='cylindrical'):
+        if shape.lower() == 'cylindrical':
+            return ['None',
+                    'Carpenter',
+                    'Mayers']
+        else:
+            return ['None']
 
     def get_absorption_correction_list(self, shape='cylindrical'):
         if shape.lower() == 'cylindrical':
