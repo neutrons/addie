@@ -11,6 +11,8 @@ except ImportError:
     except ImportError:
         raise ImportError("Requires PyQt4 or PyQt5")
 
+from addie.master_table.placzek_handler import PlaczekHandler
+
 
 class TableRowHandler:
 
@@ -62,7 +64,7 @@ class TableRowHandler:
         _ui.setVisible(show_button)
 
     def placzek_button_pressed(self, key=None):
-        print("here")
+        o_placzek = PlaczekHandler(parent=self.parent, key=key)
 
     def activated_row_changed(self, state=None):
         pass
@@ -78,7 +80,8 @@ class TableRowHandler:
                                 'abs_correction': None,
                                 'mult_scat_correction': None,
                                 'inelastic_correction': None,
-                                'placzek_button': None
+                                'placzek_button': None,
+                                'placzek_infos': None,
                                 }
 
         random_key = self.generate_random_key()
@@ -218,6 +221,8 @@ class TableRowHandler:
 
         for _key in list_ui.keys():
             _ui = list_ui[_key]
+            if _ui is None:
+                continue
             _ui.blockSignals(False)
 
     def get_multi_scat_correction_list(self, shape='cylindrical'):
