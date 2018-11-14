@@ -28,9 +28,9 @@ class TableRowHandler:
         row = self._calculate_insert_row()
         self.insert_row(row=row)
 
-    def transfer_widget_states(self, state=None):
+    def transfer_widget_states(self, state=None, value=''):
         o_transfer = TransferH3TableWidgetState(parent=self.parent)
-        o_transfer.transfer_states(state=state)
+        o_transfer.transfer_states(state=state, value=value)
 
     # global methods
     def shape_changed(self, shape='cylindrical', key=None, data_type='sample'):
@@ -38,6 +38,8 @@ class TableRowHandler:
         def update_ui(ui=None, new_list=[]):
             '''repopulate the ui with the new list and select old item selected
             if this item is in the new list as well'''
+
+            ui.blockSignals(True)
 
             # saving prev. item selected
             prev_item_selected = ui.currentText()
@@ -54,6 +56,8 @@ class TableRowHandler:
             if new_index_of_prev_item_selected != -1:
                 ui.setCurrentIndex(new_index_of_prev_item_selected)
 
+            ui.blockSignals(False)
+
         # abs. correction
         absorption_correction_ui = self.parent.master_table_list_ui[key][data_type]['abs_correction']
         list_abs_correction = self.get_absorption_correction_list(shape=shape)
@@ -65,11 +69,11 @@ class TableRowHandler:
         update_ui(ui=mult_scat_correction_ui, new_list=list_mult_scat_correction)
 
         # change state of other widgets of the same column if they are selected
-        self.transfer_widget_states()
+        self.transfer_widget_states(value=shape)
 
-    def abs_correction_changed(self, key=None, data_type='sample'):
+    def abs_correction_changed(self, value='', key=None, data_type='sample'):
         # change state of other widgets of the same column if they are selected
-        self.transfer_widget_states()
+        self.transfer_widget_states(value=value)
 
     def inelastic_correction_changed(self, value=None, key=None, data_type='sample'):
         show_button = True
@@ -82,9 +86,9 @@ class TableRowHandler:
         # change state of other widgets of the same column if they are selected
         self.transfer_widget_states()
 
-    def multi_scattering_correction(self, key=None, data_type='sample'):
+    def multi_scattering_correction(self, value='', key=None, data_type='sample'):
         # change state of other widgets of the same column if they are selected
-        self.transfer_widget_states()
+        self.transfer_widget_states(value=value)
 
     def placzek_button_pressed(self, key=None, data_type='sample'):
         o_placzek = PlaczekHandler(parent=self.parent, key=key, data_type=data_type)
@@ -197,11 +201,12 @@ class TableRowHandler:
         _layout = QtGui.QHBoxLayout()
         _layout.setMargin(0)
         _widget = QComboBox()
-        QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-                               lambda key=random_key:
-                               self.parent.master_table_sample_abs_correction_changed(key))
-        _widget.blockSignals(True)
         list_abs_correction = self.get_absorption_correction_list(shape=_shape_default_value)
+        QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
+                               lambda value=list_abs_correction[0],
+                               key = random_key:
+                               self.parent.master_table_sample_abs_correction_changed(value, key))
+        _widget.blockSignals(True)
         for _item in list_abs_correction:
             _widget.addItem(_item)
         _master_table_row_ui['sample']['abs_correction'] = _widget
@@ -214,11 +219,12 @@ class TableRowHandler:
         _layout = QtGui.QHBoxLayout()
         _layout.setMargin(0)
         _widget = QComboBox()
-        QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-                               lambda key=random_key:
-                               self.parent.master_table_sample_multi_scattering_correction_changed(key))
-        _widget.blockSignals(True)
         list_multi_scat_correction = self.get_multi_scat_correction_list(shape=_shape_default_value)
+        QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
+                               lambda value=list_multi_scat_correction[0],
+                               key=random_key:
+                               self.parent.master_table_sample_multi_scattering_correction_changed(value, key))
+        _widget.blockSignals(True)
         for _item in list_multi_scat_correction:
             _widget.addItem(_item)
         _master_table_row_ui['sample']['mult_scat_correction'] = _widget
@@ -309,10 +315,11 @@ class TableRowHandler:
         _layout.setMargin(0)
         _widget = QComboBox()
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-                               lambda key=random_key:
-                               self.parent.master_table_normalization_abs_correction_changed(key))
+                               lambda value=list_abs_correction[0],
+                                   key=random_key:
+                               self.parent.master_table_normalization_abs_correction_changed(value, key))
         _widget.blockSignals(True)
-        list_abs_correction = self.get_absorption_correction_list(shape=_shape_default_value)
+#        list_abs_correction = self.get_absorption_correction_list(shape=_shape_default_value)
         for _item in list_abs_correction:
             _widget.addItem(_item)
         _master_table_row_ui['normalization']['abs_correction'] = _widget
@@ -326,10 +333,11 @@ class TableRowHandler:
         _layout.setMargin(0)
         _widget = QComboBox()
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-                               lambda key=random_key:
-                               self.parent.master_table_normalization_multi_scattering_correction_changed(key))
+                               lambda value=list_multi_scat_correction[0],
+                                   key=random_key:
+                               self.parent.master_table_normalization_multi_scattering_correction_changed(value, key))
         _widget.blockSignals(True)
-        list_multi_scat_correction = self.get_multi_scat_correction_list(shape=_shape_default_value)
+        # list_multi_scat_correction = self.get_multi_scat_correction_list(shape=_shape_default_value)
         for _item in list_multi_scat_correction:
             _widget.addItem(_item)
         _master_table_row_ui['normalization']['mult_scat_correction'] = _widget
@@ -354,7 +362,6 @@ class TableRowHandler:
         _master_table_row_ui['normalization']['placzek_button'] = _button
         _button.setFixedWidth(35)
         _button.setVisible(False)
-        _master_table_row_ui['normalization']['placzek_button'] = _button
         _layout.addWidget(_widget1)
         _layout.addWidget(_button)
         _widget = QWidget()

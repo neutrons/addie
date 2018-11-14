@@ -3,7 +3,19 @@ import numpy as np
 
 class SelectionHandler:
 
+    right_column = -1
+    left_column = -2
+    top_row = -1
+    bottom_row = -2
+
     def __init__(self, selection_range):
+
+        if len(selection_range) == 0:
+            return
+
+        # only considering the first selection in this class
+        selection_range = selection_range[0]
+
         self.selection_range = selection_range
         self.left_column = self.selection_range.leftColumn()
         self.right_column = self.selection_range.rightColumn()
@@ -26,19 +38,21 @@ class TransferH3TableWidgetState:
         self.parent = parent
         self.table_ui = self.parent.ui.h3_table
 
-    def transfer_states(self, state=None):
+    def transfer_states(self, state=None, value=''):
 
-        selection = self.parent.ui.h3_table.selectedRanges()[0]
+        selection = self.parent.ui.h3_table.selectedRanges()
         o_selection = SelectionHandler(selection)
 
         # enable or disable all other selected rows (if only first column selected)
         if (o_selection.nbr_column_selected() == 1):
 
-            # activate row widget
-            if (o_selection.first_column_selected() == 0):
+            range_row = o_selection.get_list_row()
+            column_selected = o_selection.first_column_selected()
 
-                # get current state of button clicked
-                range_row = o_selection.get_list_row()
+            # activate row widget
+            if (column_selected == 0):
+
+                # apply state to all the widgets
                 for _row in range_row:
                     ui = self.table_ui.cellWidget(_row, 0).children()[1]
                     ui.blockSignals(True)
@@ -46,6 +60,14 @@ class TransferH3TableWidgetState:
                     ui.blockSignals(False)
 
             # sample or normalization, shape, abs. corr., mult. scat. corr or inelastic corr.
-            elif (o_selection.first_column_selected() in [7, 10, 11, 12, 18, 21, 22, 23]):
-                print("yes")
+            elif (column_selected in [7, 10, 11, 12, 18, 21, 22, 23]):
 
+                for _row in range_row:
+                    ui = self.table_ui.cellWidget(_row, column_selected).children()[1]
+                    index = ui.findText(value)
+                    print("looking for value: {}".format(value))
+                    # we found the text
+                    if index > -1:
+                        ui.blockSignals(True)
+                        ui.setCurrentIndex(index)
+                        ui.blockSignals(False)
