@@ -17,6 +17,7 @@ from addie.ui_table_tree import Ui_Dialog as UiDialog
 from addie.master_table.tree_definition import tree_dict, column_default_width, CONFIG_FILE
 from addie.master_table.table_row_handler import TableRowHandler
 from addie.master_table.table_plot_handler import TablePlotHandler
+from addie.utilities.selection_handler import SelectionHandler
 
 
 class TableInitialization:
@@ -662,7 +663,13 @@ class H3TableHandler:
 
     def cells_copy(self):
         '''copy selected cells'''
-        pass
+        selection = self.parent.ui.h3_table.selectedRanges()[0]
+        o_selection = SelectionHandler(selection)
+
+
+
+
+
 
     def cells_paste(self):
         '''paste contain of cells in new selection (only if same number of cells per row'''

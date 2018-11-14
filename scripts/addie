@@ -2512,6 +2512,14 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         o_table = TableRowHandler(parent=self)
         o_table.shape_changed(shape=text, key=key, data_type='sample')
 
+    def master_table_sample_abs_correction_changed(self, key):
+        o_table = TableRowHandler(parent=self)
+        o_table.abs_correction_changed(key=key, data_type='sample')
+
+    def master_table_sample_multi_scattering_correction_changed(self, key):
+        o_table = TableRowHandler(parent=self)
+        o_table.multi_scattering_correction(key=key, data_type='sample')
+
     def master_table_sample_inelastic_correction_changed(self, text, key):
         o_table = TableRowHandler(parent=self)
         o_table.inelastic_correction_changed(value=text, key=key, data_type='sample')
@@ -2524,6 +2532,14 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     def master_table_normalization_inelastic_correction_changed(self, text, key):
         o_table = TableRowHandler(parent=self)
         o_table.inelastic_correction_changed(value=text, key=key, data_type='normalization')
+
+    def master_table_normalization_abs_correction_changed(self, key):
+        o_table = TableRowHandler(parent=self)
+        o_table.abs_correction_changed(key=key, data_type='normalization')
+
+    def master_table_normalization_multi_scattering_correction_changed(self, key):
+        o_table = TableRowHandler(parent=self)
+        o_table.multi_scattering_correction(key=key, data_type='normalization')
 
     def master_table_normalization_placzek_button_pressed(self, key):
         o_table = TableRowHandler(parent=self)
