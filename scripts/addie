@@ -2549,6 +2549,14 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         o_table = TableRowHandler(parent=self)
         o_table.placzek_button_pressed(key=key, data_type='normalization')
 
+    def master_table_input_grouping_button_pressed(self, key):
+        o_table = TableRowHandler(parent=self)
+        o_table.grouping_button(key=key, grouping_type='input')
+
+    def master_table_output_grouping_button_pressed(self, key):
+        o_table = TableRowHandler(parent=self)
+        o_table.grouping_button(key=key, grouping_type='output')
+
     def apply_clicked(self):
         # do stuff
         self.close()

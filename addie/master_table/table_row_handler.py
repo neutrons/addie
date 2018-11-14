@@ -3,10 +3,12 @@ import random
 
 try:
     from PyQt4.QtGui import QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton, QComboBox, QWidget
+    from PyQt4.QtGui import QFileDialog
     from PyQt4 import QtCore, QtGui
 except ImportError:
     try:
         from PyQt5.QtWidgets import QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton, QWidget, QComboBox
+        from PyQt5.QtWidgets import QFileDialog
         from PyQt5 import QtCore, QtGui
     except ImportError:
         raise ImportError("Requires PyQt4 or PyQt5")
@@ -98,6 +100,18 @@ class TableRowHandler:
         # change state of other widgets of the same column if they are selected
         self.transfer_widget_states(state=state)
 
+    def grouping_button(self, key=None, grouping_type='input'):
+        message = "Select {} grouping".format(grouping_type)
+        ext = 'Grouping (*.txt);;All (*.*)'
+        file_name = QFileDialog.getOpenFileName(self.parent,
+                                                message,
+                                                self.parent.calibration_folder,
+                                                ext)
+        if file_name is None:
+            return
+
+        # FIXME
+
     # utilities
 
     def generate_random_key(self):
@@ -125,6 +139,10 @@ class TableRowHandler:
                                            'placzek_button': None,
                                            'placzek_infos': None,
                                             },
+                                'input_grouping_button': None,
+                                'input_grouping_label': None,
+                                'output_grouping_button': None,
+                                'output_grouping_label': None,
                                 }
 
         random_key = self.generate_random_key()
@@ -384,6 +402,10 @@ class TableRowHandler:
         _row1_layout.setMargin(0)
         _label = QLabel("Default  or  ")
         _button = QPushButton("...")
+        QtCore.QObject.connect(_button, QtCore.SIGNAL("pressed()"),
+                               lambda key=random_key:
+                               self.parent.master_table_input_grouping_button_pressed(key))
+        _master_table_row_ui['input_grouping_button'] = _button
         _row1_widget = QWidget()
         _row1_layout.addWidget(_label)
         _row1_layout.addWidget(_button)
@@ -392,6 +414,7 @@ class TableRowHandler:
         _row2_layout = QtGui.QHBoxLayout()
         _row2_layout.setMargin(0)
         _label = QLabel("(6 groups)")
+        _master_table_row_ui['input_grouping_label'] = _label
         _row2_layout.addItem(_spacer)
         _row2_layout.addWidget(_label)
         _row2_layout.addItem(_spacer)
@@ -406,6 +429,37 @@ class TableRowHandler:
         _verti_widget.setLayout(_verti_layout)
         self.table_ui.setCellWidget(row, 24, _verti_widget)
 
+        # column 25 - Output Grouping
+        _row1_layout = QtGui.QHBoxLayout()
+        _row1_layout.setMargin(0)
+        _label = QLabel("Default  or  ")
+        _button = QPushButton("...")
+        QtCore.QObject.connect(_button, QtCore.SIGNAL("pressed()"),
+                               lambda key=random_key:
+                               self.parent.master_table_output_grouping_button_pressed(key))
+        _master_table_row_ui['output_grouping_button'] = _button
+        _row1_widget = QWidget()
+        _row1_layout.addWidget(_label)
+        _row1_layout.addWidget(_button)
+        _row1_widget.setLayout(_row1_layout)
+
+        _row2_layout = QtGui.QHBoxLayout()
+        _row2_layout.setMargin(0)
+        _label = QLabel("(6 groups)")
+        _master_table_row_ui['output_grouping_label'] = _label
+        _row2_layout.addItem(_spacer)
+        _row2_layout.addWidget(_label)
+        _row2_layout.addItem(_spacer)
+        _row2_widget = QWidget()
+        _row2_widget.setLayout(_row2_layout)
+
+        _verti_layout = QtGui.QVBoxLayout()
+        _verti_layout.setMargin(0)
+        _verti_widget = QWidget()
+        _verti_layout.addWidget(_row1_widget)
+        _verti_layout.addWidget(_row2_widget)
+        _verti_widget.setLayout(_verti_layout)
+        self.table_ui.setCellWidget(row, 25, _verti_widget)
 
         ## recap
 
