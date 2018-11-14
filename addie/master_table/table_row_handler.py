@@ -16,6 +16,7 @@ except ImportError:
 
 from addie.master_table.placzek_handler import PlaczekHandler
 from addie.utilities.selection_handler import TransferH3TableWidgetState
+from addie.master_table.tree_definition import COLUMN_DEFAULT_HEIGHT
 
 
 class TableRowHandler:
@@ -102,8 +103,12 @@ class TableRowHandler:
     def generate_random_key(self):
         return random.randint(0, 1e5)
 
+    def set_row_height(self, row, height):
+        self.table_ui.setRowHeight(row, height)
+
     def insert_row(self, row=-1):
         self.table_ui.insertRow(row)
+        self.set_row_height(row, COLUMN_DEFAULT_HEIGHT)
 
         _master_table_row_ui = {'active': None,
                                 'sample': {'shape': None,
@@ -373,6 +378,34 @@ class TableRowHandler:
                                self.parent.master_table_normalization_inelastic_correction_changed(value, key))
         _widget.blockSignals(True)
         self.table_ui.setCellWidget(row, 23, _widget)
+
+        # column 24 - Input Grouping
+        _row1_layout = QtGui.QHBoxLayout()
+        _row1_layout.setMargin(0)
+        _label = QLabel("Default  or  ")
+        _button = QPushButton("...")
+        _row1_widget = QWidget()
+        _row1_layout.addWidget(_label)
+        _row1_layout.addWidget(_button)
+        _row1_widget.setLayout(_row1_layout)
+
+        _row2_layout = QtGui.QHBoxLayout()
+        _row2_layout.setMargin(0)
+        _label = QLabel("(6 groups)")
+        _row2_layout.addItem(_spacer)
+        _row2_layout.addWidget(_label)
+        _row2_layout.addItem(_spacer)
+        _row2_widget = QWidget()
+        _row2_widget.setLayout(_row2_layout)
+
+        _verti_layout = QtGui.QVBoxLayout()
+        _verti_layout.setMargin(0)
+        _verti_widget = QWidget()
+        _verti_layout.addWidget(_row1_widget)
+        _verti_layout.addWidget(_row2_widget)
+        _verti_widget.setLayout(_verti_layout)
+        self.table_ui.setCellWidget(row, 24, _verti_widget)
+
 
         ## recap
 
