@@ -15,6 +15,7 @@ except ImportError:
 # from qtpy import QtCore, QtGui
 
 from addie.master_table.placzek_handler import PlaczekHandler
+from addie.utilities.selection_handler import SelectionHandler
 
 
 class TableRowHandler:
@@ -72,7 +73,21 @@ class TableRowHandler:
         o_placzek = PlaczekHandler(parent=self.parent, key=key, data_type=data_type)
 
     def activated_row_changed(self, state=None):
-        pass
+        selection = self.parent.ui.h3_table.selectedRanges()[0]
+        o_selection = SelectionHandler(selection)
+
+        # enable or disable all other selected rows (if only first column selected
+        if (o_selection.nbr_column_selected() == 1) and (o_selection.first_column_selected() == 0):
+            print("yes")
+
+
+
+
+
+
+
+
+    # utilities
 
     def generate_random_key(self):
         return random.randint(0, 1e5)
