@@ -80,6 +80,8 @@ import addie.edit_sq_dialog
 from addie.pdf_lines_manager import PDFPlotManager
 
 
+DEBUG = True
+
 
 class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     """ Main addie window
@@ -310,6 +312,11 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self._pdfColorManager = PDFPlotManager()
 
         self.save_raw_config()
+
+        if DEBUG:
+            o_row = TableRowHandler(parent=self)
+            for _row in np.arange(10):
+                o_row.insert_row(row=_row)
 
         return
 

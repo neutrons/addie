@@ -78,8 +78,14 @@ class TableRowHandler:
 
         # enable or disable all other selected rows (if only first column selected
         if (o_selection.nbr_column_selected() == 1) and (o_selection.first_column_selected() == 0):
-            print("yes")
 
+            # get current state of button clicked
+            range_row = o_selection.get_list_row()
+            for _row in range_row:
+                ui = self.table_ui.cellWidget(_row, 0).children()[1]
+                ui.blockSignals(True)
+                ui.setCheckState(state)
+                ui.blockSignals(False)
 
 
 
