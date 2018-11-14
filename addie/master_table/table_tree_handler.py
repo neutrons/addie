@@ -16,6 +16,7 @@ except ImportError:
 from addie.ui_table_tree import Ui_Dialog as UiDialog
 from addie.master_table.tree_definition import tree_dict, column_default_width, CONFIG_FILE
 from addie.master_table.table_row_handler import TableRowHandler
+from addie.master_table.table_plot_handler import TablePlotHandler
 
 
 class TableInitialization:
@@ -630,17 +631,22 @@ class H3TableHandler:
 
         # plot
         elif action == _plot_sofq:
-            self._plot_sofq()
+            o_plot = TablePlotHandler(parent=self.parent)
+            o_plot.plot_sofq()
         elif action == _plot_sofq_diff_first_run_row:
-            self._plot_sofq_diff_first_run_row()
+            o_plot = TablePlotHandler(parent=self.parent)
+            o_plot.plot_sofq_diff_first_run_row()
         elif action == _plot_sofq_diff_average_row:
-            self._plot_sofq_diff_average_row()
+            o_plot = TablePlotHandler(parent=self.parent)
+            o_plot.plot_sofq_diff_average_row()
 
         # temperature
         elif action == _plot_cryostat:
-            self._plot_temperature(samp_env_choice='cryostat')
+            o_plot = TablePlotHandler(parent=self.parent)
+            o_plot.plot_temperature(samp_env_choice='cryostat')
         elif action == _plot_furnace:
-            self._plot_temperature(samp_env_choice='furnace')
+            o_plot = TablePlotHandler(parent=self.parent)
+            o_plot.plot_temperature(samp_env_choice='furnace')
 
     def check_all(self):
         '''Activate (check box in first column) all the selected rows'''
