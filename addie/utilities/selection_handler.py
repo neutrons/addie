@@ -25,18 +25,33 @@ class SelectionHandler:
     def nbr_column_selected(self):
         return (self.right_column - self.left_column) + 1
 
+    def nbr_row_selected(self):
+        return (self.top_row - self.bottom_row) + 1
+
     def first_column_selected(self):
         return self.left_column
+
+    def first_row_selected(self):
+        return self.top_row
+
+    def get_list_column(self):
+        return np.arange(self.left_column, self.right_column+1)
 
     def get_list_row(self):
         return np.arange(self.top_row, self.bottom_row+1)
 
 
-class TransferH3TableWidgetState:
+class SelectionHandlerMaster:
 
     def __init__(self, parent=None):
         self.parent = parent
         self.table_ui = self.parent.ui.h3_table
+
+
+class TransferH3TableWidgetState(SelectionHandlerMaster):
+
+    def __init__(self, parent=None):
+        SelectionHandlerMaster.__init__(self, parent=parent)
 
     def transfer_states(self, state=None, value=''):
 
@@ -72,3 +87,28 @@ class TransferH3TableWidgetState:
                         ui.setCurrentIndex(index)
                         if not column_selected in [7, 18]:
                             ui.blockSignals(False)
+
+
+class CellsHandler(SelectionHandlerMaster):
+
+    def __init__(self, parent=None):
+        SelectionHandlerMaster.__init__(self, parent=parent)
+
+    def clear(self):
+        selection = self.parent.ui.h3_table.selectedRanges()
+        o_selection = SelectionHandler(selection)
+
+        list_row = o_selection.get_list_row()
+        list_column = o_selection.get_list_column()
+
+        for _row in list_row:
+            for _column in list_column:
+                _item = self.table_ui.item(_row, _column)
+                if _item:
+                    _item.setText("")
+
+
+
+
+
+
