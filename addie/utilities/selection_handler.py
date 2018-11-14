@@ -65,9 +65,10 @@ class TransferH3TableWidgetState:
                 for _row in range_row:
                     ui = self.table_ui.cellWidget(_row, column_selected).children()[1]
                     index = ui.findText(value)
-                    print("looking for value: {}".format(value))
                     # we found the text
                     if index > -1:
-                        ui.blockSignals(True)
+                        if not column_selected in [7, 18]:
+                            ui.blockSignals(True)
                         ui.setCurrentIndex(index)
-                        ui.blockSignals(False)
+                        if not column_selected in [7, 18]:
+                            ui.blockSignals(False)
