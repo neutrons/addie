@@ -663,22 +663,18 @@ class H3TableHandler:
 
     def cells_copy(self):
         '''copy selected cells'''
-
-
-
-
-
-
+        o_cells = CellsHandler(parent=self.parent)
+        o_cells.copy()
 
     def cells_paste(self):
         '''paste contain of cells in new selection (only if same number of cells per row'''
-        pass
+        o_cells = CellsHandler(parent=self.parent)
+        o_cells.paste()
 
     def cells_clear(self):
         '''clear contain of selected cells'''
         o_cells = CellsHandler(parent=self.parent)
         o_cells.clear()
-
 
     def rows_copy(self):
         '''copy entire row'''

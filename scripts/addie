@@ -102,6 +102,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     # will list the various ui for each row using a random number as key
     master_table_list_ui = {}
+    master_table_cells_copy = {'temp': [],
+                               'list_column': []}
 
     table_headers = {'h1': [],
                      'h2': [],

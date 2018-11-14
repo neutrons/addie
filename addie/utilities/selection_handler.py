@@ -93,19 +93,64 @@ class CellsHandler(SelectionHandlerMaster):
 
     def __init__(self, parent=None):
         SelectionHandlerMaster.__init__(self, parent=parent)
+        selection = self.parent.ui.h3_table.selectedRanges()
+        self.o_selection = SelectionHandler(selection)
 
     def clear(self):
-        selection = self.parent.ui.h3_table.selectedRanges()
-        o_selection = SelectionHandler(selection)
-
-        list_row = o_selection.get_list_row()
-        list_column = o_selection.get_list_column()
+        list_row = self.o_selection.get_list_row()
+        list_column = self.o_selection.get_list_column()
 
         for _row in list_row:
             for _column in list_column:
                 _item = self.table_ui.item(_row, _column)
                 if _item:
                     _item.setText("")
+
+    def copy(self):
+        '''first column of copy and paste have to be identical'''
+        list_row = self.o_selection.get_list_row()
+        list_column = self.o_selection.get_list_column()
+
+        nbr_row = len(list_row)
+        nbr_column = len(list_column)
+
+        row_column_items = [['' for x in np.arange(nbr_column)]
+                            for y in np.arange(nbr_row)]
+        for _row in np.arange(nbr_row):
+            for _column in np.arange(nbr_column):
+                _item = self.table_ui.item(_row, _column)
+                if _item:
+                    row_column_items[_row][_column] = _item.text()
+
+        self.parent.master_table_cells_copy['temp'] = row_column_items
+        self.parent.master_table_cells_copy['list_column'] = list_column
+
+    def paste(self):
+        list_row = self.o_selection.get_list_row()
+        list_column = self.o_selection.get_list_column()
+
+        nbr_row_paste = len(list_row)
+        nbr_column_paste = len(list_column)
+
+        row_columns_items_to_copy = self.parent.master_table_cells_copy['temp']
+        [nbr_row_copy, nbr_column_copy] = np.shape(row_columns_items_to_copy)
+
+        # if we don't select the same amount of columns, we stop here (and inform
+        # user of issue in statusbar
+
+        if (list_column != self.parent.master_table_cells_copy['list_column']).all():
+            self.parent.statusbar.showMessage("Copy and Paste selections do not match!", 10000)
+
+        if (nbr_row_paste == 1) and (nbr_column_paste == 1):
+            '''copy contain from current cell'''
+            pass
+
+        elif (nbr_row_copy == 1) and (nbr_column_copy == 1):
+            '''copy that cell in all the cells now selected'''
+            pass
+
+
+
 
 
 
