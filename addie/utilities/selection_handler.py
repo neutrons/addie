@@ -3,9 +3,11 @@ import pprint
 
 try:
     from PyQt4.QtGui import QCheckBox, QLabel, QPushButton, QComboBox
+    from PyQt4 import QtGui
 except ImportError:
     try:
         from PyQt5.QtWidgets import QCheckBox, QLabel, QPushButton, QComboBox
+        from PyQt5 import QtGui
     except ImportError:
         raise ImportError("Requires PyQt4 or PyQt5")
 
@@ -96,6 +98,52 @@ class TransferH3TableWidgetState(SelectionHandlerMaster):
                         ui.setCurrentIndex(index)
                         if not column_selected in [7, 18]:
                             ui.blockSignals(False)
+
+
+class RowsHandler(SelectionHandlerMaster):
+
+    def __init__(self, parent=None):
+        SelectionHandlerMaster.__init__(self, parent=parent)
+        selection = self.parent.ui.h3_table.selectedRanges()
+        self.o_selection = SelectionHandler(selection)
+
+    def copy(self):
+        # select entire row
+        list_row = self.o_selection.get_list_row()
+        if len(list_row) > 1:
+            self.parent.ui.statusbar.setStyleSheet("color: red")
+            self.parent.ui.statusbar.showMessage("Please select only 1 row!",
+                                                 self.parent.statusbar_display_time)
+            return
+
+        row = list_row[0]
+        _table_ui = self.parent.ui.h3_table
+        nbr_col = _table_ui.columnCount()
+        _row_selection = QtGui.QTableWidgetSelectionRange(row, 0, row, nbr_col-1)
+        _table_ui.setRangeSelected(_row_selection, True)
+        self.parent.ui.statusbar.setStyleSheet("color: green")
+        self.parent.ui.statusbar.showMessage("Select another row to copy the current selected row!",
+                                             self.parent.statusbar_display_time)
+
+        self.parent.master_table_cells_copy['temp'] = []
+        self.parent.master_table_cells_copy['list_column'] = []
+        self.parent.master_table_cells_copy['row'] = row
+
+    def paste(self):
+        list_to_row = self.o_selection.get_list_row()
+        nbr_col = self.parent.ui.h3_table.columnCount()
+        _row_selection = QtGui.QTableWidgetSelectionRange(list_to_row[0], 0, list_to_row[-1], nbr_col - 1)
+        self.parent.ui.h3_table.setRangeSelected(_row_selection, True)
+
+        from_row = self.parent.master_table_cells_copy['row']
+        list_to_row = self.o_selection.get_list_row()
+        o_copy = CopyCells(parent=self.parent)
+        list_column_copy = np.arange(0, nbr_col)
+        for _row in list_to_row:
+            for _column in list_column_copy:
+                o_copy.copy_from_to(from_row=from_row,
+                                    from_col=_column,
+                                    to_row=_row)
 
 
 class CellsHandler(SelectionHandlerMaster):
@@ -230,9 +278,8 @@ class CopyCells:
                 self.table_ui.cellWidget(to_row, from_col).children()[1].setCheckState(_state)
             else:
                 self.parent.ui.statusbar.setStyleSheet("color: red")
-                self.parent.ui.statusbar.showMessage("Don't know how to copy/paste the cell from row {} " + \
-                                                     "to row {} at the column {}".format(from_row, to_row, from_col),
-                                                     self.parent.statusbar_display_time)
+                self.parent.ui.statusbar.showMessage("Don't know how to copy/paste the cell from row #{} to row #{} at the column #{}".format(from_row, to_row, from_col),
+                                                     self.parent.statusbar_display_time*2)
 
 
 

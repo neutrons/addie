@@ -17,7 +17,7 @@ from addie.ui_table_tree import Ui_Dialog as UiDialog
 from addie.master_table.tree_definition import tree_dict, column_default_width, CONFIG_FILE
 from addie.master_table.table_row_handler import TableRowHandler
 from addie.master_table.table_plot_handler import TablePlotHandler
-from addie.utilities.selection_handler import SelectionHandler, CellsHandler
+from addie.utilities.selection_handler import SelectionHandler, CellsHandler, RowsHandler
 
 
 class TableInitialization:
@@ -499,9 +499,10 @@ class H3TableHandler:
         cells_clear = cells.addAction("Clear")
 
         # Rows
-        rows = menu.addMenu("Row(s)")
+        rows = menu.addMenu("Row")
         rows_copy = rows.addAction("Copy")
         rows_paste = rows.addAction("Paste")
+        rows_duplicate = rows.addAction("Duplicate")
         rows.addSeparator()
         rows_insert = rows.addMenu("Insert")
         rows_insert_run_number = rows_insert.addAction("Via Run Number ...")
@@ -594,6 +595,8 @@ class H3TableHandler:
             self.rows_paste()
         elif action == rows_remove:
             self.rows_remove()
+        elif action == rows_duplicate:
+            self.rows_duplicate()
 
         # insert rows
         elif action == rows_insert_run_number:
@@ -678,15 +681,22 @@ class H3TableHandler:
 
     def rows_copy(self):
         '''copy entire row'''
-        pass
+        o_rows = RowsHandler(parent=self.parent)
+        o_rows.copy()
 
     def rows_paste(self):
         '''paste entire row'''
-        pass
+        o_rows = RowsHandler(parent=self.parent)
+        o_rows.paste()
 
     def rows_remove(self):
         '''remove selected rows'''
         pass
+
+    def rows_duplicate(self):
+        '''duplicate currently selected rows'''
+        o_row = TableRowHandler(parent=self.parent)
+        o_row.insert_blank_row()
 
     def refresh_table(self):
         '''reload the initial file'''
