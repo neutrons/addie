@@ -148,14 +148,15 @@ class CellsHandler(SelectionHandlerMaster):
                                                  self.parent.statusbar_display_time)
             return
 
-        # we only clicked once cell before using PASTE
+        # we only clicked once cell before using PASTE, so we can copy as the first column are the same
         if len(list_column_paste) == 1:
-
             pass
 
         else: # we clicked several columns before clicking PASTE
 
             # in this case, the COPY and PASTE number of columns have to match perfectly
+
+            # not the same number of copy and paste columns selected
             if len(list_column_copy) != len(list_column_paste):
                 self.parent.ui.statusbar.setStyleSheet("color: red")
                 self.parent.ui.statusbar.showMessage("Copy and Paste do not cover the same number of columns!",
@@ -163,6 +164,8 @@ class CellsHandler(SelectionHandlerMaster):
                 return
 
             else:
+
+                # copy and paste columns are not the same
                 list_intersection = set(list_column_copy).intersection(list_column_paste)
                 if len(list_intersection) != len(list_column_copy):
                     self.parent.ui.statusbar.setStyleSheet("color: red")
@@ -170,14 +173,10 @@ class CellsHandler(SelectionHandlerMaster):
                                                          self.parent.statusbar_display_time)
                     return
 
-        # if (nbr_row_paste == 1) and (nbr_column_paste == 1):
-        #     '''copy contain from current cell'''
-        #     pass
-        #
-        # elif (nbr_row_copy == 1) and (nbr_column_copy == 1):
-        #     '''copy that cell in all the cells now selected'''
-        #     pass
+                else:
 
+                    # we selected the same number of columns, the same ones and now we can copy countain
+                    pass
 
 
 
