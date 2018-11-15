@@ -1,4 +1,5 @@
 import numpy as np
+import pprint
 
 
 class SelectionHandler:
@@ -126,8 +127,11 @@ class CellsHandler(SelectionHandlerMaster):
         self.parent.master_table_cells_copy['list_column'] = list_column
 
     def paste(self):
-        list_row = self.o_selection.get_list_row()
-        list_column = self.o_selection.get_list_column()
+
+        list_column_copy = self.parent.master_table_cells_copy['list_column']
+
+        list_row_paste= self.o_selection.get_list_row()
+        list_column_paste = self.o_selection.get_list_column()
 
         nbr_row_paste = len(list_row)
         nbr_column_paste = len(list_column)
@@ -138,8 +142,12 @@ class CellsHandler(SelectionHandlerMaster):
         # if we don't select the same amount of columns, we stop here (and inform
         # user of issue in statusbar
 
+        if len(list_column_copy) != len(list_column_paste):
+            self.parent.ui.statusbar.showMessage("Copy and Paste do not cover the same columns!")
+            return
+        
         if (list_column != self.parent.master_table_cells_copy['list_column']).all():
-            self.parent.statusbar.showMessage("Copy and Paste selections do not match!", 10000)
+            self.parent.ui.statusbar.showMessage("Copy and Paste selections do not match!", 10000)
 
         if (nbr_row_paste == 1) and (nbr_column_paste == 1):
             '''copy contain from current cell'''

@@ -320,8 +320,6 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             for _row in np.arange(10):
                 o_row.insert_row(row=_row)
 
-        return
-
     def save_raw_config(self):
         '''this will allow the user to reset the full table and get it back in its initial state'''
         o_current_table_config = TableConfig(parent=self)
