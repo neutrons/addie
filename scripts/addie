@@ -82,10 +82,11 @@ from addie.pdf_lines_manager import PDFPlotManager
 
 DEBUG = True
 
-
 class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     """ Main addie window
     """
+
+    statusbar_display_time = 5000  # 5s
 
     # external ui (use to make sure there is only one open at a time
     advanced_window_ui = None

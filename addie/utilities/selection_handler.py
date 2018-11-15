@@ -133,8 +133,8 @@ class CellsHandler(SelectionHandlerMaster):
         list_row_paste= self.o_selection.get_list_row()
         list_column_paste = self.o_selection.get_list_column()
 
-        nbr_row_paste = len(list_row)
-        nbr_column_paste = len(list_column)
+        nbr_row_paste = len(list_row_paste)
+        nbr_column_paste = len(list_column_paste)
 
         row_columns_items_to_copy = self.parent.master_table_cells_copy['temp']
         [nbr_row_copy, nbr_column_copy] = np.shape(row_columns_items_to_copy)
@@ -142,20 +142,41 @@ class CellsHandler(SelectionHandlerMaster):
         # if we don't select the same amount of columns, we stop here (and inform
         # user of issue in statusbar
 
-        if len(list_column_copy) != len(list_column_paste):
-            self.parent.ui.statusbar.showMessage("Copy and Paste do not cover the same columns!")
+        if list_column_copy[0] != list_column_paste[0]:
+            self.parent.ui.statusbar.setStyleSheet("color: red")
+            self.parent.ui.statusbar.showMessage("Copy and Paste first column selected do not match!",
+                                                 self.parent.statusbar_display_time)
             return
-        
-        if (list_column != self.parent.master_table_cells_copy['list_column']).all():
-            self.parent.ui.statusbar.showMessage("Copy and Paste selections do not match!", 10000)
 
-        if (nbr_row_paste == 1) and (nbr_column_paste == 1):
-            '''copy contain from current cell'''
+        # we only clicked once cell before using PASTE
+        if len(list_column_paste) == 1:
+
             pass
 
-        elif (nbr_row_copy == 1) and (nbr_column_copy == 1):
-            '''copy that cell in all the cells now selected'''
-            pass
+        else: # we clicked several columns before clicking PASTE
+
+            # in this case, the COPY and PASTE number of columns have to match perfectly
+            if len(list_column_copy) != len(list_column_paste):
+                self.parent.ui.statusbar.setStyleSheet("color: red")
+                self.parent.ui.statusbar.showMessage("Copy and Paste do not cover the same number of columns!",
+                                                     self.parent.statusbar_display_time)
+                return
+
+            else:
+                list_intersection = set(list_column_copy).intersection(list_column_paste)
+                if len(list_intersection) != len(list_column_copy):
+                    self.parent.ui.statusbar.setStyleSheet("color: red")
+                    self.parent.ui.statusbar.showMessage("Copy and Paste do not cover the same columns!",
+                                                         self.parent.statusbar_display_time)
+                    return
+
+        # if (nbr_row_paste == 1) and (nbr_column_paste == 1):
+        #     '''copy contain from current cell'''
+        #     pass
+        #
+        # elif (nbr_row_copy == 1) and (nbr_column_copy == 1):
+        #     '''copy that cell in all the cells now selected'''
+        #     pass
 
 
 
