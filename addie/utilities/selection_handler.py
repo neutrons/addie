@@ -116,11 +116,17 @@ class CellsHandler(SelectionHandlerMaster):
                     _item.setText("")
 
     def copy(self):
-        '''first column of copy and paste have to be identical'''
+        ''' only 1 row at the time is allowed in the copy'''
         list_row = self.o_selection.get_list_row()
-        list_column = self.o_selection.get_list_column()
-
         nbr_row = len(list_row)
+
+        if nbr_row > 1:
+            self.parent.ui.statusbar.setStyleSheet("color: red")
+            self.parent.ui.statusbar.showMessage("Please select only 1 row!",
+                                                 self.parent.statusbar_display_time)
+            return
+
+        list_column = self.o_selection.get_list_column()
         nbr_column = len(list_column)
 
         row_column_items = [['' for x in np.arange(nbr_column)]
@@ -133,12 +139,12 @@ class CellsHandler(SelectionHandlerMaster):
 
         self.parent.master_table_cells_copy['temp'] = row_column_items
         self.parent.master_table_cells_copy['list_column'] = list_column
-        self.parent.master_table_cells_copy['list_row'] = list_row
+        self.parent.master_table_cells_copy['row'] = list_row[0]
 
     def paste(self):
 
         list_column_copy = self.parent.master_table_cells_copy['list_column']
-        list_row_copy = self.parent.master_table_cells_copy['list_row']
+        row_copy = self.parent.master_table_cells_copy['row']
 
         list_row_paste= self.o_selection.get_list_row()
         list_column_paste = self.o_selection.get_list_column()
@@ -162,14 +168,11 @@ class CellsHandler(SelectionHandlerMaster):
         if len(list_column_paste) == 1:
 
             o_copy = CopyCells(parent=self.parent)
-
-            _row_paste = list_row_paste[0]
-            for _row_copy in list_row_copy:
+            for _row_paste in list_row_paste:
                 for _column in list_column_copy:
-                    o_copy.copy_from_to(from_row=_row_copy,
+                    o_copy.copy_from_to(from_row=row_copy,
                                         from_col=_column,
                                         to_row=_row_paste)
-                _row_paste += 1
 
         else: # we clicked several columns before clicking PASTE
 
@@ -195,7 +198,13 @@ class CellsHandler(SelectionHandlerMaster):
                 else:
 
                     # we selected the same number of columns, the same ones and now we can copy countain
-                    pass
+                    o_copy = CopyCells(parent=self.parent)
+                    for _row_paste in list_row_paste:
+                        for _column in list_column_copy:
+                            o_copy.copy_from_to(from_row=row_copy,
+                                                from_col=_column,
+                                                to_row=_row_paste)
+                        _row_paste += 1
 
 
 class CopyCells:

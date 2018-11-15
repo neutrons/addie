@@ -105,7 +105,7 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     master_table_list_ui = {}
     master_table_cells_copy = {'temp': [],
                                'list_column': [],
-                               'list_row': [],
+                               'row': [],
                                }
 
     table_headers = {'h1': [],
