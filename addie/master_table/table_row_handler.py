@@ -165,6 +165,9 @@ class TableRowHandler:
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("stateChanged(int)"),
                                lambda state=0, key=random_key:
                                self.parent.master_table_select_state_changed(state, key))
+        # _widget.stateChanged.connect(lambda state=0, key=random_key:
+        #                        self.parent.master_table_select_state_changed(state, key))
+
         _widget.blockSignals(True)
         self.table_ui.setCellWidget(row, 0, _new_widget)
 
@@ -199,6 +202,9 @@ class TableRowHandler:
         _layout.setMargin(0)
         _widget = QComboBox()
         _shape_default_value = 'Cylindrical'
+        # _widget.currentIndexChanged.connect(lambda value=_shape_default_value,
+        #                        key=random_key:
+        #                        self.parent.master_table_sample_shape_changed(value, key))
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
                                lambda value=_shape_default_value,
                                key=random_key:
@@ -225,6 +231,9 @@ class TableRowHandler:
         _layout.setMargin(0)
         _widget = QComboBox()
         list_abs_correction = self.get_absorption_correction_list(shape=_shape_default_value)
+        # _widget.currentIndexChanged.connect(lambda value=list_abs_correction[0],
+        #                        key = random_key:
+        #                        self.parent.master_table_sample_abs_correction_changed(value, key))
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
                                lambda value=list_abs_correction[0],
                                key = random_key:
@@ -243,6 +252,9 @@ class TableRowHandler:
         _layout.setMargin(0)
         _widget = QComboBox()
         list_multi_scat_correction = self.get_multi_scat_correction_list(shape=_shape_default_value)
+        # _widget.currentIndexChanged.connect(lambda value=list_multi_scat_correction[0],
+        #                        key=random_key:
+        #                        self.parent.master_table_sample_multi_scattering_correction_changed(value, key))
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
                                lambda value=list_multi_scat_correction[0],
                                key=random_key:
@@ -266,6 +278,8 @@ class TableRowHandler:
                 _widget1.addItem(_item)
         _master_table_row_ui['sample']['inelastic_correction'] = _widget1
         _button = QPushButton("...")
+        # _button.pressed.connect(lambda key=random_key:
+        #                        self.parent.master_table_sample_placzek_button_pressed(key))
         QtCore.QObject.connect(_button, QtCore.SIGNAL("pressed()"),
                                lambda key=random_key:
                                self.parent.master_table_sample_placzek_button_pressed(key))
@@ -278,6 +292,9 @@ class TableRowHandler:
         _widget = QWidget()
         _widget.setLayout(_layout)
         _default_value = 'None'
+        # _widget1.currentIndexChanged.connect(lambda value=_default_value,
+        #                        key=random_key:
+        #                        self.parent.master_table_sample_inelastic_correction_changed(value, key))
         QtCore.QObject.connect(_widget1, QtCore.SIGNAL("currentIndexChanged(QString)"),
                                lambda value=_default_value,
                                key=random_key:
@@ -312,6 +329,9 @@ class TableRowHandler:
         _layout.setMargin(0)
         _widget = QComboBox()
         _shape_default_value = 'Cylindrical'
+        # _widget.currentIndexChanged.connect(lambda value=_shape_default_value,
+        #                        key=random_key:
+        #                        self.parent.master_table_normalization_shape_changed(value, key))
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
                                lambda value=_shape_default_value,
                                key=random_key:
@@ -337,6 +357,9 @@ class TableRowHandler:
         _layout = QtGui.QHBoxLayout()
         _layout.setMargin(0)
         _widget = QComboBox()
+        # _widget.currentIndexChanged.connect(lambda value=list_abs_correction[0],
+        #                            key=random_key:
+        #                        self.parent.master_table_normalization_abs_correction_changed(value, key))
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
                                lambda value=list_abs_correction[0],
                                    key=random_key:
@@ -355,6 +378,9 @@ class TableRowHandler:
         _layout = QtGui.QHBoxLayout()
         _layout.setMargin(0)
         _widget = QComboBox()
+        # _widget.currentIndexChanged.connect(lambda value=list_multi_scat_correction[0],
+        #                            key=random_key:
+        #                        self.parent.master_table_normalization_multi_scattering_correction_changed(value, key))
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
                                lambda value=list_multi_scat_correction[0],
                                    key=random_key:
@@ -379,6 +405,8 @@ class TableRowHandler:
                 _widget1.addItem(_item)
         _master_table_row_ui['normalization']['inelastic_correction'] = _widget1
         _button = QPushButton("...")
+        # _button.pressed.connect(lambda key=random_key:
+        #                        self.parent.master_table_normalization_placzek_button_pressed(key))
         QtCore.QObject.connect(_button, QtCore.SIGNAL("pressed()"),
                                lambda key=random_key:
                                self.parent.master_table_normalization_placzek_button_pressed(key))
@@ -390,6 +418,9 @@ class TableRowHandler:
         _widget = QWidget()
         _widget.setLayout(_layout)
         _default_value = 'None'
+        # _widget1.currentIndexChanged.connect( lambda value=_default_value,
+        #                        key=random_key:
+        #                        self.parent.master_table_normalization_inelastic_correction_changed(value, key))
         QtCore.QObject.connect(_widget1, QtCore.SIGNAL("currentIndexChanged(QString)"),
                                lambda value=_default_value,
                                key=random_key:
@@ -402,6 +433,8 @@ class TableRowHandler:
         _row1_layout.setMargin(0)
         _label = QLabel("Default  or  ")
         _button = QPushButton("...")
+        # _button.pressed.connect(lambda key=random_key:
+        #                        self.parent.master_table_input_grouping_button_pressed(key))
         QtCore.QObject.connect(_button, QtCore.SIGNAL("pressed()"),
                                lambda key=random_key:
                                self.parent.master_table_input_grouping_button_pressed(key))
@@ -434,6 +467,8 @@ class TableRowHandler:
         _row1_layout.setMargin(0)
         _label = QLabel("Default  or  ")
         _button = QPushButton("...")
+        # _button.pressed.connect(lambda key=random_key:
+        #                        self.parent.master_table_output_grouping_button_pressed(key))
         QtCore.QObject.connect(_button, QtCore.SIGNAL("pressed()"),
                                lambda key=random_key:
                                self.parent.master_table_output_grouping_button_pressed(key))
