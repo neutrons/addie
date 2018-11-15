@@ -1,6 +1,14 @@
 import numpy as np
 import pprint
 
+try:
+    from PyQt4.QtGui import QCheckBox, QLabel, QPushButton, QComboBox
+except ImportError:
+    try:
+        from PyQt5.QtWidgets import QCheckBox, QLabel, QPushButton, QComboBox
+    except ImportError:
+        raise ImportError("Requires PyQt4 or PyQt5")
+
 
 class SelectionHandler:
 
@@ -125,10 +133,12 @@ class CellsHandler(SelectionHandlerMaster):
 
         self.parent.master_table_cells_copy['temp'] = row_column_items
         self.parent.master_table_cells_copy['list_column'] = list_column
+        self.parent.master_table_cells_copy['list_row'] = list_row
 
     def paste(self):
 
         list_column_copy = self.parent.master_table_cells_copy['list_column']
+        list_row_copy = self.parent.master_table_cells_copy['list_row']
 
         list_row_paste= self.o_selection.get_list_row()
         list_column_paste = self.o_selection.get_list_column()
@@ -150,7 +160,16 @@ class CellsHandler(SelectionHandlerMaster):
 
         # we only clicked once cell before using PASTE, so we can copy as the first column are the same
         if len(list_column_paste) == 1:
-            pass
+
+            o_copy = CopyCells(parent=self.parent)
+
+            _row_paste = list_row_paste[0]
+            for _row_copy in list_row_copy:
+                for _column in list_column_copy:
+                    o_copy.copy_from_to(from_row=_row_copy,
+                                        from_col=_column,
+                                        to_row=_row_paste)
+                _row_paste += 1
 
         else: # we clicked several columns before clicking PASTE
 
@@ -177,6 +196,35 @@ class CellsHandler(SelectionHandlerMaster):
 
                     # we selected the same number of columns, the same ones and now we can copy countain
                     pass
+
+
+class CopyCells:
+
+    def __init__(self, parent=None):
+        self.parent = parent
+        self.table_ui = self.parent.ui.h3_table
+
+    def copy_from_to(self, from_row=-1, from_col=-1, to_row=-1):
+
+        try:
+            # let's assume the cell contain a regular item
+            _from_cell_value = self.table_ui.item(from_row, from_col).text()
+            self.table_ui.item(to_row, from_col).setText(_from_cell_value)
+        except:
+            # let's assume now that the cell contain a combobox
+            ui = self.table_ui.cellWidget(from_row, from_col).children()[1]
+            if isinstance(ui, QComboBox):
+                _from_index = ui.currentIndex()
+                self.table_ui.cellWidget(to_row, from_col).children()[1].setCurrentIndex(_from_index)
+            elif isinstance(ui, QCheckBox):
+                _state = ui.checkState()
+                self.table_ui.cellWidget(to_row, from_col).children()[1].setCheckState(_state)
+            else:
+                self.parent.ui.statusbar.setStyleSheet("color: red")
+                self.parent.ui.statusbar.showMessage("Don't know how to copy/paste the cell from row {} " + \
+                                                     "to row {} at the column {}".format(from_row, to_row, from_col),
+                                                     self.parent.statusbar_display_time)
+
 
 
 
