@@ -695,8 +695,12 @@ class H3TableHandler:
 
     def rows_duplicate(self):
         '''duplicate currently selected rows'''
-        o_row = TableRowHandler(parent=self.parent)
-        o_row.insert_blank_row()
+        o_table_row = TableRowHandler(parent=self.parent)
+        o_table_row.insert_blank_row()
+        o_row = RowsHandler(parent=self.parent)
+        row_selected = o_row.o_selection.top_row
+        o_row.copy(row=row_selected)
+        o_row.paste(row=row_selected-1)
 
     def refresh_table(self):
         '''reload the initial file'''

@@ -107,16 +107,18 @@ class RowsHandler(SelectionHandlerMaster):
         selection = self.parent.ui.h3_table.selectedRanges()
         self.o_selection = SelectionHandler(selection)
 
-    def copy(self):
+    def copy(self, row=None):
         # select entire row
-        list_row = self.o_selection.get_list_row()
-        if len(list_row) > 1:
-            self.parent.ui.statusbar.setStyleSheet("color: red")
-            self.parent.ui.statusbar.showMessage("Please select only 1 row!",
-                                                 self.parent.statusbar_display_time)
-            return
+        if row is None:
+            list_row = self.o_selection.get_list_row()
+            if len(list_row) > 1:
+                self.parent.ui.statusbar.setStyleSheet("color: red")
+                self.parent.ui.statusbar.showMessage("Please select only 1 row!",
+                                                     self.parent.statusbar_display_time)
+                return
 
-        row = list_row[0]
+            row = list_row[0]
+
         _table_ui = self.parent.ui.h3_table
         nbr_col = _table_ui.columnCount()
         _row_selection = QtGui.QTableWidgetSelectionRange(row, 0, row, nbr_col-1)
@@ -129,14 +131,20 @@ class RowsHandler(SelectionHandlerMaster):
         self.parent.master_table_cells_copy['list_column'] = []
         self.parent.master_table_cells_copy['row'] = row
 
-    def paste(self):
-        list_to_row = self.o_selection.get_list_row()
-        nbr_col = self.parent.ui.h3_table.columnCount()
-        _row_selection = QtGui.QTableWidgetSelectionRange(list_to_row[0], 0, list_to_row[-1], nbr_col - 1)
-        self.parent.ui.h3_table.setRangeSelected(_row_selection, True)
+    def paste(self, row=None):
 
+        if row is None:
+            list_to_row = self.o_selection.get_list_row()
+            nbr_col = self.parent.ui.h3_table.columnCount()
+            _row_selection = QtGui.QTableWidgetSelectionRange(list_to_row[0], 0, list_to_row[-1], nbr_col - 1)
+            self.parent.ui.h3_table.setRangeSelected(_row_selection, True)
+
+            list_to_row = self.o_selection.get_list_row()
+
+        else:
+            list_to_row = [row]
         from_row = self.parent.master_table_cells_copy['row']
-        list_to_row = self.o_selection.get_list_row()
+        nbr_col = self.parent.ui.h3_table.columnCount()
         o_copy = CopyCells(parent=self.parent)
         list_column_copy = np.arange(0, nbr_col)
         for _row in list_to_row:
