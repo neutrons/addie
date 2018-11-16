@@ -1,6 +1,21 @@
 # generated files
 MANIFEST
-fastgr/gui_fgr3.py
+addie/gui_fgr3.py
+addie/step1.py
+addie/step2.py
+addie/ui_advanced_window.py
+addie/ui_colorStyleSetup.py
+addie/ui_colorStyleSetup.py
+addie/ui_editSq.py
+addie/ui_helpGui.py
+addie/ui_iptsFileTransfer.py
+addie/ui_jobStatus.py
+addie/ui_launchMantid.py
+addie/ui_loadTableIntermediateStep.py
+addie/ui_mainWindow_no_scroll_bars.py
+addie/ui_mainWindow.py
+addie/ui_preview_ascii.py
+addie/ui_previewMantid.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
