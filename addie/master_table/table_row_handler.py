@@ -154,10 +154,13 @@ class TableRowHandler:
         _widget.setEnabled(True)
         _master_table_row_ui['active'] = _widget
         _spacer = QSpacerItem(40, 20,
-                              QSizePolicy.Expanding,
-                              QSizePolicy.Minimum)
+                               QSizePolicy.Expanding,
+                               QSizePolicy.Minimum)
         _layout.addItem(_spacer)
         _layout.addWidget(_widget)
+        _spacer = QSpacerItem(40, 20,
+                               QSizePolicy.Expanding,
+                               QSizePolicy.Minimum)
         _layout.addItem(_spacer)
         _layout.addStretch()
         _new_widget = QWidget()
@@ -167,11 +170,10 @@ class TableRowHandler:
                                self.parent.master_table_select_state_changed(state, key))
         # _widget.stateChanged.connect(lambda state=0, key=random_key:
         #                        self.parent.master_table_select_state_changed(state, key))
-
-        _widget.blockSignals(True)
+#        _widget.blockSignals(True)
         self.table_ui.setCellWidget(row, 0, _new_widget)
 
-        ## sample
+        # sample
 
         # column 1 - title
         _item = QTableWidgetItem("")
@@ -448,8 +450,14 @@ class TableRowHandler:
         _row2_layout.setMargin(0)
         _label = QLabel("(6 groups)")
         _master_table_row_ui['input_grouping_label'] = _label
+        _spacer = QSpacerItem(40, 20,
+                               QSizePolicy.Expanding,
+                               QSizePolicy.Minimum)
         _row2_layout.addItem(_spacer)
         _row2_layout.addWidget(_label)
+        _spacer = QSpacerItem(40, 20,
+                               QSizePolicy.Expanding,
+                               QSizePolicy.Minimum)
         _row2_layout.addItem(_spacer)
         _row2_widget = QWidget()
         _row2_widget.setLayout(_row2_layout)
@@ -482,8 +490,14 @@ class TableRowHandler:
         _row2_layout.setMargin(0)
         _label = QLabel("(6 groups)")
         _master_table_row_ui['output_grouping_label'] = _label
+        _spacer = QSpacerItem(40, 20,
+                               QSizePolicy.Expanding,
+                               QSizePolicy.Minimum)
         _row2_layout.addItem(_spacer)
         _row2_layout.addWidget(_label)
+        _spacer = QSpacerItem(40, 20,
+                               QSizePolicy.Expanding,
+                               QSizePolicy.Minimum)
         _row2_layout.addItem(_spacer)
         _row2_widget = QWidget()
         _row2_widget.setLayout(_row2_layout)

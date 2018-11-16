@@ -2,11 +2,11 @@ import numpy as np
 import pprint
 
 try:
-    from PyQt4.QtGui import QCheckBox, QLabel, QPushButton, QComboBox
+    from PyQt4.QtGui import QCheckBox, QLabel, QPushButton, QComboBox, QTableWidgetItem
     from PyQt4 import QtGui
 except ImportError:
     try:
-        from PyQt5.QtWidgets import QCheckBox, QLabel, QPushButton, QComboBox
+        from PyQt5.QtWidgets import QCheckBox, QLabel, QPushButton, QComboBox, QTableWidgetItem
         from PyQt5 import QtGui
     except ImportError:
         raise ImportError("Requires PyQt4 or PyQt5")
@@ -58,6 +58,39 @@ class SelectionHandlerMaster:
         self.parent = parent
         self.table_ui = self.parent.ui.h3_table
 
+    def get_ui_key_for_this_row(self, row=-1):
+        _check_box_ui_of_this_row = self.table_ui.cellWidget(row, 0).children()[1]
+        _table_list_ui = self.parent.master_table_list_ui
+        for _key in _table_list_ui.keys():
+            if _table_list_ui[_key]['active'] == _check_box_ui_of_this_row:
+                return _key
+        return None
+
+    def get_list_ui_for_this_row(self, row=-1):
+        _check_box_ui_of_this_row = self.table_ui.cellWidget(row, 0).children()[1]
+        _table_list_ui = self.parent.master_table_list_ui
+        for _key in _table_list_ui.keys():
+            if _table_list_ui[_key]['active'] == _check_box_ui_of_this_row:
+                list_ui = [_check_box_ui_of_this_row,
+                        _table_list_ui[_key]['sample']['shape'],
+                        _table_list_ui[_key]['sample']['abs_correction'],
+                        _table_list_ui[_key]['sample']['mult_scat_correction'],
+                        _table_list_ui[_key]['sample']['inelastic_correction'],
+                        _table_list_ui[_key]['normalization']['abs_correction'],
+                        _table_list_ui[_key]['normalization']['mult_scat_correction'],
+                        _table_list_ui[_key]['normalization']['inelastic_correction'],
+                        ]
+                self.parent.master_table_list_ui[_key] = {}
+                return list_ui
+        return []
+
+    def lock_signals(self, list_ui=[], lock=True):
+        if list_ui == []:
+            return
+
+        for _ui in list_ui:
+            if _ui is not None:
+                _ui.blockSignals(lock)
 
 class TransferH3TableWidgetState(SelectionHandlerMaster):
 
@@ -164,11 +197,10 @@ class RowsHandler(SelectionHandlerMaster):
             for _row in list_to_row:
                 self.remove(row=_first_row)
         else:
-            self.table_ui.blockSignals(True)
+            #self.table_ui.blockSignals(True)
             self.table_ui.setRangeSelected(self.selection[0], False)
-            #self.table_ui.removeRow(row)
-            print("removing row: {}".format(row))
-            self.table_ui.blockSignals(False)
+            self.table_ui.removeRow(row)
+            #self.table_ui.blockSignals(False)
 
 
 class CellsHandler(SelectionHandlerMaster):
