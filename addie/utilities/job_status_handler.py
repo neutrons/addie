@@ -1,4 +1,4 @@
-from PyQt4 import QtGui
+from qtpy.QtWidgets import (QApplication)  # noqa
 
 import subprocess
 import time
@@ -7,14 +7,14 @@ from addie.utilities.job_monitor_interface import JobMonitorInterface
 
 
 class JobStatusHandler(object):
-    
+
     def __init__(self, parent=None,  job_name='', script_to_run=None, thread_index=-1):
         self.parent = parent
 
         if self.parent.job_monitor_interface is None:
             job_ui = JobMonitorInterface(parent = self.parent)
             job_ui.show()
-            QtGui.QApplication.processEvents()
+            QApplication.processEvents()
             self.parent.job_monitor_interface  = job_ui
             job_ui.launch_logbook_thread()
         else:
@@ -26,7 +26,7 @@ class JobStatusHandler(object):
 
         job_list = self.parent.job_list
         p = subprocess.Popen(script_to_run.split())
-        
+
         new_job = {'job_name': job_name,
                    'time': self.get_launch_time(),
                    'status': 'processing',
@@ -36,7 +36,7 @@ class JobStatusHandler(object):
         self.parent.job_list = job_list
 
         job_ui.refresh_table(job_list)
-        
+
     def update_logbook_text(self, text):
         print(text)
 
