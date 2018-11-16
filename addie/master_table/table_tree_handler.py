@@ -496,12 +496,16 @@ class H3TableHandler:
         cells = menu.addMenu("Cell(s)")
         cells_copy = cells.addAction("Copy")
         cells_paste = cells.addAction("Paste")
+        cells_paste.setEnabled(self.parent.master_table_right_click_buttons['cell_paste']['status'])
+        self.parent.master_table_right_click_buttons['cell_paste']['ui'] = cells_paste
         cells_clear = cells.addAction("Clear")
 
         # Rows
         rows = menu.addMenu("Row")
         rows_copy = rows.addAction("Copy")
         rows_paste = rows.addAction("Paste")
+        rows_paste.setEnabled(self.parent.master_table_right_click_buttons['row_paste']['status'])
+        self.parent.master_table_right_click_buttons['row_paste']['ui'] = rows_paste
         rows_duplicate = rows.addAction("Duplicate")
         rows.addSeparator()
         rows_insert = rows.addMenu("Insert")

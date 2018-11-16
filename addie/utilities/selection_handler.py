@@ -130,6 +130,7 @@ class RowsHandler(SelectionHandlerMaster):
         self.parent.master_table_cells_copy['temp'] = []
         self.parent.master_table_cells_copy['list_column'] = []
         self.parent.master_table_cells_copy['row'] = row
+        self.parent.master_table_right_click_buttons['row_paste']['status'] = True
 
     def paste(self, row=None):
 
@@ -196,6 +197,7 @@ class CellsHandler(SelectionHandlerMaster):
         self.parent.master_table_cells_copy['temp'] = row_column_items
         self.parent.master_table_cells_copy['list_column'] = list_column
         self.parent.master_table_cells_copy['row'] = list_row[0]
+        self.parent.master_table_right_click_buttons['cell_paste']['status'] = True
 
     def paste(self):
 

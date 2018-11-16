@@ -102,6 +102,13 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     list_config_displayed = []
 
     # will list the various ui for each row using a random number as key
+    master_table_right_click_buttons = {'cell_paste': {'ui': None,
+                                                       'status': False,
+                                                       },
+                                        'row_paste': {'ui': None,
+                                                      'status': False,
+                                                      },
+                                        }
     master_table_list_ui = {}
     master_table_cells_copy = {'temp': [],
                                'list_column': [],
