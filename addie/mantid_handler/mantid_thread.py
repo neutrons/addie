@@ -1,4 +1,4 @@
-from PyQt4 import QtCore
+from qtpy.QtCore import (QThread)
 import os
 
 from mantid.simpleapi import *
@@ -7,12 +7,12 @@ import mantid
 from addie.step2_handler.mantid_script_handler import MantidScriptHandler
 
 
-class MantidThread(QtCore.QThread):
-    
+class MantidThread(QThread):
+
     def setup(self, runs=None, parameters=None):
         self.runs = runs
         self.parameters = parameters
-        
+
     def run(self):
         parameters = self.parameters
 
@@ -43,4 +43,3 @@ class MantidThread(QtCore.QThread):
                             VanadiumRadius = parameters['vanadium_radius'],
                             NormalizeByCurrent = parameters['normalize_by_current'],
                             FinalDataUnits = parameters['final_data_units'])
-
