@@ -1,36 +1,36 @@
-from PyQt4 import QtGui
+from qtpy.QtWidgets import (QMainWindow)
 
 from addie.ui_helpGui import Ui_MainWindow as UiMainWindow
 from addie.general_handler.help_gui_table_initialization import HelpGuiTableInitialization
 
 
-class HelpGui(QtGui.QMainWindow):
-    
+class HelpGui(QMainWindow):
+
     '''
     button_name = ['autonom', 'ndabs', 'scans', 'mantid']
     '''
     column_widths = [330, 40]
-    
+
     def __init__(self, parent=None, button_name=''):
         self.parent = parent
         self.button_name = button_name
-        
-        QtGui.QMainWindow.__init__(self, parent = parent)
+
+        QMainWindow.__init__(self, parent = parent)
         self.ui = UiMainWindow()
         self.ui.setupUi(self)
-        
+
         self.init_global_gui()
         self.init_table()
-	
+
     def init_table(self):
 	self.o_table = HelpGuiTableInitialization(parent=self, button_name=self.button_name)
 	self.o_table.fill()
-    
+
     def init_global_gui(self):
 	for index, col_width in enumerate(self.column_widths):
 	    self.ui.table_status.setColumnWidth(index, col_width)
 	self.setWindowTitle("Button Status: {}".format(self.button_name))
-    
+
     def refresh(self):
 	self.o_table.refill()
 
@@ -43,7 +43,7 @@ class HelpGui(QtGui.QMainWindow):
             self.parent.o_help_scans = None
         elif self.button_name == 'mantid':
             self.parent.o_help_mantid = None
-            
+
     def hide_button_clicked(self):
 	self.closeEvent(event=None)
 	self.close()
@@ -93,5 +93,3 @@ def check_status(parent=None, button_name = 'autonom'):
 	parent.o_help_scans.refresh()
     if (button_name == 'mantid') and parent.o_help_mantid:
 	parent.o_help_mantid.refresh()
-	
-	
