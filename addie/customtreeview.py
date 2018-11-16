@@ -4,7 +4,6 @@
 #       But QModelIndex.data() and QStandardItem.data() are different!
 #       The variable set to QStandardItem can be only retrieved by QModelIndex.data()
 from qtpy.QtCore import (Qt, QModelIndex, QVariant)
-#from PyQt4 import QtGui, QtCore
 from qtpy.QtWidgets import (QAbstractItemView, QHeaderView, QScrollBar, QTreeView)
 from qtpy.QtGui import (QStandardItem, QStandardItemModel)
 
