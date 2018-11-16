@@ -1,7 +1,9 @@
 import numpy as np
 import time
 
-from PyQt4 import QtCore, QtGui
+from qtpy.QtCore import (Signal)
+from qtpy.QtGui import (QCursor)
+from qtpy.QtWidgets import (QAction, QMenu)
 
 import mplgraphicsview as base
 
@@ -232,16 +234,16 @@ class BraggView(base.MplGraphicsView):
         elif button == 3:
             # right button:
             # Pop-out menu
-            self.menu = QtGui.QMenu(self)
+            self.menu = QMenu(self)
             if self.get_canvas().is_legend_on:
                 # figure has legend: remove legend
-                action1 = QtGui.QAction('Hide legend', self)
+                action1 = QAction('Hide legend', self)
                 action1.triggered.connect(self._myCanvas.hide_legend)
 
-                action2 = QtGui.QAction('Legend font larger', self)
+                action2 = QAction('Legend font larger', self)
                 action2.triggered.connect(self._myCanvas.increase_legend_font_size)
 
-                action3 = QtGui.QAction('Legend font smaller', self)
+                action3 = QAction('Legend font smaller', self)
                 action3.triggered.connect(self._myCanvas.decrease_legend_font_size)
 
                 self.menu.addAction(action2)
@@ -249,13 +251,13 @@ class BraggView(base.MplGraphicsView):
 
             else:
                 # figure does not have legend: add legend
-                action1 = QtGui.QAction('Show legend', self)
+                action1 = QAction('Show legend', self)
                 action1.triggered.connect(self._myCanvas.show_legend)
 
             self.menu.addAction(action1)
 
             # pop up menu
-            self.menu.popup(QtGui.QCursor.pos())
+            self.menu.popup(QCursor.pos())
         # END-IF-ELSE
         return
 
@@ -522,17 +524,17 @@ class GofRView(base.MplGraphicsView):
         elif button == 3:
             # right button:
             # Pop-out menu
-            self.menu = QtGui.QMenu(self)
+            self.menu = QMenu(self)
 
             if self.get_canvas().is_legend_on:
                 # figure has legend: remove legend
-                action1 = QtGui.QAction('Hide legend', self)
+                action1 = QAction('Hide legend', self)
                 action1.triggered.connect(self._myCanvas.hide_legend)
 
-                action2 = QtGui.QAction('Legend font larger', self)
+                action2 = QAction('Legend font larger', self)
                 action2.triggered.connect(self._myCanvas.increase_legend_font_size)
 
-                action3 = QtGui.QAction('Legend font smaller', self)
+                action3 = QAction('Legend font smaller', self)
                 action3.triggered.connect(self._myCanvas.decrease_legend_font_size)
 
                 self.menu.addAction(action2)
@@ -540,13 +542,13 @@ class GofRView(base.MplGraphicsView):
 
             else:
                 # figure does not have legend: add legend
-                action1 = QtGui.QAction('Show legend', self)
+                action1 = QAction('Show legend', self)
                 action1.triggered.connect(self._myCanvas.show_legend)
 
             self.menu.addAction(action1)
 
             # pop up menu
-            self.menu.popup(QtGui.QCursor.pos())
+            self.menu.popup(QCursor.pos())
         # END-IF-ELSE
 
         return
@@ -721,7 +723,7 @@ class SofQView(base.MplGraphicsView):
     Graphics view for S(Q)
     """
     # boundary moving signal (1) int for left/right boundary indicator (2)
-    boundaryMoveSignal = QtCore.pyqtSignal(int, float)
+    boundaryMoveSignal = Signal(int, float)
 
     # resolution of boundary indicator to be selected
     IndicatorResolution = 0.01
@@ -933,17 +935,17 @@ class SofQView(base.MplGraphicsView):
         if button == 3:
             # right button:
             # Pop-out menu
-            self.menu = QtGui.QMenu(self)
+            self.menu = QMenu(self)
 
             if self.get_canvas().is_legend_on:
                 # figure has legend: remove legend
-                action1 = QtGui.QAction('Hide legend', self)
+                action1 = QAction('Hide legend', self)
                 action1.triggered.connect(self._myCanvas.hide_legend)
 
-                action2 = QtGui.QAction('Legend font larger', self)
+                action2 = QAction('Legend font larger', self)
                 action2.triggered.connect(self._myCanvas.increase_legend_font_size)
 
-                action3 = QtGui.QAction('Legend font smaller', self)
+                action3 = QAction('Legend font smaller', self)
                 action3.triggered.connect(self._myCanvas.decrease_legend_font_size)
 
                 self.menu.addAction(action2)
@@ -951,12 +953,12 @@ class SofQView(base.MplGraphicsView):
 
             else:
                 # figure does not have legend: add legend
-                action1 = QtGui.QAction('Show legend', self)
+                action1 = QAction('Show legend', self)
                 action1.triggered.connect(self._myCanvas.show_legend)
 
             self.menu.addAction(action1)
             # pop up menu
-            self.menu.popup(QtGui.QCursor.pos())
+            self.menu.popup(QCursor.pos())
 
             return
         # END-IF

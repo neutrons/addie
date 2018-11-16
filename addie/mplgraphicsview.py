@@ -2,11 +2,18 @@
 import os
 import numpy as np
 
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import pyqtSignal
+from qtpy import PYQT4, PYQT5
+from qtpy.QtCore import (Signal)
+from qtpy.QtWidgets import (QSizePolicy, QVBoxLayout, QWidget)
 
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar2
+if PYQT5:
+    from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+    from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar2
+elif PYQT4:
+    from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
+    from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar2
+else:
+    raise ImportError('do not know which matplotlib backend to use')
 from matplotlib.figure import Figure
 import matplotlib.image
 
@@ -350,7 +357,7 @@ class IndicatorManager(object):
         return
 
 
-class MplGraphicsView(QtGui.QWidget):
+class MplGraphicsView(QWidget):
     """ A combined graphics view including matplotlib canvas and
     a navigation tool bar
 
@@ -360,7 +367,7 @@ class MplGraphicsView(QtGui.QWidget):
         """ Initialization
         """
         # Initialize parent
-        QtGui.QWidget.__init__(self, parent)
+        QWidget.__init__(self, parent)
 
         # set up canvas
         self._myCanvas = Qt4MplCanvas(self)
@@ -372,7 +379,7 @@ class MplGraphicsView(QtGui.QWidget):
         self._homeXYLimit = None
 
         # set up layout
-        self._vBox = QtGui.QVBoxLayout(self)
+        self._vBox = QVBoxLayout(self)
         self._vBox.addWidget(self._myCanvas)
         self._vBox.addWidget(self._myToolBar)
 
@@ -1078,7 +1085,7 @@ class Qt4MplCanvas(FigureCanvas):
         self.setParent(parent)
 
         # Set size policy to be able to expanding and resizable with frame
-        FigureCanvas.setSizePolicy(self, QtGui.QSizePolicy.Expanding,QtGui.QSizePolicy.Expanding)
+        FigureCanvas.setSizePolicy(self, QSizePolicy.Expanding,QSizePolicy.Expanding)
         FigureCanvas.updateGeometry(self)
 
         # Variables to manage all lines/subplot
@@ -1726,10 +1733,10 @@ class MyNavigationToolbar(NavigationToolbar2):
 
     # This defines a signal called 'home_button_pressed' that takes 1 boolean
     # argument for being in zoomed state or not
-    home_button_pressed = pyqtSignal()
+    home_button_pressed = Signal()
 
     # This defines a signal called 'canvas_zoom_released'
-    canvas_zoom_released = pyqtSignal()
+    canvas_zoom_released = Signal()
 
     def __init__(self, parent, canvas):
         """ Initialization
