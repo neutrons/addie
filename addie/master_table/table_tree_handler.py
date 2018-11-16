@@ -623,20 +623,6 @@ class H3TableHandler:
         elif action == _reset:
             self.reset_table()
 
-        if not (list_signal_config_files == []):
-
-            # user clicked to select config
-            for _index, _signal in enumerate(list_signal_config_files):
-                if action == _signal:
-                    self.activate_this_config(config=list_config_displayed[_index])
-
-        if not (list_signal_remove_config == []):
-
-            # user clicked to remove config
-            for _index, _signal in enumerate(list_signal_remove_config):
-                if action == _signal:
-                    self.remove_this_config(config=list_config_displayed[_index])
-
         # plot
         elif action == _plot_sofq:
             o_plot = TablePlotHandler(parent=self.parent)
@@ -655,6 +641,20 @@ class H3TableHandler:
         elif action == _plot_furnace:
             o_plot = TablePlotHandler(parent=self.parent)
             o_plot.plot_temperature(samp_env_choice='furnace')
+
+        elif not (list_signal_config_files == []):
+
+            # user clicked to select config
+            for _index, _signal in enumerate(list_signal_config_files):
+                if action == _signal:
+                    self.activate_this_config(config=list_config_displayed[_index])
+
+        elif not (list_signal_remove_config == []):
+
+            # user clicked to remove config
+            for _index, _signal in enumerate(list_signal_remove_config):
+                if action == _signal:
+                    self.remove_this_config(config=list_config_displayed[_index])
 
     def check_all(self):
         '''Activate (check box in first column) all the selected rows'''
@@ -695,7 +695,8 @@ class H3TableHandler:
 
     def rows_remove(self):
         '''remove selected rows'''
-        pass
+        o_rows = RowsHandler(parent=self.parent)
+        o_rows.remove()
 
     def rows_duplicate(self):
         '''duplicate currently selected rows'''

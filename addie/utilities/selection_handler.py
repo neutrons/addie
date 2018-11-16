@@ -104,7 +104,8 @@ class RowsHandler(SelectionHandlerMaster):
 
     def __init__(self, parent=None):
         SelectionHandlerMaster.__init__(self, parent=parent)
-        selection = self.parent.ui.h3_table.selectedRanges()
+        selection = self.table_ui.selectedRanges()
+        self.selection = selection
         self.o_selection = SelectionHandler(selection)
 
     def copy(self, row=None):
@@ -133,19 +134,21 @@ class RowsHandler(SelectionHandlerMaster):
         self.parent.master_table_right_click_buttons['row_paste']['status'] = True
 
     def paste(self, row=None):
-
         if row is None:
             list_to_row = self.o_selection.get_list_row()
-            nbr_col = self.parent.ui.h3_table.columnCount()
-            _row_selection = QtGui.QTableWidgetSelectionRange(list_to_row[0], 0, list_to_row[-1], nbr_col - 1)
-            self.parent.ui.h3_table.setRangeSelected(_row_selection, True)
+            nbr_col = self.table_ui.columnCount()
+            _row_selection = QtGui.QTableWidgetSelectionRange(list_to_row[0],
+                                                              0,
+                                                              list_to_row[-1],
+                                                              nbr_col - 1)
+            self.table_ui.setRangeSelected(_row_selection, True)
 
             list_to_row = self.o_selection.get_list_row()
 
         else:
             list_to_row = [row]
         from_row = self.parent.master_table_cells_copy['row']
-        nbr_col = self.parent.ui.h3_table.columnCount()
+        nbr_col = self.table_ui.columnCount()
         o_copy = CopyCells(parent=self.parent)
         list_column_copy = np.arange(0, nbr_col)
         for _row in list_to_row:
@@ -154,12 +157,25 @@ class RowsHandler(SelectionHandlerMaster):
                                     from_col=_column,
                                     to_row=_row)
 
+    def remove(self, row=None):
+        if row is None:
+            list_to_row = self.o_selection.get_list_row()
+            _first_row = list_to_row[0]
+            for _row in list_to_row:
+                self.remove(row=_first_row)
+        else:
+            self.table_ui.blockSignals(True)
+            self.table_ui.setRangeSelected(self.selection[0], False)
+            #self.table_ui.removeRow(row)
+            print("removing row: {}".format(row))
+            self.table_ui.blockSignals(False)
+
 
 class CellsHandler(SelectionHandlerMaster):
 
     def __init__(self, parent=None):
         SelectionHandlerMaster.__init__(self, parent=parent)
-        selection = self.parent.ui.h3_table.selectedRanges()
+        selection = self.table_ui.selectedRanges()
         self.o_selection = SelectionHandler(selection)
 
     def clear(self):
