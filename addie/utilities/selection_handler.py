@@ -92,6 +92,22 @@ class SelectionHandlerMaster:
             if _ui is not None:
                 _ui.blockSignals(lock)
 
+    def check_right_click_buttons(self):
+        nbr_row = self.table_ui.rowCount()
+        if nbr_row == 0:
+            status_button = False
+        else:
+            status_button = True
+
+        self.parent.master_table_right_click_buttons['activate_check_all']['status'] = status_button
+        self.parent.master_table_right_click_buttons['activate_uncheck_all']['status'] = status_button
+        self.parent.master_table_right_click_buttons['activate_inverse']['status'] = status_button
+        self.parent.master_table_right_click_buttons['cells_copy']['status'] = status_button
+        self.parent.master_table_right_click_buttons['cells_clear']['status'] = status_button
+        self.parent.master_table_right_click_buttons['rows_copy']['status'] = status_button
+        self.parent.master_table_right_click_buttons['rows_duplicate']['status'] = status_button
+
+
 class TransferH3TableWidgetState(SelectionHandlerMaster):
 
     def __init__(self, parent=None):
@@ -164,7 +180,7 @@ class RowsHandler(SelectionHandlerMaster):
         self.parent.master_table_cells_copy['temp'] = []
         self.parent.master_table_cells_copy['list_column'] = []
         self.parent.master_table_cells_copy['row'] = row
-        self.parent.master_table_right_click_buttons['row_paste']['status'] = True
+        self.parent.master_table_right_click_buttons['rows_paste']['status'] = True
 
     def paste(self, row=None):
         if row is None:
@@ -201,6 +217,7 @@ class RowsHandler(SelectionHandlerMaster):
             self.table_ui.setRangeSelected(self.selection[0], False)
             self.table_ui.removeRow(row)
             #self.table_ui.blockSignals(False)
+        self.check_right_click_buttons()
 
 
 class CellsHandler(SelectionHandlerMaster):
@@ -245,7 +262,7 @@ class CellsHandler(SelectionHandlerMaster):
         self.parent.master_table_cells_copy['temp'] = row_column_items
         self.parent.master_table_cells_copy['list_column'] = list_column
         self.parent.master_table_cells_copy['row'] = list_row[0]
-        self.parent.master_table_right_click_buttons['cell_paste']['status'] = True
+        self.parent.master_table_right_click_buttons['cells_paste']['status'] = True
 
     def paste(self):
 

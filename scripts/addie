@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import copy
 import sys
 import numpy as np
 import os
@@ -102,12 +103,18 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     list_config_displayed = []
 
     # will list the various ui for each row using a random number as key
-    master_table_right_click_buttons = {'cell_paste': {'ui': None,
-                                                       'status': False,
-                                                       },
-                                        'row_paste': {'ui': None,
-                                                      'status': False,
-                                                      },
+    dict_widget = {'ui': None,
+                   'status': False}
+    master_table_right_click_buttons = {'activate_check_all': copy.deepcopy(dict_widget),
+                                        'activate_uncheck_all': copy.deepcopy(dict_widget),
+                                        'activate_inverse': copy.deepcopy(dict_widget),
+                                        'cells_paste': copy.deepcopy(dict_widget),
+                                        'cells_copy': copy.deepcopy(dict_widget),
+                                        'cells_clear': copy.deepcopy(dict_widget),
+                                        'rows_paste': copy.deepcopy(dict_widget),
+                                        'rows_copy': copy.deepcopy(dict_widget),
+                                        'rows_duplicate': copy.deepcopy(dict_widget),
+
                                         }
     master_table_list_ui = {}
     master_table_cells_copy = {'temp': [],

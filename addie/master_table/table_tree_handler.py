@@ -486,27 +486,34 @@ class H3TableHandler:
         # Selection
         activate = menu.addMenu("Activate")
         activate_check_all = activate.addAction("Check All")
+        self.parent.master_table_right_click_buttons['activate_check_all']['ui'] = activate_check_all
         activate_uncheck_all = activate.addAction("Uncheck All")
+        self.parent.master_table_right_click_buttons['activate_uncheck_all']['ui'] = activate_uncheck_all
         activate.addSeparator()
         activate_inverse = activate.addAction("Inverse")
+        self.parent.master_table_right_click_buttons['activate_inverse']['ui'] = activate_inverse
 
         menu.addSeparator()
 
         # Cells
         cells = menu.addMenu("Cell(s)")
         cells_copy = cells.addAction("Copy")
+        self.parent.master_table_right_click_buttons['cells_copy']['ui'] = cells_copy
         cells_paste = cells.addAction("Paste")
-        cells_paste.setEnabled(self.parent.master_table_right_click_buttons['cell_paste']['status'])
-        self.parent.master_table_right_click_buttons['cell_paste']['ui'] = cells_paste
+        self.parent.master_table_right_click_buttons['cells_paste']['ui'] = cells_paste
+        cells_paste.setEnabled(self.parent.master_table_right_click_buttons['cells_paste']['status'])
         cells_clear = cells.addAction("Clear")
+        self.parent.master_table_right_click_buttons['cells_clear']['ui'] = cells_clear
 
         # Rows
         rows = menu.addMenu("Row")
         rows_copy = rows.addAction("Copy")
+        self.parent.master_table_right_click_buttons['rows_copy']['ui'] = rows_copy
         rows_paste = rows.addAction("Paste")
         rows_paste.setEnabled(self.parent.master_table_right_click_buttons['row_paste']['status'])
-        self.parent.master_table_right_click_buttons['row_paste']['ui'] = rows_paste
+        self.parent.master_table_right_click_buttons['rows_paste']['ui'] = rows_paste
         rows_duplicate = rows.addAction("Duplicate")
+        self.parent.master_table_right_click_buttons['rows_duplicate']['ui'] = rows_duplicate
         rows.addSeparator()
         rows_insert = rows.addMenu("Insert")
         rows_insert_run_number = rows_insert.addAction("Via Run Number ...")
