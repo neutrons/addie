@@ -17,7 +17,7 @@ from addie.ui_table_tree import Ui_Dialog as UiDialog
 from addie.master_table.tree_definition import tree_dict, column_default_width, CONFIG_FILE
 from addie.master_table.table_row_handler import TableRowHandler
 from addie.master_table.table_plot_handler import TablePlotHandler
-from addie.utilities.selection_handler import SelectionHandler, CellsHandler, RowsHandler
+from addie.master_table.selection_handler import SelectionHandler, CellsHandler, RowsHandler
 
 
 class TableInitialization:
@@ -510,7 +510,7 @@ class H3TableHandler:
         rows_copy = rows.addAction("Copy")
         self.parent.master_table_right_click_buttons['rows_copy']['ui'] = rows_copy
         rows_paste = rows.addAction("Paste")
-        rows_paste.setEnabled(self.parent.master_table_right_click_buttons['row_paste']['status'])
+        rows_paste.setEnabled(self.parent.master_table_right_click_buttons['rows_paste']['status'])
         self.parent.master_table_right_click_buttons['rows_paste']['ui'] = rows_paste
         rows_duplicate = rows.addAction("Duplicate")
         self.parent.master_table_right_click_buttons['rows_duplicate']['ui'] = rows_duplicate
@@ -665,11 +665,17 @@ class H3TableHandler:
 
     def check_all(self):
         '''Activate (check box in first column) all the selected rows'''
-        pass
+        self._set_checkbox_status()
 
     def uncheck_all(self):
         '''Deactivate (check box in first column) all the selected rows'''
-        pass
+        self._set_checkbox_status(QtCore.Qt.Unchecked)
+
+    def _set_checkbox_status(self, status=QtCore.Qt.Checked):
+        master_table_list_ui = self.parent.master_table_list_ui
+        for _key in master_table_list_ui.keys():
+            _check_box_ui = master_table_list_ui[_key]['active']
+            _check_box_ui.setCheckState(status)
 
     def inverse_activated_rows(self):
         '''Deactivate currently activated rows, and activate currently deactivated rows'''

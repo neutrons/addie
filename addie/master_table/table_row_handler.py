@@ -17,7 +17,7 @@ except ImportError:
 # from qtpy import QtCore, QtGui
 
 from addie.master_table.placzek_handler import PlaczekHandler
-from addie.utilities.selection_handler import TransferH3TableWidgetState
+from addie.master_table.selection_handler import TransferH3TableWidgetState
 from addie.master_table.tree_definition import COLUMN_DEFAULT_HEIGHT
 
 
