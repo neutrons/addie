@@ -1,16 +1,17 @@
 # Dialog to edit S(Q)
-from PyQt4 import QtGui, QtCore
+from qtpy.QtCore import (Signal)
+from qtpy.QtWidgets import (QDialog)
 import random
 
 import ui_editSq
 
 
-class EditSofQDialog(QtGui.QDialog):
+class EditSofQDialog(QDialog):
     """
     Extended dialog class to edit S(Q)
     """
-    MyEditSignal = QtCore.pyqtSignal(str, float, float)
-    MySaveSignal = QtCore.pyqtSignal(str)
+    MyEditSignal = Signal(str, float, float)
+    MySaveSignal = Signal(str)
 
     def __init__(self, parent_window):
         """
@@ -41,28 +42,20 @@ class EditSofQDialog(QtGui.QDialog):
         self._init_widgets()
 
         # set up event handlers
-        self.connect(self.ui.pushButton_quit, QtCore.SIGNAL('clicked()'),
-                     self.do_quit)
+        self.ui.pushButton_quit.clicked.connect(self.do_quit)
 
-        self.connect(self.ui.pushButton_saveNewSq, QtCore.SIGNAL('clicked()'),
-                     self.do_save)
+        self.ui.pushButton_saveNewSq.clicked.connect(self.do_save)
 
         # connect widgets' events with methods
-        self.connect(self.ui.pushButton_editSQ, QtCore.SIGNAL('clicked()'),
-                     self.do_edit_sq)
-        self.connect(self.ui.pushButton_cache, QtCore.SIGNAL('clicked()'),
-                     self.do_cache_edited_sq)
+        self.ui.pushButton_editSQ.clicked.connect(self.do_edit_sq)
+        self.ui.pushButton_cache.clicked.connect(self.do_cache_edited_sq)
 
-        self.connect(self.ui.pushButton_setScaleRange, QtCore.SIGNAL('clicked()'),
-                     self.do_set_scale_range)
-        self.connect(self.ui.pushButton_setShiftRange, QtCore.SIGNAL('clicked()'),
-                     self.do_set_shift_range)
+        self.ui.pushButton_setScaleRange.clicked.connect(self.do_set_scale_range)
+        self.ui.pushButton_setShiftRange.clicked.connect(self.do_set_shift_range)
 
         # connect q-slide
-        self.connect(self.ui.horizontalSlider_scale, QtCore.SIGNAL('valueChanged(int)'),
-                     self.event_cal_sq)
-        self.connect(self.ui.horizontalSlider_shift, QtCore.SIGNAL('valueChanged(int)'),
-                     self.event_cal_sq)
+        self.ui.horizontalSlider_scale.valueChanged.connect(self.event_cal_sq)
+        self.ui.horizontalSlider_shift.valueChanged.connect(self.event_cal_sq)
 
         # connect signals
         self.MyEditSignal.connect(self._myParentWindow.edit_sq)

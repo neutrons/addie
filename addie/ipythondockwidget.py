@@ -1,14 +1,14 @@
 import mantid_ipython_widget
-import PyQt4.QtGui
+from qtpy.QtWidgets import QDockWidget
 
 
-class IPythonDockWidget(PyQt4.QtGui.QDockWidget):
+class IPythonDockWidget(QDockWidget):
     """
     """
     def __init__(self, parent):
         """
         """
-        PyQt4.QtGui.QDockWidget.__init__(self, parent)
+        QDockWidget.__init__(self, parent)
 
         self.iPythonWidget = None
 

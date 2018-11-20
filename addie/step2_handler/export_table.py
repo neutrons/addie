@@ -1,23 +1,23 @@
-from PyQt4.QtCore import Qt
+from qtpy.QtCore import Qt
 from addie.utilities.file_handler import FileHandler
 
 
 class ExportTable(object):
-    
+
     current_path = ''
     column_label = []
     data = []
     output_text = []
-    
+
     def __init__(self, parent = None, filename = ''):
         self.parent = parent
         self.filename = filename
-        
+
     def run(self):
         self.collect_data()
         self.format_data()
         self.export_data()
-    
+
     def collect_data(self):
         nbr_row = self.parent.ui.table.rowCount()
 
@@ -34,45 +34,45 @@ class ExportTable(object):
 
         _data = []
         for i in range(nbr_row):
-            
+
             _row = []
-            
+
             # select flag
             _select_flag = self.retrieve_flag_state(row = i, column = 0)
             _row.append(_select_flag)
-            
-            # name 
+
+            # name
             _name_item = self.get_item_value(i, 1)
             _row.append(_name_item)
-            
+
             # runs
             _run_item = self.get_item_value(i, 2)
             _row.append(_run_item)
-            
+
             # sample formula
             _sample_formula = self.get_item_value(i, 3)
             _row.append(_sample_formula)
-            
+
             # mass density
             _mass_density = self.get_item_value(i, 4)
             _row.append(_mass_density)
-            
+
             # radius
             _radius = self.get_item_value(i, 5)
             _row.append(_radius)
-            
+
             # packing fraction
             _packing_fraction = self.get_item_value(i, 6)
             _row.append(_packing_fraction)
-            
+
             # sample shape
             _sample_shape = self.retrieve_sample_shape(row = i, column = 7)
             _row.append(_sample_shape)
-            
+
             # do abs corr?
             _do_corr = self.retrieve_abs_corr_state(row = i, column = 8)
             _row.append(_do_corr)
-            
+
             _data.append(_row)
         self.data = _data
 
@@ -85,13 +85,13 @@ class ExportTable(object):
         _current_path = self.current_path
         _column_label = self.column_label
         _data = self.data
-        
+
         output_text = []
         output_text.append("#" + _current_path)
-        
+
         _title = "|".join(_column_label)
         output_text.append("#" + _title)
-        
+
         for _row in _data:
             _formatted_row = "|".join(_row)
             output_text.append(_formatted_row)
@@ -122,7 +122,7 @@ class ExportTable(object):
         _selected_index = _widget.currentIndex()
         _sample_shape = str(_widget.itemText(_selected_index))
         return _sample_shape
-            
+
     def retrieve_flag_state(self, row=0, column=0):
         _widget = self.parent.ui.table.cellWidget(row, column).children()[1]
         if _widget is None:

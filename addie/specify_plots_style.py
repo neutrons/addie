@@ -1,10 +1,10 @@
-from PyQt4 import QtCore, QtGui
+from qtpy.QtWidgets import (QDialog)  # noqa
 
 import ui_colorStyleSetup
 import mplgraphicsview as mplview
 
 
-class PlotStyleDialog(QtGui.QDialog):
+class PlotStyleDialog(QDialog):
     """
     Dialog class for user to specify the color and marker of a certain line
     """
@@ -24,10 +24,8 @@ class PlotStyleDialog(QtGui.QDialog):
         self._init_widgets()
 
         # define event handlers
-        self.connect(self.ui.pushButton_apply, QtCore.SIGNAL('clicked()'),
-                     self.do_accept_quit)
-        self.connect(self.ui.pushButton_quit, QtCore.SIGNAL('clicked()'),
-                     self.do_cancel_quit)
+        self.ui.pushButton_apply.clicked.connect(self.do_accept_quit)
+        self.ui.pushButton_quit.clicked.connect(self.do_cancel_quit)
 
         # class variable
         self._acceptSelection = False
@@ -181,4 +179,3 @@ def get_plots_color_marker(parent_window, plot_label_list):
         plot_id_list, color, marker = None, None, None
 
     return plot_id_list, color, marker
-
