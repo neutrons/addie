@@ -679,7 +679,13 @@ class H3TableHandler:
 
     def inverse_activated_rows(self):
         '''Deactivate currently activated rows, and activate currently deactivated rows'''
-        pass
+        master_table_list_ui = self.parent.master_table_list_ui
+        for _key in master_table_list_ui.keys():
+            _check_box_ui = master_table_list_ui[_key]['active']
+            if _check_box_ui.checkState() == QtCore.Qt.Checked:
+                _check_box_ui.setCheckState(QtCore.Qt.Unchecked)
+            else:
+                _check_box_ui.setCheckState(QtCore.Qt.Checked)
 
     def cells_copy(self):
         '''copy selected cells'''
