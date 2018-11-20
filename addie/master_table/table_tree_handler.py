@@ -485,6 +485,7 @@ class H3TableHandler:
 
         # Selection
         activate = menu.addMenu("Activate")
+        activate.setEnabled(self.parent.master_table_right_click_buttons['activate']['status'])
         activate_check_all = activate.addAction("Check All")
         self.parent.master_table_right_click_buttons['activate_check_all']['ui'] = activate_check_all
         activate_uncheck_all = activate.addAction("Uncheck All")
@@ -497,6 +498,7 @@ class H3TableHandler:
 
         # Cells
         cells = menu.addMenu("Cell(s)")
+        cells.setEnabled(self.parent.master_table_right_click_buttons['cells']['status'])
         cells_copy = cells.addAction("Copy")
         self.parent.master_table_right_click_buttons['cells_copy']['ui'] = cells_copy
         cells_paste = cells.addAction("Paste")
@@ -507,6 +509,7 @@ class H3TableHandler:
 
         # Rows
         rows = menu.addMenu("Row")
+        rows.setEnabled(self.parent.master_table_right_click_buttons['rows']['status'])
         rows_copy = rows.addAction("Copy")
         self.parent.master_table_right_click_buttons['rows_copy']['ui'] = rows_copy
         rows_paste = rows.addAction("Paste")
@@ -691,31 +694,37 @@ class H3TableHandler:
         '''copy selected cells'''
         o_cells = CellsHandler(parent=self.parent)
         o_cells.copy()
+        self.check_status_of_right_click_buttons()
 
     def cells_paste(self):
         '''paste contain of cells in new selection (only if same number of cells per row'''
         o_cells = CellsHandler(parent=self.parent)
         o_cells.paste()
+        self.check_status_of_right_click_buttons()
 
     def cells_clear(self):
         '''clear contain of selected cells'''
         o_cells = CellsHandler(parent=self.parent)
         o_cells.clear()
+        self.check_status_of_right_click_buttons()
 
     def rows_copy(self):
         '''copy entire row'''
         o_rows = RowsHandler(parent=self.parent)
         o_rows.copy()
+        self.check_status_of_right_click_buttons()
 
     def rows_paste(self):
         '''paste entire row'''
         o_rows = RowsHandler(parent=self.parent)
         o_rows.paste()
+        self.check_status_of_right_click_buttons()
 
     def rows_remove(self):
         '''remove selected rows'''
         o_rows = RowsHandler(parent=self.parent)
         o_rows.remove()
+        self.check_status_of_right_click_buttons()
 
     def rows_duplicate(self):
         '''duplicate currently selected rows'''
@@ -725,23 +734,30 @@ class H3TableHandler:
         row_selected = o_row.o_selection.top_row
         o_row.copy(row=row_selected)
         o_row.paste(row=row_selected-1)
+        self.check_status_of_right_click_buttons()
 
     def refresh_table(self):
         '''reload the initial file'''
-        pass
+        self.check_status_of_right_click_buttons()
 
     def clear_table(self):
         '''clean up table'''
-        pass
+        nbr_row = self.parent.ui.h3_table.rowCount()
+        for _row in np.arange(nbr_row):
+            self.parent.ui.h3_table.removeRow(0)
+
+        self.parent.master_table_list_ui = {}
+        self.check_status_of_right_click_buttons()
 
     def insert_row_run_number(self):
         '''insert row using run number information and OnCat'''
-        pass
+        self.check_status_of_right_click_buttons()
 
     def insert_row_blank(self):
         '''insert a blank row'''
         o_row = TableRowHandler(parent=self.parent)
         o_row.insert_blank_row()
+        self.check_status_of_right_click_buttons()
 
     def save_as_config(self):
         o_save_config = SaveConfigInterface(parent=self,
@@ -790,6 +806,10 @@ class H3TableHandler:
 
         ConfigHandler.lazy_export_config(config_dict=self.parent.config_dict)
         self.parent.load_this_config(key='FULL_RESET', resize=True)
+
+    def check_status_of_right_click_buttons(self):
+        '''check which of the right buttons can be disabled or not'''
+        pass
 
 
 class TableConfig:

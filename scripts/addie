@@ -105,12 +105,15 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     # will list the various ui for each row using a random number as key
     dict_widget = {'ui': None,
                    'status': False}
-    master_table_right_click_buttons = {'activate_check_all': copy.deepcopy(dict_widget),
+    master_table_right_click_buttons = {'activate': copy.deepcopy(dict_widget),
+                                        'activate_check_all': copy.deepcopy(dict_widget),
                                         'activate_uncheck_all': copy.deepcopy(dict_widget),
                                         'activate_inverse': copy.deepcopy(dict_widget),
+                                        'cells': copy.deepcopy(dict_widget),
                                         'cells_paste': copy.deepcopy(dict_widget),
                                         'cells_copy': copy.deepcopy(dict_widget),
                                         'cells_clear': copy.deepcopy(dict_widget),
+                                        'rows': copy.deepcopy(dict_widget),
                                         'rows_paste': copy.deepcopy(dict_widget),
                                         'rows_copy': copy.deepcopy(dict_widget),
                                         'rows_duplicate': copy.deepcopy(dict_widget),
