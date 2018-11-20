@@ -515,6 +515,7 @@ class TableRowHandler:
         list_ui = self._get_list_ui_from_master_table_row_ui(_master_table_row_ui)
         self.parent.master_table_list_ui[random_key] = _master_table_row_ui
         self.unlock_signals_ui(list_ui=list_ui)
+        self.parent.check_status_of_right_click_buttons()
 
     def _get_list_ui_from_master_table_row_ui(self, master_table_row_ui):
         list_ui = []

@@ -424,6 +424,7 @@ class H3TableHandler:
 
     def __init__(self, parent=None):
         self.parent = parent
+        self.table_ui = self.parent.ui.h3_table
 
     def retrieve_previous_configurations(self):
         if os.path.exists(CONFIG_FILE):
@@ -509,24 +510,31 @@ class H3TableHandler:
 
         # Rows
         rows = menu.addMenu("Row")
-        rows.setEnabled(self.parent.master_table_right_click_buttons['rows']['status'])
         rows_copy = rows.addAction("Copy")
         self.parent.master_table_right_click_buttons['rows_copy']['ui'] = rows_copy
+        rows_copy.setEnabled(self.parent.master_table_right_click_buttons['rows_copy']['status'])
         rows_paste = rows.addAction("Paste")
         rows_paste.setEnabled(self.parent.master_table_right_click_buttons['rows_paste']['status'])
         self.parent.master_table_right_click_buttons['rows_paste']['ui'] = rows_paste
         rows_duplicate = rows.addAction("Duplicate")
         self.parent.master_table_right_click_buttons['rows_duplicate']['ui'] = rows_duplicate
+        rows_duplicate.setEnabled(self.parent.master_table_right_click_buttons['rows_duplicate']['status'])
         rows.addSeparator()
         rows_insert = rows.addMenu("Insert")
         rows_insert_run_number = rows_insert.addAction("Via Run Number ...")
         rows_insert_blank = rows_insert.addAction("Blank")
         rows_remove = rows.addAction("Remove")
+        rows_remove.setEnabled(self.parent.master_table_right_click_buttons['rows_remove']['status'])
+        self.parent.master_table_right_click_buttons['rows_remove']['ui'] = rows_remove
 
         # Table
         table = menu.addMenu("Table")
         table_reset = table.addAction("Reset")
+        self.parent.master_table_right_click_buttons['reset']['ui'] = table_reset
+        table_reset.setEnabled(self.parent.master_table_right_click_buttons['reset']['status'])
         table_clear = table.addAction("Clear")
+        self.parent.master_table_right_click_buttons['clear']['ui'] = table_clear
+        table_clear.setEnabled(self.parent.master_table_right_click_buttons['clear']['status'])
 
         # configuration
         config = menu.addMenu("Columns Configuration")
@@ -575,6 +583,8 @@ class H3TableHandler:
 
         # Plot
         _plot_menu = menu.addMenu('Plot')
+        self.parent.master_table_right_click_buttons['plot']['ui'] = _plot_menu
+        _plot_menu.setEnabled(self.parent.master_table_right_click_buttons['plot']['status'])
         _plot_sofq = _plot_menu.addAction("S(Q) ...")
         _plot_sofq_diff_first_run_row = _plot_menu.addAction("S(Q) Diff (1st run)...")
         _plot_sofq_diff_average_row = _plot_menu.addAction("S(Q) Diff (Avg.)...")
@@ -809,7 +819,43 @@ class H3TableHandler:
 
     def check_status_of_right_click_buttons(self):
         '''check which of the right buttons can be disabled or not'''
-        pass
+
+        def _update_status(**kwargs):
+            for _key in kwargs.keys():
+                self.parent.master_table_right_click_buttons[_key]['status'] = kwargs[_key]
+
+        nbr_row = self.table_ui.rowCount()
+        if nbr_row == 0:
+            _update_status(activate=False,
+                           cells=False,
+                           rows_paste=False,
+                           rows_copy=False,
+                           rows_duplicate=False,
+                           rows_remove=False,
+                           reset=False,
+                           clear=False,
+                           plot=False,
+                           )
+        else:
+            _update_status(activate=True,
+                           cells=True,
+                           cells_copy=True,
+                           rows_copy=True,
+                           rows_duplicate=True,
+                           rows_remove=True,
+                           reset=True,
+                           clear=True,
+                           )
+
+            if self.parent.master_table_cells_copy['temp']:
+                _update_status(cells_paste=True,
+                               cells_clear=True)
+
+            if self.parent.master_table_cells_copy['row'] and (self.parent.master_table_cells_copy['temp'] == []):
+                _update_status(rows_paste=True)
+
+            # plot enabled if only user clicked a cell with runs
+
 
 
 class TableConfig:

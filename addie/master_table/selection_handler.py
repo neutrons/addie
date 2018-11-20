@@ -180,7 +180,7 @@ class RowsHandler(SelectionHandlerMaster):
         self.parent.master_table_cells_copy['temp'] = []
         self.parent.master_table_cells_copy['list_column'] = []
         self.parent.master_table_cells_copy['row'] = row
-        self.parent.master_table_right_click_buttons['rows_paste']['status'] = True
+        #self.parent.master_table_right_click_buttons['rows_paste']['status'] = True
 
     def paste(self, row=None):
         if row is None:
