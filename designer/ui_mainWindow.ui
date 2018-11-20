@@ -3766,7 +3766,7 @@ p, li { white-space: pre-wrap; }
                 <item>
                  <widget class="QPushButton" name="pushButton_5">
                   <property name="text">
-                   <string>Table Configuration ...</string>
+                   <string>Table Columns ...</string>
                   </property>
                  </widget>
                 </item>
