@@ -4,20 +4,23 @@ import pickle
 
 
 try:
-    from PyQt4.QtGui import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu
+    from PyQt4.QtGui import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QFileDialog
     from PyQt4 import QtCore, QtGui
 except ImportError:
     try:
-        from PyQt5.QtWidgets import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu
+        from PyQt5.QtWidgets import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QFileDialog
         from PyQt5 import QtCore, QtGui
     except ImportError:
         raise ImportError("Requires PyQt4 or PyQt5")
 
+from addie.utilities.file_handler import FileHandler
 from addie.ui_table_tree import Ui_Dialog as UiDialog
 from addie.master_table.tree_definition import tree_dict, column_default_width, CONFIG_FILE
 from addie.master_table.table_row_handler import TableRowHandler
 from addie.master_table.table_plot_handler import TablePlotHandler
 from addie.master_table.selection_handler import SelectionHandler, CellsHandler, RowsHandler
+from addie.master_table.import_table import ImportTable
+from addie.master_table.export_table import ExportTable
 
 
 class TableInitialization:
@@ -771,10 +774,47 @@ class H3TableHandler:
         self.check_status_of_right_click_buttons()
 
     def _import_table(self):
-        pass
+        _current_folder = self.parent.current_folder
+        _table_file = str(QFileDialog.getOpenFileName(parent=self.parent,
+                                                      caption='Select Table File ...',
+                                                      directory=_current_folder,
+                                                      filter=("Text (*.txt);;All files (*.*)")))
+        if _table_file:
+            new_path = os.path.dirname(_table_file)
+            self.parent.current_folder = new_path
+            self.clear_table()
+
+            #FIXME
+            _o_import = ImportTable(parent=self.parent, filename=_table_file)
+            _o_import.run()
+
+            self.parent.ui.statusbar.setStyleSheet("color: blue")
+            self.parent.ui.statusbar.showMessage("File {} has been imported".format(_table_file),
+                                                 self.parent.statusbar_display_time)
+
 
     def _export_table(self):
-        pass
+        # FIXME
+        _current_folder = self.parent.current_folder
+        _table_file = str(QFileDialog.getSaveFileName(parent=self.parent,
+                                                      caption="Define Output File Name ...",
+                                                      directory=_current_folder,
+                                                      filter={"Text (*.txt);;All Files (*.*)"}))
+
+        if _table_file:
+            _file_handler = FileHandler(filename = _table_file)
+            _file_handler.check_file_extension(ext_requested='txt')
+            _table_file = _file_handler.filename
+
+            _export_handler = ExportTable(parent = self.parent_no_ui,
+                                          filename = _table_file)
+            _export_handler.run()
+
+            #FIXME
+
+            self.parent.ui.statusbar.setStyleSheet("color: blue")
+            self.parent.ui.statusbar.showMessage("Table has been exported in file {}".format(_table_file),
+                                                 self.parent.statusbar_display_time)
 
     def insert_row_run_number(self):
         '''insert row using run number information and OnCat'''
