@@ -9,6 +9,8 @@ CONFIG_FILE = os.path.join(user_home, '.addie_config.cfg')
 column_default_width = 90
 COLUMN_DEFAULT_HEIGHT = 50
 
+INDEX_OF_COLUMNS_SEARCHABLE = [1, 2, 3, 4, 5, 6, 8, 9, 13, 14, 15, 16, 17, 19, 20]
+
 h_index = {'h1': None,
            'h2': None,
            'h3': None}

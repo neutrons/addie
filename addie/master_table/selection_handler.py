@@ -11,6 +11,8 @@ except ImportError:
     except ImportError:
         raise ImportError("Requires PyQt4 or PyQt5")
 
+from addie.master_table.tree_definition import INDEX_OF_COLUMNS_SEARCHABLE
+
 
 class SelectionHandler:
 
@@ -357,8 +359,33 @@ class CopyCells:
                                                      self.parent.statusbar_display_time*2)
 
 
+class TableHandler(SelectionHandlerMaster):
 
+    list_of_columns_to_search_for = []
 
+    def __init__(self, parent=None):
+        SelectionHandlerMaster.__init__(self, parent=parent)
+
+    def search(self, text=""):
+        nbr_row = self.table_ui.rowCount()
+        if text == "":
+            # show everything
+            for _row in np.arange(nbr_row):
+                self.table_ui.setRowHidden(_row, False)
+
+        else:
+            # look in all the searchable columns, row by row
+            for _row in np.arange(nbr_row):
+                hide_it = True
+                for _col in INDEX_OF_COLUMNS_SEARCHABLE:
+                    _text_cell = str(self.table_ui.item(_row, _col).text()).lower()
+                    if text in _text_cell:
+                        hide_it = False
+                self.table_ui.setRowHidden(_row, hide_it)
+
+    def clear_search(self):
+        self.parent.ui.name_search_3.setText("")
+        self.search("")
 
 
 

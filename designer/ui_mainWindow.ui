@@ -3805,7 +3805,7 @@ p, li { white-space: pre-wrap; }
                      </size>
                     </property>
                     <property name="text">
-                     <string>equil</string>
+                     <string/>
                     </property>
                    </widget>
                   </item>
@@ -6041,8 +6041,8 @@ p, li { white-space: pre-wrap; }
    <slot>personalization_table_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1619</x>
-     <y>85</y>
+     <x>1678</x>
+     <y>86</y>
     </hint>
     <hint type="destinationlabel">
      <x>1550</x>
@@ -6063,6 +6063,38 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>1710</x>
      <y>538</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>name_search_3</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>table_search()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>696</x>
+     <y>91</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>785</x>
+     <y>28</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clear_search_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>table_search_clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1092</x>
+     <y>94</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1146</x>
+     <y>25</y>
     </hint>
    </hints>
   </connection>
@@ -6127,5 +6159,7 @@ p, li { white-space: pre-wrap; }
   <slot>make_calibration_clicked()</slot>
   <slot>personalization_table_clicked()</slot>
   <slot>h3_table_right_click()</slot>
+  <slot>table_search()</slot>
+  <slot>table_search_clear()</slot>
  </slots>
 </ui>
