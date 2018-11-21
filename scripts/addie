@@ -378,9 +378,9 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 	""")
 
         self.ui.label_25.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
-
+        self.ui.search_logo_label.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
         self.ui.clear_name_search_2.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
-        self.ui.clear_name_search_2.resize(50,30)
+        self.ui.clear_search_button.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
 
         self.ui.settings_table_button.setIcon(QtGui.QIcon(":/MPL Toolbar/settings_icon.png"))
 
