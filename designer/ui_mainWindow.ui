@@ -80,7 +80,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>2</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -2029,7 +2029,7 @@ p, li { white-space: pre-wrap; }
                      <widget class="QPushButton" name="clear_name_search_2">
                       <property name="minimumSize">
                        <size>
-                        <width>20</width>
+                        <width>30</width>
                         <height>0</height>
                        </size>
                       </property>
@@ -2040,7 +2040,7 @@ p, li { white-space: pre-wrap; }
                        </size>
                       </property>
                       <property name="text">
-                       <string>X</string>
+                       <string/>
                       </property>
                      </widget>
                     </item>

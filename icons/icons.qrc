@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="MPL Toolbar">
+    <file>search_icon.png</file>
+    <file>clear_icon.png</file>
     <file>splitter_icon.png</file>
     <file>go-home.png</file>
     <file>zoom-previous.png</file>
