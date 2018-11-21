@@ -535,6 +535,12 @@ class H3TableHandler:
         table_clear = table.addAction("Clear")
         self.parent.master_table_right_click_buttons['clear']['ui'] = table_clear
         table_clear.setEnabled(self.parent.master_table_right_click_buttons['clear']['status'])
+        table_clear.addSeparator()
+        table_import = table.addAction("Import ...")
+        self.parent.master_table_right_click_buttons['import']['ui'] = table_import
+        table_export = table.addAction("Export ...")
+        self.parent.master_table_right_click_buttons['export']['ui'] = table_export
+        table_export.setEnabled(self.parent.master_table_right_click_buttons['export']['status'])
 
         # configuration
         config = menu.addMenu("Columns Configuration")
@@ -633,6 +639,11 @@ class H3TableHandler:
             self.refresh_table()
         elif action == table_clear:
             self.clear_table()
+        elif action == table_import:
+            self._import_table()
+        elif action == table_export:
+            self._export_table()
+
 
         # configuration
         if action == configuration_save_as:
@@ -759,6 +770,12 @@ class H3TableHandler:
         self.parent.master_table_list_ui = {}
         self.check_status_of_right_click_buttons()
 
+    def _import_table(self):
+        pass
+
+    def _export_table(self):
+        pass
+
     def insert_row_run_number(self):
         '''insert row using run number information and OnCat'''
         self.check_status_of_right_click_buttons()
@@ -826,6 +843,7 @@ class H3TableHandler:
 
         nbr_row = self.table_ui.rowCount()
         if nbr_row == 0:
+            # table is empty
             _update_status(activate=False,
                            cells=False,
                            rows_paste=False,
@@ -845,6 +863,7 @@ class H3TableHandler:
                            rows_remove=True,
                            reset=True,
                            clear=True,
+                           export=True,
                            )
 
             if self.parent.master_table_cells_copy['temp']:
