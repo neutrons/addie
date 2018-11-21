@@ -529,18 +529,18 @@ class H3TableHandler:
 
         # Table
         table = menu.addMenu("Table")
+        table_import = table.addAction("Import ...")
+        self.parent.master_table_right_click_buttons['import']['ui'] = table_import
+        table_export = table.addAction("Export ...")
+        self.parent.master_table_right_click_buttons['export']['ui'] = table_export
+        table_export.setEnabled(self.parent.master_table_right_click_buttons['export']['status'])
+        table.addSeparator()
         table_reset = table.addAction("Reset")
         self.parent.master_table_right_click_buttons['reset']['ui'] = table_reset
         table_reset.setEnabled(self.parent.master_table_right_click_buttons['reset']['status'])
         table_clear = table.addAction("Clear")
         self.parent.master_table_right_click_buttons['clear']['ui'] = table_clear
         table_clear.setEnabled(self.parent.master_table_right_click_buttons['clear']['status'])
-        table_clear.addSeparator()
-        table_import = table.addAction("Import ...")
-        self.parent.master_table_right_click_buttons['import']['ui'] = table_import
-        table_export = table.addAction("Export ...")
-        self.parent.master_table_right_click_buttons['export']['ui'] = table_export
-        table_export.setEnabled(self.parent.master_table_right_click_buttons['export']['status'])
 
         # configuration
         config = menu.addMenu("Columns Configuration")
@@ -853,6 +853,7 @@ class H3TableHandler:
                            reset=False,
                            clear=False,
                            plot=False,
+                           export=False,
                            )
         else:
             _update_status(activate=True,
