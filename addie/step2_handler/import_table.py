@@ -24,7 +24,7 @@ class ImportTable(object):
 
     def load_ascii(self):
         _filename = self.filename
-        o_file = FileHandler(filename = _filename)
+        o_file = FileHandler(filename=_filename)
         o_file.retrieve_contain()
         self.file_contain = o_file.file_contain
 
@@ -67,7 +67,7 @@ class ImportTable(object):
 
             self.parent.ui.table.insertRow(_row)
 
-            #select
+            # select
             _layout = QHBoxLayout()
             _widget = QCheckBox()
             _widget.setEnabled(True)
@@ -76,47 +76,47 @@ class ImportTable(object):
             _new_widget = QWidget()
             _new_widget.setLayout(_layout)
 
-            _widget.stateChanged.connect(lambda state = 0, row = _row:
+            _widget.stateChanged.connect(lambda state=0, row=_row:
                                          self.parent.table_select_state_changed(state, row))
             self.parent.ui.table.setCellWidget(_row, 0, _new_widget)
 
-            #name
+            # name
             _item = QTableWidgetItem(_entry[1])
             self.parent.ui.table.setItem(_row, 1, _item)
 
-            #runs
+            # runs
             _item = QTableWidgetItem(_entry[2])
             self.parent.ui.table.setItem(_row, 2, _item)
 
-            #Sample formula
+            # Sample formula
             if _entry[3]:
                 _item = QTableWidgetItem(_entry[3])
             else:
                 _item = QTableWidgetItem("")
             self.parent.ui.table.setItem(_row, 3, _item)
 
-            #mass density
+            # mass density
             if _entry[4]:
                 _item = QTableWidgetItem(_entry[4])
             else:
                 _item = QTableWidgetItem("")
             self.parent.ui.table.setItem(_row, 4, _item)
 
-            #radius
+            # radius
             if _entry[5]:
                 _item = QTableWidgetItem(_entry[5])
             else:
                 _item = QTableWidgetItem("")
             self.parent.ui.table.setItem(_row, 5, _item)
 
-            #packing fraction
+            # packing fraction
             if _entry[6]:
                 _item = QTableWidgetItem(_entry[6])
             else:
                 _item = QTableWidgetItem("")
             self.parent.ui.table.setItem(_row, 6, _item)
 
-            #sample shape
+            # sample shape
             _widget = QComboBox()
             _widget.addItem("cylindrical")
             _widget.addItem("spherical")
@@ -124,7 +124,7 @@ class ImportTable(object):
                 _widget.setCurrentIndex(1)
             self.parent.ui.table.setCellWidget(_row, 7, _widget)
 
-            #do abs corr
+            # do abs corr
             _layout = QHBoxLayout()
             _widget = QCheckBox()
             if _entry[8] == "True":
@@ -143,7 +143,7 @@ class ImportTable(object):
             if _entry == ['']:
                 continue
 
-            #select
+            # select
             _widget = self.parent.ui.table.cellWidget(_row, 0).children()[1]
             if _entry[0] == "True":
                 _widget.setChecked(True)

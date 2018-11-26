@@ -27,7 +27,7 @@ class IptsFileTransferDialog(QDialog):
 
         print(_full_script)
 
-        job_handler = JobStatusHandler(parent = self.parent,
+        job_handler = JobStatusHandler(parent=self.parent,
                                        script_to_run=_full_script,
                                        job_name='IPTS File Transfer')
 
@@ -38,8 +38,8 @@ class IptsFileTransferDialog(QDialog):
 
     def source_ipts_clicked(self):
         _ipts_folder = QFileDialog.getExistingDirectory(caption="Select Input IPTS Folder ...",
-                                                      directory=self.ipts_folder,
-                                                      options=QFileDialog.ShowDirsOnly)
+                                                        directory=self.ipts_folder,
+                                                        options=QFileDialog.ShowDirsOnly)
         if not _ipts_folder:
             return
         if isinstance(_ipts_folder, tuple):
@@ -52,8 +52,8 @@ class IptsFileTransferDialog(QDialog):
 
     def source_autonom_clicked(self):
         _autonom_folder = QFileDialog.getExistingDirectory(caption="Select Input autoNOM Folder ...",
-                                                      directory=self.ipts_folder,
-                                                      options=QFileDialog.ShowDirsOnly)
+                                                           directory=self.ipts_folder,
+                                                           options=QFileDialog.ShowDirsOnly)
         if not _autonom_folder:
             return
         if isinstance(_autonom_folder, tuple):
@@ -64,8 +64,8 @@ class IptsFileTransferDialog(QDialog):
 
     def target_autonom_clicked(self):
         _autonom_folder = QFileDialog.getExistingDirectory(caption="Select Output autoNOM Folder ...",
-                                                      directory=self.parent.current_folder,
-                                                      options=QFileDialog.ShowDirsOnly)
+                                                           directory=self.parent.current_folder,
+                                                           options=QFileDialog.ShowDirsOnly)
         if not _autonom_folder:
             return
         if isinstance(_autonom_folder, tuple):

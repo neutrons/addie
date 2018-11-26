@@ -9,7 +9,7 @@ class CreateSampleFiles(object):
     file_extension = '.ini'
     list_sample_files = None
 
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         self.parent = parent
         self.current_dir = self.parent.current_folder
         self.list_sample_files = []
@@ -19,7 +19,7 @@ class CreateSampleFiles(object):
         self._create_list_of_sample_properties_files()
 
     def _retrieve_list_of_selected_rows(self):
-        o_table_handler = TableHandler(parent = self.parent)
+        o_table_handler = TableHandler(parent=self.parent)
         o_table_handler.retrieve_list_of_selected_rows()
         self.list_selected_row = o_table_handler.list_selected_row
 
@@ -51,7 +51,7 @@ class CreateSampleFiles(object):
         _text.append(row_metadata['do_abs_correction'] + ' #do absorption correction in IDL\n')
 
         f = open(full_name_of_file, 'w')
-        print(">creating file %s" %full_name_of_file)
+        print(">creating file %s" % full_name_of_file)
         for _line in _text:
             f.write(_line)
         f.close()

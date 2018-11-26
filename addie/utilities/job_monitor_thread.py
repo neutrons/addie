@@ -4,6 +4,7 @@ import os
 import time
 import psutil
 
+
 class JobMonitorThread(QThread):
 
     def __init__(self):
@@ -24,7 +25,7 @@ class JobMonitorThread(QThread):
         self.terminate()
 
     def _checking_status_of_jobs(self):
-        _job_list= self.parent.job_list
+        _job_list = self.parent.job_list
         for _row, _job in enumerate(_job_list):
             _pid = _job['pid']
             process = psutil.Process(_pid)

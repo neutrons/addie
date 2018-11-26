@@ -1,3 +1,5 @@
+from qtpy.QtWidgets import (QApplication)
+from mantid.api import AnalysisDataService as mtd
 import threading
 import types
 import inspect
@@ -19,11 +21,6 @@ except:
     from IPython.qt.inprocess import QtInProcessKernelManager
 
 
-from mantid.api import AnalysisDataService as mtd
-
-from qtpy.QtWidgets import (QApplication)
-
-
 def our_run_code(self, code_obj, result=None):
     """ Method with which we replace the run_code method of IPython's InteractiveShell class.
         It calls the original method (renamed to ipython_run_code) on a separate thread
@@ -40,10 +37,10 @@ def our_run_code(self, code_obj, result=None):
     """
 
     t = threading.Thread()
-    #ipython 3.0 introduces a third argument named result
+    # ipython 3.0 introduces a third argument named result
     nargs = len(inspect.getargspec(self.ipython_run_code).args)
     if (nargs == 3):
-        t = threading.Thread(target=self.ipython_run_code, args=[code_obj,result])
+        t = threading.Thread(target=self.ipython_run_code, args=[code_obj, result])
     else:
         t = threading.Thread(target=self.ipython_run_code, args=[code_obj])
     t.start()

@@ -23,21 +23,20 @@ class MantidReductionView(QMainWindow):
         _script = ''
         runs = _parameters['runs']
         for _run in runs:
-            o_mantid_script = MantidScriptHandler(parameters = _parameters, run=_run)
+            o_mantid_script = MantidScriptHandler(parameters=_parameters, run=_run)
             _script += o_mantid_script.script
             _script += "\n\n"
 
-        _script =  "from mantid.simpleapi import *\nimport mantid\n\n" + _script
+        _script = "from mantid.simpleapi import *\nimport mantid\n\n" + _script
 
         self.ui.preview_mantid_script_textedit.setText(_script)
 
-
     def save_as_clicked(self):
         _current_folder = self.parent.current_folder
-        _python_file = QFileDialog.getSaveFileName(parent = self.parent,
-                                                             caption = "Output File Name",
-                                                             directory = _current_folder,
-                                                             filter = ("python (*.py);; All Files (*.*)"))
+        _python_file = QFileDialog.getSaveFileName(parent=self.parent,
+                                                   caption="Output File Name",
+                                                   directory=_current_folder,
+                                                   filter=("python (*.py);; All Files (*.*)"))
         if not _python_file:
             return
 

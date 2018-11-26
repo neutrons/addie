@@ -1,4 +1,4 @@
-#pylint: disable=invalid-name,too-many-public-methods,too-many-arguments,non-parent-init-called,R0902,too-many-branches,C0302
+# pylint: disable=invalid-name,too-many-public-methods,too-many-arguments,non-parent-init-called,R0902,too-many-branches,C0302
 import os
 import numpy as np
 
@@ -14,8 +14,9 @@ elif PYQT4:
     from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar2
 else:
     raise ImportError('do not know which matplotlib backend to use')
-from matplotlib.figure import Figure
+
 import matplotlib.image
+from matplotlib.figure import Figure
 
 MplLineStyles = ['-', '--', '-.', ':', 'None', ' ', '']
 MplLineMarkers = [
@@ -63,6 +64,7 @@ class IndicatorManager(object):
     - 1: vertical. moving along X-direction. [x, x], [y_min, y_max];
     - 2: 2-way. moving in any direction. [x_min, x_max], [y, y], [x, x], [y_min, y_max].
     """
+
     def __init__(self):
         """
 
@@ -363,6 +365,7 @@ class MplGraphicsView(QWidget):
 
     Note: Merged with HFIR_Powder_Reduction.MplFigureCAnvas
     """
+
     def __init__(self, parent):
         """ Initialization
         """
@@ -1062,6 +1065,7 @@ class Qt4MplCanvas(FigureCanvas):
     """  A customized Qt widget for matplotlib figure.
     It can be used to replace GraphicsView of QtGui
     """
+
     def __init__(self, parent):
         """  Initialization
         """
@@ -1085,7 +1089,7 @@ class Qt4MplCanvas(FigureCanvas):
         self.setParent(parent)
 
         # Set size policy to be able to expanding and resizable with frame
-        FigureCanvas.setSizePolicy(self, QSizePolicy.Expanding,QSizePolicy.Expanding)
+        FigureCanvas.setSizePolicy(self, QSizePolicy.Expanding, QSizePolicy.Expanding)
         FigureCanvas.updateGeometry(self)
 
         # Variables to manage all lines/subplot
@@ -1282,7 +1286,7 @@ class Qt4MplCanvas(FigureCanvas):
         if yticklabels is not None:
             # it will always label the first N ticks even image is zoomed in
             print "--------> [FixMe]: The way to set up the Y-axis ticks is wrong!"
-            #self.axes.set_yticklabels(yticklabels)
+            # self.axes.set_yticklabels(yticklabels)
 
         # explicitly set aspect ratio of the image
         self.axes.set_aspect('auto')

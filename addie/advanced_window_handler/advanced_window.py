@@ -5,10 +5,10 @@ from addie.ui_advanced_window import Ui_MainWindow as UiMainWindow
 
 class AdvancedWindow(QMainWindow):
 
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         self.parent = parent
 
-        QMainWindow.__init__(self, parent = parent)
+        QMainWindow.__init__(self, parent=parent)
         self.ui = UiMainWindow()
         self.ui.setupUi(self)
 

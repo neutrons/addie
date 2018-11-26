@@ -14,6 +14,7 @@ class PDFPlotManager(object):
     """
     class to manage the color and line styles of G(r) and S(Q)
     """
+
     def __init__(self):
         """ initialization
         """

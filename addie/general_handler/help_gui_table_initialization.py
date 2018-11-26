@@ -31,7 +31,7 @@ class HelpGuiTableInitialization(object):
             self.parent.ui.table_status.removeRow(0)
         self.fill()
 
-    ## STEP 1
+    # STEP 1
 
     def jump_to_step1_diamond(self):
         self.parent.parent.ui.tabWidget_2.setCurrentIndex(0)
@@ -64,7 +64,7 @@ class HelpGuiTableInitialization(object):
         self.parent.parent.activateWindow()
 
     def fill_autonom(self):
-        o_step1_handler = Step1Utilities(parent = self.parent.parent)
+        o_step1_handler = Step1Utilities(parent=self.parent.parent)
 
         # diamond
         self.parent.ui.table_status.insertRow(0)
@@ -168,7 +168,7 @@ class HelpGuiTableInitialization(object):
         _widget_2.clicked.connect(self.jump_to_step1_create_folder)
         self.parent.ui.table_status.setCellWidget(5, 1, _widget_2)
 
-    ## STEP 2
+    # STEP 2
 
     def jump_to_step2_table(self):
         self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
@@ -267,7 +267,7 @@ class HelpGuiTableInitialization(object):
         self.parent.parent.activateWindow()
 
     def fill_scans(self):
-        o_step2_handler = Step2Utilities(parent = self.parent.parent)
+        o_step2_handler = Step2Utilities(parent=self.parent.parent)
 
         # table status
         self.parent.ui.table_status.insertRow(0)
@@ -321,7 +321,7 @@ class HelpGuiTableInitialization(object):
         self.parent.ui.table_status.setCellWidget(2, 1, _widget_2)
 
     def fill_ndabs(self):
-        o_step2_handler = Step2Utilities(parent = self.parent.parent)
+        o_step2_handler = Step2Utilities(parent=self.parent.parent)
 
         # table status
         self.parent.ui.table_status.insertRow(0)
@@ -496,8 +496,8 @@ class HelpGuiTableInitialization(object):
     def fill_mantid(self):
         self.row_height = 62
 
-        o_step1_handler = Step1Utilities(parent = self.parent.parent)
-        o_step2_handler = Step2Utilities(parent = self.parent.parent)
+        o_step1_handler = Step1Utilities(parent=self.parent.parent)
+        o_step2_handler = Step2Utilities(parent=self.parent.parent)
 
         # vanadium
         _row = 0
@@ -590,7 +590,7 @@ class HelpGuiTableInitialization(object):
         self.parent.ui.table_status.setCellWidget(_row, 1, _widget_2)
 
         # characterization
-        _row  += 1
+        _row += 1
         self.parent.ui.table_status.insertRow(_row)
         self.parent.ui.table_status.setRowHeight(_row, self.row_height)
         _widget = QTextEdit()

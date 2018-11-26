@@ -32,7 +32,7 @@ class RunStep1(object):
         if self.keep_running_status is False:
             return
 
-        _make_exp = MakeExpIniFileAndRunAutonom(parent=self.parent_no_ui, folder = self.folder)
+        _make_exp = MakeExpIniFileAndRunAutonom(parent=self.parent_no_ui, folder=self.folder)
         _make_exp.create()
         if self.run_autonom:
             _make_exp.run_autonom()
@@ -47,7 +47,7 @@ class RunStep1(object):
             message_box = QMessageBox()
             message_box.setText("Folder Exists Already!")
             message_box.setInformativeText("Do you want to replace it?")
-            message_box.setStandardButtons(QMessageBox.No |QMessageBox.Yes)
+            message_box.setStandardButtons(QMessageBox.No | QMessageBox.Yes)
             result = message_box.exec_()
             if result == QMessageBox.Yes:
                 self._remove_folder(_full_path)
@@ -63,7 +63,7 @@ class RunStep1(object):
             _folder_name = self.auto_folder_base_name + '_00'
         else:
             _last_index = self.retrieve_last_incremented_index(list_folder)
-            _new_index = "%.2d" %(int(_last_index)+1)
+            _new_index = "%.2d" % (int(_last_index)+1)
             _folder_name = self.auto_folder_base_name + '_' + _new_index
 
         _full_path = os.path.join(self._current_path, _folder_name)

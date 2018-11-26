@@ -9,7 +9,7 @@ class ExportTable(object):
     data = []
     output_text = []
 
-    def __init__(self, parent = None, filename = ''):
+    def __init__(self, parent=None, filename=''):
         self.parent = parent
         self.filename = filename
 
@@ -23,7 +23,7 @@ class ExportTable(object):
 
         # collect current folder
         _path = self.parent.current_folder
-        self.current_path = "current_folder: %s" %_path
+        self.current_path = "current_folder: %s" % _path
 
         _full_column_label = []
         nbr_column = self.parent.ui.table.columnCount()
@@ -38,7 +38,7 @@ class ExportTable(object):
             _row = []
 
             # select flag
-            _select_flag = self.retrieve_flag_state(row = i, column = 0)
+            _select_flag = self.retrieve_flag_state(row=i, column=0)
             _row.append(_select_flag)
 
             # name
@@ -66,11 +66,11 @@ class ExportTable(object):
             _row.append(_packing_fraction)
 
             # sample shape
-            _sample_shape = self.retrieve_sample_shape(row = i, column = 7)
+            _sample_shape = self.retrieve_sample_shape(row=i, column=7)
             _row.append(_sample_shape)
 
             # do abs corr?
-            _do_corr = self.retrieve_abs_corr_state(row = i, column = 8)
+            _do_corr = self.retrieve_abs_corr_state(row=i, column=8)
             _row.append(_do_corr)
 
             _data.append(_row)
@@ -103,8 +103,8 @@ class ExportTable(object):
         if _filename == '':
             return
         _output_text = self.output_text
-        _o_file = FileHandler(filename = _filename)
-        _o_file.create_ascii(contain = _output_text)
+        _o_file = FileHandler(filename=_filename)
+        _o_file.create_ascii(contain=_output_text)
 
     def retrieve_abs_corr_state(self, row=0, column=8):
         if self.parent.ui.table.cellWidget(row, 8) is None:

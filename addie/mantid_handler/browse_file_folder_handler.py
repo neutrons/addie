@@ -6,7 +6,7 @@ class BrowseFileFolderHandler(object):
 
     _output_ext = '/rietveld'
 
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         self.parent = parent
         self.current_folder = parent.file_path
 
@@ -23,10 +23,10 @@ class BrowseFileFolderHandler(object):
             _caption = "Select Characterization File"
             _output_ui = self.parent.ui.mantid_characterization_value
 
-        _file = QFileDialog.getOpenFileName(parent = self.parent,
-                                                  filter = _filter,
-                                                  caption = _caption,
-                                                  directory = _current_folder)
+        _file = QFileDialog.getOpenFileName(parent=self.parent,
+                                            filter=_filter,
+                                            caption=_caption,
+                                            directory=_current_folder)
         if not _file:
             return
         if isinstance(_file, tuple):
@@ -42,12 +42,12 @@ class BrowseFileFolderHandler(object):
 
     def browse_folder(self):
         _current_folder = self.current_folder
-        _caption  = "Select Output Folder"
+        _caption = "Select Output Folder"
 
-        _folder = QFileDialog.getExistingDirectory(parent = self.parent,
-                                                         caption = _caption,
-                                                         directory = _current_folder)
-        if not  _folder:
+        _folder = QFileDialog.getExistingDirectory(parent=self.parent,
+                                                   caption=_caption,
+                                                   directory=_current_folder)
+        if not _folder:
             return
         if isinstance(_folder, tuple):
             _folder = _folder[0]
