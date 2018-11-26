@@ -43,7 +43,7 @@ class PopulateBackgroundWidgets(object):
 
     def retrieve_background_file_from_exp_ini_file(self):
         _exp_ini_full_file_name = os.path.join(self.current_folder, 'exp.ini')
-        _o_exp_ini = ExpIniFileLoader(full_file_name = _exp_ini_full_file_name)
+        _o_exp_ini = ExpIniFileLoader(full_file_name=_exp_ini_full_file_name)
         _metadata = _o_exp_ini.metadata
         self.exp_ini_back_file = _metadata['MTc']
 

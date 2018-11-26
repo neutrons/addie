@@ -2,6 +2,7 @@ from qtpy.QtCore import (Qt)
 
 from addie.utilities.math_tools import is_int, is_float
 
+
 class Step2Utilities(object):
 
     def __init__(self, parent=None):
@@ -14,7 +15,7 @@ class Step2Utilities(object):
             return False
 
     def at_least_one_row_checked(self):
-        o_table_handler = TableHandler(parent = self.parent)
+        o_table_handler = TableHandler(parent=self.parent)
         o_table_handler.retrieve_list_of_selected_rows()
         list_of_selected_row = o_table_handler.list_selected_row
         if len(list_of_selected_row) > 0:
@@ -109,8 +110,8 @@ class Step2Utilities(object):
         _selected_widget = self.parent.ui.table.cellWidget(row, 0).children()
         if len(_selected_widget) > 0:
             if (_selected_widget[1].checkState() == Qt.Checked):
-                _table_handler = TableHandler(parent = self.parent)
-                for _column in range(1,7):
+                _table_handler = TableHandler(parent=self.parent)
+                for _column in range(1, 7):
                     if _table_handler.retrieve_item_text(row, _column) == '':
                         _status_ok = False
                         break
@@ -172,10 +173,11 @@ class Step2Utilities(object):
         else:
             return False
 
+
 class TableHandler(object):
 
     def __init__(self, parent=None):
-        self.parent=parent
+        self.parent = parent
 
     def retrieve_list_of_selected_rows(self):
         self.list_selected_row = []
@@ -184,10 +186,10 @@ class TableHandler(object):
             if len(_widgets) > 0:
                 _selected_widget = self.parent.ui.table.cellWidget(_row_index, 0).children()[1]
                 if (_selected_widget.checkState() == Qt.Checked):
-                    _entry = self._collect_metadata(row_index = _row_index)
+                    _entry = self._collect_metadata(row_index=_row_index)
                     self.list_selected_row.append(_entry)
 
-    def _collect_metadata(self, row_index = -1):
+    def _collect_metadata(self, row_index=-1):
         if row_index == -1:
             return []
 

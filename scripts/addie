@@ -60,7 +60,6 @@ import addie.edit_sq_dialog
 from addie.pdf_lines_manager import PDFPlotManager
 
 
-
 class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     """ Main addie window
     """
@@ -235,7 +234,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         self.ui.comboBox_xUnit.clear()
         self.ui.comboBox_xUnit.addItems(['TOF', 'dSpacing', 'Q'])
-        index = self.ui.comboBox_xUnit.findText('dSpacing',Qt.MatchFixedString)
+        index = self.ui.comboBox_xUnit.findText('dSpacing', Qt.MatchFixedString)
         self.ui.comboBox_xUnit.setCurrentIndex(index)
 
         self.ui.treeWidget_braggWSList.set_main_window(self)
@@ -556,7 +555,6 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self.ui.comboBox_SofQ.clear()
         self.ui.comboBox_SofQ.addItem('All')
 
-
         return
 
     def do_reset_gsas_tab(self):
@@ -695,11 +693,11 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
             # check
             assert isinstance(gr_line_color, str), 'G(r) line color {0} must be a string but not {1}.' \
-                                                   ''.format(gr_line_color ,type(gr_line_color))
+                                                   ''.format(gr_line_color, type(gr_line_color))
             assert isinstance(gr_line_style, str), 'G(r) line style {0} must be given by str but not {1}.' \
                                                    ''.format(gr_line_style, type(gr_line_style))
             assert isinstance(gr_line_alpha, float), 'G(r) line alpha {0} must be given by float but not {1}.' \
-                                                   ''.format(gr_line_alpha, type(gr_line_alpha))
+                ''.format(gr_line_alpha, type(gr_line_alpha))
             assert isinstance(gr_line_marker, str) or gr_line_marker is None,\
                 'G(r) line marker {0} must be given by str or None but not {1}.' \
                 ''.format(gr_line_marker, type(gr_line_marker))
@@ -778,7 +776,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         bragg_file_names = QFileDialog.getOpenFileNames(self, 'Choose Bragg File', default_dir, ext)
         if bragg_file_names is None or bragg_file_names == '' or len(bragg_file_names) == 0:
             return
-        bragg_file_names = [ str(bragg_file_name) for bragg_file_name in bragg_file_names ]
+        bragg_file_names = [str(bragg_file_name) for bragg_file_name in bragg_file_names]
 
         # update stored data directory
         try:
@@ -959,7 +957,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         assert isinstance(default_dir, str), 'Default directory {0} must be a string but not a {1}.' \
                                              ''.format(default_dir, type(default_dir))
         assert isinstance(file_filter, str), 'File filter {0} must be a string but not a {1}.' \
-                                               ''.format(file_filter, type(file_filter))
+            ''.format(file_filter, type(file_filter))
 
         # generate a dialog to get the file name to save G(r)
         export_dialog = QFileDialog()
@@ -1168,7 +1166,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         for sq_name in sq_name_list:
             # get the output file name first
             out_file_name = str(QFileDialog.getSaveFileName(self,
-                'Input File Name to Save S(Q) {0}'.format(sq_name), self._currWorkDir, file_filter))
+                                                            'Input File Name to Save S(Q) {0}'.format(sq_name), self._currWorkDir, file_filter))
             if out_file_name is None or len(out_file_name) == 0:
                 # skip if the user cancel the operation on this S(Q)
                 continue
@@ -1430,7 +1428,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         else:
             self.ui.graphicsView_bragg.set_to_single_gss(True)
             status, ws_name_list = self.ui.treeWidget_braggWSList.get_current_main_nodes()
-            plot_data_dict = { ws_name_list[0] : plot_data_dict[ws_name_list[0]]  }
+            plot_data_dict = {ws_name_list[0]: plot_data_dict[ws_name_list[0]]}
 
         # plot new
         self.ui.graphicsView_bragg.plot_banks(plot_data_dict, self._currBraggXUnit)
@@ -1482,8 +1480,8 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         # check
         assert len(bank_list) == 1 or len(ws_group_list) == 1, 'Must be either single bank (%d now) or ' \
-               'single GSS (%d now).' % (len(bank_list),
-                                         len(ws_group_list))
+            'single GSS (%d now).' % (len(bank_list),
+                                      len(ws_group_list))
 
         # get data and plot
         plot_data_dict = dict()
@@ -1617,7 +1615,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         """
         # check input
         assert isinstance(new_ws_list, list), 'Input workspace list must be a list of string' \
-               'but not %s.' % str(type(new_ws_list))
+            'but not %s.' % str(type(new_ws_list))
 
         # print 'current tab = ', self.ui.tabWidget_2.currentIndex(), self.ui.tabWidget_2.currentWidget(),
         # print self.ui.tabWidget_2.currentWidget().objectName()
@@ -1672,7 +1670,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         """
         # check
         assert isinstance(gss_group_name, str), 'GSS group workspace name must be a string but not %s.' \
-               '' % str(type(gss_group_name))
+            '' % str(type(gss_group_name))
         assert isinstance(gss_bank_ws_name_list, list), 'GSAS-single-bank workspace names {0} must be given by ' \
                                                         'list but not {1}.'.format(gss_bank_ws_name_list,
                                                                                    type(gss_bank_ws_name_list))
@@ -1698,7 +1696,6 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         # turn off the mutex lock
         self._noEventBankWidgets = False
-
 
         return
 
@@ -1760,11 +1757,11 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         """
         # check
         assert isinstance(gss_group_name, str), 'GSS workspace group name is expected to be a string, but not' \
-               ' %s.' % str(type(gss_group_name))
+            ' %s.' % str(type(gss_group_name))
 
         # rule out the unsupported situation
         assert gss_group_name.endswith('_group'), 'GSAS workspace group\' name must be ends with _group, ' \
-               'but not as %s.' % gss_group_name
+            'but not as %s.' % gss_group_name
         root_ws_name = gss_group_name.split('_group')[0]
 
         # process
@@ -1889,15 +1886,15 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     # menu
     def action_preview_ascii_clicked(self):
-        o_gui = Step3GuiHandler(parent = self)
+        o_gui = Step3GuiHandler(parent=self)
         o_gui.browse_file()
 
     def action_load_configuration_clicked(self):
-        o_import_config = ImportConfiguration(parent = self)
+        o_import_config = ImportConfiguration(parent=self)
         o_import_config.run()
 
     def action_save_configuration_clicked(self):
-        o_export_config = ExportConfiguration(parent = self)
+        o_export_config = ExportConfiguration(parent=self)
         o_export_config.run()
 
     def action_undo_clicked(self):
@@ -1913,7 +1910,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         _about.display()
 
     def advanced_option_clicked(self):
-        _advanced = AdvancedWindow(parent = self)
+        _advanced = AdvancedWindow(parent=self)
         _advanced.show()
 
     def menu_ipts_file_transfer_clicked(self):
@@ -1922,10 +1919,10 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     def main_tab_widget_changed(self, tab_selected):
         if tab_selected == 0:
-            o_gui = Step1GuiHandler(parent = self)
+            o_gui = Step1GuiHandler(parent=self)
             self.check_step1_gui()
         if tab_selected == 1:
-            _o_gui = Step2GuiHandler(parent = self)
+            _o_gui = Step2GuiHandler(parent=self)
             _o_gui.check_gui()
 
     def window_job_monitor_clicked(self):
@@ -1937,8 +1934,8 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     # job utility
     def launch_job_manager(self, job_name='', script_to_run=None, thread_index=-1):
         job_handler = JobStatusHandler(parent=self, job_name=job_name,
-                                       script_to_run = script_to_run,
-                                       thread_index = thread_index)
+                                       script_to_run=script_to_run,
+                                       thread_index=thread_index)
         job_handler.start()
 
     def kill_job(self, row=-1):
@@ -1959,7 +1956,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     def start_refresh_text_thread(self):
         _run_thread = self.logbook_thread
-        _run_thread.setup(parent = self)
+        _run_thread.setup(parent=self)
         _run_thread.update_text.connect(self.update_logbook)
         _run_thread.start()
 
@@ -1971,7 +1968,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     # tab1
     def select_current_folder_clicked(self):
-        o_gui = Step1GuiHandler(parent = self)
+        o_gui = Step1GuiHandler(parent=self)
         o_gui.select_working_folder()
         self.check_step1_gui()
 
@@ -1991,8 +1988,8 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self.check_step1_gui()
 
     def create_new_autonom_folder_button_clicked(self, status):
-        o_gui_handler = Step1GuiHandler(parent = self)
-        o_gui_handler.new_autonom_group_box(status = status)
+        o_gui_handler = Step1GuiHandler(parent=self)
+        o_gui_handler.new_autonom_group_box(status=status)
 
     def output_folder_radio_buttons(self):
         o_gui_handler = Step1GuiHandler(parent=self)
@@ -2003,7 +2000,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self.check_step1_gui()
 
     def manual_output_folder_button_clicked(self):
-        o_gui = Step1GuiHandler(parent = self)
+        o_gui = Step1GuiHandler(parent=self)
         o_gui.select_manual_output_folder()
         self.check_step1_gui()
 
@@ -2014,17 +2011,16 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     def run_autonom(self):
         """Will first create the output folder, then create the exp.ini file"""
-        _run_autonom = RunStep1(parent = self)
+        _run_autonom = RunStep1(parent=self)
         _run_autonom.create_folder()
         print(os.getcwd())
         _run_autonom.create_exp_ini_file()
 
-
     def help_button_clicked_autonom(self):
-        self.help_button_clicked(button_name = 'autonom')
+        self.help_button_clicked(button_name='autonom')
 
     def create_exp_ini_clicked(self):
-        _run_autonom = RunStep1(parent = self, run_autonom=False)
+        _run_autonom = RunStep1(parent=self, run_autonom=False)
         _run_autonom.create_folder()
         _run_autonom.create_exp_ini_file()
 
@@ -2033,14 +2029,14 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         pass
 
     def move_to_folder_clicked(self):
-        o_load_table = loadTableIntermediateStepInterface(parent = self)
+        o_load_table = loadTableIntermediateStepInterface(parent=self)
         o_load_table.show()
 
     def move_to_folder_step2(self):
         if not self.load_intermediate_step_ok:
             return
 
-        o_gui = Step2GuiHandler(parent = self)
+        o_gui = Step2GuiHandler(parent=self)
         o_gui.move_to_folder()
         self.populate_table_clicked()
 
@@ -2048,7 +2044,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         self.ui.table.blockSignals(True)
 
-        _pop_table = PopulateMasterTable(parent = self)
+        _pop_table = PopulateMasterTable(parent=self)
         _pop_table.run()
         _error_reported = _pop_table.error_reported
 
@@ -2056,14 +2052,14 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             self.ui.table.blockSignals(False)
             return
 
-        _pop_back_wdg = PopulateBackgroundWidgets(parent = self)
+        _pop_back_wdg = PopulateBackgroundWidgets(parent=self)
         _pop_back_wdg.run()
         self.name_search_clicked()
 
-        _o_gui = Step2GuiHandler(parent = self)
+        _o_gui = Step2GuiHandler(parent=self)
         _o_gui.check_gui()
 
-        o_undo = UndoHandler(parent = self)
+        o_undo = UndoHandler(parent=self)
         o_undo.save_table(first_save=True)
 
         self.ui.table.blockSignals(False)
@@ -2071,39 +2067,39 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     def import_table_clicked(self):
         self.ui.table.blockSignals(True)
 
-        _o_table = TableHandler(parent = self)
+        _o_table = TableHandler(parent=self)
         _o_table._import()
         self.name_search_clicked()
 
-        o_undo = UndoHandler(parent = self)
+        o_undo = UndoHandler(parent=self)
         o_undo.save_table(first_save=True)
 
         self.ui.table.blockSignals(False)
 
     def export_table_clicked(self):
-        _o_table = TableHandler(parent = self)
+        _o_table = TableHandler(parent=self)
         _o_table._export()
 
     def table_select_state_changed(self, state, row):
         _o_table_handler = TableHandler(parent=self)
         _o_table_handler.check_selection_status(state, row)
 
-        _o_gui = Step2GuiHandler(parent = self)
+        _o_gui = Step2GuiHandler(parent=self)
         _o_gui.check_gui()
         _o_gui.define_new_ndabs_output_file_name()
         _o_gui.define_new_sum_scans_output_file_name()
 
     def name_search_clicked(self):
-        o_table = TableHandler(parent = self)
+        o_table = TableHandler(parent=self)
         o_table.name_search()
 
     def clear_name_search_clicked(self):
-        o_table = TableHandler(parent = self)
+        o_table = TableHandler(parent=self)
         self.ui.name_search.setText('')
         o_table.name_search()
 
     def check_step2_gui(self, row, column):
-        _o_gui = Step2GuiHandler(parent = self)
+        _o_gui = Step2GuiHandler(parent=self)
         _o_gui.check_gui()
 
         _o_gui.step2_background_flag()
@@ -2113,109 +2109,110 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             o_pop = PopulateBackgroundWidgets(parent=self)
             o_pop.refresh_contain()
 
-        o_undo = UndoHandler(parent = self)
+        o_undo = UndoHandler(parent=self)
         o_undo.save_table()
 
     # PDF
 
     def check_q_range(self):
-        _o_gui = Step2GuiHandler(parent = self)
+        _o_gui = Step2GuiHandler(parent=self)
         _o_gui.check_gui()
 
     def hidrogen_clicked(self):
-        o_gui = Step2GuiHandler(parent = self)
+        o_gui = Step2GuiHandler(parent=self)
         o_gui.hidrogen_clicked()
 
     def no_hidrogen_clicked(self):
-        o_gui = Step2GuiHandler(parent = self)
+        o_gui = Step2GuiHandler(parent=self)
         o_gui.no_hidrogen_clicked()
 
     def yes_background_clicked(self):
-        o_gui = Step2GuiHandler(parent = self)
+        o_gui = Step2GuiHandler(parent=self)
         o_gui.yes_background_clicked()
 
     def no_background_clicked(self):
-        o_gui = Step2GuiHandler(parent = self)
+        o_gui = Step2GuiHandler(parent=self)
         o_gui.no_background_clicked()
 
     def background_combobox_changed(self, index):
-        o_gui = Step2GuiHandler(parent = self)
-        o_gui.background_index_changed(row_index = index)
+        o_gui = Step2GuiHandler(parent=self)
+        o_gui.background_index_changed(row_index=index)
 
     def reset_q_range(self):
-        o_gui = Step2GuiHandler(parent = self)
+        o_gui = Step2GuiHandler(parent=self)
         o_gui.reset_q_range()
 
     def run_ndabs_clicked(self):
-        o_create_sample_files = CreateSampleFiles(parent = self)
+        o_create_sample_files = CreateSampleFiles(parent=self)
         o_create_sample_files.run()
 
         list_sample_files = o_create_sample_files.list_sample_files
 
-        o_create_ndsum_file = CreateNdsumFile(parent = self)
+        o_create_ndsum_file = CreateNdsumFile(parent=self)
         o_create_ndsum_file.run()
 
-        o_run_ndsum = RunNDabs(parent = self, list_sample_files = list_sample_files)
+        o_run_ndsum = RunNDabs(parent=self, list_sample_files=list_sample_files)
         o_run_ndsum.run()
 
     def check_fourier_filter_widgets(self):
-        o_gui = Step2GuiHandler(parent = self)
+        o_gui = Step2GuiHandler(parent=self)
         o_gui.check_gui()
 
     def check_plazcek_widgets(self):
-        o_gui = Step2GuiHandler(parent = self)
+        o_gui = Step2GuiHandler(parent=self)
         o_gui.check_gui()
 
     def table_right_click(self, position):
-        _o_table = TableHandler(parent = self)
-        _o_table.right_click(position = position)
+        _o_table = TableHandler(parent=self)
+        _o_table.right_click(position=position)
 
     def run_sum_scans_clicked(self):
-        o_run_sum_scans = RunSumScans(parent = self)
+        o_run_sum_scans = RunSumScans(parent=self)
         o_run_sum_scans.run()
 
     def output_file_name_changed(self):
-        o_gui = Step2GuiHandler(parent = self)
+        o_gui = Step2GuiHandler(parent=self)
         o_gui.check_gui()
 
     def pdf_qmax_line_edit_changed(self):
-        o_gui = Step2GuiHandler(parent = self)
+        o_gui = Step2GuiHandler(parent=self)
         o_gui.check_gui()
 
     def sum_scans_output_file_name_changed(self):
-        o_gui = Step2GuiHandler(parent = self)
+        o_gui = Step2GuiHandler(parent=self)
         o_gui.check_gui()
 
     def help_button_clicked_ndabs(self):
-        self.help_button_clicked(button_name = 'ndabs')
+        self.help_button_clicked(button_name='ndabs')
 
     def help_button_clicked_scans(self):
-        self.help_button_clicked(button_name = 'scans')
+        self.help_button_clicked(button_name='scans')
 
     # Rietveld
 
     def mantid_browse_calibration_clicked(self):
-        o_mantid_gui = BrowseFileFolderHandler(parent = self)
-        o_mantid_gui.browse_file(type = 'calibration')
+        o_mantid_gui = BrowseFileFolderHandler(parent=self)
+        o_mantid_gui.browse_file(type='calibration')
 
     def mantid_browse_characterization_clicked(self):
-        o_mantid_gui = BrowseFileFolderHandler(parent = self)
-        o_mantid_gui.browse_file(type = 'characterization')
+        o_mantid_gui = BrowseFileFolderHandler(parent=self)
+        o_mantid_gui.browse_file(type='characterization')
 
     def mantid_output_directory_clicked(self):
-        o_mantid_gui = BrowseFileFolderHandler(parent = self)
+        o_mantid_gui = BrowseFileFolderHandler(parent=self)
         o_mantid_gui.browse_folder()
 
     def mantid_run_reduction(self):
-        o_mantid_run = GlobalMantidReduction(parent = self)
+        o_mantid_run = GlobalMantidReduction(parent=self)
         o_mantid_run.run()
 
     def check_mantid_gui(self):
-        o_gui = Step2GuiHandler(parent = self)
+        o_gui = Step2GuiHandler(parent=self)
         o_gui.check_gui()
 
     def help_button_clicked_mantid(self):
-        self.help_button_clicked(button_name = 'mantid')
+        self.help_button_clicked(button_name='mantid')
+
 
 def main():
     app = QApplication(sys.argv)
@@ -2226,6 +2223,7 @@ def main():
     form = MainWindow()
     form.show()
     app.exec_()
+
 
 if __name__ == '__main__':
     main()

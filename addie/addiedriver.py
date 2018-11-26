@@ -1,3 +1,5 @@
+from mantid.api import AnalysisDataService
+import mantid.simpleapi as simpleapi
 import os
 import sys
 import math
@@ -7,14 +9,12 @@ import numpy as np
 sys.path.append('/opt/mantid38/bin/')
 sys.path.append('/Users/wzz/MantidBuild/debug-stable/bin/')
 
-import mantid.simpleapi as simpleapi
-from mantid.api import AnalysisDataService
-
 
 class AddieDriver(object):
     """
     Driver for addie application
     """
+
     def __init__(self):
         """ Initialization
         Returns
@@ -206,10 +206,11 @@ class AddieDriver(object):
         # check inputs
         assert isinstance(ws_name, str), 'Workspace name {0} must be a string but not a {1}.'.format(ws_name,
                                                                                                      str(ws_name))
-        assert isinstance(output_file_name, str), 'Output file name {0} must be a string but not a {1}.'.format(
-            output_file_name, type(output_file_name))
+        assert isinstance(output_file_name, str), 'Output file name {0} must be a string but not a {1}.'.format(output_file_name,
+                                                                                                                type(output_file_name))
         assert isinstance(comment, str), 'Comment {0} must be a string but not a {1}.'.format(comment, type(comment))
-        assert isinstance(ws_index, int), 'Workspace index must be an integer but not a {1}.'.format(ws_index, type(ws_index))
+        assert isinstance(ws_index, int), 'Workspace index must be an integer but not a {1}.'.format(ws_index,
+                                                                                                     type(ws_index))
 
         # convert to point data from histogram
         simpleapi.ConvertToPointData(InputWorkspace=ws_name, OutputWorkspace=ws_name)
@@ -274,7 +275,7 @@ class AddieDriver(object):
         if curr_unit != x_unit:
             simpleapi.ConvertToHistogram(InputWorkspace=ws_name, OutputWorkspace=ws_name)
             simpleapi.ConvertUnits(InputWorkspace=ws_name, OutputWorkspace=ws_name,
-                                       Target=x_unit, EMode='Elastic')
+                                   Target=x_unit, EMode='Elastic')
 
         # convert to point data for plotting
         simpleapi.ConvertToPointData(InputWorkspace=ws_name, OutputWorkspace=ws_name)
@@ -398,11 +399,11 @@ class AddieDriver(object):
         gss_ws_name = os.path.basename(file_name).split('.')[0]
         if base_file_name.endswith('.gss') or base_file_name.endswith('.gsa') or base_file_name.endswith('.gda'):
             simpleapi.LoadGSS(Filename=file_name,
-                        OutputWorkspace=gss_ws_name)
+                              OutputWorkspace=gss_ws_name)
         elif base_file_name.endswith('.dat'):
             simpleapi.LoadAscii(Filename=file_name,
-                          OutputWorkspace=gss_ws_name,
-                          Unit='TOF')
+                                OutputWorkspace=gss_ws_name,
+                                Unit='TOF')
         else:
             raise RuntimeError('File %s is not of a supported type.' % file_name)
 

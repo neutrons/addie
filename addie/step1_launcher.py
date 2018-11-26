@@ -15,7 +15,7 @@ class MyApp(QMainWindow, step1.Ui_MainWindow):
         QMainWindow.__init__(self)
         self.setupUi(self)
 
-        init_step1 = InitStep1(parent = self)
+        init_step1 = InitStep1(parent=self)
 
     def diamond_edited(self):
         self.check_step1_gui()
@@ -47,7 +47,7 @@ class MyApp(QMainWindow, step1.Ui_MainWindow):
 
     def run_autonom(self):
         """Will first create the output folder, then create the exp.ini file"""
-        _run_autonom = RunStep1(parent = self)
+        _run_autonom = RunStep1(parent=self)
         _run_autonom.create_folder()
         _run_autonom.create_exp_ini_file()
 

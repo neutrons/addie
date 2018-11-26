@@ -24,7 +24,7 @@ class Step1GuiHandler(object):
         else:
             self.parent.run_autonom_script.setEnabled(False)
             self.parent.create_exp_ini_button.setEnabled(False)
-        check_status(parent = self.parent_no_ui, button_name='autonom')
+        check_status(parent=self.parent_no_ui, button_name='autonom')
 
     def all_mandatory_fields_non_empty(self):
         _diamond_field = str(self.parent.diamond.text()).strip().replace(" ", "")
@@ -63,27 +63,27 @@ class Step1GuiHandler(object):
 
     def select_working_folder(self):
         _current_folder = self.parent_no_ui.current_folder
-        _new_folder = QFileDialog.getExistingDirectory(parent = self.parent_no_ui,
-                                                             caption = "Select working directory",
-                                                             directory = _current_folder)
+        _new_folder = QFileDialog.getExistingDirectory(parent=self.parent_no_ui,
+                                                       caption="Select working directory",
+                                                       directory=_current_folder)
         if not _new_folder:
             return
         if isinstance(_new_folder, tuple):
             _new_folder = _new_folder[0]
         self.parent_no_ui.current_folder = _new_folder
-        o_gui = Step1GuiHandler(parent = self.parent_no_ui)
+        o_gui = Step1GuiHandler(parent=self.parent_no_ui)
         o_gui.set_main_window_title()
 
-        #move to new folder specifiy
+        # move to new folder specifiy
         os.chdir(_new_folder)
 
-        o_auto_populate = AutoPopulateWidgets(parent = self.parent_no_ui)
+        o_auto_populate = AutoPopulateWidgets(parent=self.parent_no_ui)
         o_auto_populate.run()
 
     def select_manual_output_folder(self):
         _current_folder = self.parent_no_ui.current_folder
         dlg = QFileDialog(parent=self.parent_no_ui,
-                                caption="Select or Define Output Directory")
+                          caption="Select or Define Output Directory")
         dlg.setFileMode(QFileDialog.Directory)
         if dlg.exec_():
             output_folder_name = str(dlg.selectedFiles()[0])

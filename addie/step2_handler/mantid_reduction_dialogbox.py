@@ -5,11 +5,11 @@ from addie.ui_launchMantid import Ui_Dialog as UiDialog
 
 class MantidReductionDialogbox(QDialog):
 
-    def __init__(self, parent = None, father = None):
+    def __init__(self, parent=None, father=None):
         self.parent = parent
         self.father = father
 
-        QDialog.__init__(self, parent = parent)
+        QDialog.__init__(self, parent=parent)
         self.ui = UiDialog()
         self.ui.setupUi(self)
 

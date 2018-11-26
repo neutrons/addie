@@ -3,19 +3,19 @@ import ConfigParser
 
 
 class FileHandler(object):
-    
+
     file_contain = []
-    
+
     def __init__(self, filename=None):
         self.filename = filename
-        
+
     def retrieve_contain(self):
         file_contain = []
         with open(self.filename, 'r') as f:
             file_contain = f.read()
         self.file_contain = file_contain
-        
-    def check_file_extension( self, ext_requested = 'txt'):
+
+    def check_file_extension(self, ext_requested='txt'):
         file_parsed = self.filename.split(".")
         if len(file_parsed) > 1:
             _ext = file_parsed[-1]
@@ -32,17 +32,16 @@ class FileHandler(object):
                 f.write(_line + "\n")
             else:
                 f.write(_line)
-                
+
         f.close()
-        
+
     def create_config_parser(self, section_name='Configuration', dictionary=None):
         config = ConfigParser.ConfigParser()
         cfgfile = open(self.filename, 'w')
-        
+
         config.add_section(section_name)
         for key, value in dictionary.iteritems():
             config.set(section_name, key, value)
-            
+
         config.write(cfgfile)
         cfgfile.close()
-        

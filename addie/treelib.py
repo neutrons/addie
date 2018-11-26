@@ -11,6 +11,7 @@ import customtreeview as base
 
 class BraggTree(base.CustomizedTreeView):
     """ Tree widget to store Bragg workspace """
+
     def __init__(self, parent):
         """
         Initialize
@@ -404,6 +405,7 @@ class BraggTree(base.CustomizedTreeView):
 class GofRTree(base.CustomizedTreeView):
     """ Tree to record G(R) workspaces
     """
+
     def __init__(self, parent):
         """
 

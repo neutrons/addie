@@ -11,6 +11,7 @@ import mplgraphicsview as base
 class BraggView(base.MplGraphicsView):
     """ Graphics view for Bragg diffraction
     """
+
     def __init__(self, parent):
         """
         Initialization
@@ -474,6 +475,7 @@ class GofRView(base.MplGraphicsView):
     """
     Graphics view for G(R)
     """
+
     def __init__(self, parent):
         """
         Initialization
@@ -633,7 +635,6 @@ class GofRView(base.MplGraphicsView):
         self.setXYLimit(ymin=lower_boundary, ymax=upper_boundary)
 
         return
-
 
     def has_gr(self, gr_ws_name):
         """Check whether a plot of G(r) exists on the canvas

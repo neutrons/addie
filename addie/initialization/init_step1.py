@@ -12,7 +12,7 @@ class InitStep1(object):
         self.set_title()
 
     def set_title(self):
-        o_gui = Step1GuiHandler(parent = self.parent)
+        o_gui = Step1GuiHandler(parent=self.parent)
         o_gui.set_main_window_title()
 
     def set_statusBar(self):

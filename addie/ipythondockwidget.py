@@ -5,6 +5,7 @@ from qtpy.QtWidgets import QDockWidget
 class IPythonDockWidget(QDockWidget):
     """
     """
+
     def __init__(self, parent):
         """
         """

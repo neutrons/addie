@@ -18,7 +18,7 @@ if sys.argv[-1] == 'pyuic':
             if os.stat(inname).st_mtime < os.stat(outname).st_mtime:
                 continue
         print("Converting '%s' to '%s'" % (inname, outname))
-        command = "pyuic4 %s -o %s"  % (inname, outname)
+        command = "pyuic4 %s -o %s" % (inname, outname)
         os.system(command)
         done += 1
     if not done:
@@ -28,15 +28,15 @@ if sys.argv[-1] == 'pyuic':
 setup(name="addie",
       version=versioneer.get_version(),
       cmdclass=versioneer.get_cmdclass(),
-      description = "Need a description",
-      author = "Dan, Wenduo, Jean",
-      author_email = "oldsdp@ornl.gov, zhou@ornl.gov, bilheuxjm@ornl.gov",
-      url = "http://github.com/neutrons/addie",
-      long_description = """Should have a longer description""",
-      license = "The MIT License (MIT)",
+      description="Need a description",
+      author="Dan, Wenduo, Jean",
+      author_email="oldsdp@ornl.gov, zhou@ornl.gov, bilheuxjm@ornl.gov",
+      url="http://github.com/neutrons/addie",
+      long_description="""Should have a longer description""",
+      license="The MIT License (MIT)",
       scripts=["scripts/addie"],
       packages=find_packages(),
       package_dir={},
-      install_requires=['numpy','matplotlib'],
+      install_requires=['numpy', 'matplotlib'],
       setup_requires=[],
-)
+      )

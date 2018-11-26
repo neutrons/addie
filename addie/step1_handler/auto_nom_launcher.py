@@ -4,6 +4,7 @@ import os
 from qtpy.QtWidgets import (QApplication, QMainWindow, QStyleFactory)
 import sys
 
+
 class MyApp(QMainWindow, autoNOM.Ui_MainWindow):
 
     def __init__(self):
@@ -11,6 +12,7 @@ class MyApp(QMainWindow, autoNOM.Ui_MainWindow):
         QMainWindow.__init__(self)
         autoNOM.Ui_MainWindow.__init__(self)
         self.setupUi(self)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

@@ -23,9 +23,9 @@ class Step2GuiHandler(object):
 
     def move_to_folder(self):
         _current_folder = self.current_folder
-        _new_folder = QFileDialog.getExistingDirectory(parent = self.parent_no_ui,
-                                                             caption = "Select working directory",
-                                                             directory = self.current_folder)
+        _new_folder = QFileDialog.getExistingDirectory(parent=self.parent_no_ui,
+                                                       caption="Select working directory",
+                                                       directory=self.current_folder)
         if not _new_folder:
             self.user_canceled = True
         else:
@@ -75,7 +75,7 @@ class Step2GuiHandler(object):
         self.parent.background_line_edit.setEnabled(False)
         self.parent.background_comboBox.setEnabled(False)
 
-    def background_index_changed(self, row_index = -1):
+    def background_index_changed(self, row_index=-1):
         if row_index == -1:
             return
         if self.parent.table.item(row_index, 2) is None:
@@ -84,7 +84,7 @@ class Step2GuiHandler(object):
 
     def step2_update_background_dropdown(self):
         row_index = self.parent.background_comboBox.currentIndex()
-        self.background_index_changed(row_index = row_index)
+        self.background_index_changed(row_index=row_index)
 
     def check_gui(self):
         self.check_run_ndabs_button()
@@ -104,7 +104,7 @@ class Step2GuiHandler(object):
 
     def define_new_output_file_name(self):
         """retrieve name of first row selected and use it to define output file name"""
-        o_table_handler = addie.step2_handler.table_handler.TableHandler(parent = self.parent_no_ui)
+        o_table_handler = addie.step2_handler.table_handler.TableHandler(parent=self.parent_no_ui)
         o_table_handler.retrieve_list_of_selected_rows()
         list_of_selected_row = o_table_handler.list_selected_row
         if len(list_of_selected_row) > 0:
@@ -157,7 +157,7 @@ class Step2GuiHandler(object):
             _status = False
 
         self.parent.mantid_run_reduction.setEnabled(_status)
-        check_status(parent = self.parent_no_ui, button_name='mantid')
+        check_status(parent=self.parent_no_ui, button_name='mantid')
 
     def check_run_sum_scans_button(self):
 
@@ -172,7 +172,7 @@ class Step2GuiHandler(object):
             _status = False
 
         self.parent.run_sum_scans_button.setEnabled(_status)
-        check_status(parent = self.parent_no_ui, button_name='scans')
+        check_status(parent=self.parent_no_ui, button_name='scans')
 
     def check_run_ndabs_button(self):
 
@@ -204,10 +204,10 @@ class Step2GuiHandler(object):
             _status = False
 
         self.parent.run_ndabs_button.setEnabled(_status)
-        check_status(parent = self.parent_no_ui, button_name='ndabs')
+        check_status(parent=self.parent_no_ui, button_name='ndabs')
 
     def at_least_one_row_checked(self):
-        o_table_handler = addie.step2_handler.table_handler.TableHandler(parent = self.parent_no_ui)
+        o_table_handler = addie.step2_handler.table_handler.TableHandler(parent=self.parent_no_ui)
         o_table_handler.retrieve_list_of_selected_rows()
         list_of_selected_row = o_table_handler.list_selected_row
         if len(list_of_selected_row) > 0:
@@ -220,8 +220,8 @@ class Step2GuiHandler(object):
         _selected_widget = self.parent.table.cellWidget(row, 0).children()
         if len(_selected_widget) > 0:
             if (_selected_widget[1].checkState() == Qt.Checked):
-                _table_handler = addie.step2_handler.table_handler.TableHandler(parent = self.parent_no_ui)
-                for _column in range(1,7):
+                _table_handler = addie.step2_handler.table_handler.TableHandler(parent=self.parent_no_ui)
+                for _column in range(1, 7):
                     if _table_handler.retrieve_item_text(row, _column) == '':
                         _status_ok = False
                         break
@@ -262,7 +262,7 @@ class Step2GuiHandler(object):
         return False
 
     def reset_q_range(self):
-        _q_min = "%s" %str(self.default_q_range[0])
-        _q_max = "%s" %str(self.default_q_range[1])
+        _q_min = "%s" % str(self.default_q_range[0])
+        _q_max = "%s" % str(self.default_q_range[1])
         self.parent.q_range_min.setText(_q_min)
         self.parent.q_range_max.setText(_q_max)

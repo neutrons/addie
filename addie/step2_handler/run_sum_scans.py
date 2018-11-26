@@ -28,7 +28,7 @@ class RunSumScans(object):
 
         #_run_thread = self.parent_no_ui._run_thread_sum_scans
         #_run_thread.setup(script = _script_to_run)
-        #_run_thread.start()
+        # _run_thread.start()
 
 #        os.system(_script_to_run)
 #        print("[LOG] executing in its own thread:")
@@ -38,11 +38,11 @@ class RunSumScans(object):
         _script = self.script
 
         if not self.parent.interactive_mode_checkbox.isChecked():
-            _script +=  "-n True"
+            _script += "-n True"
 
         qmax_list = str(self.parent.pdf_qmax_line_edit.text()).strip()
-        if not (qmax_list  == ""):
-            _script  +=  ' -q ' + qmax_list
+        if not (qmax_list == ""):
+            _script += ' -q ' + qmax_list
 
         return _script
 
@@ -56,11 +56,11 @@ class RunSumScans(object):
         f = open(_full_output_file_name, 'w')
 
         for _label in self._runs.keys():
-            f.write("%s %s\n" %(_label, self._runs[_label]))
+            f.write("%s %s\n" % (_label, self._runs[_label]))
         f.write("endsamples\n")
-        f.write("Background %s\n" %self._background)
+        f.write("Background %s\n" % self._background)
 
-        o_gui_handler = Step2GuiHandler(parent = self.parent_no_ui)
+        o_gui_handler = Step2GuiHandler(parent=self.parent_no_ui)
 
         # hydrogen flag
         plattype_flag = 0
@@ -78,7 +78,7 @@ class RunSumScans(object):
         f.write("ndeg {}\n".format(poly_degree))
 
         # qrangeft
-        [q_range_min, q_range_max]= o_gui_handler.get_q_range()
+        [q_range_min, q_range_max] = o_gui_handler.get_q_range()
         if (q_range_min is not "") and (q_range_max is not ""):
             f.write("qrangeft {},{}\n".format(q_range_min, q_range_max))
 
@@ -88,7 +88,7 @@ class RunSumScans(object):
             f.write("rmax {}\n".format(rmax))
 
         f.close()
-        print("[LOG] created file %s" %_full_output_file_name)
+        print("[LOG] created file %s" % _full_output_file_name)
 
     def collect_runs_checked(self):
         _runs = {}

@@ -8,6 +8,7 @@ class PlotStyleDialog(QDialog):
     """
     Dialog class for user to specify the color and marker of a certain line
     """
+
     def __init__(self, parent=None):
         """
 

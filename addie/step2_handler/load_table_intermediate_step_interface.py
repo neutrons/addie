@@ -17,7 +17,7 @@ class loadTableIntermediateStepInterface(QDialog):
         pass
 
     def ok_clicked(self):
-        o_gui = GuiHandler(parent = self)
+        o_gui = GuiHandler(parent=self)
         _state_button = o_gui.radiobutton_get_state(widget_id=self.ui.remove_temperature_checkbox)
         self.parent.remove_dynamic_temperature_flag = _state_button
         self.parent.load_intermediate_step_ok = True

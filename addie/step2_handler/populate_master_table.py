@@ -5,6 +5,7 @@ from qtpy.QtWidgets import (QCheckBox, QComboBox, QHBoxLayout, QMessageBox, QTab
 from addie.step2_handler.generate_sumthing import GenerateSumthing
 import addie.step2_handler.table_handler
 
+
 class PopulateMasterTable(object):
 
     auto_sum_ini_file = 'auto_sum.inp'
@@ -16,8 +17,8 @@ class PopulateMasterTable(object):
     def run(self):
 
         try:
-            o_generate = GenerateSumthing(parent = self.parent,
-                                          folder = self.parent.current_folder)
+            o_generate = GenerateSumthing(parent=self.parent,
+                                          folder=self.parent.current_folder)
             o_generate.create_sum_inp_file()
 
             self.read_auto_sum_file()
@@ -27,16 +28,15 @@ class PopulateMasterTable(object):
 #            _error_box.show()
             self.error_reported = True
 
-
     def empty_metadata(self):
         _metadata = {'name': "",
-                          'runs': "",
-                          'sample_formula': "",
-                          'mass_density': "",
-                          'radius': "",
-                          'packing_fraction': "",
-                          'sample_shape': "",
-                          'do_abs_correction': ""}
+                     'runs': "",
+                     'sample_formula': "",
+                     'mass_density': "",
+                     'radius': "",
+                     'packing_fraction': "",
+                     'sample_shape': "",
+                     'do_abs_correction': ""}
         return _metadata
 
     def read_auto_sum_file(self):
@@ -48,11 +48,11 @@ class PopulateMasterTable(object):
 
         _data_table = _data.split("\n")
 
-        #remove first line (background)
+        # remove first line (background)
         self._data_from_file = _data_table[1:]
 
-        print("[LOG] Reading auto_sum_file (%s)" %_full_auto_sum_file_name)
-        print("[LOG] _data_table: " , _data_table)
+        print("[LOG] Reading auto_sum_file (%s)" % _full_auto_sum_file_name)
+        print("[LOG] _data_table: ", _data_table)
 
     def populate_table(self):
         '''
@@ -60,13 +60,13 @@ class PopulateMasterTable(object):
         '''
 
         #o_table = addie.step2_handler.table_handler.TableHandler(parent = self.parent)
-        #o_table._clear_table()
+        # o_table._clear_table()
 
         # disable sorting
         self.parent.ui.table.setSortingEnabled(False)
 
         _index = 0
-        _columns_runs = self.get_columns_value(column = 2)
+        _columns_runs = self.get_columns_value(column=2)
 
         for _entry in self._data_from_file:
             if _entry.strip() == "":
@@ -78,7 +78,7 @@ class PopulateMasterTable(object):
             _metadata['name'] = name
             _metadata['runs'] = value
 
-            if self.runs_already_in_table(runs = value, table_runs = _columns_runs):
+            if self.runs_already_in_table(runs=value, table_runs=_columns_runs):
                 _index += 1
                 continue
 
@@ -95,7 +95,7 @@ class PopulateMasterTable(object):
             column_values.append(_value)
         return column_values
 
-    def runs_already_in_table(self, runs='', table_runs = []):
+    def runs_already_in_table(self, runs='', table_runs=[]):
         if runs in table_runs:
             return True
         return False
@@ -112,7 +112,7 @@ class PopulateMasterTable(object):
         _new_widget = QWidget()
         _new_widget.setLayout(_layout)
 
-        _widget.stateChanged.connect(lambda state = 0, row = row:
+        _widget.stateChanged.connect(lambda state=0, row=row:
                                      self.parent.table_select_state_changed(state, row))
         self.parent.ui.table.setCellWidget(row, 0, _new_widget)
 

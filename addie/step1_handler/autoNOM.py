@@ -12,11 +12,13 @@ from qtpy.QtWidgets import (QApplication, QMenu, QStatusBar, QTabWidget, QVBoxLa
 
 try:
     _encoding = QApplication.UnicodeUTF8
+
     def _translate(context, text, disambig):
         return QApplication.translate(context, text, disambig, _encoding)
 except AttributeError:
     def _translate(context, text, disambig):
         return QApplication.translate(context, text, disambig)
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):

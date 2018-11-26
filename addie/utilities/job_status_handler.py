@@ -12,10 +12,10 @@ class JobStatusHandler(object):
         self.parent = parent
 
         if self.parent.job_monitor_interface is None:
-            job_ui = JobMonitorInterface(parent = self.parent)
+            job_ui = JobMonitorInterface(parent=self.parent)
             job_ui.show()
             QApplication.processEvents()
-            self.parent.job_monitor_interface  = job_ui
+            self.parent.job_monitor_interface = job_ui
             job_ui.launch_logbook_thread()
         else:
             self.parent.job_monitor_interface.activateWindow()
@@ -43,13 +43,13 @@ class JobStatusHandler(object):
     def get_local_time(self):
         local_hour_offset = time.timezone / 3600.
         _gmt_time = time.gmtime()
-        [year, month, day, hour, minute, seconds, _wday, _yday, _isds ] = _gmt_time
+        [year, month, day, hour, minute, seconds, _wday, _yday, _isds] = _gmt_time
         return [year, month, day, hour-local_hour_offset, minute, seconds]
 
     def get_launch_time(self):
         local_time = self.get_local_time()
-        return "%d %d %d %d:%d:%d" %(local_time[0], local_time[1], local_time[2],
-                                     local_time[3], local_time[4], local_time[5])
+        return "%d %d %d %d:%d:%d" % (local_time[0], local_time[1], local_time[2],
+                                      local_time[3], local_time[4], local_time[5])
 
     def start(self):
         pass

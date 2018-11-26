@@ -11,6 +11,7 @@ from qtpy.QtGui import (QStandardItem, QStandardItemModel)
 class CustomizedTreeView(QTreeView):
     """ Customized TreeView for data management
     """
+
     def __init__(self, parent=None):
         """ Initialization
         :param parent: parent window
@@ -29,7 +30,7 @@ class CustomizedTreeView(QTreeView):
 
         # Data structure to control the items
         self._leafDict = dict()  # dictionary for the name each leaf and its child. key is string only!
-        self._mainNodeDict = dict() # dictionary for each main node
+        self._mainNodeDict = dict()  # dictionary for each main node
         self._myHeaderList = list()
         self._childrenInOrder = True
 
@@ -336,7 +337,7 @@ class CustomizedTreeView(QTreeView):
                     item_list.append(qitem)
                 else:
                     error_message += 'Found index %s is not a QModelIndex instance, ' \
-                                 'but of type %s.' % (str(qindex), str(type(qindex)))
+                        'but of type %s.' % (str(qindex), str(type(qindex)))
             else:
                 error_message += 'Item of index %s not a QStandardItem instance, ' \
                                  'but of type %s.' % (str(qindex), str(type(qitem)))
@@ -397,7 +398,7 @@ class CustomizedTreeView(QTreeView):
 
         """
         assert isinstance(parent_node, QStandardItem), 'Parent node %s must be a QStandardItem but not ' \
-                                                             'of type %s.' % (str(parent_node), str(type(parent_node)))
+            'of type %s.' % (str(parent_node), str(type(parent_node)))
         child_count = parent_node.rowCount()
 
         child_item_list = list()
