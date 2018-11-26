@@ -6,4 +6,4 @@ if [ $1 ]; then
 else
     CMD=''
 fi
-PYTHONPATH=build/lib:$PYTHONPATH $CMD build/scripts-2.7/addie
+QT_API=pyqt PYTHONPATH=build/lib:$PYTHONPATH $CMD build/scripts-2.7/addie
