@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Sep 14 13:47:21 2015
-
-reads in a los.txt file, writes out auto_sum.inp file 
-
-@author: Dan Olds
+reads in a los.txt file, writes out auto_sum.inp file
 """
+from __future__ import (absolute_import, division, print_function)
 from collections import defaultdict
 import sys
 import os.path
@@ -97,7 +94,7 @@ class GenerateSumthing(object):
         outfile.write("background \n")
 
         #print(">creating file %s" %full_output_file_name)
-        for key in sorted(run_nums.iterkeys()):
+        for key in sorted(run_nums.keys()):
             outbit = str(run_nums[key])
             outbit = outbit.replace("[", "")
             outbit = outbit.replace("]", "")
@@ -139,7 +136,7 @@ class GenerateSumthing(object):
         outfile.write("background \n")
 
         #print(">creating file %s" %full_output_file_name)
-        for key in sorted(run_nums.iterkeys()):
+        for key in sorted(run_nums.keys()):
             outbit = str(run_nums[key])
             outbit = outbit.replace("[", "")
             outbit = outbit.replace("]", "")

@@ -1,3 +1,4 @@
+from __future__ import (absolute_import, division, print_function, unicode_literals)
 class InitStep2(object):
 
     small_field_width = 120
@@ -20,9 +21,9 @@ class InitStep2(object):
 
     def init_labels(self):
         # q range
-        _q_range_title = u"Q range (\u212B\u207B\u00b9)"
+        _q_range_title = "Q range (\u212B\u207B\u00b9)"
         self.parent.ui.q_range_group_box.setTitle(_q_range_title)
 
         # fourier filter
-        _fourier_filter_title = u"Fourier filter (\u212B)"
+        _fourier_filter_title = "Fourier filter (\u212B)"
         self.parent.ui.fourier_filter_group_box.setTitle(_fourier_filter_title)

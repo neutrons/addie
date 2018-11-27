@@ -1,3 +1,4 @@
+from __future__ import (absolute_import, division, print_function)
 from mantid.api import AnalysisDataService
 import mantid.simpleapi as simpleapi
 import os
@@ -87,7 +88,7 @@ class AddieDriver(object):
         else:
             pdf_filter = True
             if pdf_filter != 'lorch':
-                print '[WARNING] PDF filter {0} is not supported.'.format(pdf_filter)
+                print('[WARNING] PDF filter {0} is not supported.'.format(pdf_filter))
 
         gr_ws_name = '%s(R)_%s_%d' % (prefix, self._currSqWsName, ws_seq_index)
         kwargs = {'OutputWorkspace': gr_ws_name,
@@ -191,7 +192,7 @@ class AddieDriver(object):
             simpleapi.RenameWorkspace(InputWorkspace=sq_ws, OutputWorkspace=edited_sq_name)
 
         assert sq_ws is not None, 'S(Q) workspace cannot be None.'
-        print '[DB...BAT] S(Q) workspace that is edit is {0}'.format(sq_ws)
+        print('[DB...BAT] S(Q) workspace that is edit is {0}'.format(sq_ws))
 
         return
 
@@ -255,9 +256,9 @@ class AddieDriver(object):
         """
         # check
         assert isinstance(bank_id, int) and bank_id > 0
-        assert ws_group_name in self._braggDataDict, 'Workspace groups %s does not exist in controller.' \
-                                                     'Current existing are %s.' % (ws_group_name,
-                                                                                   str(self._braggDataDict.keys()))
+        msg = 'Workspace groups {} does not exist in controller.'.format(ws_group_name)
+        msg += 'Current existing are {}.'.format(self._braggDataDict.keys())
+        assert ws_group_name in self._braggDataDict, msg
 
         ws_name = '%s_bank%d' % (ws_group_name.split('_group')[0], bank_id)
         error_message = 'Bank %d is not found in group %s. Available bank IDs are %s.' % (
@@ -310,8 +311,8 @@ class AddieDriver(object):
         :return: 3-tuple for numpy.array
         """
         # check... find key in dictionary
-        error_msg = 'R-range and delta R are not support. Current stored G(R) parameters are %s.' \
-                    '' % str(self._grWsNameDict.keys())
+        error_msg = 'R-range and delta R are not support. Current stored G(R) parameters' \
+                    ' are {}.'.format(list(self._grWsNameDict.keys()))
         assert (min_q, max_q) in self._grWsNameDict, error_msg
 
         # get the workspace

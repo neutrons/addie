@@ -1,3 +1,4 @@
+from __future__ import (absolute_import, division, print_function)
 import os
 import time
 import json
@@ -212,7 +213,7 @@ class MakeExpIniFileAndRunAutonom(object):
 
         _dict_mandatory = self._dict_mandatory
         _pre_script = '/SNS/NOM/shared/autoNOM/stable/readtitles.py -a -s'
-        for _values in _dict_mandatory.values():
+        for _values in list(_dict_mandatory.values()):
             _pre_script += ' ' + _values
 
         '''

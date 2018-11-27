@@ -1,3 +1,4 @@
+from __future__ import (absolute_import, division, print_function)
 import os
 from qtpy.QtCore import Qt
 from addie.step2_handler.step2_gui_handler import Step2GuiHandler
@@ -55,7 +56,7 @@ class RunSumScans(object):
 
         f = open(_full_output_file_name, 'w')
 
-        for _label in self._runs.keys():
+        for _label in self._runs:
             f.write("%s %s\n" % (_label, self._runs[_label]))
         f.write("endsamples\n")
         f.write("Background %s\n" % self._background)

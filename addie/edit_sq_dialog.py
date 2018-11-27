@@ -1,9 +1,10 @@
 # Dialog to edit S(Q)
+from __future__ import (absolute_import, division, print_function)
 from qtpy.QtCore import (Signal)
 from qtpy.QtWidgets import (QDialog)
 import random
 
-import ui_editSq
+from . import ui_editSq
 
 
 class EditSofQDialog(QDialog):
@@ -120,8 +121,8 @@ class EditSofQDialog(QDialog):
 
         # check whether any workspace has these key: shift_str/scale_str
         if self._myParentWindow.has_edit_sofq(curr_ws_name, key_shift, key_scale):
-            print ('Workspace {0} with shift = {1} and scale factor = {2} has already been cached.'
-                   ''.format(curr_ws_name, key_shift, key_scale))
+            print('Workspace {0} with shift = {1} and scale factor = {2} has already been cached.'
+                  ''.format(curr_ws_name, key_shift, key_scale))
             return
 
         # get the name of current S(Q) with random sequence
@@ -141,8 +142,8 @@ class EditSofQDialog(QDialog):
         :return:
         """
         # read the scale and shift value
-        print '[DB...BAT] Shift = {0} Scale Factor = {1}'.format(self.ui.lineEdit_shift.text(),
-                                                                 self.ui.lineEdit_scaleFactor.text())
+        print('[DB...BAT] Shift = {0} Scale Factor = {1}'.format(self.ui.lineEdit_shift.text(),
+                                                                 self.ui.lineEdit_scaleFactor.text()))
 
         shift_str = str(self.ui.lineEdit_shift.text())
         scale_str = str(self.ui.lineEdit_scaleFactor.text())
@@ -161,8 +162,8 @@ class EditSofQDialog(QDialog):
             else:
                 scale_factor = float(scale_str)
         except ValueError as val_error:
-            print '[ERROR] Shift {0} or scale factor {1} cannot be converted to float due to {2}.' \
-                  ''.format(shift_str, scale_str, val_error)
+            print('[ERROR] Shift {0} or scale factor {1} cannot be converted to float due to {2}.' \
+                  ''.format(shift_str, scale_str, val_error))
             return
 
         # call edit_sq()
@@ -245,8 +246,8 @@ class EditSofQDialog(QDialog):
         # check valid or not!
         if min_scale >= max_scale:
             # if not valid: set the values back to stored original
-            print '[ERROR] Minimum scale factor value {0} cannot exceed maximum scale factor value {1}.' \
-                  ''.format(min_scale, max_scale)
+            print('[ERROR] Minimum scale factor value {0} cannot exceed maximum scale factor value {1}.' \
+                  ''.format(min_scale, max_scale))
             return
         else:
             # re-set the class variable as the new min/max is accepted
@@ -278,8 +279,8 @@ class EditSofQDialog(QDialog):
         # check valid or not!
         if min_shift >= max_shift:
             # if not valid: set the values back to stored original
-            print '[ERROR] Minimum scale factor value {0} cannot exceed maximum scale factor value {1}.' \
-                  ''.format(min_shift, max_shift)
+            print('[ERROR] Minimum scale factor value {0} cannot exceed maximum scale factor value {1}.' \
+                  ''.format(min_shift, max_shift))
             return
         else:
             # re-set the class variable as the new min/max is accepted
@@ -355,7 +356,7 @@ class EditSofQDialog(QDialog):
         # get the workspace name
         workspace_name = str(self.ui.comboBox_workspaces.currentText())
         if len(workspace_name) == 0:
-            print '[INFO] No workspace is selected'
+            print('[INFO] No workspace is selected')
             return
 
         # set out the signal

@@ -1,7 +1,8 @@
+from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QDialog)  # noqa
 
-import ui_colorStyleSetup
-import mplgraphicsview as mplview
+from . import ui_colorStyleSetup
+from . import mplgraphicsview as mplview
 
 
 class PlotStyleDialog(QDialog):

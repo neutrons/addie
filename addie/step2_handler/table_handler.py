@@ -1,3 +1,4 @@
+from __future__ import (absolute_import, division, print_function)
 import os
 import re
 import glob
@@ -343,7 +344,7 @@ class TableHandler(object):
         for _range in list_ranges:
             bottom_row = _range.bottomRow()
             top_row = _range.topRow()
-            range_row = range(top_row, bottom_row + 1)
+            range_row = list(range(top_row, bottom_row + 1))
 
             for _row in range_row:
                 _widgets = self.parent.table.cellWidget(_row, 0).children()
@@ -461,7 +462,7 @@ class TableHandler(object):
             samp_x, samp_y = samp_env.getDataFromFile(data['file'], 'samp')
             envi_x, envi_y = samp_env.getDataFromFile(data['file'], 'envi')
 
-            print data['file']
+            print(data['file'])
             datasets.append({'run': data['run'] + '_samp', 'x': samp_x, 'y': samp_y, 'linestyle': '-'})
             datasets.append({'run': None, 'x': envi_x, 'y': envi_y, 'linestyle': '--'})
 

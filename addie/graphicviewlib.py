@@ -1,3 +1,4 @@
+from __future__ import (absolute_import, division, print_function)
 import numpy as np
 import time
 
@@ -5,7 +6,7 @@ from qtpy.QtCore import (Signal)
 from qtpy.QtGui import (QCursor)
 from qtpy.QtWidgets import (QAction, QMenu)
 
-import mplgraphicsview as base
+from . import mplgraphicsview as base
 
 
 class BraggView(base.MplGraphicsView):
@@ -78,7 +79,7 @@ class BraggView(base.MplGraphicsView):
         new_plot_banks = bank_to_plot_list[:]
         to_remove_banks = list()
 
-        for bank_id in self._bankPlotDict.keys():
+        for bank_id in list(self._bankPlotDict.keys()):
             if len(self._bankPlotDict[bank_id]) == 0:
                 # previously-not-being plot. either in new_plot_banks already or no-op
                 continue
@@ -165,7 +166,7 @@ class BraggView(base.MplGraphicsView):
         num_style = len(self._gssLineStyleList)
         num_color = len(self._gssColorList)
 
-        print '[DB] Index = ', self._currColorStyleMarkerIndex
+        print('[DB] Index = ', self._currColorStyleMarkerIndex)
 
         # get color with current color index
         marker_index = self._currColorStyleMarkerIndex / (num_style * num_color)
@@ -277,7 +278,7 @@ class BraggView(base.MplGraphicsView):
         assert isinstance(plot_bank_dict, dict)
 
         # plot
-        for ws_group in plot_bank_dict.keys():
+        for ws_group in list(plot_bank_dict.keys()):
             # get workspace name
             ws_name = ws_group.split('_group')[0]
             self._workspaceSet.add(ws_name)
@@ -297,9 +298,9 @@ class BraggView(base.MplGraphicsView):
                     bank_color, style, marker = self.get_multi_gss_color()
                 # END-IF-ELSE
 
-                print '[DB...BAT] Plot Mode (singel bank) = {0}, group = {1}, bank = {2}, color = {3}, marker = {4},' \
+                print('[DB...BAT] Plot Mode (singel bank) = {0}, group = {1}, bank = {2}, color = {3}, marker = {4},' \
                       'style = {5}' \
-                      ''.format(self._singleGSSMode, ws_group, bank_id, bank_color, marker, style)
+                      ''.format(self._singleGSSMode, ws_group, bank_id, bank_color, marker, style))
 
                 # plot
                 plot_id = self.add_plot_1d(vec_x, vec_y, marker=marker, color=bank_color,
@@ -396,7 +397,7 @@ class BraggView(base.MplGraphicsView):
         db_buf = ''
         for bank_id in self._bankPlotDict:
             db_buf += '%d: %s \t' % (bank_id, str(self._bankPlotDict[bank_id]))
-        print 'After removing %s, Buffer: %s.' % (str(bank_id_list), db_buf)
+        print('After removing %s, Buffer: %s.' % (str(bank_id_list), db_buf))
 
         return error_message
 
@@ -407,7 +408,7 @@ class BraggView(base.MplGraphicsView):
         None
         """
         # clean the dictionaries
-        for bank_id in self._bankPlotDict.keys():
+        for bank_id in list(self._bankPlotDict.keys()):
             self._bankPlotDict[bank_id] = list()
         self._gssDict.clear()
         self._plotScaleDict.clear()
@@ -438,7 +439,7 @@ class BraggView(base.MplGraphicsView):
         # get Y min and Y max
         y_min = 0
         y_max = 0
-        for plot_id in self._plotScaleDict.keys():
+        for plot_id in list(self._plotScaleDict.keys()):
             if self._plotScaleDict[plot_id][1] > y_max:
                 y_max = self._plotScaleDict[plot_id][1]
 
@@ -648,7 +649,7 @@ class GofRView(base.MplGraphicsView):
         list all the G(r) plotted on the figure now
         :return:
         """
-        return self._grDict.keys()
+        return list(self._grDict.keys())
 
     def remove_gr(self, plot_key):
         """Remove a plotted G(r) from canvas
@@ -707,7 +708,7 @@ class GofRView(base.MplGraphicsView):
         # check existence
         if plot_key not in self._grDict:
             raise RuntimeError('Plot with key/workspace name {0} does not exist on plot.  Current plots are '
-                               '{1}'.format(plot_key, self._grDict.keys()))
+                               '{1}'.format(plot_key, list(self._grDict.keys())))
 
         # update
         line_key = self._grDict[plot_key]
