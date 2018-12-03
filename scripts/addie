@@ -12,11 +12,11 @@ import pprint
 from addie.ipythondockwidget import IPythonDockWidget
 
 try:
-    from PyQt4.QtGui import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu
+    from PyQt4.QtGui import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QMainWindow, QApplication
     from PyQt4 import QtCore, QtGui
 except ImportError:
     try:
-        from PyQt5.QtWidgets import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu
+        from PyQt5.QtWidgets import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QMainWindow, QApplication
         from PyQt5 import QtCore, QtGui
     except ImportError:
         raise ImportError("Requires PyQt4 or PyQt5")
@@ -70,10 +70,7 @@ from addie.master_table.tree_definition import *
 from addie.ui_table_tree_save_config import Ui_Dialog as UiDialogSave
 from addie.master_table.table_row_handler import TableRowHandler
 from addie.master_table.selection_handler import TableHandler
-
-import PyQt4
-import PyQt4.QtCore as QtCore
-import PyQt4.QtGui as QtGui
+from addie.master_table.reduction_configuration_handler import ReductionConfigurationHandler
 
 import addie.addiedriver as driver
 import addie.specify_plots_style as ps
@@ -81,10 +78,10 @@ import addie.edit_sq_dialog
 
 from addie.pdf_lines_manager import PDFPlotManager
 
-
 DEBUG = True
 
-class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
+
+class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     """ Main addie window
     """
 
@@ -96,6 +93,8 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     table_tree_ui = None
     table_tree_ui_position = None
     placzek_ui = None
+    reduction_configuration_ui = None
+    reduction_configuration_ui_position = None
 
     # configuration of master table
     config_dict = OrderedDict()
@@ -2609,16 +2608,19 @@ class MainWindow(PyQt4.QtGui.QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     def cancel_clicked(self):
         self.close()
 
+    def reduction_configuration_button_clicked(self):
+        ReductionConfigurationHandler(parent=self)
+
     def closeEvent(self, eventhere=None):
         pass
 
 
 def main():
-    app = PyQt4.QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     app.setOrganizationName("Qtrac Ltd.")
     app.setOrganizationDomain("qtrac.eu")
     app.setApplicationName("Image Changer")
-    app.setWindowIcon(PyQt4.QtGui.QIcon(":/icon.png"))
+    app.setWindowIcon(QtGui.QIcon(":/icon.png"))
     form = MainWindow()
     form.show()
     app.exec_()

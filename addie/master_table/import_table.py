@@ -20,6 +20,9 @@ class ImportTable(object):
         # FIXME
         return
 
+
+
+
         self.load_ascii()
         self.parse_contain()
         self.change_path()
