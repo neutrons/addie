@@ -145,6 +145,9 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
             run_number = self.get_run_number_from_nexus_file_name(base_nexus_name=base_nexus)
             return [_file, run_number]
 
+        else:
+            return [None, None]
+
     def run_entered(self, entry=""):
         self.check_run_calibration_status()
 

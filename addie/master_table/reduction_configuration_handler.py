@@ -34,6 +34,11 @@ class ReductionConfiguration(QDialog):
         QDialog.__init__(self, parent=parent)
         self.ui = UiDialog()
         self.ui.setupUi(self)
+        self.init_widgets()
+
+    def init_widgets(self):
+        '''init all widgets with values in case we already openned that window, or populated with
+        default values'''
 
     def closeEvent(self, c):
         self.parent.reduction_configuration_ui = None
@@ -41,5 +46,6 @@ class ReductionConfiguration(QDialog):
 
     def make_calibration_clicked(self):
         MakeCalibrationLauncher(parent=self, grand_parent=self.parent)
+
 
 
