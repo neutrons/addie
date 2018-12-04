@@ -1,3 +1,6 @@
+import json
+
+
 try:
     from PyQt4.QtGui import QDialog, QFileDialog
     from PyQt4 import QtCore, QtGui
@@ -42,12 +45,39 @@ class ReductionConfiguration(QDialog):
         self.ui.reset_pdf_q_range_button.setIcon(QtGui.QIcon(":/MPL Toolbar/reset_logo.png"))
         self.ui.reset_pdf_r_range_button.setIcon(QtGui.QIcon(":/MPL Toolbar/reset_logo.png"))
 
-    def closeEvent(self, c):
-        self.parent.reduction_configuration_ui = None
-        self.parent.reduction_configuration_ui_position = self.pos()
+        # list of sample environment
+        config_file = self.parent.addie_config_file
+        with open(config_file) as f:
+            data = json.load(f)
+        pdf_q_range = data['pdf_q_range']
+
+        self.ui.pdf_q_range_min.setText(str(pdf_q_range["min"]))
+        self.ui.pdf_q_range_max.setText(str(pdf_q_range["max"]))
+        self.ui.pdf_q_range_delta.setText(str(pdf_q_range["delta"]))
+
+        pdf_r_range = data['pdf_r_range']
+        self.ui.pdf_r_range_min.setText(str(pdf_r_range["min"]))
+        self.ui.pdf_r_range_max.setText(str(pdf_r_range["max"]))
+        self.ui.pdf_r_range_delta.setText(str(pdf_r_range["delta"]))
+
+    def pdf_reset_q_range_button(self):
+        pass
+
+    def pdf_reset_r_range_button(self):
+        pass
 
     def make_calibration_clicked(self):
         MakeCalibrationLauncher(parent=self, grand_parent=self.parent)
+
+    def close_button(self):
+        # save state of buttons
+
+        # close
+        self.closeEvent(event=None)
+
+    def closeEvent(self, event=None):
+        self.parent.reduction_configuration_ui = None
+        self.parent.reduction_configuration_ui_position = self.pos()
 
 
 

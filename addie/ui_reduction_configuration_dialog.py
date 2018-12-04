@@ -102,11 +102,11 @@ class Ui_Dialog(object):
         self.label_43.setMaximumSize(QtCore.QSize(35, 16777215))
         self.label_43.setObjectName(_fromUtf8("label_43"))
         self.horizontalLayout_29.addWidget(self.label_43)
-        self.q_range_min_2 = QtGui.QLineEdit(self.q_range_group_box_2)
-        self.q_range_min_2.setMinimumSize(QtCore.QSize(80, 0))
-        self.q_range_min_2.setMaximumSize(QtCore.QSize(80, 16777215))
-        self.q_range_min_2.setObjectName(_fromUtf8("q_range_min_2"))
-        self.horizontalLayout_29.addWidget(self.q_range_min_2)
+        self.pdf_q_range_min = QtGui.QLineEdit(self.q_range_group_box_2)
+        self.pdf_q_range_min.setMinimumSize(QtCore.QSize(80, 0))
+        self.pdf_q_range_min.setMaximumSize(QtCore.QSize(80, 16777215))
+        self.pdf_q_range_min.setObjectName(_fromUtf8("pdf_q_range_min"))
+        self.horizontalLayout_29.addWidget(self.pdf_q_range_min)
         self.label_67 = QtGui.QLabel(self.q_range_group_box_2)
         self.label_67.setMinimumSize(QtCore.QSize(30, 0))
         self.label_67.setObjectName(_fromUtf8("label_67"))
@@ -116,11 +116,11 @@ class Ui_Dialog(object):
         self.label_44.setMaximumSize(QtCore.QSize(40, 16777215))
         self.label_44.setObjectName(_fromUtf8("label_44"))
         self.horizontalLayout_29.addWidget(self.label_44)
-        self.q_range_max_2 = QtGui.QLineEdit(self.q_range_group_box_2)
-        self.q_range_max_2.setMinimumSize(QtCore.QSize(80, 0))
-        self.q_range_max_2.setMaximumSize(QtCore.QSize(80, 16777215))
-        self.q_range_max_2.setObjectName(_fromUtf8("q_range_max_2"))
-        self.horizontalLayout_29.addWidget(self.q_range_max_2)
+        self.pdf_q_range_max = QtGui.QLineEdit(self.q_range_group_box_2)
+        self.pdf_q_range_max.setMinimumSize(QtCore.QSize(80, 0))
+        self.pdf_q_range_max.setMaximumSize(QtCore.QSize(80, 16777215))
+        self.pdf_q_range_max.setObjectName(_fromUtf8("pdf_q_range_max"))
+        self.horizontalLayout_29.addWidget(self.pdf_q_range_max)
         self.label_68 = QtGui.QLabel(self.q_range_group_box_2)
         self.label_68.setMinimumSize(QtCore.QSize(30, 0))
         self.label_68.setObjectName(_fromUtf8("label_68"))
@@ -131,11 +131,11 @@ class Ui_Dialog(object):
         self.label_45.setTextFormat(QtCore.Qt.RichText)
         self.label_45.setObjectName(_fromUtf8("label_45"))
         self.horizontalLayout_29.addWidget(self.label_45)
-        self.q_range_min_3 = QtGui.QLineEdit(self.q_range_group_box_2)
-        self.q_range_min_3.setMinimumSize(QtCore.QSize(80, 0))
-        self.q_range_min_3.setMaximumSize(QtCore.QSize(80, 16777215))
-        self.q_range_min_3.setObjectName(_fromUtf8("q_range_min_3"))
-        self.horizontalLayout_29.addWidget(self.q_range_min_3)
+        self.pdf_q_range_delta = QtGui.QLineEdit(self.q_range_group_box_2)
+        self.pdf_q_range_delta.setMinimumSize(QtCore.QSize(80, 0))
+        self.pdf_q_range_delta.setMaximumSize(QtCore.QSize(80, 16777215))
+        self.pdf_q_range_delta.setObjectName(_fromUtf8("pdf_q_range_delta"))
+        self.horizontalLayout_29.addWidget(self.pdf_q_range_delta)
         self.label_69 = QtGui.QLabel(self.q_range_group_box_2)
         self.label_69.setMinimumSize(QtCore.QSize(30, 0))
         self.label_69.setObjectName(_fromUtf8("label_69"))
@@ -156,11 +156,11 @@ class Ui_Dialog(object):
         self.label_46.setMaximumSize(QtCore.QSize(35, 16777215))
         self.label_46.setObjectName(_fromUtf8("label_46"))
         self.horizontalLayout_32.addWidget(self.label_46)
-        self.q_range_min_4 = QtGui.QLineEdit(self.q_range_group_box_3)
-        self.q_range_min_4.setMinimumSize(QtCore.QSize(80, 0))
-        self.q_range_min_4.setMaximumSize(QtCore.QSize(80, 16777215))
-        self.q_range_min_4.setObjectName(_fromUtf8("q_range_min_4"))
-        self.horizontalLayout_32.addWidget(self.q_range_min_4)
+        self.pdf_r_range_min = QtGui.QLineEdit(self.q_range_group_box_3)
+        self.pdf_r_range_min.setMinimumSize(QtCore.QSize(80, 0))
+        self.pdf_r_range_min.setMaximumSize(QtCore.QSize(80, 16777215))
+        self.pdf_r_range_min.setObjectName(_fromUtf8("pdf_r_range_min"))
+        self.horizontalLayout_32.addWidget(self.pdf_r_range_min)
         self.label_70 = QtGui.QLabel(self.q_range_group_box_3)
         self.label_70.setMinimumSize(QtCore.QSize(30, 0))
         self.label_70.setObjectName(_fromUtf8("label_70"))
@@ -170,11 +170,11 @@ class Ui_Dialog(object):
         self.label_47.setMaximumSize(QtCore.QSize(40, 16777215))
         self.label_47.setObjectName(_fromUtf8("label_47"))
         self.horizontalLayout_32.addWidget(self.label_47)
-        self.q_range_max_3 = QtGui.QLineEdit(self.q_range_group_box_3)
-        self.q_range_max_3.setMinimumSize(QtCore.QSize(80, 0))
-        self.q_range_max_3.setMaximumSize(QtCore.QSize(80, 16777215))
-        self.q_range_max_3.setObjectName(_fromUtf8("q_range_max_3"))
-        self.horizontalLayout_32.addWidget(self.q_range_max_3)
+        self.pdf_r_range_max = QtGui.QLineEdit(self.q_range_group_box_3)
+        self.pdf_r_range_max.setMinimumSize(QtCore.QSize(80, 0))
+        self.pdf_r_range_max.setMaximumSize(QtCore.QSize(80, 16777215))
+        self.pdf_r_range_max.setObjectName(_fromUtf8("pdf_r_range_max"))
+        self.horizontalLayout_32.addWidget(self.pdf_r_range_max)
         self.label_73 = QtGui.QLabel(self.q_range_group_box_3)
         self.label_73.setMinimumSize(QtCore.QSize(30, 0))
         self.label_73.setObjectName(_fromUtf8("label_73"))
@@ -185,11 +185,11 @@ class Ui_Dialog(object):
         self.label_74.setTextFormat(QtCore.Qt.RichText)
         self.label_74.setObjectName(_fromUtf8("label_74"))
         self.horizontalLayout_32.addWidget(self.label_74)
-        self.q_range_min_5 = QtGui.QLineEdit(self.q_range_group_box_3)
-        self.q_range_min_5.setMinimumSize(QtCore.QSize(80, 0))
-        self.q_range_min_5.setMaximumSize(QtCore.QSize(80, 16777215))
-        self.q_range_min_5.setObjectName(_fromUtf8("q_range_min_5"))
-        self.horizontalLayout_32.addWidget(self.q_range_min_5)
+        self.pdf_r_range_delta = QtGui.QLineEdit(self.q_range_group_box_3)
+        self.pdf_r_range_delta.setMinimumSize(QtCore.QSize(80, 0))
+        self.pdf_r_range_delta.setMaximumSize(QtCore.QSize(80, 16777215))
+        self.pdf_r_range_delta.setObjectName(_fromUtf8("pdf_r_range_delta"))
+        self.horizontalLayout_32.addWidget(self.pdf_r_range_delta)
         self.label_79 = QtGui.QLabel(self.q_range_group_box_3)
         self.label_79.setMinimumSize(QtCore.QSize(25, 0))
         self.label_79.setObjectName(_fromUtf8("label_79"))
@@ -330,6 +330,9 @@ class Ui_Dialog(object):
         self.tabWidget.setCurrentIndex(0)
         self.toolBox.setCurrentIndex(0)
         QtCore.QObject.connect(self.make_calibration_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.make_calibration_clicked)
+        QtCore.QObject.connect(self.reset_pdf_q_range_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.pdf_reset_q_range_button)
+        QtCore.QObject.connect(self.reset_pdf_r_range_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.pdf_reset_r_range_button)
+        QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.close_button)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
@@ -344,21 +347,21 @@ class Ui_Dialog(object):
         self.mantid_characterization_value_4.setText(_translate("Dialog", "N/A", None))
         self.q_range_group_box_2.setTitle(_translate("Dialog", "Q range", None))
         self.label_43.setText(_translate("Dialog", "Qmin", None))
-        self.q_range_min_2.setText(_translate("Dialog", "0", None))
+        self.pdf_q_range_min.setText(_translate("Dialog", "0", None))
         self.label_67.setText(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Å<span style=\" vertical-align:super;\">-1</span></p></body></html>", None))
         self.label_44.setText(_translate("Dialog", "Qmax", None))
-        self.q_range_max_2.setText(_translate("Dialog", "40", None))
+        self.pdf_q_range_max.setText(_translate("Dialog", "40", None))
         self.label_68.setText(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Å<span style=\" vertical-align:super;\">-1</span></p></body></html>", None))
         self.label_45.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-size:11pt;\">∆Q</span></p></body></html>", None))
-        self.q_range_min_3.setText(_translate("Dialog", "0.02", None))
+        self.pdf_q_range_delta.setText(_translate("Dialog", "0.02", None))
         self.label_69.setText(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -366,21 +369,21 @@ class Ui_Dialog(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Å<span style=\" vertical-align:super;\">-1</span></p></body></html>", None))
         self.q_range_group_box_3.setTitle(_translate("Dialog", "R range", None))
         self.label_46.setText(_translate("Dialog", "Rmin", None))
-        self.q_range_min_4.setText(_translate("Dialog", "0", None))
+        self.pdf_r_range_min.setText(_translate("Dialog", "0", None))
         self.label_70.setText(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Å</p></body></html>", None))
         self.label_47.setText(_translate("Dialog", "Rmax", None))
-        self.q_range_max_3.setText(_translate("Dialog", "40", None))
+        self.pdf_r_range_max.setText(_translate("Dialog", "40", None))
         self.label_73.setText(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Å</p></body></html>", None))
         self.label_74.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-size:11pt;\">∆R</span></p></body></html>", None))
-        self.q_range_min_5.setText(_translate("Dialog", "0.02", None))
+        self.pdf_r_range_delta.setText(_translate("Dialog", "0.02", None))
         self.label_79.setText(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"

@@ -219,7 +219,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="q_range_min_2">
+               <widget class="QLineEdit" name="pdf_q_range_min">
                 <property name="minimumSize">
                  <size>
                   <width>80</width>
@@ -274,7 +274,7 @@ p, li { white-space: pre-wrap; }
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="q_range_max_2">
+               <widget class="QLineEdit" name="pdf_q_range_max">
                 <property name="minimumSize">
                  <size>
                   <width>80</width>
@@ -332,7 +332,7 @@ p, li { white-space: pre-wrap; }
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="q_range_min_3">
+               <widget class="QLineEdit" name="pdf_q_range_delta">
                 <property name="minimumSize">
                  <size>
                   <width>80</width>
@@ -415,7 +415,7 @@ p, li { white-space: pre-wrap; }
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="q_range_min_4">
+               <widget class="QLineEdit" name="pdf_r_range_min">
                 <property name="minimumSize">
                  <size>
                   <width>80</width>
@@ -470,7 +470,7 @@ p, li { white-space: pre-wrap; }
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="q_range_max_3">
+               <widget class="QLineEdit" name="pdf_r_range_max">
                 <property name="minimumSize">
                  <size>
                   <width>80</width>
@@ -528,7 +528,7 @@ p, li { white-space: pre-wrap; }
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="q_range_min_5">
+               <widget class="QLineEdit" name="pdf_r_range_delta">
                 <property name="minimumSize">
                  <size>
                   <width>80</width>
@@ -942,8 +942,59 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>reset_pdf_q_range_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>pdf_reset_q_range_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>742</x>
+     <y>307</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>808</x>
+     <y>126</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>reset_pdf_r_range_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>pdf_reset_r_range_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>745</x>
+     <y>387</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>807</x>
+     <y>363</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>close_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>745</x>
+     <y>554</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>677</x>
+     <y>546</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>make_calibration_clicked()</slot>
+  <slot>pdf_reset_q_range_button()</slot>
+  <slot>pdf_reset_r_range_button()</slot>
+  <slot>close_button()</slot>
  </slots>
 </ui>

@@ -1,3 +1,5 @@
 {
-  "sample_environment": ["shifter", "orange_cryostat", "stick_furnace", "aerodynamic_levitator"]
+  "sample_environment": ["shifter", "orange_cryostat", "stick_furnace", "aerodynamic_levitator"],
+  "pdf_q_range": {"min": 0, "max": 40, "delta": 0.02},
+  "pdf_r_range": {"min": 0, "max": 40, "delta": 1.02}
 }
