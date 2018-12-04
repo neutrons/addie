@@ -39,6 +39,8 @@ class ReductionConfiguration(QDialog):
     def init_widgets(self):
         '''init all widgets with values in case we already openned that window, or populated with
         default values'''
+        self.ui.reset_pdf_q_range_button.setIcon(QtGui.QIcon(":/MPL Toolbar/reset_logo.png"))
+        self.ui.reset_pdf_r_range_button.setIcon(QtGui.QIcon(":/MPL Toolbar/reset_logo.png"))
 
     def closeEvent(self, c):
         self.parent.reduction_configuration_ui = None

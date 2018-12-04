@@ -1992,7 +1992,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.main_tab.setCurrentIndex(2)
+        self.main_tab.setCurrentIndex(1)
         self.stackedWidget.setCurrentIndex(1)
         self.tabWidget.setCurrentIndex(0)
         self.tabWidget_2.setCurrentIndex(0)
