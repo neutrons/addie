@@ -89,6 +89,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     # external ui (use to make sure there is only one open at a time
     advanced_window_ui = None
     make_calibration_ui = None
+    make_calibration_ui_position = None
     table_tree_ui = None
     table_tree_ui_position = None
     placzek_ui = None

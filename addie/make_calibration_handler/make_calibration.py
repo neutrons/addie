@@ -19,6 +19,8 @@ class MakeCalibrationLauncher(object):
                                           parent=parent)
             _make.show()
             grand_parent.make_calibration_ui = _make
+            if grand_parent.make_calibration_ui_position:
+                grand_parent.make_calibration_ui.move(grand_parent.make_calibration_ui_position)
         else:
             grand_parent.make_calibration_ui.setFocus()
             grand_parent.make_calibration_ui.activateWindow()
@@ -404,7 +406,8 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
                 json.dump(o_dict.dictionary, fp)
 
     def closeEvent(self, c):
-        self.parent.make_calibration_ui = None
+        self.grand_parent.make_calibration_ui = None
+        self.grand_parent.make_calibration_ui_position = self.pos()
 
 
 class MakeCalibrationDictionary:
