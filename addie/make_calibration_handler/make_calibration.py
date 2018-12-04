@@ -12,16 +12,16 @@ from addie.utilities.gui_handler import TableHandler
 
 class MakeCalibrationLauncher(object):
 
-    def __init__(self, parent=None):
-        self.parent = parent
+    def __init__(self, parent=None, grand_parent=None):
 
-        if self.parent.make_calibration_ui is None:
-            _make = MakeCalibrationWindow(parent=self.parent)
+        if grand_parent.make_calibration_ui is None:
+            _make = MakeCalibrationWindow(grand_parent=grand_parent,
+                                          parent=parent)
             _make.show()
-            self.parent.make_calibration_ui = _make
+            grand_parent.make_calibration_ui = _make
         else:
-            self.parent.make_calibration_ui.setFocus()
-            self.parent.make_calibration_ui.activateWindow()
+            grand_parent.make_calibration_ui.setFocus()
+            grand_parent.make_calibration_ui.activateWindow()
 
 
 class MakeCalibrationWindow(QtGui.QMainWindow):
@@ -52,10 +52,11 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
     master_list_ui = {}
     master_list_value = {}
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, grand_parent=None):
         self.parent = parent
+        self.grand_parent = grand_parent
 
-        QtGui.QMainWindow.__init__(self, parent=parent)
+        QtGui.QMainWindow.__init__(self, parent=grand_parent)
         self.ui = UiMainWindow()
         self.ui.setupUi(self)
 
@@ -102,7 +103,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
 
     def master_browse_button_clicked(self):
         _master_folder = QtGui.QFileDialog.getExistingDirectory(caption="Select Output Folder ...",
-                                                                directory=self.parent.output_folder,
+                                                                directory=self.grand_parent.output_folder,
                                                                 options=QtGui.QFileDialog.ShowDirsOnly)
         if _master_folder:
             self.ui.master_output_directory_label.setText(str(_master_folder))

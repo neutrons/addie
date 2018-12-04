@@ -28,7 +28,6 @@ import addie.step2
 
 from addie.about import AboutDialog
 from addie.advanced_window_handler.advanced_window import AdvancedWindowLauncher
-from addie.make_calibration_handler.make_calibration import MakeCalibrationLauncher
 from addie.configuration.export_configuration import ExportConfiguration
 from addie.configuration.import_configuration import ImportConfiguration
 

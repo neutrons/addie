@@ -10,6 +10,8 @@ except ImportError:
 
 from addie.ui_reduction_configuration_dialog import Ui_Dialog as UiDialog
 
+from addie.make_calibration_handler.make_calibration import MakeCalibrationLauncher
+
 
 class ReductionConfigurationHandler:
 
@@ -37,6 +39,7 @@ class ReductionConfiguration(QDialog):
         self.parent.reduction_configuration_ui = None
         self.parent.reduction_configuration_ui_position = self.pos()
 
-
+    def make_calibration_clicked(self):
+        MakeCalibrationLauncher(parent=self, grand_parent=self.parent)
 
 
