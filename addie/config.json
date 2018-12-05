@@ -2,12 +2,14 @@
   "sample_environment": ["shifter", "orange_cryostat", "stick_furnace", "aerodynamic_levitator"],
   "pdf": {"q_range": {"min": 0, "max": 40, "delta": 0.02},
           "r_range": {"min": 0, "max": 40, "delta": 1.02},
-          "reduction_configuration_file": ""
+          "reduction_configuration_file": "",
+          "characterization_file": ""
          },
   "bragg": {"characterization_file": "",
             "number_of_bins": -6000,
             "wavelength": {"min": 0.1,
                            "max": 2.9}
            },
-  "pdf_bragg": {"calibration_file": ""}
+  "pdf_bragg": {"calibration_file": ""},
+  "advanced": {"push_data_positive": false}
 }

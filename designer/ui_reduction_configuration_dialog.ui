@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -125,7 +125,7 @@
             <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
-              <height>121</height>
+              <height>53</height>
              </size>
             </property>
            </spacer>
@@ -148,7 +148,7 @@
           <number>1</number>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="page">
           <property name="geometry">
@@ -179,7 +179,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="mantid_characterization_value_4">
+              <widget class="QLabel" name="pdf_characterization_file">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                  <horstretch>0</horstretch>
@@ -872,7 +872,7 @@ p, li { white-space: pre-wrap; }
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_7">
           <item>
-           <widget class="QCheckBox" name="checkBox">
+           <widget class="QCheckBox" name="push_data_positive">
             <property name="text">
              <string>Push Data Positive</string>
             </property>
@@ -916,7 +916,7 @@ p, li { white-space: pre-wrap; }
      <item>
       <widget class="QPushButton" name="pushButton">
        <property name="text">
-        <string>Close</string>
+        <string>Save and Close</string>
        </property>
       </widget>
      </item>

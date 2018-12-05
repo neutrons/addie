@@ -81,24 +81,30 @@ class LoadReductionConfiguration:
             pdf_q_range = data['pdf']['q_range']
             pdf_r_range = data['pdf']['r_range']
             pdf_reduction_configuration_file = data["pdf"]["reduction_configuration_file"]
+            pdf_characterization_file = data["pdf"]["characterization_file"]
 
             bragg_characterization_file = data["bragg"]["characterization_file"]
             bragg_number_of_bins = data["bragg"]["number_of_bins"]
             bragg_wavelength = data["bragg"]["wavelength"]
 
             calibration_file = data["pdf_bragg"]["calibration_file"]
+            push_data_positive = data["advanced"]["push_data_positive"]
 
         else:
+            print("loading reduction configuration")
+            print(grand_parent.reduction_configuration)
 
             pdf_q_range = grand_parent.reduction_configuration['pdf']['q_range']
             pdf_r_range = grand_parent.reduction_configuration['pdf']['r_range']
             pdf_reduction_configuration_file = grand_parent.reduction_configuration['pdf']['reduction_configuration_file']
+            pdf_characterization_file = grand_parent.reduction_configuration['pdf']['characterization_file']
 
             bragg_characterization_file = grand_parent.reduction_configuration["bragg"]["characterization_file"]
             bragg_number_of_bins = grand_parent.reduction_configuration["bragg"]["number_of_bins"]
             bragg_wavelength = grand_parent.reduction_configuration["bragg"]["wavelength"]
 
             calibration_file = grand_parent.reduction_configuration["pdf_bragg"]["calibration_file"]
+            push_data_positive = grand_parent.reduction_configuration["advanced"]["push_data_positive"]
 
         # PDF and Bragg
         self._set_text_value(ui=parent.ui.calibration_file, value=calibration_file)
@@ -111,6 +117,7 @@ class LoadReductionConfiguration:
         self._set_text_value(ui=parent.ui.pdf_r_range_max, value=pdf_r_range["max"])
         self._set_text_value(ui=parent.ui.pdf_r_range_delta, value=pdf_r_range["delta"])
         self._set_text_value(ui=parent.ui.pdf_reduction_configuration_file, value=pdf_reduction_configuration_file)
+        self._set_text_value(ui=parent.ui.pdf_characterization_file, value=pdf_characterization_file)
 
         # Bragg
         self._set_text_value(ui=parent.ui.bragg_characterization_file, value=bragg_characterization_file)
@@ -118,11 +125,18 @@ class LoadReductionConfiguration:
         self._set_text_value(ui=parent.ui.bragg_wavelength_min, value=bragg_wavelength["min"])
         self._set_text_value(ui=parent.ui.bragg_wavelength_max, value=bragg_wavelength["max"])
 
+        # advanced
+        self._set_checkbox_value(ui=parent.ui.push_data_positive, value=push_data_positive)
+
     def _set_text_value(self, ui=None, value=""):
         if ui is None:
             return
-
         ui.setText(str(value))
+
+    def _set_checkbox_value(self, ui=None, value=False):
+        if ui is None:
+            return
+        ui.setChecked(value)
 
 
 class SaveReductionConfiguration:
@@ -131,11 +145,15 @@ class SaveReductionConfiguration:
         reduction_configuration = {}
 
         # PDF and Bragg
+        reduction_configuration['pdf_bragg'] = {}
+
         calibration_file = self._get_text_value(parent.ui.calibration_file)
-        reduction_configuration['pdf_bragg'] = calibration_file
+        reduction_configuration['pdf_bragg']["calibration_file"] = calibration_file
 
         # PDF
         pdf_reduction_configuration = {}
+
+        pdf_reduction_configuration['characterization_file'] = self._get_text_value(parent.ui.pdf_characterization_file)
 
         pdf_q_range_min = self._get_text_value(parent.ui.pdf_q_range_min)
         pdf_q_range_max = self._get_text_value(parent.ui.pdf_q_range_max)
@@ -151,10 +169,10 @@ class SaveReductionConfiguration:
                                                   'max': pdf_r_range_max,
                                                   'delta': pdf_r_range_delta}
 
-        pdf_reduction_config_file = self._get_text_value(parent.ui.pdf_reduction_config_file)
-        pdf_reduction_configuration['reduction_configuration_file'] = pdf_reduction_config_file
+        pdf_reduction_configuration_file = self._get_text_value(parent.ui.pdf_reduction_configuration_file)
+        pdf_reduction_configuration['reduction_configuration_file'] = pdf_reduction_configuration_file
 
-        reduction_configuration['pdf'] = pdf_reduction_config_file
+        reduction_configuration['pdf'] = pdf_reduction_configuration
 
         # Bragg
         bragg_reduction_configuration = {}
@@ -172,6 +190,12 @@ class SaveReductionConfiguration:
 
         reduction_configuration['bragg'] = bragg_reduction_configuration
 
+        # advanced
+        advanced_reduction_configuration = {}
+        advanced_reduction_configuration["push_data_positive"] = self._set_checkbox_value(ui=parent.ui.push_data_positive)
+
+        reduction_configuration["advanced"] = advanced_reduction_configuration
+
         # final save
         grand_parent.reduction_configuration = reduction_configuration
 
@@ -181,5 +205,13 @@ class SaveReductionConfiguration:
 
         return str(ui.text())
 
+    def _set_checkbox_value(self, ui=None):
+        if ui is None:
+            return False
 
+        _state = ui.checkState()
+        if _state == QtCore.Qt.Checked:
+            return True
+        else:
+            return False
 
