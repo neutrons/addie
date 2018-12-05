@@ -109,7 +109,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="calibration_label">
+             <widget class="QLabel" name="calibration_file">
               <property name="text">
                <string>N/A</string>
               </property>
@@ -125,7 +125,7 @@
             <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
-              <height>53</height>
+              <height>121</height>
              </size>
             </property>
            </spacer>
@@ -148,7 +148,7 @@
           <number>1</number>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="page">
           <property name="geometry">
@@ -613,7 +613,7 @@ p, li { white-space: pre-wrap; }
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit"/>
+                 <widget class="QLineEdit" name="pdf_reduction_configuration_file"/>
                 </item>
                 <item>
                  <widget class="QLabel" name="label_49">
@@ -671,7 +671,7 @@ p, li { white-space: pre-wrap; }
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="mantid_characterization_value_2">
+              <widget class="QLabel" name="bragg_characterization_file">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                  <horstretch>0</horstretch>
@@ -695,7 +695,7 @@ p, li { white-space: pre-wrap; }
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="mantid_number_of_bins_2">
+              <widget class="QLineEdit" name="bragg_number_of_bins">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -757,7 +757,7 @@ p, li { white-space: pre-wrap; }
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="mantid_min_crop_wavelength_2">
+                 <widget class="QLineEdit" name="bragg_wavelength_min">
                   <property name="minimumSize">
                    <size>
                     <width>50</width>
@@ -794,7 +794,7 @@ p, li { white-space: pre-wrap; }
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="mantid_max_crop_wavelength_2">
+                 <widget class="QLineEdit" name="bragg_wavelength_max">
                   <property name="minimumSize">
                    <size>
                     <width>50</width>

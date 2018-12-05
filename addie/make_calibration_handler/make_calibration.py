@@ -62,7 +62,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         self.ui = UiMainWindow()
         self.ui.setupUi(self)
 
-        self.addie_config_file = self.parent.addie_config_file
+        self.addie_config_file = grand_parent.addie_config_file
 
         self.init_widgets()
         self.init_date()
