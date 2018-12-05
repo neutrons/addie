@@ -99,7 +99,9 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     # config file to initialize the widgets (example Q and R range in PDF tab)
     current_path = os.path.dirname(os.path.dirname(__file__))
     addie_config_file = os.path.join(current_path, "addie", "config.json")
-    print("current_path: {}".format(current_path))
+
+    # master table reduction configuration
+    reduction_configuration = {}
 
     # configuration of master table
     config_dict = OrderedDict()
