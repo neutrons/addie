@@ -1992,7 +1992,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.main_tab.setCurrentIndex(1)
+        self.main_tab.setCurrentIndex(2)
         self.stackedWidget.setCurrentIndex(1)
         self.tabWidget.setCurrentIndex(0)
         self.tabWidget_2.setCurrentIndex(0)
@@ -2047,7 +2047,6 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.splitter, QtCore.SIGNAL(_fromUtf8("splitterMoved(int,int)")), MainWindow.resize_table_post_processing_tab)
         QtCore.QObject.connect(self.name_search, QtCore.SIGNAL(_fromUtf8("returnPressed()")), MainWindow.name_search_clicked)
         QtCore.QObject.connect(self.clear_name_search, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.clear_name_search_clicked)
-        QtCore.QObject.connect(self.pushButton_7, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.make_calibration_clicked)
         QtCore.QObject.connect(self.settings_table_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.personalization_table_clicked)
         QtCore.QObject.connect(self.h3_table, QtCore.SIGNAL(_fromUtf8("customContextMenuRequested(QPoint)")), MainWindow.h3_table_right_click)
         QtCore.QObject.connect(self.name_search_3, QtCore.SIGNAL(_fromUtf8("textChanged(QString)")), MainWindow.table_search)

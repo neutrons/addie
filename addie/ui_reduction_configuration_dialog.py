@@ -333,6 +333,7 @@ class Ui_Dialog(object):
         QtCore.QObject.connect(self.reset_pdf_q_range_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.pdf_reset_q_range_button)
         QtCore.QObject.connect(self.reset_pdf_r_range_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.pdf_reset_r_range_button)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.close_button)
+        QtCore.QObject.connect(self.browse_calibration_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.browse_calibration_clicked)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
@@ -418,5 +419,5 @@ class Ui_Dialog(object):
         self.groupBox_4.setTitle(_translate("Dialog", "Bragg", None))
         self.push_data_positive.setText(_translate("Dialog", "Push Data Positive", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("Dialog", "Advanced", None))
-        self.pushButton.setText(_translate("Dialog", "Close", None))
+        self.pushButton.setText(_translate("Dialog", "Save and Close", None))
 

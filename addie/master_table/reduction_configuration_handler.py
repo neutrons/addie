@@ -57,6 +57,24 @@ class ReductionConfiguration(QDialog):
     def make_calibration_clicked(self):
         MakeCalibrationLauncher(parent=self, grand_parent=self.parent)
 
+    def browse_calibration_clicked(self):
+        _calibration_folder = self.parent.calibration_folder
+        _calibration_file = QtGui.QFileDialog.getOpenFileName(parent = self.parent,
+                                                              caption = "Select Calibration File",
+                                                              directory = _calibration_folder,
+                                                              filter = ("text (*.txt);; All Files (*.*)"))
+        if _calibration_file:
+            self.ui.calibration_file.setText(_calibration_file)
+
+    def pdf_browse_characterization_clicked(self):
+        _characterization_folder = self.parent.characterization_folder
+        _characterization_file = QtGui.QFileDialog.getOpenFileName(parent=self.parent,
+                                                                   caption="Select Characterization_File",
+                                                                   directory=_characterization_folder,
+                                                                   filter=("text (*.txt);; All Files (*.*)"))
+        if _characterization_file:
+            self.ui.pdf_characterization_file.setTet(_characterization_file)
+
     def close_button(self):
         # save state of buttons
         SaveReductionConfiguration(parent=self, grand_parent=self.parent)
@@ -91,9 +109,6 @@ class LoadReductionConfiguration:
             push_data_positive = data["advanced"]["push_data_positive"]
 
         else:
-            print("loading reduction configuration")
-            print(grand_parent.reduction_configuration)
-
             pdf_q_range = grand_parent.reduction_configuration['pdf']['q_range']
             pdf_r_range = grand_parent.reduction_configuration['pdf']['r_range']
             pdf_reduction_configuration_file = grand_parent.reduction_configuration['pdf']['reduction_configuration_file']

@@ -77,7 +77,7 @@ import addie.edit_sq_dialog
 
 from addie.pdf_lines_manager import PDFPlotManager
 
-DEBUG = True
+DEBUG = False
 
 
 class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
@@ -2377,8 +2377,8 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     # Mantid
 
-    def make_calibration_clicked(self):
-        _make = MakeCalibrationLauncher(parent=self)
+    # def make_calibration_clicked(self):
+    #     _make = MakeCalibrationLauncher(parent=self)
 
     # New tab with advanced table
 

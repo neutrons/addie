@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -166,7 +166,7 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_40">
              <item>
-              <widget class="QPushButton" name="mantid_browse_characterization_button_4">
+              <widget class="QPushButton" name="pdf_browse_characterization_button">
                <property name="minimumSize">
                 <size>
                  <width>200</width>
@@ -990,11 +990,45 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>browse_calibration_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>browse_calibration_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>180</x>
+     <y>95</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>275</x>
+     <y>6</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pdf_browse_characterization_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>pdf_browse_characterization_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>175</x>
+     <y>242</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>659</x>
+     <y>7</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>make_calibration_clicked()</slot>
   <slot>pdf_reset_q_range_button()</slot>
   <slot>pdf_reset_r_range_button()</slot>
   <slot>close_button()</slot>
+  <slot>browse_calibration_clicked()</slot>
+  <slot>pdf_browse_characterization_clicked()</slot>
  </slots>
 </ui>
