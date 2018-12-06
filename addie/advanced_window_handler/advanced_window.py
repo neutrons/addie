@@ -40,6 +40,18 @@ class AdvancedWindow(QtGui.QMainWindow):
         self.ui.idl_post_processing_button.setChecked(_idl_status)
         self.ui.mantid_post_processing_button.setChecked(_mantid_status)
 
+        instrument = self.parent.instrument["full_name"]
+        list_instrument_full_name = self.parent.list_instrument["full_name"]
+        self.list_instrument_full_name = list_instrument_full_name
+        list_instrument_short_name = self.parent.list_instrument["short_name"]
+        self.list_instrument_short_name = list_instrument_short_name
+
+        self.ui.instrument_comboBox.addItems(list_instrument_full_name)
+        index_instrument = self.ui.instrument_comboBox.findText(instrument)
+        self.ui.instrument_comboBox.setCurrentIndex(index_instrument)
+        self.parent.instrument["short_name"] = list_instrument_short_name[index_instrument]
+        self.parent.instrument["full_name"] = list_instrument_full_name[index_instrument]
+
     def post_processing_clicked(self):
         if self.ui.idl_post_processing_button.isChecked():
             _index = 0
@@ -52,7 +64,9 @@ class AdvancedWindow(QtGui.QMainWindow):
         self.parent.post_processing = _post
 
     def instrument_changed(self, index):
-        instrument_selected = self.ui.instrument_comboBox.currentText()
+        self.parent.instrument["short_name"] = self.list_instrument_short_name[index]
+        self.parent.instrument["full_name"] = self.list_instrument_full_name[index]
+        self.parent.set_default_folders_path()
 
     def cache_dir_button_clicked(self):
         _cache_folder = QtGui.QFileDialog.getExistingDirectory(caption="Select Cache Folder ...",

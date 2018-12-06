@@ -25,18 +25,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="instrument_comboBox">
-        <item>
-         <property name="text">
-          <string>Nomad</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Powgen</string>
-         </property>
-        </item>
-       </widget>
+       <widget class="QComboBox" name="instrument_comboBox"/>
       </item>
       <item>
        <spacer name="horizontalSpacer_2">
@@ -215,7 +204,7 @@
      <x>0</x>
      <y>0</y>
      <width>631</width>
-     <height>20</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

@@ -11,5 +11,15 @@
                            "max": 2.9}
            },
   "pdf_bragg": {"calibration_file": ""},
-  "advanced": {"push_data_positive": false}
+  "advanced": {"push_data_positive": false},
+  "instrument": {"current": {"full_name": "Nomad",
+                             "short_name": "NOM"},
+                 "list": {"full_name": ["Nomad", "Powgen"],
+                          "short_name": ["NOM", "PG3"]
+                         }
+                },
+  "calibration_folder": {"pre": "SNS",
+                         "post": "shared/CALIBRATION"},
+  "characterization_folder": {"pre": "SNS",
+                              "post": "shared/CALIBRATION"}
 }

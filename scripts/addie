@@ -25,6 +25,7 @@ import addie.ui_mainWindow
 import addie.ui_table_tree
 import addie.step1
 import addie.step2
+from addie.configuration_initializer import ConfigurationInitializer
 
 from addie.about import AboutDialog
 from addie.advanced_window_handler.advanced_window import AdvancedWindowLauncher
@@ -83,6 +84,17 @@ DEBUG = False
 class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     """ Main addie window
     """
+
+    # config.json
+    # those infos will be automatically retrieve from the config.json file
+    instrument = {"full_name": "",   # Powgen, Nomad ...
+                  "short_name": ""}  # PG3, NOM ...
+    list_instrument = {"full_name": [],
+                       "short_name": []}
+    config_calibration_folder = {"pre": "", "post": ""}
+    config_characterization_folder = {"pre": "", "post": ""}
+
+    # end of config.json
 
     statusbar_display_time = 5000  # 5s
 
@@ -174,8 +186,8 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     remove_dynamic_temperature_flag = False
     current_folder = os.getcwd()
     configuration_folder = current_folder
-    calibration_folder = '/SNS/lustre/NOM/shared/CALIBRATION/2016_2_1B_CAL/'
-    characterization_folder = '/SNS/lustre/NOM/shared/CALIBRATION/2016_2_1B_CAL/'
+    calibration_folder = ''
+    characterization_folder = ''
     file_path = os.getcwd()
     table_selection_buffer = {}
     _run_thread_sum_scans = RunThread()
@@ -221,6 +233,8 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self.ui.dockWidget_ipython.setup()
 
         # set widgets
+        self.init_parameters()
+        self.set_default_folders_path()
         self._init_widgets()
         init_step1 = InitStep1(parent=self)
         init_step2 = InitStep2(parent=self)
@@ -362,6 +376,27 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         inside_dict['active'] = False
 
         self.reset_config_dict = inside_dict
+
+    def init_parameters(self):
+        ConfigurationInitializer(parent=self)
+
+    def set_default_folders_path(self):
+        '''Where the calibration_folder and characterization folder will be initialized
+        using instrument name...
+
+        this is very important when the instrument changed
+        '''
+        instrument_short_name = self.instrument["short_name"]
+
+        config_calibration_folder = self.config_calibration_folder
+        self.calibration_folder = os.path.join(config_calibration_folder["pre"],
+                                               instrument_short_name,
+                                               config_calibration_folder["post"])
+
+        config_characterization_file = self.config_characterization_folder
+        self.characterization_folder = os.path.join(config_characterization_file["pre"],
+                                                    instrument_short_name,
+                                                    config_characterization_file["post"])
 
     def init_master_table(self):
         o_table = TableInitialization(parent=self)

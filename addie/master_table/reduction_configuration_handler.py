@@ -38,6 +38,7 @@ class ReductionConfiguration(QDialog):
         self.ui = UiDialog()
         self.ui.setupUi(self)
         self.init_widgets()
+        self.parent.set_default_folders_path()
 
     def init_widgets(self):
         '''init all widgets with values in case we already openned that window, or populated with
