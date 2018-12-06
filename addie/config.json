@@ -18,8 +18,10 @@
                           "short_name": ["NOM", "PG3"]
                          }
                 },
-  "calibration_folder": {"pre": "SNS",
-                         "post": "shared/CALIBRATION"},
-  "characterization_folder": {"pre": "SNS",
-                              "post": "shared/CALIBRATION"}
+  "calibration_folder": {"pre": "/SNS/",
+                         "post": "shared/CALIBRATION/"},
+  "calibration_extension": "NeXus (*.h5);; Calibration (*.cal)",
+  "characterization_folder": {"pre": "/SNS/",
+                              "post": "shared/CALIBRATION/"},
+  "characterization_extension": "NeXus (*.h5);; Calibration (*.cal)"
 }

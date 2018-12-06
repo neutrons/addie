@@ -94,6 +94,9 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     config_calibration_folder = {"pre": "", "post": ""}
     config_characterization_folder = {"pre": "", "post": ""}
 
+    calibration_extension = ""
+    characterization_extension = ""
+
     # end of config.json
 
     statusbar_display_time = 5000  # 5s
@@ -221,9 +224,9 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         # Base class
         QtGui.QMainWindow.__init__(self)
 
-        if self.debugging:
-            self.calibration_folder = '/SNS/NOM/IPTS-17118/shared/'
-            self.characterization_folder = '/SNS/NOM/shared/CALIBRATION/'
+        # if self.debugging:
+        #     self.calibration_folder = '/SNS/NOM/IPTS-17118/shared/'
+        #     self.characterization_folder = '/SNS/NOM/shared/CALIBRATION/'
 
         # Initialize the UI widgets
         self.ui = addie.ui_mainWindow.Ui_MainWindow()
@@ -387,8 +390,8 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         this is very important when the instrument changed
         '''
         instrument_short_name = self.instrument["short_name"]
-
         config_calibration_folder = self.config_calibration_folder
+
         self.calibration_folder = os.path.join(config_calibration_folder["pre"],
                                                instrument_short_name,
                                                config_calibration_folder["post"])

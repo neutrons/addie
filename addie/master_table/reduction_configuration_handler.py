@@ -63,7 +63,7 @@ class ReductionConfiguration(QDialog):
         _calibration_file = QtGui.QFileDialog.getOpenFileName(parent = self.parent,
                                                               caption = "Select Calibration File",
                                                               directory = _calibration_folder,
-                                                              filter = ("text (*.txt);; All Files (*.*)"))
+                                                              filter = self.parent.calibration_extension)
         if _calibration_file:
             self.ui.calibration_file.setText(_calibration_file)
 
@@ -72,7 +72,7 @@ class ReductionConfiguration(QDialog):
         _characterization_file = QtGui.QFileDialog.getOpenFileName(parent=self.parent,
                                                                    caption="Select Characterization_File",
                                                                    directory=_characterization_folder,
-                                                                   filter=("text (*.txt);; All Files (*.*)"))
+                                                                   filter=self.parent.characterization_extension)
         if _characterization_file:
             self.ui.pdf_characterization_file.setTet(_characterization_file)
 
