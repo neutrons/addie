@@ -1,3 +1,4 @@
+from __future__ import (absolute_import, division, print_function)
 from addie.step2_handler.export_table import ExportTable
 from addie.step2_handler.import_table import ImportTable
 from addie.step2_handler.table_handler import TableHandler
@@ -26,7 +27,7 @@ class UndoHandler(object):
         undo_table = self.parent.undo_table
         new_dict = {}
         if not undo_table == {}:
-            for key in undo_table.keys():
+            for key in undo_table:
                 _new_key = str(int(key) - 1)
                 new_dict[_new_key] = undo_table[key]
             undo_table = new_dict
@@ -75,7 +76,7 @@ class UndoHandler(object):
         elif _undo_index == 10:
             _undo_status = True
             _redo_status = False
-        elif not (str(_undo_index-1) in self.parent.undo_table.keys()):
+        elif str(_undo_index-1) not in self.parent.undo_table:
             _undo_status = False
             _redo_status = True
         else:

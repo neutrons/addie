@@ -1,12 +1,13 @@
 #
 # An extension on QTreeView for file system
 #
+from __future__ import (absolute_import, division, print_function)
 import os
 
 from qtpy.QtCore import (QModelIndex)
 from qtpy.QtGui import (QStandardItem, QStandardItemModel)
 from qtpy.QtWidgets import (QAction, QFileDialog)
-import customtreeview as base
+from . import customtreeview as base
 
 
 class BraggTree(base.CustomizedTreeView):
@@ -124,9 +125,9 @@ class BraggTree(base.CustomizedTreeView):
             elif item.parent() is not None and leaf_level == -1:
                 leaf_level = 2
             elif item.parent() is None and leaf_level != 1:
-                print '[Error] Nodes of different levels are selected.'
+                print('[Error] Nodes of different levels are selected.')
             elif item.parent() is None and leaf_level != 2:
-                print '[Error] Nodes of different levels are selected.'
+                print('[Error] Nodes of different levels are selected.')
         # END-FOR
 
         if leaf_level == 1:
@@ -261,7 +262,7 @@ class BraggTree(base.CustomizedTreeView):
                 try:
                     self._mainWindow.remove_gss_from_plot(gss_group_name=gsas_name, gss_bank_ws_name_list=[ws_name])
                 except AssertionError as ass_err:
-                    print 'Workspace %s is not on canvas.' % ws_name
+                    print('Workspace %s is not on canvas.' % ws_name)
 
             # delete the node from the tree
             self.delete_node(gsas_node)
@@ -281,14 +282,14 @@ class BraggTree(base.CustomizedTreeView):
         # get the selected GSAS node's name
         status, ret_obj = self.get_current_main_nodes()
         if not status:
-            print '[Error] Get current main nodes: %s.' % str(ret_obj)
+            print('[Error] Get current main nodes: %s.' % str(ret_obj))
             return
 
         gss_node_list = ret_obj
         if len(gss_node_list) == 0:
             return
         elif len(gss_node_list) > 1:
-            print '[Error] Only 1 GSS node can be selected.  Current selected nodes are %s.' % str(gss_node_list)
+            print('[Error] Only 1 GSS node can be selected.  Current selected nodes are %s.' % str(gss_node_list))
             return
 
         # pop-out a file dialog for GSAS file's name
@@ -480,9 +481,9 @@ class GofRTree(base.CustomizedTreeView):
             elif item.parent() is not None and leaf_level == -1:
                 leaf_level = 2
             elif item.parent() is None and leaf_level != 1:
-                print '[Error] Nodes of different levels are selected.'
+                print('[Error] Nodes of different levels are selected.')
             elif item.parent() is None and leaf_level != 2:
-                print '[Error] Nodes of different levels are selected.'
+                print('[Error] Nodes of different levels are selected.')
         # END-FOR
 
         if leaf_level == 1:
@@ -513,7 +514,7 @@ class GofRTree(base.CustomizedTreeView):
         main_leaf_value = str(gr_parameter)
         status, message = self.add_main_item(main_leaf_value, False, True)
         if status is False:
-            print '[Log] %s' % message
+            print('[Log] %s' % message)
 
         # Add workspace name as a leaf
         child_value = gr_ws_name
@@ -733,7 +734,7 @@ class GofRTree(base.CustomizedTreeView):
             else:
                 self._mainWindow.remove_sq_from_plot(leaf_node_name)
         except AssertionError as ass_err:
-            print 'Unable to remove %s from canvas due to %s.' % (leaf_node_name, str(ass_err))
+            print('Unable to remove %s from canvas due to %s.' % (leaf_node_name, str(ass_err)))
         # delete node
         self.delete_node(ws_item)
 
@@ -848,7 +849,7 @@ class GofRTree(base.CustomizedTreeView):
         """ Override event handling method
         """
         status, current_run = self.get_current_run()
-        print '[INFO] Status = {0}; Current run number = {1}'.format(status, current_run)
+        print('[INFO] Status = {0}; Current run number = {1}'.format(status, current_run))
 
         # if self._mainWindow is not None:
         #     self._mainWindow.set_run(current_run)

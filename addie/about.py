@@ -1,3 +1,4 @@
+from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QMessageBox)
 from qtpy import PYQT_VERSION
 # qtpy does not provide an abstraction for this

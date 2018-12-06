@@ -1,3 +1,4 @@
+from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QDialog)
 
 from addie.ui_launchMantid import Ui_Dialog as UiDialog

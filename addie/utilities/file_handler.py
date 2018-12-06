@@ -1,5 +1,6 @@
+from __future__ import (absolute_import, division, print_function)
 import os
-import ConfigParser
+import configparser
 
 
 class FileHandler(object):
@@ -36,11 +37,11 @@ class FileHandler(object):
         f.close()
 
     def create_config_parser(self, section_name='Configuration', dictionary=None):
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         cfgfile = open(self.filename, 'w')
 
         config.add_section(section_name)
-        for key, value in dictionary.iteritems():
+        for key, value in dictionary.items():
             config.set(section_name, key, value)
 
         config.write(cfgfile)

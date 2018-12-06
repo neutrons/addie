@@ -1,6 +1,6 @@
 # A managing class (like database) for color and style of lines of all the G(r) and thus S(q) that are loaded and/or
 # calculated.
-
+from __future__ import (absolute_import, division, print_function)
 
 LineColorBase = ['black', 'red', 'blue', 'green', 'brown', 'orange']
 LineStyleBase = ['-', '--', '-.']

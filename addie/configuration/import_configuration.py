@@ -1,4 +1,5 @@
-import ConfigParser
+from __future__ import (absolute_import, division, print_function)
+import configparser
 import os
 
 from addie.configuration.config_file_name_handler import ConfigFileNameHandler
@@ -25,7 +26,7 @@ class ImportConfiguration(object):
             self.repopulate_gui()
 
     def retrieve_settings(self):
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         config.read(self.filename)
         self.config = config
 

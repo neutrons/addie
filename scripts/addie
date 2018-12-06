@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+from __future__ import (absolute_import, division, print_function)
 import sys
 import numpy as np
 import os
@@ -180,7 +180,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                                   5: self.ui.checkBox_bank5,
                                   6: self.ui.checkBox_bank6}
         self._braggBankWidgetRecords = dict()
-        for bank_id in self._braggBankWidgets.keys():
+        for bank_id in self._braggBankWidgets:
             checked = self._braggBankWidgets[bank_id].isChecked()
             self._braggBankWidgetRecords[bank_id] = checked
 
@@ -598,7 +598,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     def clear_bank_checkboxes(self):
         self._noEventBankWidgets = True
-        for check_box in self._braggBankWidgets.values():
+        for check_box in list(self._braggBankWidgets.values()):
             check_box.setChecked(False)
         self._noEventBankWidgets = False
 
@@ -679,9 +679,9 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         vec_r, vec_g, vec_ge = self._myController.get_ws_data(gr_ws_name)
 
         # check whether the workspace is on the figure
-        print '[DB...BAT] G(r) graphic has plot {0} is {1}. Keys are {2}' \
+        print('[DB...BAT] G(r) graphic has plot {0} is {1}. Keys are {2}' \
               ''.format(gr_ws_name, self.ui.graphicsView_gr.has_gr(gr_ws_name),
-                        self.ui.graphicsView_gr.get_current_grs())
+                        self.ui.graphicsView_gr.get_current_grs()))
 
         if self.ui.graphicsView_gr.has_gr(gr_ws_name):
             # update G(r) value of an existing plot
@@ -812,7 +812,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         if multi_bank_mode:
             # single-GSS/multi-bank mode
             # rename bank
-            for bank_id in self._braggBankWidgets.keys():
+            for bank_id in self._braggBankWidgets:
                 bank_check_box = self._braggBankWidgets[bank_id]
 
                 if bank_id > len(bank_angles) or bank_angles[bank_id - 1] is None:
@@ -886,7 +886,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         status, ret_obj = self._myController.load_gr(g_file_name)
         if not status:
             err_msg = ret_obj
-            print '[Error]: %s' % err_msg
+            print('[Error]: %s' % err_msg)
             return
         else:
             gr_ws_name = ret_obj
@@ -1094,7 +1094,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         # check the arguments
         for required_param in ['Qmin', 'Qmax', 'Rmin', 'Rmax', 'DeltaR']:
-            if required_param not in arg_dict.keys():
+            if required_param not in list(arg_dict.keys()):
                 raise RuntimeError('Not sufficient parameter (missing {0}) to generate S(Q) from G(r).'
                                    ''.format(required_param))
 
@@ -1212,7 +1212,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         """
         bank_id_list = list()
-        for bank_id in self._braggBankWidgets.keys():
+        for bank_id in self._braggBankWidgets:
             # access the checkbox
             bank_checkbox = self._braggBankWidgets[bank_id]
             # append
@@ -1246,7 +1246,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self._pdfColorManager.add_sofq(edit_sq_name)
 
         color, marker = self.ui.graphicsView_sq.get_plot_info(sq_name)
-        print '[DB...BAT] Original SofQ {0} has color {0} marker {1}'.format(color, marker)
+        print('[DB...BAT] Original SofQ {0} has color {0} marker {1}'.format(color, marker))
 
         # re-plot
         vec_q, vec_s, vec_e = self._myController.get_sq(edit_sq_name)
@@ -1317,7 +1317,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
             # disable all the banks except the one to plot. Notice the mutex must be on
             self._noEventBankWidgets = True
-            for bank_id in self._braggBankWidgets.keys():
+            for bank_id in self._braggBankWidgets:
                 if bank_id != bank_on_canvas:
                     self._braggBankWidgets[bank_id].setChecked(False)
             self._noEventBankWidgets = False
