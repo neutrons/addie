@@ -81,12 +81,53 @@ class FromDictionaryToTableUi:
             o_table.insert_row(row=_row_entry)
             self.populate_row(row=_row_entry, entry=_dictionary_test[_row_entry])
 
-    def populate_row(self, row=-1, entry=None):
+    def __fill_data_type(self, data_type="sample", starting_col=1, row=0, entry={}):
 
-        def _set_combobox(requested_value="", row=-1, col=-1):
-            _widget = self.table_ui.cellWidget(row, col).children()[1]
-            _index = _widget.findText(requested_value)
-            _widget.setCurrentIndex(_index)
+        col=starting_col
+
+        # sample - run
+        self.table_ui.item(row, col).setText(entry[data_type]["runs"])
+
+        # sample - background - runs
+        self.table_ui.item(row, col+1).setText(entry[data_type]["background"]["runs"])
+
+        # sample - background - background
+        self.table_ui.item(row, col+2).setText(entry[data_type]["background"]["background"])
+
+        # sample - material
+        self.table_ui.item(row, col+3).setText(entry[data_type]["material"])
+
+        # sample - packing_fraction
+        self.table_ui.item(row, col+4).setText(entry[data_type]["packing_fraction"])
+
+        # sample - geometry - shape
+        _requested_shape = entry[data_type]["geometry"]["shape"]
+        self.__set_combobox(requested_value=_requested_shape, row=row, col=col+5)
+
+        # sample - geometry - radius
+        self.table_ui.item(row, col+6).setText(entry[data_type]["geometry"]["radius_cm"])
+
+        # sample - geometry - height
+        self.table_ui.item(row, col+7).setText(entry[data_type]["geometry"]["height_cm"])
+
+        # abs correction
+        _requested_correction = entry[data_type]["abs_correction"]
+        self.__set_combobox(requested_value=_requested_correction, row=row, col=col+8)
+
+        # multi scattering correction
+        _requested_scattering = entry[data_type]["multi_scattering_correction"]
+        self.__set_combobox(requested_value=_requested_scattering, row=row, col=col+9)
+
+        # inelastic correction
+        _requested_inelastic = entry[data_type]["inelastic_correction"]
+        self.__set_combobox(requested_value=_requested_inelastic, row=row, col=col+10)
+
+    def __set_combobox(self, requested_value="", row=-1, col=-1):
+        _widget = self.table_ui.cellWidget(row, col).children()[1]
+        _index = _widget.findText(requested_value)
+        _widget.setCurrentIndex(_index)
+
+    def populate_row(self, row=-1, entry=None):
 
         # activate
         _status = QtCore.Qt.Checked if entry["activate"] else QtCore.Qt.Unchecked
@@ -96,45 +137,13 @@ class FromDictionaryToTableUi:
         # title
         self.table_ui.item(row, 1).setText(entry["title"])
 
-        # sample - run
-        self.table_ui.item(row, 2).setText(entry["sample"]["runs"])
+        # sample
+        self.__fill_data_type(data_type='sample', starting_col=2, row=row, entry=entry )
 
-        # sample - background - runs
-        self.table_ui.item(row, 3).setText(entry["sample"]["background"]["runs"])
+        # normalization
+        self.__fill_data_type(data_type='normalization', starting_col=13, row=row, entry=entry )
 
-        # sample - background - background
-        self.table_ui.item(row, 4).setText(entry["sample"]["background"]["background"])
 
-        # sample - material
-        self.table_ui.item(row, 5).setText(entry["sample"]["material"])
-
-        # sample - packing_fraction
-        self.table_ui.item(row, 6).setText(entry["sample"]["packing_fraction"])
-
-        # sample - geometry - shape
-        _requested_shape = entry["sample"]["geometry"]["shape"]
-        _set_combobox(requested_value=_requested_shape, row=row, col=7)
-        # _widget = self.table_ui.cellWidget(row, 7).children()[1]
-        # _index = _widget.findText(_requested_shape)
-        # _widget.setCurrentIndex(_index)
-
-        # sample - geometry - radius
-        self.table_ui.item(row, 8).setText(entry["sample"]["geometry"]["radius_cm"])
-
-        # sample - geometry - height
-        self.table_ui.item(row, 9).setText(entry["sample"]["geometry"]["height_cm"])
-
-        # abs correction
-        _requested_correction = entry["sample"]["abs_correction"]
-        _set_combobox(requested_value=_requested_correction, row=row, col=10)
-
-        # multi scattering correction
-        _requested_scattering = entry["sample"]["multi_scattering_correction"]
-        _set_combobox(requested_value=_requested_scattering, row=row, col=11)
-
-        # inelastic correction
-        _requested_inelastic = entry["sample"]["inelastic_correction"]
-        _set_combobox(requested_value=_requested_inelastic, row=row, col=12)
 
 
 
