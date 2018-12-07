@@ -56,6 +56,9 @@ _dictionary_test[0]["sample"]["packing_fraction"] = "fraction 1"
 _dictionary_test[0]["sample"]["geometry"]["shape"] = "spherical"
 _dictionary_test[0]["sample"]["geometry"]["radius_cm"] = "5"
 _dictionary_test[0]["sample"]["geometry"]["height_cm"] = "15"
+_dictionary_test[0]["sample"]["abs_correction"] = "Monte Carlo"
+_dictionary_test[0]["sample"]["multi_scattering_correction"] = "None"
+_dictionary_test[0]["sample"]["inelastic_correction"] = "Placzek"
 
 _dictionary_test[1] = copy.deepcopy(_default_empty_row)
 
@@ -80,6 +83,11 @@ class FromDictionaryToTableUi:
 
     def populate_row(self, row=-1, entry=None):
 
+        def _set_combobox(requested_value="", row=-1, col=-1):
+            _widget = self.table_ui.cellWidget(row, col).children()[1]
+            _index = _widget.findText(requested_value)
+            _widget.setCurrentIndex(_index)
+
         # activate
         _status = QtCore.Qt.Checked if entry["activate"] else QtCore.Qt.Unchecked
         _widget = self.table_ui.cellWidget(row, 0).children()[1]
@@ -87,3 +95,46 @@ class FromDictionaryToTableUi:
 
         # title
         self.table_ui.item(row, 1).setText(entry["title"])
+
+        # sample - run
+        self.table_ui.item(row, 2).setText(entry["sample"]["runs"])
+
+        # sample - background - runs
+        self.table_ui.item(row, 3).setText(entry["sample"]["background"]["runs"])
+
+        # sample - background - background
+        self.table_ui.item(row, 4).setText(entry["sample"]["background"]["background"])
+
+        # sample - material
+        self.table_ui.item(row, 5).setText(entry["sample"]["material"])
+
+        # sample - packing_fraction
+        self.table_ui.item(row, 6).setText(entry["sample"]["packing_fraction"])
+
+        # sample - geometry - shape
+        _requested_shape = entry["sample"]["geometry"]["shape"]
+        _set_combobox(requested_value=_requested_shape, row=row, col=7)
+        # _widget = self.table_ui.cellWidget(row, 7).children()[1]
+        # _index = _widget.findText(_requested_shape)
+        # _widget.setCurrentIndex(_index)
+
+        # sample - geometry - radius
+        self.table_ui.item(row, 8).setText(entry["sample"]["geometry"]["radius_cm"])
+
+        # sample - geometry - height
+        self.table_ui.item(row, 9).setText(entry["sample"]["geometry"]["height_cm"])
+
+        # abs correction
+        _requested_correction = entry["sample"]["abs_correction"]
+        _set_combobox(requested_value=_requested_correction, row=row, col=10)
+
+        # multi scattering correction
+        _requested_scattering = entry["sample"]["multi_scattering_correction"]
+        _set_combobox(requested_value=_requested_scattering, row=row, col=11)
+
+        # inelastic correction
+        _requested_inelastic = entry["sample"]["inelastic_correction"]
+        _set_combobox(requested_value=_requested_inelastic, row=row, col=12)
+
+
+
