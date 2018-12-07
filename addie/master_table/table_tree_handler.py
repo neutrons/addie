@@ -21,6 +21,7 @@ from addie.master_table.table_plot_handler import TablePlotHandler
 from addie.master_table.selection_handler import SelectionHandler, CellsHandler, RowsHandler
 from addie.master_table.import_table import ImportTable
 from addie.master_table.export_table import ExportTable
+from addie.master_table.master_table_loader import FromDictionaryToTableUi
 
 
 class TableInitialization:
@@ -774,6 +775,12 @@ class H3TableHandler:
         self.check_status_of_right_click_buttons()
 
     def _import_table(self):
+
+        o_loader = FromDictionaryToTableUi(parent=self.parent)
+        o_loader.fill()
+
+        return #FIXME
+
         _current_folder = self.parent.current_folder
         _table_file = str(QFileDialog.getOpenFileName(parent=self.parent,
                                                       caption='Select Table File ...',
