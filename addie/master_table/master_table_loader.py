@@ -1,3 +1,5 @@
+import os
+
 from collections import OrderedDict
 import copy
 
@@ -45,22 +47,37 @@ _default_empty_row = {"activate": True,
                       "output_grouping": "",
                       }
 # for debugging, faking a 2 row dictionary
-_dictionary_test[0] = copy.deepcopy(_default_empty_row)
-_dictionary_test[0]["activate"] = False
-_dictionary_test[0]["title"] = "this is row 0"
-_dictionary_test[0]["sample"]["run"] = "1,2,3,4,5"
-_dictionary_test[0]["sample"]["background"]["runs"] = "10,20"
-_dictionary_test[0]["sample"]["background"]["background"] = "100:300"
-_dictionary_test[0]["sample"]["material"] = "material 1"
-_dictionary_test[0]["sample"]["packing_fraction"] = "fraction 1"
-_dictionary_test[0]["sample"]["geometry"]["shape"] = "spherical"
-_dictionary_test[0]["sample"]["geometry"]["radius_cm"] = "5"
-_dictionary_test[0]["sample"]["geometry"]["height_cm"] = "15"
-_dictionary_test[0]["sample"]["abs_correction"] = "Monte Carlo"
-_dictionary_test[0]["sample"]["multi_scattering_correction"] = "None"
-_dictionary_test[0]["sample"]["inelastic_correction"] = "Placzek"
+# _dictionary_test[0] = copy.deepcopy(_default_empty_row)
+# _dictionary_test[0]["activate"] = False
+# _dictionary_test[0]["title"] = "this is row 0"
+# _dictionary_test[0]["sample"]["run"] = "1,2,3,4,5"
+# _dictionary_test[0]["sample"]["background"]["runs"] = "10,20"
+# _dictionary_test[0]["sample"]["background"]["background"] = "100:300"
+# _dictionary_test[0]["sample"]["material"] = "material 1"
+# _dictionary_test[0]["sample"]["packing_fraction"] = "fraction 1"
+# _dictionary_test[0]["sample"]["geometry"]["shape"] = "spherical"
+# _dictionary_test[0]["sample"]["geometry"]["radius_cm"] = "5"
+# _dictionary_test[0]["sample"]["geometry"]["height_cm"] = "15"
+# _dictionary_test[0]["sample"]["abs_correction"] = "Monte Carlo"
+# _dictionary_test[0]["sample"]["multi_scattering_correction"] = "None"
+# _dictionary_test[0]["sample"]["inelastic_correction"] = "Placzek"
+#
+# _dictionary_test[1] = copy.deepcopy(_default_empty_row)
 
-_dictionary_test[1] = copy.deepcopy(_default_empty_row)
+class TableFileLoader:
+    '''This class will take a table config file and will return a dictionary the program can use to
+     populate the table
+
+     For now, this loader will take 2 different file format, the old ascii and a new json file format.
+     This json file format will be format used when exporting the table
+     '''
+
+    def __init__(self, parent=None, filename=''):
+        if not os.path.exists(filename):
+            raise IOError("{} does not exist!".format(filename))
+
+
+
 
 
 class FromDictionaryToTableUi:
@@ -72,8 +89,9 @@ class FromDictionaryToTableUi:
 
     def fill(self, input_dictionary={}):
         if input_dictionary == {}:
-            # use for debugging
-            input_dictionary = _dictionary_test
+            # # use for debugging
+            # input_dictionary = _dictionary_test
+            return
 
         o_table = TableRowHandler(parent=self.parent)
 

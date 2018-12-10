@@ -21,7 +21,7 @@ from addie.master_table.table_plot_handler import TablePlotHandler
 from addie.master_table.selection_handler import SelectionHandler, CellsHandler, RowsHandler
 from addie.master_table.import_table import ImportTable
 from addie.master_table.export_table import ExportTable
-from addie.master_table.master_table_loader import FromDictionaryToTableUi
+from addie.master_table.master_table_loader import TableFileLoader
 
 
 class TableInitialization:
@@ -776,20 +776,30 @@ class H3TableHandler:
 
     def _import_table(self):
 
-        o_loader = FromDictionaryToTableUi(parent=self.parent)
-        o_loader.fill()
-
-        return #FIXME
-
         _current_folder = self.parent.current_folder
-        _table_file = str(QFileDialog.getOpenFileName(parent=self.parent,
+        table_file = str(QFileDialog.getOpenFileName(parent=self.parent,
                                                       caption='Select Table File ...',
                                                       directory=_current_folder,
-                                                      filter=("Text (*.txt);;All files (*.*)")))
-        if _table_file:
-            new_path = os.path.dirname(_table_file)
+                                                      filter=("Log (*.csv);;Text (*.txt);; All files (*.*)")))
+        if table_file:
+            new_path = os.path.dirname(table_file)
             self.parent.current_folder = new_path
             self.clear_table()
+
+            try:
+                o_dict = TableFileLoader(parent=self.parent, filename=table_file)
+            except IOError as err:
+                self.parent.ui.statusbar.setStyleSheet("color: red")
+                self.parent.ui.statusbar.showMessage(err.message,
+                                                     self.parent.statusbar_display_time)
+                return
+
+            
+
+
+            #o_dict.load()
+
+            return
 
             #FIXME
             _o_import = ImportTable(parent=self.parent, filename=_table_file)
@@ -806,7 +816,7 @@ class H3TableHandler:
         _table_file = str(QFileDialog.getSaveFileName(parent=self.parent,
                                                       caption="Define Output File Name ...",
                                                       directory=_current_folder,
-                                                      filter={"Text (*.txt);;All Files (*.*)"}))
+                                                      filter={"Text (*.csv)"}))
 
         if _table_file:
             _file_handler = FileHandler(filename = _table_file)
