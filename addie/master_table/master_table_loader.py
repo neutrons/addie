@@ -14,6 +14,7 @@ except ImportError:
         raise ImportError("Requires PyQt4 or PyQt5")
 
 from addie.utilities.file_handler import FileHandler
+from addie.utilities.list_runs_parser import ListRunsParser
 from addie.master_table.table_row_handler import TableRowHandler
 
 from addie.ui_list_of_scan_loader_dialog import Ui_Dialog as UiDialog
@@ -100,6 +101,7 @@ class AsciiLoaderOptions(QDialog):
 
     def accept(self):
         self.parent.ascii_loader_option = self.__get_option_selected()
+        self.parent._load_ascii()
         self.close()
 
 class AsciiLoader:
@@ -151,6 +153,9 @@ class AsciiLoader:
         else:
             raise ValueError("Options nos implemented yet!")
 
+        list_runs = o_format.new_list1
+        list_titles = o_format.new_list2
+
         _table_dictionary = {}
         runs_titles = zip(list_runs, list_titles)
         _index = 0
@@ -162,6 +167,7 @@ class AsciiLoader:
             _index += 1
 
         self.table_dictionary = _table_dictionary
+        self.parent.ascii_loader_dictionary = _table_dictionary
 
 class FormatAsciiList:
     ''' This class takes 2 list as input. According to the option selected, the list2 will be
@@ -205,34 +211,88 @@ class FormatAsciiList:
         self.list1 = list1
         self.list2 = list2
 
-    def __combine_identical_elements(self, check_from_list=[], combine_from_list=[]):
-        list1 = list(check_from_list)
-        list2 = list(combine_from_list)
+    def __combine_identical_elements(self, check_list=[], combine_list=[]):
+        '''This method will combine the element of the combine_list according to the
+        similitued of the check_list
+
+        for example:
+        check_list = ["sampleA", "sampleB", "sampleB"]
+        combine_list = ["1", "2", "3"]
+
+        new_check_list = ["sampleA", "sampleB"]
+        new_combine_list = ["1", "2,3"]
+        '''
+
+        list1 = list(check_list)
+        list2 = list(combine_list)
 
         final_list1 = []
         final_list2 = []
         while (list1):
-            element_list1 = list1.pop(0)
             element_list2 = list2.pop(0)
             # find all indexes where element_list2 are identical
             indices = [i for i, x in enumerate(list2) if x==element_list2]
+            list_element_to_merge = list1[indices]
+            str_list_element_to_merge = ",".join(list_element_to_merge)
+            o_combine = ListRunsParser(current_runs=str_list_element_to_merge)
+            combine_version = o_combine.new_runs()
 
+            final_list1.append(combine_version)
+            final_list2.append(element_list2)
+
+        return [final_list1, final_list2]
+
+    def __keep_string_before(self, list=[], splitter_string=""):
+        '''this function will split each element by the given splitter_string and will
+        only keep the string before that splitter
+
+        ex:
+        list = ["sampleA at temperature 150C", "sampleB at temperature 160C"]
+        splitter_string = "at temperature"
+
+        :return
+        ["sampleA", "sampleB"]
+        '''
+        new_list = []
+        for _element in list:
+            split_element = _element.split(splitter_string)
+            element_to_keep = split_element[0].strip()
+            new_list.append(element_to_keep)
+        return new_list
+
+    def __convert_list_to_combine_version(self, list=[]):
+        '''this method is to make sure we are working on the combine version of the list of runs
+
+        examples:
+        list = ["1", "2,3,4,5"]
+
+        return:
+        ["1", "2-5"]
+        '''
+        new_list = []
+        for _element in list:
+            o_parser = ListRunsParser(current_runs=_element)
+            _combine_element = o_parser.new_runs()
+            new_list.append(_combine_element)
+        return new_list
 
     def option1(self):
         # keep raw title and merge lines with exact same title
-        list1 = self.list1
-        list2 = self.list2
-        [self.new_list1, self.new_list2] = self.__combine_identical_elements(check_from_list=list2,
-                                                                             combine_from_list=list1)
-
+        [self.new_list1, self.new_list2] = self.__combine_identical_elements(check_list=self.list2,
+                                                                             combine_list=self.list1)
 
     def option2(self):
         # remove temperature part of title and merge lines with exact same title
-        pass
+        clean_list2 = self.__keep_string_before(list=self.list2,
+                                                splitter_string=" at temperature")
+        [self.new_list1, self.new_list2] = self.__combine_identical_elements(check_list=clean_list2,
+                                                                            combine_list=self.list1)
 
     def option3(self):
         # keep raw title, append run number
-        pass
+        combine_list1 = self.__convert_list_to_combine_version(list=self.list1)
+
+
 
     def option4(self):
         # take raw title, remove temperature part, add run number
@@ -258,11 +318,10 @@ class TableFileLoader:
         # trying to load first using ascii loader
         o_loader = AsciiLoader(parent=self.parent, filename=self.filename)
         o_loader.load()
-        _table_dictionary = o_loader.table_dictionary
+#        _table_dictionary = o_loader.table_dictionary
 
-        o_table_ui_loader = FromDictionaryToTableUi(parent=self.parent)
-        o_table_ui_loader.fill(input_dictionary=_table_dictionary)
-
+#        o_table_ui_loader = FromDictionaryToTableUi(parent=self.parent)
+#        o_table_ui_loader.fill(input_dictionary=_table_dictionary)
 
 
 class FromDictionaryToTableUi:

@@ -615,7 +615,6 @@ class H3TableHandler:
             self.uncheck_all()
         elif action == activate_inverse:
             self.inverse_activated_rows()
-        #FIXME
 
         # cells
         elif action == cells_copy:

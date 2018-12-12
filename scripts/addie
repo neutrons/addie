@@ -64,6 +64,7 @@ from addie.mantid_handler.browse_file_folder_handler import BrowseFileFolderHand
 from addie.mantid_handler.mantid_reduction import GlobalMantidReduction
 from addie.mantid_handler.mantid_thread import MantidThread
 
+from addie.master_table.master_table_loader import FromDictionaryToTableUi
 from addie.master_table.table_tree_handler import TableTreeHandler, TableInitialization, TableConfig, H3TableHandler
 from addie.master_table.table_tree_handler import SaveConfigInterface, TableTree
 from addie.master_table.tree_definition import *
@@ -101,6 +102,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     # load los.csv options
     ascii_loader_option = None   # None, 1, 2, 3, 4
+    ascii_loader_dictionary = {}
 
     statusbar_display_time = 5000  # 5s
 
@@ -2656,6 +2658,10 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     def cancel_clicked(self):
         self.close()
+
+    def _load_ascii(self):
+        o_table_ui_loader = FromDictionaryToTableUi(parent=self)
+        o_table_ui_loader.fill(input_dictionary=self.ascii_loader_dictionary)
 
     def reduction_configuration_button_clicked(self):
         ReductionConfigurationHandler(parent=self)
