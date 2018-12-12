@@ -1,17 +1,22 @@
 import os
-
+import numpy as np
 from collections import OrderedDict
 import copy
 
 try:
-    from PyQt4 import QtCore
+    from PyQt4 import QtCore, QtGui
+    from PyQt4.QtGui import QDialog
 except ImportError:
     try:
-        from PyQt5 import QtCore
+        from PyQt5 import QtCore, QtGui
+        from PyQt5.QtWidgets import QDialog
     except ImportError:
         raise ImportError("Requires PyQt4 or PyQt5")
 
+from addie.utilities.file_handler import FileHandler
 from addie.master_table.table_row_handler import TableRowHandler
+
+from addie.ui_list_of_scan_loader_dialog import Ui_Dialog as UiDialog
 
 # init test dictionary (to test loader
 _dictionary_test = OrderedDict()
@@ -64,6 +69,176 @@ _default_empty_row = {"activate": True,
 #
 # _dictionary_test[1] = copy.deepcopy(_default_empty_row)
 
+class AsciiLoaderOptions(QDialog):
+
+    def __init__(self, parent=None):
+        self.parent = parent
+        QDialog.__init__(self, parent=parent)
+        self.ui = UiDialog()
+        self.ui.setupUi(self)
+        self.init_widgets()
+
+        self.parent.ascii_loader_option = None
+
+    def init_widgets(self):
+        self.radio_button_changed()
+
+    def __get_option_selected(self):
+        if self.ui.option1.isChecked():
+            return 1
+        elif self.ui.option2.isChecked():
+            return 2
+        elif self.ui.option3.isChecked():
+            return 3
+        else:
+            return 4
+
+    def radio_button_changed(self):
+        option_selected = self.__get_option_selected()
+        image = ":/preview/load_csv_case{}.png".format(option_selected)
+        self.ui.preview_label.setPixmap(QtGui.QPixmap(image))
+
+    def accept(self):
+        self.parent.ascii_loader_option = self.__get_option_selected()
+        self.close()
+
+class AsciiLoader:
+
+    filename = ''
+    file_contain = [] # raw file contain
+    table_dictionary = {}
+
+    def __init__(self, parent=None, filename=''):
+        self.filename = filename
+        self.parent = parent
+        o_dialog = AsciiLoaderOptions(parent=parent)
+        o_dialog.show()
+
+    def load(self):
+        # options selected by user
+        options = self.parent.ascii_loader_option
+        if options is None:
+            return
+
+        filename = self.filename
+        o_file = FileHandler(filename=filename)
+        o_table = o_file.pandas_parser()
+
+        list_runs = o_table['#Scan']
+        list_titles = o_table['title']
+
+        o_format = FormatAsciiList(list1=list_runs,
+                                   list2=list_titles)
+        # option 1
+        # keep raw title and merge lines with exact same title
+        if options == 1:
+            o_format.option1()
+
+        # option 2
+        # remove temperature part of title and merge lines with exact same title
+        elif options == 2:
+            o_format.option2()
+        # option 3
+        # keep raw title, append run number
+        elif options == 3:
+            o_format.option3()
+
+        # option 4
+        # take raw title, remove temperature part, add run number
+        elif options == 4:
+            o_format.option4()
+
+        else:
+            raise ValueError("Options nos implemented yet!")
+
+        _table_dictionary = {}
+        runs_titles = zip(list_runs, list_titles)
+        _index = 0
+        for [_run, _title] in runs_titles:
+            _entry = copy.deepcopy(_default_empty_row)
+            _entry['title'] = str(_title)
+            _entry['sample']['runs'] = str(_run)
+            _table_dictionary[_index] = _entry
+            _index += 1
+
+        self.table_dictionary = _table_dictionary
+
+class FormatAsciiList:
+    ''' This class takes 2 list as input. According to the option selected, the list2 will be
+    modified. Once it has been modified, if two element are equal, the runs coming from the list1 will
+    be combined using a compact version
+
+    ex: list1 = ["1","2","3","4"]
+        list2 = ["sampleA at temperature 10C",
+                 "sampleA at temperature 5C",
+                 "sampleA at temperature 15C",
+                 "sampleA at temperature 15C"]
+
+        options1:  keep raw title and merge lines with exact same title
+        list1 = ["1", "2", "3,4"]
+        list2 = ["sampleA at temperature 10C",
+                 "sampleA at temperature 5C",
+                 "sampleA at temperature 15C"]
+
+        options2: remove temperature part of title and merge lines with exact same title
+        list1 = ["1-4"]
+        list2 = ["sampleA"]
+
+        options3: keep raw title, append run number
+        list1 = ["1", "2", "3,4"]
+        list2 = ["sampleA at temperature 10C_1",
+                 "sampleA at temperature 5C_2",
+                 "sampleA at temperature 15C_3,4"]
+
+        options4: take raw title, remove temperature part, add run number
+        list1 = ["1", "2", "3", "4"]
+        list2 = ["sampleA at temperature 10C_1",
+                 "sampleA at temperature 5C_2",
+                 "sampleA at temperature 15C_3",
+                 "sampleA at temperature 15C_4"]
+    '''
+
+    new_list1 = []
+    new_list2 = []
+
+    def __init__(self, list1=[], list2=[]):
+        self.list1 = list1
+        self.list2 = list2
+
+    def __combine_identical_elements(self, check_from_list=[], combine_from_list=[]):
+        list1 = list(check_from_list)
+        list2 = list(combine_from_list)
+
+        final_list1 = []
+        final_list2 = []
+        while (list1):
+            element_list1 = list1.pop(0)
+            element_list2 = list2.pop(0)
+            # find all indexes where element_list2 are identical
+            indices = [i for i, x in enumerate(list2) if x==element_list2]
+
+
+    def option1(self):
+        # keep raw title and merge lines with exact same title
+        list1 = self.list1
+        list2 = self.list2
+        [self.new_list1, self.new_list2] = self.__combine_identical_elements(check_from_list=list2,
+                                                                             combine_from_list=list1)
+
+
+    def option2(self):
+        # remove temperature part of title and merge lines with exact same title
+        pass
+
+    def option3(self):
+        # keep raw title, append run number
+        pass
+
+    def option4(self):
+        # take raw title, remove temperature part, add run number
+        pass
+
+
 class TableFileLoader:
     '''This class will take a table config file and will return a dictionary the program can use to
      populate the table
@@ -76,7 +251,17 @@ class TableFileLoader:
         if not os.path.exists(filename):
             raise IOError("{} does not exist!".format(filename))
 
+        self.parent = parent
+        self.filename = filename
 
+    def load(self):
+        # trying to load first using ascii loader
+        o_loader = AsciiLoader(parent=self.parent, filename=self.filename)
+        o_loader.load()
+        _table_dictionary = o_loader.table_dictionary
+
+        o_table_ui_loader = FromDictionaryToTableUi(parent=self.parent)
+        o_table_ui_loader.fill(input_dictionary=_table_dictionary)
 
 
 
@@ -95,9 +280,9 @@ class FromDictionaryToTableUi:
 
         o_table = TableRowHandler(parent=self.parent)
 
-        for _row_entry in _dictionary_test.keys():
+        for _row_entry in input_dictionary.keys():
             o_table.insert_row(row=_row_entry)
-            self.populate_row(row=_row_entry, entry=_dictionary_test[_row_entry])
+            self.populate_row(row=_row_entry, entry=input_dictionary[_row_entry])
 
     def __fill_data_type(self, data_type="sample", starting_col=1, row=0, entry={}):
 

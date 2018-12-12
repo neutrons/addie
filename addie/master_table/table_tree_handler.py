@@ -533,8 +533,11 @@ class H3TableHandler:
 
         # Table
         table = menu.addMenu("Table")
-        table_import = table.addAction("Import ...")
+        table_import = table.addAction("Import & Replace ...")
         self.parent.master_table_right_click_buttons['import']['ui'] = table_import
+        table_append = table.addAction("Import & Append ...")
+        self.parent.master_table_right_click_buttons['append']['ui'] = table_append
+        table_append.setEnabled(self.parent.master_table_right_click_buttons['append']['status'])
         table_export = table.addAction("Export ...")
         self.parent.master_table_right_click_buttons['export']['ui'] = table_export
         table_export.setEnabled(self.parent.master_table_right_click_buttons['export']['status'])
@@ -645,6 +648,8 @@ class H3TableHandler:
             self.clear_table()
         elif action == table_import:
             self._import_table()
+        elif action == table_append:
+            self._append_table()
         elif action == table_export:
             self._export_table()
 
@@ -774,7 +779,18 @@ class H3TableHandler:
         self.parent.master_table_list_ui = {}
         self.check_status_of_right_click_buttons()
 
-    def _import_table(self):
+    def _append_table(self):
+        self._import_table(clear_table=False)
+
+    def _import_table(self, clear_table=True):
+
+        # for debuging only
+        table_file = "/SNS/users/j35/los.csv"
+        o_dict = TableFileLoader(parent=self.parent, filename=table_file)
+        o_dict.load()
+
+
+        return # REMOVEME
 
         _current_folder = self.parent.current_folder
         table_file = str(QFileDialog.getOpenFileName(parent=self.parent,
@@ -784,7 +800,8 @@ class H3TableHandler:
         if table_file:
             new_path = os.path.dirname(table_file)
             self.parent.current_folder = new_path
-            self.clear_table()
+            if clear_table:
+                self.clear_table()
 
             try:
                 o_dict = TableFileLoader(parent=self.parent, filename=table_file)
@@ -794,16 +811,10 @@ class H3TableHandler:
                                                      self.parent.statusbar_display_time)
                 return
 
-            
+            o_dict.load()
 
-
-            #o_dict.load()
-
-            return
-
-            #FIXME
-            _o_import = ImportTable(parent=self.parent, filename=_table_file)
-            _o_import.run()
+            # _o_import = ImportTable(parent=self.parent, filename=_table_file)
+            # _o_import.run()
 
             self.parent.ui.statusbar.setStyleSheet("color: blue")
             self.parent.ui.statusbar.showMessage("File {} has been imported".format(_table_file),
@@ -911,6 +922,7 @@ class H3TableHandler:
                            clear=False,
                            plot=False,
                            export=False,
+                           append=False,
                            )
         else:
             _update_status(activate=True,
@@ -922,6 +934,7 @@ class H3TableHandler:
                            reset=True,
                            clear=True,
                            export=True,
+                           append=True
                            )
 
             if self.parent.master_table_cells_copy['temp']:

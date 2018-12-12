@@ -99,6 +99,9 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     # end of config.json
 
+    # load los.csv options
+    ascii_loader_option = None   # None, 1, 2, 3, 4
+
     statusbar_display_time = 5000  # 5s
 
     # external ui (use to make sure there is only one open at a time
@@ -142,6 +145,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                                         'reset': copy.deepcopy(dict_widget),
                                         'clear': copy.deepcopy(dict_widget),
                                         'import': copy.deepcopy(dict_widget),
+                                        'append': copy.deepcopy(dict_widget),
                                         'export': copy.deepcopy(dict_widget),
                                         'plot': copy.deepcopy(dict_widget),
                                         }

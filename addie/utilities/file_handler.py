@@ -1,5 +1,6 @@
 import os
 import ConfigParser
+import pandas as pd
 
 
 class FileHandler(object):
@@ -8,7 +9,11 @@ class FileHandler(object):
     
     def __init__(self, filename=None):
         self.filename = filename
-        
+
+    def pandas_parser(self):
+        obj = pd.read_csv(self.filename)
+        return obj
+
     def retrieve_contain(self):
         file_contain = []
         with open(self.filename, 'r') as f:

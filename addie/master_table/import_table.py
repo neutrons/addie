@@ -16,13 +16,6 @@ class ImportTable(object):
         self.filename = filename
         
     def run(self):
-
-        # FIXME
-        return
-
-
-
-
         self.load_ascii()
         self.parse_contain()
         self.change_path()
