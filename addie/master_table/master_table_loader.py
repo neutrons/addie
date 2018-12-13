@@ -72,12 +72,16 @@ _default_empty_row = {"activate": True,
 
 class AsciiLoaderOptions(QDialog):
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, filename=''):
         self.parent = parent
+        self.filename = filename
         QDialog.__init__(self, parent=parent)
         self.ui = UiDialog()
         self.ui.setupUi(self)
         self.init_widgets()
+
+        short_filename = os.path.basename(filename)
+        self.setWindowTitle("Options to load {}".format(short_filename))
 
         self.parent.ascii_loader_option = None
 
@@ -101,7 +105,7 @@ class AsciiLoaderOptions(QDialog):
 
     def accept(self):
         self.parent.ascii_loader_option = self.__get_option_selected()
-        self.parent._load_ascii()
+        self.parent._load_ascii(filename=self.filename)
         self.close()
 
 class AsciiLoader:
@@ -113,7 +117,9 @@ class AsciiLoader:
     def __init__(self, parent=None, filename=''):
         self.filename = filename
         self.parent = parent
-        o_dialog = AsciiLoaderOptions(parent=parent)
+
+    def show_dialog(self):
+        o_dialog = AsciiLoaderOptions(parent=self.parent, filename=self.filename)
         o_dialog.show()
 
     def load(self):
@@ -169,6 +175,10 @@ class AsciiLoader:
         self.table_dictionary = _table_dictionary
         self.parent.ascii_loader_dictionary = _table_dictionary
 
+        o_table_ui_loader = FromDictionaryToTableUi(parent=self.parent)
+        o_table_ui_loader.fill(input_dictionary=_table_dictionary)
+
+
 class FormatAsciiList:
     ''' This class takes 2 list as input. According to the option selected, the list2 will be
     modified. Once it has been modified, if two element are equal, the runs coming from the list1 will
@@ -213,7 +223,7 @@ class FormatAsciiList:
 
     def __combine_identical_elements(self, check_list=[], combine_list=[]):
         '''This method will combine the element of the combine_list according to the
-        similitued of the check_list
+        similitude of the check_list
 
         for example:
         check_list = ["sampleA", "sampleB", "sampleB"]
@@ -223,16 +233,16 @@ class FormatAsciiList:
         new_combine_list = ["1", "2,3"]
         '''
 
-        list1 = list(check_list)
-        list2 = list(combine_list)
+        list2 = list(check_list)
+        list1 = list(combine_list)
 
         final_list1 = []
         final_list2 = []
-        while (list1):
+        while (list2):
             element_list2 = list2.pop(0)
             # find all indexes where element_list2 are identical
             indices = [i for i, x in enumerate(list2) if x==element_list2]
-            list_element_to_merge = list1[indices]
+            list_element_to_merge = [str(list1[i]) for i in indices]
             str_list_element_to_merge = ",".join(list_element_to_merge)
             o_combine = ListRunsParser(current_runs=str_list_element_to_merge)
             combine_version = o_combine.new_runs()
@@ -292,8 +302,6 @@ class FormatAsciiList:
         # keep raw title, append run number
         combine_list1 = self.__convert_list_to_combine_version(list=self.list1)
 
-
-
     def option4(self):
         # take raw title, remove temperature part, add run number
         pass
@@ -317,7 +325,7 @@ class TableFileLoader:
     def load(self):
         # trying to load first using ascii loader
         o_loader = AsciiLoader(parent=self.parent, filename=self.filename)
-        o_loader.load()
+        o_loader.show_dialog()
 #        _table_dictionary = o_loader.table_dictionary
 
 #        o_table_ui_loader = FromDictionaryToTableUi(parent=self.parent)
@@ -332,6 +340,7 @@ class FromDictionaryToTableUi:
         self.table_ui = self.parent.ui.h3_table
 
     def fill(self, input_dictionary={}):
+
         if input_dictionary == {}:
             # # use for debugging
             # input_dictionary = _dictionary_test
