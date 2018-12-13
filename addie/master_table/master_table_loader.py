@@ -108,6 +108,7 @@ class AsciiLoaderOptions(QDialog):
         self.parent._load_ascii(filename=self.filename)
         self.close()
 
+
 class AsciiLoader:
 
     filename = ''
@@ -304,7 +305,7 @@ class FormatAsciiList:
         '''
         new_list = []
         for _element in list:
-            o_parser = ListRunsParser(current_runs=_element)
+            o_parser = ListRunsParser(current_runs=str(_element))
             _combine_element = o_parser.new_runs()
             new_list.append(_combine_element)
         return new_list
@@ -324,6 +325,8 @@ class FormatAsciiList:
     def option3(self):
         # keep raw title, append run number
         combine_list1 = self.__convert_list_to_combine_version(list=self.list1)
+        
+
 
     def option4(self):
         # take raw title, remove temperature part, add run number
