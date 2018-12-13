@@ -232,7 +232,6 @@ class FormatAsciiList:
         new_check_list = ["sampleA", "sampleB"]
         new_combine_list = ["1", "2,3"]
         '''
-
         list2 = list(check_list)
         list1 = list(combine_list)
 
@@ -258,8 +257,8 @@ class FormatAsciiList:
                 list2 = clean_list2
 
                 list_element_to_merge = [str(list1[i]) for i in indices]
-                str_list_element_to_merge = ",".join(list_element_to_merge)
-                o_combine = ListRunsParser(current_runs=str_list_element_to_merge)
+                str_element_to_merge += "," + (",".join(list_element_to_merge))
+                o_combine = ListRunsParser(current_runs=str_element_to_merge)
                 str_element_to_merge = o_combine.new_runs()
 
                 for _index in indices:
@@ -273,10 +272,6 @@ class FormatAsciiList:
 
             final_list2.append(element_list2)
             final_list1.append(str_element_to_merge)
-
-        import pprint
-        pprint.pprint(final_list1)
-
 
         return [final_list1, final_list2]
 
@@ -324,7 +319,7 @@ class FormatAsciiList:
         clean_list2 = self.__keep_string_before(list=self.list2,
                                                 splitter_string=" at temperature")
         [self.new_list1, self.new_list2] = self.__combine_identical_elements(check_list=clean_list2,
-                                                                            combine_list=self.list1)
+                                                                             combine_list=self.list1)
 
     def option3(self):
         # keep raw title, append run number
