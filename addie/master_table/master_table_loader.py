@@ -239,16 +239,44 @@ class FormatAsciiList:
         final_list1 = []
         final_list2 = []
         while (list2):
+
             element_list2 = list2.pop(0)
+            str_element_to_merge = str(list1.pop(0))
+
             # find all indexes where element_list2 are identical
             indices = [i for i, x in enumerate(list2) if x==element_list2]
-            list_element_to_merge = [str(list1[i]) for i in indices]
-            str_list_element_to_merge = ",".join(list_element_to_merge)
-            o_combine = ListRunsParser(current_runs=str_list_element_to_merge)
-            combine_version = o_combine.new_runs()
+            if not (indices == []):
 
-            final_list1.append(combine_version)
+                # remove all element already treated
+                for _index in indices:
+                    list2[_index] = ''
+
+                clean_list2 = []
+                for _entry in list2:
+                    if not (_entry == ''):
+                        clean_list2.append(_entry)
+                list2 = clean_list2
+
+                list_element_to_merge = [str(list1[i]) for i in indices]
+                str_list_element_to_merge = ",".join(list_element_to_merge)
+                o_combine = ListRunsParser(current_runs=str_list_element_to_merge)
+                str_element_to_merge = o_combine.new_runs()
+
+                for _index in indices:
+                    list1[_index] = ''
+
+                clean_list1 = []
+                for _entry in list1:
+                    if not (_entry == ''):
+                        clean_list1.append(_entry)
+                list1 = clean_list1
+
             final_list2.append(element_list2)
+            final_list1.append(str_element_to_merge)
+
+        import pprint
+        pprint.pprint(final_list1)
+
 
         return [final_list1, final_list2]
 
