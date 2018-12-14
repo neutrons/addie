@@ -87,6 +87,43 @@ class TableFileExporter:
         item = str(self.table_ui.item(row, column).text())
         return item
 
+    def _get_selected_value(self, row=-1, column=-1):
+        widget = self.table_ui.cellWidget(row, column).children()[1]
+        return str(widget.currentText())
+
+    def _retrieve_element_infos(self, element='sample'):
+        if element == 'sample':
+            column_start = 2
+        else:
+            column_start = 13
+
+        _element_dict = copy.deepcopy(_element)
+
+        _element_dict["Runs"] = self._get_item_value(row=row, column=column_start)
+        _element_dict["Background"]["Runs"] = self._get_item_value(row=row, column=column_start+1)
+        _element_dict["Background"]["Runs"] = self._get_item_value(row=row, column=column_start+2)
+        _element_dict["Material"] = self._get_item_value(row=row, column=column_start+3)
+        _element_dict["PackingFraction"] =  self._get_item_value(row=row, column=column_start+4)
+        _element_dict["Geometry"]["Shape"] = self._get_selected_value(row=row, column=column_start+5)
+        #FIXME
+
+        radius = self._get_item_value(row=row, column=column_start+6)
+        height = self._get_item_value(row=row, column=column_start+7)
+        abs_correction = self._get_selected_value(row=row,column=column_start+8)
+        multiple_scattering_correction = self._get_selected_value(row=row, column=column_start+9)
+        inelastic_correction = self._get_selected_value(row=row,column=column_start+10)
+        if inelastic_correction.lower() == 'placzek':
+            pass
+        #order
+        #self
+        #interference
+        #fit_spectrum_width
+        #lambda_binning_for_fit
+        #lambda_binning_for_calc
+
+        return {}
+
+
     def _retrieve_row_infos(self, row=-1):
         '''this method retrieves the infos for the given row'''
 
@@ -95,13 +132,32 @@ class TableFileExporter:
 
         activate = self._get_checkbox_state(row=row, column=0)
         title = self._get_item_value(row=row, column=1)
+
+        # sample
+        sample_element = self._retrieve_element_infos(element='sample')
         runs = self._get_item_value(row=row, column=2)
         background_runs = self._get_item_value(row=row, column=3)
         background_background = self._get_item_value(row=row, column=4)
         material = self._get_item_value(row=row, column=5)
         packing_fraction =  self._get_item_value(row=row, column=6)
+        shape = self._get_selected_value(row=row, column=7)
+        radius = self._get_item_value(row=row, column=8)
+        height = self._get_item_value(row=row, column=9)
+        abs_correction = self._get_selected_value(row=row,column=10)
+        multiple_scattering_correction = self._get_selected_value(row=row, column=11)
+        inelastic_correction = self._get_selected_value(row=row,column=12)
+        if inelastic_correction.lower() == 'placzek':
+            pass
+        #order
+        #self
+        #interference
+        #fit_spectrum_width
+        #lambda_binning_for_fit
+        #lambda_binning_for_calc
 
 
+        #input_grouping
+        #output_grouping
 
         if row==0:
             print(" activate: {}".format(activate))
