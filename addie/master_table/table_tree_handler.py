@@ -823,7 +823,7 @@ class H3TableHandler:
         _table_file = str(QFileDialog.getSaveFileName(parent=self.parent,
                                                       caption="Define Output File Name ...",
                                                       directory=_current_folder,
-                                                      filter={"json (*.json)"}))
+                                                      filter=("json (*.json)")))
 
         if _table_file:
             _file_handler = FileHandler(filename = _table_file)
@@ -832,6 +832,7 @@ class H3TableHandler:
 
             o_export = TableFileExporter(parent=self.parent,
                                          filename=_table_file)
+            o_export.create_dictionary()
 
             # _export_handler = ExportTable(parent = self.parent_no_ui,
             #                               filename = _table_file)

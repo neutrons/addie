@@ -41,7 +41,7 @@ class ReductionConfiguration(QDialog):
         self.parent.set_default_folders_path()
 
     def init_widgets(self):
-        '''init all widgets with values in case we already openned that window, or populated with
+        '''init all widgets with values in case we already opened that window, or populated with
         default values'''
         self.ui.reset_pdf_q_range_button.setIcon(QtGui.QIcon(":/MPL Toolbar/reset_logo.png"))
         self.ui.reset_pdf_r_range_button.setIcon(QtGui.QIcon(":/MPL Toolbar/reset_logo.png"))
