@@ -90,13 +90,27 @@ class TableFileExporter:
     def _retrieve_row_infos(self, row=-1):
         '''this method retrieves the infos for the given row'''
 
+        if row==0:
+            print("row: {}".format(row))
+
         activate = self._get_checkbox_state(row=row, column=0)
         title = self._get_item_value(row=row, column=1)
+        runs = self._get_item_value(row=row, column=2)
+        background_runs = self._get_item_value(row=row, column=3)
+        background_background = self._get_item_value(row=row, column=4)
+        material = self._get_item_value(row=row, column=5)
+        packing_fraction =  self._get_item_value(row=row, column=6)
 
 
 
-        print("activate: {}".format(activate))
-        print("title: {}".format(title))
+        if row==0:
+            print(" activate: {}".format(activate))
+            print(" title: {}".format(title))
+            print(" runs: {}".format(runs))
+            print(" background_runs: {}".format(background_runs))
+            print(" background_background: {}".format(background_background))
+            print(" material: {}".format(material))
+            print(" packing_fraction: {}".format(packing_fraction))
 
 
 

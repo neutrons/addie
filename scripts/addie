@@ -72,6 +72,7 @@ from addie.ui_table_tree_save_config import Ui_Dialog as UiDialogSave
 from addie.master_table.table_row_handler import TableRowHandler
 from addie.master_table.selection_handler import TableHandler
 from addie.master_table.reduction_configuration_handler import ReductionConfigurationHandler
+from addie.make_calibration_handler.make_calibration import MakeCalibrationLauncher
 
 import addie.addiedriver as driver
 import addie.specify_plots_style as ps
@@ -2423,11 +2424,6 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     # Mantid
 
-    # def make_calibration_clicked(self):
-    #     _make = MakeCalibrationLauncher(parent=self)
-
-    # New tab with advanced table
-
     # master table
     def personalization_table_clicked(self):
         o_master_table_tree = TableTreeHandler(parent=self)
@@ -2653,6 +2649,19 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     def master_table_output_grouping_button_pressed(self, key):
         o_table = TableRowHandler(parent=self)
         o_table.grouping_button(key=key, grouping_type='output')
+
+    # calibrations
+    def make_calibration_clicked(self):
+        MakeCalibrationLauncher(parent=self)
+
+    def browse_calibration_clicked(self):
+        _calibration_folder = self.calibration_folder
+        _calibration_file = QtGui.QFileDialog.getOpenFileName(parent = self,
+                                                              caption = "Select Calibration File",
+                                                              directory = _calibration_folder,
+                                                              filter = self.calibration_extension)
+        if _calibration_file:
+            self.ui.calibration_file.setText(_calibration_file)
 
     def apply_clicked(self):
         # do stuff

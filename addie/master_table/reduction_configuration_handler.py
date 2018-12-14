@@ -55,17 +55,17 @@ class ReductionConfiguration(QDialog):
     def pdf_reset_r_range_button(self):
         pass
 
-    def make_calibration_clicked(self):
-        MakeCalibrationLauncher(parent=self, grand_parent=self.parent)
-
-    def browse_calibration_clicked(self):
-        _calibration_folder = self.parent.calibration_folder
-        _calibration_file = QtGui.QFileDialog.getOpenFileName(parent = self.parent,
-                                                              caption = "Select Calibration File",
-                                                              directory = _calibration_folder,
-                                                              filter = self.parent.calibration_extension)
-        if _calibration_file:
-            self.ui.calibration_file.setText(_calibration_file)
+    # def make_calibration_clicked(self):
+    #     MakeCalibrationLauncher(parent=self, grand_parent=self.parent)
+    #
+    # def browse_calibration_clicked(self):
+    #     _calibration_folder = self.parent.calibration_folder
+    #     _calibration_file = QtGui.QFileDialog.getOpenFileName(parent = self.parent,
+    #                                                           caption = "Select Calibration File",
+    #                                                           directory = _calibration_folder,
+    #                                                           filter = self.parent.calibration_extension)
+    #     if _calibration_file:
+    #         self.ui.calibration_file.setText(_calibration_file)
 
     def pdf_browse_characterization_clicked(self):
         _characterization_folder = self.parent.characterization_folder
@@ -74,7 +74,7 @@ class ReductionConfiguration(QDialog):
                                                                    directory=_characterization_folder,
                                                                    filter=self.parent.characterization_extension)
         if _characterization_file:
-            self.ui.pdf_characterization_file.setTet(_characterization_file)
+            self.ui.pdf_characterization_file.setText(_characterization_file)
 
     def close_button(self):
         # save state of buttons
@@ -106,7 +106,7 @@ class LoadReductionConfiguration:
             bragg_number_of_bins = data["bragg"]["number_of_bins"]
             bragg_wavelength = data["bragg"]["wavelength"]
 
-            calibration_file = data["pdf_bragg"]["calibration_file"]
+            #calibration_file = data["pdf_bragg"]["calibration_file"]
             push_data_positive = data["advanced"]["push_data_positive"]
 
         else:
@@ -119,11 +119,11 @@ class LoadReductionConfiguration:
             bragg_number_of_bins = grand_parent.reduction_configuration["bragg"]["number_of_bins"]
             bragg_wavelength = grand_parent.reduction_configuration["bragg"]["wavelength"]
 
-            calibration_file = grand_parent.reduction_configuration["pdf_bragg"]["calibration_file"]
+            #calibration_file = grand_parent.reduction_configuration["pdf_bragg"]["calibration_file"]
             push_data_positive = grand_parent.reduction_configuration["advanced"]["push_data_positive"]
 
         # PDF and Bragg
-        self._set_text_value(ui=parent.ui.calibration_file, value=calibration_file)
+        #self._set_text_value(ui=parent.ui.calibration_file, value=calibration_file)
 
         # PDF
         self._set_text_value(ui=parent.ui.pdf_q_range_min, value=pdf_q_range["min"])
@@ -163,8 +163,8 @@ class SaveReductionConfiguration:
         # PDF and Bragg
         reduction_configuration['pdf_bragg'] = {}
 
-        calibration_file = self._get_text_value(parent.ui.calibration_file)
-        reduction_configuration['pdf_bragg']["calibration_file"] = calibration_file
+        #calibration_file = self._get_text_value(parent.ui.calibration_file)
+        #reduction_configuration['pdf_bragg']["calibration_file"] = calibration_file
 
         # PDF
         pdf_reduction_configuration = {}

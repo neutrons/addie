@@ -4024,6 +4024,112 @@ p, li { white-space: pre-wrap; }
                     </widget>
                    </item>
                    <item>
+                    <spacer name="horizontalSpacer_12">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_34">
+                     <item>
+                      <widget class="QLabel" name="label_50">
+                       <property name="minimumSize">
+                        <size>
+                         <width>80</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>80</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string>Calibration:</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QPushButton" name="browse_calibration_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>100</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>100</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string>Browse ...</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="label_51">
+                       <property name="minimumSize">
+                        <size>
+                         <width>20</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>20</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string>or</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QPushButton" name="make_calibration_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>100</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>100</width>
+                         <height>16777215</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string>Make ...</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="calibration_file">
+                       <property name="minimumSize">
+                        <size>
+                         <width>500</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string>N/A</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item>
                     <spacer name="horizontalSpacer_11">
                      <property name="orientation">
                       <enum>Qt::Horizontal</enum>
@@ -6143,6 +6249,38 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>browse_calibration_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>browse_calibration_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>562</x>
+     <y>885</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>619</x>
+     <y>982</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>make_calibration_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>make_calibration_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>709</x>
+     <y>883</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>847</x>
+     <y>981</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>diamond_edited()</slot>
@@ -6207,5 +6345,7 @@ p, li { white-space: pre-wrap; }
   <slot>table_search()</slot>
   <slot>table_search_clear()</slot>
   <slot>reduction_configuration_button_clicked()</slot>
+  <slot>browse_calibration_clicked()</slot>
+  <slot>slot1()</slot>
  </slots>
 </ui>

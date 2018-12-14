@@ -31,93 +31,6 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_26">
-            <item>
-             <widget class="QLabel" name="label_26">
-              <property name="minimumSize">
-               <size>
-                <width>80</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>80</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Calibration:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="browse_calibration_button">
-              <property name="minimumSize">
-               <size>
-                <width>100</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Browse ...</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_27">
-              <property name="minimumSize">
-               <size>
-                <width>20</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>20</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>or</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="make_calibration_button">
-              <property name="minimumSize">
-               <size>
-                <width>100</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Make ...</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="calibration_file">
-              <property name="text">
-               <string>N/A</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
            <spacer name="verticalSpacer_3">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -125,7 +38,7 @@
             <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
-              <height>53</height>
+              <height>86</height>
              </size>
             </property>
            </spacer>
@@ -927,22 +840,6 @@ p, li { white-space: pre-wrap; }
  <resources/>
  <connections>
   <connection>
-   <sender>make_calibration_button</sender>
-   <signal>clicked()</signal>
-   <receiver>Dialog</receiver>
-   <slot>make_calibration_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>312</x>
-     <y>91</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>407</x>
-     <y>7</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>reset_pdf_q_range_button</sender>
    <signal>clicked()</signal>
    <receiver>Dialog</receiver>
@@ -987,22 +884,6 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>677</x>
      <y>546</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>browse_calibration_button</sender>
-   <signal>clicked()</signal>
-   <receiver>Dialog</receiver>
-   <slot>browse_calibration_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>180</x>
-     <y>95</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>275</x>
-     <y>6</y>
     </hint>
    </hints>
   </connection>

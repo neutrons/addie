@@ -12,18 +12,17 @@ from addie.utilities.gui_handler import TableHandler
 
 class MakeCalibrationLauncher(object):
 
-    def __init__(self, parent=None, grand_parent=None):
+    def __init__(self, parent=None):
 
-        if grand_parent.make_calibration_ui is None:
-            _make = MakeCalibrationWindow(grand_parent=grand_parent,
-                                          parent=parent)
+        if parent.make_calibration_ui is None:
+            _make = MakeCalibrationWindow(parent=parent)
             _make.show()
-            grand_parent.make_calibration_ui = _make
-            if grand_parent.make_calibration_ui_position:
-                grand_parent.make_calibration_ui.move(grand_parent.make_calibration_ui_position)
+            parent.make_calibration_ui = _make
+            if parent.make_calibration_ui_position:
+                parent.make_calibration_ui.move(parent.make_calibration_ui_position)
         else:
-            grand_parent.make_calibration_ui.setFocus()
-            grand_parent.make_calibration_ui.activateWindow()
+            parent.make_calibration_ui.setFocus()
+            parent.make_calibration_ui.activateWindow()
 
 
 class MakeCalibrationWindow(QtGui.QMainWindow):
@@ -54,15 +53,14 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
     master_list_ui = {}
     master_list_value = {}
 
-    def __init__(self, parent=None, grand_parent=None):
+    def __init__(self, parent=None):
         self.parent = parent
-        self.grand_parent = grand_parent
 
-        QtGui.QMainWindow.__init__(self, parent=grand_parent)
+        QtGui.QMainWindow.__init__(self, parent=parent)
         self.ui = UiMainWindow()
         self.ui.setupUi(self)
 
-        self.addie_config_file = grand_parent.addie_config_file
+        self.addie_config_file = parent.addie_config_file
 
         self.init_widgets()
         self.init_date()
@@ -107,7 +105,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
 
     def master_browse_button_clicked(self):
         _master_folder = QtGui.QFileDialog.getExistingDirectory(caption="Select Output Folder ...",
-                                                                directory=self.grand_parent.output_folder,
+                                                                directory=self.parent.output_folder,
                                                                 options=QtGui.QFileDialog.ShowDirsOnly)
         if _master_folder:
             self.ui.master_output_directory_label.setText(str(_master_folder))
@@ -408,8 +406,8 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
                 json.dump(o_dict.dictionary, fp)
 
     def closeEvent(self, c):
-        self.grand_parent.make_calibration_ui = None
-        self.grand_parent.make_calibration_ui_position = self.pos()
+        self.parent.make_calibration_ui = None
+        self.parent.make_calibration_ui_position = self.pos()
 
 
 class MakeCalibrationDictionary:
