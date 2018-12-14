@@ -542,12 +542,12 @@ class H3TableHandler:
         self.parent.master_table_right_click_buttons['export']['ui'] = table_export
         table_export.setEnabled(self.parent.master_table_right_click_buttons['export']['status'])
         table.addSeparator()
-        table_reset = table.addAction("Reset")
-        self.parent.master_table_right_click_buttons['reset']['ui'] = table_reset
-        table_reset.setEnabled(self.parent.master_table_right_click_buttons['reset']['status'])
         table_clear = table.addAction("Clear")
         self.parent.master_table_right_click_buttons['clear']['ui'] = table_clear
         table_clear.setEnabled(self.parent.master_table_right_click_buttons['clear']['status'])
+        table_reset = table.addAction("Reset Format")
+        self.parent.master_table_right_click_buttons['reset']['ui'] = table_reset
+        table_reset.setEnabled(self.parent.master_table_right_click_buttons['reset']['status'])
 
         # configuration
         config = menu.addMenu("Columns Configuration")

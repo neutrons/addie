@@ -359,7 +359,6 @@ class FormatAsciiList:
                                                                              combine_list=self.list1)
 
 
-
 class TableFileLoader:
     '''This class will take a table config file and will return a dictionary the program can use to
      populate the table
