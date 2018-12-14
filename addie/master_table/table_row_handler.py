@@ -124,6 +124,8 @@ class TableRowHandler:
         self.table_ui.insertRow(row)
         self.set_row_height(row, COLUMN_DEFAULT_HEIGHT)
 
+        _list_ui_to_unlock = []
+
         _master_table_row_ui = {'active': None,
                                 'title': None,
                                 'sample': {'runs': None,
@@ -240,6 +242,7 @@ class TableRowHandler:
                                lambda value=_shape_default_value,
                                key=random_key:
                                self.parent.master_table_sample_shape_changed(value, key))
+        _list_ui_to_unlock.append(_widget)
         _widget.blockSignals(True)
         _widget.addItem("cylindrical")
         _widget.addItem("spherical")
@@ -272,6 +275,7 @@ class TableRowHandler:
                                key = random_key:
                                self.parent.master_table_sample_abs_correction_changed(value, key))
         _widget.blockSignals(True)
+        _list_ui_to_unlock.append(_widget)
         for _item in list_abs_correction:
             _widget.addItem(_item)
         _master_table_row_ui['sample']['abs_correction'] = _widget
@@ -293,6 +297,7 @@ class TableRowHandler:
                                key=random_key:
                                self.parent.master_table_sample_multi_scattering_correction_changed(value, key))
         _widget.blockSignals(True)
+        _list_ui_to_unlock.append(_widget)
         for _item in list_multi_scat_correction:
             _widget.addItem(_item)
         _master_table_row_ui['sample']['mult_scat_correction'] = _widget
@@ -333,6 +338,7 @@ class TableRowHandler:
                                key=random_key:
                                self.parent.master_table_sample_inelastic_correction_changed(value, key))
         _widget.blockSignals(True)
+        _list_ui_to_unlock.append(_widget)
         self.table_ui.setCellWidget(row, 12, _widget)
 
         ## normalization
@@ -370,6 +376,7 @@ class TableRowHandler:
                                key=random_key:
                                self.parent.master_table_normalization_shape_changed(value, key))
         _widget.blockSignals(True)
+        _list_ui_to_unlock.append(_widget)
         _widget.addItem("cylindrical")
         _widget.addItem("spherical")
         _master_table_row_ui['normalization']['shape'] = _widget
@@ -398,6 +405,7 @@ class TableRowHandler:
                                    key=random_key:
                                self.parent.master_table_normalization_abs_correction_changed(value, key))
         _widget.blockSignals(True)
+        _list_ui_to_unlock.append(_widget)
 #        list_abs_correction = self.get_absorption_correction_list(shape=_shape_default_value)
         for _item in list_abs_correction:
             _widget.addItem(_item)
@@ -419,6 +427,7 @@ class TableRowHandler:
                                    key=random_key:
                                self.parent.master_table_normalization_multi_scattering_correction_changed(value, key))
         _widget.blockSignals(True)
+        _list_ui_to_unlock.append(_widget)
         # list_multi_scat_correction = self.get_multi_scat_correction_list(shape=_shape_default_value)
         for _item in list_multi_scat_correction:
             _widget.addItem(_item)
@@ -459,6 +468,7 @@ class TableRowHandler:
                                key=random_key:
                                self.parent.master_table_normalization_inelastic_correction_changed(value, key))
         _widget.blockSignals(True)
+        _list_ui_to_unlock.append(_widget)
         self.table_ui.setCellWidget(row, 23, _widget)
 
         # automatically populate placzek infos with default values
@@ -548,9 +558,9 @@ class TableRowHandler:
 
         ## recap
 
-        list_ui = self._get_list_ui_from_master_table_row_ui(_master_table_row_ui)
+        #list_ui = self._get_list_ui_from_master_table_row_ui(_master_table_row_ui)
         self.parent.master_table_list_ui[random_key] = _master_table_row_ui
-        self.unlock_signals_ui(list_ui=list_ui)
+        self.unlock_signals_ui(list_ui=_list_ui_to_unlock)
         self.parent.check_status_of_right_click_buttons()
 
     def _get_list_ui_from_master_table_row_ui(self, master_table_row_ui):
