@@ -71,11 +71,7 @@ class TableFileExporter:
         dictionary that will be saved into a json file'''
 
         general_infos = self._retrieve_general_infos()
-
-        nbr_row = self.table_ui.rowCount()
-        for _row in np.arange(nbr_row):
-            _row_infos = self._retrieve_row_infos(row=_row)
-
+        _row_infos = self._retrieve_row_infos()
 
     def _get_checkbox_state(self, row=-1, column=-1):
         state = self.table_ui.cellWidget(row, column).children()[1].checkState()
@@ -91,63 +87,62 @@ class TableFileExporter:
         widget = self.table_ui.cellWidget(row, column).children()[1]
         return str(widget.currentText())
 
-    def _retrieve_element_infos(self, element='sample'):
-        if element == 'sample':
-            column_start = 2
-        else:
-            column_start = 13
+    def _retrieve_element_infos(self, element='sample', row_entry=None):
 
-        _element_dict = copy.deepcopy(_element)
+        _element_dict = OrderedDict()
 
-        _element_dict["Runs"] = self._get_item_value(row=row, column=column_start)
-        _element_dict["Background"]["Runs"] = self._get_item_value(row=row, column=column_start+1)
-        _element_dict["Background"]["Runs"] = self._get_item_value(row=row, column=column_start+2)
-        _element_dict["Material"] = self._get_item_value(row=row, column=column_start+3)
-        _element_dict["PackingFraction"] =  self._get_item_value(row=row, column=column_start+4)
-        _element_dict["Geometry"]["Shape"] = self._get_selected_value(row=row, column=column_start+5)
+        _element_dict['Runs'] = None
+        _element_dict['Background'] = OrderedDict()
+        _element_dict['Background']['Runs'] = None
+        _element_dict['Background']['Background'] = None
+        _element_dict['Material'] = None
         #FIXME
 
-        radius = self._get_item_value(row=row, column=column_start+6)
-        height = self._get_item_value(row=row, column=column_start+7)
-        abs_correction = self._get_selected_value(row=row,column=column_start+8)
-        multiple_scattering_correction = self._get_selected_value(row=row, column=column_start+9)
-        inelastic_correction = self._get_selected_value(row=row,column=column_start+10)
-        if inelastic_correction.lower() == 'placzek':
-            pass
-        #order
-        #self
-        #interference
-        #fit_spectrum_width
-        #lambda_binning_for_fit
-        #lambda_binning_for_calc
-
-        return {}
 
 
-    def _retrieve_row_infos(self, row=-1):
-        '''this method retrieves the infos for the given row'''
 
-        if row==0:
-            print("row: {}".format(row))
+        return _element_dict
 
-        activate = self._get_checkbox_state(row=row, column=0)
-        title = self._get_item_value(row=row, column=1)
+    def _retrieve_row_infos(self):
+        '''this method retrieves the infos from the table using the master_table_list_ui'''
 
-        # sample
-        sample_element = self._retrieve_element_infos(element='sample')
-        runs = self._get_item_value(row=row, column=2)
-        background_runs = self._get_item_value(row=row, column=3)
-        background_background = self._get_item_value(row=row, column=4)
-        material = self._get_item_value(row=row, column=5)
-        packing_fraction =  self._get_item_value(row=row, column=6)
-        shape = self._get_selected_value(row=row, column=7)
-        radius = self._get_item_value(row=row, column=8)
-        height = self._get_item_value(row=row, column=9)
-        abs_correction = self._get_selected_value(row=row,column=10)
-        multiple_scattering_correction = self._get_selected_value(row=row, column=11)
-        inelastic_correction = self._get_selected_value(row=row,column=12)
-        if inelastic_correction.lower() == 'placzek':
-            pass
+        full_export_dictionary = OrderedDict()
+        master_table_list_ui = self.parent.master_table_list_ui
+
+        index = 0
+        for _key in master_table_list_ui.keys():
+
+            _row_entry = master_table_list_ui[_key]
+
+            _export_dictionary_sample = self._retrieve_element_infos(element='sample',
+                                                                        row_entry=_row_entry)
+            _export_dictionary_normalization = self._retrieve_element_infos(element='normalization',
+                                                                               row_entry=_row_entry)
+
+            full_export_dictionary[index] = {'sample': _export_dictionary_sample,
+                                             'normalization': _export_dictionary_normalization}
+
+        return full_export_dictionary
+
+
+        # activate = self._get_checkbox_state(row=row, column=0)
+        # title = self._get_item_value(row=row, column=1)
+        #
+        # # sample
+        # sample_element = self._retrieve_element_infos(element='sample')
+        # runs = self._get_item_value(row=row, column=2)
+        # background_runs = self._get_item_value(row=row, column=3)
+        # background_background = self._get_item_value(row=row, column=4)
+        # material = self._get_item_value(row=row, column=5)
+        # packing_fraction =  self._get_item_value(row=row, column=6)
+        # shape = self._get_selected_value(row=row, column=7)
+        # radius = self._get_item_value(row=row, column=8)
+        # height = self._get_item_value(row=row, column=9)
+        # abs_correction = self._get_selected_value(row=row,column=10)
+        # multiple_scattering_correction = self._get_selected_value(row=row, column=11)
+        # inelastic_correction = self._get_selected_value(row=row,column=12)
+        # if inelastic_correction.lower() == 'placzek':
+        #     pass
         #order
         #self
         #interference
@@ -159,14 +154,14 @@ class TableFileExporter:
         #input_grouping
         #output_grouping
 
-        if row==0:
-            print(" activate: {}".format(activate))
-            print(" title: {}".format(title))
-            print(" runs: {}".format(runs))
-            print(" background_runs: {}".format(background_runs))
-            print(" background_background: {}".format(background_background))
-            print(" material: {}".format(material))
-            print(" packing_fraction: {}".format(packing_fraction))
+        # if row==0:
+        #     print(" activate: {}".format(activate))
+        #     print(" title: {}".format(title))
+        #     print(" runs: {}".format(runs))
+        #     print(" background_runs: {}".format(background_runs))
+        #     print(" background_background: {}".format(background_background))
+        #     print(" material: {}".format(material))
+        #     print(" packing_fraction: {}".format(packing_fraction))
 
 
 

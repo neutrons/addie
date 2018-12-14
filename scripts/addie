@@ -157,7 +157,21 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                                         'plot': copy.deepcopy(dict_widget),
                                         }
 
-    master_table_list_ui = {}
+    placzek_info_dict = {'order_text': None,
+                         'order_index': None,
+                         'is_self': None,
+                         'is_interference': None,
+                         'fit_spectrum_text': None,
+                         'fit_spectrum_index': None,
+                         'lambda_fit_min': None,
+                         'lambda_fit_max': None,
+                         'lambda_fit_delta': None,
+                         'lambda_calc_min': None,
+                         'lambda_calc_max': None,
+                         'lambda_calc_delta': None,
+                         }
+
+    master_table_list_ui = OrderedDict()
     master_table_cells_copy = {'temp': [],
                                'list_column': [],
                                'row': [],

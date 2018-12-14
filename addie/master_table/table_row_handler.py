@@ -125,14 +125,37 @@ class TableRowHandler:
         self.set_row_height(row, COLUMN_DEFAULT_HEIGHT)
 
         _master_table_row_ui = {'active': None,
-                                'sample': {'shape': None,
+                                'title': None,
+                                'sample': {'runs': None,
+                                           'background': {'runs': None,
+                                                          'background': None,
+                                                          },
+                                           'material': None,
+                                           'mass_density': None,
+                                           'packing_fraction': None,
+                                           'geometry': {'radius': None,
+                                                        'height': None,
+                                                        'geometry': None,
+                                                        },
+                                           'shape': None,
                                            'abs_correction': None,
                                            'mult_scat_correction': None,
                                            'inelastic_correction': None,
                                            'placzek_button': None,
                                            'placzek_infos': None,
                                             },
-                                'normalization': {'shape': None,
+                                'normalization': {'runs': None,
+                                           'background': {'runs': None,
+                                                          'background': None,
+                                                          },
+                                           'material': None,
+                                           'mass_density': None,
+                                           'packing_fraction': None,
+                                           'geometry': {'radius': None,
+                                                        'height': None,
+                                                        'geometry': None,
+                                                        },
+                                           'shape': None,
                                            'abs_correction': None,
                                            'mult_scat_correction': None,
                                            'inelastic_correction': None,
@@ -177,26 +200,32 @@ class TableRowHandler:
 
         # column 1 - title
         _item = QTableWidgetItem("")
+        _master_table_row_ui['title'] = _item
         self.table_ui.setItem(row, 1, _item)
 
         # column 2 - sample runs
         _item = QTableWidgetItem("")
+        _master_table_row_ui['sample']['runs'] = _item
         self.table_ui.setItem(row, 2, _item)
 
         # column 3 - background runs
         _item = QTableWidgetItem("")
+        _master_table_row_ui['sample']['background']['runs'] = _item
         self.table_ui.setItem(row, 3, _item)
 
         # column 4 - background background
         _item = QTableWidgetItem("")
+        _master_table_row_ui['sample']['background']['background'] = _item
         self.table_ui.setItem(row, 4, _item)
 
         # column 5 - material
         _item = QTableWidgetItem("")
+        _master_table_row_ui['sample']['material'] = _item
         self.table_ui.setItem(row, 5, _item)
 
         # column 6 - packing fraction
         _item = QTableWidgetItem("")
+        _master_table_row_ui['sample']['packing_fraction'] = _item
         self.table_ui.setItem(row, 6, _item)
 
         # column 7 - shape (cylindrical or spherical)
@@ -222,10 +251,12 @@ class TableRowHandler:
 
         # column 8 - radius
         _item = QTableWidgetItem("")
+        _master_table_row_ui['sample']['geometry']['radius'] = _item
         self.table_ui.setItem(row, 8, _item)
 
         # column 9 - height
         _item = QTableWidgetItem("")
+        _master_table_row_ui['sample']['geometry']['height'] = _item
         self.table_ui.setItem(row, 9, _item)
 
         # column 10 - abs. correction
@@ -429,6 +460,11 @@ class TableRowHandler:
                                self.parent.master_table_normalization_inelastic_correction_changed(value, key))
         _widget.blockSignals(True)
         self.table_ui.setCellWidget(row, 23, _widget)
+
+        # automatically populate placzek infos with default values
+
+
+
 
         # column 24 - Input Grouping
         _row1_layout = QtGui.QHBoxLayout()
