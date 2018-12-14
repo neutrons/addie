@@ -310,6 +310,24 @@ class FormatAsciiList:
             new_list.append(_combine_element)
         return new_list
 
+    def __append_list1_to_list2(self, list1=[], list2=[]):
+        '''will append to the end of each list2 element, the value of the list1, with the same index
+
+        examples:
+        list1 = ["1", "2", "3", "4-6"]
+        list2 = ["Sample A", "Sample B", "Sample C", "Sample D"]
+
+        :returns
+        ["Sample A_1", "Sample B_2", "Sample C_3", "Sample D_4-6"]
+        '''
+        new_list2 = [_ele2 + "_" + str(_ele1) for _ele1, _ele2 in zip(list1, list2)]
+
+        # new_list2 = []
+        # for element1, element2 in zip(list1, list2):
+        #     new_list2.append(list2 + "_" + str(element1))
+
+        return new_list2
+
     def option1(self):
         # keep raw title and merge lines with exact same title
         [self.new_list1, self.new_list2] = self.__combine_identical_elements(check_list=self.list2,
@@ -325,8 +343,10 @@ class FormatAsciiList:
     def option3(self):
         # keep raw title, append run number
         combine_list1 = self.__convert_list_to_combine_version(list=self.list1)
-        
+        list2_with_run_number = self.__append_list1_to_list2(list1=combine_list1, list2=self.list2)
 
+        [self.new_list1, self.new_list2] = self.__combine_identical_elements(check_list=list2_with_run_number,
+                                                                             combine_list=self.list1)
 
     def option4(self):
         # take raw title, remove temperature part, add run number
