@@ -52,6 +52,9 @@ class AdvancedWindow(QtGui.QMainWindow):
         self.parent.instrument["short_name"] = list_instrument_short_name[index_instrument]
         self.parent.instrument["full_name"] = list_instrument_full_name[index_instrument]
 
+        self.ui.cache_dir_label.setText(self.parent.cache_folder)
+        self.ui.output_dir_label.setText(self.parent.output_folder)
+
     def post_processing_clicked(self):
         if self.ui.idl_post_processing_button.isChecked():
             _index = 0

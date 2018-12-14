@@ -378,10 +378,6 @@ class TableFileLoader:
         # trying to load first using ascii loader
         o_loader = AsciiLoader(parent=self.parent, filename=self.filename)
         o_loader.show_dialog()
-#        _table_dictionary = o_loader.table_dictionary
-
-#        o_table_ui_loader = FromDictionaryToTableUi(parent=self.parent)
-#        o_table_ui_loader.fill(input_dictionary=_table_dictionary)
 
 
 class FromDictionaryToTableUi:

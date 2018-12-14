@@ -12,8 +12,13 @@ class ConfigurationInitializer:
         parent.instrument["short_name"] = data["instrument"]["current"]["short_name"]
         parent.list_instrument = data["instrument"]["list"]
 
+        parent.facility = data["facility"]
+
         parent.config_calibration_folder = data["calibration_folder"]
         parent.config_characterization_folder = data["characterization_folder"]
 
         parent.calibration_extension = data["calibration_extension"]
         parent.characterization_extension = data["characterization_extension"]
+
+        parent.cache_folder = data["cacheDir"]
+        parent.output_folder = data["outputDir"]

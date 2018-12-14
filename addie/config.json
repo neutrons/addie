@@ -23,5 +23,9 @@
   "calibration_extension": "NeXus (*.h5);; Calibration (*.cal)",
   "characterization_folder": {"pre": "/SNS/",
                               "post": "shared/CALIBRATION/"},
-  "characterization_extension": "NeXus (*.h5);; Calibration (*.cal)"
+  "characterization_extension": "NeXus (*.h5);; Calibration (*.cal)",
+  "facility": "SNS",
+  "cacheDir": "./tmp",
+  "outputDir": "./output"
+
 }

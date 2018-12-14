@@ -88,6 +88,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     # config.json
     # those infos will be automatically retrieve from the config.json file
+    facility = ''
     instrument = {"full_name": "",   # Powgen, Nomad ...
                   "short_name": ""}  # PG3, NOM ...
     list_instrument = {"full_name": [],
@@ -97,6 +98,9 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     calibration_extension = ""
     characterization_extension = ""
+
+    cache_folder = './' # defined in the advanced window
+    output_folder = './' # defined in the advanced window
 
     # end of config.json
 
@@ -187,8 +191,6 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     undo_button_enabled = False
     redo_button_enabled = False
     post_processing = 'idl'  # or 'mantid'
-    cache_folder = './' # defined in the advanced window
-    output_folder = './' # defined in the advanced window
 
     debugging = False
     load_intermediate_step_ok = False
@@ -2117,7 +2119,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         _about.display()
 
     def advanced_option_clicked(self):
-        _advanced = AdvancedWindowLauncher(parent = self)
+        AdvancedWindowLauncher(parent = self)
 
     def menu_ipts_file_transfer_clicked(self):
         _o_ipts = IptsFileTransferDialog(parent=self)

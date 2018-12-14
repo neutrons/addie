@@ -22,6 +22,7 @@ from addie.master_table.selection_handler import SelectionHandler, CellsHandler,
 from addie.master_table.import_table import ImportTable
 from addie.master_table.export_table import ExportTable
 from addie.master_table.master_table_loader import TableFileLoader
+from addie.master_table.master_table_exporter import TableFileExporter
 
 
 class TableInitialization:
@@ -812,32 +813,29 @@ class H3TableHandler:
 
             o_dict.load()
 
-            # _o_import = ImportTable(parent=self.parent, filename=_table_file)
-            # _o_import.run()
-
             self.parent.ui.statusbar.setStyleSheet("color: blue")
             self.parent.ui.statusbar.showMessage("File {} has been imported".format(_table_file),
                                                  self.parent.statusbar_display_time)
 
 
     def _export_table(self):
-        # FIXME
         _current_folder = self.parent.current_folder
         _table_file = str(QFileDialog.getSaveFileName(parent=self.parent,
                                                       caption="Define Output File Name ...",
                                                       directory=_current_folder,
-                                                      filter={"Text (*.csv)"}))
+                                                      filter={"json (*.json)"}))
 
         if _table_file:
             _file_handler = FileHandler(filename = _table_file)
-            _file_handler.check_file_extension(ext_requested='txt')
+            _file_handler.check_file_extension(ext_requested='json')
             _table_file = _file_handler.filename
 
-            _export_handler = ExportTable(parent = self.parent_no_ui,
-                                          filename = _table_file)
-            _export_handler.run()
+            o_export = TableFileExporter(parent=self.parent,
+                                         filename=_table_file)
 
-            #FIXME
+            # _export_handler = ExportTable(parent = self.parent_no_ui,
+            #                               filename = _table_file)
+            # _export_handler.run()
 
             self.parent.ui.statusbar.setStyleSheet("color: blue")
             self.parent.ui.statusbar.showMessage("Table has been exported in file {}".format(_table_file),
