@@ -350,7 +350,14 @@ class FormatAsciiList:
 
     def option4(self):
         # take raw title, remove temperature part, add run number
-        pass
+        clean_list2 = self.__keep_string_before(list=self.list2,
+                                                splitter_string=" at temperature")
+        combine_list1 = self.__convert_list_to_combine_version(list=self.list1)
+        list2_with_run_number = self.__append_list1_to_list2(list1=combine_list1, list2=clean_list2)
+
+        [self.new_list1, self.new_list2] = self.__combine_identical_elements(check_list=list2_with_run_number,
+                                                                             combine_list=self.list1)
+
 
 
 class TableFileLoader:
