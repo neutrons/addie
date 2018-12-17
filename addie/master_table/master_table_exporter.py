@@ -10,6 +10,9 @@ except ImportError:
     except ImportError:
         raise ImportError("Requires PyQt4 or PyQt5")
 
+from addie.master_table.tree_definition import sample_first_column, normalization_first_column
+from addie.master_table.utilities import Utilities
+
 _export_dictionary = OrderedDict()
 
 _element= {"Runs": "",
@@ -21,6 +24,7 @@ _element= {"Runs": "",
            "MassDensity": np.NaN,
            "PackingFraction": np.NaN,
            "Geometry": {"Radius": np.NaN,
+                        "Radius1": np.NaN,
                         "Height": np.NaN,
                         },
            "AbsorptionCorrection": {"Type": "",
@@ -60,7 +64,6 @@ _empty_row = {'activate': True,
 
 class TableFileExporter:
 
-
     def __init__(self, parent=None, filename=''):
         self.parent = parent
         self.table_ui = parent.ui.h3_table
@@ -87,9 +90,87 @@ class TableFileExporter:
         widget = self.table_ui.cellWidget(row, column).children()[1]
         return str(widget.currentText())
 
-    def _retrieve_element_infos(self, element='sample', row_entry=None):
+    def _retrieve_element_infos(self, element='sample', row=-1):
+        '''form the given row, and the given element (sample or normalization) will
+        retrieve the widgets values'''
 
         _element_dict = OrderedDict()
+
+        if element == 'sample':
+            column = sample_first_column
+        else:
+            column = normalization_first_column
+
+        runs = self._get_item_value(row=row, column=column)
+
+        column += 1
+        background_runs = self._get_item_value(row=row, column=column)
+
+        column += 1
+        background_background = self._get_item_value(row=row, column=column)
+
+        column += 1
+        material = self._get_item_value(row=row, column=column)
+
+        column += 1
+        mass_density = self._get_item_value(row=row, column=column)
+
+        column += 1
+        packing_fraction =  self._get_item_value(row=row, column=6)
+
+        column += 1
+        shape = self._get_selected_value(row=row, column=column)
+
+        column += 1
+        radius = self._get_item_value(row=row, column=column)
+
+        column += 1
+        radius2 = self._get_item_value(row=row, column=column)
+
+        column += 1
+        height = self._get_item_value(row=row, column=column)
+
+        column += 1
+        abs_correction = self._get_selected_value(row=row, column=column)
+
+        column += 1
+        multiple_scattering_correction = self._get_selected_value(row=row, column=column)
+
+        column += 1
+        inelastic_correction = self._get_selected_value(row=row,column=column)
+        #if inelastic_correction.lower() == 'placzek':
+
+        # retrieve the key according to row
+        o_util = Utilities(parent=self.parent)
+        key = o_util.get_row_key_from_row_index(row=row)
+
+        # for debugging and testing, printing the value of title of this key/row
+        master_table_list_ui = self.parent.master_table_list_ui
+        widget = master_table_list_ui[key]['title']
+        print("row: {} has a title of: {}".format(row, str(widget.text())))
+
+
+        # order
+        # self
+        # interference
+        # fit_spectrum_width
+        # lambda_binning_for_fit
+        # lambda_binning_for_calc
+        #
+        # input_grouping
+        # output_grouping
+
+        # if row==0:
+        #     print(" activate: {}".format(activate))
+        #     print(" title: {}".format(title))
+        #     print(" runs: {}".format(runs))
+        #     print(" background_runs: {}".format(background_runs))
+        #     print(" background_background: {}".format(background_background))
+        #     print(" material: {}".format(material))
+        #     print(" packing_fraction: {}".format(packing_fraction))
+        #     print(" shape: {}".format(shape))
+
+
 
         _element_dict['Runs'] = None
         _element_dict['Background'] = OrderedDict()
@@ -107,61 +188,26 @@ class TableFileExporter:
         '''this method retrieves the infos from the table using the master_table_list_ui'''
 
         full_export_dictionary = OrderedDict()
-        master_table_list_ui = self.parent.master_table_list_ui
+        nbr_row = self.table_ui.rowCount()
+        #master_table_list_ui = self.parent.master_table_list_ui
 
-        index = 0
-        for _key in master_table_list_ui.keys():
+        #index = 0
+        for _row in np.arange(nbr_row):
 
-            _row_entry = master_table_list_ui[_key]
-
+            activate = self._get_checkbox_state(row=_row, column=0)
+            title = self._get_item_value(row=_row, column=1)
             _export_dictionary_sample = self._retrieve_element_infos(element='sample',
-                                                                        row_entry=_row_entry)
+                                                                        row=_row)
             _export_dictionary_normalization = self._retrieve_element_infos(element='normalization',
-                                                                               row_entry=_row_entry)
+                                                                            row=_row)
 
-            full_export_dictionary[index] = {'sample': _export_dictionary_sample,
+            full_export_dictionary[_row] = {'sample': _export_dictionary_sample,
                                              'normalization': _export_dictionary_normalization}
 
         return full_export_dictionary
 
 
-        # activate = self._get_checkbox_state(row=row, column=0)
-        # title = self._get_item_value(row=row, column=1)
-        #
-        # # sample
-        # sample_element = self._retrieve_element_infos(element='sample')
-        # runs = self._get_item_value(row=row, column=2)
-        # background_runs = self._get_item_value(row=row, column=3)
-        # background_background = self._get_item_value(row=row, column=4)
-        # material = self._get_item_value(row=row, column=5)
-        # packing_fraction =  self._get_item_value(row=row, column=6)
-        # shape = self._get_selected_value(row=row, column=7)
-        # radius = self._get_item_value(row=row, column=8)
-        # height = self._get_item_value(row=row, column=9)
-        # abs_correction = self._get_selected_value(row=row,column=10)
-        # multiple_scattering_correction = self._get_selected_value(row=row, column=11)
-        # inelastic_correction = self._get_selected_value(row=row,column=12)
-        # if inelastic_correction.lower() == 'placzek':
-        #     pass
-        #order
-        #self
-        #interference
-        #fit_spectrum_width
-        #lambda_binning_for_fit
-        #lambda_binning_for_calc
 
-
-        #input_grouping
-        #output_grouping
-
-        # if row==0:
-        #     print(" activate: {}".format(activate))
-        #     print(" title: {}".format(title))
-        #     print(" runs: {}".format(runs))
-        #     print(" background_runs: {}".format(background_runs))
-        #     print(" background_background: {}".format(background_background))
-        #     print(" material: {}".format(material))
-        #     print(" packing_fraction: {}".format(packing_fraction))
 
 
 

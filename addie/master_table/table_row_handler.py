@@ -481,6 +481,7 @@ class TableRowHandler:
 #        list_abs_correction = self.get_absorption_correction_list(shape=_shape_default_value)
         for _item in list_abs_correction:
             _widget.addItem(_item)
+        _widget.setCurrentIndex(0)
         _master_table_row_ui['normalization']['abs_correction'] = _widget
         _layout.addWidget(_widget)
         _w = QWidget()
@@ -504,8 +505,8 @@ class TableRowHandler:
         # list_multi_scat_correction = self.get_multi_scat_correction_list(shape=_shape_default_value)
         for _item in list_multi_scat_correction:
             _widget.addItem(_item)
+        _widget.setCurrentIndex(0)
         _master_table_row_ui['normalization']['mult_scat_correction'] = _widget
-        #_widget.setCurrentIndex(0)
         _layout.addWidget(_widget)
         _w = QWidget()
         _w.setLayout(_layout)
@@ -520,6 +521,7 @@ class TableRowHandler:
         list_inelastic_correction = self.get_inelastic_scattering_list(shape=_shape_default_value)
         for _item in list_inelastic_correction:
                 _widget1.addItem(_item)
+        _widget1.setCurrentIndex(0)
         _master_table_row_ui['normalization']['inelastic_correction'] = _widget1
         _button = QPushButton("...")
         # _button.pressed.connect(lambda key=random_key:
