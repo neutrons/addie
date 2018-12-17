@@ -57,7 +57,7 @@ class PlaczekWindow(QMainWindow):
         is_interference = info_dict['is_interference']
         self.ui.interference_checkBox.setChecked(is_interference)
 
-        fit_spectrum_index = info_dict['fit_spectrum_index']
+        fit_spectrum_index = info_dict['fit_spectrum_with']['index_selected']
         self.ui.fit_spectrum_comboBox.setCurrentIndex(fit_spectrum_index)
 
         lambda_fit_min = info_dict['lambda_fit_min']

@@ -22,3 +22,5 @@ class ConfigurationInitializer:
 
         parent.cache_folder = data["cacheDir"]
         parent.output_folder = data["outputDir"]
+
+        parent.placzek_default = data['placzek']

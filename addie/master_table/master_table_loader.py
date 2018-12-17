@@ -470,6 +470,8 @@ class FromDictionaryToTableUi:
     def __set_combobox(self, requested_value="", row=-1, col=-1):
         _widget = self.table_ui.cellWidget(row, col).children()[1]
         _index = _widget.findText(requested_value)
+        if _index == -1:
+            _index = 0
         _widget.setCurrentIndex(_index)
 
     def populate_row(self, row=-1, entry=None):

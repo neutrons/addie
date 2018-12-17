@@ -103,6 +103,8 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     cache_folder = './' # defined in the advanced window
     output_folder = './' # defined in the advanced window
 
+    placzek_default = {}
+
     # end of config.json
 
     # load los.csv options

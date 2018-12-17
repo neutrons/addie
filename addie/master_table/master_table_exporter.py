@@ -138,16 +138,17 @@ class TableFileExporter:
 
         column += 1
         inelastic_correction = self._get_selected_value(row=row,column=column)
-        #if inelastic_correction.lower() == 'placzek':
+        if inelastic_correction.lower() == 'placzek':
 
-        # retrieve the key according to row
-        o_util = Utilities(parent=self.parent)
-        key = o_util.get_row_key_from_row_index(row=row)
+            # retrieve the key according to row
+            o_util = Utilities(parent=self.parent)
+            key = o_util.get_row_key_from_row_index(row=row)
 
-        # for debugging and testing, printing the value of title of this key/row
-        master_table_list_ui = self.parent.master_table_list_ui
-        widget = master_table_list_ui[key]['title']
-        print("row: {} has a title of: {}".format(row, str(widget.text())))
+            placzek_infos = self.parent.master_table_list_ui[key][element]['placzek_infos']
+
+            print("at row: {}, placzek_infos".format(row))
+            import pprint
+            pprint.pprint(placzek_infos)
 
 
         # order

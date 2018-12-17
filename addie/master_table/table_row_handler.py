@@ -392,6 +392,9 @@ class TableRowHandler:
         _list_ui_to_unlock.append(_widget)
         self.table_ui.setCellWidget(row, column, _widget)
 
+        # save default placzek settings
+        _master_table_row_ui['sample']['placzek_infos'] = self.formated_placzek_default()
+
         ## normalization
 
         # column 15 - sample runs
@@ -549,11 +552,7 @@ class TableRowHandler:
         self.table_ui.setCellWidget(row, column, _widget)
 
         # automatically populate placzek infos with default values
-
-
-        # FIXME
-
-
+        _master_table_row_ui['normalization']['placzek_infos'] = self.formated_placzek_default()
 
         # column 28 - Input Grouping
         column += 1
@@ -641,6 +640,23 @@ class TableRowHandler:
         self.parent.master_table_list_ui[random_key] = _master_table_row_ui
         self.unlock_signals_ui(list_ui=_list_ui_to_unlock)
         self.parent.check_status_of_right_click_buttons()
+
+    def formated_placzek_default(self):
+        config_placzek = self.parent.placzek_default
+
+        new_format = {'order_index': config_placzek['order']['index_selected'],
+                      'is_self': config_placzek['self'],
+                      'is_interference': config_placzek['interference'],
+                      'fit_spectrum_index': config_placzek['fit_spectrum_with']['index_selected'],
+                      'lambda_fit_min': config_placzek['lambda_binning_for_fit']['min'],
+                      'lambda_fit_max': config_placzek['lambda_binning_for_fit']['max'],
+                      'lambda_fit_delta': config_placzek['lambda_binning_for_fit']['delta'],
+                      'lambda_calc_min': config_placzek['lambda_binning_for_calc']['min'],
+                      'lambda_calc_max': config_placzek['lambda_binning_for_calc']['max'],
+                      'lambda_calc_delta': config_placzek['lambda_binning_for_calc']['delta'],
+                      }
+
+        return new_format
 
     def _get_list_ui_from_master_table_row_ui(self, master_table_row_ui):
         list_ui = []
