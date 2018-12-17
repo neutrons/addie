@@ -181,6 +181,10 @@ class AsciiLoader:
         o_table_ui_loader = FromDictionaryToTableUi(parent=self.parent)
         o_table_ui_loader.fill(input_dictionary=_table_dictionary)
 
+        self.parent.ui.statusbar.setStyleSheet("color: blue")
+        self.parent.ui.statusbar.showMessage("File {} has been imported".format(self.filename),
+                                            self.parent.statusbar_display_time)
+
 
 class FormatAsciiList:
     ''' This class takes 2 list as input. According to the option selected, the list2 will be
@@ -376,7 +380,7 @@ class TableFileLoader:
         self.parent = parent
         self.filename = filename
 
-    def load(self):
+    def display_dialog(self):
         # trying to load first using ascii loader
         o_loader = AsciiLoader(parent=self.parent, filename=self.filename)
         o_loader.show_dialog()

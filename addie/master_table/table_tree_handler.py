@@ -784,13 +784,11 @@ class H3TableHandler:
 
     def _import_table(self, clear_table=True):
 
-        # for debuging only
-        table_file = "/SNS/users/j35/los.csv"
-        o_dict = TableFileLoader(parent=self.parent, filename=table_file)
-        o_dict.load()
-
-
-        return # REMOVEME
+        # # for debuging only
+        # table_file = "/SNS/users/j35/los.csv"
+        # o_dict = TableFileLoader(parent=self.parent, filename=table_file)
+        # o_dict.load()
+        # return # REMOVEME
 
         _current_folder = self.parent.current_folder
         table_file = str(QFileDialog.getOpenFileName(parent=self.parent,
@@ -811,12 +809,7 @@ class H3TableHandler:
                                                      self.parent.statusbar_display_time)
                 return
 
-            o_dict.load()
-
-            self.parent.ui.statusbar.setStyleSheet("color: blue")
-            self.parent.ui.statusbar.showMessage("File {} has been imported".format(_table_file),
-                                                 self.parent.statusbar_display_time)
-
+            o_dict.display_dialog()
 
     def _export_table(self):
         _current_folder = self.parent.current_folder

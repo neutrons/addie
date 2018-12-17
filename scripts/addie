@@ -2688,6 +2688,9 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         o_ascii_loader = AsciiLoader(parent=self, filename=filename)
         o_ascii_loader.load()
 
+
+
+
     def reduction_configuration_button_clicked(self):
         ReductionConfigurationHandler(parent=self)
 
