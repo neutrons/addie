@@ -47,6 +47,9 @@ sample_children_1['sample_background']['children'] = sample_children_2
 sample_children_1['sample_material'] = copy.deepcopy(base_dict)
 sample_children_1['sample_material']['name'] = "Material"
 
+sample_children_1['sample_mass_density'] = copy.deepcopy(base_dict)
+sample_children_1['sample_mass_density']['name'] = "Mass Density"
+
 sample_children_1['sample_packing_fraction'] = copy.deepcopy(base_dict)
 sample_children_1['sample_packing_fraction']['name'] = "Packing Fraction"
 
@@ -94,6 +97,9 @@ vanadium_children_1['vanadium_background']['children'] = vanadium_children_2
 
 vanadium_children_1['vanadium_material'] = copy.deepcopy(base_dict)
 vanadium_children_1['vanadium_material']['name'] = "Materials"
+
+vanadium_children_1['sample_mass_density'] = copy.deepcopy(base_dict)
+vanadium_children_1['sample_mass_density']['name'] = "Mass Density"
 
 vanadium_children_1['vanadium_packing_fraction'] = copy.deepcopy(base_dict)
 vanadium_children_1['vanadium_packing_fraction']['name'] = "Packing Fraction"

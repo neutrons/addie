@@ -196,41 +196,55 @@ class TableRowHandler:
         # _widget.stateChanged.connect(lambda state=0, key=random_key:
         #                        self.parent.master_table_select_state_changed(state, key))
 #        _widget.blockSignals(True)
-        self.table_ui.setCellWidget(row, 0, _new_widget)
+        column = 0
+        self.table_ui.setCellWidget(row, column, _new_widget)
 
         # sample
 
+        column += 1
         # column 1 - title
         _item = QTableWidgetItem("")
         _master_table_row_ui['title'] = _item
-        self.table_ui.setItem(row, 1, _item)
+        self.table_ui.setItem(row, column, _item)
 
         # column 2 - sample runs
+        column += 1
         _item = QTableWidgetItem("")
         _master_table_row_ui['sample']['runs'] = _item
-        self.table_ui.setItem(row, 2, _item)
+        self.table_ui.setItem(row, column, _item)
 
         # column 3 - background runs
+        column += 1
         _item = QTableWidgetItem("")
         _master_table_row_ui['sample']['background']['runs'] = _item
-        self.table_ui.setItem(row, 3, _item)
+        self.table_ui.setItem(row, column, _item)
 
         # column 4 - background background
+        column += 1
         _item = QTableWidgetItem("")
         _master_table_row_ui['sample']['background']['background'] = _item
-        self.table_ui.setItem(row, 4, _item)
+        self.table_ui.setItem(row, column, _item)
 
         # column 5 - material
+        column += 1
         _item = QTableWidgetItem("")
         _master_table_row_ui['sample']['material'] = _item
-        self.table_ui.setItem(row, 5, _item)
+        self.table_ui.setItem(row, column, _item)
 
-        # column 6 - packing fraction
+        # column 6 - mass density
+        column += 1
+        _item = QTableWidgetItem("")
+        _master_table_row_ui['sample']['mass_density'] = _item
+        self.table_ui.setItem(row, column, _item)
+
+        # column 7 - packing fraction
+        column += 1
         _item = QTableWidgetItem("")
         _master_table_row_ui['sample']['packing_fraction'] = _item
-        self.table_ui.setItem(row, 6, _item)
+        self.table_ui.setItem(row, column, _item)
 
-        # column 7 - shape (cylindrical or spherical)
+        # column 8 - shape (cylindrical or spherical)
+        column += 1
         _layout = QtGui.QHBoxLayout()
         _layout.setMargin(0)
         _widget = QComboBox()
@@ -250,19 +264,22 @@ class TableRowHandler:
         _layout.addWidget(_widget)
         _w = QWidget()
         _w.setLayout(_layout)
-        self.table_ui.setCellWidget(row, 7, _w)
+        self.table_ui.setCellWidget(row, column, _w)
 
-        # column 8 - radius
+        # column 9 - radius
+        column += 1
         _item = QTableWidgetItem("")
         _master_table_row_ui['sample']['geometry']['radius'] = _item
-        self.table_ui.setItem(row, 8, _item)
+        self.table_ui.setItem(row, column, _item)
 
-        # column 9 - height
+        # column 10 - height
+        column += 1
         _item = QTableWidgetItem("")
         _master_table_row_ui['sample']['geometry']['height'] = _item
-        self.table_ui.setItem(row, 9, _item)
+        self.table_ui.setItem(row, column, _item)
 
-        # column 10 - abs. correction
+        # column 11 - abs. correction
+        column += 1
         _layout = QtGui.QHBoxLayout()
         _layout.setMargin(0)
         _widget = QComboBox()
@@ -282,9 +299,10 @@ class TableRowHandler:
         _layout.addWidget(_widget)
         _w = QWidget()
         _w.setLayout(_layout)
-        self.table_ui.setCellWidget(row, 10, _w)
+        self.table_ui.setCellWidget(row, column, _w)
 
-        # column 11 - multi. scattering correction
+        # column 12 - multi. scattering correction
+        column += 1
         _layout = QtGui.QHBoxLayout()
         _layout.setMargin(0)
         _widget = QComboBox()
@@ -304,9 +322,10 @@ class TableRowHandler:
         _layout.addWidget(_widget)
         _w = QWidget()
         _w.setLayout(_layout)
-        self.table_ui.setCellWidget(row, 11, _w)
+        self.table_ui.setCellWidget(row, column, _w)
 
-        # column 12 - inelastic correction
+        # column 13 - inelastic correction
+        column += 1
         _layout = QtGui.QHBoxLayout()
         _layout.setMargin(0)
         _widget1 = QComboBox()
@@ -339,31 +358,43 @@ class TableRowHandler:
                                self.parent.master_table_sample_inelastic_correction_changed(value, key))
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
-        self.table_ui.setCellWidget(row, 12, _widget)
+        self.table_ui.setCellWidget(row, column, _widget)
 
         ## normalization
 
-        # column 13 - sample runs
+        # column 14 - sample runs
+        column += 1
         _item = QTableWidgetItem("")
-        self.table_ui.setItem(row, 13, _item)
+        self.table_ui.setItem(row, column, _item)
 
-        # column 14 - background runs
+        # column 15 - background runs
+        column += 1
         _item = QTableWidgetItem("")
-        self.table_ui.setItem(row, 14, _item)
+        self.table_ui.setItem(row, column, _item)
 
-        # column 15 - background background
+        # column 16 - background background
+        column += 1
         _item = QTableWidgetItem("")
-        self.table_ui.setItem(row, 15, _item)
+        self.table_ui.setItem(row, column, _item)
 
-        # column 16 - material
+        # column 17 - material
+        column += 1
         _item = QTableWidgetItem("")
-        self.table_ui.setItem(row, 16, _item)
+        self.table_ui.setItem(row, column, _item)
 
-        # column 17 - packing fraction
+        # column 18 - mass density
+        column += 1
         _item = QTableWidgetItem("")
-        self.table_ui.setItem(row, 17, _item)
+        _master_table_row_ui['normalization']['mass_density'] = _item
+        self.table_ui.setItem(row, column, _item)
 
-        # column 18 - shape (cylindrical or spherical)
+        # column 19 - packing fraction
+        column += 1
+        _item = QTableWidgetItem("")
+        self.table_ui.setItem(row, column, _item)
+
+        # column 20 - shape (cylindrical or spherical)
+        column += 1
         _layout = QtGui.QHBoxLayout()
         _layout.setMargin(0)
         _widget = QComboBox()
@@ -383,17 +414,20 @@ class TableRowHandler:
         _layout.addWidget(_widget)
         _w = QWidget()
         _w.setLayout(_layout)
-        self.table_ui.setCellWidget(row, 18, _w)
+        self.table_ui.setCellWidget(row, column, _w)
 
-        # column 19 - radius
+        # column 21 - radius
+        column += 1
         _item = QTableWidgetItem("")
-        self.table_ui.setItem(row, 19, _item)
+        self.table_ui.setItem(row, column, _item)
 
-        # column 20 - height
+        # column 22 - height
+        column += 1
         _item = QTableWidgetItem("")
-        self.table_ui.setItem(row, 20, _item)
+        self.table_ui.setItem(row, column, _item)
 
-        # column 21 - abs. correction
+        # column 23 - abs. correctiona
+        column += 1
         _layout = QtGui.QHBoxLayout()
         _layout.setMargin(0)
         _widget = QComboBox()
@@ -413,9 +447,10 @@ class TableRowHandler:
         _layout.addWidget(_widget)
         _w = QWidget()
         _w.setLayout(_layout)
-        self.table_ui.setCellWidget(row, 21, _w)
+        self.table_ui.setCellWidget(row, column, _w)
 
-        # column 22 - multi. scattering correction
+        # column 24 - multi. scattering correction
+        column += 1
         _layout = QtGui.QHBoxLayout()
         _layout.setMargin(0)
         _widget = QComboBox()
@@ -435,9 +470,10 @@ class TableRowHandler:
         _layout.addWidget(_widget)
         _w = QWidget()
         _w.setLayout(_layout)
-        self.table_ui.setCellWidget(row, 22, _w)
+        self.table_ui.setCellWidget(row, column, _w)
 
-        # column 23 - inelastic correction
+        # column 25 - inelastic correction
+        column += 1
         _layout = QtGui.QHBoxLayout()
         _layout.setMargin(0)
         _widget1 = QComboBox()
@@ -469,14 +505,17 @@ class TableRowHandler:
                                self.parent.master_table_normalization_inelastic_correction_changed(value, key))
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
-        self.table_ui.setCellWidget(row, 23, _widget)
+        self.table_ui.setCellWidget(row, column, _widget)
 
         # automatically populate placzek infos with default values
 
 
+        # FIXME
 
 
-        # column 24 - Input Grouping
+
+        # column 26 - Input Grouping
+        column += 1
         _row1_layout = QtGui.QHBoxLayout()
         _row1_layout.setMargin(0)
         _label = QLabel("Default  or  ")
@@ -514,9 +553,10 @@ class TableRowHandler:
         _verti_layout.addWidget(_row1_widget)
         _verti_layout.addWidget(_row2_widget)
         _verti_widget.setLayout(_verti_layout)
-        self.table_ui.setCellWidget(row, 24, _verti_widget)
+        self.table_ui.setCellWidget(row, column, _verti_widget)
 
-        # column 25 - Output Grouping
+        # column 27 - Output Grouping
+        column += 1
         _row1_layout = QtGui.QHBoxLayout()
         _row1_layout.setMargin(0)
         _label = QLabel("Default  or  ")
@@ -531,7 +571,6 @@ class TableRowHandler:
         _row1_layout.addWidget(_label)
         _row1_layout.addWidget(_button)
         _row1_widget.setLayout(_row1_layout)
-
         _row2_layout = QtGui.QHBoxLayout()
         _row2_layout.setMargin(0)
         _label = QLabel("(6 groups)")
@@ -547,14 +586,13 @@ class TableRowHandler:
         _row2_layout.addItem(_spacer)
         _row2_widget = QWidget()
         _row2_widget.setLayout(_row2_layout)
-
         _verti_layout = QtGui.QVBoxLayout()
         _verti_layout.setMargin(0)
         _verti_widget = QWidget()
         _verti_layout.addWidget(_row1_widget)
         _verti_layout.addWidget(_row2_widget)
         _verti_widget.setLayout(_verti_layout)
-        self.table_ui.setCellWidget(row, 25, _verti_widget)
+        self.table_ui.setCellWidget(row, column, _verti_widget)
 
         ## recap
 
