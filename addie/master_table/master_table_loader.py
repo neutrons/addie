@@ -32,6 +32,7 @@ _default_empty_row = {"activate": True,
                                  "packing_fraction": "",
                                  "geometry": {"shape": "cylindrical",
                                               "radius_cm": "",
+                                              "radius2_cm": "",
                                               "height_cm": "",
                                               },
                                  "abs_correction": "",
@@ -46,6 +47,7 @@ _default_empty_row = {"activate": True,
                                  "packing_fraction": "",
                                  "geometry": {"shape": "cylindrical",
                                               "radius_cm": "",
+                                              "radius2_cm": "",
                                               "height_cm": "",
                                               },
                                  "abs_correction": "",
@@ -410,39 +412,43 @@ class FromDictionaryToTableUi:
 
         column=starting_col
 
-        # sample - run
+        # run
         self.table_ui.item(row, column).setText(entry[data_type]["runs"])
 
-        # sample - background - runs
+        # background - runs
         column += 1
         self.table_ui.item(row, column).setText(entry[data_type]["background"]["runs"])
 
-        # sample - background - background
+        # background - background
         column += 1
         self.table_ui.item(row, column).setText(entry[data_type]["background"]["background"])
 
-        # sample - material
+        # material
         column += 1
         self.table_ui.item(row, column).setText(entry[data_type]["material"])
 
-        # sample - mass density
+        # mass density
         column += 1
         self.table_ui.item(row, column).setText(entry[data_type]["mass_density"])
 
-        # sample - packing_fraction
+        # packing_fraction
         column +=1
         self.table_ui.item(row, column).setText(entry[data_type]["packing_fraction"])
 
-        # sample - geometry - shape
+        # geometry - shape
         column += 1
         _requested_shape = entry[data_type]["geometry"]["shape"]
         self.__set_combobox(requested_value=_requested_shape, row=row, col=column)
 
-        # sample - geometry - radius
+        # geometry - radius
         column += 1
         self.table_ui.item(row, column).setText(entry[data_type]["geometry"]["radius_cm"])
 
-        # sample - geometry - height
+        # geometry - radius2
+        column += 1
+        self.table_ui.item(row, column).setText(entry[data_type]["geometry"]["radius2_cm"])
+
+        # geometry - height
         column += 1
         self.table_ui.item(row, column).setText(entry[data_type]["geometry"]["height_cm"])
 
@@ -480,7 +486,7 @@ class FromDictionaryToTableUi:
         self.__fill_data_type(data_type='sample', starting_col=2, row=row, entry=entry )
 
         # normalization
-        self.__fill_data_type(data_type='normalization', starting_col=14, row=row, entry=entry )
+        self.__fill_data_type(data_type='normalization', starting_col=15, row=row, entry=entry )
 
 
 

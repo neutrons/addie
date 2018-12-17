@@ -136,6 +136,7 @@ class TableRowHandler:
                                            'mass_density': None,
                                            'packing_fraction': None,
                                            'geometry': {'radius': None,
+                                                        'radius2': None,
                                                         'height': None,
                                                         'geometry': None,
                                                         },
@@ -154,6 +155,7 @@ class TableRowHandler:
                                            'mass_density': None,
                                            'packing_fraction': None,
                                            'geometry': {'radius': None,
+                                                        'radius2': None,
                                                         'height': None,
                                                         'geometry': None,
                                                         },
@@ -272,13 +274,19 @@ class TableRowHandler:
         _master_table_row_ui['sample']['geometry']['radius'] = _item
         self.table_ui.setItem(row, column, _item)
 
-        # column 10 - height
+        # column 10 - radius
+        column += 1
+        _item = QTableWidgetItem("")
+        _master_table_row_ui['sample']['geometry']['radius2'] = _item
+        self.table_ui.setItem(row, column, _item)
+
+        # column 11 - height
         column += 1
         _item = QTableWidgetItem("")
         _master_table_row_ui['sample']['geometry']['height'] = _item
         self.table_ui.setItem(row, column, _item)
 
-        # column 11 - abs. correction
+        # column 12 - abs. correction
         column += 1
         _layout = QtGui.QHBoxLayout()
         _layout.setMargin(0)
@@ -301,7 +309,7 @@ class TableRowHandler:
         _w.setLayout(_layout)
         self.table_ui.setCellWidget(row, column, _w)
 
-        # column 12 - multi. scattering correction
+        # column 13 - multi. scattering correction
         column += 1
         _layout = QtGui.QHBoxLayout()
         _layout.setMargin(0)
@@ -324,7 +332,7 @@ class TableRowHandler:
         _w.setLayout(_layout)
         self.table_ui.setCellWidget(row, column, _w)
 
-        # column 13 - inelastic correction
+        # column 14 - inelastic correction
         column += 1
         _layout = QtGui.QHBoxLayout()
         _layout.setMargin(0)
@@ -362,38 +370,38 @@ class TableRowHandler:
 
         ## normalization
 
-        # column 14 - sample runs
+        # column 15 - sample runs
         column += 1
         _item = QTableWidgetItem("")
         self.table_ui.setItem(row, column, _item)
 
-        # column 15 - background runs
+        # column 16 - background runs
         column += 1
         _item = QTableWidgetItem("")
         self.table_ui.setItem(row, column, _item)
 
-        # column 16 - background background
+        # column 17 - background background
         column += 1
         _item = QTableWidgetItem("")
         self.table_ui.setItem(row, column, _item)
 
-        # column 17 - material
+        # column 18 - material
         column += 1
         _item = QTableWidgetItem("")
         self.table_ui.setItem(row, column, _item)
 
-        # column 18 - mass density
+        # column 19 - mass density
         column += 1
         _item = QTableWidgetItem("")
         _master_table_row_ui['normalization']['mass_density'] = _item
         self.table_ui.setItem(row, column, _item)
 
-        # column 19 - packing fraction
+        # column 20 - packing fraction
         column += 1
         _item = QTableWidgetItem("")
         self.table_ui.setItem(row, column, _item)
 
-        # column 20 - shape (cylindrical or spherical)
+        # column 21 - shape (cylindrical or spherical)
         column += 1
         _layout = QtGui.QHBoxLayout()
         _layout.setMargin(0)
@@ -416,17 +424,22 @@ class TableRowHandler:
         _w.setLayout(_layout)
         self.table_ui.setCellWidget(row, column, _w)
 
-        # column 21 - radius
+        # column 22 - radius
         column += 1
         _item = QTableWidgetItem("")
         self.table_ui.setItem(row, column, _item)
 
-        # column 22 - height
+        # column 23 - radius2
         column += 1
         _item = QTableWidgetItem("")
         self.table_ui.setItem(row, column, _item)
 
-        # column 23 - abs. correctiona
+        # column 24 - height
+        column += 1
+        _item = QTableWidgetItem("")
+        self.table_ui.setItem(row, column, _item)
+
+        # column 25 - abs. correctiona
         column += 1
         _layout = QtGui.QHBoxLayout()
         _layout.setMargin(0)
@@ -449,7 +462,7 @@ class TableRowHandler:
         _w.setLayout(_layout)
         self.table_ui.setCellWidget(row, column, _w)
 
-        # column 24 - multi. scattering correction
+        # column 26 - multi. scattering correction
         column += 1
         _layout = QtGui.QHBoxLayout()
         _layout.setMargin(0)
@@ -472,7 +485,7 @@ class TableRowHandler:
         _w.setLayout(_layout)
         self.table_ui.setCellWidget(row, column, _w)
 
-        # column 25 - inelastic correction
+        # column 27 - inelastic correction
         column += 1
         _layout = QtGui.QHBoxLayout()
         _layout.setMargin(0)
@@ -514,7 +527,7 @@ class TableRowHandler:
 
 
 
-        # column 26 - Input Grouping
+        # column 28 - Input Grouping
         column += 1
         _row1_layout = QtGui.QHBoxLayout()
         _row1_layout.setMargin(0)
@@ -555,7 +568,7 @@ class TableRowHandler:
         _verti_widget.setLayout(_verti_layout)
         self.table_ui.setCellWidget(row, column, _verti_widget)
 
-        # column 27 - Output Grouping
+        # column 29 - Output Grouping
         column += 1
         _row1_layout = QtGui.QHBoxLayout()
         _row1_layout.setMargin(0)

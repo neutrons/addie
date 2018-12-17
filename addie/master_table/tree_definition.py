@@ -16,7 +16,7 @@ h_index = {'h1': None,
            'h3': None}
 
 base_dict = {'ui': None,
-             'name': "Title",
+             'name': "",
              'children': None,
              'h_index': copy.deepcopy(h_index),
              }
@@ -60,6 +60,8 @@ sample_children_2['sample_geometry_shape']['name'] = "Shape"
 sample_children_2['sample_geometry_radius'] = copy.deepcopy(base_dict)
 sample_children_2['sample_geometry_radius']['name'] = "Radius (cm)"
 
+sample_children_2['sample_geometry_radius2'] = copy.deepcopy(base_dict)
+
 sample_children_2['sample_geometry_Height'] = copy.deepcopy(base_dict)
 sample_children_2['sample_geometry_Height']['name'] = "Height (cm)"
 
@@ -98,8 +100,8 @@ vanadium_children_1['vanadium_background']['children'] = vanadium_children_2
 vanadium_children_1['vanadium_material'] = copy.deepcopy(base_dict)
 vanadium_children_1['vanadium_material']['name'] = "Materials"
 
-vanadium_children_1['sample_mass_density'] = copy.deepcopy(base_dict)
-vanadium_children_1['sample_mass_density']['name'] = "Mass Density"
+vanadium_children_1['vanadium_mass_density'] = copy.deepcopy(base_dict)
+vanadium_children_1['vanadium_mass_density']['name'] = "Mass Density"
 
 vanadium_children_1['vanadium_packing_fraction'] = copy.deepcopy(base_dict)
 vanadium_children_1['vanadium_packing_fraction']['name'] = "Packing Fraction"
@@ -110,6 +112,8 @@ vanadium_children_2['vanadium_geometry_shape']['name'] = 'Shape'
 
 vanadium_children_2['vanadium_geometry_radius'] = copy.deepcopy(base_dict)
 vanadium_children_2['vanadium_geometry_radius']['name'] = 'Radius (cm)'
+
+vanadium_children_2['vanadium_geometry_radius2'] = copy.deepcopy(base_dict)
 
 vanadium_children_2['vanadium_geometry_Height'] = copy.deepcopy(base_dict)
 vanadium_children_2['vanadium_geometry_Height']['name'] = 'Height (cm)'
