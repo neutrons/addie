@@ -28,6 +28,7 @@ _default_empty_row = {"activate": True,
                                                 "background": "",
                                                 },
                                  "material": "",
+                                 "mass_density": "",
                                  "packing_fraction": "",
                                  "geometry": {"shape": "cylindrical",
                                               "radius_cm": "",
@@ -41,6 +42,7 @@ _default_empty_row = {"activate": True,
                                                 "background": "",
                                                 },
                                  "material": "",
+                                 "mass_density": "",
                                  "packing_fraction": "",
                                  "geometry": {"shape": "cylindrical",
                                               "radius_cm": "",
@@ -402,44 +404,58 @@ class FromDictionaryToTableUi:
 
     def __fill_data_type(self, data_type="sample", starting_col=1, row=0, entry={}):
 
-        col=starting_col
+        column=starting_col
 
         # sample - run
-        self.table_ui.item(row, col).setText(entry[data_type]["runs"])
+        self.table_ui.item(row, column).setText(entry[data_type]["runs"])
 
         # sample - background - runs
-        self.table_ui.item(row, col+1).setText(entry[data_type]["background"]["runs"])
+        column += 1
+        self.table_ui.item(row, column).setText(entry[data_type]["background"]["runs"])
 
         # sample - background - background
-        self.table_ui.item(row, col+2).setText(entry[data_type]["background"]["background"])
+        column += 1
+        self.table_ui.item(row, column).setText(entry[data_type]["background"]["background"])
 
         # sample - material
-        self.table_ui.item(row, col+3).setText(entry[data_type]["material"])
+        column += 1
+        self.table_ui.item(row, column).setText(entry[data_type]["material"])
+
+        # sample - mass density
+        column += 1
+        self.table_ui.item(row, column).setText(entry[data_type]["mass_density"])
 
         # sample - packing_fraction
-        self.table_ui.item(row, col+4).setText(entry[data_type]["packing_fraction"])
+        column +=1
+        self.table_ui.item(row, column).setText(entry[data_type]["packing_fraction"])
 
         # sample - geometry - shape
+        column += 1
         _requested_shape = entry[data_type]["geometry"]["shape"]
-        self.__set_combobox(requested_value=_requested_shape, row=row, col=col+5)
+        self.__set_combobox(requested_value=_requested_shape, row=row, col=column)
 
         # sample - geometry - radius
-        self.table_ui.item(row, col+6).setText(entry[data_type]["geometry"]["radius_cm"])
+        column += 1
+        self.table_ui.item(row, column).setText(entry[data_type]["geometry"]["radius_cm"])
 
         # sample - geometry - height
-        self.table_ui.item(row, col+7).setText(entry[data_type]["geometry"]["height_cm"])
+        column += 1
+        self.table_ui.item(row, column).setText(entry[data_type]["geometry"]["height_cm"])
 
         # abs correction
+        column += 1
         _requested_correction = entry[data_type]["abs_correction"]
-        self.__set_combobox(requested_value=_requested_correction, row=row, col=col+8)
+        self.__set_combobox(requested_value=_requested_correction, row=row, col=column)
 
         # multi scattering correction
+        column += 1
         _requested_scattering = entry[data_type]["multi_scattering_correction"]
-        self.__set_combobox(requested_value=_requested_scattering, row=row, col=col+9)
+        self.__set_combobox(requested_value=_requested_scattering, row=row, col=column)
 
         # inelastic correction
+        column += 1
         _requested_inelastic = entry[data_type]["inelastic_correction"]
-        self.__set_combobox(requested_value=_requested_inelastic, row=row, col=col+10)
+        self.__set_combobox(requested_value=_requested_inelastic, row=row, col=column)
 
     def __set_combobox(self, requested_value="", row=-1, col=-1):
         _widget = self.table_ui.cellWidget(row, col).children()[1]
@@ -460,7 +476,7 @@ class FromDictionaryToTableUi:
         self.__fill_data_type(data_type='sample', starting_col=2, row=row, entry=entry )
 
         # normalization
-        self.__fill_data_type(data_type='normalization', starting_col=13, row=row, entry=entry )
+        self.__fill_data_type(data_type='normalization', starting_col=14, row=row, entry=entry )
 
 
 
