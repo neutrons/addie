@@ -57,25 +57,25 @@ class PlaczekWindow(QMainWindow):
         is_interference = info_dict['is_interference']
         self.ui.interference_checkBox.setChecked(is_interference)
 
-        fit_spectrum_index = info_dict['fit_spectrum_with']['index_selected']
+        fit_spectrum_index = info_dict['fit_spectrum_index']
         self.ui.fit_spectrum_comboBox.setCurrentIndex(fit_spectrum_index)
 
-        lambda_fit_min = info_dict['lambda_fit_min']
+        lambda_fit_min = str(info_dict['lambda_fit_min'])
         self.ui.lambda_fit_min.setText(lambda_fit_min)
 
-        lambda_fit_max = info_dict['lambda_fit_max']
+        lambda_fit_max = str(info_dict['lambda_fit_max'])
         self.ui.lambda_fit_max.setText(lambda_fit_max)
 
-        lambda_fit_delta = info_dict['lambda_fit_delta']
+        lambda_fit_delta = str(info_dict['lambda_fit_delta'])
         self.ui.lambda_fit_delta.setText(lambda_fit_delta)
 
-        lambda_calc_min = info_dict['lambda_calc_min']
+        lambda_calc_min = str(info_dict['lambda_calc_min'])
         self.ui.lambda_calc_min.setText(lambda_calc_min)
 
-        lambda_calc_max = info_dict['lambda_calc_max']
+        lambda_calc_max = str(info_dict['lambda_calc_max'])
         self.ui.lambda_calc_max.setText(lambda_calc_max)
 
-        lambda_calc_delta = info_dict['lambda_calc_delta']
+        lambda_calc_delta = str(info_dict['lambda_calc_delta'])
         self.ui.lambda_calc_delta.setText(lambda_calc_delta)
 
     def save_widgets(self):
