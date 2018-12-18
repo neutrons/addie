@@ -122,15 +122,31 @@ class JsonLoader:
         self.filename = filename
         self.parent = parent
 
+    def _retrieve_element_dict(self, element='sample', source_row_entry={}):
+        _target_row_entry = {}
+        _target_row_entry["runs"] = source_row_entry[element]['Runs']
+        _target_row_entry["background"] = {}
+        _target_row_entry["background"]["runs"] = source_row_entry[element]['Background']["Runs"]
+        _target_row_entry["background"]["background"] = source_row_entry[element]["Background"]["Background"]["Runs"]
+        _target_row_entry["material"] = source_row_entry[element]["Material"]
+        _target_row_entry["mass_density"] = source_row_entry[element]["MassDensity"]
+        _target_row_entry["packing_fraction"] = source_row_entry[element]["PackingFraction"]
+        _target_row_entry["geometry"] = {}
+        _target_row_entry["geometry"]["shape"] = source_row_entry[element]["Geometry"]["Shape"]
+        _target_row_entry["geometry"]["radius_cm"] = source_row_entry[element]["Geometry"]["Radius"]
+        _target_row_entry["geometry"]["radius2_cm"] = source_row_entry[element]["Geometry"]["Radius2"]
+        _target_row_entry["geometry"]["height_cm"] = source_row_entry[element]["Geometry"]["Height"]
+        _target_row_entry["abs_correction"] = source_row_entry[element]["AbsorptionCorrection"]["Type"]
+        _target_row_entry["multi_scattering_correction"] = source_row_entry[element]["MultipleScatteringCorrection"]["Type"]
+        _target_row_entry["inelastic_correction"] = source_row_entry[element]["InelasticCorrection"]["Type"]
+        return _target_row_entry
+
     def load(self):
 
         # load json
         with open(self.filename) as f:
             data = json.load(f)
 
-        print("data is")
-        import pprint
-        pprint.pprint(data)
 
         # convert into UI dictionary
         list_keys = [_key for _key in data.keys()]
@@ -146,18 +162,12 @@ class JsonLoader:
 
             _target_row_entry["activate"] = _source_row_entry['Activate']
             _target_row_entry["title"] = _source_row_entry['Title']
-            _target_row_entry["sample"]["runs"] = _source_row_entry['Sample']['Runs']
-            _target_row_entry["sample"]["background"]["runs"] = _source_row_entry['Sample']['Background']["Runs"]
-            _target_row_entry["sample"]["background"]["background"] = _source_row_entry["Sample"]["Background"]["Background"]["Runs"]
-            _target_row_entry["sample"]["material"] = _source_row_entry["Sample"]["Material"]
-            _target_row_entry["sample"]["mass_density"] = _source_row_entry["Sample"]["MassDensity"]
-            _target_row_entry["sample"]["packing_fraction"] = _source_row_entry["Sample"]["PackingFraction"]
-            _target_row_entry["sample"]["geometry"]["shape"] = _source_row_entry["Sample"]["Geometry"]["Shape"]
-            _target_row_entry["sample"]["geometry"]["radius_cm"] = _source_row_entry["Sample"]["Geometry"]["Radius"]
-            _target_row_entry["sample"]["geometry"]["radius2_cm"] = _source_row_entry["Sample"]["Geometry"]["Radius2"]
-            _target_row_entry["sample"]["geometry"]["height_cm"] = _source_row_entry["Sample"]["Geometry"]["Height"]
-            _target_row_entry["sample"]["abs_correction"] = _source_row_entry["Sample"]["AbsorptionCorrection"]["Type"]
-            _target_row_entry["sample"]["multi_scattering_correction"] = _source_row_entry["Sample"]["MultipleScatteringCorrection"]["Type"]
+            _target_row_entry["sample"] = self._retrieve_element_dict(element='Sample',
+                                                                      source_row_entry=_source_row_entry)
+            _target_row_entry["runs"] = _source_row_entry['Sample']['Runs']
+            _target_row_entry["normalization"] = self._retrieve_element_dict(element='Normalization',
+                                                                             source_row_entry=_source_row_entry)
+
 
             table_dictionary[_row] = _target_row_entry
 
