@@ -794,7 +794,7 @@ class H3TableHandler:
         table_file = str(QFileDialog.getOpenFileName(parent=self.parent,
                                                       caption='Select Table File ...',
                                                       directory=_current_folder,
-                                                      filter=("Log (*.csv);;Text (*.txt);; All files (*.*)")))
+                                                      filter=("json (*.json);; Log (*.csv)")))
         if table_file:
             new_path = os.path.dirname(table_file)
             self.parent.current_folder = new_path

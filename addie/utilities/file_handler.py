@@ -10,6 +10,13 @@ class FileHandler(object):
     def __init__(self, filename=None):
         self.filename = filename
 
+    @staticmethod
+    def is_file_correct_extension(filename='', ext_requested='csv'):
+        [_, _ext] = os.path.splitext(filename)
+        if _ext == ".{}".format(ext_requested):
+            return True
+        return False
+
     def pandas_parser(self):
         obj = pd.read_csv(self.filename)
         return obj
@@ -19,7 +26,7 @@ class FileHandler(object):
         with open(self.filename, 'r') as f:
             file_contain = f.read()
         self.file_contain = file_contain
-        
+
     def check_file_extension( self, ext_requested = 'txt'):
         file_parsed = self.filename.split(".")
         if len(file_parsed) > 1:

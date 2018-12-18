@@ -2,6 +2,7 @@ import os
 import numpy as np
 from collections import OrderedDict
 import copy
+import json
 
 try:
     from PyQt4 import QtCore, QtGui
@@ -111,6 +112,25 @@ class AsciiLoaderOptions(QDialog):
         self.parent.ascii_loader_option = self.__get_option_selected()
         self.parent._load_ascii(filename=self.filename)
         self.close()
+
+
+class JsonLoader:
+
+    filename = ''
+
+    def __init__(self, parent=None, filename=''):
+        self.filename = filename
+        self.parent = parent
+
+    def load(self):
+
+        # load json
+        with open(self.filename) as f:
+            data = json.load(f)
+
+        # convert into UI dictionary
+        import pprint
+        pprint.pprint(data)
 
 
 class AsciiLoader:
@@ -383,9 +403,16 @@ class TableFileLoader:
         self.filename = filename
 
     def display_dialog(self):
-        # trying to load first using ascii loader
-        o_loader = AsciiLoader(parent=self.parent, filename=self.filename)
-        o_loader.show_dialog()
+
+        # if extension is csv, use ascii loader
+        if FileHandler.is_file_correct_extension(filename=self.filename, ext_requested='csv'): # ascii file
+            o_loader = AsciiLoader(parent=self.parent, filename=self.filename)
+            o_loader.show_dialog()
+        elif FileHandler.is_file_correct_extension(filename=self.filename, ext_requested='json'): # json file
+            o_loader = JsonLoader(parent=self.parent, filename=self.filename)
+            o_loader.load()
+        else:
+            raise IOError("File format not supported!".format(self.filename))
 
 
 class FromDictionaryToTableUi:
