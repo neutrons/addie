@@ -1,6 +1,7 @@
 from collections import OrderedDict
 import copy
 import numpy as np
+import json
 
 try:
     from PyQt4.QtCore import Qt
@@ -23,8 +24,9 @@ _element= {"Runs": "",
            "Material": "",
            "MassDensity": np.NaN,
            "PackingFraction": np.NaN,
-           "Geometry": {"Radius": np.NaN,
-                        "Radius1": np.NaN,
+           "Geometry": {"Shape": "",
+                        "Radius": np.NaN,
+                        "Radius2": np.NaN,
                         "Height": np.NaN,
                         },
            "AbsorptionCorrection": {"Type": "",
@@ -37,7 +39,7 @@ _element= {"Runs": "",
                                    "Interference": False,
                                    "FitSpectrumWith": "GaussConvCubicSpline",
                                    "LambdaBinningForFit": "",
-                                   "LambdaBinningForCAlc": "",
+                                   "LambdaBinningForCalc": "",
                                    },
            }
 
@@ -54,8 +56,9 @@ _data = {"Facility": "SNS",
                      "Grouping": {"Initial": "",
                                   "Output": "",
                                   },
-                     "CacheDir": "./tmp",
-                     "OutputDir": "./output"},
+                     },
+         "CacheDir": "./tmp",
+         "OutputDir": "./output",
          }
 
 _empty_row = {'activate': True,
@@ -73,8 +76,14 @@ class TableFileExporter:
         '''using the general infos, and the one from each row, this method creates the master
         dictionary that will be saved into a json file'''
 
-        general_infos = self._retrieve_general_infos()
-        _row_infos = self._retrieve_row_infos()
+        self.dict = self._retrieve_row_infos()
+
+    def export(self):
+        dict = self.dict
+        filename = self.filename
+
+        with open(filename, 'w') as outfile:
+            json.dump(dict, outfile)
 
     def _get_checkbox_state(self, row=-1, column=-1):
         state = self.table_ui.cellWidget(row, column).children()[1].checkState()
@@ -94,7 +103,7 @@ class TableFileExporter:
         '''form the given row, and the given element (sample or normalization) will
         retrieve the widgets values'''
 
-        _element_dict = OrderedDict()
+        dict_element = copy.deepcopy(_element)
 
         if element == 'sample':
             column = sample_first_column
@@ -102,42 +111,56 @@ class TableFileExporter:
             column = normalization_first_column
 
         runs = self._get_item_value(row=row, column=column)
+        dict_element['Runs'] = runs
 
         column += 1
         background_runs = self._get_item_value(row=row, column=column)
+        dict_element["Background"]["Runs"] = background_runs
 
         column += 1
         background_background = self._get_item_value(row=row, column=column)
+        dict_element["Background"]["Background"]["Runs"] = background_background
 
         column += 1
         material = self._get_item_value(row=row, column=column)
+        dict_element["Material"] = material
 
         column += 1
         mass_density = self._get_item_value(row=row, column=column)
+        dict_element["MassDensity"] = mass_density
 
         column += 1
         packing_fraction =  self._get_item_value(row=row, column=6)
+        dict_element["PackingFraction"] = packing_fraction
 
         column += 1
         shape = self._get_selected_value(row=row, column=column)
+        dict_element["Geometry"]["Shape"] = shape
 
         column += 1
         radius = self._get_item_value(row=row, column=column)
+        dict_element["Geometry"]["Radius"] = radius
 
         column += 1
         radius2 = self._get_item_value(row=row, column=column)
+        dict_element["Geometry"]["Radius2"] = radius2
 
         column += 1
         height = self._get_item_value(row=row, column=column)
+        dict_element["Geometry"]["Height"] = height
 
         column += 1
         abs_correction = self._get_selected_value(row=row, column=column)
+        dict_element["AbsorptionCorrection"] = abs_correction
 
         column += 1
         multiple_scattering_correction = self._get_selected_value(row=row, column=column)
+        dict_element["MultipleScatteringCorrection"] = multiple_scattering_correction
 
         column += 1
         inelastic_correction = self._get_selected_value(row=row,column=column)
+        dict_element["InelasticCorrection"]["Type"] = inelastic_correction
+
         if inelastic_correction.lower() == 'placzek':
 
             # retrieve the key according to row
@@ -146,53 +169,29 @@ class TableFileExporter:
 
             placzek_infos = self.parent.master_table_list_ui[key][element]['placzek_infos']
 
-            print("at row: {}, placzek_infos".format(row))
-            import pprint
-            pprint.pprint(placzek_infos)
-
-
-        # order
-        # self
-        # interference
-        # fit_spectrum_width
-        # lambda_binning_for_fit
-        # lambda_binning_for_calc
-        #
-        # input_grouping
-        # output_grouping
-
-        # if row==0:
-        #     print(" activate: {}".format(activate))
-        #     print(" title: {}".format(title))
-        #     print(" runs: {}".format(runs))
-        #     print(" background_runs: {}".format(background_runs))
-        #     print(" background_background: {}".format(background_background))
-        #     print(" material: {}".format(material))
-        #     print(" packing_fraction: {}".format(packing_fraction))
-        #     print(" shape: {}".format(shape))
-
-
-
-        _element_dict['Runs'] = None
-        _element_dict['Background'] = OrderedDict()
-        _element_dict['Background']['Runs'] = None
-        _element_dict['Background']['Background'] = None
-        _element_dict['Material'] = None
-        #FIXME
-
-
-
-
-        return _element_dict
+            dict_element["InelasticCorrection"]["Order"] = placzek_infos["order_index"]
+            dict_element["InelasticCorrection"]["Self"] = placzek_infos["is_self"]
+            dict_element["InelasticCorrection"]["Interference"] = placzek_infos["is_interference"]
+            dict_element["InelasticCorrection"]["FitSpectrumWith"] = placzek_infos["fit_spectrum_text"]
+            dict_element["InelasticCorrection"]["LambdaBinningForFit"] = "{},{},{}".format(placzek_infos["lambda_fit_min"],
+                                                                                      placzek_infos["lambda_fit_delta"],
+                                                                                      placzek_infos["lambda_fit_max"])
+            dict_element["InelasticCorrection"]["LambdaBinningForCalc"] = "{},{},{}".format(placzek_infos["lambda_calc_min"],
+                                                                                       placzek_infos["lambda_calc_delta"],
+                                                                                       placzek_infos["lambda_calc_max"])
+        return dict_element
 
     def _retrieve_row_infos(self):
         '''this method retrieves the infos from the table using the master_table_list_ui'''
 
+        facility = self.parent.facility
+        instrument = self.parent.instrument["short_name"]
+        cachedir = self.parent.cache_folder
+        outputdir = self.parent.output_folder
+
         full_export_dictionary = OrderedDict()
         nbr_row = self.table_ui.rowCount()
-        #master_table_list_ui = self.parent.master_table_list_ui
 
-        #index = 0
         for _row in np.arange(nbr_row):
 
             activate = self._get_checkbox_state(row=_row, column=0)
@@ -201,31 +200,18 @@ class TableFileExporter:
                                                                         row=_row)
             _export_dictionary_normalization = self._retrieve_element_infos(element='normalization',
                                                                             row=_row)
+            _calibration = str(self.parent.ui.calibration_file.text())
 
             full_export_dictionary[_row] = {'sample': _export_dictionary_sample,
-                                             'normalization': _export_dictionary_normalization}
+                                            'activate': activate,
+                                            'title': title,
+                                            'calibration': _calibration,
+                                            'normalization': _export_dictionary_normalization,
+                                            'facility': facility,
+                                            'instrument': instrument,
+                                            'cachedir': cachedir,
+                                            'outputdir': outputdir}
 
         return full_export_dictionary
-
-
-
-
-
-
-
-    def _retrieve_general_infos(self):
-        '''this method collects the general information (such as facility, instrument'''
-
-        facility = self.parent.facility
-        instrument = self.parent.instrument["short_name"]
-        cachedir = self.parent.cache_folder
-        outputdir = self.parent.output_folder
-
-        return {'facility': facility,
-                'instrument': instrument,
-                'cachedir': cachedir,
-                'outputdir': outputdir}
-
-
 
 

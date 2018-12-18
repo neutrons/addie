@@ -826,10 +826,7 @@ class H3TableHandler:
             o_export = TableFileExporter(parent=self.parent,
                                          filename=_table_file)
             o_export.create_dictionary()
-
-            # _export_handler = ExportTable(parent = self.parent_no_ui,
-            #                               filename = _table_file)
-            # _export_handler.run()
+            o_export.export()
 
             self.parent.ui.statusbar.setStyleSheet("color: blue")
             self.parent.ui.statusbar.showMessage("Table has been exported in file {}".format(_table_file),
