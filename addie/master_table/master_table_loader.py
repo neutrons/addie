@@ -156,9 +156,8 @@ class JsonLoader:
             _target_row_entry["sample"]["geometry"]["radius_cm"] = _source_row_entry["Sample"]["Geometry"]["Radius"]
             _target_row_entry["sample"]["geometry"]["radius2_cm"] = _source_row_entry["Sample"]["Geometry"]["Radius2"]
             _target_row_entry["sample"]["geometry"]["height_cm"] = _source_row_entry["Sample"]["Geometry"]["Height"]
-            #_target_row_entry["sample"]["abs_correction"] = _source_row_entry["Sample"]["AbsorptionCorrection"]["Type"]
-            print("value is : {}".format(_source_row_entry["Sample"]["AbsorptionCorrection"]["Type"]))
-
+            _target_row_entry["sample"]["abs_correction"] = _source_row_entry["Sample"]["AbsorptionCorrection"]["Type"]
+            _target_row_entry["sample"]["multi_scattering_correction"] = _source_row_entry["Sample"]["MultipleScatteringCorrection"]["Type"]
 
             table_dictionary[_row] = _target_row_entry
 

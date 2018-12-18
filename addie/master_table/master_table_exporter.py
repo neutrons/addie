@@ -155,7 +155,7 @@ class TableFileExporter:
 
         column += 1
         multiple_scattering_correction = self._get_selected_value(row=row, column=column)
-        dict_element["MultipleScatteringCorrection"] = multiple_scattering_correction
+        dict_element["MultipleScatteringCorrection"]["Type"] = multiple_scattering_correction
 
         column += 1
         inelastic_correction = self._get_selected_value(row=row,column=column)
@@ -172,7 +172,7 @@ class TableFileExporter:
             dict_element["InelasticCorrection"]["Order"] = placzek_infos["order_index"]
             dict_element["InelasticCorrection"]["Self"] = placzek_infos["is_self"]
             dict_element["InelasticCorrection"]["Interference"] = placzek_infos["is_interference"]
-            dict_element["InelasticCorrection"]["FitSpectrumWith"] = placzek_infos["fit_spectrum_text"]
+            dict_element["InelasticCorrection"]["FitSpectrumWith"] = placzek_infos["fit_spectrum_index"]
             dict_element["InelasticCorrection"]["LambdaBinningForFit"] = "{},{},{}".format(placzek_infos["lambda_fit_min"],
                                                                                       placzek_infos["lambda_fit_delta"],
                                                                                       placzek_infos["lambda_fit_max"])
