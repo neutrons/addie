@@ -38,7 +38,9 @@ _default_empty_row = {"activate": True,
                                               },
                                  "abs_correction": "",
                                  "multi_scattering_correction": "",
-                                 "inelastic_correction": ""},
+                                 "inelastic_correction": "",
+                                 "placzek": {},
+                                 },
                       "normalization": {"runs": "",
                                  "background": {"runs": "",
                                                 "background": "",
@@ -53,7 +55,10 @@ _default_empty_row = {"activate": True,
                                               },
                                  "abs_correction": "",
                                  "multi_scattering_correction": "",
-                                 "inelastic_correction": ""},
+                                 "inelastic_correction": "",
+                                 "placzek": {},
+                                 },
+
                       "input_grouping": "",
                       "output_grouping": "",
                       }
@@ -139,6 +144,10 @@ class JsonLoader:
         _target_row_entry["abs_correction"] = source_row_entry[element]["AbsorptionCorrection"]["Type"]
         _target_row_entry["multi_scattering_correction"] = source_row_entry[element]["MultipleScatteringCorrection"]["Type"]
         _target_row_entry["inelastic_correction"] = source_row_entry[element]["InelasticCorrection"]["Type"]
+
+
+
+
         return _target_row_entry
 
     def load(self):
@@ -452,6 +461,11 @@ class TableFileLoader:
 
         self.parent = parent
         self.filename = filename
+        self.init_raw_dict()
+
+    def init_raw_dict(self):
+        _default_empty_row['sample']['placzek'] = self.parent.placzek_default
+        _default_empty_row['normalization']['placzek'] = self.parent.placzek_default
 
     def display_dialog(self):
 

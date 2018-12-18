@@ -161,24 +161,25 @@ class TableFileExporter:
         inelastic_correction = self._get_selected_value(row=row,column=column)
         dict_element["InelasticCorrection"]["Type"] = inelastic_correction
 
-        if inelastic_correction.lower() == 'placzek':
+#        if inelastic_correction.lower() == 'placzek':
 
-            # retrieve the key according to row
-            o_util = Utilities(parent=self.parent)
-            key = o_util.get_row_key_from_row_index(row=row)
+        # retrieve the key according to row
+        o_util = Utilities(parent=self.parent)
+        key = o_util.get_row_key_from_row_index(row=row)
 
-            placzek_infos = self.parent.master_table_list_ui[key][element]['placzek_infos']
+        placzek_infos = self.parent.master_table_list_ui[key][element]['placzek_infos']
 
-            dict_element["InelasticCorrection"]["Order"] = placzek_infos["order_index"]
-            dict_element["InelasticCorrection"]["Self"] = placzek_infos["is_self"]
-            dict_element["InelasticCorrection"]["Interference"] = placzek_infos["is_interference"]
-            dict_element["InelasticCorrection"]["FitSpectrumWith"] = placzek_infos["fit_spectrum_index"]
-            dict_element["InelasticCorrection"]["LambdaBinningForFit"] = "{},{},{}".format(placzek_infos["lambda_fit_min"],
-                                                                                      placzek_infos["lambda_fit_delta"],
-                                                                                      placzek_infos["lambda_fit_max"])
-            dict_element["InelasticCorrection"]["LambdaBinningForCalc"] = "{},{},{}".format(placzek_infos["lambda_calc_min"],
-                                                                                       placzek_infos["lambda_calc_delta"],
-                                                                                       placzek_infos["lambda_calc_max"])
+        dict_element["InelasticCorrection"]["Order"] = placzek_infos["order_index"]
+        dict_element["InelasticCorrection"]["Self"] = placzek_infos["is_self"]
+        dict_element["InelasticCorrection"]["Interference"] = placzek_infos["is_interference"]
+        dict_element["InelasticCorrection"]["FitSpectrumWith"] = placzek_infos["fit_spectrum_index"]
+        dict_element["InelasticCorrection"]["LambdaBinningForFit"] = "{},{},{}".format(placzek_infos["lambda_fit_min"],
+                                                                                  placzek_infos["lambda_fit_delta"],
+                                                                                  placzek_infos["lambda_fit_max"])
+        dict_element["InelasticCorrection"]["LambdaBinningForCalc"] = "{},{},{}".format(placzek_infos["lambda_calc_min"],
+                                                                                   placzek_infos["lambda_calc_delta"],
+                                                                                   placzek_infos["lambda_calc_max"])
+
         return dict_element
 
     def _retrieve_row_infos(self):
