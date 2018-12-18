@@ -128,10 +128,33 @@ class JsonLoader:
         with open(self.filename) as f:
             data = json.load(f)
 
+        print("data is")
+        import pprint
+        pprint.pprint(data)
+
         # convert into UI dictionary
         list_keys = [_key for _key in data.keys()]
         list_keys.sort()
-        print(list_keys)
+
+        table_dictionary = {}
+        for _row in list_keys:
+
+            _source_row_entry = data[str(_row)]
+            _row = np.int(_row)
+            _target_row_entry = copy.deepcopy(_default_empty_row)
+
+            _target_row_entry["activate"] = _source_row_entry['activate']
+
+
+            table_dictionary[_row] = _target_row_entry
+
+        o_table_ui_loader = FromDictionaryToTableUi(parent=self.parent)
+        o_table_ui_loader.fill(input_dictionary=table_dictionary)
+
+        self.parent.ui.statusbar.setStyleSheet("color: blue")
+        self.parent.ui.statusbar.showMessage("File {} has been imported".format(self.filename),
+                                            self.parent.statusbar_display_time)
+
 
 
 
