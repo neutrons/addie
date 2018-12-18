@@ -202,15 +202,17 @@ class TableFileExporter:
                                                                             row=_row)
             _calibration = str(self.parent.ui.calibration_file.text())
 
-            full_export_dictionary[_row] = {'sample': _export_dictionary_sample,
-                                            'activate': activate,
-                                            'title': title,
-                                            'calibration': _calibration,
-                                            'normalization': _export_dictionary_normalization,
-                                            'facility': facility,
-                                            'instrument': instrument,
-                                            'cachedir': cachedir,
-                                            'outputdir': outputdir}
+            # force 3 digits index (to make sure loading back the table will be done in the same order)
+            row = "{:03}".format(_row)
+            full_export_dictionary[row] = {'sample': _export_dictionary_sample,
+                                           'activate': activate,
+                                           'title': title,
+                                           'calibration': _calibration,
+                                           'normalization': _export_dictionary_normalization,
+                                           'facility': facility,
+                                           'instrument': instrument,
+                                           'cachedir': cachedir,
+                                           'outputdir': outputdir}
 
         return full_export_dictionary
 

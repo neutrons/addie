@@ -129,8 +129,10 @@ class JsonLoader:
             data = json.load(f)
 
         # convert into UI dictionary
-        import pprint
-        pprint.pprint(data)
+        list_keys = [_key for _key in data.keys()]
+        list_keys.sort()
+        print(list_keys)
+
 
 
 class AsciiLoader:
