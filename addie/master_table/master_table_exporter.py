@@ -61,8 +61,8 @@ _data = {"Facility": "SNS",
          "OutputDir": "./output",
          }
 
-_empty_row = {'activate': True,
-              'data': copy.deepcopy(_data)}
+# _empty_row = {'Activate': True,
+#               'Data': copy.deepcopy(_data)}
 
 
 class TableFileExporter:
@@ -151,7 +151,7 @@ class TableFileExporter:
 
         column += 1
         abs_correction = self._get_selected_value(row=row, column=column)
-        dict_element["AbsorptionCorrection"] = abs_correction
+        dict_element["AbsorptionCorrection"]["Type"] = abs_correction
 
         column += 1
         multiple_scattering_correction = self._get_selected_value(row=row, column=column)
@@ -204,15 +204,15 @@ class TableFileExporter:
 
             # force 3 digits index (to make sure loading back the table will be done in the same order)
             row = "{:03}".format(_row)
-            full_export_dictionary[row] = {'sample': _export_dictionary_sample,
-                                           'activate': activate,
-                                           'title': title,
-                                           'calibration': _calibration,
-                                           'normalization': _export_dictionary_normalization,
-                                           'facility': facility,
-                                           'instrument': instrument,
-                                           'cachedir': cachedir,
-                                           'outputdir': outputdir}
+            full_export_dictionary[row] = {'Sample': _export_dictionary_sample,
+                                           'Activate': activate,
+                                           'Title': title,
+                                           'Calibration': _calibration,
+                                           'Normalization': _export_dictionary_normalization,
+                                           'Facility': facility,
+                                           'Instrument': instrument,
+                                           'Cachedir': cachedir,
+                                           'Outputdir': outputdir}
 
         return full_export_dictionary
 

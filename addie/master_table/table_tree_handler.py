@@ -784,11 +784,11 @@ class H3TableHandler:
 
     def _import_table(self, clear_table=True):
 
-        # for debuging only
-        table_file = "/SNS/users/j35/test1.json"
-        o_dict = TableFileLoader(parent=self.parent, filename=table_file)
-        o_dict.display_dialog()
-        return # REMOVEME
+        # # for debuging only
+        # table_file = "/SNS/users/j35/test1.json"
+        # o_dict = TableFileLoader(parent=self.parent, filename=table_file)
+        # o_dict.display_dialog()
+        # return # REMOVEME
 
 
 

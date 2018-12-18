@@ -11,7 +11,7 @@ except ImportError:
     except ImportError:
         raise ImportError("Requires PyQt4 or PyQt5")
 
-from addie.master_table.tree_definition import INDEX_OF_COLUMNS_SEARCHABLE
+from addie.master_table.tree_definition import INDEX_OF_COLUMNS_SEARCHABLE, INDEX_OF_COLUMNS_WITH_COMBOBOX
 
 
 class SelectionHandler:
@@ -137,7 +137,7 @@ class TransferH3TableWidgetState(SelectionHandlerMaster):
                     ui.blockSignals(False)
 
             # sample or normalization, shape, abs. corr., mult. scat. corr or inelastic corr.
-            elif (column_selected in [7, 10, 11, 12, 18, 21, 22, 23]):
+            elif (column_selected in INDEX_OF_COLUMNS_WITH_COMBOBOX):
 
                 for _row in range_row:
                     ui = self.table_ui.cellWidget(_row, column_selected).children()[1]

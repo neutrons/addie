@@ -11,6 +11,8 @@ COLUMN_DEFAULT_HEIGHT = 50
 
 INDEX_OF_COLUMNS_SEARCHABLE = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 15, 16, 17, 18, 19, 20, 22, 23, 24]
 
+INDEX_OF_COLUMNS_WITH_COMBOBOX = [8, 12, 13, 14, 21, 25, 26, 27, ]
+
 sample_first_column = 2
 normalization_first_column = 15
 

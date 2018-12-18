@@ -137,16 +137,35 @@ class JsonLoader:
         list_keys.sort()
 
         table_dictionary = {}
+        first_entry = True
         for _row in list_keys:
 
             _source_row_entry = data[str(_row)]
             _row = np.int(_row)
             _target_row_entry = copy.deepcopy(_default_empty_row)
 
-            _target_row_entry["activate"] = _source_row_entry['activate']
+            _target_row_entry["activate"] = _source_row_entry['Activate']
+            _target_row_entry["title"] = _source_row_entry['Title']
+            _target_row_entry["sample"]["runs"] = _source_row_entry['Sample']['Runs']
+            _target_row_entry["sample"]["background"]["runs"] = _source_row_entry['Sample']['Background']["Runs"]
+            _target_row_entry["sample"]["background"]["background"] = _source_row_entry["Sample"]["Background"]["Background"]["Runs"]
+            _target_row_entry["sample"]["material"] = _source_row_entry["Sample"]["Material"]
+            _target_row_entry["sample"]["mass_density"] = _source_row_entry["Sample"]["MassDensity"]
+            _target_row_entry["sample"]["packing_fraction"] = _source_row_entry["Sample"]["PackingFraction"]
+            _target_row_entry["sample"]["geometry"]["shape"] = _source_row_entry["Sample"]["Geometry"]["Shape"]
+            _target_row_entry["sample"]["geometry"]["radius_cm"] = _source_row_entry["Sample"]["Geometry"]["Radius"]
+            _target_row_entry["sample"]["geometry"]["radius2_cm"] = _source_row_entry["Sample"]["Geometry"]["Radius2"]
+            _target_row_entry["sample"]["geometry"]["height_cm"] = _source_row_entry["Sample"]["Geometry"]["Height"]
+            #_target_row_entry["sample"]["abs_correction"] = _source_row_entry["Sample"]["AbsorptionCorrection"]["Type"]
+            print("value is : {}".format(_source_row_entry["Sample"]["AbsorptionCorrection"]["Type"]))
 
 
             table_dictionary[_row] = _target_row_entry
+
+            # load general settings of first entry only
+            if first_entry:
+                pass
+                first_entry = False
 
         o_table_ui_loader = FromDictionaryToTableUi(parent=self.parent)
         o_table_ui_loader.fill(input_dictionary=table_dictionary)
@@ -154,8 +173,6 @@ class JsonLoader:
         self.parent.ui.statusbar.setStyleSheet("color: blue")
         self.parent.ui.statusbar.showMessage("File {} has been imported".format(self.filename),
                                             self.parent.statusbar_display_time)
-
-
 
 
 class AsciiLoader:
