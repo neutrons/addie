@@ -129,22 +129,38 @@ class JsonLoader:
 
     def _retrieve_element_dict(self, element='sample', source_row_entry={}):
         _target_row_entry = {}
-        _target_row_entry["runs"] = source_row_entry[element]['Runs']
+        _source_entry = source_row_entry[element]
+        _target_row_entry["runs"] = _source_entry['Runs']
         _target_row_entry["background"] = {}
-        _target_row_entry["background"]["runs"] = source_row_entry[element]['Background']["Runs"]
-        _target_row_entry["background"]["background"] = source_row_entry[element]["Background"]["Background"]["Runs"]
-        _target_row_entry["material"] = source_row_entry[element]["Material"]
-        _target_row_entry["mass_density"] = source_row_entry[element]["MassDensity"]
-        _target_row_entry["packing_fraction"] = source_row_entry[element]["PackingFraction"]
+        _target_row_entry["background"]["runs"] = _source_entry['Background']["Runs"]
+        _target_row_entry["background"]["background"] = _source_entry["Background"]["Background"]["Runs"]
+        _target_row_entry["material"] = _source_entry["Material"]
+        _target_row_entry["mass_density"] = _source_entry["MassDensity"]
+        _target_row_entry["packing_fraction"] = _source_entry["PackingFraction"]
         _target_row_entry["geometry"] = {}
-        _target_row_entry["geometry"]["shape"] = source_row_entry[element]["Geometry"]["Shape"]
-        _target_row_entry["geometry"]["radius_cm"] = source_row_entry[element]["Geometry"]["Radius"]
-        _target_row_entry["geometry"]["radius2_cm"] = source_row_entry[element]["Geometry"]["Radius2"]
-        _target_row_entry["geometry"]["height_cm"] = source_row_entry[element]["Geometry"]["Height"]
-        _target_row_entry["abs_correction"] = source_row_entry[element]["AbsorptionCorrection"]["Type"]
-        _target_row_entry["multi_scattering_correction"] = source_row_entry[element]["MultipleScatteringCorrection"]["Type"]
-        _target_row_entry["inelastic_correction"] = source_row_entry[element]["InelasticCorrection"]["Type"]
+        _target_row_entry["geometry"]["shape"] = _source_entry["Geometry"]["Shape"]
+        _target_row_entry["geometry"]["radius_cm"] = _source_entry["Geometry"]["Radius"]
+        _target_row_entry["geometry"]["radius2_cm"] = _source_entry["Geometry"]["Radius2"]
+        _target_row_entry["geometry"]["height_cm"] = _source_entry["Geometry"]["Height"]
+        _target_row_entry["abs_correction"] = _source_entry["AbsorptionCorrection"]["Type"]
+        _target_row_entry["multi_scattering_correction"] = _source_entry["MultipleScatteringCorrection"]["Type"]
+        _target_row_entry["inelastic_correction"] = _source_entry["InelasticCorrection"]["Type"]
+        _target_row_entry["placzek"] = copy.deepcopy(self.parent.placzek_default)
+        _target_row_entry["placzek"]["order"]["name_list"] = _source_entry["InelasticCorrection"]["Order"]
+        _target_row_entry["placzek"]["self"] = _source_entry["InelasticCorrection"]["Self"]
+        _target_row_entry["placzek"]["interference"] = _source_entry["InelasticCorrection"]["Interference"]
+        _target_row_entry["placzek"]["fit_spectrum_with"]["short_name_list"] = _source_entry["InelasticCorrection"]["FitSpectrumWith"]
 
+        lambda_binning_for_fit = _source_entry["InelasticCorrection"]["LambdaBinningForFit"].split(",")
+        if len(lambda_binning_for_fit) == 3:
+            _target_row_entry["placzek"]["lambda_binning_for_fit"]["min"] = lambda_binning_for_fit[0]
+            _target_row_entry["placzek"]["lambda_binning_for_fit"]["delta"] = lambda_binning_for_fit[1]
+            _target_row_entry["placzek"]["lambda_binning_for_fit"]["max"] = lambda_binning_for_fit[2]
+        else:
+            default_placzek = self.parent.placzek_default["lambda_binning_for_fit"]
+            _target_row_entry["placzek"]["lambda_binning_for_fit"]["min"] = default_placzek["min"]
+            _target_row_entry["placzek"]["lambda_binning_for_fit"]["delta"] = default_placzek["delta"]
+            _target_row_entry["placzek"]["lambda_binning_for_fit"]["max"] = default_placzek["max"]
 
 
 
