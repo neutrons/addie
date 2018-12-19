@@ -3904,6 +3904,9 @@ p, li { white-space: pre-wrap; }
                      <property name="autoScroll">
                       <bool>true</bool>
                      </property>
+                     <property name="horizontalScrollMode">
+                      <enum>QAbstractItemView::ScrollPerPixel</enum>
+                     </property>
                     </widget>
                    </item>
                    <item>
@@ -3922,6 +3925,12 @@ p, li { white-space: pre-wrap; }
                      </property>
                      <property name="horizontalScrollBarPolicy">
                       <enum>Qt::ScrollBarAlwaysOff</enum>
+                     </property>
+                     <property name="autoScroll">
+                      <bool>true</bool>
+                     </property>
+                     <property name="horizontalScrollMode">
+                      <enum>QAbstractItemView::ScrollPerPixel</enum>
                      </property>
                      <column>
                       <property name="text">
@@ -3966,6 +3975,9 @@ p, li { white-space: pre-wrap; }
                      </property>
                      <property name="selectionMode">
                       <enum>QAbstractItemView::ContiguousSelection</enum>
+                     </property>
+                     <property name="horizontalScrollMode">
+                      <enum>QAbstractItemView::ScrollPerPixel</enum>
                      </property>
                      <attribute name="verticalHeaderVisible">
                       <bool>false</bool>
