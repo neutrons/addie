@@ -212,8 +212,8 @@ class TableFileExporter:
                                            'Normalization': _export_dictionary_normalization,
                                            'Facility': facility,
                                            'Instrument': instrument,
-                                           'Cachedir': cachedir,
-                                           'Outputdir': outputdir}
+                                           'CacheDir': cachedir,
+                                           'OutputDir': outputdir}
 
         return full_export_dictionary
 

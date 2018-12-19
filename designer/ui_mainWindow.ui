@@ -4038,6 +4038,12 @@ p, li { white-space: pre-wrap; }
                    </item>
                    <item>
                     <widget class="QGroupBox" name="groupBox_2">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
                      <property name="title">
                       <string>Calibration</string>
                      </property>
@@ -4101,6 +4107,12 @@ p, li { white-space: pre-wrap; }
                       </item>
                       <item>
                        <widget class="QLabel" name="calibration_file">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
                         <property name="minimumSize">
                          <size>
                           <width>500</width>

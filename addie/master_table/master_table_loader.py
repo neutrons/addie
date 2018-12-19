@@ -17,6 +17,7 @@ except ImportError:
 from addie.utilities.file_handler import FileHandler
 from addie.utilities.list_runs_parser import ListRunsParser
 from addie.master_table.table_row_handler import TableRowHandler
+from addie.utilities.set import Set
 
 from addie.ui_list_of_scan_loader_dialog import Ui_Dialog as UiDialog
 
@@ -162,8 +163,6 @@ class JsonLoader:
             _target_row_entry["placzek"]["lambda_binning_for_fit"]["delta"] = default_placzek["delta"]
             _target_row_entry["placzek"]["lambda_binning_for_fit"]["max"] = default_placzek["max"]
 
-
-
         return _target_row_entry
 
     def load(self):
@@ -193,12 +192,30 @@ class JsonLoader:
             _target_row_entry["normalization"] = self._retrieve_element_dict(element='Normalization',
                                                                              source_row_entry=_source_row_entry)
 
-
             table_dictionary[_row] = _target_row_entry
 
             # load general settings of first entry only
             if first_entry:
-                pass
+                o_set = Set(parent=self.parent)
+
+                # short name of instrument (ex: NOM)
+                short_instrument_name = str(_source_row_entry['Instrument'])
+                o_set.set_instrument(short_name=short_instrument_name)
+
+                # name of facility (not used yet)
+                facility = str(_source_row_entry["Facility"])
+                self.parent.facility = facility
+
+                # cache and output dir
+                cache_folder = str(_source_row_entry["CacheDir"])
+                self.parent.cache_folder = cache_folder
+
+                output_dir = str(_source_row_entry["OutputDir"])
+                self.parent.output_folder = output_dir
+
+                calibration_file = str(_source_row_entry["Calibration"])
+                self.parent.ui.calibration_file.setText(calibration_file)
+
                 first_entry = False
 
         o_table_ui_loader = FromDictionaryToTableUi(parent=self.parent)
