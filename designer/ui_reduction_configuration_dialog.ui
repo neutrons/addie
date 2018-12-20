@@ -41,10 +41,17 @@
                <item>
                 <widget class="QRadioButton" name="intermediate_from_calibration_radioButton">
                  <property name="text">
-                  <string>From Calibration File</string>
+                  <string/>
                  </property>
                  <property name="checked">
                   <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="intermediate_from_calibration_label">
+                 <property name="text">
+                  <string>From Calibration File</string>
                  </property>
                 </widget>
                </item>
@@ -83,7 +90,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLabel" name="label_7">
+                  <widget class="QLabel" name="intermediate_from_calibration_groups_label">
                    <property name="minimumSize">
                     <size>
                      <width>50</width>
@@ -108,7 +115,7 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_3">
                <item>
-                <widget class="QRadioButton" name="radioButton_2">
+                <widget class="QRadioButton" name="intermediate_browse_radio_button">
                  <property name="minimumSize">
                   <size>
                    <width>15</width>
@@ -167,7 +174,7 @@
                <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_5">
                  <item>
-                  <widget class="QLabel" name="intermediate_browse_groupe_value">
+                  <widget class="QLabel" name="intermediate_browse_groups_value">
                    <property name="enabled">
                     <bool>false</bool>
                    </property>
@@ -189,7 +196,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLabel" name="label_5">
+                  <widget class="QLabel" name="intermediate_browse_groups_label">
                    <property name="enabled">
                     <bool>false</bool>
                    </property>
@@ -228,10 +235,17 @@
                <item>
                 <widget class="QRadioButton" name="output_from_calibration_radioButton">
                  <property name="text">
-                  <string>From Calibration File</string>
+                  <string/>
                  </property>
                  <property name="checked">
                   <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="label">
+                 <property name="text">
+                  <string>From Calibration File</string>
                  </property>
                 </widget>
                </item>
@@ -1144,7 +1158,7 @@ p, li { white-space: pre-wrap; }
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="save_and_close_button">
        <property name="text">
         <string>Save and Close</string>
        </property>
@@ -1163,11 +1177,11 @@ p, li { white-space: pre-wrap; }
    <slot>pdf_reset_q_range_button()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>742</x>
-     <y>307</y>
+     <x>689</x>
+     <y>433</y>
     </hint>
     <hint type="destinationlabel">
-     <x>808</x>
+     <x>733</x>
      <y>126</y>
     </hint>
    </hints>
@@ -1179,24 +1193,24 @@ p, li { white-space: pre-wrap; }
    <slot>pdf_reset_r_range_button()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>745</x>
-     <y>387</y>
+     <x>689</x>
+     <y>513</y>
     </hint>
     <hint type="destinationlabel">
-     <x>807</x>
+     <x>733</x>
      <y>363</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>pushButton</sender>
+   <sender>save_and_close_button</sender>
    <signal>clicked()</signal>
    <receiver>Dialog</receiver>
    <slot>close_button()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>745</x>
-     <y>554</y>
+     <x>723</x>
+     <y>867</y>
     </hint>
     <hint type="destinationlabel">
      <x>677</x>
@@ -1211,12 +1225,44 @@ p, li { white-space: pre-wrap; }
    <slot>pdf_browse_characterization_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>175</x>
-     <y>242</y>
+     <x>199</x>
+     <y>364</y>
     </hint>
     <hint type="destinationlabel">
      <x>659</x>
      <y>7</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>intermediate_from_calibration_radioButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>intermediate_radio_button_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>132</x>
+     <y>125</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>4</x>
+     <y>75</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>intermediate_browse_radio_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>intermediate_browse_radio_button_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>50</x>
+     <y>157</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>6</x>
+     <y>199</y>
     </hint>
    </hints>
   </connection>
@@ -1228,5 +1274,7 @@ p, li { white-space: pre-wrap; }
   <slot>close_button()</slot>
   <slot>browse_calibration_clicked()</slot>
   <slot>pdf_browse_characterization_clicked()</slot>
+  <slot>intermediate_radio_button_clicked()</slot>
+  <slot>intermediate_browse_radio_button_clicked()</slot>
  </slots>
 </ui>
