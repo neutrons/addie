@@ -74,28 +74,28 @@ class TableRowHandler:
         # change state of other widgets of the same column if they are selected
         self.transfer_widget_states(value=shape)
 
-        # change label of columns
-        column1 = "Radius (cm)"
-        column2 = ""
-        column3 = "Height (cm)"
-
-        if shape == 'spherical':
-            column3 = ""
-        elif shape == 'hollow cylinder':
-            column1 = "Inner Radius (cm)"
-            column2 = "Outer Radius (cm)"
-
-        if data_type == 'sample':
-            column_offset = 9
-        else:
-            column_offset = 22
-
-        _item1 = QTableWidgetItem(column1)
-        self.table_ui.setHorizontalHeaderItem(column_offset, _item1)
-        _item2 = QTableWidgetItem(column2)
-        self.table_ui.setHorizontalHeaderItem(column_offset+1, _item2)
-        _item3 = QTableWidgetItem(column3)
-        self.table_ui.setHorizontalHeaderItem(column_offset+2, _item3)
+        # # change label of columns
+        # column1 = "Radius (cm)"
+        # column2 = ""
+        # column3 = "Height (cm)"
+        #
+        # if shape == 'spherical':
+        #     column3 = ""
+        # elif shape == 'hollow cylinder':
+        #     column1 = "Inner Radius (cm)"
+        #     column2 = "Outer Radius (cm)"
+        #
+        # if data_type == 'sample':
+        #     column_offset = 9
+        # else:
+        #     column_offset = 22
+        #
+        # _item1 = QTableWidgetItem(column1)
+        # self.table_ui.setHorizontalHeaderItem(column_offset, _item1)
+        # _item2 = QTableWidgetItem(column2)
+        # self.table_ui.setHorizontalHeaderItem(column_offset+1, _item2)
+        # _item3 = QTableWidgetItem(column3)
+        # self.table_ui.setHorizontalHeaderItem(column_offset+2, _item3)
 
     def abs_correction_changed(self, value='', key=None, data_type='sample'):
         # change state of other widgets of the same column if they are selected
@@ -684,8 +684,12 @@ class TableRowHandler:
             return ['None',
                     'Carpenter',
                     'Mayers']
-        else:
+        elif shape.lower() == 'spherical':
             return ['None']
+        elif shape.lower() == 'hollow cylindrical':
+            return ['None']
+
+        return ['None']
 
     def get_inelastic_scattering_list(self, shape='cylindrical'):
         return ['None',
@@ -698,13 +702,18 @@ class TableRowHandler:
                     'Carpenter',
                     'Mayers',
                     'Podman & Pings',
-                    'Monte Carlo',
+                    'Monte-Carlo',
                     'Numerical',
                     ]
-        else:
+        elif shape.lower() == 'spherical':
             return ['None',
-                    'Monte Carlo',
+                    'Monte-Carlo',
                     ]
+        elif shape.lower() == 'hollow cylinder':
+            return ['None',
+                    'Monte-Carlo']
+
+        return ['None']
 
     def _calculate_insert_row(self):
         selection = self.parent.ui.h3_table.selectedRanges()

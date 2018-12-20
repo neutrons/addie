@@ -3970,6 +3970,9 @@ p, li { white-space: pre-wrap; }
                      <property name="contextMenuPolicy">
                       <enum>Qt::CustomContextMenu</enum>
                      </property>
+                     <property name="autoScrollMargin">
+                      <number>1</number>
+                     </property>
                      <property name="alternatingRowColors">
                       <bool>true</bool>
                      </property>
