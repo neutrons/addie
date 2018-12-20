@@ -2,12 +2,66 @@ from collections import OrderedDict
 import copy
 from os.path import expanduser
 import os
+import numpy as np
 
 user_home = expanduser("~")
 CONFIG_FILE = os.path.join(user_home, '.addie_config.cfg')
 
 column_default_width = 90
 COLUMN_DEFAULT_HEIGHT = 50
+
+h3_COLUMNS_WIDTH = [90,  #activate
+                    150,  #title
+                    90,  #runs  #sample
+                    90,  #background runs
+                    90,  #background background
+                    90,  #material
+                    120,  #mass density
+                    120,  #packing fraction
+                    90,  #shape
+                    50, 50, 50,  #geometry dimensions
+                    150, 150, 150,  #correction
+                    90,  # runs  #normalization
+                    90,  # background runs
+                    90,  # background background
+                    90,  # material
+                    120,  # mass density
+                    120,  # packing fraction
+                    90,  # shape
+                    50, 50, 50,  # geometry dimensions
+                    150, 150, 150,  # correction
+                    50, 50, # grouping
+                    ]
+
+h2_COLUMNS_WIDTH = [h3_COLUMNS_WIDTH[0],
+                    h3_COLUMNS_WIDTH[1],
+                    h3_COLUMNS_WIDTH[2],
+                    h3_COLUMNS_WIDTH[3] + h3_COLUMNS_WIDTH[4],
+                    h3_COLUMNS_WIDTH[5],
+                    h3_COLUMNS_WIDTH[6],
+                    h3_COLUMNS_WIDTH[7],
+                    h3_COLUMNS_WIDTH[8]+h3_COLUMNS_WIDTH[9]+h3_COLUMNS_WIDTH[10]+h3_COLUMNS_WIDTH[11],
+                    h3_COLUMNS_WIDTH[12],
+                    h3_COLUMNS_WIDTH[13],
+                    h3_COLUMNS_WIDTH[14],
+                    h3_COLUMNS_WIDTH[15],
+                    h3_COLUMNS_WIDTH[16]+h3_COLUMNS_WIDTH[17],
+                    h3_COLUMNS_WIDTH[18],
+                    h3_COLUMNS_WIDTH[19],
+                    h3_COLUMNS_WIDTH[20],
+                    h3_COLUMNS_WIDTH[21]+h3_COLUMNS_WIDTH[22]+h3_COLUMNS_WIDTH[23]+h3_COLUMNS_WIDTH[24],
+                    h3_COLUMNS_WIDTH[25],
+                    h3_COLUMNS_WIDTH[26],
+                    h3_COLUMNS_WIDTH[27],
+                    h3_COLUMNS_WIDTH[28],
+                    h3_COLUMNS_WIDTH[29]]
+
+h1_COLUMNS_WIDTH = [h3_COLUMNS_WIDTH[0],
+                    h3_COLUMNS_WIDTH[1],
+                    np.sum(h3_COLUMNS_WIDTH[2:15]),
+                    np.sum(h3_COLUMNS_WIDTH[15:28]),
+                    h3_COLUMNS_WIDTH[28],
+                    h3_COLUMNS_WIDTH[29]]
 
 INDEX_OF_COLUMNS_SEARCHABLE = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 15, 16, 17, 18, 19, 20, 22, 23, 24]
 

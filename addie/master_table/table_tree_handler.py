@@ -16,6 +16,7 @@ except ImportError:
 from addie.utilities.file_handler import FileHandler
 from addie.ui_table_tree import Ui_Dialog as UiDialog
 from addie.master_table.tree_definition import tree_dict, column_default_width, CONFIG_FILE
+from addie.master_table.tree_definition import h1_COLUMNS_WIDTH, h2_COLUMNS_WIDTH, h3_COLUMNS_WIDTH
 from addie.master_table.table_row_handler import TableRowHandler
 from addie.master_table.table_plot_handler import TablePlotHandler
 from addie.master_table.selection_handler import SelectionHandler, CellsHandler, RowsHandler
@@ -155,6 +156,16 @@ class TableInitialization:
         td = self.tree_dict
 
         table_width = {'h1': [], 'h2': [], 'h3': []}
+
+        # Trying manual input of table dimensions
+        table_width['h3'] = h3_COLUMNS_WIDTH
+        table_width['h2'] = h2_COLUMNS_WIDTH
+        table_width['h1'] = h1_COLUMNS_WIDTH
+        self.table_width = table_width
+
+        return
+
+
 
         # check all the h1 headers
         for _key_h1 in td.keys():
