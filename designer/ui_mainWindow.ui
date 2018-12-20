@@ -3898,6 +3898,9 @@ p, li { white-space: pre-wrap; }
                        <height>20</height>
                       </size>
                      </property>
+                     <property name="verticalScrollBarPolicy">
+                      <enum>Qt::ScrollBarAlwaysOn</enum>
+                     </property>
                      <property name="horizontalScrollBarPolicy">
                       <enum>Qt::ScrollBarAlwaysOff</enum>
                      </property>
@@ -3922,6 +3925,9 @@ p, li { white-space: pre-wrap; }
                        <width>16777215</width>
                        <height>20</height>
                       </size>
+                     </property>
+                     <property name="verticalScrollBarPolicy">
+                      <enum>Qt::ScrollBarAlwaysOn</enum>
                      </property>
                      <property name="horizontalScrollBarPolicy">
                       <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -3969,6 +3975,9 @@ p, li { white-space: pre-wrap; }
                      </property>
                      <property name="contextMenuPolicy">
                       <enum>Qt::CustomContextMenu</enum>
+                     </property>
+                     <property name="verticalScrollBarPolicy">
+                      <enum>Qt::ScrollBarAlwaysOn</enum>
                      </property>
                      <property name="autoScrollMargin">
                       <number>1</number>
