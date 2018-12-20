@@ -107,6 +107,7 @@ class ReductionConfiguration(QDialog):
             o_grouping = LoadGroupingFile(filename=_intermediate_group_file)
             nbr_groups = o_grouping.get_number_of_groups()
             self.ui.intermediate_browse_groups_value.setText(str(nbr_groups))
+            self.parent.intermediate_grouping_file = _intermediate_group_file
 
     def output_browse_button_clicked(self):
         _characterization_folder = self.parent.characterization_folder
@@ -119,6 +120,7 @@ class ReductionConfiguration(QDialog):
             o_grouping = LoadGroupingFile(filename=_output_group_file)
             nbr_groups = o_grouping.get_number_of_groups()
             self.ui.output_browse_groups_value.setText(str(nbr_groups))
+            self.parent.output_grouping_file = _output_group_file
 
     def pdf_reset_q_range_button(self):
         pass

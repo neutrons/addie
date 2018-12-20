@@ -189,6 +189,8 @@ class TableFileExporter:
         instrument = self.parent.instrument["short_name"]
         cachedir = self.parent.cache_folder
         outputdir = self.parent.output_folder
+        intermediate_grouping_file = self.parent.intermediate_grouping_file
+        output_grouping_file = self.parent.output_grouping_file
 
         full_export_dictionary = OrderedDict()
         nbr_row = self.table_ui.rowCount()
@@ -213,7 +215,15 @@ class TableFileExporter:
                                            'Facility': facility,
                                            'Instrument': instrument,
                                            'CacheDir': cachedir,
-                                           'OutputDir': outputdir}
+                                           'OutputDir': outputdir,
+                                           "Merging": {"QBinning": [],
+                                                       "SumBanks": [],
+                                                       "Characterizations": "",
+                                                       "Grouping": {"Initial": intermediate_grouping_file,
+                                                                    "Output": output_grouping_file,
+                                                                    },
+                                                       },
+                                           }
 
         return full_export_dictionary
 
