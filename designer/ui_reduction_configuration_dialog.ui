@@ -67,13 +67,13 @@
                   <widget class="QLabel" name="intermediate_from_calibration_groups_value">
                    <property name="minimumSize">
                     <size>
-                     <width>20</width>
+                     <width>25</width>
                      <height>0</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>20</width>
+                     <width>25</width>
                      <height>16777215</height>
                     </size>
                    </property>
@@ -173,13 +173,13 @@
                    </property>
                    <property name="minimumSize">
                     <size>
-                     <width>20</width>
+                     <width>25</width>
                      <height>0</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>20</width>
+                     <width>25</width>
                      <height>16777215</height>
                     </size>
                    </property>
@@ -254,13 +254,13 @@
                   <widget class="QLabel" name="output_from_calibration_groups_value">
                    <property name="minimumSize">
                     <size>
-                     <width>20</width>
+                     <width>25</width>
                      <height>0</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>20</width>
+                     <width>25</width>
                      <height>16777215</height>
                     </size>
                    </property>
@@ -360,13 +360,13 @@
                    </property>
                    <property name="minimumSize">
                     <size>
-                     <width>20</width>
+                     <width>25</width>
                      <height>0</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>20</width>
+                     <width>25</width>
                      <height>16777215</height>
                     </size>
                    </property>
