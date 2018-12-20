@@ -1,5 +1,5 @@
 import json
-
+from xml.dom import minidom
 
 try:
     from PyQt4.QtGui import QDialog, QFileDialog
@@ -160,13 +160,15 @@ class ReductionConfiguration(QDialog):
 
 
 class LoadGroupingFile:
+    '''This class reads the XML file and will return the number of groups <group ID=""> found in that file'''
 
     def __init__(self, filename=''):
         self.filename = filename
 
     def get_number_of_groups(self):
-        # FIXME
-        return -1
+        xmldoc = minidom.parse(self.filename)
+        itemlist = xmldoc.getElementsByTagName('group')
+        return len(itemlist)
 
 
 class LoadReductionConfiguration:
