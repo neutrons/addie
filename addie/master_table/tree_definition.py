@@ -18,7 +18,7 @@ h3_COLUMNS_WIDTH = [90,  #activate
                     90,  #material
                     120,  #mass density
                     120,  #packing fraction
-                    90,  #shape
+                    150,  #shape
                     50, 50, 50,  #geometry dimensions
                     150, 150, 150,  #correction
                     90,  # runs  #normalization
@@ -27,7 +27,7 @@ h3_COLUMNS_WIDTH = [90,  #activate
                     90,  # material
                     120,  # mass density
                     120,  # packing fraction
-                    90,  # shape
+                    150,  # shape
                     50, 50, 50,  # geometry dimensions
                     150, 150, 150,  # correction
 #                    50, 50, # grouping

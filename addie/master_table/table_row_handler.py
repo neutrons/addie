@@ -554,85 +554,85 @@ class TableRowHandler:
         # automatically populate placzek infos with default values
         _master_table_row_ui['normalization']['placzek_infos'] = self.formated_placzek_default()
 
-        # column 28 - Input Grouping
-        column += 1
-        _row1_layout = QtGui.QHBoxLayout()
-        _row1_layout.setMargin(0)
-        _label = QLabel("Default  or  ")
-        _button = QPushButton("...")
-        # _button.pressed.connect(lambda key=random_key:
+        # # column 28 - Input Grouping
+        # column += 1
+        # _row1_layout = QtGui.QHBoxLayout()
+        # _row1_layout.setMargin(0)
+        # _label = QLabel("Default  or  ")
+        # _button = QPushButton("...")
+        # # _button.pressed.connect(lambda key=random_key:
+        # #                        self.parent.master_table_input_grouping_button_pressed(key))
+        # QtCore.QObject.connect(_button, QtCore.SIGNAL("pressed()"),
+        #                        lambda key=random_key:
         #                        self.parent.master_table_input_grouping_button_pressed(key))
-        QtCore.QObject.connect(_button, QtCore.SIGNAL("pressed()"),
-                               lambda key=random_key:
-                               self.parent.master_table_input_grouping_button_pressed(key))
-        _master_table_row_ui['input_grouping_button'] = _button
-        _row1_widget = QWidget()
-        _row1_layout.addWidget(_label)
-        _row1_layout.addWidget(_button)
-        _row1_widget.setLayout(_row1_layout)
-
-        _row2_layout = QtGui.QHBoxLayout()
-        _row2_layout.setMargin(0)
-        _label = QLabel("(6 groups)")
-        _master_table_row_ui['input_grouping_label'] = _label
-        _spacer = QSpacerItem(40, 20,
-                               QSizePolicy.Expanding,
-                               QSizePolicy.Minimum)
-        _row2_layout.addItem(_spacer)
-        _row2_layout.addWidget(_label)
-        _spacer = QSpacerItem(40, 20,
-                               QSizePolicy.Expanding,
-                               QSizePolicy.Minimum)
-        _row2_layout.addItem(_spacer)
-        _row2_widget = QWidget()
-        _row2_widget.setLayout(_row2_layout)
-
-        _verti_layout = QtGui.QVBoxLayout()
-        _verti_layout.setMargin(0)
-        _verti_widget = QWidget()
-        _verti_layout.addWidget(_row1_widget)
-        _verti_layout.addWidget(_row2_widget)
-        _verti_widget.setLayout(_verti_layout)
-        self.table_ui.setCellWidget(row, column, _verti_widget)
-
-        # column 29 - Output Grouping
-        column += 1
-        _row1_layout = QtGui.QHBoxLayout()
-        _row1_layout.setMargin(0)
-        _label = QLabel("Default  or  ")
-        _button = QPushButton("...")
-        # _button.pressed.connect(lambda key=random_key:
+        # _master_table_row_ui['input_grouping_button'] = _button
+        # _row1_widget = QWidget()
+        # _row1_layout.addWidget(_label)
+        # _row1_layout.addWidget(_button)
+        # _row1_widget.setLayout(_row1_layout)
+        #
+        # _row2_layout = QtGui.QHBoxLayout()
+        # _row2_layout.setMargin(0)
+        # _label = QLabel("(6 groups)")
+        # _master_table_row_ui['input_grouping_label'] = _label
+        # _spacer = QSpacerItem(40, 20,
+        #                        QSizePolicy.Expanding,
+        #                        QSizePolicy.Minimum)
+        # _row2_layout.addItem(_spacer)
+        # _row2_layout.addWidget(_label)
+        # _spacer = QSpacerItem(40, 20,
+        #                        QSizePolicy.Expanding,
+        #                        QSizePolicy.Minimum)
+        # _row2_layout.addItem(_spacer)
+        # _row2_widget = QWidget()
+        # _row2_widget.setLayout(_row2_layout)
+        #
+        # _verti_layout = QtGui.QVBoxLayout()
+        # _verti_layout.setMargin(0)
+        # _verti_widget = QWidget()
+        # _verti_layout.addWidget(_row1_widget)
+        # _verti_layout.addWidget(_row2_widget)
+        # _verti_widget.setLayout(_verti_layout)
+        # self.table_ui.setCellWidget(row, column, _verti_widget)
+        #
+        # # column 29 - Output Grouping
+        # column += 1
+        # _row1_layout = QtGui.QHBoxLayout()
+        # _row1_layout.setMargin(0)
+        # _label = QLabel("Default  or  ")
+        # _button = QPushButton("...")
+        # # _button.pressed.connect(lambda key=random_key:
+        # #                        self.parent.master_table_output_grouping_button_pressed(key))
+        # QtCore.QObject.connect(_button, QtCore.SIGNAL("pressed()"),
+        #                        lambda key=random_key:
         #                        self.parent.master_table_output_grouping_button_pressed(key))
-        QtCore.QObject.connect(_button, QtCore.SIGNAL("pressed()"),
-                               lambda key=random_key:
-                               self.parent.master_table_output_grouping_button_pressed(key))
-        _master_table_row_ui['output_grouping_button'] = _button
-        _row1_widget = QWidget()
-        _row1_layout.addWidget(_label)
-        _row1_layout.addWidget(_button)
-        _row1_widget.setLayout(_row1_layout)
-        _row2_layout = QtGui.QHBoxLayout()
-        _row2_layout.setMargin(0)
-        _label = QLabel("(6 groups)")
-        _master_table_row_ui['output_grouping_label'] = _label
-        _spacer = QSpacerItem(40, 20,
-                               QSizePolicy.Expanding,
-                               QSizePolicy.Minimum)
-        _row2_layout.addItem(_spacer)
-        _row2_layout.addWidget(_label)
-        _spacer = QSpacerItem(40, 20,
-                               QSizePolicy.Expanding,
-                               QSizePolicy.Minimum)
-        _row2_layout.addItem(_spacer)
-        _row2_widget = QWidget()
-        _row2_widget.setLayout(_row2_layout)
-        _verti_layout = QtGui.QVBoxLayout()
-        _verti_layout.setMargin(0)
-        _verti_widget = QWidget()
-        _verti_layout.addWidget(_row1_widget)
-        _verti_layout.addWidget(_row2_widget)
-        _verti_widget.setLayout(_verti_layout)
-        self.table_ui.setCellWidget(row, column, _verti_widget)
+        # _master_table_row_ui['output_grouping_button'] = _button
+        # _row1_widget = QWidget()
+        # _row1_layout.addWidget(_label)
+        # _row1_layout.addWidget(_button)
+        # _row1_widget.setLayout(_row1_layout)
+        # _row2_layout = QtGui.QHBoxLayout()
+        # _row2_layout.setMargin(0)
+        # _label = QLabel("(6 groups)")
+        # _master_table_row_ui['output_grouping_label'] = _label
+        # _spacer = QSpacerItem(40, 20,
+        #                        QSizePolicy.Expanding,
+        #                        QSizePolicy.Minimum)
+        # _row2_layout.addItem(_spacer)
+        # _row2_layout.addWidget(_label)
+        # _spacer = QSpacerItem(40, 20,
+        #                        QSizePolicy.Expanding,
+        #                        QSizePolicy.Minimum)
+        # _row2_layout.addItem(_spacer)
+        # _row2_widget = QWidget()
+        # _row2_widget.setLayout(_row2_layout)
+        # _verti_layout = QtGui.QVBoxLayout()
+        # _verti_layout.setMargin(0)
+        # _verti_widget = QWidget()
+        # _verti_layout.addWidget(_row1_widget)
+        # _verti_layout.addWidget(_row2_widget)
+        # _verti_widget.setLayout(_verti_layout)
+        # self.table_ui.setCellWidget(row, column, _verti_widget)
 
         ## recap
 
