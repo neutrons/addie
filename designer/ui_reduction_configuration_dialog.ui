@@ -1298,6 +1298,38 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>intermediate_browse_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>intermediate_browse_button_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>105</x>
+     <y>153</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>159</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>output_browse_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>output_browse_button_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>101</x>
+     <y>259</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>6</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>make_calibration_clicked()</slot>
@@ -1310,5 +1342,7 @@ p, li { white-space: pre-wrap; }
   <slot>intermediate_browse_radio_button_clicked()</slot>
   <slot>output_radio_button_clicked()</slot>
   <slot>output_browse_radio_button_clicked()</slot>
+  <slot>intermediate_browse_button_clicked()</slot>
+  <slot>output_browse_button_clicked()</slot>
  </slots>
 </ui>

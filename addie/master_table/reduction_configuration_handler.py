@@ -96,6 +96,30 @@ class ReductionConfiguration(QDialog):
     def output_browse_radio_button_clicked(self):
         self._check_status_output_buttons()
 
+    def intermediate_browse_button_clicked(self):
+        _characterization_folder = self.parent.characterization_folder
+        _intermediate_group_file = QtGui.QFileDialog.getOpenFileName(parent=self.parent,
+                                                                   caption="Select Grouping File",
+                                                                   directory=_characterization_folder,
+                                                                   filter="XML (*.xml)")
+        if _intermediate_group_file:
+            self.ui.intermediate_browse_value.setText(_intermediate_group_file)
+            o_grouping = LoadGroupingFile(filename=_intermediate_group_file)
+            nbr_groups = o_grouping.get_number_of_groups()
+            self.ui.intermediate_browse_groups_value.setText(str(nbr_groups))
+
+    def output_browse_button_clicked(self):
+        _characterization_folder = self.parent.characterization_folder
+        _output_group_file = QtGui.QFileDialog.getOpenFileName(parent=self.parent,
+                                                                   caption="Select Grouping File",
+                                                                   directory=_characterization_folder,
+                                                                   filter="XML (*.xml)")
+        if _output_group_file:
+            self.ui.output_browse_value.setText(_output_group_file)
+            o_grouping = LoadGroupingFile(filename=_output_group_file)
+            nbr_groups = o_grouping.get_number_of_groups()
+            self.ui.output_browse_groups_value.setText(str(nbr_groups))
+
     def pdf_reset_q_range_button(self):
         pass
 
@@ -117,7 +141,7 @@ class ReductionConfiguration(QDialog):
     def pdf_browse_characterization_clicked(self):
         _characterization_folder = self.parent.characterization_folder
         _characterization_file = QtGui.QFileDialog.getOpenFileName(parent=self.parent,
-                                                                   caption="Select Characterization_File",
+                                                                   caption="Select Characterization File",
                                                                    directory=_characterization_folder,
                                                                    filter=self.parent.characterization_extension)
         if _characterization_file:
@@ -133,6 +157,16 @@ class ReductionConfiguration(QDialog):
     def closeEvent(self, event=None):
         self.parent.reduction_configuration_ui = None
         self.parent.reduction_configuration_ui_position = self.pos()
+
+
+class LoadGroupingFile:
+
+    def __init__(self, filename=''):
+        self.filename = filename
+
+    def get_number_of_groups(self):
+        # FIXME
+        return -1
 
 
 class LoadReductionConfiguration:
