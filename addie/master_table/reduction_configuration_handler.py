@@ -71,6 +71,7 @@ class ReductionConfiguration(QDialog):
     def _check_status_intermediate_buttons(self):
         '''this method will enabled or not all the widgets of the intermediate groups browse section'''
         status_browse_widgets = self.ui.intermediate_browse_radio_button.isChecked()
+        self.parent.intermediate_grouping['enabled'] = status_browse_widgets
         for _widget in self.list_grouping_intermediate_browse_widgets:
             _widget.setEnabled(status_browse_widgets)
         for _widget in self.list_grouping_intermediate_widgets:
@@ -79,6 +80,7 @@ class ReductionConfiguration(QDialog):
     def _check_status_output_buttons(self):
         '''this method will enabled or not all the widgets of the output groups browse section'''
         status_browse_widgets = self.ui.output_browse_radio_button.isChecked()
+        self.parent.output_grouping['enabled'] = status_browse_widgets
         for _widget in self.list_grouping_output_browse_widgets:
             _widget.setEnabled(status_browse_widgets)
         for _widget in self.list_grouping_output_widgets:
@@ -107,7 +109,8 @@ class ReductionConfiguration(QDialog):
             o_grouping = LoadGroupingFile(filename=_intermediate_group_file)
             nbr_groups = o_grouping.get_number_of_groups()
             self.ui.intermediate_browse_groups_value.setText(str(nbr_groups))
-            self.parent.intermediate_grouping_file = _intermediate_group_file
+            self.parent.intermediate_grouping['filename'] = _intermediate_group_file
+            self.parent.intermediate_grouping['nbr_groups'] = nbr_groups
 
     def output_browse_button_clicked(self):
         _characterization_folder = self.parent.characterization_folder
@@ -120,7 +123,8 @@ class ReductionConfiguration(QDialog):
             o_grouping = LoadGroupingFile(filename=_output_group_file)
             nbr_groups = o_grouping.get_number_of_groups()
             self.ui.output_browse_groups_value.setText(str(nbr_groups))
-            self.parent.output_grouping_file = _output_group_file
+            self.parent.output_grouping['filename'] = _output_group_file
+            self.parent.output_grouping['nbr_groups'] = nbr_groups
 
     def pdf_reset_q_range_button(self):
         pass

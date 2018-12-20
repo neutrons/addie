@@ -112,8 +112,12 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     ascii_loader_dictionary = {}
 
     # intermediate and output grouping files
-    intermediate_grouping_file = ''
-    output_grouping_file = ''
+    grouping_dict = {'filename': "",
+                     'nbr_groups': "N/A",
+                     'enabled': False}
+    intermediate_grouping = copy.deepcopy(grouping_dict)
+    output_grouping = copy.deepcopy(grouping_dict)
+
 
     statusbar_display_time = 5000  # 5s
 
