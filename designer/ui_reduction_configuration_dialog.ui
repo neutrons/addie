@@ -243,7 +243,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QLabel" name="label">
+                <widget class="QLabel" name="output_from_calibration_label">
                  <property name="text">
                   <string>From Calibration File</string>
                  </property>
@@ -284,7 +284,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLabel" name="label_9">
+                  <widget class="QLabel" name="output_from_calibration_groups_label">
                    <property name="minimumSize">
                     <size>
                      <width>50</width>
@@ -309,7 +309,7 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_8">
                <item>
-                <widget class="QRadioButton" name="radioButton_4">
+                <widget class="QRadioButton" name="output_browse_radio_button">
                  <property name="minimumSize">
                   <size>
                    <width>15</width>
@@ -390,7 +390,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLabel" name="label_11">
+                  <widget class="QLabel" name="output_browse_groups_label">
                    <property name="enabled">
                     <bool>false</bool>
                    </property>
@@ -1178,7 +1178,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>689</x>
-     <y>433</y>
+     <y>427</y>
     </hint>
     <hint type="destinationlabel">
      <x>733</x>
@@ -1194,7 +1194,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>689</x>
-     <y>513</y>
+     <y>507</y>
     </hint>
     <hint type="destinationlabel">
      <x>733</x>
@@ -1226,7 +1226,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>199</x>
-     <y>364</y>
+     <y>358</y>
     </hint>
     <hint type="destinationlabel">
      <x>659</x>
@@ -1241,8 +1241,8 @@ p, li { white-space: pre-wrap; }
    <slot>intermediate_radio_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>132</x>
-     <y>125</y>
+     <x>58</x>
+     <y>127</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -1266,6 +1266,38 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>output_from_calibration_radioButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>output_radio_button_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>51</x>
+     <y>227</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>6</x>
+     <y>256</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>output_browse_radio_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>output_browse_radio_button_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>49</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>309</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>make_calibration_clicked()</slot>
@@ -1276,5 +1308,7 @@ p, li { white-space: pre-wrap; }
   <slot>pdf_browse_characterization_clicked()</slot>
   <slot>intermediate_radio_button_clicked()</slot>
   <slot>intermediate_browse_radio_button_clicked()</slot>
+  <slot>output_radio_button_clicked()</slot>
+  <slot>output_browse_radio_button_clicked()</slot>
  </slots>
 </ui>

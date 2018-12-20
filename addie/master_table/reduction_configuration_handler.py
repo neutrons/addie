@@ -60,6 +60,14 @@ class ReductionConfiguration(QDialog):
                                                    self.ui.intermediate_from_calibration_groups_label,
                                                    self.ui.intermediate_from_calibration_groups_value]
 
+        self.list_grouping_output_browse_widgets = [self.ui.output_browse_button,
+                                                          self.ui.output_browse_value,
+                                                          self.ui.output_browse_groups_value,
+                                                          self.ui.output_browse_groups_label]
+        self.list_grouping_output_widgets = [self.ui.output_from_calibration_label,
+                                                   self.ui.output_from_calibration_groups_label,
+                                                   self.ui.output_from_calibration_groups_value]
+
     def _check_status_intermediate_buttons(self):
         '''this method will enabled or not all the widgets of the intermediate groups browse section'''
         status_browse_widgets = self.ui.intermediate_browse_radio_button.isChecked()
@@ -68,11 +76,25 @@ class ReductionConfiguration(QDialog):
         for _widget in self.list_grouping_intermediate_widgets:
             _widget.setEnabled(not status_browse_widgets)
 
+    def _check_status_output_buttons(self):
+        '''this method will enabled or not all the widgets of the output groups browse section'''
+        status_browse_widgets = self.ui.output_browse_radio_button.isChecked()
+        for _widget in self.list_grouping_output_browse_widgets:
+            _widget.setEnabled(status_browse_widgets)
+        for _widget in self.list_grouping_output_widgets:
+            _widget.setEnabled(not status_browse_widgets)
+
     def intermediate_radio_button_clicked(self):
         self._check_status_intermediate_buttons()
 
     def intermediate_browse_radio_button_clicked(self):
         self._check_status_intermediate_buttons()
+
+    def output_radio_button_clicked(self):
+        self._check_status_output_buttons()
+
+    def output_browse_radio_button_clicked(self):
+        self._check_status_output_buttons()
 
     def pdf_reset_q_range_button(self):
         pass
