@@ -68,23 +68,45 @@ class ReductionConfiguration(QDialog):
                                                    self.ui.output_from_calibration_groups_label,
                                                    self.ui.output_from_calibration_groups_value]
 
+        intermediate_grouping = self.parent.intermediate_grouping
+        status_intermediate = intermediate_grouping['enabled']
+        self.change_status_intermediate_buttons(status=status_intermediate)
+        self.ui.intermediate_browse_value.setText(intermediate_grouping['filename'])
+        self.ui.intermediate_browse_groups_value.setText(str(intermediate_grouping['nbr_groups']))
+        #fixme
+        # enable or not radio button
+
+        output_grouping = self.parent.output_grouping
+        status_output = output_grouping['enabled']
+        self.change_status_output_buttons(status=status_output)
+        self.ui.output_browse_value.setText(output_grouping['filename'])
+        self.ui.output_browse_groups_value.setText(str(output_grouping['nbr_groups']))
+        #fixme
+        # enable or not radio button
+
     def _check_status_intermediate_buttons(self):
         '''this method will enabled or not all the widgets of the intermediate groups browse section'''
         status_browse_widgets = self.ui.intermediate_browse_radio_button.isChecked()
         self.parent.intermediate_grouping['enabled'] = status_browse_widgets
+        self.change_status_intermediate_buttons(status=status_browse_widgets)
+
+    def change_status_intermediate_buttons(self, status=False):
         for _widget in self.list_grouping_intermediate_browse_widgets:
-            _widget.setEnabled(status_browse_widgets)
+            _widget.setEnabled(status)
         for _widget in self.list_grouping_intermediate_widgets:
-            _widget.setEnabled(not status_browse_widgets)
+            _widget.setEnabled(not status)
 
     def _check_status_output_buttons(self):
         '''this method will enabled or not all the widgets of the output groups browse section'''
         status_browse_widgets = self.ui.output_browse_radio_button.isChecked()
         self.parent.output_grouping['enabled'] = status_browse_widgets
+        self.change_status_output_buttons(status=status_browse_widgets)
+
+    def change_status_output_buttons(self, status=False):
         for _widget in self.list_grouping_output_browse_widgets:
-            _widget.setEnabled(status_browse_widgets)
+            _widget.setEnabled(status)
         for _widget in self.list_grouping_output_widgets:
-            _widget.setEnabled(not status_browse_widgets)
+            _widget.setEnabled(not status)
 
     def intermediate_radio_button_clicked(self):
         self._check_status_intermediate_buttons()
