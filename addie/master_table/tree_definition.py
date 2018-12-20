@@ -30,7 +30,7 @@ h3_COLUMNS_WIDTH = [90,  #activate
                     90,  # shape
                     50, 50, 50,  # geometry dimensions
                     150, 150, 150,  # correction
-                    50, 50, # grouping
+#                    50, 50, # grouping
                     ]
 
 h2_COLUMNS_WIDTH = [h3_COLUMNS_WIDTH[0],
@@ -53,19 +53,21 @@ h2_COLUMNS_WIDTH = [h3_COLUMNS_WIDTH[0],
                     h3_COLUMNS_WIDTH[25],
                     h3_COLUMNS_WIDTH[26],
                     h3_COLUMNS_WIDTH[27],
-                    h3_COLUMNS_WIDTH[28],
-                    h3_COLUMNS_WIDTH[29]]
+#                    h3_COLUMNS_WIDTH[28],
+#                    h3_COLUMNS_WIDTH[29]
+                    ]
 
 h1_COLUMNS_WIDTH = [h3_COLUMNS_WIDTH[0],
                     h3_COLUMNS_WIDTH[1],
                     np.sum(h3_COLUMNS_WIDTH[2:15]),
                     np.sum(h3_COLUMNS_WIDTH[15:28]),
-                    h3_COLUMNS_WIDTH[28],
-                    h3_COLUMNS_WIDTH[29]]
+#                    h3_COLUMNS_WIDTH[28],
+#                    h3_COLUMNS_WIDTH[29]
+                    ]
 
 INDEX_OF_COLUMNS_SEARCHABLE = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 15, 16, 17, 18, 19, 20, 22, 23, 24]
 
-INDEX_OF_COLUMNS_WITH_COMBOBOX = [8, 12, 13, 14, 21, 25, 26, 27, ]
+INDEX_OF_COLUMNS_WITH_COMBOBOX = [8, 12, 13, 14, 21, 25, 26, 27]
 
 sample_first_column = 2
 normalization_first_column = 15
@@ -194,8 +196,8 @@ tree_dict['vanadium'] = copy.deepcopy(base_dict)
 tree_dict['vanadium']['name'] = 'Normalization'
 tree_dict['vanadium']['children'] = vanadium_children_1
 
-tree_dict['input_grouping'] = copy.deepcopy(base_dict)
-tree_dict['input_grouping']['name'] = "Input Grouping"
-
-tree_dict['output_grouping'] = copy.deepcopy(base_dict)
-tree_dict['output_grouping']['name'] = "Output Grouping"
+# tree_dict['input_grouping'] = copy.deepcopy(base_dict)
+# tree_dict['input_grouping']['name'] = "Input Grouping"
+#
+# tree_dict['output_grouping'] = copy.deepcopy(base_dict)
+# tree_dict['output_grouping']['name'] = "Output Grouping"
