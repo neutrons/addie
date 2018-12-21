@@ -14,6 +14,9 @@
     <file>document-print.png</file>
   </qresource>
   <qresource prefix="preview">
+    <file>hollow_cylindrical_reference.png</file>
+    <file>spherical_reference.png</file>
+    <file>cylindrical_reference.png</file>
     <file>load_csv_case1.png</file>
     <file>load_csv_case2.png</file>
     <file>load_csv_case3.png</file>

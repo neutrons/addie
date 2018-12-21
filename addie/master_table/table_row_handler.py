@@ -839,7 +839,8 @@ class DimensionsSetter(QDialog):
                 for _widget in self.group['radius2']:
                     _widget.setVisible(False)
                 # display right image label
-                #FIXME
+                self.ui.preview.setPixmap(QtGui.QPixmap(":/preview/cylindrical_reference.png"))
+                self.ui.preview.setScaledContents(True)
 
             elif shape_selected.lower() == 'spherical':
                 # change label of first label
@@ -851,11 +852,13 @@ class DimensionsSetter(QDialog):
                 for _widget in self.group['height']:
                     _widget.setVisible(False)
                 # display the right image label
-                #FIXME
+                self.ui.preview.setPixmap(QtGui.QPixmap(":/preview/spherical_reference.png"))
+                self.ui.preview.setScaledContents(True)
+
             elif shape_selected.lower() == 'hollow cylinder':
                 # display the right image label
-                # FIXME
-                pass
+                self.ui.preview.setPixmap(QtGui.QPixmap(":/preview/hollow_cylindrical_reference.png"))
+                self.ui.preview.setScaledContents(True)
 
             # display value of radius1,2,height for this row
 
