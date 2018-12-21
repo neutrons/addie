@@ -189,8 +189,8 @@ class TableFileExporter:
         instrument = self.parent.instrument["short_name"]
         cachedir = self.parent.cache_folder
         outputdir = self.parent.output_folder
-        intermediate_grouping_file = self.parent.intermediate_grouping_file
-        output_grouping_file = self.parent.output_grouping_file
+        intermediate_grouping_file = self.parent.intermediate_grouping['filename']
+        output_grouping_file = self.parent.output_grouping['filename']
 
         full_export_dictionary = OrderedDict()
         nbr_row = self.table_ui.rowCount()

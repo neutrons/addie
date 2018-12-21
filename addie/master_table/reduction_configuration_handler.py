@@ -1,5 +1,4 @@
 import json
-from xml.dom import minidom
 
 try:
     from PyQt4.QtGui import QDialog, QFileDialog
@@ -14,6 +13,7 @@ except ImportError:
 from addie.ui_reduction_configuration_dialog import Ui_Dialog as UiDialog
 
 from addie.make_calibration_handler.make_calibration import MakeCalibrationLauncher
+from addie.master_table.utilities import LoadGroupingFile
 
 
 class ReductionConfigurationHandler:
@@ -71,18 +71,16 @@ class ReductionConfiguration(QDialog):
         intermediate_grouping = self.parent.intermediate_grouping
         status_intermediate = intermediate_grouping['enabled']
         self.change_status_intermediate_buttons(status=status_intermediate)
+        self.ui.intermediate_browse_radio_button.setChecked(status_intermediate)
         self.ui.intermediate_browse_value.setText(intermediate_grouping['filename'])
         self.ui.intermediate_browse_groups_value.setText(str(intermediate_grouping['nbr_groups']))
-        #fixme
-        # enable or not radio button
 
         output_grouping = self.parent.output_grouping
         status_output = output_grouping['enabled']
         self.change_status_output_buttons(status=status_output)
+        self.ui.output_browse_radio_button.setChecked(status_output)
         self.ui.output_browse_value.setText(output_grouping['filename'])
         self.ui.output_browse_groups_value.setText(str(output_grouping['nbr_groups']))
-        #fixme
-        # enable or not radio button
 
     def _check_status_intermediate_buttons(self):
         '''this method will enabled or not all the widgets of the intermediate groups browse section'''
@@ -187,17 +185,17 @@ class ReductionConfiguration(QDialog):
         self.parent.reduction_configuration_ui_position = self.pos()
 
 
-class LoadGroupingFile:
-    '''This class reads the XML file and will return the number of groups <group ID=""> found in that file'''
-
-    def __init__(self, filename=''):
-        self.filename = filename
-
-    def get_number_of_groups(self):
-        xmldoc = minidom.parse(self.filename)
-        itemlist = xmldoc.getElementsByTagName('group')
-        return len(itemlist)
-
+# class LoadGroupingFile:
+#     '''This class reads the XML file and will return the number of groups <group ID=""> found in that file'''
+#
+#     def __init__(self, filename=''):
+#         self.filename = filename
+#
+#     def get_number_of_groups(self):
+#         xmldoc = minidom.parse(self.filename)
+#         itemlist = xmldoc.getElementsByTagName('group')
+#         return len(itemlist)
+#
 
 class LoadReductionConfiguration:
 

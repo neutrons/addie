@@ -18,6 +18,7 @@ from addie.utilities.file_handler import FileHandler
 from addie.utilities.list_runs_parser import ListRunsParser
 from addie.master_table.table_row_handler import TableRowHandler
 from addie.utilities.set import Set
+from addie.master_table.utilities import LoadGroupingFile
 
 from addie.ui_list_of_scan_loader_dialog import Ui_Dialog as UiDialog
 
@@ -215,6 +216,22 @@ class JsonLoader:
 
                 calibration_file = str(_source_row_entry["Calibration"])
                 self.parent.ui.calibration_file.setText(calibration_file)
+
+                intermediate_grouping_file = str(_source_row_entry["Merging"]["Grouping"]["Initial"])
+                if not (intermediate_grouping_file == ''):
+                    self.parent.intermediate_grouping['filename'] = intermediate_grouping_file
+                    self.parent.intermediate_grouping['enabled'] = True
+                    o_grouping = LoadGroupingFile(filename=intermediate_grouping_file)
+                    nbr_groups = o_grouping.get_number_of_groups()
+                    self.parent.intermediate_grouping['nbr_groups'] = nbr_groups
+
+                output_grouping_file = str(_source_row_entry["Merging"]["Grouping"]["Output"])
+                if not (output_grouping_file == ''):
+                    self.parent.output_grouping['filename'] = output_grouping_file
+                    self.parent.output_grouping['enabled'] = True
+                    o_grouping = LoadGroupingFile(filename=output_grouping_file)
+                    nbr_groups = o_grouping.get_number_of_groups()
+                    self.parent.output_grouping['nbr_groups'] = nbr_groups
 
                 first_entry = False
 
