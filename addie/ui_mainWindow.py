@@ -1520,6 +1520,7 @@ class Ui_MainWindow(object):
         item = QtGui.QTableWidgetItem()
         self.h3_table.setHorizontalHeaderItem(7, item)
         self.h3_table.verticalHeader().setVisible(False)
+        self.h3_table.verticalHeader().setCascadingSectionResizes(False)
         self.verticalLayout_14.addWidget(self.h3_table)
         self.verticalLayout_3.addLayout(self.verticalLayout_14)
         self.horizontalLayout_8 = QtGui.QHBoxLayout()

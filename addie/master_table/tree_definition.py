@@ -8,7 +8,7 @@ user_home = expanduser("~")
 CONFIG_FILE = os.path.join(user_home, '.addie_config.cfg')
 
 column_default_width = 90
-COLUMN_DEFAULT_HEIGHT = 50
+COLUMN_DEFAULT_HEIGHT = 100
 
 h3_COLUMNS_WIDTH = [90,  #activate
                     150,  #title

@@ -2,12 +2,14 @@ import numpy as np
 import random
 
 try:
-    from PyQt4.QtGui import QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton, QComboBox, QWidget
+    from PyQt4.QtGui import QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton, \
+        QComboBox, QWidget, QGridLayout, QVBoxLayout, QHBoxLayout, QDialog
     from PyQt4.QtGui import QFileDialog
     from PyQt4 import QtCore, QtGui
 except ImportError:
     try:
-        from PyQt5.QtWidgets import QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton, QWidget, QComboBox
+        from PyQt5.QtWidgets import QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton, \
+            QWidget, QComboBox, QGridLayout, QVBoxLayout, QHBoxLayout, QDialog
         from PyQt5.QtWidgets import QFileDialog
         from PyQt5 import QtCore, QtGui
     except ImportError:
@@ -19,6 +21,8 @@ except ImportError:
 from addie.master_table.placzek_handler import PlaczekHandler
 from addie.master_table.selection_handler import TransferH3TableWidgetState
 from addie.master_table.tree_definition import COLUMN_DEFAULT_HEIGHT
+
+from addie.ui_dimensions_setter import Ui_Dialog as UiDialog
 
 
 class TableRowHandler:
@@ -198,7 +202,7 @@ class TableRowHandler:
         random_key = self.generate_random_key()
 
         # column 0 (active or not checkBox)
-        _layout = QtGui.QHBoxLayout()
+        _layout = QHBoxLayout()
         _widget = QCheckBox()
         _widget.setCheckState(QtCore.Qt.Checked)
         _widget.setEnabled(True)
@@ -270,7 +274,7 @@ class TableRowHandler:
 
         # column 8 - shape (cylindrical or spherical)
         column += 1
-        _layout = QtGui.QHBoxLayout()
+        _layout = QHBoxLayout()
         _layout.setMargin(0)
         _widget = QComboBox()
         _shape_default_value = 'Cylindrical'
@@ -292,27 +296,84 @@ class TableRowHandler:
         _w.setLayout(_layout)
         self.table_ui.setCellWidget(row, column, _w)
 
-        # column 9 - radius
+        # column 9 - dimensions
         column += 1
-        _item = QTableWidgetItem("")
-        _master_table_row_ui['sample']['geometry']['radius'] = _item
-        self.table_ui.setItem(row, column, _item)
 
-        # column 10 - radius
-        column += 1
-        _item = QTableWidgetItem("")
-        _master_table_row_ui['sample']['geometry']['radius2'] = _item
-        self.table_ui.setItem(row, column, _item)
+        # # layout 1
+        # _grid_layout = QGridLayout()
+        #
+        # _label1 = QLabel("Radius:")
+        # _grid_layout.addWidget(_label1, 1, 0)
+        # _value1 = QLabel("N/A")
+        # _grid_layout.addWidget(_value1, 1, 1)
+        # _dim1 = QLabel("cm")
+        # _grid_layout.addWidget(_dim1, 1, 2)
+        #
+        # _label2 = QLabel("Radius:")
+        # _label2.setVisible(False)
+        # _grid_layout.addWidget(_label2, 2, 0)
+        # _value2 = QLabel("N/A")
+        # _value2.setVisible(False)
+        # _grid_layout.addWidget(_value2, 2, 1)
+        # _dim2 = QLabel("cm")
+        # _dim2.setVisible(False)
+        # _grid_layout.addWidget(_dim2, 2, 2)
+        #
+        # _label3 = QLabel("Height:")
+        # _grid_layout.addWidget(_label3, 3, 0)
+        # _value3 = QLabel("N/A")
+        # _grid_layout.addWidget(_value3, 3, 1)
+        # _dim3 = QLabel("cm")
+        # _grid_layout.addWidget(_dim3, 3, 2)
+        #
+        # _master_table_row_ui['sample']['geometry']['radius'] = _value1
+        # _master_table_row_ui['sample']['geometry']['radius2'] = _value2
+        # _master_table_row_ui['sample']['geometry']['height'] = _value3
+        #
+        # _geometry_widget = QWidget()
+        # _geometry_widget.setLayout(_grid_layout)
+        #
+        # _set_dimensions_button = QPushButton("...")
+        # _set_dimensions_button.setFixedHeight(15)
+        # _verti_layout = QVBoxLayout()
+        # _verti_layout.addWidget(_geometry_widget)
+        # _verti_layout.addWidget(_set_dimensions_button)
+        # _verti_widget = QWidget()
+        # _verti_widget.setLayout(_verti_layout)
 
-        # column 11 - height
-        column += 1
-        _item = QTableWidgetItem("")
-        _master_table_row_ui['sample']['geometry']['height'] = _item
-        self.table_ui.setItem(row, column, _item)
+        # Layout 2
+        _label1 = QLabel("Ri:")
+        _value1 = QLabel("N/A")
+        _label2 = QLabel(";Ro:")
+        _value2 = QLabel("N/A")
+        _label3 = QLabel(";D:")
+        _value3 = QLabel("N/A")
+        _hori_layout = QHBoxLayout()
+        _hori_layout.addWidget(_label1)
+        _hori_layout.addWidget(_value1)
+        _hori_layout.addWidget(_label2)
+        _hori_layout.addWidget(_value2)
+        _hori_layout.addWidget(_label3)
+        _hori_layout.addWidget(_value3)
+        _hori_widget = QWidget()
+        _hori_widget.setLayout(_hori_layout)
 
-        # column 12 - abs. correction
+        _set_button = QPushButton("...")
+        _verti_layout = QVBoxLayout()
+        _verti_layout.addWidget(_hori_widget)
+        _verti_layout.addWidget(_set_button)
+        _verti_widget = QWidget()
+        _verti_widget.setLayout(_verti_layout)
+
+        QtCore.QObject.connect(_set_button, QtCore.SIGNAL("pressed()"),
+                               lambda key=random_key:
+                               self.parent.master_table_sample_dimensions_setter_button_pressed(key))
+
+        self.table_ui.setCellWidget(row, column, _verti_widget)
+
+        # column 10 - abs. correction
         column += 1
-        _layout = QtGui.QHBoxLayout()
+        _layout = QHBoxLayout()
         _layout.setMargin(0)
         _widget = QComboBox()
         list_abs_correction = self.get_absorption_correction_list(shape=_shape_default_value)
@@ -333,9 +394,9 @@ class TableRowHandler:
         _w.setLayout(_layout)
         self.table_ui.setCellWidget(row, column, _w)
 
-        # column 13 - multi. scattering correction
+        # column 11 - multi. scattering correction
         column += 1
-        _layout = QtGui.QHBoxLayout()
+        _layout = QHBoxLayout()
         _layout.setMargin(0)
         _widget = QComboBox()
         list_multi_scat_correction = self.get_multi_scat_correction_list(shape=_shape_default_value)
@@ -356,9 +417,9 @@ class TableRowHandler:
         _w.setLayout(_layout)
         self.table_ui.setCellWidget(row, column, _w)
 
-        # column 14 - inelastic correction
+        # column 12 - inelastic correction
         column += 1
-        _layout = QtGui.QHBoxLayout()
+        _layout = QHBoxLayout()
         _layout.setMargin(0)
         _widget1 = QComboBox()
         _widget1.setMinimumHeight(20)
@@ -397,40 +458,40 @@ class TableRowHandler:
 
         ## normalization
 
-        # column 15 - sample runs
+        # column 13 - sample runs
         column += 1
         _item = QTableWidgetItem("")
         self.table_ui.setItem(row, column, _item)
 
-        # column 16 - background runs
+        # column 14 - background runs
         column += 1
         _item = QTableWidgetItem("")
         self.table_ui.setItem(row, column, _item)
 
-        # column 17 - background background
+        # column 15 - background background
         column += 1
         _item = QTableWidgetItem("")
         self.table_ui.setItem(row, column, _item)
 
-        # column 18 - material
+        # column 16 - material
         column += 1
         _item = QTableWidgetItem("")
         self.table_ui.setItem(row, column, _item)
 
-        # column 19 - mass density
+        # column 17 - mass density
         column += 1
         _item = QTableWidgetItem("")
         _master_table_row_ui['normalization']['mass_density'] = _item
         self.table_ui.setItem(row, column, _item)
 
-        # column 20 - packing fraction
+        # column 18 - packing fraction
         column += 1
         _item = QTableWidgetItem("")
         self.table_ui.setItem(row, column, _item)
 
-        # column 21 - shape (cylindrical or spherical)
+        # column 19 - shape (cylindrical or spherical)
         column += 1
-        _layout = QtGui.QHBoxLayout()
+        _layout = QHBoxLayout()
         _layout.setMargin(0)
         _widget = QComboBox()
         _shape_default_value = 'Cylindrical'
@@ -452,24 +513,24 @@ class TableRowHandler:
         _w.setLayout(_layout)
         self.table_ui.setCellWidget(row, column, _w)
 
-        # column 22 - radius
+        # column 20 - radius
         column += 1
         _item = QTableWidgetItem("")
         self.table_ui.setItem(row, column, _item)
 
-        # column 23 - radius2
+        # column 21 - radius2
         column += 1
         _item = QTableWidgetItem("")
         self.table_ui.setItem(row, column, _item)
 
-        # column 24 - height
+        # column 22 - height
         column += 1
         _item = QTableWidgetItem("")
         self.table_ui.setItem(row, column, _item)
 
-        # column 25 - abs. correctiona
+        # column 23 - abs. correctiona
         column += 1
-        _layout = QtGui.QHBoxLayout()
+        _layout = QHBoxLayout()
         _layout.setMargin(0)
         _widget = QComboBox()
         # _widget.currentIndexChanged.connect(lambda value=list_abs_correction[0],
@@ -491,9 +552,9 @@ class TableRowHandler:
         _w.setLayout(_layout)
         self.table_ui.setCellWidget(row, column, _w)
 
-        # column 26 - multi. scattering correction
+        # column 24 - multi. scattering correction
         column += 1
-        _layout = QtGui.QHBoxLayout()
+        _layout = QHBoxLayout()
         _layout.setMargin(0)
         _widget = QComboBox()
         # _widget.currentIndexChanged.connect(lambda value=list_multi_scat_correction[0],
@@ -515,9 +576,9 @@ class TableRowHandler:
         _w.setLayout(_layout)
         self.table_ui.setCellWidget(row, column, _w)
 
-        # column 27 - inelastic correction
+        # column 25 - inelastic correction
         column += 1
-        _layout = QtGui.QHBoxLayout()
+        _layout = QHBoxLayout()
         _layout.setMargin(0)
         _widget1 = QComboBox()
         _widget1.setMinimumHeight(20)
@@ -726,4 +787,14 @@ class TableRowHandler:
         return first_selection.topRow()
 
 
+class DimensionsSetter(QDialog):
 
+        def __init__(self, parent=None):
+            self.parent = parent
+            QDialog.__init__(self, parent=parent)
+            self.ui = UiDialog()
+            self.ui.setupUi(self)
+
+        def accept(self):
+            print("do something")
+            self.close()

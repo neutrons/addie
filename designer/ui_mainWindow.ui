@@ -3994,6 +3994,9 @@ p, li { white-space: pre-wrap; }
                      <attribute name="verticalHeaderVisible">
                       <bool>false</bool>
                      </attribute>
+                     <attribute name="verticalHeaderCascadingSectionResizes">
+                      <bool>false</bool>
+                     </attribute>
                      <column>
                       <property name="text">
                        <string/>
@@ -6299,7 +6302,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>210</x>
-     <y>882</y>
+     <y>858</y>
     </hint>
     <hint type="destinationlabel">
      <x>270</x>
@@ -6314,8 +6317,8 @@ p, li { white-space: pre-wrap; }
    <slot>browse_calibration_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>562</x>
-     <y>885</y>
+     <x>519</x>
+     <y>871</y>
     </hint>
     <hint type="destinationlabel">
      <x>619</x>

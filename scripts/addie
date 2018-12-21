@@ -69,7 +69,7 @@ from addie.master_table.table_tree_handler import TableTreeHandler, TableInitial
 from addie.master_table.table_tree_handler import SaveConfigInterface, TableTree
 from addie.master_table.tree_definition import *
 from addie.ui_table_tree_save_config import Ui_Dialog as UiDialogSave
-from addie.master_table.table_row_handler import TableRowHandler
+from addie.master_table.table_row_handler import TableRowHandler, DimensionsSetter
 from addie.master_table.selection_handler import TableHandler
 from addie.master_table.reduction_configuration_handler import ReductionConfigurationHandler
 from addie.make_calibration_handler.make_calibration import MakeCalibrationLauncher
@@ -2673,6 +2673,10 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     def master_table_output_grouping_button_pressed(self, key):
         o_table = TableRowHandler(parent=self)
         o_table.grouping_button(key=key, grouping_type='output')
+
+    def master_table_sample_dimensions_setter_button_pressed(self, key):
+        o_dimensions_ui = DimensionsSetter(parent=self)
+        o_dimensions_ui.show()
 
     # calibrations
     def make_calibration_clicked(self):
