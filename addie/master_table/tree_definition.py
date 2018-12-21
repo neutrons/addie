@@ -19,8 +19,8 @@ h3_COLUMNS_WIDTH = [90,  #activate
                     120,  #mass density
                     120,  #packing fraction
                     150,  #shape
-                    50, 50, 50,  #geometry dimensions
-                    150, 150, 150,  #correction
+                    150, # geometry dimensions
+                    150, 200, 150,  #correction
                     90,  # runs  #normalization
                     90,  # background runs
                     90,  # background background
@@ -28,8 +28,8 @@ h3_COLUMNS_WIDTH = [90,  #activate
                     120,  # mass density
                     120,  # packing fraction
                     150,  # shape
-                    50, 50, 50,  # geometry dimensions
-                    150, 150, 150,  # correction
+                    150, # geometry dimensions
+                    150, 200, 150,  # correction
 #                    50, 50, # grouping
                     ]
 
@@ -40,34 +40,33 @@ h2_COLUMNS_WIDTH = [h3_COLUMNS_WIDTH[0],
                     h3_COLUMNS_WIDTH[5],
                     h3_COLUMNS_WIDTH[6],
                     h3_COLUMNS_WIDTH[7],
-                    h3_COLUMNS_WIDTH[8]+h3_COLUMNS_WIDTH[9]+h3_COLUMNS_WIDTH[10]+h3_COLUMNS_WIDTH[11],
+                    h3_COLUMNS_WIDTH[8]+h3_COLUMNS_WIDTH[9],
+                    h3_COLUMNS_WIDTH[10],
+                    h3_COLUMNS_WIDTH[11],
                     h3_COLUMNS_WIDTH[12],
                     h3_COLUMNS_WIDTH[13],
-                    h3_COLUMNS_WIDTH[14],
-                    h3_COLUMNS_WIDTH[15],
-                    h3_COLUMNS_WIDTH[16]+h3_COLUMNS_WIDTH[17],
+                    h3_COLUMNS_WIDTH[14]+h3_COLUMNS_WIDTH[15],
+                    h3_COLUMNS_WIDTH[16],
+                    h3_COLUMNS_WIDTH[17],
                     h3_COLUMNS_WIDTH[18],
-                    h3_COLUMNS_WIDTH[19],
-                    h3_COLUMNS_WIDTH[20],
-                    h3_COLUMNS_WIDTH[21]+h3_COLUMNS_WIDTH[22]+h3_COLUMNS_WIDTH[23]+h3_COLUMNS_WIDTH[24],
-                    h3_COLUMNS_WIDTH[25],
-                    h3_COLUMNS_WIDTH[26],
-                    h3_COLUMNS_WIDTH[27],
-#                    h3_COLUMNS_WIDTH[28],
-#                    h3_COLUMNS_WIDTH[29]
+                    h3_COLUMNS_WIDTH[19]+h3_COLUMNS_WIDTH[20],
+                    h3_COLUMNS_WIDTH[21],
+                    h3_COLUMNS_WIDTH[22],
+                    h3_COLUMNS_WIDTH[23],
                     ]
+
 
 h1_COLUMNS_WIDTH = [h3_COLUMNS_WIDTH[0],
                     h3_COLUMNS_WIDTH[1],
-                    np.sum(h3_COLUMNS_WIDTH[2:15]),
-                    np.sum(h3_COLUMNS_WIDTH[15:28]),
+                    np.sum(h3_COLUMNS_WIDTH[2:13]),
+                    np.sum(h3_COLUMNS_WIDTH[13:24]),
 #                    h3_COLUMNS_WIDTH[28],
 #                    h3_COLUMNS_WIDTH[29]
                     ]
 
-INDEX_OF_COLUMNS_SEARCHABLE = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 15, 16, 17, 18, 19, 20, 22, 23, 24]
+INDEX_OF_COLUMNS_SEARCHABLE = [1, 2, 3, 4, 5, 6, 7, 9, 13, 14,15, 16, 17, 18, 20, 21]
 
-INDEX_OF_COLUMNS_WITH_COMBOBOX = [8, 12, 13, 14, 21, 25, 26, 27]
+INDEX_OF_COLUMNS_WITH_COMBOBOX = [8, 10, 11, 12, 18, 20, 21, 22]
 
 sample_first_column = 2
 normalization_first_column = 15
@@ -118,13 +117,8 @@ sample_children_2 = OrderedDict()
 sample_children_2['sample_geometry_shape'] = copy.deepcopy(base_dict)
 sample_children_2['sample_geometry_shape']['name'] = "Shape"
 
-sample_children_2['sample_geometry_radius'] = copy.deepcopy(base_dict)
-sample_children_2['sample_geometry_radius']['name'] = "Radius (cm)"
-
-sample_children_2['sample_geometry_radius2'] = copy.deepcopy(base_dict)
-
-sample_children_2['sample_geometry_Height'] = copy.deepcopy(base_dict)
-sample_children_2['sample_geometry_Height']['name'] = "Height (cm)"
+sample_children_2['sample_geometry_dimensions'] = copy.deepcopy(base_dict)
+sample_children_2['sample_geometry_dimensions']['name'] = "Dimensions (cm)"
 
 sample_children_1['sample_geometry'] = copy.deepcopy(base_dict)
 sample_children_1['sample_geometry']['name'] = "Geometry"
@@ -171,13 +165,8 @@ vanadium_children_2 = OrderedDict()
 vanadium_children_2['vanadium_geometry_shape'] = copy.deepcopy(base_dict)
 vanadium_children_2['vanadium_geometry_shape']['name'] = 'Shape'
 
-vanadium_children_2['vanadium_geometry_radius'] = copy.deepcopy(base_dict)
-vanadium_children_2['vanadium_geometry_radius']['name'] = 'Radius (cm)'
-
-vanadium_children_2['vanadium_geometry_radius2'] = copy.deepcopy(base_dict)
-
-vanadium_children_2['vanadium_geometry_Height'] = copy.deepcopy(base_dict)
-vanadium_children_2['vanadium_geometry_Height']['name'] = 'Height (cm)'
+vanadium_children_2['vanadium_geometry_dimensions'] = copy.deepcopy(base_dict)
+vanadium_children_2['vanadium_geometry_dimensions']['name'] = 'Dimensions (cm)'
 
 vanadium_children_1['vanadium_geometry'] = copy.deepcopy(base_dict)
 vanadium_children_1['vanadium_geometry']['name'] = 'Geometry'
