@@ -7,6 +7,10 @@ class Utilities:
         self.parent = parent
         self.table_ui = parent.ui.h3_table
 
+    def get_row_index_from_row_key(self, row_key=None):
+        '''this methods returns the row for the given row key'''
+        pass
+
     def get_row_key_from_row_index(self, row=-1):
         '''this method returns the key (random key) of the given row in master table.
         An example of its use is if we want to retrieve the placzek settings for this row

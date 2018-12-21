@@ -1,3 +1,4 @@
+import copy
 import numpy as np
 import random
 
@@ -153,6 +154,11 @@ class TableRowHandler:
 
         _list_ui_to_unlock = []
 
+        _dimension_widgets = {'label': None, 'value': None, 'units': None}
+        _full_dimension_widgets = {'radius': copy.deepcopy(_dimension_widgets),
+                                   'radius2': copy.deepcopy(_dimension_widgets),
+                                   'height': copy.deepcopy(_dimension_widgets)}
+
         _master_table_row_ui = {'active': None,
                                 'title': None,
                                 'sample': {'runs': None,
@@ -162,11 +168,7 @@ class TableRowHandler:
                                            'material': None,
                                            'mass_density': None,
                                            'packing_fraction': None,
-                                           'geometry': {'radius': None,
-                                                        'radius2': None,
-                                                        'height': None,
-                                                        'geometry': None,
-                                                        },
+                                           'geometry': copy.deepcopy(_full_dimension_widgets),
                                            'shape': None,
                                            'abs_correction': None,
                                            'mult_scat_correction': None,
@@ -299,73 +301,81 @@ class TableRowHandler:
         # column 9 - dimensions
         column += 1
 
-        # # layout 1
-        # _grid_layout = QGridLayout()
-        #
-        # _label1 = QLabel("Radius:")
-        # _grid_layout.addWidget(_label1, 1, 0)
-        # _value1 = QLabel("N/A")
-        # _grid_layout.addWidget(_value1, 1, 1)
-        # _dim1 = QLabel("cm")
-        # _grid_layout.addWidget(_dim1, 1, 2)
-        #
-        # _label2 = QLabel("Radius:")
-        # _label2.setVisible(False)
-        # _grid_layout.addWidget(_label2, 2, 0)
-        # _value2 = QLabel("N/A")
-        # _value2.setVisible(False)
-        # _grid_layout.addWidget(_value2, 2, 1)
-        # _dim2 = QLabel("cm")
-        # _dim2.setVisible(False)
-        # _grid_layout.addWidget(_dim2, 2, 2)
-        #
-        # _label3 = QLabel("Height:")
-        # _grid_layout.addWidget(_label3, 3, 0)
-        # _value3 = QLabel("N/A")
-        # _grid_layout.addWidget(_value3, 3, 1)
-        # _dim3 = QLabel("cm")
-        # _grid_layout.addWidget(_dim3, 3, 2)
-        #
-        # _master_table_row_ui['sample']['geometry']['radius'] = _value1
-        # _master_table_row_ui['sample']['geometry']['radius2'] = _value2
-        # _master_table_row_ui['sample']['geometry']['height'] = _value3
-        #
-        # _geometry_widget = QWidget()
-        # _geometry_widget.setLayout(_grid_layout)
-        #
-        # _set_dimensions_button = QPushButton("...")
-        # _set_dimensions_button.setFixedHeight(15)
-        # _verti_layout = QVBoxLayout()
-        # _verti_layout.addWidget(_geometry_widget)
-        # _verti_layout.addWidget(_set_dimensions_button)
-        # _verti_widget = QWidget()
-        # _verti_widget.setLayout(_verti_layout)
+        # layout 1
+        _grid_layout = QGridLayout()
 
-        # Layout 2
-        _label1 = QLabel("Ri:")
+        _label1 = QLabel("Radius:")
+        _grid_layout.addWidget(_label1, 1, 0)
         _value1 = QLabel("N/A")
-        _label2 = QLabel(";Ro:")
-        _value2 = QLabel("N/A")
-        _label3 = QLabel(";D:")
-        _value3 = QLabel("N/A")
-        _hori_layout = QHBoxLayout()
-        _hori_layout.addWidget(_label1)
-        _hori_layout.addWidget(_value1)
-        _hori_layout.addWidget(_label2)
-        _hori_layout.addWidget(_value2)
-        _hori_layout.addWidget(_label3)
-        _hori_layout.addWidget(_value3)
-        _hori_widget = QWidget()
-        _hori_widget.setLayout(_hori_layout)
+        _grid_layout.addWidget(_value1, 1, 1)
+        _dim1 = QLabel("cm")
+        _grid_layout.addWidget(_dim1, 1, 2)
 
-        _set_button = QPushButton("...")
+        _label2 = QLabel("Radius:")
+        _label2.setVisible(False)
+        _grid_layout.addWidget(_label2, 2, 0)
+        _value2 = QLabel("N/A")
+        _value2.setVisible(False)
+        _grid_layout.addWidget(_value2, 2, 1)
+        _dim2 = QLabel("cm")
+        _dim2.setVisible(False)
+        _grid_layout.addWidget(_dim2, 2, 2)
+
+        _label3 = QLabel("Height:")
+        _grid_layout.addWidget(_label3, 3, 0)
+        _value3 = QLabel("N/A")
+        _grid_layout.addWidget(_value3, 3, 1)
+        _dim3 = QLabel("cm")
+        _grid_layout.addWidget(_dim3, 3, 2)
+
+        _master_table_row_ui['sample']['geometry']['radius']['value'] = _value1
+        _master_table_row_ui['sample']['geometry']['radius2']['value'] = _value2
+        _master_table_row_ui['sample']['geometry']['height']['value'] = _value3
+
+        _master_table_row_ui['sample']['geometry']['radius']['label'] = _label1
+        _master_table_row_ui['sample']['geometry']['radius2']['label'] = _label2
+        _master_table_row_ui['sample']['geometry']['height']['label'] = _label3
+
+        _master_table_row_ui['sample']['geometry']['radius']['units'] = _dim1
+        _master_table_row_ui['sample']['geometry']['radius2']['units'] = _dim2
+        _master_table_row_ui['sample']['geometry']['height']['units'] = _dim3
+
+        _geometry_widget = QWidget()
+        _geometry_widget.setLayout(_grid_layout)
+
+        _set_dimensions_button = QPushButton("...")
+        _set_dimensions_button.setFixedHeight(15)
         _verti_layout = QVBoxLayout()
-        _verti_layout.addWidget(_hori_widget)
-        _verti_layout.addWidget(_set_button)
+        _verti_layout.addWidget(_geometry_widget)
+        _verti_layout.addWidget(_set_dimensions_button)
         _verti_widget = QWidget()
         _verti_widget.setLayout(_verti_layout)
 
-        QtCore.QObject.connect(_set_button, QtCore.SIGNAL("pressed()"),
+        # # Layout 2
+        # _label1 = QLabel("Ri:")
+        # _value1 = QLabel("N/A")
+        # _label2 = QLabel(";Ro:")
+        # _value2 = QLabel("N/A")
+        # _label3 = QLabel(";D:")
+        # _value3 = QLabel("N/A")
+        # _hori_layout = QHBoxLayout()
+        # _hori_layout.addWidget(_label1)
+        # _hori_layout.addWidget(_value1)
+        # _hori_layout.addWidget(_label2)
+        # _hori_layout.addWidget(_value2)
+        # _hori_layout.addWidget(_label3)
+        # _hori_layout.addWidget(_value3)
+        # _hori_widget = QWidget()
+        # _hori_widget.setLayout(_hori_layout)
+        #
+        # _set_button = QPushButton("...")
+        # _verti_layout = QVBoxLayout()
+        # _verti_layout.addWidget(_hori_widget)
+        # _verti_layout.addWidget(_set_button)
+        # _verti_widget = QWidget()
+        # _verti_widget.setLayout(_verti_layout)
+
+        QtCore.QObject.connect(_set_dimensions_button, QtCore.SIGNAL("pressed()"),
                                lambda key=random_key:
                                self.parent.master_table_sample_dimensions_setter_button_pressed(key))
 
@@ -789,11 +799,67 @@ class TableRowHandler:
 
 class DimensionsSetter(QDialog):
 
-        def __init__(self, parent=None):
+        def __init__(self, parent=None, key=None, data_type='sample'):
             self.parent = parent
+            self.key = key
+            self.data_type =  data_type
+
             QDialog.__init__(self, parent=parent)
             self.ui = UiDialog()
             self.ui.setupUi(self)
+
+            self.group_widgets()
+            self.init_widgets()
+
+        def group_widgets(self):
+            self.group = {'radius': [self.ui.radius_label,
+                                     self.ui.radius_value,
+                                     self.ui.radius_units],
+                          'radius2': [self.ui.radius2_label,
+                                      self.ui.radius2_value,
+                                      self.ui.radius2_units],
+                          'height': [self.ui.height_label,
+                                     self.ui.height_value,
+                                     self.ui.height_units]}
+
+        def init_widgets(self):
+            '''using the shape defined for this row, will display the right widgets and will populate
+            them with the right values'''
+
+            # which shape are we working on
+            table_row_ui = self.parent.master_table_list_ui[self.key][self.data_type]
+            shape_ui = table_row_ui['shape']
+            shape_selected = shape_ui.currentText()
+
+            # hide/show widgets according to shape selected
+            if shape_selected.lower() == 'cylindrical':
+                # change label of first label
+                self.ui.radius_label.setText("Radius")
+                # hide radius 2 widgets
+                for _widget in self.group['radius2']:
+                    _widget.setVisible(False)
+                # display right image label
+                #FIXME
+
+            elif shape_selected.lower() == 'spherical':
+                # change label of first label
+                self.ui.radius_label.setText("Radius")
+                # hide radius widgets
+                for _widget in self.group['radius2']:
+                    _widget.setVisible(False)
+                # hide radius 2 widgets
+                for _widget in self.group['height']:
+                    _widget.setVisible(False)
+                # display the right image label
+                #FIXME
+            elif shape_selected.lower() == 'hollow cylinder':
+                # display the right image label
+                # FIXME
+                pass
+
+            # display value of radius1,2,height for this row
+
+            return
 
         def accept(self):
             print("do something")

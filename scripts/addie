@@ -2645,6 +2645,10 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         o_table = TableRowHandler(parent=self)
         o_table.placzek_button_pressed(key=key, data_type='sample')
 
+    def master_table_sample_dimensions_setter_button_pressed(self, key):
+        o_dimensions_ui = DimensionsSetter(parent=self, key=key, data_type='sample')
+        o_dimensions_ui.show()
+
     # normalization columns
     def master_table_normalization_shape_changed(self, text, key):
         o_table = TableRowHandler(parent=self)
@@ -2666,17 +2670,13 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         o_table = TableRowHandler(parent=self)
         o_table.placzek_button_pressed(key=key, data_type='normalization')
 
-    def master_table_input_grouping_button_pressed(self, key):
-        o_table = TableRowHandler(parent=self)
-        o_table.grouping_button(key=key, grouping_type='input')
-
-    def master_table_output_grouping_button_pressed(self, key):
-        o_table = TableRowHandler(parent=self)
-        o_table.grouping_button(key=key, grouping_type='output')
-
-    def master_table_sample_dimensions_setter_button_pressed(self, key):
-        o_dimensions_ui = DimensionsSetter(parent=self)
-        o_dimensions_ui.show()
+    # def master_table_input_grouping_button_pressed(self, key):
+    #     o_table = TableRowHandler(parent=self)
+    #     o_table.grouping_button(key=key, grouping_type='input')
+    #
+    # def master_table_output_grouping_button_pressed(self, key):
+    #     o_table = TableRowHandler(parent=self)
+    #     o_table.grouping_button(key=key, grouping_type='output')
 
     # calibrations
     def make_calibration_clicked(self):
@@ -2701,9 +2701,6 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     def _load_ascii(self, filename=''):
         o_ascii_loader = AsciiLoader(parent=self, filename=filename)
         o_ascii_loader.load()
-
-
-
 
     def reduction_configuration_button_clicked(self):
         ReductionConfigurationHandler(parent=self)

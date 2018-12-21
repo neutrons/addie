@@ -81,9 +81,9 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(_translate("Dialog", "Geometry Dimensions", None))
-        self.radius_label.setText(_translate("Dialog", "Radius:", None))
+        self.radius_label.setText(_translate("Dialog", "Inner Radius", None))
         self.radius_units.setText(_translate("Dialog", "cm", None))
-        self.radius2_label.setText(_translate("Dialog", "Radius:", None))
+        self.radius2_label.setText(_translate("Dialog", "Outer Radius", None))
         self.radius2_units.setText(_translate("Dialog", "cm", None))
         self.height_label.setText(_translate("Dialog", "Height", None))
         self.height_units.setText(_translate("Dialog", "cm", None))
