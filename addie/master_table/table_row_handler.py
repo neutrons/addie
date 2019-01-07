@@ -76,31 +76,36 @@ class TableRowHandler:
         list_mult_scat_correction = self.get_multi_scat_correction_list(shape=shape)
         update_ui(ui=mult_scat_correction_ui, new_list=list_mult_scat_correction)
 
+        _enabled_radius_1 = True
+        _enabled_radius_2 = True
+        _enabled_height = True
+        _label_radius_1 = 'Radius'
+        _label_radius_2 = 'Outer Radius'
+        if shape == 'cylindrical':
+            _enabled_radius_2 = False
+        elif shape == 'spherical':
+            _enabled_height = False
+            _enabled_radius_2 = False
+        else:
+            _label_radius_1 = 'Inner Radius'
+
+        self.parent.master_table_list_ui[key][data_type]['geometry']['radius']['value'].setVisible(_enabled_radius_1)
+        self.parent.master_table_list_ui[key][data_type]['geometry']['radius2']['value'].setVisible(_enabled_radius_2)
+        self.parent.master_table_list_ui[key][data_type]['geometry']['height']['value'].setVisible(_enabled_height)
+
+        self.parent.master_table_list_ui[key][data_type]['geometry']['radius']['label'].setVisible(_enabled_radius_1)
+        self.parent.master_table_list_ui[key][data_type]['geometry']['radius2']['label'].setVisible(_enabled_radius_2)
+        self.parent.master_table_list_ui[key][data_type]['geometry']['height']['label'].setVisible(_enabled_height)
+
+        self.parent.master_table_list_ui[key][data_type]['geometry']['radius']['units'].setVisible(_enabled_radius_1)
+        self.parent.master_table_list_ui[key][data_type]['geometry']['radius2']['units'].setVisible(_enabled_radius_2)
+        self.parent.master_table_list_ui[key][data_type]['geometry']['height']['units'].setVisible(_enabled_height)
+
+        self.parent.master_table_list_ui[key][data_type]['geometry']['radius']['label'].setText(_label_radius_1)
+        self.parent.master_table_list_ui[key][data_type]['geometry']['radius2']['label'].setText(_label_radius_2)
+
         # change state of other widgets of the same column if they are selected
         self.transfer_widget_states(value=shape)
-
-        # # change label of columns
-        # column1 = "Radius (cm)"
-        # column2 = ""
-        # column3 = "Height (cm)"
-        #
-        # if shape == 'spherical':
-        #     column3 = ""
-        # elif shape == 'hollow cylinder':
-        #     column1 = "Inner Radius (cm)"
-        #     column2 = "Outer Radius (cm)"
-        #
-        # if data_type == 'sample':
-        #     column_offset = 9
-        # else:
-        #     column_offset = 22
-        #
-        # _item1 = QTableWidgetItem(column1)
-        # self.table_ui.setHorizontalHeaderItem(column_offset, _item1)
-        # _item2 = QTableWidgetItem(column2)
-        # self.table_ui.setHorizontalHeaderItem(column_offset+1, _item2)
-        # _item3 = QTableWidgetItem(column3)
-        # self.table_ui.setHorizontalHeaderItem(column_offset+2, _item3)
 
     def abs_correction_changed(self, value='', key=None, data_type='sample'):
         # change state of other widgets of the same column if they are selected
@@ -183,11 +188,7 @@ class TableRowHandler:
                                            'material': None,
                                            'mass_density': None,
                                            'packing_fraction': None,
-                                           'geometry': {'radius': None,
-                                                        'radius2': None,
-                                                        'height': None,
-                                                        'geometry': None,
-                                                        },
+                                           'geometry': copy.deepcopy(_full_dimension_widgets),
                                            'shape': None,
                                            'abs_correction': None,
                                            'mult_scat_correction': None,
@@ -523,22 +524,66 @@ class TableRowHandler:
         _w.setLayout(_layout)
         self.table_ui.setCellWidget(row, column, _w)
 
-        # column 20 - radius
+        # column 20 - dimensions
         column += 1
-        _item = QTableWidgetItem("")
-        self.table_ui.setItem(row, column, _item)
 
-        # column 21 - radius2
-        column += 1
-        _item = QTableWidgetItem("")
-        self.table_ui.setItem(row, column, _item)
+        # layout 1
+        _grid_layout = QGridLayout()
 
-        # column 22 - height
-        column += 1
-        _item = QTableWidgetItem("")
-        self.table_ui.setItem(row, column, _item)
+        _label1 = QLabel("Radius:")
+        _grid_layout.addWidget(_label1, 1, 0)
+        _value1 = QLabel("N/A")
+        _grid_layout.addWidget(_value1, 1, 1)
+        _dim1 = QLabel("cm")
+        _grid_layout.addWidget(_dim1, 1, 2)
 
-        # column 23 - abs. correctiona
+        _label2 = QLabel("Radius:")
+        _label2.setVisible(False)
+        _grid_layout.addWidget(_label2, 2, 0)
+        _value2 = QLabel("N/A")
+        _value2.setVisible(False)
+        _grid_layout.addWidget(_value2, 2, 1)
+        _dim2 = QLabel("cm")
+        _dim2.setVisible(False)
+        _grid_layout.addWidget(_dim2, 2, 2)
+
+        _label3 = QLabel("Height:")
+        _grid_layout.addWidget(_label3, 3, 0)
+        _value3 = QLabel("N/A")
+        _grid_layout.addWidget(_value3, 3, 1)
+        _dim3 = QLabel("cm")
+        _grid_layout.addWidget(_dim3, 3, 2)
+
+        _master_table_row_ui['normalization']['geometry']['radius']['value'] = _value1
+        _master_table_row_ui['normalization']['geometry']['radius2']['value'] = _value2
+        _master_table_row_ui['normalization']['geometry']['height']['value'] = _value3
+
+        _master_table_row_ui['normalization']['geometry']['radius']['label'] = _label1
+        _master_table_row_ui['normalization']['geometry']['radius2']['label'] = _label2
+        _master_table_row_ui['normalization']['geometry']['height']['label'] = _label3
+
+        _master_table_row_ui['normalization']['geometry']['radius']['units'] = _dim1
+        _master_table_row_ui['normalization']['geometry']['radius2']['units'] = _dim2
+        _master_table_row_ui['normalization']['geometry']['height']['units'] = _dim3
+
+        _geometry_widget = QWidget()
+        _geometry_widget.setLayout(_grid_layout)
+
+        _set_dimensions_button = QPushButton("...")
+        _set_dimensions_button.setFixedHeight(15)
+        _verti_layout = QVBoxLayout()
+        _verti_layout.addWidget(_geometry_widget)
+        _verti_layout.addWidget(_set_dimensions_button)
+        _verti_widget = QWidget()
+        _verti_widget.setLayout(_verti_layout)
+
+        QtCore.QObject.connect(_set_dimensions_button, QtCore.SIGNAL("pressed()"),
+                               lambda key=random_key:
+                               self.parent.master_table_sample_dimensions_setter_button_pressed(key))
+
+        self.table_ui.setCellWidget(row, column, _verti_widget)
+
+        # column 21 - abs. correctiona
         column += 1
         _layout = QHBoxLayout()
         _layout.setMargin(0)
@@ -586,7 +631,7 @@ class TableRowHandler:
         _w.setLayout(_layout)
         self.table_ui.setCellWidget(row, column, _w)
 
-        # column 25 - inelastic correction
+        # column 22 - inelastic correction
         column += 1
         _layout = QHBoxLayout()
         _layout.setMargin(0)
@@ -799,71 +844,81 @@ class TableRowHandler:
 
 class DimensionsSetter(QDialog):
 
-        def __init__(self, parent=None, key=None, data_type='sample'):
-            self.parent = parent
-            self.key = key
-            self.data_type =  data_type
+    shape_selected = 'cylindrical'
 
-            QDialog.__init__(self, parent=parent)
-            self.ui = UiDialog()
-            self.ui.setupUi(self)
+    def __init__(self, parent=None, key=None, data_type='sample'):
+        self.parent = parent
+        self.key = key
+        self.data_type =  data_type
 
-            self.group_widgets()
-            self.init_widgets()
+        QDialog.__init__(self, parent=parent)
+        self.ui = UiDialog()
+        self.ui.setupUi(self)
 
-        def group_widgets(self):
-            self.group = {'radius': [self.ui.radius_label,
-                                     self.ui.radius_value,
-                                     self.ui.radius_units],
-                          'radius2': [self.ui.radius2_label,
-                                      self.ui.radius2_value,
-                                      self.ui.radius2_units],
-                          'height': [self.ui.height_label,
-                                     self.ui.height_value,
-                                     self.ui.height_units]}
+        self.group_widgets()
+        self.init_widgets_layout()
+        self.init_widgets_content()
 
-        def init_widgets(self):
-            '''using the shape defined for this row, will display the right widgets and will populate
-            them with the right values'''
+    def group_widgets(self):
+        self.group = {'radius': [self.ui.radius_label,
+                                 self.ui.radius_value,
+                                 self.ui.radius_units],
+                      'radius2': [self.ui.radius2_label,
+                                  self.ui.radius2_value,
+                                  self.ui.radius2_units],
+                      'height': [self.ui.height_label,
+                                 self.ui.height_value,
+                                 self.ui.height_units]}
 
-            # which shape are we working on
-            table_row_ui = self.parent.master_table_list_ui[self.key][self.data_type]
-            shape_ui = table_row_ui['shape']
-            shape_selected = shape_ui.currentText()
+    def init_widgets_content(self):
+        pass
 
-            # hide/show widgets according to shape selected
-            if shape_selected.lower() == 'cylindrical':
-                # change label of first label
-                self.ui.radius_label.setText("Radius")
-                # hide radius 2 widgets
-                for _widget in self.group['radius2']:
-                    _widget.setVisible(False)
-                # display right image label
-                self.ui.preview.setPixmap(QtGui.QPixmap(":/preview/cylindrical_reference.png"))
-                self.ui.preview.setScaledContents(True)
+    def init_widgets_layout(self):
+        '''using the shape defined for this row, will display the right widgets and will populate
+        them with the right values'''
 
-            elif shape_selected.lower() == 'spherical':
-                # change label of first label
-                self.ui.radius_label.setText("Radius")
-                # hide radius widgets
-                for _widget in self.group['radius2']:
-                    _widget.setVisible(False)
-                # hide radius 2 widgets
-                for _widget in self.group['height']:
-                    _widget.setVisible(False)
-                # display the right image label
-                self.ui.preview.setPixmap(QtGui.QPixmap(":/preview/spherical_reference.png"))
-                self.ui.preview.setScaledContents(True)
+        # which shape are we working on
+        table_row_ui = self.parent.master_table_list_ui[self.key][self.data_type]
+        shape_ui = table_row_ui['shape']
+        self.shape_selected = shape_ui.currentText()
 
-            elif shape_selected.lower() == 'hollow cylinder':
-                # display the right image label
-                self.ui.preview.setPixmap(QtGui.QPixmap(":/preview/hollow_cylindrical_reference.png"))
-                self.ui.preview.setScaledContents(True)
+        # hide/show widgets according to shape selected
+        if self.shape_selected.lower() == 'cylindrical':
+            # change label of first label
+            self.ui.radius_label.setText("Radius")
+            # hide radius 2 widgets
+            for _widget in self.group['radius2']:
+                _widget.setVisible(False)
+            # display right image label
+            self.ui.preview.setPixmap(QtGui.QPixmap(":/preview/cylindrical_reference.png"))
+            self.ui.preview.setScaledContents(True)
 
-            # display value of radius1,2,height for this row
+        elif self.shape_selected.lower() == 'spherical':
+            # change label of first label
+            self.ui.radius_label.setText("Radius")
+            # hide radius widgets
+            for _widget in self.group['radius2']:
+                _widget.setVisible(False)
+            # hide radius 2 widgets
+            for _widget in self.group['height']:
+                _widget.setVisible(False)
+            # display the right image label
+            self.ui.preview.setPixmap(QtGui.QPixmap(":/preview/spherical_reference.png"))
+            self.ui.preview.setScaledContents(True)
 
-            return
+        elif self.shape_selected.lower() == 'hollow cylinder':
+            # display the right image label
+            self.ui.preview.setPixmap(QtGui.QPixmap(":/preview/hollow_cylindrical_reference.png"))
+            self.ui.preview.setScaledContents(True)
 
-        def accept(self):
-            print("do something")
-            self.close()
+        # display value of radius1,2,height for this row
+
+        return
+
+    def accept(self):
+
+
+
+
+        print("do something")
+        self.close()

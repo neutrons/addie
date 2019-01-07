@@ -8,7 +8,7 @@ user_home = expanduser("~")
 CONFIG_FILE = os.path.join(user_home, '.addie_config.cfg')
 
 column_default_width = 90
-COLUMN_DEFAULT_HEIGHT = 100
+COLUMN_DEFAULT_HEIGHT = 120
 
 h3_COLUMNS_WIDTH = [90,  #activate
                     150,  #title
@@ -19,7 +19,7 @@ h3_COLUMNS_WIDTH = [90,  #activate
                     120,  #mass density
                     120,  #packing fraction
                     150,  #shape
-                    150, # geometry dimensions
+                    200, # geometry dimensions
                     150, 200, 150,  #correction
                     90,  # runs  #normalization
                     90,  # background runs
@@ -28,7 +28,7 @@ h3_COLUMNS_WIDTH = [90,  #activate
                     120,  # mass density
                     120,  # packing fraction
                     150,  # shape
-                    150, # geometry dimensions
+                    200, # geometry dimensions
                     150, 200, 150,  # correction
 #                    50, 50, # grouping
                     ]
