@@ -11,7 +11,7 @@ except ImportError:
     except ImportError:
         raise ImportError("Requires PyQt4 or PyQt5")
 
-from addie.master_table.tree_definition import sample_first_column, normalization_first_column
+from addie.master_table.tree_definition import SAMPLE_FIRST_COLUMN, NORMALIZATION_FIRST_COLUMN
 from addie.master_table.utilities import Utilities
 
 _export_dictionary = OrderedDict()
@@ -110,9 +110,9 @@ class TableFileExporter:
         key = o_util.get_row_key_from_row_index(row=row)
 
         if element == 'sample':
-            column = sample_first_column
+            column = SAMPLE_FIRST_COLUMN
         else:
-            column = normalization_first_column
+            column = NORMALIZATION_FIRST_COLUMN
 
         runs = self._get_item_value(row=row, column=column)
         dict_element['Runs'] = runs

@@ -68,8 +68,8 @@ INDEX_OF_COLUMNS_SEARCHABLE = [1, 2, 3, 4, 5, 6, 7, 13, 14, 15, 16, 17, 18]
 
 INDEX_OF_COLUMNS_WITH_COMBOBOX = [8, 10, 11, 12, 18, 20, 21, 22]
 
-sample_first_column = 2
-normalization_first_column = 15
+SAMPLE_FIRST_COLUMN = 2
+NORMALIZATION_FIRST_COLUMN = 13
 
 h_index = {'h1': None,
            'h2': None,
