@@ -579,7 +579,7 @@ class TableRowHandler:
 
         QtCore.QObject.connect(_set_dimensions_button, QtCore.SIGNAL("pressed()"),
                                lambda key=random_key:
-                               self.parent.master_table_sample_dimensions_setter_button_pressed(key))
+                               self.parent.master_table_normalization_dimensions_setter_button_pressed(key))
 
         self.table_ui.setCellWidget(row, column, _verti_widget)
 
@@ -870,8 +870,42 @@ class DimensionsSetter(QDialog):
                                  self.ui.height_value,
                                  self.ui.height_units]}
 
+    def __get_label_value(self, geometry_type):
+        '''helper function to retrieve value of labels from master table.
+
+        :argument:
+        geometry_type being 'radius', 'radius2' or 'height'
+        '''
+        return str(self.parent.master_table_list_ui[self.key][self.data_type]['geometry'][geometry_type]['value'].text())
+
+    def __set_label_value(self, geometry_type, value):
+        '''helper function to set value of label in master table.
+
+        :argument:
+        geometry_type being 'radius', 'radius2' or 'height'
+        value: value to set
+        '''
+        self.parent.master_table_list_ui[self.key][self.data_type]['geometry'][geometry_type]['value'].setText(value)
+
     def init_widgets_content(self):
-        pass
+        '''populate the widgets using the value from the master table'''
+
+        height = 'N/A'
+        radius2 = 'N/A'
+
+        if self.shape_selected.lower() == 'cylindrical':
+            radius = self.__get_label_value('radius')
+            height = self.__get_label_value('height')
+        elif self.shape_selected.lower() == 'spherical':
+            radius = self.__get_label_value('radius')
+        else:
+            radius = self.__get_label_value('radius')
+            radius2 = self.__get_label_value('radius2')
+            height = self.__get_label_value('height')
+
+        self.ui.radius_value.setText(radius)
+        self.ui.radius2_value.setText(radius2)
+        self.ui.height_value.setText(height)
 
     def init_widgets_layout(self):
         '''using the shape defined for this row, will display the right widgets and will populate
@@ -917,8 +951,20 @@ class DimensionsSetter(QDialog):
 
     def accept(self):
 
+        radius = str(self.ui.radius_value.text())
+        radius2 = 'N/A'
+        height = 'N/A'
 
+        if self.shape_selected.lower() == 'cylindrical':
+            height = str(self.ui.height_value.text())
+        elif self.shape_selected.lower() == 'spherical':
+            pass
+        else:
+            radius2 = str(self.ui.radius2_value.text())
+            height = str(self.ui.height_value.text())
 
+        self.__set_label_value('radius', radius)
+        self.__set_label_value('radius2', radius2)
+        self.__set_label_value('height', height)
 
-        print("do something")
         self.close()
