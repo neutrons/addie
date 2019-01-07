@@ -159,7 +159,7 @@ class TableRowHandler:
 
         _list_ui_to_unlock = []
 
-        _dimension_widgets = {'label': None, 'value': None, 'units': None}
+        _dimension_widgets = {'label': None, 'value': 'N/A', 'units': None}
         _full_dimension_widgets = {'radius': copy.deepcopy(_dimension_widgets),
                                    'radius2': copy.deepcopy(_dimension_widgets),
                                    'height': copy.deepcopy(_dimension_widgets)}
