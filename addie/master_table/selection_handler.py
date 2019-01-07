@@ -379,7 +379,7 @@ class TableHandler(SelectionHandlerMaster):
                 hide_it = True
                 for _col in INDEX_OF_COLUMNS_SEARCHABLE:
                     _text_cell = str(self.table_ui.item(_row, _col).text()).lower()
-                    if text in _text_cell:
+                    if text.lower() in _text_cell:
                         hide_it = False
                 self.table_ui.setRowHidden(_row, hide_it)
 
