@@ -34,9 +34,9 @@ _default_empty_row = {"activate": True,
                                  "mass_density": "",
                                  "packing_fraction": "",
                                  "geometry": {"shape": "cylindrical",
-                                              "radius_cm": "",
-                                              "radius2_cm": "",
-                                              "height_cm": "",
+                                              "radius": "",
+                                              "radius2": "",
+                                              "height": "",
                                               },
                                  "abs_correction": "",
                                  "multi_scattering_correction": "",
@@ -51,9 +51,9 @@ _default_empty_row = {"activate": True,
                                  "mass_density": "",
                                  "packing_fraction": "",
                                  "geometry": {"shape": "cylindrical",
-                                              "radius_cm": "",
-                                              "radius2_cm": "",
-                                              "height_cm": "",
+                                              "radius": "",
+                                              "radius2": "",
+                                              "height": "",
                                               },
                                  "abs_correction": "",
                                  "multi_scattering_correction": "",
@@ -141,9 +141,9 @@ class JsonLoader:
         _target_row_entry["packing_fraction"] = _source_entry["PackingFraction"]
         _target_row_entry["geometry"] = {}
         _target_row_entry["geometry"]["shape"] = _source_entry["Geometry"]["Shape"]
-        _target_row_entry["geometry"]["radius_cm"] = _source_entry["Geometry"]["Radius"]
-        _target_row_entry["geometry"]["radius2_cm"] = _source_entry["Geometry"]["Radius2"]
-        _target_row_entry["geometry"]["height_cm"] = _source_entry["Geometry"]["Height"]
+        _target_row_entry["geometry"]["radius"] = _source_entry["Geometry"]["Radius"]
+        _target_row_entry["geometry"]["radius2"] = _source_entry["Geometry"]["Radius2"]
+        _target_row_entry["geometry"]["height"] = _source_entry["Geometry"]["Height"]
         _target_row_entry["abs_correction"] = _source_entry["AbsorptionCorrection"]["Type"]
         _target_row_entry["multi_scattering_correction"] = _source_entry["MultipleScatteringCorrection"]["Type"]
         _target_row_entry["inelastic_correction"] = _source_entry["InelasticCorrection"]["Type"]
@@ -586,9 +586,9 @@ class FromDictionaryToTableUi:
 
         # geometry
         column += 1
-        self.parent.master_table_list_ui[key][data_type]['geometry']['radius']['value'].setText(entry[data_type]['geometry']['radius_cm'])
-        self.parent.master_table_list_ui[key][data_type]['geometry']['radius2']['value'].setText(entry[data_type]['geometry']['radius2_cm'])
-        self.parent.master_table_list_ui[key][data_type]['geometry']['height']['value'].setText(entry[data_type]['geometry']['height_cm'])
+        self.parent.master_table_list_ui[key][data_type]['geometry']['radius']['value'].setText(entry[data_type]['geometry']['radius'])
+        self.parent.master_table_list_ui[key][data_type]['geometry']['radius2']['value'].setText(entry[data_type]['geometry']['radius2'])
+        self.parent.master_table_list_ui[key][data_type]['geometry']['height']['value'].setText(entry[data_type]['geometry']['height'])
 
         # abs correction
         column += 1
@@ -622,16 +622,11 @@ class FromDictionaryToTableUi:
         # title
         self.table_ui.item(row, 1).setText(entry["title"])
 
-        import pprint
-        pprint.pprint(entry)
-
-        return
-
         # sample
         self.__fill_data_type(data_type='sample', starting_col=2, row=row, entry=entry, key=key)
 
         # normalization
-        self.__fill_data_type(data_type='normalization', starting_col=15, row=row, entry=entry, key=key)
+        self.__fill_data_type(data_type='normalization', starting_col=13, row=row, entry=entry, key=key)
 
 
 

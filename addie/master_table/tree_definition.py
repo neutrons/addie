@@ -64,7 +64,7 @@ h1_COLUMNS_WIDTH = [h3_COLUMNS_WIDTH[0],
 #                    h3_COLUMNS_WIDTH[29]
                     ]
 
-INDEX_OF_COLUMNS_SEARCHABLE = [1, 2, 3, 4, 5, 6, 7, 9, 13, 14,15, 16, 17, 18, 20, 21]
+INDEX_OF_COLUMNS_SEARCHABLE = [1, 2, 3, 4, 5, 6, 7, 13, 14, 15, 16, 17, 18]
 
 INDEX_OF_COLUMNS_WITH_COMBOBOX = [8, 10, 11, 12, 18, 20, 21, 22]
 
