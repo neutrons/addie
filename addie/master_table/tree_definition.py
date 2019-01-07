@@ -12,7 +12,7 @@ COLUMN_DEFAULT_HEIGHT = 120
 
 h3_COLUMNS_WIDTH = [90,  #activate
                     250,  #title
-                    90,  #runs  #sample
+                    150,  #runs  #sample
                     90,  #background runs
                     90,  #background background
                     90,  #material
