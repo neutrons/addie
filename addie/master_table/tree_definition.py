@@ -7,11 +7,11 @@ import numpy as np
 user_home = expanduser("~")
 CONFIG_FILE = os.path.join(user_home, '.addie_config.cfg')
 
-column_default_width = 90
+COLUMN_DEFAULT_WIDTH = 90
 COLUMN_DEFAULT_HEIGHT = 120
 
 h3_COLUMNS_WIDTH = [90,  #activate
-                    150,  #title
+                    250,  #title
                     90,  #runs  #sample
                     90,  #background runs
                     90,  #background background

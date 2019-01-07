@@ -203,6 +203,7 @@ class TableRowHandler:
                                 }
 
         random_key = self.generate_random_key()
+        self.key = random_key
 
         # column 0 (active or not checkBox)
         _layout = QHBoxLayout()

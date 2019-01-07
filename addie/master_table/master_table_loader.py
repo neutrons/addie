@@ -548,9 +548,11 @@ class FromDictionaryToTableUi:
 
         for _row_entry in input_dictionary.keys():
             o_table.insert_row(row=_row_entry)
-            self.populate_row(row=_row_entry, entry=input_dictionary[_row_entry])
+            self.populate_row(row=_row_entry,
+                              entry=input_dictionary[_row_entry],
+                              key=o_table.key)
 
-    def __fill_data_type(self, data_type="sample", starting_col=1, row=0, entry={}):
+    def __fill_data_type(self, data_type="sample", starting_col=1, row=0, entry={}, key=None):
 
         column=starting_col
 
@@ -582,17 +584,11 @@ class FromDictionaryToTableUi:
         _requested_shape = entry[data_type]["geometry"]["shape"]
         self.__set_combobox(requested_value=_requested_shape, row=row, col=column)
 
-        # geometry - radius
+        # geometry
         column += 1
-        self.table_ui.item(row, column).setText(entry[data_type]["geometry"]["radius_cm"])
-
-        # geometry - radius2
-        column += 1
-        self.table_ui.item(row, column).setText(entry[data_type]["geometry"]["radius2_cm"])
-
-        # geometry - height
-        column += 1
-        self.table_ui.item(row, column).setText(entry[data_type]["geometry"]["height_cm"])
+        self.parent.master_table_list_ui[key][data_type]['geometry']['radius']['value'].setText(entry[data_type]['geometry']['radius_cm'])
+        self.parent.master_table_list_ui[key][data_type]['geometry']['radius2']['value'].setText(entry[data_type]['geometry']['radius2_cm'])
+        self.parent.master_table_list_ui[key][data_type]['geometry']['height']['value'].setText(entry[data_type]['geometry']['height_cm'])
 
         # abs correction
         column += 1
@@ -616,7 +612,7 @@ class FromDictionaryToTableUi:
             _index = 0
         _widget.setCurrentIndex(_index)
 
-    def populate_row(self, row=-1, entry=None):
+    def populate_row(self, row=-1, entry=None, key=None):
 
         # activate
         _status = QtCore.Qt.Checked if entry["activate"] else QtCore.Qt.Unchecked
@@ -626,11 +622,16 @@ class FromDictionaryToTableUi:
         # title
         self.table_ui.item(row, 1).setText(entry["title"])
 
+        import pprint
+        pprint.pprint(entry)
+
+        return
+
         # sample
-        self.__fill_data_type(data_type='sample', starting_col=2, row=row, entry=entry )
+        self.__fill_data_type(data_type='sample', starting_col=2, row=row, entry=entry, key=key)
 
         # normalization
-        self.__fill_data_type(data_type='normalization', starting_col=15, row=row, entry=entry )
+        self.__fill_data_type(data_type='normalization', starting_col=15, row=row, entry=entry, key=key)
 
 
 

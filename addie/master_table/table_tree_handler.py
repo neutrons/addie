@@ -15,7 +15,7 @@ except ImportError:
 
 from addie.utilities.file_handler import FileHandler
 from addie.ui_table_tree import Ui_Dialog as UiDialog
-from addie.master_table.tree_definition import tree_dict, column_default_width, CONFIG_FILE
+from addie.master_table.tree_definition import tree_dict, COLUMN_DEFAULT_WIDTH, CONFIG_FILE
 from addie.master_table.tree_definition import h1_COLUMNS_WIDTH, h2_COLUMNS_WIDTH, h3_COLUMNS_WIDTH
 from addie.master_table.table_row_handler import TableRowHandler
 from addie.master_table.table_plot_handler import TablePlotHandler
@@ -28,7 +28,7 @@ from addie.master_table.master_table_exporter import TableFileExporter
 
 class TableInitialization:
 
-    default_width = column_default_width
+    default_width = COLUMN_DEFAULT_WIDTH
 
     def __init__(self, parent=None):
         self.parent = parent

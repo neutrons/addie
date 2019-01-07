@@ -105,6 +105,10 @@ class TableFileExporter:
 
         dict_element = copy.deepcopy(_element)
 
+        # retrieve the key according to row
+        o_util = Utilities(parent=self.parent)
+        key = o_util.get_row_key_from_row_index(row=row)
+
         if element == 'sample':
             column = sample_first_column
         else:
@@ -138,15 +142,18 @@ class TableFileExporter:
         dict_element["Geometry"]["Shape"] = shape
 
         column += 1
-        radius = self._get_item_value(row=row, column=column)
+        radius = str(self.parent.master_table_list_ui[key]['sample']['geometry']['radius']['value'].text())
+        radius2 = 'N/A'
+        height = 'N/A'
+        if shape == 'cylindrical':
+            height = str(self.parent.master_table_list_ui[key]['sample']['geometry']['height']['value'].text())
+        elif shape == 'spherical':
+            pass
+        else:
+            radius2 = str(self.parent.master_table_list_ui[key]['sample']['geometry']['radius2']['value'].text())
+
         dict_element["Geometry"]["Radius"] = radius
-
-        column += 1
-        radius2 = self._get_item_value(row=row, column=column)
         dict_element["Geometry"]["Radius2"] = radius2
-
-        column += 1
-        height = self._get_item_value(row=row, column=column)
         dict_element["Geometry"]["Height"] = height
 
         column += 1
@@ -162,10 +169,6 @@ class TableFileExporter:
         dict_element["InelasticCorrection"]["Type"] = inelastic_correction
 
 #        if inelastic_correction.lower() == 'placzek':
-
-        # retrieve the key according to row
-        o_util = Utilities(parent=self.parent)
-        key = o_util.get_row_key_from_row_index(row=row)
 
         placzek_infos = self.parent.master_table_list_ui[key][element]['placzek_infos']
 
