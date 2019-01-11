@@ -200,7 +200,7 @@ class PeriodicTable(QMainWindow):
 
 
         # clear button icon
-        # FIXME
+        self.ui.clear_button.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
 
     def reset_text_field(self):
         self.ui.chemical_formula.setText("")

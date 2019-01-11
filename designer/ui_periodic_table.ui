@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1008</width>
-    <height>554</height>
+    <width>1060</width>
+    <height>560</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -2219,7 +2219,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="clear_button">
         <property name="minimumSize">
          <size>
           <width>30</width>
@@ -2233,7 +2233,7 @@
          </size>
         </property>
         <property name="text">
-         <string>X</string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -2300,7 +2300,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1008</width>
+     <width>1060</width>
      <height>22</height>
     </rect>
    </property>
@@ -3782,7 +3782,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton</sender>
+   <sender>clear_button</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
    <slot>reset_text_field()</slot>
