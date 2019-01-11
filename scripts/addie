@@ -163,8 +163,8 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                                         'rows_remove': copy.deepcopy(dict_widget),
                                         'reset': copy.deepcopy(dict_widget),
                                         'clear': copy.deepcopy(dict_widget),
-                                        'import': copy.deepcopy(dict_widget),
-                                        'append': copy.deepcopy(dict_widget),
+                                        'import_from_file_append': copy.deepcopy(dict_widget),
+                                        'import_from_database_append': copy.deepcopy(dict_widget),
                                         'export': copy.deepcopy(dict_widget),
                                         'plot': copy.deepcopy(dict_widget),
                                         }

@@ -545,11 +545,21 @@ class H3TableHandler:
 
         # Table
         table = menu.addMenu("Table")
-        table_import = table.addAction("Import & Replace ...")
-        self.parent.master_table_right_click_buttons['import']['ui'] = table_import
-        table_append = table.addAction("Import & Append ...")
-        self.parent.master_table_right_click_buttons['append']['ui'] = table_append
-        table_append.setEnabled(self.parent.master_table_right_click_buttons['append']['status'])
+        table_import_from_file = table.addMenu("Import from File")
+        table_import_from_file_replace = table_import_from_file.addAction("Replace ...")
+        table_import_from_file_append = table_import_from_file.addAction("Append ...")
+        table_import_from_file_append.setEnabled(self.parent.master_table_right_click_buttons['import_from_file_append']['status'])
+        table_import_from_database = table.addMenu("Import from Database")
+        table_import_from_database_replace = table_import_from_database.addAction("Replace ...")
+        table_import_from_database_append = table_import_from_database.addAction("Append ...")
+        table_import_from_database_append.setEnabled(self.parent.master_table_right_click_buttons['import_from_database_append']['status'])
+
+        # table_import = table.addAction("Import & Replace ...")
+        # self.parent.master_table_right_click_buttons['import']['ui'] = table_import
+        # table_append = table.addAction("Import & Append ...")
+        # self.parent.master_table_right_click_buttons['append']['ui'] = table_append
+        # table_append.setEnabled(self.parent.master_table_right_click_buttons['append']['status'])
+        #
         table_export = table.addAction("Export ...")
         self.parent.master_table_right_click_buttons['export']['ui'] = table_export
         table_export.setEnabled(self.parent.master_table_right_click_buttons['export']['status'])
@@ -657,13 +667,16 @@ class H3TableHandler:
             self.refresh_table()
         elif action == table_clear:
             self.clear_table()
-        elif action == table_import:
-            self._import_table()
-        elif action == table_append:
-            self._append_table()
+        elif action == table_import_from_file_replace:
+            self._import_table_from_file(clear_table=True)
+        elif action == table_import_from_file_append:
+            self._import_table_from_file(clear_table=False)
+        elif action == table_import_from_database_replace:
+            self._import_table_from_database(clear_table=True)
+        elif action == table_import_from_database_append:
+            self._import_table_from_database(clear_table=False)
         elif action == table_export:
             self._export_table()
-
 
         # configuration
         if action == configuration_save_as:
@@ -790,20 +803,10 @@ class H3TableHandler:
         self.parent.master_table_list_ui = {}
         self.check_status_of_right_click_buttons()
 
-    def _append_table(self):
-        self._import_table(clear_table=False)
+    def _import_table_from_database(self, clear_table=True):
+        pass
 
-    def _import_table(self, clear_table=True):
-
-        # # for debuging only
-        # table_file = "/SNS/users/j35/test1.json"
-        # o_dict = TableFileLoader(parent=self.parent, filename=table_file)
-        # o_dict.display_dialog()
-        # return # REMOVEME
-
-
-
-
+    def _import_table_from_file(self, clear_table=True):
 
         _current_folder = self.parent.current_folder
         table_file = str(QFileDialog.getOpenFileName(parent=self.parent,
@@ -925,7 +928,8 @@ class H3TableHandler:
                            clear=False,
                            plot=False,
                            export=False,
-                           append=False,
+                           import_from_file_append=False,
+                           import_from_database_append=False,
                            )
         else:
             _update_status(activate=True,
@@ -937,7 +941,8 @@ class H3TableHandler:
                            reset=True,
                            clear=True,
                            export=True,
-                           append=True
+                           import_from_file_append=True,
+                           import_from_database_append=True,
                            )
 
             if self.parent.master_table_cells_copy['temp']:
