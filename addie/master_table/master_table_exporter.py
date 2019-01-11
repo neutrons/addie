@@ -95,6 +95,10 @@ class TableFileExporter:
         item = str(self.table_ui.item(row, column).text())
         return item
 
+    def _get_text_value(self, row=-1, column=-1):
+        widget = self.table_ui.cellWidget(row, column).children()[1]
+        return str(widget.text())
+
     def _get_selected_value(self, row=-1, column=-1):
         widget = self.table_ui.cellWidget(row, column).children()[1]
         return str(widget.currentText())
@@ -126,7 +130,7 @@ class TableFileExporter:
         dict_element["Background"]["Background"]["Runs"] = background_background
 
         column += 1
-        material = self._get_item_value(row=row, column=column)
+        material = self._get_text_value(row=row, column=column)
         dict_element["Material"] = material
 
         column += 1

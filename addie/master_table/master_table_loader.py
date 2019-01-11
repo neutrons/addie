@@ -569,7 +569,7 @@ class FromDictionaryToTableUi:
 
         # material
         column += 1
-        self.table_ui.item(row, column).setText(entry[data_type]["material"])
+        self.parent.master_table_list_ui[key][data_type]['material']['text'].setText(entry[data_type]["material"])
 
         # mass density
         column += 1
