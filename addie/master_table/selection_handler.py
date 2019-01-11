@@ -11,7 +11,9 @@ except ImportError:
     except ImportError:
         raise ImportError("Requires PyQt4 or PyQt5")
 
-from addie.master_table.tree_definition import INDEX_OF_COLUMNS_SEARCHABLE, INDEX_OF_COLUMNS_WITH_COMBOBOX
+from addie.master_table.tree_definition import INDEX_OF_COLUMNS_SEARCHABLE
+from addie.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_COMBOBOX
+from addie.master_table.tree_definition import INDEX_OF_SPECIAL_COLUMNS_SEARCHABLE
 
 
 class SelectionHandler:
@@ -377,10 +379,17 @@ class TableHandler(SelectionHandlerMaster):
             # look in all the searchable columns, row by row
             for _row in np.arange(nbr_row):
                 hide_it = True
+
                 for _col in INDEX_OF_COLUMNS_SEARCHABLE:
                     _text_cell = str(self.table_ui.item(_row, _col).text()).lower()
                     if text.lower() in _text_cell:
                         hide_it = False
+
+                for _col in INDEX_OF_SPECIAL_COLUMNS_SEARCHABLE:
+                    _text_widget = str(self.table_ui.cellWidget(_row, _col).children()[1].text()).lower()
+                    if text.lower() in _text_widget:
+                        hide_it = False
+
                 self.table_ui.setRowHidden(_row, hide_it)
 
     def clear_search(self):
