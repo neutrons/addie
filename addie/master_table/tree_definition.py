@@ -15,7 +15,7 @@ h3_COLUMNS_WIDTH = [90,  #activate
                     150,  #runs  #sample
                     90,  #background runs
                     90,  #background background
-                    90,  #material
+                    150,  #chemical formula
                     120,  #mass density
                     120,  #packing fraction
                     150,  #shape
@@ -24,7 +24,7 @@ h3_COLUMNS_WIDTH = [90,  #activate
                     90,  # runs  #normalization
                     90,  # background runs
                     90,  # background background
-                    90,  # material
+                    150,  #chemical formula
                     120,  # mass density
                     120,  # packing fraction
                     150,  # shape
@@ -105,7 +105,7 @@ sample_children_1['sample_background']['name'] = "Background"
 sample_children_1['sample_background']['children'] = sample_children_2
 
 sample_children_1['sample_material'] = copy.deepcopy(base_dict)
-sample_children_1['sample_material']['name'] = "Material"
+sample_children_1['sample_material']['name'] = "Chemical Formula"
 
 sample_children_1['sample_mass_density'] = copy.deepcopy(base_dict)
 sample_children_1['sample_mass_density']['name'] = "Mass Density"
@@ -153,7 +153,7 @@ vanadium_children_1['vanadium_background']['name'] = "Background"
 vanadium_children_1['vanadium_background']['children'] = vanadium_children_2
 
 vanadium_children_1['vanadium_material'] = copy.deepcopy(base_dict)
-vanadium_children_1['vanadium_material']['name'] = "Materials"
+vanadium_children_1['vanadium_material']['name'] = "Chemical Formula"
 
 vanadium_children_1['vanadium_mass_density'] = copy.deepcopy(base_dict)
 vanadium_children_1['vanadium_mass_density']['name'] = "Mass Density"

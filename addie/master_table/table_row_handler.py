@@ -4,13 +4,13 @@ import random
 
 try:
     from PyQt4.QtGui import QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton, \
-        QComboBox, QWidget, QGridLayout, QVBoxLayout, QHBoxLayout, QDialog
+        QComboBox, QWidget, QGridLayout, QVBoxLayout, QHBoxLayout, QDialog, QLineEdit
     from PyQt4.QtGui import QFileDialog
     from PyQt4 import QtCore, QtGui
 except ImportError:
     try:
         from PyQt5.QtWidgets import QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton, \
-            QWidget, QComboBox, QGridLayout, QVBoxLayout, QHBoxLayout, QDialog
+            QWidget, QComboBox, QGridLayout, QVBoxLayout, QHBoxLayout, QDialog, QLineEdit
         from PyQt5.QtWidgets import QFileDialog
         from PyQt5 import QtCore, QtGui
     except ImportError:
@@ -163,6 +163,7 @@ class TableRowHandler:
         _full_dimension_widgets = {'radius': copy.deepcopy(_dimension_widgets),
                                    'radius2': copy.deepcopy(_dimension_widgets),
                                    'height': copy.deepcopy(_dimension_widgets)}
+        _material = {'text': None, 'button': None}
 
         _master_table_row_ui = {'active': None,
                                 'title': None,
@@ -170,7 +171,7 @@ class TableRowHandler:
                                            'background': {'runs': None,
                                                           'background': None,
                                                           },
-                                           'material': None,
+                                           'material': copy.deepcopy(_material),
                                            'mass_density': None,
                                            'packing_fraction': None,
                                            'geometry': copy.deepcopy(_full_dimension_widgets),
@@ -185,7 +186,7 @@ class TableRowHandler:
                                            'background': {'runs': None,
                                                           'background': None,
                                                           },
-                                           'material': None,
+                                           'material': copy.deepcopy(_material),
                                            'mass_density': None,
                                            'packing_fraction': None,
                                            'geometry': copy.deepcopy(_full_dimension_widgets),
@@ -260,9 +261,24 @@ class TableRowHandler:
 
         # column 5 - material
         column += 1
-        _item = QTableWidgetItem("")
-        _master_table_row_ui['sample']['material'] = _item
-        self.table_ui.setItem(row, column, _item)
+        _material_text = QLineEdit("")
+        _material_button = QPushButton("...")
+        QtCore.QObject.connect(_material_button, QtCore.SIGNAL("pressed()"),
+                               lambda key=random_key:
+                               self.parent.master_table_sample_material_button_pressed(key))
+
+        _verti_layout = QVBoxLayout()
+        _verti_layout.addWidget(_material_text)
+        _verti_layout.addWidget(_material_button)
+        _material_widget = QWidget()
+        _material_widget.setLayout(_verti_layout)
+        self.table_ui.setCellWidget(row, column, _material_widget)
+        _master_table_row_ui['sample']['material']['text'] = _material_text
+        _master_table_row_ui['sample']['material']['button'] = _material_button
+
+#        _item = QTableWidgetItem("")
+#        _master_table_row_ui['sample']['material'] = _item
+#        self.table_ui.setItem(row, column, _item)
 
         # column 6 - mass density
         column += 1
@@ -487,8 +503,23 @@ class TableRowHandler:
 
         # column 16 - material
         column += 1
-        _item = QTableWidgetItem("")
-        self.table_ui.setItem(row, column, _item)
+        _material_text = QLineEdit("")
+        _material_button = QPushButton("...")
+        QtCore.QObject.connect(_material_button, QtCore.SIGNAL("pressed()"),
+                               lambda key=random_key:
+                               self.parent.master_table_normalization_material_button_pressed(key))
+
+        _verti_layout = QVBoxLayout()
+        _verti_layout.addWidget(_material_text)
+        _verti_layout.addWidget(_material_button)
+        _material_widget = QWidget()
+        _material_widget.setLayout(_verti_layout)
+        self.table_ui.setCellWidget(row, column, _material_widget)
+        _master_table_row_ui['normalization']['material']['text'] = _material_text
+        _master_table_row_ui['normalization']['material']['button'] = _material_button
+
+#        _item = QTableWidgetItem("")
+#        self.table_ui.setItem(row, column, _item)
 
         # column 17 - mass density
         column += 1

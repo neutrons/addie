@@ -12,7 +12,7 @@ import pprint
 from addie.ipythondockwidget import IPythonDockWidget
 
 try:
-    from PyQt4.QtGui import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QMainWindow, QApplication
+    from PyQt4.QtGui import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QMainWindow, QApplication, QMainWindow
     from PyQt4 import QtCore, QtGui
 except ImportError:
     try:
@@ -73,6 +73,7 @@ from addie.master_table.table_row_handler import TableRowHandler, DimensionsSett
 from addie.master_table.selection_handler import TableHandler
 from addie.master_table.reduction_configuration_handler import ReductionConfigurationHandler
 from addie.make_calibration_handler.make_calibration import MakeCalibrationLauncher
+from addie.master_table.periodic_table.material_handler import MaterialHandler
 
 import addie.addiedriver as driver
 import addie.specify_plots_style as ps
@@ -130,6 +131,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     placzek_ui = None
     reduction_configuration_ui = None
     reduction_configuration_ui_position = None
+    material_ui = None
 
     # config file to initialize the widgets (example Q and R range in PDF tab)
     current_path = os.path.dirname(os.path.dirname(__file__))
@@ -255,7 +257,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         ----------
         """
         # Base class
-        QtGui.QMainWindow.__init__(self)
+        QMainWindow.__init__(self)
 
         # if self.debugging:
         #     self.calibration_folder = '/SNS/NOM/IPTS-17118/shared/'
@@ -2625,6 +2627,9 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         o_table.activated_row_changed(state=state)
 
     ## sample columns
+    def master_table_sample_material_button_pressed(self, key):
+        MaterialHandler(parent=self, key=key, data_type='sample')
+
     def master_table_sample_shape_changed(self, text, key):
         o_table = TableRowHandler(parent=self)
         o_table.shape_changed(shape=text, key=key, data_type='sample')
@@ -2650,6 +2655,9 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         o_dimensions_ui.show()
 
     # normalization columns
+    def master_table_normalization_material_button_pressed(self, key):
+        MaterialHandler(parent=self, key=key, data_type='normalization')
+
     def master_table_normalization_shape_changed(self, text, key):
         o_table = TableRowHandler(parent=self)
         o_table.shape_changed(shape=text, key=key, data_type='normalization')
