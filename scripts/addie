@@ -74,6 +74,7 @@ from addie.master_table.selection_handler import TableHandler
 from addie.master_table.reduction_configuration_handler import ReductionConfigurationHandler
 from addie.make_calibration_handler.make_calibration import MakeCalibrationLauncher
 from addie.master_table.periodic_table.material_handler import MaterialHandler
+from addie.master_table.mass_density_handler import MassDensityHandler
 
 import addie.addiedriver as driver
 import addie.specify_plots_style as ps
@@ -132,6 +133,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     reduction_configuration_ui = None
     reduction_configuration_ui_position = None
     material_ui = None
+    mass_density_ui = None
 
     # config file to initialize the widgets (example Q and R range in PDF tab)
     current_path = os.path.dirname(os.path.dirname(__file__))
@@ -2631,7 +2633,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         MaterialHandler(parent=self, key=key, data_type='sample')
 
     def master_table_sample_mass_density_button_pressed(self, key):
-        pass
+        MassDensityHandler(parent=self, data_type='sample', key=key)
 
     def master_table_sample_shape_changed(self, text, key):
         o_table = TableRowHandler(parent=self)
@@ -2662,7 +2664,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         MaterialHandler(parent=self, key=key, data_type='normalization')
 
     def master_table_normalization_mass_density_button_pressed(self, key):
-        pass
+        MassDensityHandler(parent=self, data_type='normalization', key=key)
 
     def master_table_normalization_shape_changed(self, text, key):
         o_table = TableRowHandler(parent=self)

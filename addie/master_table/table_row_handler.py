@@ -164,6 +164,13 @@ class TableRowHandler:
                                    'radius2': copy.deepcopy(_dimension_widgets),
                                    'height': copy.deepcopy(_dimension_widgets)}
         _text_button = {'text': None, 'button': None}
+        _mass_density_options = {'value': "N/A",
+                                 "selected": False}
+        _mass_density_infos = {'number_density': copy.deepcopy(_mass_density_options),
+                               'mass_density': copy.deepcopy(_mass_density_options),
+                               'mass': copy.deepcopy(_mass_density_options),
+                               }
+        _mass_density_infos['mass_density']["selected"] = True
 
         _master_table_row_ui = {'active': None,
                                 'title': None,
@@ -173,6 +180,7 @@ class TableRowHandler:
                                                           },
                                            'material': copy.deepcopy(_text_button),
                                            'mass_density': copy.deepcopy(_text_button),
+                                           'mass_density_infos': copy.deepcopy(_mass_density_infos),
                                            'packing_fraction': None,
                                            'geometry': copy.deepcopy(_full_dimension_widgets),
                                            'shape': None,
@@ -188,6 +196,7 @@ class TableRowHandler:
                                                           },
                                            'material': copy.deepcopy(_text_button),
                                            'mass_density': copy.deepcopy(_text_button),
+                                           'mass_density_infos': copy.deepcopy(_mass_density_infos),
                                            'packing_fraction': None,
                                            'geometry': copy.deepcopy(_full_dimension_widgets),
                                            'shape': None,

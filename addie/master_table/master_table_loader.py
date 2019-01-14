@@ -24,6 +24,13 @@ from addie.ui_list_of_scan_loader_dialog import Ui_Dialog as UiDialog
 
 # init test dictionary (to test loader
 _dictionary_test = OrderedDict()
+_mass_density_dict = {"mass_density": {"value": "N/A",
+                                       "selected": True},
+                      "number_density": {"value": "N/A",
+                                         "selected": False},
+                      "mass": {"value": "N/A",
+                               "selected": False},
+                      }
 _default_empty_row = {"activate": True,
                       "title": "",
                       "sample": {"runs": "",
@@ -31,7 +38,7 @@ _default_empty_row = {"activate": True,
                                                 "background": "",
                                                 },
                                  "material": "",
-                                 "mass_density": "",
+                                 "mass_density": copy.deepcopy(_mass_density_dict),
                                  "packing_fraction": "",
                                  "geometry": {"shape": "cylindrical",
                                               "radius": "N/A",
@@ -48,7 +55,7 @@ _default_empty_row = {"activate": True,
                                                 "background": "",
                                                 },
                                  "material": "",
-                                 "mass_density": "",
+                                 "mass_density": copy.deepcopy(_mass_density_dict),
                                  "packing_fraction": "",
                                  "geometry": {"shape": "cylindrical",
                                               "radius": "N/A",
@@ -137,7 +144,13 @@ class JsonLoader:
         _target_row_entry["background"]["runs"] = _source_entry['Background']["Runs"]
         _target_row_entry["background"]["background"] = _source_entry["Background"]["Background"]["Runs"]
         _target_row_entry["material"] = _source_entry["Material"]
-        _target_row_entry["mass_density"] = _source_entry["MassDensity"]
+        _target_row_entry["mass_density"] = copy.deepcopy(_mass_density_dict)
+        _target_row_entry["mass_density"]["mass_density"]["value"] = _source_entry["MassDensity"]["MassDensity"]
+        _target_row_entry["mass_density"]["mass_density"]["selected"] = _source_entry["MassDensity"]["UseMassDensity"]
+        _target_row_entry["mass_density"]["number_density"]["value"] = _source_entry["MassDensity"]["NumberDensity"]
+        _target_row_entry["mass_density"]["number_density"]["selected"] = _source_entry["MassDensity"]["UseNumberDensity"]
+        _target_row_entry["mass_density"]["mass"]["value"] = _source_entry["MassDensity"]["Mass"]
+        _target_row_entry["mass_density"]["mass"]["selected"] = _source_entry["MassDensity"]["UseMass"]
         _target_row_entry["packing_fraction"] = _source_entry["PackingFraction"]
         _target_row_entry["geometry"] = {}
         _target_row_entry["geometry"]["shape"] = _source_entry["Geometry"]["Shape"]
@@ -573,7 +586,7 @@ class FromDictionaryToTableUi:
 
         # mass density
         column += 1
-        self.table_ui.item(row, column).setText(entry[data_type]["mass_density"])
+        self.parent.master_table_list_ui[key][data_type]['mass_density']['text'].setText(entry[data_type]["mass_density"]["mass_density"]["value"])
 
         # packing_fraction
         column +=1

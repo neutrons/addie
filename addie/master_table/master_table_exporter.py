@@ -22,7 +22,12 @@ _element= {"Runs": "",
                                          },
                           },
            "Material": "",
-           "MassDensity": np.NaN,
+           "MassDensity": {"MassDensity": np.NaN,
+                           "UseMassDensity": True,
+                           "NumberDensity": np.NaN,
+                           "UseNumberDensity": False,
+                           "Mass": np.NaN,
+                           "UseMass": False},
            "PackingFraction": np.NaN,
            "Geometry": {"Shape": "",
                         "Radius": np.NaN,
@@ -133,12 +138,18 @@ class TableFileExporter:
         material = self._get_text_value(row=row, column=column)
         dict_element["Material"] = material
 
+        # mass density
         column += 1
-        mass_density = self._get_item_value(row=row, column=column)
-        dict_element["MassDensity"] = mass_density
+        mass_density = str(self.parent.master_table_list_ui[key][element]['mass_density']['text'].text())
+        dict_element["MassDensity"]["MassDensity"] = mass_density
+        dict_element["MassDensity"]["UseMassDensity"] = self.parent.master_table_list_ui[key][element]['mass_density_infos']['mass_density']['selected']
+        dict_element["MassDensity"]["NumberDensity"] = self.parent.master_table_list_ui[key][element]['mass_density_infos']['number_density']['value']
+        dict_element["MassDensity"]["UseNumberDensity"] = self.parent.master_table_list_ui[key][element]['mass_density_infos']['number_density']['selected']
+        dict_element["MassDensity"]["Mass"] = self.parent.master_table_list_ui[key][element]['mass_density_infos']['mass']['value']
+        dict_element["MassDensity"]["UseMass"] = self.parent.master_table_list_ui[key][element]['mass_density_infos']['mass']['selected']
 
         column += 1
-        packing_fraction =  self._get_item_value(row=row, column=6)
+        packing_fraction =  self._get_item_value(row=row, column=column)
         dict_element["PackingFraction"] = packing_fraction
 
         column += 1
@@ -146,15 +157,15 @@ class TableFileExporter:
         dict_element["Geometry"]["Shape"] = shape
 
         column += 1
-        radius = str(self.parent.master_table_list_ui[key]['sample']['geometry']['radius']['value'].text())
+        radius = str(self.parent.master_table_list_ui[key][element]['geometry']['radius']['value'].text())
         radius2 = 'N/A'
         height = 'N/A'
         if shape == 'cylindrical':
-            height = str(self.parent.master_table_list_ui[key]['sample']['geometry']['height']['value'].text())
+            height = str(self.parent.master_table_list_ui[key][element]['geometry']['height']['value'].text())
         elif shape == 'spherical':
             pass
         else:
-            radius2 = str(self.parent.master_table_list_ui[key]['sample']['geometry']['radius2']['value'].text())
+            radius2 = str(self.parent.master_table_list_ui[key][element]['geometry']['radius2']['value'].text())
 
         dict_element["Geometry"]["Radius"] = radius
         dict_element["Geometry"]["Radius2"] = radius2

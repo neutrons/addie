@@ -33,7 +33,13 @@ class MassDensityWindow(QDialog):
         self.ui.setupUi(self)
 
     def accept(self):
-        pass
+        self.parent.mass_density_ui = None
+        self.close()
 
     def reject(self):
+        self.parent.mass_density_ui = None
+        self.close()
+
+    def closeEvent(self, c):
         pass
+
