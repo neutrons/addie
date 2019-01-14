@@ -9,9 +9,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>414</width>
-    <height>368</height>
+    <width>462</width>
+    <height>363</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Mass Density / Number Density / ...</string>
@@ -58,7 +64,7 @@
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>64</width>
+            <width>112</width>
             <height>20</height>
            </size>
           </property>
@@ -72,7 +78,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_9">
      <item>
-      <widget class="QLabel" name="label_8">
+      <widget class="QLabel" name="mass_density_error_message">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -80,7 +86,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Message Here !</string>
+        <string>Missing Chemical Formula to update Mass Density!</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
@@ -156,7 +162,7 @@
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>31</width>
+            <width>69</width>
             <height>20</height>
            </size>
           </property>
@@ -170,7 +176,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_10">
      <item>
-      <widget class="QLabel" name="label_11">
+      <widget class="QLabel" name="number_density_error_message">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -178,7 +184,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Message Here !</string>
+        <string>Missing Chemical Formula to update Number Density!</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
@@ -319,7 +325,7 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>37</height>
+       <height>32</height>
       </size>
      </property>
     </spacer>
