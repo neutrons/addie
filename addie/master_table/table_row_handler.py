@@ -163,7 +163,7 @@ class TableRowHandler:
         _full_dimension_widgets = {'radius': copy.deepcopy(_dimension_widgets),
                                    'radius2': copy.deepcopy(_dimension_widgets),
                                    'height': copy.deepcopy(_dimension_widgets)}
-        _material = {'text': None, 'button': None}
+        _text_button = {'text': None, 'button': None}
 
         _master_table_row_ui = {'active': None,
                                 'title': None,
@@ -171,8 +171,8 @@ class TableRowHandler:
                                            'background': {'runs': None,
                                                           'background': None,
                                                           },
-                                           'material': copy.deepcopy(_material),
-                                           'mass_density': None,
+                                           'material': copy.deepcopy(_text_button),
+                                           'mass_density': copy.deepcopy(_text_button),
                                            'packing_fraction': None,
                                            'geometry': copy.deepcopy(_full_dimension_widgets),
                                            'shape': None,
@@ -186,8 +186,8 @@ class TableRowHandler:
                                            'background': {'runs': None,
                                                           'background': None,
                                                           },
-                                           'material': copy.deepcopy(_material),
-                                           'mass_density': None,
+                                           'material': copy.deepcopy(_text_button),
+                                           'mass_density': copy.deepcopy(_text_button),
                                            'packing_fraction': None,
                                            'geometry': copy.deepcopy(_full_dimension_widgets),
                                            'shape': None,
@@ -282,9 +282,19 @@ class TableRowHandler:
 
         # column 6 - mass density
         column += 1
-        _item = QTableWidgetItem("")
-        _master_table_row_ui['sample']['mass_density'] = _item
-        self.table_ui.setItem(row, column, _item)
+        _mass_text = QLineEdit("")
+        _mass_button = QPushButton("...")
+        QtCore.QObject.connect(_mass_button, QtCore.SIGNAL("pressed()"),
+                               lambda key=random_key:
+                               self.parent.master_table_sample_mass_density_button_pressed(key))
+        _verti_layout = QVBoxLayout()
+        _verti_layout.addWidget(_mass_text)
+        _verti_layout.addWidget(_mass_button)
+        _mass_widget = QWidget()
+        _mass_widget.setLayout(_verti_layout)
+        self.table_ui.setCellWidget(row, column, _mass_widget)
+        _master_table_row_ui['sample']['mass_density']['text'] = _mass_text
+        _master_table_row_ui['sample']['mass_density']['button'] = _mass_button
 
         # column 7 - packing fraction
         column += 1
@@ -523,9 +533,19 @@ class TableRowHandler:
 
         # column 17 - mass density
         column += 1
-        _item = QTableWidgetItem("")
-        _master_table_row_ui['normalization']['mass_density'] = _item
-        self.table_ui.setItem(row, column, _item)
+        _mass_text = QLineEdit("")
+        _mass_button = QPushButton("...")
+        QtCore.QObject.connect(_mass_button, QtCore.SIGNAL("pressed()"),
+                               lambda key=random_key:
+                               self.parent.master_table_normalization_mass_density_button_pressed(key))
+        _verti_layout = QVBoxLayout()
+        _verti_layout.addWidget(_mass_text)
+        _verti_layout.addWidget(_mass_button)
+        _mass_widget = QWidget()
+        _mass_widget.setLayout(_verti_layout)
+        self.table_ui.setCellWidget(row, column, _mass_widget)
+        _master_table_row_ui['normalization']['mass_density']['text'] = _mass_text
+        _master_table_row_ui['normalization']['mass_density']['button'] = _mass_button
 
         # column 18 - packing fraction
         column += 1
