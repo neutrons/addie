@@ -23,6 +23,8 @@ class MassDensityHandler:
 
 class MassDensityWindow(QDialog):
 
+    chemical_formula_defined = False
+
     def __init__(self, parent=None, key=None, data_type='sample'):
         self.parent = parent
         self.key = key
@@ -41,15 +43,17 @@ class MassDensityWindow(QDialog):
         self.ui.mass_density_error_message.setStyleSheet("color: red")
         self.ui.number_density_error_message.setStyleSheet("color: red")
 
+        self.radio_button_changed()
+
         # geometry
         geometry = str(self.parent.master_table_list_ui[self.key][self.data_type]['shape'].currentText())
         self.ui.geometry_label.setText(geometry)
 
-        chemical_formula_defined = self._is_chemical_formula_defined()
+        self.chemical_formula_defined = self._is_chemical_formula_defined()
 
         if self.parent.master_table_list_ui[self.key][self.data_type]['mass_density_infos']['number_density']['selected']:
             self.ui.number_density_radio_button.setChecked(True)
-            self.ui.mass_density_error_message.setVisible(not chemical_formula_defined)
+            self.ui.mass_density_error_message.setVisible(not self.chemical_formula_defined)
             self.ui.number_density_error_message.setVisible(False)
 
         elif self.parent.master_table_list_ui[self.key][self.data_type]['mass_density_infos']['mass']['selected']:
@@ -59,7 +63,7 @@ class MassDensityWindow(QDialog):
 
         else: # mass density selected
             self.ui.mass_density_error_message.setVisible(False)
-            self.ui.number_density_error_message.setVisible(not chemical_formula_defined)
+            self.ui.number_density_error_message.setVisible(not self.chemical_formula_defined)
 
     def _is_chemical_formula_defined(self):
         if self.parent.master_table_list_ui[self.key][self.data_type]['material']['text'].text() == "":
@@ -67,7 +71,15 @@ class MassDensityWindow(QDialog):
         return True
 
     def radio_button_changed(self):
-        pass
+        if self.ui.mass_density_radio_button.isChecked():
+            self.ui.mass_density_error_message.setVisible(False)
+            self.ui.number_density_error_message.setVisible(not self.chemical_formula_defined)
+        elif self.ui.number_density_radio_button.isChecked():
+            self.ui.mass_density_error_message.setVisible(not self.chemical_formula_defined)
+            self.ui.number_density_error_message.setVisible(False)
+        else:
+            self.ui.mass_density_error_message.setVisible(False)
+            self.ui.number_density_error_message.setVisible(False)
 
     def accept(self):
         self.parent.mass_density_ui = None
