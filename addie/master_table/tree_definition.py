@@ -16,7 +16,7 @@ h3_COLUMNS_WIDTH = [90,  #activate
                     90,  #background runs
                     90,  #background background
                     150,  #chemical formula
-                    120,  #mass density
+                    150,  #mass density
                     120,  #packing fraction
                     150,  #shape
                     200, # geometry dimensions
@@ -25,7 +25,7 @@ h3_COLUMNS_WIDTH = [90,  #activate
                     90,  # background runs
                     90,  # background background
                     150,  #chemical formula
-                    120,  # mass density
+                    150,  # mass density
                     120,  # packing fraction
                     150,  # shape
                     200, # geometry dimensions

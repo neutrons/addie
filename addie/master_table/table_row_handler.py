@@ -292,12 +292,18 @@ class TableRowHandler:
         # column 6 - mass density
         column += 1
         _mass_text = QLineEdit("")
+        _mass_units = QLabel("g/cc")
+        _top_widget = QWidget()
+        _top_layout = QHBoxLayout()
+        _top_layout.addWidget(_mass_text)
+        _top_layout.addWidget(_mass_units)
+        _top_widget.setLayout(_top_layout)
         _mass_button = QPushButton("...")
         QtCore.QObject.connect(_mass_button, QtCore.SIGNAL("pressed()"),
                                lambda key=random_key:
                                self.parent.master_table_sample_mass_density_button_pressed(key))
         _verti_layout = QVBoxLayout()
-        _verti_layout.addWidget(_mass_text)
+        _verti_layout.addWidget(_top_widget)
         _verti_layout.addWidget(_mass_button)
         _mass_widget = QWidget()
         _mass_widget.setLayout(_verti_layout)
@@ -543,12 +549,18 @@ class TableRowHandler:
         # column 17 - mass density
         column += 1
         _mass_text = QLineEdit("")
+        _mass_units = QLabel("g/cc")
+        _top_widget = QWidget()
+        _top_layout = QHBoxLayout()
+        _top_layout.addWidget(_mass_text)
+        _top_layout.addWidget(_mass_units)
+        _top_widget.setLayout(_top_layout)
         _mass_button = QPushButton("...")
         QtCore.QObject.connect(_mass_button, QtCore.SIGNAL("pressed()"),
                                lambda key=random_key:
                                self.parent.master_table_normalization_mass_density_button_pressed(key))
         _verti_layout = QVBoxLayout()
-        _verti_layout.addWidget(_mass_text)
+        _verti_layout.addWidget(_top_widget)
         _verti_layout.addWidget(_mass_button)
         _mass_widget = QWidget()
         _mass_widget.setLayout(_verti_layout)

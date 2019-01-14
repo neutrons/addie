@@ -32,6 +32,15 @@ class MassDensityWindow(QDialog):
         self.ui = UiDialog()
         self.ui.setupUi(self)
 
+        self.init_widgets()
+
+    def init_widgets(self):
+        self.ui.number_density_units.setText(u"Atoms/\u212B")
+
+        # geometry
+        geometry = str(self.parent.master_table_list_ui[self.key][self.data_type]['shape'].currentText())
+        self.ui.geometry_label.setText(geometry)
+
     def accept(self):
         self.parent.mass_density_ui = None
         self.close()
