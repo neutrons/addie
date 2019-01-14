@@ -259,7 +259,7 @@ class TableRowHandler:
         _master_table_row_ui['sample']['background']['background'] = _item
         self.table_ui.setItem(row, column, _item)
 
-        # column 5 - material
+        # column 5 - material (chemical formula)
         column += 1
         _material_text = QLineEdit("")
         _material_button = QPushButton("...")
