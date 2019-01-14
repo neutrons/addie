@@ -61,11 +61,13 @@ class MassDensityWindow(QDialog):
             self.ui.mass_density_error_message.setVisible(False)
             self.ui.number_density_error_message.setVisible(not chemical_formula_defined)
 
-
     def _is_chemical_formula_defined(self):
         if self.parent.master_table_list_ui[self.key][self.data_type]['material']['text'].text() == "":
             return False
         return True
+
+    def radio_button_changed(self):
+        pass
 
     def accept(self):
         self.parent.mass_density_ui = None

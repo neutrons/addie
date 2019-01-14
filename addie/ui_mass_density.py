@@ -171,6 +171,9 @@ class Ui_Dialog(object):
         self.retranslateUi(Dialog)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), Dialog.accept)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), Dialog.reject)
+        QtCore.QObject.connect(self.mass_density_radio_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.radio_button_changed)
+        QtCore.QObject.connect(self.number_density_radio_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.radio_button_changed)
+        QtCore.QObject.connect(self.mass_geometry_radio_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.radio_button_changed)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
