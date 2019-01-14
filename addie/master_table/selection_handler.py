@@ -14,6 +14,9 @@ except ImportError:
 from addie.master_table.tree_definition import INDEX_OF_COLUMNS_SEARCHABLE
 from addie.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_COMBOBOX
 from addie.master_table.tree_definition import INDEX_OF_SPECIAL_COLUMNS_SEARCHABLE
+from addie.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS
+
+from addie.master_table.utilities import Utilities
 
 
 class SelectionHandler:
@@ -347,14 +350,32 @@ class CopyCells:
             _from_cell_value = self.table_ui.item(from_row, from_col).text()
             self.table_ui.item(to_row, from_col).setText(_from_cell_value)
         except:
-            # let's assume now that the cell contain a combobox
             ui = self.table_ui.cellWidget(from_row, from_col).children()[1]
+            # let's assume now that the cell contain a combobox
             if isinstance(ui, QComboBox):
                 _from_index = ui.currentIndex()
                 self.table_ui.cellWidget(to_row, from_col).children()[1].setCurrentIndex(_from_index)
+            # checkbox
             elif isinstance(ui, QCheckBox):
                 _state = ui.checkState()
                 self.table_ui.cellWidget(to_row, from_col).children()[1].setCheckState(_state)
+            elif from_col in INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS:
+                o_utilities = Utilities(parent=self.parent)
+                _from_key = o_utilities.get_row_key_from_row_index(row=from_row)
+                _to_key = o_utilities.get_row_key_from_row_index(row=to_row)
+                _master_table_row_ui = self.parent.master_table_list_ui
+                if from_col == INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS[0]: # sample
+                    data_type = 'sample'
+                else:
+                    data_type = 'normalization'
+                _radius = str(_master_table_row_ui[_from_key][data_type]['geometry']['radius']['value'].text())
+                _radius2 = str(_master_table_row_ui[_from_key][data_type]['geometry']['radius2']['value'].text())
+                _height = str(_master_table_row_ui[_from_key][data_type]['geometry']['height']['value'].text())
+
+                self.parent.master_table_list_ui[_to_key][data_type]['geometry']['radius']['value'].setText(_radius)
+                self.parent.master_table_list_ui[_to_key][data_type]['geometry']['radius2']['value'].setText(_radius2)
+                self.parent.master_table_list_ui[_to_key][data_type]['geometry']['height']['value'].setText(_height)
+
             else:
                 self.parent.ui.statusbar.setStyleSheet("color: red")
                 self.parent.ui.statusbar.showMessage("Don't know how to copy/paste the cell from row #{} to row #{} at the column #{}".format(from_row, to_row, from_col),
