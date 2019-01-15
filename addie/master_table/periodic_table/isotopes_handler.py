@@ -41,7 +41,7 @@ class IsotopeDialog(QDialog):
         for iso in getattr(periodictable, element):
             #reformat
             list_str_iso = str(iso).split('-')
-            str_iso = "".join(list_str_iso)
+            str_iso = "".join(list_str_iso[::-1])
             list_isotopes.append(str_iso)
 
         self.ui.comboBox.addItems(list_isotopes)

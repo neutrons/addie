@@ -216,14 +216,16 @@ class PeriodicTable(QMainWindow):
 
         previous_chemical_formula = str(self.ui.chemical_formula.text())
         if is_natural_element:
+            if number == 1:
+                number = ''
             new_isotope_string = "{}{}".format(isotope, number)
         elif number > 1:
             new_isotope_string = "({}){}".format(isotope, number)
         else:
-            new_isotope_string = "{}".format(isotope)
+            new_isotope_string = "({})".format(isotope)
 
         if previous_chemical_formula != '':
-            new_chemical_formula = previous_chemical_formula + '-' + new_isotope_string
+            new_chemical_formula = previous_chemical_formula + ' ' + new_isotope_string
         else:
             new_chemical_formula = new_isotope_string
 
