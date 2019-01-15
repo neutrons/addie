@@ -69,7 +69,8 @@ from addie.master_table.table_tree_handler import TableTreeHandler, TableInitial
 from addie.master_table.table_tree_handler import SaveConfigInterface, TableTree
 from addie.master_table.tree_definition import *
 from addie.ui_table_tree_save_config import Ui_Dialog as UiDialogSave
-from addie.master_table.table_row_handler import TableRowHandler, DimensionsSetter
+from addie.master_table.table_row_handler import TableRowHandler
+from addie.master_table.geometry_handler import DimensionsSetter
 from addie.master_table.selection_handler import TableHandler
 from addie.master_table.reduction_configuration_handler import ReductionConfigurationHandler
 from addie.make_calibration_handler.make_calibration import MakeCalibrationLauncher

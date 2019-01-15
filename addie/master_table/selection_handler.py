@@ -200,6 +200,26 @@ class TransferH3TableWidgetState(SelectionHandlerMaster):
                     master_table_row_ui[_to_key][data_type]['mass_density_infos'] = mass_density_info
                     master_table_row_ui[_to_key][data_type]['mass_density']['text'].setText(mass_density_value)
 
+            elif (column_selected in INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS):
+
+                o_utilities = Utilities(parent=self.parent)
+                _from_key = o_utilities.get_row_key_from_row_index(row=from_row)
+
+                radius = str(master_table_row_ui[_from_key][data_type]['geometry']['radius']['value'].text())
+                radius2 = str(master_table_row_ui[_from_key][data_type]['geometry']['radius2']['value'].text())
+                height = str(master_table_row_ui[_from_key][data_type]['geometry']['height']['value'].text())
+
+                for _row in range_row:
+                    if _row == from_row:
+                        continue
+
+                    _to_key = o_utilities.get_row_key_from_row_index(row=_row)
+
+                    master_table_row_ui[_to_key][data_type]['geometry']['radius']['value'].setText(radius)
+                    master_table_row_ui[_to_key][data_type]['geometry']['radius2']['value'].setText(radius2)
+                    master_table_row_ui[_to_key][data_type]['geometry']['height']['value'].setText(height)
+
+
 class RowsHandler(SelectionHandlerMaster):
 
     def __init__(self, parent=None):

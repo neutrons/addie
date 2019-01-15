@@ -28,6 +28,9 @@
   <property name="windowTitle">
    <string>Geometry Dimensions</string>
   </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QGridLayout" name="gridLayout">
