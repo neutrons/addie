@@ -37,7 +37,8 @@ class MassDensityWindow(QDialog):
         self.init_widgets()
 
     def init_widgets(self):
-        self.ui.number_density_units.setText(u"Atoms/\u212B")
+        self.ui.number_density_units.setText(u"Atoms/\u212B\u00B3")
+        self.ui.mass_density_label.setText(u"g/cm\u00B3")
 
         # error messages
         self.ui.mass_density_error_message.setStyleSheet("color: red")

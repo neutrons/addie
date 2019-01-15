@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>462</width>
-    <height>363</height>
+    <height>440</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -51,7 +51,7 @@
          <widget class="QLineEdit" name="mass_density_line_edit"/>
         </item>
         <item>
-         <widget class="QLabel" name="label">
+         <widget class="QLabel" name="mass_density_label">
           <property name="text">
            <string>g/cc</string>
           </property>
