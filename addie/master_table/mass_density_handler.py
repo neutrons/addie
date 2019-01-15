@@ -43,27 +43,49 @@ class MassDensityWindow(QDialog):
         self.ui.mass_density_error_message.setStyleSheet("color: red")
         self.ui.number_density_error_message.setStyleSheet("color: red")
 
-        self.radio_button_changed()
-
         # geometry
         geometry = str(self.parent.master_table_list_ui[self.key][self.data_type]['shape'].currentText())
         self.ui.geometry_label.setText(geometry)
 
         self.chemical_formula_defined = self._is_chemical_formula_defined()
 
-        if self.parent.master_table_list_ui[self.key][self.data_type]['mass_density_infos']['number_density']['selected']:
-            self.ui.number_density_radio_button.setChecked(True)
-            self.ui.mass_density_error_message.setVisible(not self.chemical_formula_defined)
-            self.ui.number_density_error_message.setVisible(False)
+        mass_density_list_ui = self.parent.master_table_list_ui[self.key][self.data_type]
+        mass_density_infos = mass_density_list_ui['mass_density_infos']
 
-        elif self.parent.master_table_list_ui[self.key][self.data_type]['mass_density_infos']['mass']['selected']:
+        _mass_density = str(mass_density_list_ui['mass_density']['text'].text())
+        self.ui.mass_density_line_edit.setText(_mass_density)
+
+        _mass_density_checked = mass_density_infos['mass_density']['selected']
+        _number_density_checked = mass_density_infos['number_density']['selected']
+
+        _number_density = mass_density_infos['number_density']['value']
+        self.ui.number_density_line_edit.setText(_number_density)
+
+        _mass_value = mass_density_infos['mass']['value']
+        self.ui.mass_line_edit.setText(_mass_value)
+
+        if _mass_density_checked:
             self.ui.mass_density_radio_button.setChecked(True)
-            self.ui.mass_density_error_message.setVisible(False)
-            self.ui.number_density_error_message.setVisible(False)
+        elif _number_density_checked:
+            self.ui.number_density_radio_button.setChecked(True)
+        else:
+            self.ui.mass_geometry_radio_button.setChecked(True)
 
-        else: # mass density selected
-            self.ui.mass_density_error_message.setVisible(False)
-            self.ui.number_density_error_message.setVisible(not self.chemical_formula_defined)
+        self.radio_button_changed()
+
+        # if self.ui.number_density_radio_button.isChecked():
+        #     self.ui.number_density_radio_button.setChecked(True)
+        #     self.ui.mass_density_error_message.setVisible(not self.chemical_formula_defined)
+        #     self.ui.number_density_error_message.setVisible(False)
+        #
+        # elif self.ui.mass_geometry_radio_button.isChecked():
+        #     self.ui.mass_density_radio_button.setChecked(True)
+        #     self.ui.mass_density_error_message.setVisible(False)
+        #     self.ui.number_density_error_message.setVisible(False)
+        #
+        # else: # mass density selected
+        #     self.ui.mass_density_error_message.setVisible(False)
+        #     self.ui.number_density_error_message.setVisible(not self.chemical_formula_defined)
 
     def _is_chemical_formula_defined(self):
         if self.parent.master_table_list_ui[self.key][self.data_type]['material']['text'].text() == "":
@@ -81,8 +103,36 @@ class MassDensityWindow(QDialog):
             self.ui.mass_density_error_message.setVisible(False)
             self.ui.number_density_error_message.setVisible(False)
 
+    def save(self):
+        mass_density_list_ui = self.parent.master_table_list_ui[self.key][self.data_type]
+        mass_density_infos = mass_density_list_ui['mass_density_infos']
+
+        mass_density_flag = False
+        number_density_flag = False
+        mass_flag = False
+        if self.ui.mass_density_radio_button.isChecked():
+            mass_density_flag = True
+        elif self.ui.number_density_radio_button.isChecked():
+            number_density_flag = True
+        else:
+            mass_flag = True
+
+        mass_density = str(self.ui.mass_density_line_edit.text())
+        mass_density_list_ui['mass_density']['text'].setText(mass_density)
+        mass_density_infos['mass_density']['value'] = mass_density
+        mass_density_infos['mass_density']['selected'] = mass_density_flag
+
+        number_density = str(self.ui.number_density_line_edit.text())
+        mass_density_infos['number_density']['value'] = number_density
+        mass_density_infos['number_density']['selected'] = number_density_flag
+
+        mass = str(self.ui.mass_line_edit.text())
+        mass_density_infos['mass']['value'] = mass
+        mass_density_infos['mass']['selected'] = mass_flag
+
     def accept(self):
         self.parent.mass_density_ui = None
+        self.save()
         self.close()
 
     def reject(self):
