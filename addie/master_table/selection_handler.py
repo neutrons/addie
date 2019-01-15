@@ -16,6 +16,9 @@ from addie.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_COMBOBOX
 from addie.master_table.tree_definition import INDEX_OF_SPECIAL_COLUMNS_SEARCHABLE
 from addie.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS
 from addie.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA
+from addie.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_MASS_DENSITY
+from addie.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_ITEMS
+from addie.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_CHECKBOX
 
 from addie.master_table.utilities import Utilities
 
@@ -252,22 +255,22 @@ class CellsHandler(SelectionHandlerMaster):
 
         if nbr_row > 1:
             self.parent.ui.statusbar.setStyleSheet("color: red")
-            self.parent.ui.statusbar.showMessage("Please select only 1 row!",
+            self.parent.ui.statusbar.showMessage("Selection of columns must be in the same row!",
                                                  self.parent.statusbar_display_time)
             return
 
         list_column = self.o_selection.get_list_column()
-        nbr_column = len(list_column)
+        #nbr_column = len(list_column)
 
-        row_column_items = [['' for x in np.arange(nbr_column)]
-                            for y in np.arange(nbr_row)]
-        for _row in np.arange(nbr_row):
-            for _column in np.arange(nbr_column):
-                _item = self.table_ui.item(_row, _column)
-                if _item:
-                    row_column_items[_row][_column] = _item.text()
+        #row_column_items = [['' for x in np.arange(nbr_column)]
+        #                    for y in np.arange(nbr_row)]
+#        for _row in np.arange(nbr_row):
+        #for _column in np.arange(nbr_column):
+        #    _item = self.table_ui.item(_row, _column)
+        #    if _item:
+        #        row_column_items[_row][_column] = _item.text()
 
-        self.parent.master_table_cells_copy['temp'] = row_column_items
+        #self.parent.master_table_cells_copy['temp'] = row_column_items
         self.parent.master_table_cells_copy['list_column'] = list_column
         self.parent.master_table_cells_copy['row'] = list_row[0]
         self.parent.master_table_right_click_buttons['cells_paste']['status'] = True
@@ -284,7 +287,7 @@ class CellsHandler(SelectionHandlerMaster):
         nbr_column_paste = len(list_column_paste)
 
         row_columns_items_to_copy = self.parent.master_table_cells_copy['temp']
-        [nbr_row_copy, nbr_column_copy] = np.shape(row_columns_items_to_copy)
+        #[nbr_row_copy, nbr_column_copy] = np.shape(row_columns_items_to_copy)
 
         # if we don't select the same amount of columns, we stop here (and inform
         # user of issue in statusbar
@@ -346,56 +349,83 @@ class CopyCells:
 
     def copy_from_to(self, from_row=-1, from_col=-1, to_row=-1):
 
-        try:
-            # let's assume the cell contain a regular item
+        if from_col in INDEX_OF_COLUMNS_WITH_ITEMS:
             _from_cell_value = self.table_ui.item(from_row, from_col).text()
             self.table_ui.item(to_row, from_col).setText(_from_cell_value)
-        except:
+
+        elif from_col in INDEX_OF_COLUMNS_WITH_COMBOBOX:
             ui = self.table_ui.cellWidget(from_row, from_col).children()[1]
-            # let's assume now that the cell contain a combobox
+            _from_index = ui.currentIndex()
+            self.table_ui.cellWidget(to_row, from_col).children()[1].setCurrentIndex(_from_index)
 
-            if isinstance(ui, QComboBox):
-                _from_index = ui.currentIndex()
-                self.table_ui.cellWidget(to_row, from_col).children()[1].setCurrentIndex(_from_index)
-            # checkbox
+        elif from_col in INDEX_OF_COLUMNS_WITH_CHECKBOX:
+            ui = self.table_ui.cellWidget(from_row, from_col).children()[1]
+            _state = ui.checkState()
+            self.table_ui.cellWidget(to_row, from_col).children()[1].setCheckState(_state)
 
-            elif isinstance(ui, QCheckBox):
-                _state = ui.checkState()
-                self.table_ui.cellWidget(to_row, from_col).children()[1].setCheckState(_state)
-
-            elif from_col in INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS:
-                o_utilities = Utilities(parent=self.parent)
-                _from_key = o_utilities.get_row_key_from_row_index(row=from_row)
-                _to_key = o_utilities.get_row_key_from_row_index(row=to_row)
-                _master_table_row_ui = self.parent.master_table_list_ui
-                if from_col == INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS[0]: # sample
-                    data_type = 'sample'
-                else:
-                    data_type = 'normalization'
-                _radius = str(_master_table_row_ui[_from_key][data_type]['geometry']['radius']['value'].text())
-                _radius2 = str(_master_table_row_ui[_from_key][data_type]['geometry']['radius2']['value'].text())
-                _height = str(_master_table_row_ui[_from_key][data_type]['geometry']['height']['value'].text())
-
-                self.parent.master_table_list_ui[_to_key][data_type]['geometry']['radius']['value'].setText(_radius)
-                self.parent.master_table_list_ui[_to_key][data_type]['geometry']['radius2']['value'].setText(_radius2)
-                self.parent.master_table_list_ui[_to_key][data_type]['geometry']['height']['value'].setText(_height)
-
-            elif from_col in INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA:
-                o_utilities = Utilities(parent=self.parent)
-                _from_key = o_utilities.get_row_key_from_row_index(row=from_row)
-                _to_key = o_utilities.get_row_key_from_row_index(row=to_row)
-                _master_table_row_ui = self.parent.master_table_list_ui
-                if from_col == INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA[0]: # sample
-                    data_type = 'sample'
-                else:
-                    data_type = 'normalization'
-                _chemical_formula = str(_master_table_row_ui[_from_key][data_type]['material']['text'].text())
-                self.parent.master_table_list_ui[_to_key][data_type]['material']['text'].setText(_chemical_formula)
-
+        elif from_col in INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS:
+            o_utilities = Utilities(parent=self.parent)
+            _from_key = o_utilities.get_row_key_from_row_index(row=from_row)
+            _to_key = o_utilities.get_row_key_from_row_index(row=to_row)
+            _master_table_row_ui = self.parent.master_table_list_ui
+            if from_col == INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS[0]: # sample
+                data_type = 'sample'
             else:
-                self.parent.ui.statusbar.setStyleSheet("color: red")
-                self.parent.ui.statusbar.showMessage("Don't know how to copy/paste the cell from row #{} to row #{} at the column #{}".format(from_row, to_row, from_col),
-                                                     self.parent.statusbar_display_time*2)
+                data_type = 'normalization'
+            _radius = str(_master_table_row_ui[_from_key][data_type]['geometry']['radius']['value'].text())
+            _radius2 = str(_master_table_row_ui[_from_key][data_type]['geometry']['radius2']['value'].text())
+            _height = str(_master_table_row_ui[_from_key][data_type]['geometry']['height']['value'].text())
+
+            self.parent.master_table_list_ui[_to_key][data_type]['geometry']['radius']['value'].setText(_radius)
+            self.parent.master_table_list_ui[_to_key][data_type]['geometry']['radius2']['value'].setText(_radius2)
+            self.parent.master_table_list_ui[_to_key][data_type]['geometry']['height']['value'].setText(_height)
+
+        elif from_col in INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA:
+            o_utilities = Utilities(parent=self.parent)
+            _from_key = o_utilities.get_row_key_from_row_index(row=from_row)
+            _to_key = o_utilities.get_row_key_from_row_index(row=to_row)
+            _master_table_row_ui = self.parent.master_table_list_ui
+            if from_col == INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA[0]: # sample
+                data_type = 'sample'
+            else:
+                data_type = 'normalization'
+            _chemical_formula = str(_master_table_row_ui[_from_key][data_type]['material']['text'].text())
+            self.parent.master_table_list_ui[_to_key][data_type]['material']['text'].setText(_chemical_formula)
+
+        elif from_col in INDEX_OF_COLUMNS_WITH_MASS_DENSITY:
+            o_utilities = Utilities(parent=self.parent)
+            _from_key = o_utilities.get_row_key_from_row_index(row=from_row)
+            _to_key = o_utilities.get_row_key_from_row_index(row=to_row)
+            _master_table_row_ui = self.parent.master_table_list_ui
+            if from_col == INDEX_OF_COLUMNS_WITH_MASS_DENSITY[0]: # sample
+                data_type = 'sample'
+            else:
+                data_type = 'normalization'
+            _mass_density = str(_master_table_row_ui[_from_key][data_type]['mass_density']['text'].text())
+            self.parent.master_table_list_ui[_to_key][data_type]['mass_density']['text'].setText(_mass_density)
+
+            self.parent.master_table_list_ui[_to_key][data_type]['mass_density_infos']['number_density']['value'] = \
+            self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['number_density']['value']
+
+            self.parent.master_table_list_ui[_to_key][data_type]['mass_density_infos']['number_density']['selected'] = \
+            self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['number_density']['selected']
+
+            self.parent.master_table_list_ui[_to_key][data_type]['mass_density_infos']['mass_density']['value'] = \
+            self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['mass_density']['value']
+
+            self.parent.master_table_list_ui[_to_key][data_type]['mass_density_infos']['mass_density']['selected'] = \
+            self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['mass_density']['selected']
+
+            self.parent.master_table_list_ui[_to_key][data_type]['mass_density_infos']['mass']['value'] = \
+            self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['mass']['value']
+
+            self.parent.master_table_list_ui[_to_key][data_type]['mass_density_infos']['mass']['selected'] = \
+            self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['mass']['selected']
+
+        else:
+            self.parent.ui.statusbar.setStyleSheet("color: red")
+            self.parent.ui.statusbar.showMessage("Don't know how to copy/paste the cell from row #{} to row #{} at the column #{}".format(from_row, to_row, from_col),
+                                                 self.parent.statusbar_display_time*2)
 
 
 class TableHandler(SelectionHandlerMaster):
