@@ -36,9 +36,9 @@ class TableRowHandler:
         row = self._calculate_insert_row()
         self.insert_row(row=row)
 
-    def transfer_widget_states(self, from_key=None):
+    def transfer_widget_states(self, from_key=None, data_type='sample'):
         o_transfer = TransferH3TableWidgetState(parent=self.parent)
-        o_transfer.transfer_states(from_key=from_key)
+        o_transfer.transfer_states(from_key=from_key, data_type=data_type)
 
     # global methods
     def shape_changed(self, shape='cylindrical', key=None, data_type='sample'):
@@ -105,11 +105,11 @@ class TableRowHandler:
         self.parent.master_table_list_ui[key][data_type]['geometry']['radius2']['label'].setText(_label_radius_2)
 
         # change state of other widgets of the same column if they are selected
-        self.transfer_widget_states(from_key=key)
+        self.transfer_widget_states(from_key=key, data_type=data_type)
 
     def abs_correction_changed(self, value='', key=None, data_type='sample'):
         # change state of other widgets of the same column if they are selected
-        self.transfer_widget_states(from_key=key)
+        self.transfer_widget_states(from_key=key, data_type=data_type)
 
     def inelastic_correction_changed(self, value=None, key=None, data_type='sample'):
         show_button = True
@@ -120,18 +120,18 @@ class TableRowHandler:
         _ui.setVisible(show_button)
 
         # change state of other widgets of the same column if they are selected
-        self.transfer_widget_states()
+        self.transfer_widget_states(from_key=key, data_type=data_type)
 
     def multi_scattering_correction(self, value='', key=None, data_type='sample'):
         # change state of other widgets of the same column if they are selected
-        self.transfer_widget_states(from_key=key)
+        self.transfer_widget_states(from_key=key, data_type=data_type)
 
     def placzek_button_pressed(self, key=None, data_type='sample'):
         o_placzek = PlaczekHandler(parent=self.parent, key=key, data_type=data_type)
 
     def activated_row_changed(self, key=None):
         # change state of other widgets of the same column if they are selected
-        self.transfer_widget_states(from_key=key)
+        self.transfer_widget_states(from_key=key, data_type=data_type)
 
     def grouping_button(self, key=None, grouping_type='input'):
         message = "Select {} grouping".format(grouping_type)

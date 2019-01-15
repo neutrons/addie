@@ -124,7 +124,7 @@ class TransferH3TableWidgetState(SelectionHandlerMaster):
     def __init__(self, parent=None):
         SelectionHandlerMaster.__init__(self, parent=parent)
 
-    def transfer_states(self, from_key=None):
+    def transfer_states(self, from_key=None, data_type='sample'):
 
         selection = self.parent.ui.h3_table.selectedRanges()
         o_selection = SelectionHandler(selection)
@@ -140,7 +140,7 @@ class TransferH3TableWidgetState(SelectionHandlerMaster):
             o_utilities = Utilities(parent=self.parent)
             from_row = o_utilities.get_row_index_from_row_key(row_key=from_key)
 
-            # activate row widget
+            # activate row widget (first column)
             if (column_selected == 0):
 
                 #state = self.table_ui.cellWidget(from_row, 0).children()[1].checkState()
@@ -149,27 +149,27 @@ class TransferH3TableWidgetState(SelectionHandlerMaster):
                 # apply state to all the widgets
                 for _row in range_row:
                     _to_key = o_utilities.get_row_key_from_row_index(row=_row)
-                    #ui = self.table_ui.cellWidget(_row, 0).children()[1]
                     ui = master_table_row_ui[_to_key]['active']
                     ui.blockSignals(True)
                     ui.setCheckState(state)
                     ui.blockSignals(False)
 
-            # # sample or normalization, shape, abs. corr., mult. scat. corr or inelastic corr.
-            # elif (column_selected in INDEX_OF_COLUMNS_WITH_COMBOBOX):
-            #
-            #     _index =
-            #
-            #     for _row in range_row:
-            #         ui = self.table_ui.cellWidget(_row, column_selected).children()[1]
-            #         index = ui.findText(value)
-            #         # we found the text
-            #         if index > -1:
-            #             #if not column_selected in [7, 18]:
-            #             #    ui.blockSignals(True)
-            #             ui.setCurrentIndex(index)
-            #             #if not column_selected in [7, 18]:
-            #             #    ui.blockSignals(False)
+            # sample or normalization, shape, abs. corr., mult. scat. corr or inelastic corr.
+            elif (column_selected in INDEX_OF_COLUMNS_WITH_COMBOBOX):
+
+                ui = self.table_ui.cellWidget(from_row, column_selected).children()[1]
+                index = ui.currentIndex()
+
+                for _row in range_row:
+                    if _row == from_row:
+                        continue
+                        
+                    ui = self.table_ui.cellWidget(_row, column_selected).children()[1]
+
+                    if index > -1:
+                        #ui.blockSignals(True)
+                        ui.setCurrentIndex(index)
+                        #ui.blockSignals(False)
             #
             # elif (column_selected in INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA):
             #
