@@ -503,11 +503,15 @@ class PeriodicTable(QMainWindow):
     def og_button(self):
         self.click_button('og')
 
+    def calculate_full_molecular_mass(self):
+        chemical_formula = str(self.ui.chemical_formula.text())
+
     def ok(self):
         self.parent.material_ui = None
         chemical_formula = str(self.ui.chemical_formula.text())
         text_ui = self.parent.master_table_list_ui[self.key][self.data_type]['material']['text']
         text_ui.setText(chemical_formula)
+        self.calculate_full_molecular_mass()
         o_table = TableRowHandler(parent=self.parent)
         o_table.transfer_widget_states(from_key=self.key, data_type=self.data_type)
         self.close()
@@ -515,6 +519,10 @@ class PeriodicTable(QMainWindow):
     def cancel(self):
         self.parent.material_ui = None
         self.close()
+
+    def closeEvent(self, c):
+        self.parent.material_ui = None
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

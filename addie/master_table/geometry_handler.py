@@ -155,3 +155,4 @@ class DimensionsSetter(QDialog):
         o_table.transfer_widget_states(from_key=self.key, data_type=self.data_type)
 
         self.close()
+

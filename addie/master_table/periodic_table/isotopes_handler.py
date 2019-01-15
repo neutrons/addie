@@ -37,7 +37,7 @@ class IsotopeDialog(QDialog):
         self.init_widgets(element)
 
     def init_widgets(self, element):
-        list_isotopes = []
+        list_isotopes = [element]
         for iso in getattr(periodictable, element):
             #reformat
             list_str_iso = str(iso).split('-')
