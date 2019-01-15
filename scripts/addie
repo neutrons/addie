@@ -2639,6 +2639,10 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     def master_table_sample_mass_density_button_pressed(self, key):
         MassDensityHandler(parent=self, data_type='sample', key=key)
 
+    def master_table_sample_mass_density_line_edit_entered(self, key):
+        o_table = TableRowHandler(parent=self)
+        o_table.transfer_widget_states(from_key=key, data_type='sample')
+
     def master_table_sample_shape_changed(self, text, key):
         o_table = TableRowHandler(parent=self)
         o_table.shape_changed(shape=text, key=key, data_type='sample')
@@ -2673,6 +2677,10 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     def master_table_normalization_mass_density_button_pressed(self, key):
         MassDensityHandler(parent=self, data_type='normalization', key=key)
+
+    def master_table_normalization_mass_density_line_edit_entered(self, key):
+        o_table = TableRowHandler(parent=self)
+        o_table.transfer_widget_states(from_key=key, data_type='normalization')
 
     def master_table_normalization_shape_changed(self, text, key):
         o_table = TableRowHandler(parent=self)

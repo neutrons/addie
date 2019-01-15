@@ -6,6 +6,8 @@ except:
     except:
         raise ImportError("Requires PyQt4 or PyQt5")
 
+from addie.master_table.table_row_handler import TableRowHandler
+
 from addie.ui_mass_density import Ui_Dialog as UiDialog
 
 
@@ -134,6 +136,8 @@ class MassDensityWindow(QDialog):
     def accept(self):
         self.parent.mass_density_ui = None
         self.save()
+        o_table = TableRowHandler(parent=self.parent)
+        o_table.transfer_widget_states(from_key=self.key, data_type=self.data_type)
         self.close()
 
     def reject(self):

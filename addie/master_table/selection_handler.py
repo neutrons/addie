@@ -183,6 +183,22 @@ class TransferH3TableWidgetState(SelectionHandlerMaster):
                     _to_key = o_utilities.get_row_key_from_row_index(row=_row)
                     master_table_row_ui[_to_key][data_type]['material']['text'].setText(chemical_formula)
 
+            elif (column_selected in INDEX_OF_COLUMNS_WITH_MASS_DENSITY):
+
+                o_utilities = Utilities(parent=self.parent)
+                _from_key = o_utilities.get_row_key_from_row_index(row=from_row)
+
+                mass_density_info = master_table_row_ui[_from_key][data_type]['mass_density_infos']
+                mass_density_value = str(master_table_row_ui[_from_key][data_type]['mass_density']['text'].text())
+
+                for _row in range_row:
+                    if _row == from_row:
+                        continue
+
+                    _to_key = o_utilities.get_row_key_from_row_index(row=_row)
+
+                    master_table_row_ui[_to_key][data_type]['mass_density_infos'] = mass_density_info
+                    master_table_row_ui[_to_key][data_type]['mass_density']['text'].setText(mass_density_value)
 
 class RowsHandler(SelectionHandlerMaster):
 
