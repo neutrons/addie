@@ -210,12 +210,14 @@ class PeriodicTable(QMainWindow):
     def chemical_formula_changed(self, new_formula):
         pass
 
-    def add_new_entry(self, isotope='', number=1):
+    def add_new_entry(self, isotope='', number=1, is_natural_element=False):
         if isotope == '':
             return
 
         previous_chemical_formula = str(self.ui.chemical_formula.text())
-        if number > 1:
+        if is_natural_element:
+            new_isotope_string = "{}{}".format(isotope, number)
+        elif number > 1:
             new_isotope_string = "({}){}".format(isotope, number)
         else:
             new_isotope_string = "{}".format(isotope)
