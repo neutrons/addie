@@ -2626,7 +2626,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     # widgets from master table
     def master_table_select_state_changed(self, state, key):
         o_table = TableRowHandler(parent=self)
-        o_table.activated_row_changed(state=state)
+        o_table.activated_row_changed(key=key)
 
     ## sample columns
     def master_table_sample_material_button_pressed(self, key):

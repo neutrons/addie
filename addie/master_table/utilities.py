@@ -1,4 +1,6 @@
 from xml.dom import minidom
+import numpy as np
+
 
 class Utilities:
     '''utilities related to work in master table'''
@@ -9,7 +11,22 @@ class Utilities:
 
     def get_row_index_from_row_key(self, row_key=None):
         '''this methods returns the row for the given row key'''
-        pass
+
+        if row_key == None:
+            return -1
+
+        master_table_row_ui = self.parent.master_table_list_ui
+        nbr_row = self.parent.ui.h3_table.rowCount()
+
+        checkbox_ui_of_row_key = master_table_row_ui[row_key]['active']
+
+        for _row in np.arange(nbr_row):
+
+            _ui_checkbox = self.parent.ui.h3_table.cellWidget(_row, 0).children()[1]
+            if _ui_checkbox == checkbox_ui_of_row_key:
+                return _row
+
+        return -1
 
     def get_row_key_from_row_index(self, row=-1):
         '''this method returns the key (random key) of the given row in master table.
