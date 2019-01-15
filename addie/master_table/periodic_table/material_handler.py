@@ -11,6 +11,8 @@ except:
     except ImportError:
         raise ImportError("Requires PyQt4 or PyQt5")
 
+from addie.master_table.table_row_handler import TableRowHandler
+
 from addie.ui_periodic_table import Ui_MainWindow as UiMainWindow
 from isotopes_handler import IsotopesHandler
 
@@ -506,6 +508,8 @@ class PeriodicTable(QMainWindow):
         chemical_formula = str(self.ui.chemical_formula.text())
         text_ui = self.parent.master_table_list_ui[self.key][self.data_type]['material']['text']
         text_ui.setText(chemical_formula)
+        o_table = TableRowHandler(parent=self.parent)
+        o_table.transfer_widget_states(from_key=self.key, data_type=self.data_type)
         self.close()
 
     def cancel(self):

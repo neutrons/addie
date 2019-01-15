@@ -163,26 +163,25 @@ class TransferH3TableWidgetState(SelectionHandlerMaster):
                 for _row in range_row:
                     if _row == from_row:
                         continue
-                        
+
                     ui = self.table_ui.cellWidget(_row, column_selected).children()[1]
 
                     if index > -1:
                         #ui.blockSignals(True)
                         ui.setCurrentIndex(index)
                         #ui.blockSignals(False)
-            #
-            # elif (column_selected in INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA):
-            #
-            #     o_utilities = Utilities(parent=self.parent)
-            #     for _row in range_row:
-            #         _from_key = o_utilities.get_row_key_from_row_index(row=_row)
-            #         _to_key = o_utilities.get_row_key_from_row_index(row=to_row)
-            #         _master_table_row_ui = self.parent.master_table_list_ui
-            #         if from_col == INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS[0]:  # sample
-            #             data_type = 'sample'
-            #         else:
-            #             data_type = 'normalization'
 
+            elif (column_selected in INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA):
+
+                o_utilities = Utilities(parent=self.parent)
+                _from_key = o_utilities.get_row_key_from_row_index(row=from_row)
+                chemical_formula = str(master_table_row_ui[_from_key][data_type]['material']['text'].text())
+                for _row in range_row:
+                    if _row == from_row:
+                        continue
+
+                    _to_key = o_utilities.get_row_key_from_row_index(row=_row)
+                    master_table_row_ui[_to_key][data_type]['material']['text'].setText(chemical_formula)
 
 
 class RowsHandler(SelectionHandlerMaster):

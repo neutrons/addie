@@ -271,6 +271,9 @@ class TableRowHandler:
         # column 5 - material (chemical formula)
         column += 1
         _material_text = QLineEdit("")
+        QtCore.QObject.connect(_material_text, QtCore.SIGNAL("returnPressed()"),
+                               lambda key=random_key:
+                               self.parent.master_table_sample_material_line_edit_entered(key))
         _material_button = QPushButton("...")
         QtCore.QObject.connect(_material_button, QtCore.SIGNAL("pressed()"),
                                lambda key=random_key:
@@ -529,6 +532,9 @@ class TableRowHandler:
         # column 16 - material
         column += 1
         _material_text = QLineEdit("")
+        QtCore.QObject.connect(_material_text, QtCore.SIGNAL("returnPressed()"),
+                               lambda key=random_key:
+                               self.parent.master_table_normalization_material_line_edit_entered(key))
         _material_button = QPushButton("...")
         QtCore.QObject.connect(_material_button, QtCore.SIGNAL("pressed()"),
                                lambda key=random_key:
