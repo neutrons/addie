@@ -158,7 +158,15 @@ class MassDensityWindow(QMainWindow):
         self.ui.number_density_line_edit.setText(number_density)
 
     def number_density_value_changed(self):
-        pass
+        # calculate mass density if chemical formula defined
+        if self.chemical_formula_defined:
+            number_density = np.float(self.ui.number_density_line_edit.text())
+            avogadro = scipy.constants.N_A
+            mass_density = number_density * self.total_molecular_mass / self.total_number_of_atoms / (avogadro/1e24)
+            mass_density = "{:.5}".format(mass_density)
+        else:
+            mass_density = 'N/A'
+        self.ui.mass_density_line_edit.setText(mass_density)
 
     def mass_value_changed(self):
         pass
