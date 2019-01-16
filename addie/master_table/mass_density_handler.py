@@ -9,6 +9,7 @@ except:
 from addie.master_table.table_row_handler import TableRowHandler
 
 from addie.ui_mass_density import Ui_Dialog as UiDialog
+from addie.utilities.math_tools import is_number, volume_of_cylinder, volume_of_hollow_cylinder, volume_of_sphere
 
 
 class MassDensityHandler:
@@ -41,15 +42,20 @@ class MassDensityWindow(QDialog):
     def init_widgets(self):
         self.ui.number_density_units.setText(u"Atoms/\u212B\u00B3")
         self.ui.mass_density_label.setText(u"g/cm\u00B3")
+        self.ui.volume_units.setText(u"cm\u00B3")
+        self.ui.ok.setEnabled(False)
 
         # error messages
         self.ui.mass_density_error_message.setStyleSheet("color: red")
         self.ui.number_density_error_message.setStyleSheet("color: red")
+        self.ui.mass_error_message.setStyleSheet("color: red")
 
         # geometry
         geometry = str(self.parent.master_table_list_ui[self.key][self.data_type]['shape'].currentText())
         self.ui.geometry_label.setText(geometry)
-
+        self.geometry_dimensions_defined = self._is_geometry_dimensions_defined()
+        if self.geometry_dimensions_defined:
+            self._calculate_and_display_geometry_volume()
         self.chemical_formula_defined = self._is_chemical_formula_defined()
 
         mass_density_list_ui = self.parent.master_table_list_ui[self.key][self.data_type]
@@ -95,6 +101,49 @@ class MassDensityWindow(QDialog):
             return False
         return True
 
+    def _is_geometry_dimensions_defined(self):
+        geometry_defined = str(self.ui.geometry_label.text())
+        radius = str(self.parent.master_table_list_ui[self.key][self.data_type]['geometry']['radius']['value'].text())
+        radius2 = str(self.parent.master_table_list_ui[self.key][self.data_type]['geometry']['radius2']['value'].text())
+        height = str(self.parent.master_table_list_ui[self.key][self.data_type]['geometry']['height']['value'].text())
+
+        if geometry_defined.lower() == 'cylindrical':
+            if is_number(radius) and is_number(height):
+                return True
+        elif geometry_defined.lower() == 'spherical':
+            if is_number(radius):
+                return True
+        else:
+            if is_number(radius) and is_number(radius2) and is_number(height):
+                return True
+
+        return False
+
+    def _calculate_and_display_geometry_volume(self):
+        geometry_defined = str(self.ui.geometry_label.text())
+        radius = str(self.parent.master_table_list_ui[self.key][self.data_type]['geometry']['radius']['value'].text())
+        radius2 = str(self.parent.master_table_list_ui[self.key][self.data_type]['geometry']['radius2']['value'].text())
+        height = str(self.parent.master_table_list_ui[self.key][self.data_type]['geometry']['height']['value'].text())
+
+        if geometry_defined.lower() == 'cylindrical':
+            volume = volume_of_cylinder(radius=radius, height=height)
+        elif geometry_defined.lower() == 'spherical':
+            volume = volume_of_sphere(radius=radius)
+        else:
+            volume = volume_of_hollow_cylinder(inner_radius=radius, outer_radius=radius2, height=height)
+
+        str_volume = "{:.4}".format(volume)
+        self.ui.volume_label.setText(str_volume)
+
+    def mass_density_value_changed(self):
+        pass
+
+    def number_density_value_changed(self):
+        pass
+
+    def mass_value_changed(self):
+        pass
+
     def radio_button_changed(self):
         mass_density_line_edit_status = False
         number_density_line_edit_status = False
@@ -103,14 +152,17 @@ class MassDensityWindow(QDialog):
             self.ui.mass_density_error_message.setVisible(False)
             self.ui.number_density_error_message.setVisible(not self.chemical_formula_defined)
             mass_density_line_edit_status = True
+            self.ui.mass_error_message.setVisible(False)
         elif self.ui.number_density_radio_button.isChecked():
             self.ui.mass_density_error_message.setVisible(not self.chemical_formula_defined)
             self.ui.number_density_error_message.setVisible(False)
             number_density_line_edit_status = True
+            self.ui.mass_error_message.setVisible(False)
         else:
-            self.ui.mass_density_error_message.setVisible(False)
-            self.ui.number_density_error_message.setVisible(False)
+            self.ui.mass_density_error_message.setVisible(not self.chemical_formula_defined)
+            self.ui.number_density_error_message.setVisible(not self.chemical_formula_defined)
             mass_line_edit_status = True
+            self.ui.mass_error_message.setVisible(not self.geometry_dimensions_defined)
 
         self.ui.mass_line_edit.setEnabled(mass_line_edit_status)
         self.ui.number_density_line_edit.setEnabled(number_density_line_edit_status)
