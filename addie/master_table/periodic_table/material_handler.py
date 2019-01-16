@@ -546,14 +546,17 @@ class PeriodicTable(QMainWindow):
         '''
         list_element = chemical_formula.split(" ")
         periodictable_list_element_format = []
-        for _element in list_element:
-            periodictable_list_element_format.append(self.get_periodictable_formatted_element(_element))
+        try:
+            for _element in list_element:
+                periodictable_list_element_format.append(self.get_periodictable_formatted_element(_element))
 
-        periodictable_format = " ".join(periodictable_list_element_format)
-        print(periodictable_format)
-        print("Periodicable format: {}".format(formula(periodictable_format)))
+            periodictable_format = " ".join(periodictable_list_element_format)
+            periodictable_formula = formula(periodictable_format)
+            self.molecular_mass = periodictable_formula.mass
+            return True
 
-        return True
+        except:
+            return False
 
     def ok(self):
         chemical_formula = str(self.ui.chemical_formula.text())
@@ -564,6 +567,7 @@ class PeriodicTable(QMainWindow):
             self.calculate_full_molecular_mass()
             o_table = TableRowHandler(parent=self.parent)
             o_table.transfer_widget_states(from_key=self.key, data_type=self.data_type)
+            print(self.molecular_mass)
             self.close()
         else:
             self.ui.statusbar.setStyleSheet("color: red")
