@@ -216,7 +216,21 @@ class MassDensityWindow(QMainWindow):
 
     def update_status_of_save_button(self):
         # check the active radio button and check if value is there to enable save button
-        pass
+        enabled_save_button = False
+        if self.ui.mass_density_radio_button.isSelected():
+            string_value = str(self.ui.mass_density_line_edit.text())
+            if is_number(string_value):
+                enabled_save_button = True
+        elif self.ui.number_density_radio_button.isSelected():
+            string_value = str(self.ui.number_density_line_edit.text())
+            if is_number(string_value):
+                enabled_save_button = True
+        else:
+            string_value = str(self.ui.mass_line_edit.text())
+            if is_number(string_value) and self.chemical_formula_defined and \
+                self.geometry_dimensions_defined:
+                enabled_save_button = True
+        self.ui.ok.setEnabled(enabled_save_button)
 
     def save(self):
         mass_density_list_ui = self.parent.master_table_list_ui[self.key][self.data_type]
