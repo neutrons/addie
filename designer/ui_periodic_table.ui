@@ -2255,7 +2255,7 @@
     <item>
      <widget class="QLabel" name="label_2">
       <property name="text">
-       <string>Instructions: Select Elements/Isotopes or Manually Defined the Formula.    Example:   (7Li)2-(16O)3-103Sb</string>
+       <string>Instructions: Select Elements/Isotopes or Manually Defined the Formula.    Example:   (Li7)2 (O16)3 (Sb103) C</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>

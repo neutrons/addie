@@ -995,7 +995,7 @@ class Ui_MainWindow(object):
         self.ta.setText(_translate("MainWindow", "Ta", None))
         self.n.setText(_translate("MainWindow", "N", None))
         self.label.setText(_translate("MainWindow", "Chemical Formula: ", None))
-        self.label_2.setText(_translate("MainWindow", "Instructions: Select Elements/Isotopes or Manually Defined the Formula.    Example:   (7Li)2-(16O)3-103Sb", None))
+        self.label_2.setText(_translate("MainWindow", "Instructions: Select Elements/Isotopes or Manually Defined the Formula.    Example:   (Li7)2 (O16)3 (Sb103) C", None))
         self.pushButton_3.setText(_translate("MainWindow", "Cancel", None))
         self.pushButton_2.setText(_translate("MainWindow", "OK", None))
 

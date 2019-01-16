@@ -170,6 +170,8 @@ class TableRowHandler:
                                'mass_density': copy.deepcopy(_mass_density_options),
                                'mass': copy.deepcopy(_mass_density_options),
                                }
+        _material_infos = {'mantid_format': None,
+                           'addie_format': None}
         _mass_density_infos['mass_density']["selected"] = True
 
         _master_table_row_ui = {'active': None,
@@ -179,6 +181,7 @@ class TableRowHandler:
                                                           'background': None,
                                                           },
                                            'material': copy.deepcopy(_text_button),
+                                           'material_infos': copy.deepcopy(_material_infos),
                                            'mass_density': copy.deepcopy(_text_button),
                                            'mass_density_infos': copy.deepcopy(_mass_density_infos),
                                            'packing_fraction': None,
@@ -195,6 +198,7 @@ class TableRowHandler:
                                                           'background': None,
                                                           },
                                            'material': copy.deepcopy(_text_button),
+                                           'material_infos': copy.deepcopy(_material_infos),
                                            'mass_density': copy.deepcopy(_text_button),
                                            'mass_density_infos': copy.deepcopy(_mass_density_infos),
                                            'packing_fraction': None,
@@ -271,6 +275,7 @@ class TableRowHandler:
         # column 5 - material (chemical formula)
         column += 1
         _material_text = QLineEdit("")
+        _material_text.setEnabled(False)
         QtCore.QObject.connect(_material_text, QtCore.SIGNAL("returnPressed()"),
                                lambda key=random_key:
                                self.parent.master_table_sample_material_line_edit_entered(key))
@@ -535,6 +540,7 @@ class TableRowHandler:
         # column 16 - material
         column += 1
         _material_text = QLineEdit("")
+        _material_text.setEnabled(False)
         QtCore.QObject.connect(_material_text, QtCore.SIGNAL("returnPressed()"),
                                lambda key=random_key:
                                self.parent.master_table_normalization_material_line_edit_entered(key))

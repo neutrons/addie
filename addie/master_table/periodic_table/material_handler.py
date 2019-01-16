@@ -1,5 +1,7 @@
+import re
 import sys
 import copy
+from periodictable import formula
 
 try:
     from PyQt4.QtGui import QMainWindow, QApplication
@@ -44,7 +46,6 @@ class PeriodicTable(QMainWindow):
                   6: copy.deepcopy(list_ui_color),
                   7: copy.deepcopy(list_ui_color),
                   }
-
 
     def __init__(self, parent=None, key=None, data_type='sample'):
 
@@ -510,15 +511,65 @@ class PeriodicTable(QMainWindow):
     def calculate_full_molecular_mass(self):
         chemical_formula = str(self.ui.chemical_formula.text())
 
+    def get_periodictable_formatted_element(self, element):
+        '''The goal of this method is to go from Mantid format of an element (Si28)2 to
+        the format accepted by the periodictable library (to calculate the molecular mass for example) (Si[28]2)'''
+
+        # if we have a single stable element
+        regular_expression_1 = r'^(?P<stable_element>[A-Z]{1}[a-z]{0,1}$)'
+        m1 = re.search(regular_expression_1, element)
+        if not m1 is None:
+            return m1.group('stable_element')
+
+        # stable with stochiometric coefficient
+        regular_expression_2 = r'^(?P<stable_element>[A-Z]{1}[a-z]{0,1})(?P<stochiometric_coefficient>\d+)$'
+        m2 = re.search(regular_expression_2, element)
+        if not m2 is None:
+            return "{}{}".format(m2.group('stable_element'), m2.group('stochiometric_coefficient'))
+
+        # isotope with or without stochiometric coefficient
+        regular_expression_3 = r'^\((?P<isotope_element>[A-Z]{1}[a-z]{0,1})(?P<isotope_number>\d+)\)(?P<stochiometric_coefficient>\d*)$'
+        m3 = re.search(regular_expression_3, element)
+        if not m3 is None:
+            return "{}[{}]{}".format(m3.group('isotope_element'), m3.group('isotope_number'), m3.group('stochiometric_coefficient'))
+
+        raise ValueError
+
+
+    def retrieving_molecular_mass_worked(self, chemical_formula):
+        '''this method will parse the formula to go from Nantid format to periodictable library format, in order
+        to calculate the molecular mass
+
+        return: True if the string has been correctly formatted
+        False if something went wrong
+
+        '''
+        list_element = chemical_formula.split(" ")
+        periodictable_list_element_format = []
+        for _element in list_element:
+            periodictable_list_element_format.append(self.get_periodictable_formatted_element(_element))
+
+        periodictable_format = " ".join(periodictable_list_element_format)
+        print(periodictable_format)
+        print("Periodicable format: {}".format(formula(periodictable_format)))
+
+        return True
+
     def ok(self):
-        self.parent.material_ui = None
         chemical_formula = str(self.ui.chemical_formula.text())
-        text_ui = self.parent.master_table_list_ui[self.key][self.data_type]['material']['text']
-        text_ui.setText(chemical_formula)
-        self.calculate_full_molecular_mass()
-        o_table = TableRowHandler(parent=self.parent)
-        o_table.transfer_widget_states(from_key=self.key, data_type=self.data_type)
-        self.close()
+        if self.retrieving_molecular_mass_worked(chemical_formula):
+            self.parent.material_ui = None
+            text_ui = self.parent.master_table_list_ui[self.key][self.data_type]['material']['text']
+            text_ui.setText(chemical_formula)
+            self.calculate_full_molecular_mass()
+            o_table = TableRowHandler(parent=self.parent)
+            o_table.transfer_widget_states(from_key=self.key, data_type=self.data_type)
+            self.close()
+        else:
+            self.ui.statusbar.setStyleSheet("color: red")
+            self.ui.statusbar.showMessage("Unable to calculate Molecular Mass! CHECK YOUR FORMULA!",
+                                                 self.parent.statusbar_display_time)
+
 
     def cancel(self):
         self.parent.material_ui = None
