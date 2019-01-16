@@ -300,7 +300,7 @@ class TableRowHandler:
 
         # column 6 - mass density
         column += 1
-        _mass_text = QLineEdit("")
+        _mass_text = QLineEdit("N/A")
         QtCore.QObject.connect(_mass_text, QtCore.SIGNAL("returnPressed()"),
                                lambda key=random_key:
                                self.parent.master_table_sample_mass_density_line_edit_entered(key))
@@ -564,7 +564,7 @@ class TableRowHandler:
 
         # column 17 - mass density
         column += 1
-        _mass_text = QLineEdit("")
+        _mass_text = QLineEdit("N/A")
         QtCore.QObject.connect(_mass_text, QtCore.SIGNAL("returnPressed()"),
                                lambda key=random_key:
                                self.parent.master_table_normalization_mass_density_line_edit_entered(key))

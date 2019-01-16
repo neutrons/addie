@@ -96,15 +96,25 @@ class MassDensityWindow(QDialog):
         return True
 
     def radio_button_changed(self):
+        mass_density_line_edit_status = False
+        number_density_line_edit_status = False
+        mass_line_edit_status = False
         if self.ui.mass_density_radio_button.isChecked():
             self.ui.mass_density_error_message.setVisible(False)
             self.ui.number_density_error_message.setVisible(not self.chemical_formula_defined)
+            mass_density_line_edit_status = True
         elif self.ui.number_density_radio_button.isChecked():
             self.ui.mass_density_error_message.setVisible(not self.chemical_formula_defined)
             self.ui.number_density_error_message.setVisible(False)
+            number_density_line_edit_status = True
         else:
             self.ui.mass_density_error_message.setVisible(False)
             self.ui.number_density_error_message.setVisible(False)
+            mass_line_edit_status = True
+
+        self.ui.mass_line_edit.setEnabled(mass_line_edit_status)
+        self.ui.number_density_line_edit.setEnabled(number_density_line_edit_status)
+        self.ui.mass_density_line_edit.setEnabled(mass_density_line_edit_status)
 
     def save(self):
         mass_density_list_ui = self.parent.master_table_list_ui[self.key][self.data_type]

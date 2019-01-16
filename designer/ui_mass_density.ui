@@ -351,8 +351,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>227</x>
-     <y>343</y>
+     <x>236</x>
+     <y>430</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -367,8 +367,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>295</x>
-     <y>349</y>
+     <x>304</x>
+     <y>430</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -399,8 +399,8 @@
    <slot>radio_button_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>50</x>
-     <y>129</y>
+     <x>60</x>
+     <y>180</y>
     </hint>
     <hint type="destinationlabel">
      <x>18</x>
@@ -415,8 +415,8 @@
    <slot>radio_button_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>17</x>
-     <y>244</y>
+     <x>23</x>
+     <y>329</y>
     </hint>
     <hint type="destinationlabel">
      <x>15</x>
@@ -424,8 +424,42 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>mass_density_line_edit</sender>
+   <signal>returnPressed()</signal>
+   <receiver>Dialog</receiver>
+   <slot>mass_density_value_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>205</x>
+     <y>36</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>214</x>
+     <y>103</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>number_density_line_edit</sender>
+   <signal>returnPressed()</signal>
+   <receiver>Dialog</receiver>
+   <slot>number_density_value_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>222</x>
+     <y>173</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>228</x>
+     <y>231</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>radio_button_changed()</slot>
+  <slot>mass_density_value_changed()</slot>
+  <slot>number_density_value_changed()</slot>
  </slots>
 </ui>
