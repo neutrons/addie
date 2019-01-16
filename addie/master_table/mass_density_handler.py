@@ -1,14 +1,17 @@
+import numpy as np
+import scipy.constants
+
 try:
-    from PyQt4.QtGui import QDialog
+    from PyQt4.QtGui import QMainWindow
 except:
     try:
-        from PyQt5.QtWidgets import QDialog
+        from PyQt5.QtWidgets import QMainWindow
     except:
         raise ImportError("Requires PyQt4 or PyQt5")
 
 from addie.master_table.table_row_handler import TableRowHandler
 
-from addie.ui_mass_density import Ui_Dialog as UiDialog
+from addie.ui_mass_density import Ui_MainWindow as UiMainWindow
 from addie.utilities.math_tools import is_number, volume_of_cylinder, volume_of_hollow_cylinder, volume_of_sphere
 
 
@@ -24,17 +27,21 @@ class MassDensityHandler:
             parent.mass_density_ui.activateWindow()
 
 
-class MassDensityWindow(QDialog):
+class MassDensityWindow(QMainWindow):
 
     chemical_formula_defined = False
+    geometry_dimensions_defined = False
+
+    total_number_of_atoms = np.NaN
+    total_molecular_mass = np.NaN
 
     def __init__(self, parent=None, key=None, data_type='sample'):
         self.parent = parent
         self.key = key
         self.data_type = data_type
 
-        QDialog.__init__(self, parent=parent)
-        self.ui = UiDialog()
+        QMainWindow.__init__(self, parent=parent)
+        self.ui = UiMainWindow()
         self.ui.setupUi(self)
 
         self.init_widgets()
@@ -57,6 +64,10 @@ class MassDensityWindow(QDialog):
         if self.geometry_dimensions_defined:
             self._calculate_and_display_geometry_volume()
         self.chemical_formula_defined = self._is_chemical_formula_defined()
+
+        if self.chemical_formula_defined:
+            self.total_number_of_atoms = self.parent.master_table_list_ui[self.key][self.data_type]['mass_density_infos']['total_number_of_atoms']
+            self.total_molecular_mass = self.parent.master_table_list_ui[self.key][self.data_type]['mass_density_infos']['molecular_mass']
 
         mass_density_list_ui = self.parent.master_table_list_ui[self.key][self.data_type]
         mass_density_infos = mass_density_list_ui['mass_density_infos']
@@ -136,7 +147,15 @@ class MassDensityWindow(QDialog):
         self.ui.volume_label.setText(str_volume)
 
     def mass_density_value_changed(self):
-        pass
+        # calculate number density if chemical formula defined
+        if self.chemical_formula_defined:
+            mass_density = np.float(self.ui.mass_density_line_edit.text())
+            avogadro = scipy.constants.N_A
+            number_density = mass_density * (avogadro / 1e24) * self.total_number_of_atoms / self.total_molecular_mass
+            number_density = "{:.5}".format(number_density)
+        else:
+            number_density = 'N/A'
+        self.ui.number_density_line_edit.setText(number_density)
 
     def number_density_value_changed(self):
         pass
