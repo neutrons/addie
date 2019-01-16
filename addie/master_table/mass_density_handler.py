@@ -156,6 +156,7 @@ class MassDensityWindow(QMainWindow):
         else:
             number_density = 'N/A'
         self.ui.number_density_line_edit.setText(number_density)
+        self.update_status_of_save_button()
 
     def number_density_value_changed(self):
         # calculate mass density if chemical formula defined
@@ -167,6 +168,7 @@ class MassDensityWindow(QMainWindow):
         else:
             mass_density = 'N/A'
         self.ui.mass_density_line_edit.setText(mass_density)
+        self.update_status_of_save_button()
 
     def mass_value_changed(self):
         if self.geometry_dimensions_defined and self.chemical_formula_defined:
@@ -181,9 +183,10 @@ class MassDensityWindow(QMainWindow):
         else:
             mass_density = "N/A"
             number_density = "N/A"
-        
+
         self.ui.mass_density_line_edit.setText(mass_density)
         self.ui.number_density_line_edit.setText(number_density)
+        self.update_status_of_save_button()
 
     def radio_button_changed(self):
         mass_density_line_edit_status = False
@@ -208,6 +211,12 @@ class MassDensityWindow(QMainWindow):
         self.ui.mass_line_edit.setEnabled(mass_line_edit_status)
         self.ui.number_density_line_edit.setEnabled(number_density_line_edit_status)
         self.ui.mass_density_line_edit.setEnabled(mass_density_line_edit_status)
+
+        self.update_status_of_save_button()
+
+    def update_status_of_save_button(self):
+        # check the active radio button and check if value is there to enable save button
+        pass
 
     def save(self):
         mass_density_list_ui = self.parent.master_table_list_ui[self.key][self.data_type]
