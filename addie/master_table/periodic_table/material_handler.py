@@ -1,3 +1,4 @@
+import numpy as np
 import re
 import sys
 import copy
@@ -511,7 +512,7 @@ class PeriodicTable(QMainWindow):
     def calculate_full_molecular_mass(self):
         chemical_formula = str(self.ui.chemical_formula.text())
 
-    def get_periodictable_formatted_element(self, element):
+    def get_periodictable_formatted_element_and_number_of_atoms(self, element):
         '''The goal of this method is to go from Mantid format of an element (Si28)2 to
         the format accepted by the periodictable library (to calculate the molecular mass for example) (Si[28]2)'''
 
@@ -519,24 +520,30 @@ class PeriodicTable(QMainWindow):
         regular_expression_1 = r'^(?P<stable_element>[A-Z]{1}[a-z]{0,1}$)'
         m1 = re.search(regular_expression_1, element)
         if not m1 is None:
-            return m1.group('stable_element')
+            return [m1.group('stable_element'), 1]
 
         # stable with stochiometric coefficient
         regular_expression_2 = r'^(?P<stable_element>[A-Z]{1}[a-z]{0,1})(?P<stochiometric_coefficient>\d+)$'
         m2 = re.search(regular_expression_2, element)
         if not m2 is None:
-            return "{}{}".format(m2.group('stable_element'), m2.group('stochiometric_coefficient'))
+            return ["{}{}".format(m2.group('stable_element'), m2.group('stochiometric_coefficient')),
+                    np.int(m2.group('stochiometric_coefficient'))]
 
         # isotope with or without stochiometric coefficient
         regular_expression_3 = r'^\((?P<isotope_element>[A-Z]{1}[a-z]{0,1})(?P<isotope_number>\d+)\)(?P<stochiometric_coefficient>\d*)$'
         m3 = re.search(regular_expression_3, element)
         if not m3 is None:
-            return "{}[{}]{}".format(m3.group('isotope_element'), m3.group('isotope_number'), m3.group('stochiometric_coefficient'))
+            if m3.group('stochiometric_coefficient') == "":
+                number_of_atoms = 1
+            else:
+                number_of_atoms = np.int(m3.group('stochiometric_coefficient'))
+            return ["{}[{}]{}".format(m3.group('isotope_element'), m3.group('isotope_number'), m3.group('stochiometric_coefficient')),
+            number_of_atoms]
 
         raise ValueError
 
 
-    def retrieving_molecular_mass_worked(self, chemical_formula):
+    def retrieving_molecular_mass_and_number_of_atoms_worked(self, chemical_formula):
         '''this method will parse the formula to go from Nantid format to periodictable library format, in order
         to calculate the molecular mass
 
@@ -546,13 +553,17 @@ class PeriodicTable(QMainWindow):
         '''
         list_element = chemical_formula.split(" ")
         periodictable_list_element_format = []
+        total_number_of_atoms = 0
         try:
             for _element in list_element:
-                periodictable_list_element_format.append(self.get_periodictable_formatted_element(_element))
+                [formated_element, number_of_atoms] = self.get_periodictable_formatted_element_and_number_of_atoms(_element)
+                periodictable_list_element_format.append(formated_element)
+                total_number_of_atoms += number_of_atoms
 
             periodictable_format = " ".join(periodictable_list_element_format)
             periodictable_formula = formula(periodictable_format)
             self.molecular_mass = periodictable_formula.mass
+            self.total_number_of_atoms = total_number_of_atoms
             return True
 
         except:
@@ -560,7 +571,7 @@ class PeriodicTable(QMainWindow):
 
     def ok(self):
         chemical_formula = str(self.ui.chemical_formula.text())
-        if self.retrieving_molecular_mass_worked(chemical_formula):
+        if self.retrieving_molecular_mass_and_number_of_atoms_worked(chemical_formula):
             self.parent.material_ui = None
             text_ui = self.parent.master_table_list_ui[self.key][self.data_type]['material']['text']
             text_ui.setText(chemical_formula)
@@ -568,6 +579,7 @@ class PeriodicTable(QMainWindow):
             o_table = TableRowHandler(parent=self.parent)
             o_table.transfer_widget_states(from_key=self.key, data_type=self.data_type)
             self.parent.master_table_list_ui[self.key][self.data_type]['mass_density_infos']['molecular_mass'] = self.molecular_mass
+            self.parent.master_table_list_ui[self.key][self.data_type]['mass_density_infos']['total_number_of_atoms'] = self.total_number_of_atoms
             self.close()
         else:
             self.ui.statusbar.setStyleSheet("color: red")

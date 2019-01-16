@@ -170,6 +170,7 @@ class TableRowHandler:
                                'mass_density': copy.deepcopy(_mass_density_options),
                                'mass': copy.deepcopy(_mass_density_options),
                                'molecular_mass': np.NaN,
+                               'total_number_of_atoms': np.NaN,
                                }
         _material_infos = {'mantid_format': None,
                            'addie_format': None}

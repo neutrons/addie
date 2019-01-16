@@ -2192,19 +2192,6 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Chemical Formula: </string>
@@ -2213,6 +2200,12 @@
       </item>
       <item>
        <widget class="QLineEdit" name="chemical_formula">
+        <property name="minimumSize">
+         <size>
+          <width>300</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="placeholderText">
          <string extracomment="Click elements in table or Define manually Formula"/>
         </property>
@@ -2223,13 +2216,13 @@
         <property name="minimumSize">
          <size>
           <width>30</width>
-          <height>30</height>
+          <height>25</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
           <width>30</width>
-          <height>30</height>
+          <height>25</height>
          </size>
         </property>
         <property name="text">
@@ -2246,19 +2239,6 @@
          <set>Qt::AlignCenter</set>
         </property>
        </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
       </item>
      </layout>
     </item>
