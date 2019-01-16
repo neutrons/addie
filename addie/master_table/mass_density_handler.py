@@ -169,7 +169,21 @@ class MassDensityWindow(QMainWindow):
         self.ui.mass_density_line_edit.setText(mass_density)
 
     def mass_value_changed(self):
-        pass
+        if self.geometry_dimensions_defined and self.chemical_formula_defined:
+            mass = np.float(self.ui.mass_line_edit.text())
+            volume = np.float(self.ui.volume_label.text())
+            avogadro = scipy.constants.N_A
+
+            mass_density = mass / volume
+            number_density = mass_density * (avogadro / 1e24) * self.total_number_of_atoms / self.total_molecular_mass
+            number_density = "{:.5}".format(number_density)
+            mass_density = "{:.5}".format(mass_density)
+        else:
+            mass_density = "N/A"
+            number_density = "N/A"
+        
+        self.ui.mass_density_line_edit.setText(mass_density)
+        self.ui.number_density_line_edit.setText(number_density)
 
     def radio_button_changed(self):
         mass_density_line_edit_status = False
