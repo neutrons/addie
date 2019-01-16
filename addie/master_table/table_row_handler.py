@@ -21,7 +21,7 @@ except ImportError:
 
 from addie.master_table.placzek_handler import PlaczekHandler
 from addie.master_table.selection_handler import TransferH3TableWidgetState
-from addie.master_table.tree_definition import COLUMN_DEFAULT_HEIGHT
+from addie.master_table.tree_definition import COLUMN_DEFAULT_HEIGHT, CONFIG_BUTTON_HEIGHT, CONFIG_BUTTON_WIDTH
 
 from addie.ui_dimensions_setter import Ui_Dialog as UiDialog
 
@@ -281,6 +281,8 @@ class TableRowHandler:
                                lambda key=random_key:
                                self.parent.master_table_sample_material_line_edit_entered(key))
         _material_button = QPushButton("...")
+        _material_button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
+        _material_button.setFixedWidth(CONFIG_BUTTON_WIDTH)
         QtCore.QObject.connect(_material_button, QtCore.SIGNAL("pressed()"),
                                lambda key=random_key:
                                self.parent.master_table_sample_material_button_pressed(key))
@@ -311,6 +313,8 @@ class TableRowHandler:
         _top_layout.addWidget(_mass_units)
         _top_widget.setLayout(_top_layout)
         _mass_button = QPushButton("...")
+        _mass_button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
+        _mass_button.setFixedWidth(CONFIG_BUTTON_WIDTH)
         QtCore.QObject.connect(_mass_button, QtCore.SIGNAL("pressed()"),
                                lambda key=random_key:
                                self.parent.master_table_sample_mass_density_button_pressed(key))
@@ -399,7 +403,8 @@ class TableRowHandler:
         _geometry_widget.setLayout(_grid_layout)
 
         _set_dimensions_button = QPushButton("...")
-        _set_dimensions_button.setFixedHeight(15)
+        _set_dimensions_button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
+        _set_dimensions_button.setFixedWidth(CONFIG_BUTTON_WIDTH)
         _verti_layout = QVBoxLayout()
         _verti_layout.addWidget(_geometry_widget)
         _verti_layout.addWidget(_set_dimensions_button)
@@ -493,13 +498,14 @@ class TableRowHandler:
                 _widget1.addItem(_item)
         _master_table_row_ui['sample']['inelastic_correction'] = _widget1
         _button = QPushButton("...")
+        _button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
+        _button.setFixedWidth(CONFIG_BUTTON_WIDTH)
         # _button.pressed.connect(lambda key=random_key:
         #                        self.parent.master_table_sample_placzek_button_pressed(key))
         QtCore.QObject.connect(_button, QtCore.SIGNAL("pressed()"),
                                lambda key=random_key:
                                self.parent.master_table_sample_placzek_button_pressed(key))
         _master_table_row_ui['sample']['placzek_button'] = _button
-        _button.setFixedWidth(35)
         _button.setVisible(False)
         _master_table_row_ui['sample']['placzek_button'] = _button
         _layout.addWidget(_widget1)
@@ -546,6 +552,8 @@ class TableRowHandler:
                                lambda key=random_key:
                                self.parent.master_table_normalization_material_line_edit_entered(key))
         _material_button = QPushButton("...")
+        _material_button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
+        _material_button.setFixedWidth(CONFIG_BUTTON_WIDTH)
         QtCore.QObject.connect(_material_button, QtCore.SIGNAL("pressed()"),
                                lambda key=random_key:
                                self.parent.master_table_normalization_material_button_pressed(key))
@@ -575,6 +583,8 @@ class TableRowHandler:
         _top_layout.addWidget(_mass_units)
         _top_widget.setLayout(_top_layout)
         _mass_button = QPushButton("...")
+        _mass_button.setFixedWidth(CONFIG_BUTTON_WIDTH)
+        _mass_button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
         QtCore.QObject.connect(_mass_button, QtCore.SIGNAL("pressed()"),
                                lambda key=random_key:
                                self.parent.master_table_normalization_mass_density_button_pressed(key))
@@ -662,7 +672,8 @@ class TableRowHandler:
         _geometry_widget.setLayout(_grid_layout)
 
         _set_dimensions_button = QPushButton("...")
-        _set_dimensions_button.setFixedHeight(15)
+        _set_dimensions_button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
+        _set_dimensions_button.setFixedWidth(CONFIG_BUTTON_WIDTH)
         _verti_layout = QVBoxLayout()
         _verti_layout.addWidget(_geometry_widget)
         _verti_layout.addWidget(_set_dimensions_button)
@@ -735,13 +746,14 @@ class TableRowHandler:
         _widget1.setCurrentIndex(0)
         _master_table_row_ui['normalization']['inelastic_correction'] = _widget1
         _button = QPushButton("...")
+        _button.setFixedWidth(CONFIG_BUTTON_WIDTH)
+        _button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
         # _button.pressed.connect(lambda key=random_key:
         #                        self.parent.master_table_normalization_placzek_button_pressed(key))
         QtCore.QObject.connect(_button, QtCore.SIGNAL("pressed()"),
                                lambda key=random_key:
                                self.parent.master_table_normalization_placzek_button_pressed(key))
         _master_table_row_ui['normalization']['placzek_button'] = _button
-        _button.setFixedWidth(35)
         _button.setVisible(False)
         _layout.addWidget(_widget1)
         _layout.addWidget(_button)

@@ -9,6 +9,8 @@ CONFIG_FILE = os.path.join(user_home, '.addie_config.cfg')
 
 COLUMN_DEFAULT_WIDTH = 90
 COLUMN_DEFAULT_HEIGHT = 120
+CONFIG_BUTTON_HEIGHT = 20
+CONFIG_BUTTON_WIDTH = 30
 
 h3_COLUMNS_WIDTH = [90,  #activate
                     250,  #title
