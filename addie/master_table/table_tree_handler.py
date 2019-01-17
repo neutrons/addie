@@ -545,10 +545,10 @@ class H3TableHandler:
 
         # Table
         table = menu.addMenu("Table")
-        table_import_from_file = table.addMenu("Import from File")
-        table_import_from_file_replace = table_import_from_file.addAction("Replace ...")
-        table_import_from_file_append = table_import_from_file.addAction("Append ...")
-        table_import_from_file_append.setEnabled(self.parent.master_table_right_click_buttons['import_from_file_append']['status'])
+        table_import_from_config = table.addMenu("Import from Config. File")
+        table_import_from_config_replace = table_import_from_config.addAction("Replace ...")
+        table_import_from_config_append = table_import_from_config.addAction("Append ...")
+        table_import_from_config_append.setEnabled(self.parent.master_table_right_click_buttons['import_from_file_append']['status'])
         table_import_from_database = table.addMenu("Import from Database")
         table_import_from_database_replace = table_import_from_database.addAction("Replace ...")
         table_import_from_database_append = table_import_from_database.addAction("Append ...")
@@ -667,9 +667,9 @@ class H3TableHandler:
             self.refresh_table()
         elif action == table_clear:
             self.clear_table()
-        elif action == table_import_from_file_replace:
+        elif action == table_import_from_config_replace:
             self._import_table_from_file(clear_table=True)
-        elif action == table_import_from_file_append:
+        elif action == table_import_from_config_append:
             self._import_table_from_file(clear_table=False)
         elif action == table_import_from_database_replace:
             self._import_table_from_database(clear_table=True)
