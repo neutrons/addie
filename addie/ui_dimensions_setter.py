@@ -113,6 +113,10 @@ class Ui_Dialog(object):
         QtCore.QObject.connect(self.cancel, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.reject)
         QtCore.QObject.connect(self.ok, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.accept)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
+        Dialog.setTabOrder(self.radius_value, self.radius2_value)
+        Dialog.setTabOrder(self.radius2_value, self.height_value)
+        Dialog.setTabOrder(self.height_value, self.ok)
+        Dialog.setTabOrder(self.ok, self.cancel)
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(_translate("Dialog", "Geometry Dimensions", None))

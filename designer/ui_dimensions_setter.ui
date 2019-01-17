@@ -234,6 +234,13 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>radius_value</tabstop>
+  <tabstop>radius2_value</tabstop>
+  <tabstop>height_value</tabstop>
+  <tabstop>ok</tabstop>
+  <tabstop>cancel</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

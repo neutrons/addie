@@ -436,6 +436,16 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <tabstops>
+  <tabstop>mass_density_radio_button</tabstop>
+  <tabstop>number_density_radio_button</tabstop>
+  <tabstop>mass_geometry_radio_button</tabstop>
+  <tabstop>mass_density_line_edit</tabstop>
+  <tabstop>number_density_line_edit</tabstop>
+  <tabstop>mass_line_edit</tabstop>
+  <tabstop>ok</tabstop>
+  <tabstop>cancel</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

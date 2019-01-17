@@ -218,6 +218,13 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.mass_density_line_edit, QtCore.SIGNAL(_fromUtf8("returnPressed()")), MainWindow.mass_density_value_changed)
         QtCore.QObject.connect(self.cancel, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.reject)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        MainWindow.setTabOrder(self.mass_density_radio_button, self.number_density_radio_button)
+        MainWindow.setTabOrder(self.number_density_radio_button, self.mass_geometry_radio_button)
+        MainWindow.setTabOrder(self.mass_geometry_radio_button, self.mass_density_line_edit)
+        MainWindow.setTabOrder(self.mass_density_line_edit, self.number_density_line_edit)
+        MainWindow.setTabOrder(self.number_density_line_edit, self.mass_line_edit)
+        MainWindow.setTabOrder(self.mass_line_edit, self.ok)
+        MainWindow.setTabOrder(self.ok, self.cancel)
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
