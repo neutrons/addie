@@ -817,10 +817,20 @@ class H3TableHandler:
         pass
 
     def _import_table_from_file(self, clear_table=True):
-        pass
+        _current_folder = self.parent.current_folder
+        table_file = str(QFileDialog.getOpenFileName(parent=self.parent,
+                                                      caption='Select Table File ...',
+                                                      directory=_current_folder,
+                                                      filter=("NeXus (*.nxsh5);; Raw (*.raw);; NeXus_old (*.nxs)")))
+        if table_file:
+            new_path = os.path.dirname(table_file)
+            self.parent.current_folder = new_path
+            if clear_table:
+                self.clear_table()
+
+            #FIXME
 
     def _import_table_from_config(self, clear_table=True):
-
         _current_folder = self.parent.current_folder
         table_file = str(QFileDialog.getOpenFileName(parent=self.parent,
                                                       caption='Select Table File ...',
