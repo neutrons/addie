@@ -548,11 +548,17 @@ class H3TableHandler:
         table_import_from_config = table.addMenu("Import from Config. File")
         table_import_from_config_replace = table_import_from_config.addAction("Replace ...")
         table_import_from_config_append = table_import_from_config.addAction("Append ...")
-        table_import_from_config_append.setEnabled(self.parent.master_table_right_click_buttons['import_from_file_append']['status'])
+        table_import_from_config_append.setEnabled(self.parent.master_table_right_click_buttons['import_from_config_append']['status'])
+
         table_import_from_database = table.addMenu("Import from Database")
         table_import_from_database_replace = table_import_from_database.addAction("Replace ...")
         table_import_from_database_append = table_import_from_database.addAction("Append ...")
         table_import_from_database_append.setEnabled(self.parent.master_table_right_click_buttons['import_from_database_append']['status'])
+
+        table_import_from_file = table.addMenu("Import from File(s)")
+        table_import_from_file_replace = table_import_from_file.addAction("Replace ...")
+        table_import_from_file_append = table_import_from_file.addAction("Append ...")
+        table_import_from_file_append.setEnabled(self.parent.master_table_right_click_buttons['import_from_file_append']['status'])
 
         # table_import = table.addAction("Import & Replace ...")
         # self.parent.master_table_right_click_buttons['import']['ui'] = table_import
@@ -668,15 +674,19 @@ class H3TableHandler:
         elif action == table_clear:
             self.clear_table()
         elif action == table_import_from_config_replace:
-            self._import_table_from_file(clear_table=True)
+            self._import_table_from_config(clear_table=True)
         elif action == table_import_from_config_append:
-            self._import_table_from_file(clear_table=False)
+            self._import_table_from_config(clear_table=False)
         elif action == table_import_from_database_replace:
             self._import_table_from_database(clear_table=True)
         elif action == table_import_from_database_append:
             self._import_table_from_database(clear_table=False)
         elif action == table_export:
             self._export_table()
+        elif action == table_import_from_file_replace:
+            self._import_table_from_file(clear_table=True)
+        elif action == table_import_from_file_append:
+            self._import_table_from_file(clear_table=False)
 
         # configuration
         if action == configuration_save_as:
@@ -807,6 +817,9 @@ class H3TableHandler:
         pass
 
     def _import_table_from_file(self, clear_table=True):
+        pass
+
+    def _import_table_from_config(self, clear_table=True):
 
         _current_folder = self.parent.current_folder
         table_file = str(QFileDialog.getOpenFileName(parent=self.parent,
@@ -928,8 +941,9 @@ class H3TableHandler:
                            clear=False,
                            plot=False,
                            export=False,
-                           import_from_file_append=False,
+                           import_from_config_append=False,
                            import_from_database_append=False,
+                           import_from_file_append=False
                            )
         else:
             _update_status(activate=True,
@@ -941,8 +955,9 @@ class H3TableHandler:
                            reset=True,
                            clear=True,
                            export=True,
-                           import_from_file_append=True,
+                           import_from_config_append=True,
                            import_from_database_append=True,
+                           import_from_file_append=True
                            )
 
             if self.parent.master_table_cells_copy['temp']:
