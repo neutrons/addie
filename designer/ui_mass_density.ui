@@ -416,7 +416,7 @@
       <item>
        <widget class="QPushButton" name="ok">
         <property name="text">
-         <string>OK</string>
+         <string>Save</string>
         </property>
        </widget>
       </item>

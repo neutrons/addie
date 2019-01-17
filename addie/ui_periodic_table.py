@@ -994,5 +994,5 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "Chemical Formula: ", None))
         self.label_2.setText(_translate("MainWindow", "(Li7)2 (O16)3 (Sb103) C", None))
         self.pushButton_3.setText(_translate("MainWindow", "Cancel", None))
-        self.pushButton_2.setText(_translate("MainWindow", "OK", None))
+        self.pushButton_2.setText(_translate("MainWindow", "Save", None))
 

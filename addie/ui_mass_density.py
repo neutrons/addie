@@ -236,5 +236,5 @@ class Ui_MainWindow(object):
         self.volume_units.setText(_translate("MainWindow", "cm3", None))
         self.mass_error_message.setText(_translate("MainWindow", "Geometry Dimensions Have Not Been Defined! ", None))
         self.cancel.setText(_translate("MainWindow", "Cancel", None))
-        self.ok.setText(_translate("MainWindow", "OK", None))
+        self.ok.setText(_translate("MainWindow", "Save", None))
 
