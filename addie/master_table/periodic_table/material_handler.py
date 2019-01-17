@@ -191,6 +191,8 @@ class PeriodicTable(QMainWindow):
 
     def init_widgets(self):
 
+        self.ui.save_button.setEnabled(False)
+
         # init contain of chemical formula
         text = str(self.parent.master_table_list_ui[self.key][self.data_type]['material']['text'].text())
         self.ui.chemical_formula.setText(text)
@@ -210,7 +212,7 @@ class PeriodicTable(QMainWindow):
         self.ui.chemical_formula.setText("")
 
     def chemical_formula_changed(self, new_formula):
-        pass
+        self.check_status_save_button()
 
     def add_new_entry(self, isotope='', number=1, is_natural_element=False):
         if isotope == '':
@@ -586,6 +588,11 @@ class PeriodicTable(QMainWindow):
             self.ui.statusbar.showMessage("Unable to calculate Molecular Mass! CHECK YOUR FORMULA!",
                                                  self.parent.statusbar_display_time)
 
+    def check_status_save_button(self):
+        if str(self.ui.chemical_formula.text()) != "":
+            self.ui.save_button.setEnabled(True)
+        else:
+            self.ui.save_button.setEnabled(False)
 
     def cancel(self):
         self.parent.material_ui = None

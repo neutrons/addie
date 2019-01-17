@@ -2245,7 +2245,7 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <widget class="QPushButton" name="pushButton_3">
+       <widget class="QPushButton" name="cancel_button">
         <property name="text">
          <string>Cancel</string>
         </property>
@@ -2265,7 +2265,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="save_button">
         <property name="text">
          <string>Save</string>
         </property>
@@ -3730,7 +3730,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_3</sender>
+   <sender>cancel_button</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
    <slot>cancel()</slot>
@@ -3746,7 +3746,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_2</sender>
+   <sender>save_button</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
    <slot>ok()</slot>
