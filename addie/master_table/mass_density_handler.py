@@ -217,11 +217,11 @@ class MassDensityWindow(QMainWindow):
     def update_status_of_save_button(self):
         # check the active radio button and check if value is there to enable save button
         enabled_save_button = False
-        if self.ui.mass_density_radio_button.isSelected():
+        if self.ui.mass_density_radio_button.isChecked():
             string_value = str(self.ui.mass_density_line_edit.text())
             if is_number(string_value):
                 enabled_save_button = True
-        elif self.ui.number_density_radio_button.isSelected():
+        elif self.ui.number_density_radio_button.isChecked():
             string_value = str(self.ui.number_density_line_edit.text())
             if is_number(string_value):
                 enabled_save_button = True
