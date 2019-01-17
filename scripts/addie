@@ -125,6 +125,9 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     statusbar_display_time = 5000  # 5s
 
     # external ui (use to make sure there is only one open at a time
+    import_from_database_ui = None
+    import_from_database_ui_position = None
+
     advanced_window_ui = None
     make_calibration_ui = None
     make_calibration_ui_position = None

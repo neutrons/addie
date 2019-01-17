@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>257</width>
-    <height>173</height>
+    <width>514</width>
+    <height>169</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,43 +15,66 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QRadioButton" name="ipts_radio_button">
        <property name="text">
         <string>IPTS #</string>
        </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="ipts_combobox"/>
+      <widget class="QComboBox" name="ipts_combobox">
+       <property name="minimumSize">
+        <size>
+         <width>150</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>150</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </item>
    <item>
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>or</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QLabel" name="label_3">
+      <widget class="QRadioButton" name="run_radio_button">
        <property name="text">
-        <string>Run Number</string>
+        <string>Run #</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLineEdit" name="run_number_lineedit"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>1,3-5,10</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -63,7 +86,7 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>40</height>
+       <height>49</height>
       </size>
      </property>
     </spacer>
@@ -71,12 +94,9 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <widget class="QDialogButtonBox" name="buttonBox">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="standardButtons">
-        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <widget class="QPushButton" name="cancel_button">
+       <property name="text">
+        <string>Cancel</string>
        </property>
       </widget>
      </item>
@@ -93,6 +113,13 @@
        </property>
       </spacer>
      </item>
+     <item>
+      <widget class="QPushButton" name="import_button">
+       <property name="text">
+        <string>Import</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
@@ -100,36 +127,107 @@
  <resources/>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
+   <sender>cancel_button</sender>
+   <signal>clicked()</signal>
    <receiver>Dialog</receiver>
-   <slot>accept()</slot>
+   <slot>cancel_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>54</x>
+     <y>146</y>
     </hint>
     <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
+     <x>80</x>
+     <y>106</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
+   <sender>import_button</sender>
+   <signal>clicked()</signal>
    <receiver>Dialog</receiver>
-   <slot>reject()</slot>
+   <slot>import_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>459</x>
+     <y>144</y>
     </hint>
     <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
+     <x>482</x>
+     <y>99</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ipts_radio_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>radio_button_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>33</x>
+     <y>24</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>33</x>
+     <y>85</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>run_radio_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>radio_button_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>54</x>
+     <y>57</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>60</x>
+     <y>75</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ipts_combobox</sender>
+   <signal>currentIndexChanged(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>ipts_selection_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>197</x>
+     <y>24</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>289</x>
+     <y>21</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>run_number_lineedit</sender>
+   <signal>returnPressed()</signal>
+   <receiver>Dialog</receiver>
+   <slot>run_number_return_pressed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>289</x>
+     <y>63</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>307</x>
+     <y>89</y>
     </hint>
    </hints>
   </connection>
  </connections>
+ <slots>
+  <slot>cancel_button_clicked()</slot>
+  <slot>import_button_clicked()</slot>
+  <slot>radio_button_changed()</slot>
+  <slot>ipts_selection_changed()</slot>
+  <slot>run_number_return_pressed()</slot>
+ </slots>
 </ui>
