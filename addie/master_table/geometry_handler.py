@@ -43,6 +43,9 @@ class DimensionsSetter(QDialog):
         self.init_widgets_layout()
         self.init_widgets_content()
 
+        if parent.geometry_ui_position:
+            self.move(parent.geometry_ui_position)
+
     def group_widgets(self):
         self.group = {'radius': [self.ui.radius_label,
                                  self.ui.radius_value,
@@ -155,4 +158,7 @@ class DimensionsSetter(QDialog):
         o_table.transfer_widget_states(from_key=self.key, data_type=self.data_type)
 
         self.close()
+
+    def closeEvent(self, c):
+        self.parent.geometry_ui_position = self.pos()
 

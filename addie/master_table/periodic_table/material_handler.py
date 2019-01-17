@@ -27,6 +27,8 @@ class MaterialHandler:
             o_material = PeriodicTable(parent=parent, key=key, data_type=data_type)
             o_material.show()
             parent.material_ui = o_material
+            if parent.material_ui_position:
+                parent.material_ui.move(parent.material_ui_position)
         else:
             parent.material_ui.setFocus()
             parent.material_ui.activateWindow()
@@ -600,6 +602,7 @@ class PeriodicTable(QMainWindow):
 
     def closeEvent(self, c):
         self.parent.material_ui = None
+        self.parent.material_ui_position = self.pos()
 
 
 if __name__ == "__main__":

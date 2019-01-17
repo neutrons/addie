@@ -133,8 +133,14 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     placzek_ui = None
     reduction_configuration_ui = None
     reduction_configuration_ui_position = None
+
     material_ui = None
+    material_ui_position = None
+
     mass_density_ui = None
+    mass_density_ui_position = None
+
+    geometry_ui_position = None
 
     # config file to initialize the widgets (example Q and R range in PDF tab)
     current_path = os.path.dirname(os.path.dirname(__file__))
