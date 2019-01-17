@@ -522,23 +522,23 @@ class PeriodicTable(QMainWindow):
         regular_expression_1 = r'^(?P<stable_element>[A-Z]{1}[a-z]{0,1}$)'
         m1 = re.search(regular_expression_1, element)
         if not m1 is None:
-            return [m1.group('stable_element'), 1]
+            return [m1.group('stable_element'), 1.]
 
         # stable with stochiometric coefficient
-        regular_expression_2 = r'^(?P<stable_element>[A-Z]{1}[a-z]{0,1})(?P<stochiometric_coefficient>\d+)$'
+        regular_expression_2 = r'^(?P<stable_element>[A-Z]{1}[a-z]{0,1})(?P<stochiometric_coefficient>\d*\.{0,1}\d*)$'
         m2 = re.search(regular_expression_2, element)
         if not m2 is None:
             return ["{}{}".format(m2.group('stable_element'), m2.group('stochiometric_coefficient')),
-                    np.int(m2.group('stochiometric_coefficient'))]
+                    np.float(m2.group('stochiometric_coefficient'))]
 
         # isotope with or without stochiometric coefficient
-        regular_expression_3 = r'^\((?P<isotope_element>[A-Z]{1}[a-z]{0,1})(?P<isotope_number>\d+)\)(?P<stochiometric_coefficient>\d*)$'
+        regular_expression_3 = r'\((?P<isotope_element>[A-Z]{1}[a-z]{0,1})(?P<isotope_number>\d+)\)(?P<stochiometric_coefficient>\d*\.{0,1}\d*)'
         m3 = re.search(regular_expression_3, element)
         if not m3 is None:
             if m3.group('stochiometric_coefficient') == "":
-                number_of_atoms = 1
+                number_of_atoms = 1.
             else:
-                number_of_atoms = np.int(m3.group('stochiometric_coefficient'))
+                number_of_atoms = np.float(m3.group('stochiometric_coefficient'))
             return ["{}[{}]{}".format(m3.group('isotope_element'), m3.group('isotope_number'), m3.group('stochiometric_coefficient')),
             number_of_atoms]
 
@@ -555,7 +555,7 @@ class PeriodicTable(QMainWindow):
         '''
         list_element = chemical_formula.split(" ")
         periodictable_list_element_format = []
-        total_number_of_atoms = 0
+        total_number_of_atoms = 0.
         try:
             for _element in list_element:
                 [formated_element, number_of_atoms] = self.get_periodictable_formatted_element_and_number_of_atoms(_element)

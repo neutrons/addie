@@ -227,7 +227,7 @@ class Ui_MainWindow(object):
         MainWindow.setTabOrder(self.ok, self.cancel)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Mass Density | Neutron Density | Mass", None))
         self.mass_density_radio_button.setText(_translate("MainWindow", "Mass Density", None))
         self.mass_density_label.setText(_translate("MainWindow", "g/cc", None))
         self.mass_density_error_message.setText(_translate("MainWindow", "Missing Chemical Formula to Update Mass Density!", None))

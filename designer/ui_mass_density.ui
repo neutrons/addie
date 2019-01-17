@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Mass Density | Neutron Density | Mass</string>
   </property>
   <property name="documentMode">
    <bool>true</bool>

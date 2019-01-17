@@ -993,7 +993,7 @@ class Ui_MainWindow(object):
         MainWindow.setTabOrder(self.ts, self.og)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Select your Chemical Formula", None))
         self.ba.setText(_translate("MainWindow", "Ba", None))
         self.ti.setText(_translate("MainWindow", "Ti", None))
         self.si.setText(_translate("MainWindow", "Si", None))
