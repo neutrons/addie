@@ -23,6 +23,8 @@ from addie.master_table.placzek_handler import PlaczekHandler
 from addie.master_table.selection_handler import TransferH3TableWidgetState
 from addie.master_table.tree_definition import COLUMN_DEFAULT_HEIGHT
 
+from addie.utilities.math_tools import is_number
+
 from addie.ui_dimensions_setter import Ui_Dialog as UiDialog
 
 
@@ -45,6 +47,8 @@ class DimensionsSetter(QDialog):
 
         if parent.geometry_ui_position:
             self.move(parent.geometry_ui_position)
+
+        self.check_save_button()
 
     def group_widgets(self):
         self.group = {'radius': [self.ui.radius_label,
@@ -135,6 +139,29 @@ class DimensionsSetter(QDialog):
         # display value of radius1,2,height for this row
 
         return
+
+    def value_changed(self, text):
+        self.check_save_button()
+
+    def check_save_button(self):
+        save_button_status = False
+
+        radius = str(self.ui.radius_value.text())
+        radius2 = str(self.ui.radius2_value.text())
+        height = str(self.ui.height_value.text())
+
+        if self.shape_selected.lower() == 'cylindrical':
+            if is_number(radius) and is_number(height):
+                save_button_status = True
+        elif self.shape_selected.lower() == 'spherical':
+            if is_number(radius):
+                save_button_status = True
+        else:
+            if is_number(radius) and is_number(radius2) and is_number(height):
+                save_button_status = True
+
+        self.ui.ok.setEnabled(save_button_status)
+
 
     def accept(self):
 

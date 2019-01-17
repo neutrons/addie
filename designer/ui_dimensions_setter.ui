@@ -275,5 +275,56 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>radius_value</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>value_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>197</x>
+     <y>24</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>19</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radius2_value</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>value_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>200</x>
+     <y>55</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>291</x>
+     <y>58</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>height_value</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>value_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>207</x>
+     <y>83</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>289</x>
+     <y>98</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <slots>
+  <slot>value_changed()</slot>
+ </slots>
 </ui>
