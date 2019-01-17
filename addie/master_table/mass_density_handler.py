@@ -260,16 +260,14 @@ class MassDensityWindow(QMainWindow):
         mass_density_infos['mass']['selected'] = mass_flag
 
     def accept(self):
-        self.parent.mass_density_ui = None
         self.save()
         o_table = TableRowHandler(parent=self.parent)
         o_table.transfer_widget_states(from_key=self.key, data_type=self.data_type)
         self.close()
 
     def reject(self):
-        self.parent.mass_density_ui = None
         self.close()
 
     def closeEvent(self, c):
-        pass
+        self.parent.mass_density_ui = None
 
