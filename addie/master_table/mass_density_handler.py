@@ -233,6 +233,14 @@ class MassDensityWindow(QMainWindow):
         self.ui.ok.setEnabled(enabled_save_button)
 
     def save(self):
+        # first validate fields in case user forgot to hit enter before leaving window
+        if self.ui.mass_density_radio_button.isChecked():
+            self.mass_density_value_changed()
+        elif self.ui.number_density_radio_button.isChecked():
+            self.number_density_value_changed()
+        else:
+            self.mass_value_changed()
+
         mass_density_list_ui = self.parent.master_table_list_ui[self.key][self.data_type]
         mass_density_infos = mass_density_list_ui['mass_density_infos']
 
