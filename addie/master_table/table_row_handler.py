@@ -129,7 +129,9 @@ class TableRowHandler:
     def placzek_button_pressed(self, key=None, data_type='sample'):
         o_placzek = PlaczekHandler(parent=self.parent, key=key, data_type=data_type)
 
-    def activated_row_changed(self, key=None):
+    def activated_row_changed(self, key=None, state=None):
+        data_type = 'sample'
+
         # change state of other widgets of the same column if they are selected
         self.transfer_widget_states(from_key=key, data_type=data_type)
 
