@@ -4,10 +4,12 @@ import pprint
 try:
     from PyQt4.QtGui import QCheckBox, QLabel, QPushButton, QComboBox, QTableWidgetItem
     from PyQt4 import QtGui
+    from PyQt4.QtCore import Qt
 except ImportError:
     try:
         from PyQt5.QtWidgets import QCheckBox, QLabel, QPushButton, QComboBox, QTableWidgetItem
         from PyQt5 import QtGui
+        from PyQt5.QtCore import Qt
     except ImportError:
         raise ImportError("Requires PyQt4 or PyQt5")
 
@@ -304,9 +306,59 @@ class CellsHandler(SelectionHandlerMaster):
 
         for _row in list_row:
             for _column in list_column:
-                _item = self.table_ui.item(_row, _column)
-                if _item:
-                    _item.setText("")
+
+                if _column in INDEX_OF_COLUMNS_WITH_ITEMS:
+                    self.table_ui.item(_row, _column).setText("")
+
+                elif _column in INDEX_OF_COLUMNS_WITH_COMBOBOX:
+                    self.table_ui.cellWidget(_row, _column).children()[1].setCurrentIndex(0)
+
+                elif _column in INDEX_OF_COLUMNS_WITH_CHECKBOX:
+                    _disable_state = Qt.Unchecked
+                    self.table_ui.cellWidget(_row, _column).children()[1].setCheckState(_disable_state)
+
+                elif _column in INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS:
+                    o_utilities = Utilities(parent=self.parent)
+                    _key = o_utilities.get_row_key_from_row_index(row=_row)
+                    _master_table_row_ui = self.parent.master_table_list_ui
+                    if _column == INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS[0]:  # sample
+                        data_type = 'sample'
+                    else:
+                        data_type = 'normalization'
+
+                    self.parent.master_table_list_ui[_key][data_type]['geometry']['radius']['value'].setText("N/A")
+                    self.parent.master_table_list_ui[_key][data_type]['geometry']['radius2']['value'].setText("N/A")
+                    self.parent.master_table_list_ui[_key][data_type]['geometry']['height']['value'].setText("N/A")
+
+                elif _column in INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA:
+                    o_utilities = Utilities(parent=self.parent)
+                    _key = o_utilities.get_row_key_from_row_index(row=_row)
+                    _master_table_row_ui = self.parent.master_table_list_ui
+                    if _column == INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA[0]:  # sample
+                        data_type = 'sample'
+                    else:
+                        data_type = 'normalization'
+                    self.parent.master_table_list_ui[_key][data_type]['material']['text'].setText("")
+
+                elif _column in INDEX_OF_COLUMNS_WITH_MASS_DENSITY:
+                    o_utilities = Utilities(parent=self.parent)
+                    _key = o_utilities.get_row_key_from_row_index(row=_row)
+                    _master_table_row_ui = self.parent.master_table_list_ui
+                    if _column == INDEX_OF_COLUMNS_WITH_MASS_DENSITY[0]:  # sample
+                        data_type = 'sample'
+                    else:
+                        data_type = 'normalization'
+                    self.parent.master_table_list_ui[_key][data_type]['mass_density']['text'].setText("N/A")
+                    self.parent.master_table_list_ui[_key][data_type]['mass_density_infos']['number_density'][
+                        'value'] = "N/A"
+                    self.parent.master_table_list_ui[_key][data_type]['mass_density_infos']['number_density'][
+                        'selected'] = False
+                    self.parent.master_table_list_ui[_key][data_type]['mass_density_infos']['mass_density'][
+                        'value'] = "N/A"
+                    self.parent.master_table_list_ui[_key][data_type]['mass_density_infos']['mass_density'][
+                        'selected'] = True
+                    self.parent.master_table_list_ui[_key][data_type]['mass_density_infos']['mass']['value'] = "N/A"
+                    self.parent.master_table_list_ui[_key][data_type]['mass_density_infos']['mass']['selected'] = False
 
     def copy(self):
         ''' only 1 row at the time is allowed in the copy'''
