@@ -62,7 +62,7 @@ class OncatAuthenticationWindow(QMainWindow):
         self.ui.authentication_message.setStyleSheet("color: red")
 
     def is_valid_password(self):
-        userid = str(self.ui.ucams.text())
+        userid = str(self.ui.ucams.text()).strip()
         password = str(self.ui.password.text())
 
         # Initialize token store
@@ -80,6 +80,7 @@ class OncatAuthenticationWindow(QMainWindow):
 
         try:
             oncat.login(userid, password)
+            self.parent.ucams = userid
         except:
             return False
 
