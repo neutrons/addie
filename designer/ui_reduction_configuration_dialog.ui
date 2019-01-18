@@ -1145,6 +1145,13 @@ p, li { white-space: pre-wrap; }
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
+      <widget class="QPushButton" name="cancel_button">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -1330,6 +1337,22 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>cancel_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>cancel_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>70</x>
+     <y>851</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>145</x>
+     <y>849</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>make_calibration_clicked()</slot>
@@ -1344,5 +1367,6 @@ p, li { white-space: pre-wrap; }
   <slot>output_browse_radio_button_clicked()</slot>
   <slot>intermediate_browse_button_clicked()</slot>
   <slot>output_browse_button_clicked()</slot>
+  <slot>cancel_clicked()</slot>
  </slots>
 </ui>

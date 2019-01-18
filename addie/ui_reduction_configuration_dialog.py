@@ -420,6 +420,9 @@ class Ui_Dialog(object):
         self.verticalLayout_2.addWidget(self.tabWidget)
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
+        self.cancel_button = QtGui.QPushButton(Dialog)
+        self.cancel_button.setObjectName(_fromUtf8("cancel_button"))
+        self.horizontalLayout.addWidget(self.cancel_button)
         spacerItem6 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem6)
         self.save_and_close_button = QtGui.QPushButton(Dialog)
@@ -439,6 +442,7 @@ class Ui_Dialog(object):
         QtCore.QObject.connect(self.output_browse_radio_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.output_browse_radio_button_clicked)
         QtCore.QObject.connect(self.intermediate_browse_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.intermediate_browse_button_clicked)
         QtCore.QObject.connect(self.output_browse_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.output_browse_button_clicked)
+        QtCore.QObject.connect(self.cancel_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.cancel_clicked)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
@@ -535,5 +539,6 @@ class Ui_Dialog(object):
         self.groupBox_4.setTitle(_translate("Dialog", "Bragg", None))
         self.push_data_positive.setText(_translate("Dialog", "Push Data Positive", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("Dialog", "Advanced", None))
+        self.cancel_button.setText(_translate("Dialog", "Cancel", None))
         self.save_and_close_button.setText(_translate("Dialog", "Save and Close", None))
 

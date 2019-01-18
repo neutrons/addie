@@ -184,6 +184,8 @@ class ReductionConfiguration(QDialog):
         self.parent.reduction_configuration_ui = None
         self.parent.reduction_configuration_ui_position = self.pos()
 
+    def cancel_clicked(self):
+        self.close()
 
 # class LoadGroupingFile:
 #     '''This class reads the XML file and will return the number of groups <group ID=""> found in that file'''
