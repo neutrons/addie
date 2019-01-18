@@ -45,7 +45,6 @@ class OncatAuthenticationWindow(QMainWindow):
         self.ui.setupUi(self)
 
         self.center()
-
         self.init_widgets()
 
     def center(self):
@@ -61,7 +60,6 @@ class OncatAuthenticationWindow(QMainWindow):
         self.ui.password.setFocus()
         self.ui.authentication_message.setVisible(False)
         self.ui.authentication_message.setStyleSheet("color: red")
-
 
     def is_valid_password(self):
         userid = str(self.ui.ucams.text())
@@ -91,6 +89,9 @@ class OncatAuthenticationWindow(QMainWindow):
         # do something
         if self.is_valid_password():
             self.close()
+
+            self.parent.launch_import_from_database_handler()
+
         else:
             self.ui.password.setText("")
             self.ui.authentication_message.setVisible(True)

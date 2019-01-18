@@ -18,8 +18,11 @@ class MakeCalibrationLauncher(object):
             _make = MakeCalibrationWindow(parent=parent)
             _make.show()
             parent.make_calibration_ui = _make
-            if parent.make_calibration_ui_position:
-                parent.make_calibration_ui.move(parent.make_calibration_ui_position)
+            # make this window appears on top of oncat authentication window
+            if parent.oncat_authentication_ui_position:
+                parent.make_calibration_ui.move(parent.oncat_authentication_ui_position)
+            #if parent.make_calibration_ui_position:
+                #parent.make_calibration_ui.move(parent.make_calibration_ui_position)
         else:
             parent.make_calibration_ui.setFocus()
             parent.make_calibration_ui.activateWindow()
