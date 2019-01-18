@@ -1,3 +1,4 @@
+from collections import OrderedDict
 import numpy as np
 import os
 import pickle
@@ -717,14 +718,14 @@ class H3TableHandler:
             o_plot = TablePlotHandler(parent=self.parent)
             o_plot.plot_temperature(samp_env_choice='furnace')
 
-        elif not (list_signal_config_files == []):
+        if not (list_signal_config_files == []):
 
             # user clicked to select config
             for _index, _signal in enumerate(list_signal_config_files):
                 if action == _signal:
                     self.activate_this_config(config=list_config_displayed[_index])
 
-        elif not (list_signal_remove_config == []):
+        if not (list_signal_remove_config == []):
 
             # user clicked to remove config
             for _index, _signal in enumerate(list_signal_remove_config):
@@ -898,8 +899,6 @@ class H3TableHandler:
         config_dict = ConfigHandler.remove_this_config(config=self.parent.config_dict,
                                                        key=config)
         self.parent.config_dict = config_dict
-        # import pprint
-        # pprint.pprint(config_dict)
         ConfigHandler.lazy_export_config(config_dict=config_dict)
 
     def activate_this_config(self, config):
