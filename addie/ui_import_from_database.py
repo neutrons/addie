@@ -69,6 +69,12 @@ class Ui_Dialog(object):
         self.verticalLayout.addLayout(self.horizontalLayout_3)
 
         self.retranslateUi(Dialog)
+        QtCore.QObject.connect(self.cancel_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.cancel_button_clicked)
+        QtCore.QObject.connect(self.import_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.import_button_clicked)
+        QtCore.QObject.connect(self.ipts_radio_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.radio_button_changed)
+        QtCore.QObject.connect(self.run_radio_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.radio_button_changed)
+        QtCore.QObject.connect(self.ipts_combobox, QtCore.SIGNAL(_fromUtf8("currentIndexChanged(QString)")), Dialog.ipts_selection_changed)
+        QtCore.QObject.connect(self.run_number_lineedit, QtCore.SIGNAL(_fromUtf8("returnPressed()")), Dialog.run_number_return_pressed)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):

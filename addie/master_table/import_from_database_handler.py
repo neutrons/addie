@@ -46,11 +46,10 @@ class ImportFromDatabaseWindow(QDialog):
         pass
 
     def import_button_clicked(self):
-        print("herererererre")
+        pass
 
     def cancel_button_clicked(self):
         self.close()
-        print("here")
 
     def closeEvent(self, c):
         self.parent.import_from_database_ui = None
