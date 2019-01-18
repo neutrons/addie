@@ -2,10 +2,12 @@ import pyoncat
 import oauthlib
 
 try:
-    from PyQt4.QtGui import QMainWindow, QLineEdit
+    from PyQt4.QtGui import QMainWindow, QLineEdit, QApplication
+    from PyQt4 import QtGui
 except:
     try:
-        from PyQt5.QtWidgets import QMainWindow, QLineEdit
+        from PyQt5.QtWidgets import QMainWindow, QLineEdit, QApplication
+        from PyQt5 import QtGui
     except:
         raise ImportError("Requires PyQt4 or PyQt5")
 
@@ -42,7 +44,16 @@ class OncatAuthenticationWindow(QMainWindow):
         self.ui = UiMainWindow()
         self.ui.setupUi(self)
 
+        self.center()
+
         self.init_widgets()
+
+    def center(self):
+        frameGm = self.frameGeometry()
+        screen = QApplication.desktop().screenNumber(QtGui.QApplication.desktop().cursor().pos())
+        centerPoint = QApplication.desktop().screenGeometry(screen).center()
+        frameGm.moveCenter(centerPoint)
+        self.move(frameGm.topLeft())
 
     def init_widgets(self):
         self.ui.ucams.setText(self.parent.ucams)
