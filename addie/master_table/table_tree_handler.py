@@ -26,6 +26,7 @@ from addie.master_table.export_table import ExportTable
 from addie.master_table.master_table_loader import TableFileLoader
 from addie.master_table.master_table_exporter import TableFileExporter
 from addie.master_table.import_from_database_handler import ImportFromDatabaseHandler
+from addie.master_table.oncat_authentication_handler import OncatAuthenticationHandler
 
 
 class TableInitialization:
@@ -816,7 +817,8 @@ class H3TableHandler:
         self.check_status_of_right_click_buttons()
 
     def _import_table_from_database(self, clear_table=True):
-        ImportFromDatabaseHandler(parent=self.parent)
+        #ImportFromDatabaseHandler(parent=self.parent)
+        OncatAuthenticationHandler(parent=self.parent)
 
     def _import_table_from_file(self, clear_table=True):
         _current_folder = self.parent.current_folder

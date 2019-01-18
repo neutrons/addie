@@ -26,6 +26,7 @@ import addie.ui_table_tree
 import addie.step1
 import addie.step2
 from addie.configuration_initializer import ConfigurationInitializer
+from addie.utilities.general import get_ucams
 
 from addie.about import AboutDialog
 from addie.advanced_window_handler.advanced_window import AdvancedWindowLauncher
@@ -90,6 +91,8 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     """ Main addie window
     """
 
+    first_oncat_authentication = True
+
     # config.json
     # those infos will be automatically retrieve from the config.json file
     facility = ''
@@ -127,6 +130,8 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     # external ui (use to make sure there is only one open at a time
     import_from_database_ui = None
     import_from_database_ui_position = None
+
+    oncat_authentication_ui_position = None
 
     advanced_window_ui = None
     make_calibration_ui = None
@@ -416,6 +421,8 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             o_row = TableRowHandler(parent=self)
             for _row in np.arange(10):
                 o_row.insert_row(row=_row)
+
+        self.ucams = get_ucams()
 
     def save_raw_config(self):
         '''this will allow the user to reset the full table and get it back in its initial state'''

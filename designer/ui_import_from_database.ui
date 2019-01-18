@@ -55,6 +55,13 @@
        </property>
       </spacer>
      </item>
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>Change User ...</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
@@ -222,6 +229,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>change_user_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>482</x>
+     <y>24</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>485</x>
+     <y>71</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>cancel_button_clicked()</slot>
@@ -229,5 +252,6 @@
   <slot>radio_button_changed()</slot>
   <slot>ipts_selection_changed()</slot>
   <slot>run_number_return_pressed()</slot>
+  <slot>change_user_clicked()</slot>
  </slots>
 </ui>

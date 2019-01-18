@@ -6,6 +6,8 @@ except:
     except:
         raise ImportError("Requires PyQt4 or PyQt5")
 
+from addie.master_table.oncat_authentication_handler import OncatAuthenticationHandler
+
 from addie.ui_import_from_database import Ui_Dialog as UiDialog
 
 class ImportFromDatabaseHandler:
@@ -33,8 +35,13 @@ class ImportFromDatabaseWindow(QDialog):
 
         self.init_widgets()
 
+        #if self.parent.first_oncat_authentication
+
     def init_widgets(self):
         pass
+
+    def change_user_clicked(self):
+        OncatAuthenticationHandler(parent=self.parent)
 
     def radio_button_changed(self):
         pass

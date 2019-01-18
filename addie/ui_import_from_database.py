@@ -41,6 +41,9 @@ class Ui_Dialog(object):
         self.horizontalLayout_2.addWidget(self.ipts_combobox)
         spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem)
+        self.pushButton = QtGui.QPushButton(Dialog)
+        self.pushButton.setObjectName(_fromUtf8("pushButton"))
+        self.horizontalLayout_2.addWidget(self.pushButton)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
@@ -75,11 +78,13 @@ class Ui_Dialog(object):
         QtCore.QObject.connect(self.run_radio_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.radio_button_changed)
         QtCore.QObject.connect(self.ipts_combobox, QtCore.SIGNAL(_fromUtf8("currentIndexChanged(QString)")), Dialog.ipts_selection_changed)
         QtCore.QObject.connect(self.run_number_lineedit, QtCore.SIGNAL(_fromUtf8("returnPressed()")), Dialog.run_number_return_pressed)
+        QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.change_user_clicked)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(_translate("Dialog", "Dialog", None))
         self.ipts_radio_button.setText(_translate("Dialog", "IPTS #", None))
+        self.pushButton.setText(_translate("Dialog", "Change User ...", None))
         self.run_radio_button.setText(_translate("Dialog", "Run #", None))
         self.label_2.setText(_translate("Dialog", "1,3-5,10", None))
         self.cancel_button.setText(_translate("Dialog", "Cancel", None))
