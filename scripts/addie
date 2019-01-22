@@ -78,6 +78,7 @@ from addie.make_calibration_handler.make_calibration import MakeCalibrationLaunc
 from addie.master_table.periodic_table.material_handler import MaterialHandler
 from addie.master_table.mass_density_handler import MassDensityHandler
 from addie.master_table.import_from_database_handler import ImportFromDatabaseHandler
+from addie.master_table.import_from_run_number_handler import ImportFromRunNumbereHandler
 
 import addie.addiedriver as driver
 import addie.specify_plots_style as ps
@@ -131,6 +132,9 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     # external ui (use to make sure there is only one open at a time
     import_from_database_ui = None
     import_from_database_ui_position = None
+
+    import_from_run_number_ui = None
+    import_from_run_number_ui_position = None
 
     oncat_authentication_ui_position = None
 
@@ -2727,6 +2731,9 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     def launch_import_from_database_handler(self):
         ImportFromDatabaseHandler(parent=self)
+
+    def launch_import_from_run_number_handler(self):
+        ImportFromRunNumberHandler(parent=self)
 
     # def master_table_input_grouping_button_pressed(self, key):
     #     o_table = TableRowHandler(parent=self)

@@ -28,8 +28,8 @@ class InMemoryTokenStore(object):
 
 class OncatAuthenticationHandler:
 
-    def __init__(self, parent=None):
-        o_oncat = OncatAuthenticationWindow(parent=parent)
+    def __init__(self, parent=None, next_ui='from_database_ui'):
+        o_oncat = OncatAuthenticationWindow(parent=parent, next_ui=next_ui)
         o_oncat.show()
         if parent.oncat_authentication_ui_position:
             o_oncat.move(parent.oncat_authentication_ui_position)
@@ -37,9 +37,10 @@ class OncatAuthenticationHandler:
 
 class OncatAuthenticationWindow(QMainWindow):
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, next_ui='from_database_ui'):
         QMainWindow.__init__(self, parent=parent)
         self.parent = parent
+        self.next_ui = next_ui
 
         self.ui = UiMainWindow()
         self.ui.setupUi(self)
@@ -91,7 +92,10 @@ class OncatAuthenticationWindow(QMainWindow):
         if self.is_valid_password():
             self.close()
 
-            self.parent.launch_import_from_database_handler()
+            if self.next_ui == 'from_database_ui':
+                self.parent.launch_import_from_database_handler()
+            elif self.next_ui == 'from_run_number_ui':
+                self.parent.launch_import_from_run_number_handler()
 
         else:
             self.ui.password.setText("")

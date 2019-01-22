@@ -818,7 +818,7 @@ class H3TableHandler:
 
     def _import_table_from_database(self, clear_table=True):
         #ImportFromDatabaseHandler(parent=self.parent)
-        OncatAuthenticationHandler(parent=self.parent)
+        OncatAuthenticationHandler(parent=self.parent, next_ui='from_database_ui')
 
     def _import_table_from_file(self, clear_table=True):
         _current_folder = self.parent.current_folder
@@ -879,6 +879,7 @@ class H3TableHandler:
 
     def insert_row_run_number(self):
         '''insert row using run number information and OnCat'''
+        OncatAuthenticationHandler(parent=self.parent, next_ui='from_run_number_ui')
         self.check_status_of_right_click_buttons()
 
     def insert_row_blank(self):
