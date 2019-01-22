@@ -45,6 +45,15 @@ class ImportFromRunNumberWindow(QDialog):
     def run_number_return_pressed(self):
         pass
 
+    def run_number_text_changed(self, run_number_string):
+        self.check_widgets(run_number_string=run_number_string)
+
+    def check_widgets(self, run_number_string=""):
+        enabled_import_button = True
+        if run_number_string.strip() == "":
+            enabled_import_button = False
+        self.ui.import_button.setEnabled(enabled_import_button)
+
     def import_button_clicked(self):
         pass
 

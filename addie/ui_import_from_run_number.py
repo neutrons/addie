@@ -58,6 +58,7 @@ class Ui_Dialog(object):
         spacerItem2 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem2)
         self.import_button = QtGui.QPushButton(Dialog)
+        self.import_button.setEnabled(False)
         self.import_button.setObjectName(_fromUtf8("import_button"))
         self.horizontalLayout_3.addWidget(self.import_button)
         self.verticalLayout.addLayout(self.horizontalLayout_3)
@@ -67,6 +68,7 @@ class Ui_Dialog(object):
         QtCore.QObject.connect(self.import_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.import_button_clicked)
         QtCore.QObject.connect(self.run_number_lineedit, QtCore.SIGNAL(_fromUtf8("returnPressed()")), Dialog.run_number_return_pressed)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.change_user_clicked)
+        QtCore.QObject.connect(self.run_number_lineedit, QtCore.SIGNAL(_fromUtf8("textChanged(QString)")), Dialog.run_number_text_changed)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):

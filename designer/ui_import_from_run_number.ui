@@ -96,6 +96,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="import_button">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Import</string>
        </property>
@@ -130,11 +133,11 @@
    <slot>import_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>459</x>
-     <y>144</y>
+     <x>455</x>
+     <y>151</y>
     </hint>
     <hint type="destinationlabel">
-     <x>482</x>
+     <x>465</x>
      <y>99</y>
     </hint>
    </hints>
@@ -162,12 +165,28 @@
    <slot>change_user_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>482</x>
-     <y>24</y>
+     <x>455</x>
+     <y>34</y>
     </hint>
     <hint type="destinationlabel">
-     <x>485</x>
+     <x>465</x>
      <y>71</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>run_number_lineedit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>run_number_text_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>199</x>
+     <y>54</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>259</x>
+     <y>77</y>
     </hint>
    </hints>
   </connection>
@@ -179,5 +198,6 @@
   <slot>ipts_selection_changed()</slot>
   <slot>run_number_return_pressed()</slot>
   <slot>change_user_clicked()</slot>
+  <slot>run_number_text_changed()</slot>
  </slots>
 </ui>
