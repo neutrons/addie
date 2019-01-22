@@ -1,9 +1,9 @@
 try:
-    from PyQt4.QtGui import QDialog, QComboBox, QLineEdit, QPushButton, QWidget, QHBoxLayout
+    from PyQt4.QtGui import QDialog, QComboBox, QLineEdit, QPushButton, QWidget, QHBoxLayout, QLabel, QTableWidgetItem
     from PyQt4 import QtGui, QtCore
 except:
     try:
-        from PyQt5.QtWidgets import QDialog, QComboBox, QLineEdit, QPushButton, QWidget, QHBoxLayout
+        from PyQt5.QtWidgets import QDialog, QComboBox, QLineEdit, QPushButton, QWidget, QHBoxLayout, QLabel, QTableWidgetItem
         from PyQt5 import QtGui, QtCore
     except:
         raise ImportError("Requires PyQt4 or PyQt5")
@@ -11,6 +11,8 @@ except:
 from addie.master_table.oncat_authentication_handler import OncatAuthenticationHandler
 from addie.utilities.oncat import pyoncatGetIptsList
 from addie.master_table.tree_definition import LIST_SEARCH_CRITERIA
+
+from addie.utilities.general import generate_random_key
 
 from addie.ui_import_from_database import Ui_Dialog as UiDialog
 
@@ -31,8 +33,10 @@ class ImportFromDatabaseHandler:
 
 class ImportFromDatabaseWindow(QDialog):
 
-    column_widths = [200, 100, 300]
+    column_widths = [10, 200, 100, 300]
     row_height = 40
+
+    list_ui = {}
 
     def __init__(self, parent=None):
         self.parent = parent
@@ -47,6 +51,8 @@ class ImportFromDatabaseWindow(QDialog):
     def init_widgets(self):
         if self.parent.oncat is None:
             return
+
+        self.ui.tableWidget.setColumnHidden(0, True)
 
         self.ui.error_message.setStyleSheet("color: red")
         self.ui.error_message.setVisible(False)
@@ -126,18 +132,28 @@ class ImportFromDatabaseWindow(QDialog):
         self._add_row(row=nbr_row)
 
     def list_criteria_changed(self, value):
-        pass
+        item_selected = value
+        print("vlaue is {}".format(value))
 
     def _add_row(self, row=-1):
+
+        _random_key = generate_random_key()
+
+        _list_ui_for_this_row = {}
 
         self.ui.tableWidget.insertRow(row)
         self.ui.tableWidget.setRowHeight(row, self.row_height)
 
+        # key
+        _item = QTableWidgetItem("{}".format(_random_key))
+        self.ui.tableWidget.setItem(row, 0, _item)
+
         # search argument
         _widget = QComboBox()
+        _list_ui_for_this_row['list_items'] = _widget
         list_items = LIST_SEARCH_CRITERIA[self.parent.instrument['short_name'].lower()]
         _widget.addItems(list_items)
-        self.ui.tableWidget.setCellWidget(row, 0, _widget)
+        self.ui.tableWidget.setCellWidget(row, 1, _widget)
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
                                lambda value=list_items[0]:
                                self.list_criteria_changed(value))
@@ -145,23 +161,39 @@ class ImportFromDatabaseWindow(QDialog):
         # criteria
         list_criteria = ['is', 'contains']
         _widget = QComboBox()
+        _list_ui_for_this_row['list_criteria'] = _widget
         _widget.addItems(list_criteria)
-        self.ui.tableWidget.setCellWidget(row, 1, _widget)
+        self.ui.tableWidget.setCellWidget(row, 2, _widget)
 
         # argument
         _layout = QHBoxLayout()
         _lineedit = QLineEdit()
+        _label = QLabel()
+        _label.setVisible(False)
         _button = QPushButton("Define")
         _button.setVisible(False)
+
+        _list_ui_for_this_row['value_lineedit'] = _lineedit
+        _list_ui_for_this_row['value_label'] = _label
+        _list_ui_for_this_row['value_button'] = _button
+
         _layout.addWidget(_lineedit)
+        _layout.addWidget(_label)
         _layout.addWidget(_button)
         _widget = QWidget()
         _widget.setLayout(_layout)
-        self.ui.tableWidget.setCellWidget(row, 2, _widget)
+        self.ui.tableWidget.setCellWidget(row, 3, _widget)
+
+        self.list_ui[_random_key] = _list_ui_for_this_row
+        self.check_remove_widget()
 
     def remove_criteria_clicked(self):
-        _select = self.ui.tableWidget.selectedRows()
-        row = _select[0]
+        _select = self.ui.tableWidget.selectedRanges()
+        if not _select:
+            return
+        row = _select[0].topRow()
+        _randome_key = str(self.ui.tableWidget.item(row, 0).text())
+        self.list_ui.pop(_randome_key, None)
         self.ui.tableWidget.removeRow(row)
         self.check_remove_widget()
 
