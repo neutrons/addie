@@ -7,8 +7,10 @@ except:
         raise ImportError("Requires PyQt4 or PyQt5")
 
 from addie.master_table.oncat_authentication_handler import OncatAuthenticationHandler
+from addie.utilities.oncat import pyoncatGetIptsList
 
 from addie.ui_import_from_database import Ui_Dialog as UiDialog
+
 
 class ImportFromDatabaseHandler:
 
@@ -38,7 +40,19 @@ class ImportFromDatabaseWindow(QDialog):
         #if self.parent.first_oncat_authentication
 
     def init_widgets(self):
-        pass
+        if self.parent.oncat is None:
+            return
+
+        # retrieve list of IPTS for this user
+        instrument = self.parent.instrument['short_name']
+        facility = self.parent.facility
+
+        list_ipts = pyoncatGetIptsList(oncat=self.parent.oncat,
+                                       instrument=instrument,
+                                       facility=facility)
+
+        self.ui.ipts_combobox.addItems(list_ipts)
+
 
     def change_user_clicked(self):
         OncatAuthenticationHandler(parent=self.parent)
@@ -47,6 +61,9 @@ class ImportFromDatabaseWindow(QDialog):
         pass
 
     def ipts_selection_changed(self, ipts_selected):
+        pass
+
+    def ipts_text_changed(self, ipts_text):
         pass
 
     def run_number_return_pressed(self):

@@ -94,6 +94,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     """
 
     first_oncat_authentication = True
+    oncat = None # object to use to retrieve IPTS numbers...etc. Created by oncat_authentication_handler.py
 
     # config.json
     # those infos will be automatically retrieve from the config.json file

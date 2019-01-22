@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>514</width>
-    <height>169</height>
+    <width>453</width>
+    <height>224</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <item>
       <widget class="QRadioButton" name="ipts_radio_button">
        <property name="text">
-        <string>IPTS #</string>
+        <string>Select IPTS</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -43,22 +43,38 @@
       </widget>
      </item>
      <item>
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>or</string>
        </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
-      </spacer>
+      </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Change User ...</string>
+        <string>IPTS-</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>16777215</height>
+        </size>
        </property>
       </widget>
      </item>
@@ -69,7 +85,7 @@
      <item>
       <widget class="QRadioButton" name="run_radio_button">
        <property name="text">
-        <string>Run #</string>
+        <string>Run(s) #</string>
        </property>
       </widget>
      </item>
@@ -101,9 +117,9 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <widget class="QPushButton" name="cancel_button">
+      <widget class="QPushButton" name="pushButton">
        <property name="text">
-        <string>Cancel</string>
+        <string>Change User ...</string>
        </property>
       </widget>
      </item>
@@ -119,6 +135,13 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancel_button">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="import_button">
@@ -140,8 +163,8 @@
    <slot>cancel_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>54</x>
-     <y>146</y>
+     <x>64</x>
+     <y>213</y>
     </hint>
     <hint type="destinationlabel">
      <x>80</x>
@@ -156,11 +179,11 @@
    <slot>import_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>459</x>
-     <y>144</y>
+     <x>442</x>
+     <y>213</y>
     </hint>
     <hint type="destinationlabel">
-     <x>482</x>
+     <x>452</x>
      <y>99</y>
     </hint>
    </hints>
@@ -172,8 +195,8 @@
    <slot>radio_button_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>33</x>
-     <y>24</y>
+     <x>43</x>
+     <y>66</y>
     </hint>
     <hint type="destinationlabel">
      <x>33</x>
@@ -188,8 +211,8 @@
    <slot>radio_button_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>54</x>
-     <y>57</y>
+     <x>64</x>
+     <y>99</y>
     </hint>
     <hint type="destinationlabel">
      <x>60</x>
@@ -204,8 +227,8 @@
    <slot>ipts_selection_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>197</x>
-     <y>24</y>
+     <x>263</x>
+     <y>67</y>
     </hint>
     <hint type="destinationlabel">
      <x>289</x>
@@ -220,8 +243,8 @@
    <slot>run_number_return_pressed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>289</x>
-     <y>63</y>
+     <x>381</x>
+     <y>100</y>
     </hint>
     <hint type="destinationlabel">
      <x>307</x>
@@ -236,12 +259,28 @@
    <slot>change_user_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>482</x>
-     <y>24</y>
+     <x>442</x>
+     <y>34</y>
     </hint>
     <hint type="destinationlabel">
-     <x>485</x>
+     <x>452</x>
      <y>71</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>ipts_text_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>394</x>
+     <y>63</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>358</x>
+     <y>134</y>
     </hint>
    </hints>
   </connection>
@@ -253,5 +292,6 @@
   <slot>ipts_selection_changed()</slot>
   <slot>run_number_return_pressed()</slot>
   <slot>change_user_clicked()</slot>
+  <slot>ipts_text_changed()</slot>
  </slots>
 </ui>

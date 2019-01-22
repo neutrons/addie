@@ -48,10 +48,16 @@ class ImportFromRunNumberWindow(QDialog):
     def run_number_text_changed(self, run_number_string):
         self.check_widgets(run_number_string=run_number_string)
 
+    def run_number_format_is_correct(self, run_number_string):
+        #FIXME
+        # make sure the format of the string is correct and that we can retrieve a correct list of runs
+        return True
+
     def check_widgets(self, run_number_string=""):
         enabled_import_button = True
         if run_number_string.strip() == "":
-            enabled_import_button = False
+            if not self.run_number_format_is_correct(run_number_string.strip()):
+                enabled_import_button = False
         self.ui.import_button.setEnabled(enabled_import_button)
 
     def import_button_clicked(self):

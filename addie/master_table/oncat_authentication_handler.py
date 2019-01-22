@@ -82,6 +82,7 @@ class OncatAuthenticationWindow(QMainWindow):
         try:
             oncat.login(userid, password)
             self.parent.ucams = userid
+            self.parent.oncat = oncat
         except:
             return False
 
