@@ -131,9 +131,12 @@ class ImportFromDatabaseWindow(QDialog):
         nbr_row = self.ui.tableWidget.rowCount()
         self._add_row(row=nbr_row)
 
-    def list_criteria_changed(self, value):
+    def chemical_formula_pressed(self, key):
+        print(key)
+
+    def list_criteria_changed(self, value, key):
         item_selected = value
-        print("vlaue is {}".format(value))
+        print("value is {}".format(value))
 
     def _add_row(self, row=-1):
 
@@ -155,8 +158,9 @@ class ImportFromDatabaseWindow(QDialog):
         _widget.addItems(list_items)
         self.ui.tableWidget.setCellWidget(row, 1, _widget)
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-                               lambda value=list_items[0]:
-                               self.list_criteria_changed(value))
+                               lambda value=list_items[0],
+                               key = _random_key:
+                               self.list_criteria_changed(value, key))
 
         # criteria
         list_criteria = ['is', 'contains']
@@ -168,10 +172,14 @@ class ImportFromDatabaseWindow(QDialog):
         # argument
         _layout = QHBoxLayout()
         _lineedit = QLineEdit()
+        _lineedit.setVisible(False)
         _label = QLabel()
-        _label.setVisible(False)
+        _label.setVisible(True)
         _button = QPushButton("Define")
-        _button.setVisible(False)
+        QtCore.QObject.connect(_button, QtCore.SIGNAL("pressed()"),
+                                lambda key=_random_key:
+                               self.chemical_formula_pressed(key))
+        _button.setVisible(True)
 
         _list_ui_for_this_row['value_lineedit'] = _lineedit
         _list_ui_for_this_row['value_label'] = _label
