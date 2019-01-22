@@ -42,6 +42,9 @@ class ImportFromDatabaseWindow(QDialog):
         if self.parent.oncat is None:
             return
 
+        self.ui.error_message.setStyleSheet("color: red")
+        self.ui.error_message.setVisible(False)
+
         # retrieve list of IPTS for this user
         instrument = self.parent.instrument['short_name']
         facility = self.parent.facility
@@ -49,6 +52,7 @@ class ImportFromDatabaseWindow(QDialog):
         list_ipts = pyoncatGetIptsList(oncat=self.parent.oncat,
                                        instrument=instrument,
                                        facility=facility)
+        self.list_ipts = list_ipts
 
         self.ui.ipts_combobox.addItems(list_ipts)
 
@@ -62,6 +66,9 @@ class ImportFromDatabaseWindow(QDialog):
         if self.ui.ipts_radio_button.isChecked():
             ipts_widgets_status = True
             run_widgets_status = False
+            self.ipts_text_changed(str(self.ui.ipts_lineedit.text()))
+        else:
+            self.ui.error_message.setVisible(False)
 
         self.ui.ipts_combobox.setEnabled(ipts_widgets_status)
         self.ui.ipts_lineedit.setEnabled(ipts_widgets_status)
@@ -70,11 +77,21 @@ class ImportFromDatabaseWindow(QDialog):
         self.ui.run_number_lineedit.setEnabled(run_widgets_status)
         self.ui.run_number_label.setEnabled(run_widgets_status)
 
+
     def ipts_selection_changed(self, ipts_selected):
         pass
 
     def ipts_text_changed(self, ipts_text):
-        pass
+        if ipts_text.strip() != "":
+            str_ipts = "IPTS-{}".format(ipts_text.strip())
+
+            ipts_exist = False
+            if str_ipts in self.list_ipts:
+                ipts_exist = True
+        else:
+            ipts_exist = True
+
+        self.ui.error_message.setVisible(not ipts_exist)
 
     def run_number_return_pressed(self):
         pass
