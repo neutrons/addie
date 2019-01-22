@@ -1,8 +1,10 @@
 try:
     from PyQt4.QtGui import QDialog
+    from PyQt4 import QtGui
 except:
     try:
         from PyQt5.QtWidgets import QDialog
+        from PyQt5 import QtGui
     except:
         raise ImportError("Requires PyQt4 or PyQt5")
 
@@ -56,6 +58,8 @@ class ImportFromDatabaseWindow(QDialog):
 
         self.ui.ipts_combobox.addItems(list_ipts)
 
+        self.ui.clear_ipts.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
+        self.ui.clear_run.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
 
     def change_user_clicked(self):
         OncatAuthenticationHandler(parent=self.parent)
@@ -73,13 +77,20 @@ class ImportFromDatabaseWindow(QDialog):
         self.ui.ipts_combobox.setEnabled(ipts_widgets_status)
         self.ui.ipts_lineedit.setEnabled(ipts_widgets_status)
         self.ui.ipts_label.setEnabled(ipts_widgets_status)
+        self.ui.clear_ipts.setEnabled(ipts_widgets_status)
 
         self.ui.run_number_lineedit.setEnabled(run_widgets_status)
         self.ui.run_number_label.setEnabled(run_widgets_status)
+        self.ui.clear_run.setEnabled(run_widgets_status)
 
+    def clear_ipts(self):
+        self.ui.ipts_lineedit.setText("")
+
+    def clear_run(self):
+        self.ui.run_number_lineedit.setText("")
 
     def ipts_selection_changed(self, ipts_selected):
-        pass
+        self.ui.ipts_lineedit.setText("")
 
     def ipts_text_changed(self, ipts_text):
         if ipts_text.strip() != "":
@@ -92,6 +103,7 @@ class ImportFromDatabaseWindow(QDialog):
             ipts_exist = True
 
         self.ui.error_message.setVisible(not ipts_exist)
+        self.ui.import_button.setEnabled(ipts_exist)
 
     def run_number_return_pressed(self):
         pass

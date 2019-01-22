@@ -78,6 +78,25 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="clear_ipts">
+       <property name="minimumSize">
+        <size>
+         <width>25</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>25</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
@@ -91,6 +110,25 @@
      </item>
      <item>
       <widget class="QLineEdit" name="run_number_lineedit"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="clear_run">
+       <property name="minimumSize">
+        <size>
+         <width>25</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>25</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="run_number_label">
@@ -196,7 +234,7 @@
    <slot>cancel_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>64</x>
+     <x>331</x>
      <y>213</y>
     </hint>
     <hint type="destinationlabel">
@@ -229,7 +267,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>43</x>
-     <y>66</y>
+     <y>33</y>
     </hint>
     <hint type="destinationlabel">
      <x>33</x>
@@ -245,7 +283,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>64</x>
-     <y>99</y>
+     <y>66</y>
     </hint>
     <hint type="destinationlabel">
      <x>60</x>
@@ -261,7 +299,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>263</x>
-     <y>67</y>
+     <y>34</y>
     </hint>
     <hint type="destinationlabel">
      <x>289</x>
@@ -276,8 +314,8 @@
    <slot>run_number_return_pressed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>381</x>
-     <y>100</y>
+     <x>350</x>
+     <y>67</y>
     </hint>
     <hint type="destinationlabel">
      <x>307</x>
@@ -292,8 +330,8 @@
    <slot>change_user_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>442</x>
-     <y>34</y>
+     <x>117</x>
+     <y>213</y>
     </hint>
     <hint type="destinationlabel">
      <x>452</x>
@@ -308,12 +346,44 @@
    <slot>ipts_text_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>394</x>
-     <y>63</y>
+     <x>363</x>
+     <y>30</y>
     </hint>
     <hint type="destinationlabel">
      <x>358</x>
      <y>134</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clear_ipts</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>clear_ipts()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>431</x>
+     <y>32</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>421</x>
+     <y>92</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clear_run</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>clear_run()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>372</x>
+     <y>59</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>132</y>
     </hint>
    </hints>
   </connection>
@@ -326,5 +396,7 @@
   <slot>run_number_return_pressed()</slot>
   <slot>change_user_clicked()</slot>
   <slot>ipts_text_changed()</slot>
+  <slot>clear_ipts()</slot>
+  <slot>clear_run()</slot>
  </slots>
 </ui>
