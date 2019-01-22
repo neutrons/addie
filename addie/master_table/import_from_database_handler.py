@@ -114,6 +114,12 @@ class ImportFromDatabaseWindow(QDialog):
     def cancel_button_clicked(self):
         self.close()
 
+    def add_criteria_clicked(self):
+        pass
+
+    def remove_criteria_clicked(self):
+        pass
+
     def closeEvent(self, c):
         self.parent.import_from_database_ui = None
         self.parent.import_from_database_ui_position = self.pos()
