@@ -91,6 +91,12 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>import_button</tabstop>
+  <tabstop>run_number_lineedit</tabstop>
+  <tabstop>cancel_button</tabstop>
+  <tabstop>pushButton</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

@@ -154,6 +154,16 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>import_button</tabstop>
+  <tabstop>ipts_combobox</tabstop>
+  <tabstop>lineEdit</tabstop>
+  <tabstop>run_number_lineedit</tabstop>
+  <tabstop>cancel_button</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>run_radio_button</tabstop>
+  <tabstop>ipts_radio_button</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
