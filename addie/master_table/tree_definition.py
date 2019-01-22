@@ -198,3 +198,12 @@ tree_dict['vanadium']['children'] = vanadium_children_1
 #
 # tree_dict['output_grouping'] = copy.deepcopy(base_dict)
 # tree_dict['output_grouping']['name'] = "Output Grouping"
+
+LIST_SEARCH_CRITERIA = {'nom': ['Chemical Formula',
+                                'Title',
+                                'Sample',
+                                'Env',
+                                'Device',
+                                ],
+                        'pg3': [''],
+                        }

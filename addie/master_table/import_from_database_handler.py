@@ -1,15 +1,16 @@
 try:
-    from PyQt4.QtGui import QDialog
-    from PyQt4 import QtGui
+    from PyQt4.QtGui import QDialog, QComboBox, QLineEdit, QPushButton, QWidget, QHBoxLayout
+    from PyQt4 import QtGui, QtCore
 except:
     try:
-        from PyQt5.QtWidgets import QDialog
-        from PyQt5 import QtGui
+        from PyQt5.QtWidgets import QDialog, QComboBox, QLineEdit, QPushButton, QWidget, QHBoxLayout
+        from PyQt5 import QtGui, QtCore
     except:
         raise ImportError("Requires PyQt4 or PyQt5")
 
 from addie.master_table.oncat_authentication_handler import OncatAuthenticationHandler
 from addie.utilities.oncat import pyoncatGetIptsList
+from addie.master_table.tree_definition import LIST_SEARCH_CRITERIA
 
 from addie.ui_import_from_database import Ui_Dialog as UiDialog
 
@@ -29,6 +30,9 @@ class ImportFromDatabaseHandler:
 
 
 class ImportFromDatabaseWindow(QDialog):
+
+    column_widths = [200, 100, 300]
+    row_height = 40
 
     def __init__(self, parent=None):
         self.parent = parent
@@ -60,6 +64,9 @@ class ImportFromDatabaseWindow(QDialog):
 
         self.ui.clear_ipts.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
         self.ui.clear_run.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
+
+        for _col, _width in enumerate(self.column_widths):
+            self.ui.tableWidget.setColumnWidth(_col, _width)
 
     def change_user_clicked(self):
         OncatAuthenticationHandler(parent=self.parent)
@@ -115,10 +122,55 @@ class ImportFromDatabaseWindow(QDialog):
         self.close()
 
     def add_criteria_clicked(self):
+        nbr_row = self.ui.tableWidget.rowCount()
+        self._add_row(row=nbr_row)
+
+    def list_criteria_changed(self, value):
         pass
 
+    def _add_row(self, row=-1):
+
+        self.ui.tableWidget.insertRow(row)
+        self.ui.tableWidget.setRowHeight(row, self.row_height)
+
+        # search argument
+        _widget = QComboBox()
+        list_items = LIST_SEARCH_CRITERIA[self.parent.instrument['short_name'].lower()]
+        _widget.addItems(list_items)
+        self.ui.tableWidget.setCellWidget(row, 0, _widget)
+        QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
+                               lambda value=list_items[0]:
+                               self.list_criteria_changed(value))
+
+        # criteria
+        list_criteria = ['is', 'contains']
+        _widget = QComboBox()
+        _widget.addItems(list_criteria)
+        self.ui.tableWidget.setCellWidget(row, 1, _widget)
+
+        # argument
+        _layout = QHBoxLayout()
+        _lineedit = QLineEdit()
+        _button = QPushButton("Define")
+        _button.setVisible(False)
+        _layout.addWidget(_lineedit)
+        _layout.addWidget(_button)
+        _widget = QWidget()
+        _widget.setLayout(_layout)
+        self.ui.tableWidget.setCellWidget(row, 2, _widget)
+
     def remove_criteria_clicked(self):
-        pass
+        _select = self.ui.tableWidget.selectedRows()
+        row = _select[0]
+        self.ui.tableWidget.removeRow(row)
+        self.check_remove_widget()
+
+    def check_remove_widget(self):
+        nbr_row = self.ui.tableWidget.rowCount()
+        if nbr_row > 0:
+            self.ui.remove_criteria_button.setEnabled(True)
+        else:
+            self.ui.remove_criteria_button.setEnabled(False)
 
     def closeEvent(self, c):
         self.parent.import_from_database_ui = None
