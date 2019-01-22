@@ -78,7 +78,7 @@ from addie.make_calibration_handler.make_calibration import MakeCalibrationLaunc
 from addie.master_table.periodic_table.material_handler import MaterialHandler
 from addie.master_table.mass_density_handler import MassDensityHandler
 from addie.master_table.import_from_database_handler import ImportFromDatabaseHandler
-from addie.master_table.import_from_run_number_handler import ImportFromRunNumbereHandler
+from addie.master_table.import_from_run_number_handler import ImportFromRunNumberHandler
 
 import addie.addiedriver as driver
 import addie.specify_plots_style as ps

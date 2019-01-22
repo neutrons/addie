@@ -11,11 +11,11 @@ from addie.master_table.oncat_authentication_handler import OncatAuthenticationH
 from addie.ui_import_from_run_number import Ui_Dialog as UiDialog
 
 
-class ImportFromRunNumbereHandler:
+class ImportFromRunNumberHandler:
 
     def __init__(self, parent=None):
         if parent.import_from_run_number_ui is None:
-            o_import = ImportFromRunNumbereWindow(parent=parent)
+            o_import = ImportFromRunNumberWindow(parent=parent)
             o_import.show()
             parent.import_from_run_number_ui = o_import
             if parent.import_from_run_number_ui_position:
