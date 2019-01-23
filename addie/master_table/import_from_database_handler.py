@@ -11,6 +11,7 @@ except:
 from addie.master_table.oncat_authentication_handler import OncatAuthenticationHandler
 from addie.utilities.oncat import pyoncatGetIptsList
 from addie.master_table.tree_definition import LIST_SEARCH_CRITERIA
+from addie.master_table.periodic_table.material_handler import MaterialHandler
 
 from addie.utilities.general import generate_random_key
 
@@ -135,7 +136,10 @@ class ImportFromDatabaseWindow(QDialog):
         self._add_row(row=nbr_row)
 
     def chemical_formula_pressed(self, key):
-        print(key)
+        MaterialHandler(parent=self.parent,
+                        database_window=self,
+                        key=key,
+                        data_type='database')
 
     def list_criteria_changed(self, value, key):
         item_selected = value

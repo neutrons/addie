@@ -22,9 +22,12 @@ from isotopes_handler import IsotopesHandler
 
 class MaterialHandler:
 
-    def __init__(self, parent=None, key=None, data_type='sample'):
+    def __init__(self, parent=None, database_window=None, key=None, data_type='sample'):
         if parent.material_ui is None:
-            o_material = PeriodicTable(parent=parent, key=key, data_type=data_type)
+            o_material = PeriodicTable(parent=parent,
+                                       database_window=database_window,
+                                       key=key,
+                                       data_type=data_type)
             o_material.show()
             parent.material_ui = o_material
             if parent.material_ui_position:
@@ -50,9 +53,10 @@ class PeriodicTable(QMainWindow):
                   7: copy.deepcopy(list_ui_color),
                   }
 
-    def __init__(self, parent=None, key=None, data_type='sample'):
+    def __init__(self, parent=None, database_window=None, key=None, data_type='sample'):
 
         self.parent = parent
+        self.database_window = database_window
         self.key = key
         self.data_type = data_type
 
@@ -196,7 +200,12 @@ class PeriodicTable(QMainWindow):
         self.ui.save_button.setEnabled(False)
 
         # init contain of chemical formula
-        text = str(self.parent.master_table_list_ui[self.key][self.data_type]['material']['text'].text())
+        if self.data_type == 'database':
+            # retrieve value from import_from_database label
+            text = str(self.database_window.list_ui[self.key]['value_label'].text())
+        else:
+            # retrieve value from sample or normalization columns in master table
+            text = str(self.parent.master_table_list_ui[self.key][self.data_type]['material']['text'].text())
         self.ui.chemical_formula.setText(text)
 
         # set color of buttons
@@ -576,14 +585,21 @@ class PeriodicTable(QMainWindow):
     def ok(self):
         chemical_formula = str(self.ui.chemical_formula.text())
         if self.retrieving_molecular_mass_and_number_of_atoms_worked(chemical_formula):
+
             self.parent.material_ui = None
-            text_ui = self.parent.master_table_list_ui[self.key][self.data_type]['material']['text']
-            text_ui.setText(chemical_formula)
-            self.calculate_full_molecular_mass()
-            o_table = TableRowHandler(parent=self.parent)
-            o_table.transfer_widget_states(from_key=self.key, data_type=self.data_type)
-            self.parent.master_table_list_ui[self.key][self.data_type]['mass_density_infos']['molecular_mass'] = self.molecular_mass
-            self.parent.master_table_list_ui[self.key][self.data_type]['mass_density_infos']['total_number_of_atoms'] = self.total_number_of_atoms
+
+            if self.data_type == 'database':
+                ui = self.database_window.list_ui[self.key]['value_label']
+                ui.setText(chemical_formula)
+
+            else: # 'sample' or 'normalization'
+                text_ui = self.parent.master_table_list_ui[self.key][self.data_type]['material']['text']
+                text_ui.setText(chemical_formula)
+                self.calculate_full_molecular_mass()
+                o_table = TableRowHandler(parent=self.parent)
+                o_table.transfer_widget_states(from_key=self.key, data_type=self.data_type)
+                self.parent.master_table_list_ui[self.key][self.data_type]['mass_density_infos']['molecular_mass'] = self.molecular_mass
+                self.parent.master_table_list_ui[self.key][self.data_type]['mass_density_infos']['total_number_of_atoms'] = self.total_number_of_atoms
             self.close()
         else:
             self.ui.statusbar.setStyleSheet("color: red")
