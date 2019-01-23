@@ -116,8 +116,10 @@ class ImportFromDatabaseWindow(QDialog):
             ipts_exist = False
             if str_ipts in self.list_ipts:
                 ipts_exist = True
+                index = self.ui.ipts_combobox.findText(str_ipts)
+                self.ui.ipts_combobox.setCurrentIndex(index)
         else:
-            ipts_exist = True
+            ipts_exist = True # we will use the combobox IPTS
 
         self.ui.error_message.setVisible(not ipts_exist)
         self.ui.import_button.setEnabled(ipts_exist)
