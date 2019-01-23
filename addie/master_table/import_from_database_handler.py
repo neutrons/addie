@@ -142,8 +142,18 @@ class ImportFromDatabaseWindow(QDialog):
                         data_type='database')
 
     def list_criteria_changed(self, value, key):
-        item_selected = value
-        print("value is {}".format(value))
+        if value == 'Chemical Formula':
+            show_label = True
+            show_button = True
+            show_lineedit = False
+        else:
+            show_label = False
+            show_button = False
+            show_lineedit = True
+
+        self.list_ui[key]['value_lineedit'].setVisible(show_lineedit)
+        self.list_ui[key]['value_label'].setVisible(show_label)
+        self.list_ui[key]['value_button'].setVisible(show_button)
 
     def _add_row(self, row=-1):
 

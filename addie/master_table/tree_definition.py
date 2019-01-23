@@ -201,9 +201,7 @@ tree_dict['vanadium']['children'] = vanadium_children_1
 
 LIST_SEARCH_CRITERIA = {'nom': ['Chemical Formula',
                                 'Title',
-                                'Sample',
-                                'Env',
-                                'Device',
+                                'Sample Env. Device',
                                 ],
                         'pg3': [''],
                         }
