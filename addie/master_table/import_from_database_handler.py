@@ -36,6 +36,9 @@ class ImportFromDatabaseWindow(QDialog):
     column_widths = [10, 200, 100, 300]
     row_height = 40
 
+    button_height = 30
+    button_width = 150
+
     list_ui = {}
 
     def __init__(self, parent=None):
@@ -175,7 +178,9 @@ class ImportFromDatabaseWindow(QDialog):
         _lineedit.setVisible(False)
         _label = QLabel()
         _label.setVisible(True)
-        _button = QPushButton("Define")
+        _button = QPushButton("Define Formula")
+        _button.setFixedHeight(self.button_height)
+        _button.setFixedWidth(self.button_width)
         QtCore.QObject.connect(_button, QtCore.SIGNAL("pressed()"),
                                 lambda key=_random_key:
                                self.chemical_formula_pressed(key))
