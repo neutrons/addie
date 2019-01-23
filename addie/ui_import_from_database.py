@@ -202,6 +202,6 @@ class Ui_Dialog(object):
         self.remove_criteria_button.setText(_translate("Dialog", "-", None))
         self.add_criteria_button.setText(_translate("Dialog", "+", None))
         self.pushButton.setText(_translate("Dialog", "Change User ...", None))
-        self.cancel_button.setText(_translate("Dialog", "Cancel", None))
+        self.cancel_button.setText(_translate("Dialog", "Close", None))
         self.import_button.setText(_translate("Dialog", "Import", None))
 

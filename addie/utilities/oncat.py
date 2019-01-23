@@ -12,14 +12,14 @@ class InMemoryTokenStore(object):
         return self._token
 
 
-def pyoncatGetRuns(oncat, instrument, runs, facility='SNS'):
+def pyoncatGetRuns(oncat=None, instrument='', runs=-1, facility='SNS'):
     datafiles = oncat.Datafile.list(
         facility=facility,
         instrument=instrument,
         projection=['location'],
         tags=['type/raw'],
         exts=['.nxs.h5'],
-        ranges_q='indexed.run_number:%d' % runs
+        ranges_q='indexed.run_number:%s' % runs
     )
     return datafiles
 

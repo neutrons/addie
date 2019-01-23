@@ -9,11 +9,12 @@ except:
         raise ImportError("Requires PyQt4 or PyQt5")
 
 from addie.master_table.oncat_authentication_handler import OncatAuthenticationHandler
-from addie.utilities.oncat import pyoncatGetIptsList
+from addie.utilities.oncat import pyoncatGetIptsList, pyoncatGetRuns
 from addie.master_table.tree_definition import LIST_SEARCH_CRITERIA
 from addie.master_table.periodic_table.material_handler import MaterialHandler
 
 from addie.utilities.general import generate_random_key
+from addie.utilities.list_runs_parser import ListRunsParser
 
 from addie.ui_import_from_database import Ui_Dialog as UiDialog
 
@@ -128,7 +129,29 @@ class ImportFromDatabaseWindow(QDialog):
         pass
 
     def import_button_clicked(self):
-        pass
+        if self.ui.run_radio_button.isChecked():
+            print("clicked import list of runs")
+            str_runs = str(self.ui.run_number_lineedit.text())
+
+            o_parser = ListRunsParser(current_runs=str_runs)
+            list_of_runs = o_parser.list_current_runs
+
+            for _run in list_of_runs:
+
+                _nexus_json = pyoncatGetRuns(oncat=self.parent.oncat,
+                                               instrument=self.parent.instrument['short_name'],
+                                               runs=_run,
+                                               facility=self.parent.facility,
+                                               )
+                print("for run {}, json is is {}".format(_run, _nexus_json))
+        else:
+            ipts = str(self.ui.ipts_combobox.currentText())
+
+
+
+
+
+
 
     def cancel_button_clicked(self):
         self.close()
