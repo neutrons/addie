@@ -155,7 +155,15 @@ class TableRowHandler:
     def set_row_height(self, row, height):
         self.table_ui.setRowHeight(row, height)
 
-    def insert_row(self, row=-1):
+    def fill_row(self, sample_runs=''):
+        if dict == {}:
+            return
+
+        row = self._calculate_insert_row()
+        self.insert_row(row=row, sample_runs=sample_runs)
+
+    def insert_row(self, row=-1,
+                   sample_runs=''):
         self.table_ui.insertRow(row)
         self.set_row_height(row, COLUMN_DEFAULT_HEIGHT)
 
@@ -260,7 +268,7 @@ class TableRowHandler:
 
         # column 2 - sample runs
         column += 1
-        _item = QTableWidgetItem("")
+        _item = QTableWidgetItem(sample_runs)
         _master_table_row_ui['sample']['runs'] = _item
         self.table_ui.setItem(row, column, _item)
 

@@ -1,5 +1,18 @@
 import pyoncat
 
+try:
+    from PyQt4.QtGui import QDialog
+    from PyQt4 import QtGui, QtCore
+except:
+    try:
+        from PyQt5.QtWidgets import QDialog
+        from PyQt5 import QtGui, QtCore
+    except:
+        raise ImportError("Requires PyQt4 or PyQt5")
+
+from addie.ui_oncat_error_message import Ui_Dialog as UiDialog
+
+
 # Create token store
 class InMemoryTokenStore(object):
     def __init__(self):
@@ -60,3 +73,21 @@ if __name__ == "__main__":
     print("VISION IPTSs")
     print("-" * dashes)
     print(pyoncatGetIptsList(oncat, 'VIS'))
+
+
+class OncatErrorMessageWindow(QDialog):
+
+    def __init__(self, parent=None, list_of_runs=[]):
+        QDialog.__init__(self, parent=parent)
+        self.ui = UiDialog()
+        self.ui.setupUi(self)
+
+        self.init_widgets(list_of_runs=list_of_runs)
+
+    def init_widgets(self, list_of_runs=[]):
+        str_list_of_runs = "\n".join(list_of_runs)
+        self.ui.list_of_runs.setText(str_list_of_runs)
+
+
+
+

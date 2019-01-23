@@ -1,17 +1,21 @@
 try:
-    from PyQt4.QtGui import QDialog, QComboBox, QLineEdit, QPushButton, QWidget, QHBoxLayout, QLabel, QTableWidgetItem
+    from PyQt4.QtGui import QDialog, QComboBox, QLineEdit, QPushButton, QWidget, QHBoxLayout, QLabel, \
+        QTableWidgetItem, QApplication
     from PyQt4 import QtGui, QtCore
 except:
     try:
-        from PyQt5.QtWidgets import QDialog, QComboBox, QLineEdit, QPushButton, QWidget, QHBoxLayout, QLabel, QTableWidgetItem
+        from PyQt5.QtWidgets import QDialog, QComboBox, QLineEdit, QPushButton, QWidget, QHBoxLayout, QLabel, \
+            QTableWidgetItem, QApplication
         from PyQt5 import QtGui, QtCore
     except:
         raise ImportError("Requires PyQt4 or PyQt5")
 
 from addie.master_table.oncat_authentication_handler import OncatAuthenticationHandler
+from addie.utilities.oncat import OncatErrorMessageWindow
 from addie.utilities.oncat import pyoncatGetIptsList, pyoncatGetRuns
 from addie.master_table.tree_definition import LIST_SEARCH_CRITERIA
 from addie.master_table.periodic_table.material_handler import MaterialHandler
+from addie.master_table.table_row_handler import TableRowHandler
 
 from addie.utilities.general import generate_random_key
 from addie.utilities.list_runs_parser import ListRunsParser
@@ -129,12 +133,17 @@ class ImportFromDatabaseWindow(QDialog):
         pass
 
     def import_button_clicked(self):
+
+        QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+
         if self.ui.run_radio_button.isChecked():
-            print("clicked import list of runs")
             str_runs = str(self.ui.run_number_lineedit.text())
 
             o_parser = ListRunsParser(current_runs=str_runs)
             list_of_runs = o_parser.list_current_runs
+
+            list_of_runs_found = []
+            list_of_runs_not_found = []
 
             for _run in list_of_runs:
 
@@ -143,15 +152,38 @@ class ImportFromDatabaseWindow(QDialog):
                                                runs=_run,
                                                facility=self.parent.facility,
                                                )
-                print("for run {}, json is is {}".format(_run, _nexus_json))
+                if _nexus_json == []:
+                    list_of_runs_not_found.append(_run)
+                else:
+                    list_of_runs_found.append(_run)
+
+            if list_of_runs_not_found:
+                self.inform_of_list_of_runs_not_found(list_of_runs=list_of_runs_not_found)
+
+            # clear input widget
+            self.ui.run_number_lineedit.setText("")
+            self.insert_in_master_table(list_of_runs=list_of_runs_found)
+
         else:
             ipts = str(self.ui.ipts_combobox.currentText())
 
+        QApplication.restoreOverrideCursor()
 
+    def inform_of_list_of_runs_not_found(self, list_of_runs=''):
+        if list_of_runs == '':
+            return
 
+        o_info = OncatErrorMessageWindow(parent=self,
+                                         list_of_runs=list_of_runs)
+        o_info.show()
 
+    def insert_in_master_table(self, list_of_runs=[]):
+        if list_of_runs == []:
+            return
 
-
+        o_row = TableRowHandler(parent=self.parent)
+        for _run in list_of_runs:
+            o_row.fill_row(sample_runs=_run)
 
     def cancel_button_clicked(self):
         self.close()
