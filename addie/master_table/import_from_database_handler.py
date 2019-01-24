@@ -132,7 +132,7 @@ class ImportFromDatabaseWindow(QDialog):
     def run_number_return_pressed(self):
         pass
 
-    def get_list_of_runs_found_and_not_found(self, str_runs="", oncat_result={}):
+    def get_list_of_runs_found_and_not_found(self, str_runs="", oncat_result={}, check_not_found=True):
         o_parser = ListRunsParser(current_runs=str_runs)
         list_of_runs = o_parser.list_current_runs
 
@@ -141,7 +141,11 @@ class ImportFromDatabaseWindow(QDialog):
             _run_number = _json['indexed']['run_number']
             list_of_runs_found.append("{}".format(_run_number))
 
-        list_of_runs_not_found = set(list_of_runs) - set(list_of_runs_found)
+        if check_not_found:
+            list_of_runs_not_found = set(list_of_runs) - set(list_of_runs_found)
+        else:
+            list_of_runs_not_found = []
+
         return {'not_found': list_of_runs_not_found,
                 'found': list_of_runs_found}
 
@@ -171,21 +175,21 @@ class ImportFromDatabaseWindow(QDialog):
 
             # clear input widget
             self.ui.run_number_lineedit.setText("")
-            self.insert_in_master_table(list_of_runs=list_of_runs_found)
 
         else:
             ipts = str(self.ui.ipts_combobox.currentText())
-
-            print("IPTS: {}".format(ipts))
-            print("instrument: {}".format(instrument))
-            print("facility: {}".format(self.parent.facility))
 
             _nexus_json = pyoncatGetRunsFromIpts(oncat=self.parent.oncat,
                                                  instrument=self.parent.instrument['short_name'],
                                                  ipts=ipts,
                                                  facility=self.parent.facility)
 
-            print(_nexus_json)
+            result = self.get_list_of_runs_found_and_not_found(str_runs="",
+                                                               oncat_result=_nexus_json,
+                                                               check_not_found=False)
+            list_of_runs_found = result['found']
+
+        self.insert_in_master_table(list_of_runs=list_of_runs_found)
 
         QApplication.restoreOverrideCursor()
 
