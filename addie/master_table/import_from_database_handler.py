@@ -51,6 +51,11 @@ class ImportFromDatabaseWindow(QDialog):
 
     ipts_exist = True
     nexus_json = {}
+    metadata = {}
+
+    list_of_nexus_found = []
+    list_of_nexus_not_found = []
+    list_of_nexus_filtered_out = []
 
     def __init__(self, parent=None):
         self.parent = parent
@@ -111,6 +116,10 @@ class ImportFromDatabaseWindow(QDialog):
         self.ui.clear_run.setEnabled(run_widgets_status)
 
         self.check_import_button()
+
+    def filter_widget_status(self, enabled_widgets=False):
+        self.ui.tableWidget.setEnabled(enabled_widgets)
+        self.ui.add_criteria_button.setEnabled(enabled_widgets)
 
     def clear_ipts(self):
         self.ui.ipts_lineedit.setText("")
@@ -356,11 +365,29 @@ class ImportFromDatabaseWindow(QDialog):
             self.insert_in_master_table(nexus_json=nexus_json)
         else:
             self.nexus_json = nexus_json
+            self.isolate_metadata()
 
         QApplication.restoreOverrideCursor()
 
         if insert_in_table:
             self.close()
+
+    def isolate_metadata(self):
+        '''retrieve the metadata of interest from the json returns by ONCat'''
+        nexus_json = self.nexus_json
+        metadata = {}
+
+        list_chemical_formula = []
+        list_mass_density = []
+
+        for _json in nexus_json:
+            list_chemical_formula.append(str(_json['metadata']['entry']['sample']['chemical_formula']))
+            list_mass_density.append(str(_json['metadata']['entry']['sample']['mass_density']))
+
+        metadata['chemical_formula'] = set(list_chemical_formula)
+        metadata['mass_density'] = set(list_mass_density)
+
+        self.metadata = metadata
 
     def files_not_found_more_clicked(self):
         list_of_runs_not_found = self.list_of_runs_not_found
@@ -391,13 +418,23 @@ class ImportFromDatabaseWindow(QDialog):
         if index == 0:
             # what to load
             pass
-        elif index == 1:
-            # narrow down selection
-            pass
-        elif index == 2:
+        else:
             if self.ui.import_button.isEnabled():
                 self.import_button_clicked(insert_in_table=False)
+
+            if index == 2: # status page
                 self.refresh_status_page()
+            elif index == 1: # filter page
+                self.refresh_filter_page()
+
+    def refresh_filter_page(self):
+        nexus_json = self.nexus_json
+
+        enabled_widgets = False
+        if len(nexus_json) > 0:
+            enabled_widgets = True
+
+        self.filter_widget_status(enabled_widgets=enabled_widgets)
 
     def refresh_status_page(self):
         nexus_json = self.nexus_json
@@ -421,7 +458,9 @@ class ImportFromDatabaseWindow(QDialog):
         self.ui.file_not_found_more.setVisible(visible_list_of_runs_not_found_button)
 
         # list of files filtered out
-
+        visible_list_of_runs_filtered_out = False
+        #FIXME HERE
+        self.ui.files_filtered_out_more.setVisible(visible_list_of_runs_filtered_out)
 
 
     def closeEvent(self, c):
