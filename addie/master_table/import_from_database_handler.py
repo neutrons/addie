@@ -163,8 +163,11 @@ class ImportFromDatabaseWindow(QDialog):
         self.check_import_button()
 
     def get_list_of_runs_found_and_not_found(self, str_runs="", oncat_result={}, check_not_found=True):
-        o_parser = ListRunsParser(current_runs=str_runs)
-        list_of_runs = o_parser.list_current_runs
+        if str_runs:
+            o_parser = ListRunsParser(current_runs=str_runs)
+            list_of_runs = o_parser.list_current_runs
+        else:
+            check_not_found = False
 
         list_of_runs_found = []
         for _json in oncat_result:
@@ -330,12 +333,10 @@ class ImportFromDatabaseWindow(QDialog):
                                                                oncat_result=nexus_json)
             list_of_runs_not_found = result['not_found']
             self.list_of_runs_not_found = list_of_runs_not_found
-
-            # if list_of_runs_not_found:
-            #     self.inform_of_list_of_runs_not_found(list_of_runs=list_of_runs_not_found)
+            self.list_of_runs_found = result['found']
 
             # clear input widget
-            self.ui.run_number_lineedit.setText("")
+#            self.ui.run_number_lineedit.setText("")
 
         else:
             ipts = str(self.ui.ipts_combobox.currentText())
@@ -345,9 +346,11 @@ class ImportFromDatabaseWindow(QDialog):
                                                 ipts=ipts,
                                                 facility=self.parent.facility)
 
-            # result = self.get_list_of_runs_found_and_not_found(str_runs="",
-            #                                                    oncat_result=nexus_json,
-            #                                                    check_not_found=False)
+            result = self.get_list_of_runs_found_and_not_found(oncat_result=nexus_json,
+                                                               check_not_found=False)
+
+            self.list_of_runs_not_found = result['not_found']
+            self.list_of_runs_found = result['found']
 
         if insert_in_table:
             self.insert_in_master_table(nexus_json=nexus_json)
@@ -371,7 +374,9 @@ class ImportFromDatabaseWindow(QDialog):
         pass
 
     def files_initially_selected_more_clicked(self):
-        pass
+        list_of_nexus_found = self.list_of_runs_found
+        self.inform_of_list_of_runs(list_of_runs=list_of_nexus_found,
+                                    message='List of NeXus found!')
 
     def inform_of_list_of_runs(self, list_of_runs='', message=''):
         if list_of_runs == '':
@@ -400,6 +405,10 @@ class ImportFromDatabaseWindow(QDialog):
 
         # raw
         self.ui.number_of_files_initially_selected.setText("{}".format(nbr_of_raw_nexus))
+        visible_list_of_files_initially_selected = False
+        if nbr_of_raw_nexus > 0:
+            visible_list_of_files_initially_selected = True
+        self.ui.file_initially_selected_more.setVisible(visible_list_of_files_initially_selected)
 
         # not found
         list_of_runs_not_found = self.list_of_runs_not_found

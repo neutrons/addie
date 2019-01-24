@@ -470,7 +470,7 @@
          <item row="1" column="2">
           <widget class="QLabel" name="number_of_files_to_import_label_2">
            <property name="text">
-            <string>NeXus have been initially selected</string>
+            <string>NeXus file(s) found!</string>
            </property>
           </widget>
          </item>

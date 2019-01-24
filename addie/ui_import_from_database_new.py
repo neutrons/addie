@@ -288,7 +288,7 @@ class Ui_Dialog(object):
         self.number_of_files_to_import_label_3.setText(_translate("Dialog", "NeXus file(s) not found!", None))
         self.file_not_found_more.setText(_translate("Dialog", "more ...", None))
         self.number_of_files_initially_selected.setText(_translate("Dialog", "0", None))
-        self.number_of_files_to_import_label_2.setText(_translate("Dialog", "NeXus have been initially selected", None))
+        self.number_of_files_to_import_label_2.setText(_translate("Dialog", "NeXus file(s) found!", None))
         self.file_initially_selected_more.setText(_translate("Dialog", "more ...", None))
         self.number_of_files_filtered_out.setText(_translate("Dialog", "0", None))
         self.number_of_files_filtered_out_label.setText(_translate("Dialog", "Files have been filtered Out.", None))
