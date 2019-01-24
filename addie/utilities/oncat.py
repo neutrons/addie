@@ -29,7 +29,11 @@ def pyoncatGetNexus(oncat=None, instrument='', runs=-1, facility='SNS'):
     datafiles = oncat.Datafile.list(
         facility=facility,
         instrument=instrument,
-        projection=['location', 'indexed.run_number'],
+        projection=['location',
+                    'indexed.run_number',
+                    'metadata.entry.sample.chemical_formula',
+                    'metadata.entry.sample.mass_density',
+                    ],
         tags=['type/raw'],
         exts=['.nxs.h5'],
         ranges_q='indexed.run_number:%s' % runs
@@ -40,7 +44,10 @@ def pyoncatGetRunsFromIpts(oncat=None, instrument='', ipts='', facility='SNS'):
     run_list = oncat.Datafile.list(facility=facility,
                                    instrument=instrument,
                                    experiment=ipts,
-                                   projection=['indexed.run_number'],
+                                   projection=['indexed.run_number',
+                                               'metadata.entry.sample.chemical_formula',
+                                               'metadata.entry.sample.mass_density',
+                                               ],
                                    tags=['type/raw'],
                                    exts=['.nxs.h5'])
     return run_list

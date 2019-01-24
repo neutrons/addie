@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 try:
     from PyQt4.QtGui import QDialog, QComboBox, QLineEdit, QPushButton, QWidget, QHBoxLayout, QLabel, \
         QTableWidgetItem, QApplication
@@ -159,16 +161,15 @@ class ImportFromDatabaseWindow(QDialog):
             str_runs = str(self.ui.run_number_lineedit.text())
             str_runs = remove_white_spaces(str_runs)
 
-            _nexus_json = pyoncatGetNexus(oncat=self.parent.oncat,
+            nexus_json = pyoncatGetNexus(oncat=self.parent.oncat,
                                           instrument=self.parent.instrument['short_name'],
                                           runs=str_runs,
                                           facility=self.parent.facility,
                                           )
 
             result = self.get_list_of_runs_found_and_not_found(str_runs=str_runs,
-                                                                     oncat_result=_nexus_json)
+                                                               oncat_result=nexus_json)
             list_of_runs_not_found = result['not_found']
-            list_of_runs_found = result['found']
 
             if list_of_runs_not_found:
                 self.inform_of_list_of_runs_not_found(list_of_runs=list_of_runs_not_found)
@@ -179,17 +180,17 @@ class ImportFromDatabaseWindow(QDialog):
         else:
             ipts = str(self.ui.ipts_combobox.currentText())
 
-            _nexus_json = pyoncatGetRunsFromIpts(oncat=self.parent.oncat,
+            nexus_json = pyoncatGetRunsFromIpts(oncat=self.parent.oncat,
                                                  instrument=self.parent.instrument['short_name'],
                                                  ipts=ipts,
                                                  facility=self.parent.facility)
 
-            result = self.get_list_of_runs_found_and_not_found(str_runs="",
-                                                               oncat_result=_nexus_json,
-                                                               check_not_found=False)
-            list_of_runs_found = result['found']
+            # result = self.get_list_of_runs_found_and_not_found(str_runs="",
+            #                                                    oncat_result=nexus_json,
+            #                                                    check_not_found=False)
 
-        self.insert_in_master_table(list_of_runs=list_of_runs_found)
+
+        self.insert_in_master_table(nexus_json=nexus_json)
 
         QApplication.restoreOverrideCursor()
 
@@ -201,13 +202,31 @@ class ImportFromDatabaseWindow(QDialog):
                                          list_of_runs=list_of_runs)
         o_info.show()
 
-    def insert_in_master_table(self, list_of_runs=[]):
-        if list_of_runs == []:
+    def build_result_dictionary(self, nexus_json=[]):
+        """isolate the infos I need from ONCat result"""
+        result_dict = OrderedDict()
+
+        for _json in nexus_json:
+            result_dict[_json['indexed']['run_number']] = {'chemical_formula': "{}".format(_json['metadata']['entry']['sample']['chemical_formula']),
+                                                           'mass_density': "{}".format(_json['metadata']['entry']['sample']['mass_density']),
+                                                           }
+        return result_dict
+
+    def insert_in_master_table(self, nexus_json=[]):
+        if nexus_json == []:
             return
 
+        runs_dict = self.build_result_dictionary(nexus_json=nexus_json)
+
         o_row = TableRowHandler(parent=self.parent)
-        for _run in list_of_runs:
-            o_row.fill_row(sample_runs=_run)
+        for _run in runs_dict.keys():
+            _chemical_formula = runs_dict[_run]['chemical_formula']
+            _mass_density = runs_dict[_run]['mass_density']
+            _run = "{}".format(_run)
+
+            o_row.fill_row(sample_runs=_run,
+                           sample_chemical_formula=_chemical_formula,
+                           sample_mass_density=_mass_density)
 
     def cancel_button_clicked(self):
         self.close()

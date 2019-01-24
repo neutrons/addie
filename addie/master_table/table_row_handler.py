@@ -155,15 +155,21 @@ class TableRowHandler:
     def set_row_height(self, row, height):
         self.table_ui.setRowHeight(row, height)
 
-    def fill_row(self, sample_runs=''):
+    def fill_row(self, sample_runs='',
+                 sample_chemical_formula='N/A',
+                 sample_mass_density='N/A'):
         if dict == {}:
             return
 
         row = self._calculate_insert_row()
-        self.insert_row(row=row, sample_runs=sample_runs)
+        self.insert_row(row=row, sample_runs=sample_runs,
+                        sample_mass_density=sample_mass_density,
+                        sample_chemical_formula=sample_chemical_formula)
 
     def insert_row(self, row=-1,
-                   sample_runs=''):
+                   sample_runs='',
+                   sample_mass_density='N/A',
+                   sample_chemical_formula='N/A'):
         self.table_ui.insertRow(row)
         self.set_row_height(row, COLUMN_DEFAULT_HEIGHT)
 
@@ -286,7 +292,7 @@ class TableRowHandler:
 
         # column 5 - material (chemical formula)
         column += 1
-        _material_text = QLineEdit("")
+        _material_text = QLineEdit(sample_chemical_formula)
         _material_text.setEnabled(False)
         QtCore.QObject.connect(_material_text, QtCore.SIGNAL("returnPressed()"),
                                lambda key=random_key:
@@ -313,7 +319,7 @@ class TableRowHandler:
 
         # column 6 - mass density
         column += 1
-        _mass_text = QLineEdit("N/A")
+        _mass_text = QLineEdit(sample_mass_density)
         QtCore.QObject.connect(_mass_text, QtCore.SIGNAL("returnPressed()"),
                                lambda key=random_key:
                                self.parent.master_table_sample_mass_density_line_edit_entered(key))
