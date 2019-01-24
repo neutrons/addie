@@ -22,7 +22,7 @@ from addie.master_table.table_row_handler import TableRowHandler
 from addie.utilities.general import generate_random_key, remove_white_spaces
 from addie.utilities.list_runs_parser import ListRunsParser
 
-from addie.ui_import_from_database import Ui_Dialog as UiDialog
+from addie.ui_import_from_database_new import Ui_Dialog as UiDialog
 
 
 class ImportFromDatabaseHandler:
@@ -60,7 +60,6 @@ class ImportFromDatabaseWindow(QDialog):
 
         self.init_widgets()
         self.radio_button_changed()
-        self.check_preloading_buttons()
 
     def init_widgets(self):
         if self.parent.oncat is None:
@@ -94,32 +93,6 @@ class ImportFromDatabaseWindow(QDialog):
     def change_user_clicked(self):
         OncatAuthenticationHandler(parent=self.parent)
 
-    def check_preloading_buttons(self):
-        disable_preloading_button = True
-        preloading_text = "Checking "
-        if self.ui.ipts_radio_button.isChecked():
-            ipts_run = str(self.ui.ipts_lineedit.text()).strip()
-            if ipts_run == "":
-                disable_preloading_button = False
-                ipts_selected = str(self.ui.ipts_combobox.currentText())
-                preloading_text += "{}".format(ipts_selected)
-            elif self.ipts_exist:
-                disable_preloading_button = False
-                ipts_selected = str(self.ui.ipts_combobox.currentText())
-                preloading_text += "{}".format(ipts_selected)
-            else:
-                preloading_text = "Nothing to Check!"
-        else:
-            list_of_runs = str(self.ui.run_number_lineedit.text()).strip()
-            if list_of_runs != "":
-                disable_preloading_button = False
-                preloading_text += "Runs {}".format(list_of_runs)
-            else:
-                preloading_text = "Nothing to Check!"
-
-        self.ui.preloading_button.setEnabled(not disable_preloading_button)
-        self.ui.preloading_button.setText(preloading_text)
-
     def radio_button_changed(self):
         ipts_widgets_status = False
         run_widgets_status = True
@@ -139,19 +112,14 @@ class ImportFromDatabaseWindow(QDialog):
         self.ui.run_number_label.setEnabled(run_widgets_status)
         self.ui.clear_run.setEnabled(run_widgets_status)
 
-        self.check_preloading_buttons()
-
     def clear_ipts(self):
         self.ui.ipts_lineedit.setText("")
-        self.check_preloading_buttons()
 
     def clear_run(self):
         self.ui.run_number_lineedit.setText("")
-        self.check_preloading_buttons()
 
     def ipts_selection_changed(self, ipts_selected):
         self.ui.ipts_lineedit.setText("")
-        self.check_preloading_buttons()
 
     def ipts_text_changed(self, ipts_text):
         if ipts_text.strip() != "":
@@ -168,7 +136,6 @@ class ImportFromDatabaseWindow(QDialog):
         self.ipts_exist = ipts_exist
         #self.ui.error_message.setVisible(not ipts_exist)
         #self.ui.import_button.setEnabled(ipts_exist)
-        self.check_preloading_buttons()
 
     def run_number_return_pressed(self):
         pass
