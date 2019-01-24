@@ -4649,11 +4649,6 @@ p, li { white-space: pre-wrap; }
                 <property name="toolTip">
                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;List of workspace names.  Each workspace is an individual bank&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
-                <column>
-                 <property name="text">
-                  <string notr="true">1</string>
-                 </property>
-                </column>
                </widget>
               </item>
              </layout>
@@ -5074,11 +5069,6 @@ p, li { white-space: pre-wrap; }
                   <property name="toolTip">
                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;write click on the workspace name should give user the option to plot/over plot &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
-                  <column>
-                   <property name="text">
-                    <string notr="true">1</string>
-                   </property>
-                  </column>
                  </widget>
                 </item>
                 <item>

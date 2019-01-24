@@ -6,3 +6,6 @@ def get_ucams():
 
 def generate_random_key():
     return random.randint(0, 1e5)
+
+def remove_white_spaces(str):
+    return str.replace(" ", "")

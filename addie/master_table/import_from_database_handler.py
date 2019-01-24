@@ -12,12 +12,12 @@ except:
 
 from addie.master_table.oncat_authentication_handler import OncatAuthenticationHandler
 from addie.utilities.oncat import OncatErrorMessageWindow
-from addie.utilities.oncat import pyoncatGetIptsList, pyoncatGetRuns
+from addie.utilities.oncat import pyoncatGetIptsList, pyoncatGetNexus, pyoncatGetRunsFromIpts
 from addie.master_table.tree_definition import LIST_SEARCH_CRITERIA
 from addie.master_table.periodic_table.material_handler import MaterialHandler
 from addie.master_table.table_row_handler import TableRowHandler
 
-from addie.utilities.general import generate_random_key
+from addie.utilities.general import generate_random_key, remove_white_spaces
 from addie.utilities.list_runs_parser import ListRunsParser
 
 from addie.ui_import_from_database import Ui_Dialog as UiDialog
@@ -132,30 +132,39 @@ class ImportFromDatabaseWindow(QDialog):
     def run_number_return_pressed(self):
         pass
 
+    def get_list_of_runs_found_and_not_found(self, str_runs="", oncat_result={}):
+        o_parser = ListRunsParser(current_runs=str_runs)
+        list_of_runs = o_parser.list_current_runs
+
+        list_of_runs_found = []
+        for _json in oncat_result:
+            _run_number = _json['indexed']['run_number']
+            list_of_runs_found.append("{}".format(_run_number))
+
+        list_of_runs_not_found = set(list_of_runs) - set(list_of_runs_found)
+        return {'not_found': list_of_runs_not_found,
+                'found': list_of_runs_found}
+
     def import_button_clicked(self):
 
         QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
 
         if self.ui.run_radio_button.isChecked():
+
+            # remove white space to string to make ONCat happy
             str_runs = str(self.ui.run_number_lineedit.text())
+            str_runs = remove_white_spaces(str_runs)
 
-            o_parser = ListRunsParser(current_runs=str_runs)
-            list_of_runs = o_parser.list_current_runs
+            _nexus_json = pyoncatGetNexus(oncat=self.parent.oncat,
+                                          instrument=self.parent.instrument['short_name'],
+                                          runs=str_runs,
+                                          facility=self.parent.facility,
+                                          )
 
-            list_of_runs_found = []
-            list_of_runs_not_found = []
-
-            for _run in list_of_runs:
-
-                _nexus_json = pyoncatGetRuns(oncat=self.parent.oncat,
-                                               instrument=self.parent.instrument['short_name'],
-                                               runs=_run,
-                                               facility=self.parent.facility,
-                                               )
-                if _nexus_json == []:
-                    list_of_runs_not_found.append(_run)
-                else:
-                    list_of_runs_found.append(_run)
+            result = self.get_list_of_runs_found_and_not_found(str_runs=str_runs,
+                                                                     oncat_result=_nexus_json)
+            list_of_runs_not_found = result['not_found']
+            list_of_runs_found = result['found']
 
             if list_of_runs_not_found:
                 self.inform_of_list_of_runs_not_found(list_of_runs=list_of_runs_not_found)
@@ -166,6 +175,17 @@ class ImportFromDatabaseWindow(QDialog):
 
         else:
             ipts = str(self.ui.ipts_combobox.currentText())
+
+            print("IPTS: {}".format(ipts))
+            print("instrument: {}".format(instrument))
+            print("facility: {}".format(self.parent.facility))
+
+            _nexus_json = pyoncatGetRunsFromIpts(oncat=self.parent.oncat,
+                                                 instrument=self.parent.instrument['short_name'],
+                                                 ipts=ipts,
+                                                 facility=self.parent.facility)
+
+            print(_nexus_json)
 
         QApplication.restoreOverrideCursor()
 
