@@ -50,6 +50,7 @@ class ImportFromDatabaseWindow(QDialog):
     list_ui = {}
 
     ipts_exist = True
+    nexus_json = {}
 
     def __init__(self, parent=None):
         self.parent = parent
@@ -157,8 +158,23 @@ class ImportFromDatabaseWindow(QDialog):
             # narrow down selection
             pass
         elif index == 2:
-            # status
-            pass
+            if self.ui.import_button.isEnabled():
+                self.import_button_clicked(insert_in_table=False)
+                self.refresh_status_page()
+
+    def refresh_status_page(self):
+        nexus_json = self.nexus_json
+        nbr_of_raw_nexus = len(nexus_json)
+
+        # raw
+        self.ui.number_of_files_initially_selected.setText("{}".format(nbr_of_raw_nexus))
+
+        # not found
+        list_of_runs_not_found = self.list_of_runs_not_found
+        self.ui.number_of_files_not_found.setText("{}".format(len(list_of_runs_not_found)))
+        if list_of_runs_not_found:
+            # show button
+            self.inform_of_list_of_runs_not_found(list_of_runs=list_of_runs_not_found)
 
     def run_number_return_pressed(self):
         pass
@@ -327,9 +343,11 @@ class ImportFromDatabaseWindow(QDialog):
         else:
             self.ui.remove_criteria_button.setEnabled(False)
 
-    def import_button_clicked(self):
+    def import_button_clicked(self, insert_in_table=True):
 
         QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+
+        self.list_of_runs_not_found = []
 
         if self.ui.run_radio_button.isChecked():
 
@@ -346,6 +364,7 @@ class ImportFromDatabaseWindow(QDialog):
             result = self.get_list_of_runs_found_and_not_found(str_runs=str_runs,
                                                                oncat_result=nexus_json)
             list_of_runs_not_found = result['not_found']
+            self.list_of_runs_not_found = list_of_runs_not_found
 
             if list_of_runs_not_found:
                 self.inform_of_list_of_runs_not_found(list_of_runs=list_of_runs_not_found)
@@ -365,10 +384,15 @@ class ImportFromDatabaseWindow(QDialog):
             #                                                    oncat_result=nexus_json,
             #                                                    check_not_found=False)
 
-        self.insert_in_master_table(nexus_json=nexus_json)
+        if insert_in_table:
+            self.insert_in_master_table(nexus_json=nexus_json)
+        else:
+            self.nexus_json = nexus_json
 
         QApplication.restoreOverrideCursor()
-        self.close()
+
+        if insert_in_table:
+            self.close()
 
     def closeEvent(self, c):
         self.parent.import_from_database_ui = None
