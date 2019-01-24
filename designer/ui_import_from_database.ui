@@ -176,27 +176,40 @@
     </layout>
    </item>
    <item>
-    <widget class="QPushButton" name="preloading_button">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="text">
-      <string>Pre-Loading</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <spacer name="horizontalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
+    <layout class="QHBoxLayout" name="horizontalLayout_6">
+     <item>
+      <widget class="QPushButton" name="preloading_button">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>Pre-Loading</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="clear_preloading_button">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>130</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>130</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Clear Pre-Loading</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <spacer name="verticalSpacer">
@@ -655,7 +668,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>26</x>
-     <y>422</y>
+     <y>400</y>
     </hint>
     <hint type="destinationlabel">
      <x>85</x>
@@ -671,11 +684,59 @@
    <hints>
     <hint type="sourcelabel">
      <x>807</x>
-     <y>421</y>
+     <y>399</y>
     </hint>
     <hint type="destinationlabel">
      <x>453</x>
      <y>341</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>run_number_lineedit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>run_number_text_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>292</x>
+     <y>55</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>188</x>
+     <y>136</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>preloading_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>preloading_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>631</x>
+     <y>84</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>635</x>
+     <y>148</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clear_preloading_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>clear_preloading_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>730</x>
+     <y>83</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>790</x>
+     <y>136</y>
     </hint>
    </hints>
   </connection>
@@ -692,5 +753,8 @@
   <slot>clear_run()</slot>
   <slot>remove_criteria_clicked()</slot>
   <slot>add_criteria_clicked()</slot>
+  <slot>run_number_text_changed()</slot>
+  <slot>preloading_clicked()</slot>
+  <slot>clear_preloading_clicked()</slot>
  </slots>
 </ui>
