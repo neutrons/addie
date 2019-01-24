@@ -88,25 +88,37 @@ class ImportFromDatabaseWindow(QDialog):
         for _col, _width in enumerate(self.column_widths):
             self.ui.tableWidget.setColumnWidth(_col, _width)
 
+        self.ui.number_of_files_to_import.setVisible(False)
+        self.ui.number_of_files_to_import_label.setVisible(False)
+
     def change_user_clicked(self):
         OncatAuthenticationHandler(parent=self.parent)
 
     def check_preloading_buttons(self):
-        disable_import_button = True
         disable_preloading_button = True
+        preloading_text = "Checking "
         if self.ui.ipts_radio_button.isChecked():
             ipts_run = str(self.ui.ipts_lineedit.text()).strip()
             if ipts_run == "":
                 disable_preloading_button = False
+                ipts_selected = str(self.ui.ipts_combobox.currentText())
+                preloading_text += "{}".format(ipts_selected)
             elif self.ipts_exist:
                 disable_preloading_button = False
+                ipts_selected = str(self.ui.ipts_combobox.currentText())
+                preloading_text += "{}".format(ipts_selected)
+            else:
+                preloading_text = "Nothing to Check!"
         else:
             list_of_runs = str(self.ui.run_number_lineedit.text()).strip()
             if list_of_runs != "":
                 disable_preloading_button = False
+                preloading_text += "Runs {}".format(list_of_runs)
+            else:
+                preloading_text = "Nothing to Check!"
 
         self.ui.preloading_button.setEnabled(not disable_preloading_button)
-        self.ui.clear_preloading_button.setEnabled(not disable_preloading_button)
+        self.ui.preloading_button.setText(preloading_text)
 
     def radio_button_changed(self):
         ipts_widgets_status = False
@@ -154,8 +166,8 @@ class ImportFromDatabaseWindow(QDialog):
             ipts_exist = True # we will use the combobox IPTS
 
         self.ipts_exist = ipts_exist
-        self.ui.error_message.setVisible(not ipts_exist)
-        self.ui.import_button.setEnabled(ipts_exist)
+        #self.ui.error_message.setVisible(not ipts_exist)
+        #self.ui.import_button.setEnabled(ipts_exist)
         self.check_preloading_buttons()
 
     def run_number_return_pressed(self):

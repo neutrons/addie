@@ -183,29 +183,7 @@
         <bool>false</bool>
        </property>
        <property name="text">
-        <string>Pre-Loading</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="clear_preloading_button">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>130</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>130</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Clear Pre-Loading</string>
+        <string>Checking Import</string>
        </property>
       </widget>
      </item>
@@ -721,22 +699,6 @@
     <hint type="destinationlabel">
      <x>635</x>
      <y>148</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>clear_preloading_button</sender>
-   <signal>clicked()</signal>
-   <receiver>Dialog</receiver>
-   <slot>clear_preloading_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>730</x>
-     <y>83</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>790</x>
-     <y>136</y>
     </hint>
    </hints>
   </connection>
