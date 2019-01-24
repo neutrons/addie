@@ -106,7 +106,7 @@
    <slot>cancel_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>54</x>
+     <x>334</x>
      <y>146</y>
     </hint>
     <hint type="destinationlabel">
@@ -139,7 +139,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>289</x>
-     <y>63</y>
+     <y>30</y>
     </hint>
     <hint type="destinationlabel">
      <x>307</x>
@@ -154,8 +154,8 @@
    <slot>change_user_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>455</x>
-     <y>34</y>
+     <x>117</x>
+     <y>151</y>
     </hint>
     <hint type="destinationlabel">
      <x>465</x>
@@ -171,7 +171,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>199</x>
-     <y>54</y>
+     <y>21</y>
     </hint>
     <hint type="destinationlabel">
      <x>259</x>

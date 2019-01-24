@@ -43,9 +43,45 @@
       </widget>
      </item>
      <item>
+      <spacer name="horizontalSpacer_5">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
       <widget class="QLabel" name="ipts_label">
        <property name="text">
         <string>or</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="error_message">
+       <property name="text">
+        <string>IPTS # Does Not Exist !</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -140,6 +176,16 @@
     </layout>
    </item>
    <item>
+    <widget class="QPushButton" name="preloading_button">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string>Pre-Loading</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <spacer name="horizontalSpacer_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -151,16 +197,6 @@
       </size>
      </property>
     </spacer>
-   </item>
-   <item>
-    <widget class="QLabel" name="error_message">
-     <property name="text">
-      <string>IPTS # Does Not Exist !</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
    </item>
    <item>
     <spacer name="verticalSpacer">
@@ -177,6 +213,9 @@
    </item>
    <item>
     <widget class="QLabel" name="label">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="text">
       <string>Search Criteria Tools</string>
      </property>
@@ -184,6 +223,9 @@
    </item>
    <item>
     <widget class="QTableWidget" name="tableWidget">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="palette">
       <palette>
        <active>
@@ -327,6 +369,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="add_criteria_button">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="maximumSize">
         <size>
          <width>30</width>
@@ -352,6 +397,40 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <spacer name="horizontalSpacer_6">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="number_of_files_to_import">
+       <property name="text">
+        <string>0</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Files will be imported!</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -384,6 +463,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="import_button">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Import</string>
        </property>
@@ -412,8 +494,8 @@
    <slot>cancel_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>413</x>
-     <y>398</y>
+     <x>718</x>
+     <y>528</y>
     </hint>
     <hint type="destinationlabel">
      <x>80</x>
@@ -428,8 +510,8 @@
    <slot>import_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>524</x>
-     <y>398</y>
+     <x>829</x>
+     <y>528</y>
     </hint>
     <hint type="destinationlabel">
      <x>452</x>
@@ -509,7 +591,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>117</x>
-     <y>398</y>
+     <y>528</y>
     </hint>
     <hint type="destinationlabel">
      <x>452</x>
@@ -524,7 +606,7 @@
    <slot>ipts_text_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>445</x>
+     <x>750</x>
      <y>30</y>
     </hint>
     <hint type="destinationlabel">
@@ -540,7 +622,7 @@
    <slot>clear_ipts()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>513</x>
+     <x>818</x>
      <y>32</y>
     </hint>
     <hint type="destinationlabel">
@@ -556,7 +638,7 @@
    <slot>clear_run()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>454</x>
+     <x>759</x>
      <y>59</y>
     </hint>
     <hint type="destinationlabel">
@@ -573,7 +655,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>26</x>
-     <y>354</y>
+     <y>422</y>
     </hint>
     <hint type="destinationlabel">
      <x>85</x>
@@ -588,8 +670,8 @@
    <slot>add_criteria_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>502</x>
-     <y>353</y>
+     <x>807</x>
+     <y>421</y>
     </hint>
     <hint type="destinationlabel">
      <x>453</x>
