@@ -407,70 +407,10 @@
        </item>
        <item>
         <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="0">
-          <spacer name="horizontalSpacer_8">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="number_of_files_not_found">
-           <property name="text">
-            <string>0</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
          <item row="0" column="2">
           <widget class="QLabel" name="number_of_files_to_import_label_3">
            <property name="text">
             <string>NeXus file(s) not found!</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="3">
-          <widget class="QPushButton" name="file_not_found_more">
-           <property name="text">
-            <string>more ...</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <spacer name="horizontalSpacer_7">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLabel" name="number_of_files_initially_selected">
-           <property name="text">
-            <string>0</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="2">
-          <widget class="QLabel" name="number_of_files_to_import_label_2">
-           <property name="text">
-            <string>NeXus file(s) found!</string>
            </property>
           </widget>
          </item>
@@ -481,8 +421,29 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
-          <spacer name="horizontalSpacer_2">
+         <item row="2" column="2">
+          <widget class="QLabel" name="number_of_files_filtered_out_label">
+           <property name="text">
+            <string>Files have been filtered Out.</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <widget class="QPushButton" name="file_not_found_more">
+           <property name="text">
+            <string>more ...</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="3">
+          <widget class="QPushButton" name="files_filtered_out_more">
+           <property name="text">
+            <string>more ...</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <spacer name="horizontalSpacer_7">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
@@ -504,22 +465,18 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="2">
-          <widget class="QLabel" name="number_of_files_filtered_out_label">
+         <item row="0" column="1">
+          <widget class="QLabel" name="number_of_files_not_found">
            <property name="text">
-            <string>Files have been filtered Out.</string>
+            <string>0</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
          </item>
-         <item row="2" column="3">
-          <widget class="QPushButton" name="files_filtered_out_more">
-           <property name="text">
-            <string>more ...</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <spacer name="horizontalSpacer_6">
+         <item row="0" column="0">
+          <spacer name="horizontalSpacer_8">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
@@ -531,8 +488,8 @@
            </property>
           </spacer>
          </item>
-         <item row="3" column="1">
-          <widget class="QLabel" name="number_of_files_to_import">
+         <item row="1" column="1">
+          <widget class="QLabel" name="number_of_files_initially_selected">
            <property name="text">
             <string>0</string>
            </property>
@@ -541,17 +498,23 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="2">
-          <widget class="QLabel" name="number_of_files_to_import_label">
-           <property name="text">
-            <string>Files will be imported!</string>
+         <item row="2" column="0">
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
            </property>
-          </widget>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
-         <item row="3" column="3">
-          <widget class="QPushButton" name="files_imported_more">
+         <item row="1" column="2">
+          <widget class="QLabel" name="number_of_files_to_import_label_2">
            <property name="text">
-            <string>more ...</string>
+            <string>NeXus file(s) found!</string>
            </property>
           </widget>
          </item>
@@ -565,7 +528,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>142</height>
+           <height>157</height>
           </size>
          </property>
         </spacer>
@@ -898,22 +861,6 @@
     <hint type="destinationlabel">
      <x>321</x>
      <y>564</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>files_imported_more</sender>
-   <signal>clicked()</signal>
-   <receiver>Dialog</receiver>
-   <slot>files_imported_more_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>629</x>
-     <y>373</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>402</x>
-     <y>571</y>
     </hint>
    </hints>
   </connection>

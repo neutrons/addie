@@ -420,6 +420,10 @@ class ImportFromDatabaseWindow(QDialog):
             visible_list_of_runs_not_found_button = True
         self.ui.file_not_found_more.setVisible(visible_list_of_runs_not_found_button)
 
+        # list of files filtered out
+
+
+
     def closeEvent(self, c):
         self.parent.import_from_database_ui = None
         self.parent.import_from_database_ui_position = self.pos()
