@@ -87,9 +87,6 @@ class ImportFromDatabaseWindow(QDialog):
         for _col, _width in enumerate(self.column_widths):
             self.ui.tableWidget.setColumnWidth(_col, _width)
 
-        self.ui.number_of_files_to_import.setVisible(False)
-        self.ui.number_of_files_to_import_label.setVisible(False)
-
     def change_user_clicked(self):
         OncatAuthenticationHandler(parent=self.parent)
 
@@ -111,6 +108,8 @@ class ImportFromDatabaseWindow(QDialog):
         self.ui.run_number_lineedit.setEnabled(run_widgets_status)
         self.ui.run_number_label.setEnabled(run_widgets_status)
         self.ui.clear_run.setEnabled(run_widgets_status)
+
+        self.check_import_button()
 
     def clear_ipts(self):
         self.ui.ipts_lineedit.setText("")
@@ -134,8 +133,32 @@ class ImportFromDatabaseWindow(QDialog):
             ipts_exist = True # we will use the combobox IPTS
 
         self.ipts_exist = ipts_exist
-        #self.ui.error_message.setVisible(not ipts_exist)
-        #self.ui.import_button.setEnabled(ipts_exist)
+        self.check_import_button()
+
+    def check_import_button(self):
+        enable_import = False
+        if self.ui.ipts_radio_button.isChecked():
+            if str(self.ui.ipts_lineedit.text()).strip() != "":
+                if self.ipts_exist:
+                    enable_import = True
+            else:
+                enable_import = True
+        else:
+            if str(self.ui.run_number_lineedit.text()).strip() != "":
+                enable_import = True
+
+        self.ui.import_button.setEnabled(enable_import)
+
+    def toolbox_changed(self, index):
+        if index == 0:
+            # what to load
+            pass
+        elif index == 1:
+            # narrow down selection
+            pass
+        elif index == 2:
+            # status
+            pass
 
     def run_number_return_pressed(self):
         pass
@@ -147,7 +170,7 @@ class ImportFromDatabaseWindow(QDialog):
         pass
 
     def run_number_text_changed(self, text):
-        self.check_preloading_buttons()
+        self.check_import_button()
 
     def get_list_of_runs_found_and_not_found(self, str_runs="", oncat_result={}, check_not_found=True):
         o_parser = ListRunsParser(current_runs=str_runs)
@@ -166,48 +189,6 @@ class ImportFromDatabaseWindow(QDialog):
         return {'not_found': list_of_runs_not_found,
                 'found': list_of_runs_found}
 
-    def import_button_clicked(self):
-
-        QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
-
-        if self.ui.run_radio_button.isChecked():
-
-            # remove white space to string to make ONCat happy
-            str_runs = str(self.ui.run_number_lineedit.text())
-            str_runs = remove_white_spaces(str_runs)
-
-            nexus_json = pyoncatGetNexus(oncat=self.parent.oncat,
-                                          instrument=self.parent.instrument['short_name'],
-                                          runs=str_runs,
-                                          facility=self.parent.facility,
-                                          )
-
-            result = self.get_list_of_runs_found_and_not_found(str_runs=str_runs,
-                                                               oncat_result=nexus_json)
-            list_of_runs_not_found = result['not_found']
-
-            if list_of_runs_not_found:
-                self.inform_of_list_of_runs_not_found(list_of_runs=list_of_runs_not_found)
-
-            # clear input widget
-            self.ui.run_number_lineedit.setText("")
-
-        else:
-            ipts = str(self.ui.ipts_combobox.currentText())
-
-            nexus_json = pyoncatGetRunsFromIpts(oncat=self.parent.oncat,
-                                                 instrument=self.parent.instrument['short_name'],
-                                                 ipts=ipts,
-                                                 facility=self.parent.facility)
-
-            # result = self.get_list_of_runs_found_and_not_found(str_runs="",
-            #                                                    oncat_result=nexus_json,
-            #                                                    check_not_found=False)
-
-
-        self.insert_in_master_table(nexus_json=nexus_json)
-
-        QApplication.restoreOverrideCursor()
 
     def inform_of_list_of_runs_not_found(self, list_of_runs=''):
         if list_of_runs == '':
@@ -345,6 +326,49 @@ class ImportFromDatabaseWindow(QDialog):
             self.ui.remove_criteria_button.setEnabled(True)
         else:
             self.ui.remove_criteria_button.setEnabled(False)
+
+    def import_button_clicked(self):
+
+        QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+
+        if self.ui.run_radio_button.isChecked():
+
+            # remove white space to string to make ONCat happy
+            str_runs = str(self.ui.run_number_lineedit.text())
+            str_runs = remove_white_spaces(str_runs)
+
+            nexus_json = pyoncatGetNexus(oncat=self.parent.oncat,
+                                         instrument=self.parent.instrument['short_name'],
+                                         runs=str_runs,
+                                         facility=self.parent.facility,
+                                         )
+
+            result = self.get_list_of_runs_found_and_not_found(str_runs=str_runs,
+                                                               oncat_result=nexus_json)
+            list_of_runs_not_found = result['not_found']
+
+            if list_of_runs_not_found:
+                self.inform_of_list_of_runs_not_found(list_of_runs=list_of_runs_not_found)
+
+            # clear input widget
+            self.ui.run_number_lineedit.setText("")
+
+        else:
+            ipts = str(self.ui.ipts_combobox.currentText())
+
+            nexus_json = pyoncatGetRunsFromIpts(oncat=self.parent.oncat,
+                                                instrument=self.parent.instrument['short_name'],
+                                                ipts=ipts,
+                                                facility=self.parent.facility)
+
+            # result = self.get_list_of_runs_found_and_not_found(str_runs="",
+            #                                                    oncat_result=nexus_json,
+            #                                                    check_not_found=False)
+
+        self.insert_in_master_table(nexus_json=nexus_json)
+
+        QApplication.restoreOverrideCursor()
+        self.close()
 
     def closeEvent(self, c):
         self.parent.import_from_database_ui = None
