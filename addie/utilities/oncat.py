@@ -93,12 +93,13 @@ if __name__ == "__main__":
 
 class OncatErrorMessageWindow(QDialog):
 
-    def __init__(self, parent=None, list_of_runs=[]):
+    def __init__(self, parent=None, list_of_runs=[], message=''):
         QDialog.__init__(self, parent=parent)
         self.ui = UiDialog()
         self.ui.setupUi(self)
 
         self.init_widgets(list_of_runs=list_of_runs)
+        self.ui.message.setText(message)
 
     def init_widgets(self, list_of_runs=[]):
         str_list_of_runs = "\n".join(list_of_runs)

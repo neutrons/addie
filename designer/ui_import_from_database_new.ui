@@ -17,7 +17,7 @@
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
       <property name="geometry">
@@ -797,7 +797,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>45</x>
-     <y>326</y>
+     <y>500</y>
     </hint>
     <hint type="destinationlabel">
      <x>85</x>
@@ -813,7 +813,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>676</x>
-     <y>326</y>
+     <y>500</y>
     </hint>
     <hint type="destinationlabel">
      <x>453</x>
@@ -853,6 +853,70 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>file_not_found_more</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>files_not_found_more_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>636</x>
+     <y>271</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>194</x>
+     <y>548</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>file_initially_selected_more</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>files_initially_selected_more_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>658</x>
+     <y>310</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>251</x>
+     <y>557</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>files_filtered_out_more</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>files_filtered_out_more_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>653</x>
+     <y>341</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>321</x>
+     <y>564</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>files_imported_more</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>files_imported_more_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>629</x>
+     <y>373</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>402</x>
+     <y>571</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>cancel_button_clicked()</slot>
@@ -870,5 +934,9 @@
   <slot>preloading_clicked()</slot>
   <slot>clear_preloading_clicked()</slot>
   <slot>toolbox_changed()</slot>
+  <slot>files_not_found_more_clicked()</slot>
+  <slot>files_initially_selected_more_clicked()</slot>
+  <slot>files_filtered_out_more_clicked()</slot>
+  <slot>files_imported_more_clicked()</slot>
  </slots>
 </ui>

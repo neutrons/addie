@@ -150,32 +150,6 @@ class ImportFromDatabaseWindow(QDialog):
 
         self.ui.import_button.setEnabled(enable_import)
 
-    def toolbox_changed(self, index):
-        if index == 0:
-            # what to load
-            pass
-        elif index == 1:
-            # narrow down selection
-            pass
-        elif index == 2:
-            if self.ui.import_button.isEnabled():
-                self.import_button_clicked(insert_in_table=False)
-                self.refresh_status_page()
-
-    def refresh_status_page(self):
-        nexus_json = self.nexus_json
-        nbr_of_raw_nexus = len(nexus_json)
-
-        # raw
-        self.ui.number_of_files_initially_selected.setText("{}".format(nbr_of_raw_nexus))
-
-        # not found
-        list_of_runs_not_found = self.list_of_runs_not_found
-        self.ui.number_of_files_not_found.setText("{}".format(len(list_of_runs_not_found)))
-        if list_of_runs_not_found:
-            # show button
-            self.inform_of_list_of_runs_not_found(list_of_runs=list_of_runs_not_found)
-
     def run_number_return_pressed(self):
         pass
 
@@ -204,15 +178,6 @@ class ImportFromDatabaseWindow(QDialog):
 
         return {'not_found': list_of_runs_not_found,
                 'found': list_of_runs_found}
-
-
-    def inform_of_list_of_runs_not_found(self, list_of_runs=''):
-        if list_of_runs == '':
-            return
-
-        o_info = OncatErrorMessageWindow(parent=self,
-                                         list_of_runs=list_of_runs)
-        o_info.show()
 
     def build_result_dictionary(self, nexus_json=[]):
         """isolate the infos I need from ONCat result"""
@@ -366,8 +331,8 @@ class ImportFromDatabaseWindow(QDialog):
             list_of_runs_not_found = result['not_found']
             self.list_of_runs_not_found = list_of_runs_not_found
 
-            if list_of_runs_not_found:
-                self.inform_of_list_of_runs_not_found(list_of_runs=list_of_runs_not_found)
+            # if list_of_runs_not_found:
+            #     self.inform_of_list_of_runs_not_found(list_of_runs=list_of_runs_not_found)
 
             # clear input widget
             self.ui.run_number_lineedit.setText("")
@@ -393,6 +358,58 @@ class ImportFromDatabaseWindow(QDialog):
 
         if insert_in_table:
             self.close()
+
+    def files_not_found_more_clicked(self):
+        list_of_runs_not_found = self.list_of_runs_not_found
+        self.inform_of_list_of_runs(list_of_runs=list_of_runs_not_found,
+                                    message='List of NeXus not found!')
+
+    def files_filtered_out_more_clicked(self):
+        pass
+
+    def files_imported_more_clicked(self):
+        pass
+
+    def files_initially_selected_more_clicked(self):
+        pass
+
+    def inform_of_list_of_runs(self, list_of_runs='', message=''):
+        if list_of_runs == '':
+            return
+
+        o_info = OncatErrorMessageWindow(parent=self,
+                                         list_of_runs=list_of_runs,
+                                         message=message)
+        o_info.show()
+
+    def toolbox_changed(self, index):
+        if index == 0:
+            # what to load
+            pass
+        elif index == 1:
+            # narrow down selection
+            pass
+        elif index == 2:
+            if self.ui.import_button.isEnabled():
+                self.import_button_clicked(insert_in_table=False)
+                self.refresh_status_page()
+
+    def refresh_status_page(self):
+        nexus_json = self.nexus_json
+        nbr_of_raw_nexus = len(nexus_json)
+
+        # raw
+        self.ui.number_of_files_initially_selected.setText("{}".format(nbr_of_raw_nexus))
+
+        # not found
+        list_of_runs_not_found = self.list_of_runs_not_found
+        self.ui.number_of_files_not_found.setText("{}".format(len(list_of_runs_not_found)))
+        visible_list_of_runs_not_found_button = False
+        if list_of_runs_not_found:
+            # show button
+           # self.inform_of_list_of_runs_not_found(list_of_runs=list_of_runs_not_found)
+            visible_list_of_runs_not_found_button = True
+        self.ui.file_not_found_more.setVisible(visible_list_of_runs_not_found_button)
 
     def closeEvent(self, c):
         self.parent.import_from_database_ui = None

@@ -14,16 +14,16 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Status</string>
   </property>
   <property name="modal">
    <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="message">
      <property name="text">
-      <string>Error Locating Those Runs!</string>
+      <string/>
      </property>
     </widget>
    </item>

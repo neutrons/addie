@@ -30,9 +30,10 @@ class Ui_Dialog(object):
         Dialog.setModal(True)
         self.verticalLayout = QtGui.QVBoxLayout(Dialog)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
-        self.label = QtGui.QLabel(Dialog)
-        self.label.setObjectName(_fromUtf8("label"))
-        self.verticalLayout.addWidget(self.label)
+        self.message = QtGui.QLabel(Dialog)
+        self.message.setText(_fromUtf8(""))
+        self.message.setObjectName(_fromUtf8("message"))
+        self.verticalLayout.addWidget(self.message)
         self.list_of_runs = QtGui.QTextEdit(Dialog)
         self.list_of_runs.setEnabled(False)
         self.list_of_runs.setObjectName(_fromUtf8("list_of_runs"))
@@ -51,7 +52,6 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog", None))
-        self.label.setText(_translate("Dialog", "Error Locating Those Runs!", None))
+        Dialog.setWindowTitle(_translate("Dialog", "Status", None))
         self.pushButton.setText(_translate("Dialog", "Close", None))
 
