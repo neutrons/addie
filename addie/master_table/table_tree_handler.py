@@ -539,9 +539,10 @@ class H3TableHandler:
         self.parent.master_table_right_click_buttons['rows_duplicate']['ui'] = rows_duplicate
         rows_duplicate.setEnabled(self.parent.master_table_right_click_buttons['rows_duplicate']['status'])
         rows.addSeparator()
-        rows_insert = rows.addMenu("Insert")
-        rows_insert_run_number = rows_insert.addAction("Via Run Number ...")
-        rows_insert_blank = rows_insert.addAction("Blank")
+        rows_insert_blank = rows.addAction("Insert Blank")
+        # rows_insert = rows.addMenu("Insert")
+        # rows_insert_run_number = rows_insert.addAction("Via Run Number ...")
+        #rows_insert_blank = rows_insert.addAction("Blank")
         rows_remove = rows.addAction("Remove")
         rows_remove.setEnabled(self.parent.master_table_right_click_buttons['rows_remove']['status'])
         self.parent.master_table_right_click_buttons['rows_remove']['ui'] = rows_remove
@@ -666,8 +667,8 @@ class H3TableHandler:
             self.rows_duplicate()
 
         # insert rows
-        elif action == rows_insert_run_number:
-            self.insert_row_run_number()
+        #elif action == rows_insert_run_number:
+        #    self.insert_row_run_number()
         elif action == rows_insert_blank:
             self.insert_row_blank()
 
