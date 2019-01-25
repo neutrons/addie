@@ -429,9 +429,6 @@ class ImportFromDatabaseWindow(QDialog):
 
         nexus_json = self.nexus_json
 
-        import pprint
-        pprint.pprint(nexus_json)
-
         enabled_widgets = False
         if not (nexus_json == {}):
             enabled_widgets = True
