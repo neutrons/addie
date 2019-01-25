@@ -422,10 +422,11 @@ class ImportFromDatabaseWindow(QDialog):
             if self.ui.import_button.isEnabled():
                 self.import_button_clicked(insert_in_table=False)
 
-            if index == 2: # status page
-                self.refresh_status_page()
             elif index == 1: # filter page
                 self.refresh_filter_page()
+
+            # if index == 2: # status page
+            #     self.refresh_status_page()
 
     def refresh_filter_page(self):
         nexus_json = self.nexus_json
@@ -436,31 +437,31 @@ class ImportFromDatabaseWindow(QDialog):
 
         self.filter_widget_status(enabled_widgets=enabled_widgets)
 
-    def refresh_status_page(self):
-        nexus_json = self.nexus_json
-        nbr_of_raw_nexus = len(nexus_json)
-
-        # raw
-        self.ui.number_of_files_initially_selected.setText("{}".format(nbr_of_raw_nexus))
-        visible_list_of_files_initially_selected = False
-        if nbr_of_raw_nexus > 0:
-            visible_list_of_files_initially_selected = True
-        self.ui.file_initially_selected_more.setVisible(visible_list_of_files_initially_selected)
-
-        # not found
-        list_of_runs_not_found = self.list_of_runs_not_found
-        self.ui.number_of_files_not_found.setText("{}".format(len(list_of_runs_not_found)))
-        visible_list_of_runs_not_found_button = False
-        if list_of_runs_not_found:
-            # show button
-           # self.inform_of_list_of_runs_not_found(list_of_runs=list_of_runs_not_found)
-            visible_list_of_runs_not_found_button = True
-        self.ui.file_not_found_more.setVisible(visible_list_of_runs_not_found_button)
-
-        # list of files filtered out
-        visible_list_of_runs_filtered_out = False
-        #FIXME HERE
-        self.ui.files_filtered_out_more.setVisible(visible_list_of_runs_filtered_out)
+    # def refresh_status_page(self):
+    #     nexus_json = self.nexus_json
+    #     nbr_of_raw_nexus = len(nexus_json)
+    #
+    #     # raw
+    #     self.ui.number_of_files_initially_selected.setText("{}".format(nbr_of_raw_nexus))
+    #     visible_list_of_files_initially_selected = False
+    #     if nbr_of_raw_nexus > 0:
+    #         visible_list_of_files_initially_selected = True
+    #     self.ui.file_initially_selected_more.setVisible(visible_list_of_files_initially_selected)
+    #
+    #     # not found
+    #     list_of_runs_not_found = self.list_of_runs_not_found
+    #     self.ui.number_of_files_not_found.setText("{}".format(len(list_of_runs_not_found)))
+    #     visible_list_of_runs_not_found_button = False
+    #     if list_of_runs_not_found:
+    #         # show button
+    #        # self.inform_of_list_of_runs_not_found(list_of_runs=list_of_runs_not_found)
+    #         visible_list_of_runs_not_found_button = True
+    #     self.ui.file_not_found_more.setVisible(visible_list_of_runs_not_found_button)
+    #
+    #     # list of files filtered out
+    #     visible_list_of_runs_filtered_out = False
+    #     #FIXME HERE
+    #     self.ui.files_filtered_out_more.setVisible(visible_list_of_runs_filtered_out)
 
 
     def closeEvent(self, c):

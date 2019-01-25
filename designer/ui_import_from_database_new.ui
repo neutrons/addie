@@ -25,11 +25,11 @@
         <x>0</x>
         <y>0</y>
         <width>678</width>
-        <height>440</height>
+        <height>471</height>
        </rect>
       </property>
       <attribute name="label">
-       <string>Select Runs to Import.</string>
+       <string>Select Runs to Import</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
@@ -201,7 +201,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>353</height>
+           <height>384</height>
           </size>
          </property>
         </spacer>
@@ -384,154 +384,6 @@
           </widget>
          </item>
         </layout>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="page_3">
-      <attribute name="label">
-       <string>Summary</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
-       <item>
-        <spacer name="verticalSpacer_4">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="2">
-          <widget class="QLabel" name="number_of_files_to_import_label_3">
-           <property name="text">
-            <string>NeXus file(s) not found!</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="3">
-          <widget class="QPushButton" name="file_initially_selected_more">
-           <property name="text">
-            <string>more ...</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="2">
-          <widget class="QLabel" name="number_of_files_filtered_out_label">
-           <property name="text">
-            <string>Files have been filtered Out.</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="3">
-          <widget class="QPushButton" name="file_not_found_more">
-           <property name="text">
-            <string>more ...</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="3">
-          <widget class="QPushButton" name="files_filtered_out_more">
-           <property name="text">
-            <string>more ...</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <spacer name="horizontalSpacer_7">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLabel" name="number_of_files_filtered_out">
-           <property name="text">
-            <string>0</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="number_of_files_not_found">
-           <property name="text">
-            <string>0</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <spacer name="horizontalSpacer_8">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLabel" name="number_of_files_initially_selected">
-           <property name="text">
-            <string>0</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <spacer name="horizontalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="1" column="2">
-          <widget class="QLabel" name="number_of_files_to_import_label_2">
-           <property name="text">
-            <string>NeXus file(s) found!</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>157</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>
@@ -813,54 +665,6 @@
     <hint type="destinationlabel">
      <x>4</x>
      <y>36</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>file_not_found_more</sender>
-   <signal>clicked()</signal>
-   <receiver>Dialog</receiver>
-   <slot>files_not_found_more_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>636</x>
-     <y>271</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>194</x>
-     <y>548</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>file_initially_selected_more</sender>
-   <signal>clicked()</signal>
-   <receiver>Dialog</receiver>
-   <slot>files_initially_selected_more_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>658</x>
-     <y>310</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>251</x>
-     <y>557</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>files_filtered_out_more</sender>
-   <signal>clicked()</signal>
-   <receiver>Dialog</receiver>
-   <slot>files_filtered_out_more_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>653</x>
-     <y>341</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>321</x>
-     <y>564</y>
     </hint>
    </hints>
   </connection>
