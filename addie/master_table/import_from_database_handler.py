@@ -138,7 +138,9 @@ class ImportFromDatabaseWindow(QDialog):
             if str_ipts in self.list_ipts:
                 ipts_exist = True
                 index = self.ui.ipts_combobox.findText(str_ipts)
+                self.ui.ipts_combobox.blockSignals(True)
                 self.ui.ipts_combobox.setCurrentIndex(index)
+                self.ui.ipts_combobox.blockSignals(False)
         else:
             ipts_exist = True # we will use the combobox IPTS
 
