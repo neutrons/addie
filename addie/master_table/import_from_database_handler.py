@@ -120,6 +120,8 @@ class ImportFromDatabaseWindow(QDialog):
     def filter_widget_status(self, enabled_widgets=False):
         self.ui.tableWidget.setEnabled(enabled_widgets)
         self.ui.add_criteria_button.setEnabled(enabled_widgets)
+        self.ui.filter_result_label.setEnabled(enabled_widgets)
+        self.ui.tableWidget_filter_result.setEnabled(enabled_widgets)
 
     def clear_ipts(self):
         self.ui.ipts_lineedit.setText("")
@@ -162,12 +164,6 @@ class ImportFromDatabaseWindow(QDialog):
         self.ui.import_button.setEnabled(enable_import)
 
     def run_number_return_pressed(self):
-        pass
-
-    def preloading_clicked(self):
-        pass
-
-    def clear_preloading_clicked(self):
         pass
 
     def run_number_text_changed(self, text):
@@ -436,6 +432,54 @@ class ImportFromDatabaseWindow(QDialog):
             enabled_widgets = True
 
         self.filter_widget_status(enabled_widgets=enabled_widgets)
+        self.refresh_result_of_filter_table(nexus_json=nexus_json)
+
+    def clear_tableWidget_filter_result(self):
+        nbr_row = self.ui.tableWidget_filter_result.rowCount()
+        for _row in np.arange(nbr_row):
+            self.ui.tableWidget_filter_result.removerow(0)
+
+    def refresh_result_of_filter_table(self, nexus_json=[]):
+        if nexus_json == []:
+            self.clear_tableWidget_filter_result()
+        else:
+
+            is_first_row = True
+            for _row, _json in enumerate(nexus_json):
+
+                self.ui.tableWidget_filter_result.insertRow(_row)
+
+                # run number
+                column_index = 0
+                if is_first_row: self.ui.tableWidget_filter_result.insertColumn(column_index)
+                _run_number = str(_json['indexed']['run_number'])
+                _item = QTableWidgetItem("{}".format(_run_number))
+                self.ui.tableWidget_filter_result.setItem(_row, column_index, _item)
+
+                # title
+                column_index += 1
+                if is_first_row: self.ui.tableWidget_filter_result.insertColumn(column_index)
+                _title = str(_json['metadata']['entry']['title'])
+                _item = QTableWidgetItem("{}".format(_title))
+                self.ui.tableWidget_filter_result.setItem(_row, column_index, _item)
+
+                # chemical_formula
+                column_index += 1
+                if is_first_row: self.ui.tableWidget_filter_result.insertColumn(column_index)
+                _chemical_formula = str(_json['metadata']['entry']['sample']['chemical_formula'])
+                _item = QTableWidgetItem("{}".format(_chemical_formula))
+                self.ui.tableWidget_filter_result.setItem(_row, column_index, _item)
+
+                # mass_density
+                column_index += 1
+                if is_first_row: self.ui.tableWidget_filter_result.insertColumn(column_index)
+                _mass_density = str(_json['metadata']['entry']['sample']['mass_density'])
+                _item = QTableWidgetItem("{}".format(_mass_density))
+                self.ui.tableWidget_filter_result.setItem(_row, column_index, _item)
+
+                is_first_row = False
+
+                # print("row {} with run number {}".format(_row, _run_number))
 
     # def refresh_status_page(self):
     #     nexus_json = self.nexus_json

@@ -33,6 +33,7 @@ def pyoncatGetNexus(oncat=None, instrument='', runs=-1, facility='SNS'):
                     'indexed.run_number',
                     'metadata.entry.sample.chemical_formula',
                     'metadata.entry.sample.mass_density',
+                    'metadata.entry.title',
                     ],
         tags=['type/raw'],
         exts=['.nxs.h5'],
@@ -47,6 +48,7 @@ def pyoncatGetRunsFromIpts(oncat=None, instrument='', ipts='', facility='SNS'):
                                    projection=['indexed.run_number',
                                                'metadata.entry.sample.chemical_formula',
                                                'metadata.entry.sample.mass_density',
+                                               'metadata.entry.title',
                                                ],
                                    tags=['type/raw'],
                                    exts=['.nxs.h5'])
