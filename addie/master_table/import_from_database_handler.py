@@ -416,23 +416,24 @@ class ImportFromDatabaseWindow(QDialog):
 
     def toolbox_changed(self, index):
         if index == 0:
-            # what to load
-            pass
-        else:
-            if self.ui.import_button.isEnabled():
-                self.import_button_clicked(insert_in_table=False)
-
-            elif index == 1: # filter page
-                self.refresh_filter_page()
+            self.nexus_json = {}
+        elif index == 1:
+            self.refresh_filter_page()
 
             # if index == 2: # status page
             #     self.refresh_status_page()
 
     def refresh_filter_page(self):
+        if self.ui.import_button.isEnabled():
+            self.import_button_clicked(insert_in_table=False)
+
         nexus_json = self.nexus_json
 
+        import pprint
+        pprint.pprint(nexus_json)
+
         enabled_widgets = False
-        if len(nexus_json) > 0:
+        if not (nexus_json == {}):
             enabled_widgets = True
 
         self.filter_widget_status(enabled_widgets=enabled_widgets)
