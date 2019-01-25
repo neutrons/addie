@@ -169,7 +169,8 @@ class TableRowHandler:
     def insert_row(self, row=-1,
                    sample_runs='',
                    sample_mass_density='N/A',
-                   sample_chemical_formula='N/A'):
+                   sample_chemical_formula='N/A',
+                   packing_fraction='N/A'):
         self.table_ui.insertRow(row)
         self.set_row_height(row, COLUMN_DEFAULT_HEIGHT)
 
@@ -346,7 +347,9 @@ class TableRowHandler:
 
         # column 7 - packing fraction
         column += 1
-        _item = QTableWidgetItem("")
+        if packing_fraction == "N/A":
+            packing_fraction = "{}".format(self.parent.packing_fraction)
+        _item = QTableWidgetItem(packing_fraction)
         _master_table_row_ui['sample']['packing_fraction'] = _item
         self.table_ui.setItem(row, column, _item)
 

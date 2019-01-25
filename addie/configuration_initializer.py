@@ -24,3 +24,5 @@ class ConfigurationInitializer:
         parent.output_folder = data["outputDir"]
 
         parent.placzek_default = data['placzek']
+
+        parent.packing_fraction = data['packing_fraction']

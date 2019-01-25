@@ -27,6 +27,7 @@
   "facility": "SNS",
   "cacheDir": "./tmp",
   "outputDir": "./output",
+  "packing_fraction": 1,
   "placzek": {"order": {"name_list": ["1st"],
                         "index_selected": 0},
               "self": true,
