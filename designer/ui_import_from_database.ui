@@ -17,7 +17,7 @@
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page">
       <property name="geometry">
@@ -323,6 +323,11 @@
          <column>
           <property name="text">
            <string>New Column</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Rule #</string>
           </property>
          </column>
          <column>

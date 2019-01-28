@@ -44,7 +44,7 @@ class ImportFromDatabaseHandler:
 
 class ImportFromDatabaseWindow(QDialog):
 
-    column_widths = [10, 200, 100, 300]
+    filter_column_widths = [10, 50, 200, 100, 300]
     row_height = 40
 
     button_height = 30
@@ -96,7 +96,7 @@ class ImportFromDatabaseWindow(QDialog):
         self.ui.clear_ipts.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
         self.ui.clear_run.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
 
-        for _col, _width in enumerate(self.column_widths):
+        for _col, _width in enumerate(self.filter_column_widths):
             self.ui.tableWidget.setColumnWidth(_col, _width)
 
     def change_user_clicked(self):
@@ -267,12 +267,16 @@ class ImportFromDatabaseWindow(QDialog):
         _item = QTableWidgetItem("{}".format(_random_key))
         self.ui.tableWidget.setItem(row, 0, _item)
 
+        # rule #
+        _item = QTableWidgetItem("{}".format(row+1))
+        self.ui.tableWidget.setItem(row, 1, _item)
+
         # search argument
         _widget = QComboBox()
         _list_ui_for_this_row['list_items'] = _widget
         list_items = LIST_SEARCH_CRITERIA[self.parent.instrument['short_name'].lower()]
         _widget.addItems(list_items)
-        self.ui.tableWidget.setCellWidget(row, 1, _widget)
+        self.ui.tableWidget.setCellWidget(row, 2, _widget)
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
                                lambda value=list_items[0],
                                key = _random_key:
@@ -283,14 +287,14 @@ class ImportFromDatabaseWindow(QDialog):
         _widget = QComboBox()
         _list_ui_for_this_row['list_criteria'] = _widget
         _widget.addItems(list_criteria)
-        self.ui.tableWidget.setCellWidget(row, 2, _widget)
+        self.ui.tableWidget.setCellWidget(row, 3, _widget)
 
         # argument
         _widget = QComboBox()
         _widget.setEditable(True)
         list_values = [""] + list(self.metadata['chemical_formula'])
         _widget.addItems(list_values)
-        self.ui.tableWidget.setCellWidget(row, 3, _widget)
+        self.ui.tableWidget.setCellWidget(row, 4, _widget)
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("editTextChanged(QString)"),
                                lambda value=list_values[0],
                                       key = _random_key:
