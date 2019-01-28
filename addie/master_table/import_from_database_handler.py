@@ -300,6 +300,10 @@ class ImportFromDatabaseWindow(QDialog):
                                       key = _random_key:
                                self.list_argument_index_changed(value, key))
 
+
+        if row == 0:
+            self.ui.tableWidget.horizontalHeader().setVisible(True)
+
         # # argument
         # _layout = QHBoxLayout()
         # _lineedit = QLineEdit()
