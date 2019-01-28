@@ -57,7 +57,7 @@ class PDFPlotManager(object):
         -------
 
         """
-        marker_index = style_marker_index / len(LineStyleBase)
+        marker_index = style_marker_index // len(LineStyleBase)
         style_index = style_marker_index % len(LineStyleBase)
 
         return LineStyleBase[style_index], LineMarkerBase[marker_index]
