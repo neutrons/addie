@@ -89,7 +89,8 @@ _default_empty_row = {"activate": True,
 #
 # _dictionary_test[1] = copy.deepcopy(_default_empty_row)
 
-class AsciiLoaderOptions(QDialog):
+
+class AsciiLoaderOptionsInterface(QDialog):
 
     def __init__(self, parent=None, filename=''):
         self.parent = parent
@@ -107,7 +108,7 @@ class AsciiLoaderOptions(QDialog):
     def init_widgets(self):
         self.radio_button_changed()
 
-    def __get_option_selected(self):
+    def get_option_selected(self):
         if self.ui.option1.isChecked():
             return 1
         elif self.ui.option2.isChecked():
@@ -118,12 +119,15 @@ class AsciiLoaderOptions(QDialog):
             return 4
 
     def radio_button_changed(self):
-        option_selected = self.__get_option_selected()
+        option_selected = self.get_option_selected()
         image = ":/preview/load_csv_case{}.png".format(option_selected)
         self.ui.preview_label.setPixmap(QtGui.QPixmap(image))
 
+
+class AsciiLoaderOptions(AsciiLoaderOptionsInterface):
+
     def accept(self):
-        self.parent.ascii_loader_option = self.__get_option_selected()
+        self.parent.ascii_loader_option = self.get_option_selected()
         self.parent._load_ascii(filename=self.filename)
         self.close()
 

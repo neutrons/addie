@@ -20,6 +20,7 @@ from addie.utilities.oncat import pyoncatGetIptsList, pyoncatGetNexus, pyoncatGe
 from addie.master_table.tree_definition import LIST_SEARCH_CRITERIA
 from addie.master_table.periodic_table.material_handler import MaterialHandler
 from addie.master_table.table_row_handler import TableRowHandler
+from addie.master_table.master_table_loader import AsciiLoaderOptionsInterface
 
 from addie.utilities.general import generate_random_key, remove_white_spaces
 from addie.utilities.list_runs_parser import ListRunsParser
@@ -324,7 +325,10 @@ class ImportFromDatabaseWindow(QDialog):
             self.ui.remove_criteria_button.setEnabled(False)
 
     def import_button_clicked(self, insert_in_table=True):
+        o_dialog = AsciiLoaderOptions(parent=self.parent)
+        o_dialog.show()
 
+    def import_table(self, insert_in_table=True):
         QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
 
         self.list_of_runs_not_found = []
@@ -428,7 +432,7 @@ class ImportFromDatabaseWindow(QDialog):
 
     def refresh_filter_page(self):
         if self.ui.import_button.isEnabled():
-            self.import_button_clicked(insert_in_table=False)
+            self.import_table(insert_in_table=False)
 
         nexus_json = self.nexus_json
 
@@ -513,3 +517,9 @@ class ImportFromDatabaseWindow(QDialog):
     def closeEvent(self, c):
         self.parent.import_from_database_ui = None
         self.parent.import_from_database_ui_position = self.pos()
+
+
+class AsciiLoaderOptions(AsciiLoaderOptionsInterface):
+
+    def accept(self):
+        pass
