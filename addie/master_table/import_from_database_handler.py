@@ -59,6 +59,9 @@ class ImportFromDatabaseWindow(QDialog):
     list_of_nexus_not_found = []
     list_of_nexus_filtered_out = []
 
+    # first time filling the metadata filter table
+    first_time_filling_table = True
+
     def __init__(self, parent=None):
         self.parent = parent
 
@@ -454,7 +457,7 @@ class ImportFromDatabaseWindow(QDialog):
         title = metadata_filter['title']
         list_args = metadata_filter["path"]
         argument_value = self._json_extractor(json=json, list_args=copy.deepcopy(list_args))
-        if row == 0:
+        if self.first_time_filling_table:
             self.ui.tableWidget_filter_result.insertColumn(col)
             _item_title = QTableWidgetItem(title)
             self.ui.tableWidget_filter_result.setHorizontalHeaderItem(col, _item_title)
@@ -478,45 +481,7 @@ class ImportFromDatabaseWindow(QDialog):
                                     row=_row,
                                     col=_column)
 
-                # # run number
-                # column_index = 0
-                # if is_first_row: self.ui.tableWidget_filter_result.insertColumn(column_index)
-                # _run_number = str(_json['indexed']['run_number'])
-                # _item = QTableWidgetItem("{}".format(_run_number))
-                # self.ui.tableWidget_filter_result.setItem(_row, column_index, _item)
-                # _item_title = QTableWidgetItem("Run Number")
-                # self.ui.tableWidget_filter_result.setHorizontalHeaderItem(column_index, _item_title)
-                #
-                # # title
-                # column_index += 1
-                # if is_first_row: self.ui.tableWidget_filter_result.insertColumn(column_index)
-                # _title = str(_json['metadata']['entry']['title'])
-                # _item = QTableWidgetItem("{}".format(_title))
-                # self.ui.tableWidget_filter_result.setItem(_row, column_index, _item)
-                # _item_title = QTableWidgetItem("Title")
-                # self.ui.tableWidget_filter_result.setHorizontalHeaderItem(column_index, _item_title)
-                #
-                # # chemical_formula
-                # column_index += 1
-                # if is_first_row: self.ui.tableWidget_filter_result.insertColumn(column_index)
-                # _chemical_formula = str(_json['metadata']['entry']['sample']['chemical_formula'])
-                # _item = QTableWidgetItem("{}".format(_chemical_formula))
-                # self.ui.tableWidget_filter_result.setItem(_row, column_index, _item)
-                # _item_title = QTableWidgetItem("Chemical Formula")
-                # self.ui.tableWidget_filter_result.setHorizontalHeaderItem(column_index, _item_title)
-                #
-                # # mass_density
-                # column_index += 1
-                # if is_first_row: self.ui.tableWidget_filter_result.insertColumn(column_index)
-                # _mass_density = str(_json['metadata']['entry']['sample']['mass_density'])
-                # _item = QTableWidgetItem("{}".format(_mass_density))
-                # self.ui.tableWidget_filter_result.setItem(_row, column_index, _item)
-                # _item_title = QTableWidgetItem("Mass Density")
-                # self.ui.tableWidget_filter_result.setHorizontalHeaderItem(column_index, _item_title)
-                #
-                # is_first_row = False
-
-                # print("row {} with run number {}".format(_row, _run_number))
+            self.first_time_filling_table = False
 
     # def refresh_status_page(self):
     #     nexus_json = self.nexus_json
