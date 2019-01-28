@@ -114,6 +114,9 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     placzek_default = {}
 
+    # list of arguments to use in Import from ONCat and to display for filters
+    oncat_metadata_filters = []
+
     # end of config.json
 
     # load los.csv options

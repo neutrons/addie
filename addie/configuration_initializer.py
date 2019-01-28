@@ -26,3 +26,5 @@ class ConfigurationInitializer:
         parent.placzek_default = data['placzek']
 
         parent.packing_fraction = data['packing_fraction']
+
+        parent.oncat_metadata_filters = data["oncat_metadata_filters"]

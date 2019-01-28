@@ -1,4 +1,6 @@
 from collections import OrderedDict
+import copy
+import numpy as np
 
 try:
     from PyQt4.QtGui import QDialog, QComboBox, QLineEdit, QPushButton, QWidget, QHBoxLayout, QLabel, \
@@ -432,52 +434,87 @@ class ImportFromDatabaseWindow(QDialog):
             enabled_widgets = True
 
         self.filter_widget_status(enabled_widgets=enabled_widgets)
-        self.refresh_result_of_filter_table(nexus_json=nexus_json)
+        self.refresh_result_of_filter_table(nexus_json=copy.deepcopy(nexus_json))
 
     def clear_tableWidget_filter_result(self):
         nbr_row = self.ui.tableWidget_filter_result.rowCount()
         for _row in np.arange(nbr_row):
-            self.ui.tableWidget_filter_result.removerow(0)
+            self.ui.tableWidget_filter_result.removeRow(0)
+
+    def _json_extractor(self, json=None, list_args=[]):
+        if len(list_args) == 1:
+            return json[list_args[0]]
+        else:
+            return self._json_extractor(json[list_args.pop(0)],
+                                        list_args=list_args)
+
+    def set_table_item(self, json=None, metadata_filter={}, row=-1, col=-1):
+        """Populate the filter metadada table from the oncat json file of only the arguments specified in
+        the config.json file (oncat_metadata_filters)"""
+        title = metadata_filter['title']
+        list_args = metadata_filter["path"]
+        argument_value = self._json_extractor(json=json, list_args=copy.deepcopy(list_args))
+        if row == 0:
+            self.ui.tableWidget_filter_result.insertColumn(col)
+            _item_title = QTableWidgetItem(title)
+            self.ui.tableWidget_filter_result.setHorizontalHeaderItem(col, _item_title)
+            width = metadata_filter["column_width"]
+            self.ui.tableWidget_filter_result.setColumnWidth(col, width)
+
+        _item = QTableWidgetItem("{}".format(argument_value))
+        self.ui.tableWidget_filter_result.setItem(row, col, _item)
 
     def refresh_result_of_filter_table(self, nexus_json=[]):
-        if nexus_json == []:
-            self.clear_tableWidget_filter_result()
-        else:
 
-            is_first_row = True
-            for _row, _json in enumerate(nexus_json):
+        oncat_metadata_filters = self.parent.oncat_metadata_filters
+        #if nexus_json == []:
+        self.clear_tableWidget_filter_result()
+        #else:
+        for _row, _json in enumerate(nexus_json):
+            self.ui.tableWidget_filter_result.insertRow(_row)
+            for _column, metadata_filter in enumerate(oncat_metadata_filters):
+                self.set_table_item(json=copy.deepcopy(_json),
+                                    metadata_filter=metadata_filter,
+                                    row=_row,
+                                    col=_column)
 
-                self.ui.tableWidget_filter_result.insertRow(_row)
-
-                # run number
-                column_index = 0
-                if is_first_row: self.ui.tableWidget_filter_result.insertColumn(column_index)
-                _run_number = str(_json['indexed']['run_number'])
-                _item = QTableWidgetItem("{}".format(_run_number))
-                self.ui.tableWidget_filter_result.setItem(_row, column_index, _item)
-
-                # title
-                column_index += 1
-                if is_first_row: self.ui.tableWidget_filter_result.insertColumn(column_index)
-                _title = str(_json['metadata']['entry']['title'])
-                _item = QTableWidgetItem("{}".format(_title))
-                self.ui.tableWidget_filter_result.setItem(_row, column_index, _item)
-
-                # chemical_formula
-                column_index += 1
-                if is_first_row: self.ui.tableWidget_filter_result.insertColumn(column_index)
-                _chemical_formula = str(_json['metadata']['entry']['sample']['chemical_formula'])
-                _item = QTableWidgetItem("{}".format(_chemical_formula))
-                self.ui.tableWidget_filter_result.setItem(_row, column_index, _item)
-
-                # mass_density
-                column_index += 1
-                if is_first_row: self.ui.tableWidget_filter_result.insertColumn(column_index)
-                _mass_density = str(_json['metadata']['entry']['sample']['mass_density'])
-                _item = QTableWidgetItem("{}".format(_mass_density))
-                self.ui.tableWidget_filter_result.setItem(_row, column_index, _item)
-
-                is_first_row = False
+                # # run number
+                # column_index = 0
+                # if is_first_row: self.ui.tableWidget_filter_result.insertColumn(column_index)
+                # _run_number = str(_json['indexed']['run_number'])
+                # _item = QTableWidgetItem("{}".format(_run_number))
+                # self.ui.tableWidget_filter_result.setItem(_row, column_index, _item)
+                # _item_title = QTableWidgetItem("Run Number")
+                # self.ui.tableWidget_filter_result.setHorizontalHeaderItem(column_index, _item_title)
+                #
+                # # title
+                # column_index += 1
+                # if is_first_row: self.ui.tableWidget_filter_result.insertColumn(column_index)
+                # _title = str(_json['metadata']['entry']['title'])
+                # _item = QTableWidgetItem("{}".format(_title))
+                # self.ui.tableWidget_filter_result.setItem(_row, column_index, _item)
+                # _item_title = QTableWidgetItem("Title")
+                # self.ui.tableWidget_filter_result.setHorizontalHeaderItem(column_index, _item_title)
+                #
+                # # chemical_formula
+                # column_index += 1
+                # if is_first_row: self.ui.tableWidget_filter_result.insertColumn(column_index)
+                # _chemical_formula = str(_json['metadata']['entry']['sample']['chemical_formula'])
+                # _item = QTableWidgetItem("{}".format(_chemical_formula))
+                # self.ui.tableWidget_filter_result.setItem(_row, column_index, _item)
+                # _item_title = QTableWidgetItem("Chemical Formula")
+                # self.ui.tableWidget_filter_result.setHorizontalHeaderItem(column_index, _item_title)
+                #
+                # # mass_density
+                # column_index += 1
+                # if is_first_row: self.ui.tableWidget_filter_result.insertColumn(column_index)
+                # _mass_density = str(_json['metadata']['entry']['sample']['mass_density'])
+                # _item = QTableWidgetItem("{}".format(_mass_density))
+                # self.ui.tableWidget_filter_result.setItem(_row, column_index, _item)
+                # _item_title = QTableWidgetItem("Mass Density")
+                # self.ui.tableWidget_filter_result.setHorizontalHeaderItem(column_index, _item_title)
+                #
+                # is_first_row = False
 
                 # print("row {} with run number {}".format(_row, _run_number))
 

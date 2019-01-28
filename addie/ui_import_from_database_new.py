@@ -174,7 +174,7 @@ class Ui_Dialog(object):
         self.tableWidget_filter_result.setObjectName(_fromUtf8("tableWidget_filter_result"))
         self.tableWidget_filter_result.setColumnCount(0)
         self.tableWidget_filter_result.setRowCount(0)
-        self.tableWidget_filter_result.horizontalHeader().setStretchLastSection(True)
+        self.tableWidget_filter_result.horizontalHeader().setStretchLastSection(False)
         self.tableWidget_filter_result.verticalHeader().setStretchLastSection(False)
         self.verticalLayout_2.addWidget(self.tableWidget_filter_result)
         self.toolBox.addItem(self.page_2, _fromUtf8(""))
