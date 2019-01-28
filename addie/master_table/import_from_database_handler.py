@@ -25,7 +25,7 @@ from addie.master_table.master_table_loader import AsciiLoaderOptionsInterface
 from addie.utilities.general import generate_random_key, remove_white_spaces
 from addie.utilities.list_runs_parser import ListRunsParser
 
-from addie.ui_import_from_database_new import Ui_Dialog as UiDialog
+from addie.ui_import_from_database import Ui_Dialog as UiDialog
 
 
 class ImportFromDatabaseHandler:
@@ -234,6 +234,12 @@ class ImportFromDatabaseWindow(QDialog):
                         key=key,
                         data_type='database')
 
+    def list_argument_changed(self, value, key):
+        print("new value is {}".format(value))
+
+    def list_argument_index_changed(self, value, key):
+        print("index changed and value is now {}".format(value))
+
     def list_criteria_changed(self, value, key):
         if value == 'Chemical Formula':
             show_label = True
@@ -280,29 +286,44 @@ class ImportFromDatabaseWindow(QDialog):
         self.ui.tableWidget.setCellWidget(row, 2, _widget)
 
         # argument
-        _layout = QHBoxLayout()
-        _lineedit = QLineEdit()
-        _lineedit.setVisible(False)
-        _label = QLabel()
-        _label.setVisible(True)
-        _button = QPushButton("Define Formula")
-        _button.setFixedHeight(self.button_height)
-        _button.setFixedWidth(self.button_width)
-        QtCore.QObject.connect(_button, QtCore.SIGNAL("pressed()"),
-                                lambda key=_random_key:
-                               self.chemical_formula_pressed(key))
-        _button.setVisible(True)
-
-        _list_ui_for_this_row['value_lineedit'] = _lineedit
-        _list_ui_for_this_row['value_label'] = _label
-        _list_ui_for_this_row['value_button'] = _button
-
-        _layout.addWidget(_lineedit)
-        _layout.addWidget(_label)
-        _layout.addWidget(_button)
-        _widget = QWidget()
-        _widget.setLayout(_layout)
+        _widget = QComboBox()
+        _widget.setEditable(True)
+        list_values = [""] + list(self.metadata['chemical_formula'])
+        _widget.addItems(list_values)
         self.ui.tableWidget.setCellWidget(row, 3, _widget)
+        QtCore.QObject.connect(_widget, QtCore.SIGNAL("editTextChanged(QString)"),
+                               lambda value=list_values[0],
+                                      key = _random_key:
+                               self.list_argument_changed(value, key))
+        QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
+                               lambda value=list_values[0],
+                                      key = _random_key:
+                               self.list_argument_index_changed(value, key))
+
+        # # argument
+        # _layout = QHBoxLayout()
+        # _lineedit = QLineEdit()
+        # _lineedit.setVisible(False)
+        # _label = QLabel()
+        # _label.setVisible(True)
+        # _button = QPushButton("Define Formula")
+        # _button.setFixedHeight(self.button_height)
+        # _button.setFixedWidth(self.button_width)
+        # QtCore.QObject.connect(_button, QtCore.SIGNAL("pressed()"),
+        #                         lambda key=_random_key:
+        #                        self.chemical_formula_pressed(key))
+        # _button.setVisible(True)
+        #
+        # _list_ui_for_this_row['value_lineedit'] = _lineedit
+        # _list_ui_for_this_row['value_label'] = _label
+        # _list_ui_for_this_row['value_button'] = _button
+        #
+        # _layout.addWidget(_lineedit)
+        # _layout.addWidget(_label)
+        # _layout.addWidget(_button)
+        # _widget = QWidget()
+        # _widget.setLayout(_layout)
+        # self.ui.tableWidget.setCellWidget(row, 3, _widget)
 
         self.list_ui[_random_key] = _list_ui_for_this_row
         self.check_remove_widget()
@@ -324,11 +345,12 @@ class ImportFromDatabaseWindow(QDialog):
         else:
             self.ui.remove_criteria_button.setEnabled(False)
 
-    def import_button_clicked(self, insert_in_table=True):
+    def import_button_clicked(self):
         o_dialog = AsciiLoaderOptions(parent=self.parent)
         o_dialog.show()
 
-    def import_table(self, insert_in_table=True):
+    def import_button(self, insert_in_table=True):
+
         QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
 
         self.list_of_runs_not_found = []
@@ -432,7 +454,7 @@ class ImportFromDatabaseWindow(QDialog):
 
     def refresh_filter_page(self):
         if self.ui.import_button.isEnabled():
-            self.import_table(insert_in_table=False)
+            self.import_button(insert_in_table=False)
 
         nexus_json = self.nexus_json
 
@@ -519,7 +541,9 @@ class ImportFromDatabaseWindow(QDialog):
         self.parent.import_from_database_ui_position = self.pos()
 
 
+
 class AsciiLoaderOptions(AsciiLoaderOptionsInterface):
 
     def accept(self):
         pass
+        #self.close()
