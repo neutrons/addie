@@ -78,8 +78,8 @@ class GlobalRuleWindow(QDialog):
                 return "{}".format(offset+row)
 
     def add_row(self, row=-1):
-
         self.ui.tableWidget.insertRow(row)
+        list_of_widgets_to_unlock = []
 
         # group name
         _column = 0
@@ -88,17 +88,31 @@ class GlobalRuleWindow(QDialog):
         self.ui.tableWidget.setItem(row, _column, _item)
 
         # group to group rule
-        _column += 1
-        _widget = QComboBox()
         list_options = ["and", "or"]
-        _widget.addItems(list_options)
-        self.ui.tableWidget.setCellWidget(row, _column, _widget)
+        _column += 1
+        if row > 0:
+            _widget = QComboBox()
+            _widget.addItems(list_options)
+            self.ui.tableWidget.setCellWidget(row, _column, _widget)
+            _widget.blockSignals(True)
+            list_of_widgets_to_unlock.append(_widget)
+            QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
+                                   lambda value=list_options[0]:
+                                   self.combobox_changed(value))
+        else:
+            _item = QTableWidgetItem("N/A")
+            self.ui.tableWidget.setItem(row, _column, _item)
 
         # rule columns
         _column += 1
         for _offset in np.arange(len(self.list_of_rule_names)):
             _row_layout = QHBoxLayout()
             _widget = QCheckBox()
+            _widget.blockSignals(True)
+            list_of_widgets_to_unlock.append(_widget)
+            QtCore.QObject.connect(_widget, QtCore.SIGNAL("stateChanged(int)"),
+                                   lambda value=0:
+                                   self.checkbox_changed(value))
             _spacer1 = QSpacerItem(40,20, QSizePolicy.Expanding, QSizePolicy.Minimum)
             _row_layout.addItem(_spacer1)
             _row_layout.addWidget(_widget)
@@ -111,9 +125,31 @@ class GlobalRuleWindow(QDialog):
         # inner group rule
         _column += len(self.list_of_rule_names)
         _widget = QComboBox()
+        _widget.blockSignals(True)
+        list_of_widgets_to_unlock.append(_widget)
+        QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
+                               lambda value=list_options[0]:
+                               self.combobox_changed(value))
         list_options = ["and", "or"]
         _widget.addItems(list_options)
         self.ui.tableWidget.setCellWidget(row, _column, _widget)
+        self.unlock_signals_ui(list_of_widgets_to_unlock)
+
+    def unlock_signals_ui(self, list_ui=[]):
+        if list_ui == []:
+            return
+
+        for _ui in list_ui:
+            _ui.blockSignals(False)
+
+    def checkbox_changed(self, value):
+        self.refresh_global_rule()
+
+    def combobox_changed(self, value):
+        self.refresh_global_rule()
+
+    def refresh_global_rule(self):
+        print("refreshing global rule")
 
 
     # Event Handler
@@ -129,6 +165,7 @@ class GlobalRuleWindow(QDialog):
         row = _select[0].topRow()
         self.ui.tableWidget.removeRow(row)
         self.check_widgets()
+        self.refresh_global_rule()
 
     def accept(self):
         print("do something")
