@@ -233,7 +233,7 @@ class Ui_Dialog(object):
         self.verticalLayout_3.addLayout(self.horizontalLayout_3)
 
         self.retranslateUi(Dialog)
-        self.toolBox.setCurrentIndex(1)
+        self.toolBox.setCurrentIndex(0)
         QtCore.QObject.connect(self.cancel_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.cancel_button_clicked)
         QtCore.QObject.connect(self.import_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.import_button_clicked)
         QtCore.QObject.connect(self.ipts_radio_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.radio_button_changed)

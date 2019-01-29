@@ -27,12 +27,12 @@
      </property>
      <column>
       <property name="text">
-       <string>Group</string>
+       <string>Group Name</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Btw Group</string>
+       <string>Btw. Groups</string>
       </property>
      </column>
      <column>
@@ -76,7 +76,7 @@
      <item>
       <widget class="QPushButton" name="add_group_button">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="maximumSize">
         <size>

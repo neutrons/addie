@@ -251,8 +251,8 @@ class ImportFromDatabaseWindow(QDialog):
     def list_criteria_changed(self, value, key):
         pass
 
-    def define_uniq_rule_name(self, row):
-        """this method makes sure that the name of the rule defined is uniq and does not exist already"""
+    def define_unique_rule_name(self, row):
+        """this method makes sure that the name of the rule defined is unique and does not exist already"""
         nbr_row = self.ui.tableWidget.rowCount()
         list_rule_name = []
         for _row in np.arange(nbr_row):
@@ -282,7 +282,7 @@ class ImportFromDatabaseWindow(QDialog):
         self.ui.tableWidget.setItem(row, 0, _item)
 
         # rule #
-        _rule_name = self.define_uniq_rule_name(row)
+        _rule_name = self.define_unique_rule_name(row)
         _item = QTableWidgetItem("{}".format(_rule_name))
         self.ui.tableWidget.setItem(row, 1, _item)
 
