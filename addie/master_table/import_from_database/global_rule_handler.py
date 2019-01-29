@@ -56,7 +56,7 @@ class GlobalRuleWindow(QDialog):
     def check_widgets(self):
         nbr_row = self.ui.tableWidget.rowCount()
         enable_remove_widget = True
-        if nbr_row == 1:
+        if nbr_row == 0:
             enable_remove_widget = False
         self.ui.remove_group_button.setEnabled(enable_remove_widget)
 
@@ -98,11 +98,12 @@ class GlobalRuleWindow(QDialog):
         _column += 1
         for _offset in np.arange(len(self.list_of_rule_names)):
             _row_layout = QHBoxLayout()
-            _spacer = QSpacerItem(40,20, QSizePolicy.Expanding, QSizePolicy.Minimum)
             _widget = QCheckBox()
-            _row_layout.addItem(_spacer)
+            _spacer1 = QSpacerItem(40,20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+            _row_layout.addItem(_spacer1)
             _row_layout.addWidget(_widget)
-            _row_layout.addItem(_spacer)
+            _spacer2 = QSpacerItem(40,20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+            _row_layout.addItem(_spacer2)
             _rule_widget = QWidget()
             _rule_widget.setLayout(_row_layout)
             self.ui.tableWidget.setCellWidget(row, _column+_offset, _rule_widget)
@@ -122,6 +123,11 @@ class GlobalRuleWindow(QDialog):
         self.add_row(row=nbr_row)
 
     def remove_group(self):
+        _select = self.ui.tableWidget.selectedRanges()
+        if not _select:
+            return
+        row = _select[0].topRow()
+        self.ui.tableWidget.removeRow(row)
         self.check_widgets()
 
     def accept(self):
