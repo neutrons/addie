@@ -148,9 +148,53 @@ class GlobalRuleWindow(QDialog):
     def combobox_changed(self, value):
         self.refresh_global_rule()
 
-    def refresh_global_rule(self):
-        print("refreshing global rule")
+    def _retrieve_group_relation(self, row=-1, group_type='inner'):
 
+        nbr_column = self.ui.tableWidget.columnCount()
+
+        if group_type == 'inner':
+            column = nbr_column - 1
+        else:
+            if row == 0:
+                return ""
+            column = 1
+
+        widget = self.ui.tableWidget.cellWidget(row, column)
+        if widget:
+            return widget.currentText()
+        else:
+            return ""
+
+    def _retrieve_rules_checked(self, row=-1):
+        nbr_rules = len(self.list_of_rule_names)
+
+        list_of_rules_checked = []
+
+        global_offset_up_to_rule_name = 2
+        for _index_rule in np.arange(nbr_rules):
+            _widget = self.ui.tableWidget.cellWidget(row, global_offset_up_to_rule_name+_index_rule).children()[1]
+            if _widget.checkState() == QtCore.Qt.Checked:
+                rule_name= str(self.ui.tableWidget.horizontalHeaderItem(global_offset_up_to_rule_name+_index_rule).text())
+                list_of_rules_checked.append(rule_name)
+
+        return list_of_rules_checked
+
+    def refresh_global_rule(self):
+        nbr_row = self.ui.tableWidget.rowCount()
+
+        global_rule = ""
+
+        for _row in np.arange(nbr_row):
+
+            if _row > 0:
+                #retrieve between group relation
+                between_group_relation = self._retrieve_group_relation(group_type='outer')
+
+            # inner group relation
+            inner_group_relation = self._retrieve_group_relation(row=_row)
+
+            # retrieve rule that are checked
+            list_of_rules_checked = self._retrieve_rules_checked(row=_row)
 
     # Event Handler
     def add_group(self):
