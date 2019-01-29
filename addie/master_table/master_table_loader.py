@@ -288,7 +288,7 @@ class AsciiLoader:
         list_titles = o_table['title']
 
         o_format = FormatAsciiList(list1=list_runs,
-                                   list2=list_titles)
+                                   list2=list_titleS)
         # option 1
         # keep raw title and merge lines with exact same title
         if options == 1:

@@ -99,6 +99,12 @@ class ImportFromDatabaseWindow(QDialog):
         for _col, _width in enumerate(self.filter_column_widths):
             self.ui.tableWidget.setColumnWidth(_col, _width)
 
+            self.ui.splitter.setStyleSheet("""
+    	QSplitter::handle {
+    	   image: url(':/MPL Toolbar/splitter_icon.png');
+    	}
+    	""")
+
     def change_user_clicked(self):
         OncatAuthenticationHandler(parent=self.parent)
 
@@ -243,7 +249,7 @@ class ImportFromDatabaseWindow(QDialog):
 
     def list_criteria_changed(self, value, key):
         pass
-        
+
     def define_uniq_rule_name(self, row):
         """this method makes sure that the name of the rule defined is uniq and does not exist already"""
         nbr_row = self.ui.tableWidget.rowCount()

@@ -24,8 +24,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>1760</width>
-        <height>825</height>
+        <width>838</width>
+        <height>639</height>
        </rect>
       </property>
       <attribute name="label">
@@ -223,8 +223,29 @@
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
         <widget class="QSplitter" name="splitter">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+         <property name="lineWidth">
+          <number>4</number>
+         </property>
+         <property name="midLineWidth">
+          <number>9</number>
+         </property>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
+         </property>
+         <property name="opaqueResize">
+          <bool>false</bool>
+         </property>
+         <property name="handleWidth">
+          <number>14</number>
+         </property>
+         <property name="childrenCollapsible">
+          <bool>true</bool>
          </property>
          <widget class="QWidget" name="">
           <layout class="QVBoxLayout" name="verticalLayout_4">
