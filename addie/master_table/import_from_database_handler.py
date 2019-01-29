@@ -227,6 +227,7 @@ class ImportFromDatabaseWindow(QDialog):
     def add_criteria_clicked(self):
         nbr_row = self.ui.tableWidget.rowCount()
         self._add_row(row=nbr_row)
+        self.check_rule_widgets()
 
     def chemical_formula_pressed(self, key):
         MaterialHandler(parent=self.parent,
@@ -241,21 +242,27 @@ class ImportFromDatabaseWindow(QDialog):
         print("index changed and value is now {}".format(value))
 
     def list_criteria_changed(self, value, key):
-        if value == 'Chemical Formula':
-            show_label = True
-            show_button = True
-            show_lineedit = False
-        else:
-            show_label = False
-            show_button = False
-            show_lineedit = True
+        pass
+        
+    def define_uniq_rule_name(self, row):
+        """this method makes sure that the name of the rule defined is uniq and does not exist already"""
+        nbr_row = self.ui.tableWidget.rowCount()
+        list_rule_name = []
+        for _row in np.arange(nbr_row):
+            if self.ui.tableWidget.item(_row, 1):
+                _rule_name = str(self.ui.tableWidget.item(_row, 1).text())
+                list_rule_name.append(_rule_name)
 
-        self.list_ui[key]['value_lineedit'].setVisible(show_lineedit)
-        self.list_ui[key]['value_label'].setVisible(show_label)
-        self.list_ui[key]['value_button'].setVisible(show_button)
+        offset = 0
+        while True:
+            if ("{}".format(offset+row)) in list_rule_name:
+                offset += 1
+            else:
+                return offset+row
+
 
     def _add_row(self, row=-1):
-
+        """this add a row to the filter table (top table)"""
         _random_key = generate_random_key()
 
         _list_ui_for_this_row = {}
@@ -268,7 +275,8 @@ class ImportFromDatabaseWindow(QDialog):
         self.ui.tableWidget.setItem(row, 0, _item)
 
         # rule #
-        _item = QTableWidgetItem("{}".format(row+1))
+        _rule_name = self.define_uniq_rule_name(row)
+        _item = QTableWidgetItem("{}".format(_rule_name))
         self.ui.tableWidget.setItem(row, 1, _item)
 
         # search argument
@@ -292,7 +300,7 @@ class ImportFromDatabaseWindow(QDialog):
         # argument
         _widget = QComboBox()
         _widget.setEditable(True)
-        list_values = [""] + list(self.metadata['chemical_formula'])
+        list_values = list(self.metadata['chemical_formula'])
         _widget.addItems(list_values)
         self.ui.tableWidget.setCellWidget(row, 4, _widget)
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("editTextChanged(QString)"),
@@ -303,7 +311,6 @@ class ImportFromDatabaseWindow(QDialog):
                                lambda value=list_values[0],
                                       key = _random_key:
                                self.list_argument_index_changed(value, key))
-
 
         if row == 0:
             self.ui.tableWidget.horizontalHeader().setVisible(True)
@@ -334,7 +341,7 @@ class ImportFromDatabaseWindow(QDialog):
         # self.ui.tableWidget.setCellWidget(row, 3, _widget)
 
         self.list_ui[_random_key] = _list_ui_for_this_row
-        self.check_remove_widget()
+        self.check_all_filter_widgets()
 
     def remove_criteria_clicked(self):
         _select = self.ui.tableWidget.selectedRanges()
@@ -344,7 +351,30 @@ class ImportFromDatabaseWindow(QDialog):
         _randome_key = str(self.ui.tableWidget.item(row, 0).text())
         self.list_ui.pop(_randome_key, None)
         self.ui.tableWidget.removeRow(row)
+        self.check_all_filter_widgets()
+
+    def check_all_filter_widgets(self):
         self.check_remove_widget()
+        self.check_rule_widgets()
+
+    def check_rule_widgets(self):
+        nbr_row = self.ui.tableWidget.rowCount()
+        enable_global_rule_label = False
+        enable_global_rule_value = False
+        enable_global_rule_button = False
+        if nbr_row == 0:
+            pass
+        elif nbr_row == 1:
+            enable_global_rule_label = True
+            enable_global_rule_value = True
+        else:
+            enable_global_rule_label = True
+            enable_global_rule_value = True
+            enable_global_rule_button = True
+
+        self.ui.global_rule_label.setEnabled(enable_global_rule_label)
+        self.ui.global_rule_lineedit.setEnabled(enable_global_rule_value)
+        self.ui.global_rule_button.setEnabled(enable_global_rule_button)
 
     def check_remove_widget(self):
         nbr_row = self.ui.tableWidget.rowCount()
