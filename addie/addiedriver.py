@@ -401,6 +401,9 @@ class AddieDriver(object):
         if base_file_name.endswith('.gss') or base_file_name.endswith('.gsa') or base_file_name.endswith('.gda'):
             simpleapi.LoadGSS(Filename=file_name,
                               OutputWorkspace=gss_ws_name)
+        elif base_file_name.endswith('.nxs'):
+            simpleapi.LoadNexusProcessed(Filename=file_name, OutputWorkspace=gss_ws_name)
+            simpleapi.ConvertUnits(InputWorkspace=gss_ws_name, OutputWorkspace=gss_ws_name, EMode='Elastic', Target='TOF')
         elif base_file_name.endswith('.dat'):
             simpleapi.LoadAscii(Filename=file_name,
                                 OutputWorkspace=gss_ws_name,
@@ -452,7 +455,14 @@ class AddieDriver(object):
         sq_ws_name = os.path.basename(file_name).split('.')[0]
 
         # call mantid LoadAscii
-        simpleapi.LoadAscii(Filename=file_name, OutputWorkspace=sq_ws_name, Unit='MomentumTransfer')
+        ext = file_name.upper().split('.')[-1]
+        if ext == 'NXS':
+            simpleapi.LoadNexusProcessed(Filename=file_name, OutputWorkspace=sq_ws_name)
+            simpleapi.ConvertUnits(InputWorkspace=sq_ws_name, OutputWorkspace=sq_ws_name, EMode='Elastic', Target='MomentumTransfer')
+            simpleapi.ConvertToPointData(InputWorkspace=sq_ws_name, OutputWorkspace=sq_ws_name)  # TODO REMOVE THIS LINE
+        elif ext == 'DAT' or ext == 'txt':
+            simpleapi.LoadAscii(Filename=file_name, OutputWorkspace=sq_ws_name, Unit='MomentumTransfer')
+
         assert AnalysisDataService.doesExist(sq_ws_name), 'Unable to load S(Q) file %s.' % file_name
 
         # The S(Q) file is in fact S(Q)-1 in sq file.  So need to add 1 to the workspace

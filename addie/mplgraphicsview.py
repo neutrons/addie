@@ -875,11 +875,11 @@ class Qt4MplCanvas(FigureCanvas):
         self.fig.patch.set_facecolor('white')
 
         if True:
-            self.axes = self.fig.add_subplot(111)  # return: matplotlib.axes.AxesSubplot
+            self.axes = self.fig.add_subplot(111, projection='mantid')  # return: matplotlib.axes.AxesSubplot
             self.fig.subplots_adjust(bottom=0.15)
             self.axes2 = None
         else:
-            self.axes = self.fig.add_host_subplot(111)
+            self.axes = self.fig.add_host_subplot(111, projection='mantid')
 
         # Initialize parent class and set parent
         FigureCanvas.__init__(self, self.fig)

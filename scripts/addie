@@ -765,7 +765,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         -------
         """
         # get file
-        ext = 'GSAS (*.gsa);;DAT (*.dat);;All (*.*)'
+        ext = 'GSAS (*.gsa *.gda *.gss);;Processed Nexus (*.nxs);;dat (*.dat);;All (*.*)'
 
         # get default dir
         if self._currDataDir is None:
@@ -993,9 +993,9 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             default_dir = self.getDefaultDir(sub_dir='SofQ')
 
         # get the file
-        ext = 'DAT (*.dat);;All (*.*)'
+        ext = 'nxs (*.nxs);;dat (*.dat);;All (*.*)'
         sq_file_names = QFileDialog.getOpenFileNames(self, 'Choose S(Q) File', default_dir, ext)
-        if sq_file_names is None or sq_file_names == '':
+        if sq_file_names is None or sq_file_names == '' or len(sq_file_names) == 0:
             return
         else:
             # update current data directory
