@@ -233,6 +233,7 @@ class GlobalRuleWindow(QDialog):
         self.refresh_global_rule()
 
     def accept(self):
-        print("do something")
+        global_rule = str(self.ui.rule_result.text())
+        self.parent.ui.global_rule_lineedit.setText(global_rule)
         self.close()
 
