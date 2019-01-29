@@ -175,7 +175,7 @@ class GlobalRuleWindow(QDialog):
             _widget = self.ui.tableWidget.cellWidget(row, global_offset_up_to_rule_name+_index_rule).children()[1]
             if _widget.checkState() == QtCore.Qt.Checked:
                 rule_name= str(self.ui.tableWidget.horizontalHeaderItem(global_offset_up_to_rule_name+_index_rule).text())
-                list_of_rules_checked.append(rule_name)
+                list_of_rules_checked.append(" #{} ".format(rule_name))
 
         return list_of_rules_checked
 
@@ -188,13 +188,28 @@ class GlobalRuleWindow(QDialog):
 
             if _row > 0:
                 #retrieve between group relation
-                between_group_relation = self._retrieve_group_relation(group_type='outer')
+                between_group_relation = self._retrieve_group_relation(row=_row, group_type='outer')
 
             # inner group relation
             inner_group_relation = self._retrieve_group_relation(row=_row)
 
             # retrieve rule that are checked
             list_of_rules_checked = self._retrieve_rules_checked(row=_row)
+
+            if list_of_rules_checked:
+                if len(list_of_rules_checked) > 1:
+                    group_string = "( " + inner_group_relation.join(list_of_rules_checked) + " )"
+                else:
+                    group_string = list_of_rules_checked[0]
+            else:
+                continue
+
+            if global_rule == "":
+                global_rule = group_string
+            else:
+                global_rule += " " + between_group_relation + " " + group_string
+
+            self.ui.rule_result.setText(global_rule)
 
     # Event Handler
     def add_group(self):

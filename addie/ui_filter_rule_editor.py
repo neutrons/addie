@@ -102,7 +102,7 @@ class Ui_Dialog(object):
         item.setText(_translate("Dialog", "Inner Group", None))
         self.remove_group_button.setText(_translate("Dialog", "-", None))
         self.add_group_button.setText(_translate("Dialog", "+", None))
-        self.label.setText(_translate("Dialog", "Rules:", None))
+        self.label.setText(_translate("Dialog", "Global Rule:", None))
         self.rule_result.setText(_translate("Dialog", "N/A", None))
         self.cancel.setText(_translate("Dialog", "Cancel", None))
         self.ok.setText(_translate("Dialog", "OK", None))

@@ -96,7 +96,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Rules:</string>
+        <string>Global Rule:</string>
        </property>
       </widget>
      </item>
