@@ -34,6 +34,7 @@ class GlobalRuleWindow(QDialog):
         self.ui.setupUi(self)
 
         self.init_widgets()
+        self.refresh_global_rule()
 
     def get_list_of_rule_names(self):
         """make the list of rule name defined in the previous ui"""
@@ -52,6 +53,9 @@ class GlobalRuleWindow(QDialog):
             self.ui.tableWidget.insertColumn(_col_index+2)
             item_title = QTableWidgetItem(_name)
             self.ui.tableWidget.setHorizontalHeaderItem(_col_index+2, item_title)
+
+        for _col_index in np.arange(len(list_of_rule_names)):
+            self.add_row(row=_col_index)
 
     def check_widgets(self):
         nbr_row = self.ui.tableWidget.rowCount()
@@ -109,6 +113,8 @@ class GlobalRuleWindow(QDialog):
             _row_layout = QHBoxLayout()
             _widget = QCheckBox()
             _widget.blockSignals(True)
+            if _offset == row:
+                _widget.setCheckState(QtCore.Qt.Checked)
             list_of_widgets_to_unlock.append(_widget)
             QtCore.QObject.connect(_widget, QtCore.SIGNAL("stateChanged(int)"),
                                    lambda value=0:
