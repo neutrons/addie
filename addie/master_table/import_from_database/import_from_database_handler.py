@@ -14,13 +14,14 @@ except:
     except:
         raise ImportError("Requires PyQt4 or PyQt5")
 
-from addie.master_table.oncat_authentication_handler import OncatAuthenticationHandler
+from addie.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
 from addie.utilities.oncat import OncatErrorMessageWindow
 from addie.utilities.oncat import pyoncatGetIptsList, pyoncatGetNexus, pyoncatGetRunsFromIpts
 from addie.master_table.tree_definition import LIST_SEARCH_CRITERIA
 from addie.master_table.periodic_table.material_handler import MaterialHandler
 from addie.master_table.table_row_handler import TableRowHandler
 from addie.master_table.master_table_loader import AsciiLoaderOptionsInterface
+from addie.master_table.import_from_database.global_rule_handler import GlobalRuleHandler
 
 from addie.utilities.general import generate_random_key, remove_white_spaces
 from addie.utilities.list_runs_parser import ListRunsParser
@@ -579,6 +580,8 @@ class ImportFromDatabaseWindow(QDialog):
     #     #FIXME HERE
     #     self.ui.files_filtered_out_more.setVisible(visible_list_of_runs_filtered_out)
 
+    def edit_global_rule_clicked(self):
+        GlobalRuleHandler(parent=self)
 
     def closeEvent(self, c):
         self.parent.import_from_database_ui = None

@@ -25,8 +25,8 @@ from addie.master_table.import_table import ImportTable
 from addie.master_table.export_table import ExportTable
 from addie.master_table.master_table_loader import TableFileLoader
 from addie.master_table.master_table_exporter import TableFileExporter
-from addie.master_table.import_from_database_handler import ImportFromDatabaseHandler
-from addie.master_table.oncat_authentication_handler import OncatAuthenticationHandler
+from addie.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
+from addie.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
 
 
 class TableInitialization:

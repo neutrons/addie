@@ -561,8 +561,8 @@
    <slot>cancel_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>599</x>
-     <y>573</y>
+     <x>762</x>
+     <y>745</y>
     </hint>
     <hint type="destinationlabel">
      <x>80</x>
@@ -577,8 +577,8 @@
    <slot>import_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>685</x>
-     <y>573</y>
+     <x>845</x>
+     <y>745</y>
     </hint>
     <hint type="destinationlabel">
      <x>452</x>
@@ -625,8 +625,8 @@
    <slot>ipts_selection_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>277</x>
-     <y>74</y>
+     <x>272</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>289</x>
@@ -657,8 +657,8 @@
    <slot>change_user_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>125</x>
-     <y>573</y>
+     <x>123</x>
+     <y>745</y>
     </hint>
     <hint type="destinationlabel">
      <x>452</x>
@@ -673,8 +673,8 @@
    <slot>ipts_text_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>645</x>
-     <y>74</y>
+     <x>805</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
      <x>358</x>
@@ -689,8 +689,8 @@
    <slot>clear_ipts()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>676</x>
-     <y>74</y>
+     <x>836</x>
+     <y>78</y>
     </hint>
     <hint type="destinationlabel">
      <x>421</x>
@@ -705,8 +705,8 @@
    <slot>clear_run()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>611</x>
-     <y>107</y>
+     <x>774</x>
+     <y>115</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
@@ -721,8 +721,8 @@
    <slot>remove_criteria_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>45</x>
-     <y>500</y>
+     <x>49</x>
+     <y>287</y>
     </hint>
     <hint type="destinationlabel">
      <x>85</x>
@@ -737,8 +737,8 @@
    <slot>add_criteria_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>676</x>
-     <y>500</y>
+     <x>835</x>
+     <y>287</y>
     </hint>
     <hint type="destinationlabel">
      <x>453</x>
@@ -778,6 +778,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>global_rule_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>edit_global_rule_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>794</x>
+     <y>351</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>626</x>
+     <y>723</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>cancel_button_clicked()</slot>
@@ -799,5 +815,6 @@
   <slot>files_initially_selected_more_clicked()</slot>
   <slot>files_filtered_out_more_clicked()</slot>
   <slot>files_imported_more_clicked()</slot>
+  <slot>edit_global_rule_clicked()</slot>
  </slots>
 </ui>

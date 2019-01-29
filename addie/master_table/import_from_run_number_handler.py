@@ -6,7 +6,7 @@ except:
     except:
         raise ImportError("Requires PyQt4 or PyQt5")
 
-from addie.master_table.oncat_authentication_handler import OncatAuthenticationHandler
+from addie.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
 
 from addie.ui_import_from_run_number import Ui_Dialog as UiDialog
 

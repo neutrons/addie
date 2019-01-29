@@ -25,7 +25,9 @@ except AttributeError:
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName(_fromUtf8("Dialog"))
+        Dialog.setWindowModality(QtCore.Qt.WindowModal)
         Dialog.resize(613, 330)
+        Dialog.setModal(True)
         self.verticalLayout = QtGui.QVBoxLayout(Dialog)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.tableWidget = QtGui.QTableWidget(Dialog)

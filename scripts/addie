@@ -77,7 +77,7 @@ from addie.master_table.reduction_configuration_handler import ReductionConfigur
 from addie.make_calibration_handler.make_calibration import MakeCalibrationLauncher
 from addie.master_table.periodic_table.material_handler import MaterialHandler
 from addie.master_table.mass_density_handler import MassDensityHandler
-from addie.master_table.import_from_database_handler import ImportFromDatabaseHandler
+from addie.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
 from addie.master_table.import_from_run_number_handler import ImportFromRunNumberHandler
 
 import addie.addiedriver as driver
