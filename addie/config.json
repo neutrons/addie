@@ -141,13 +141,13 @@
       ],
       "column_width": 150
       },
-      {"title": "Proton Charge",
+      {"title": "Proton Charge (C)",
       "path": [
         "metadata",
         "entry",
         "proton_charge"
       ],
-      "column_width": 100}
+      "column_width": 150}
     ],
     "POW": []
   }

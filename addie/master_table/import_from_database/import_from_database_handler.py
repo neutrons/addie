@@ -597,7 +597,7 @@ class ImportFromDatabaseWindow(QDialog):
         argument_value = self._json_extractor(json=json, list_args=copy.deepcopy(list_args))
 
         # if title is "Proton Charge" change format of value displayed
-        if title == "Proton Charge":
+        if title == "Proton Charge (C)":
             argument_value = _format_proton_charge(argument_value)
 
         if table_ui is None:
