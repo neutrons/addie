@@ -35,6 +35,7 @@ class GlobalRuleWindow(QDialog):
 
         self.init_widgets()
         self.refresh_global_rule()
+        self.check_widgets()
 
     def get_list_of_rule_names(self):
         """make the list of rule name defined in the previous ui"""
@@ -215,7 +216,7 @@ class GlobalRuleWindow(QDialog):
             else:
                 global_rule += " " + between_group_relation + " " + group_string
 
-            self.ui.rule_result.setText(global_rule)
+        self.ui.rule_result.setText(global_rule)
 
     # Event Handler
     def add_group(self):
@@ -227,8 +228,9 @@ class GlobalRuleWindow(QDialog):
         _select = self.ui.tableWidget.selectedRanges()
         if not _select:
             return
-        row = _select[0].topRow()
-        self.ui.tableWidget.removeRow(row)
+        else:
+            row = _select[0].topRow()
+            self.ui.tableWidget.removeRow(row)
         self.check_widgets()
         self.refresh_global_rule()
 
