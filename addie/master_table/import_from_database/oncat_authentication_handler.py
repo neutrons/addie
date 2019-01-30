@@ -69,10 +69,21 @@ class OncatAuthenticationWindow(QMainWindow):
         # Initialize token store
         token_store = InMemoryTokenStore()
 
+        # # Setup ONcat object
+        # oncat = pyoncat.ONCat(
+        #     'https://oncat.ornl.gov',
+        #     client_id='cf46da72-9279-4466-bc59-329aea56bafe',
+        #     client_secret=None,
+        #     token_getter=token_store.get_token,
+        #     token_setter=token_store.set_token,
+        #     flow=pyoncat.RESOURCE_OWNER_CREDENTIALS_FLOW
+        # )
+
         # Setup ONcat object
         oncat = pyoncat.ONCat(
             'https://oncat.ornl.gov',
             client_id='cf46da72-9279-4466-bc59-329aea56bafe',
+            scopes = ['api:read', 'settings:read'],
             client_secret=None,
             token_getter=token_store.get_token,
             token_setter=token_store.set_token,

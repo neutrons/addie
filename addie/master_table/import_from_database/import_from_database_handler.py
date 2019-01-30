@@ -217,7 +217,7 @@ class ImportFromDatabaseWindow(QDialog):
                 'found': list_of_runs_found}
 
     def build_result_dictionary(self, nexus_json=[]):
-        """isolate the infos I need from ONCat result"""
+        """isolate the infos I need from ONCat result to insert in the main window, master table"""
         result_dict = OrderedDict()
 
         for _json in nexus_json:
@@ -487,13 +487,19 @@ class ImportFromDatabaseWindow(QDialog):
 
         list_chemical_formula = []
         list_mass_density = []
+        list_proton_charge = []
+        list_device_name = []
 
         for _json in nexus_json:
             list_chemical_formula.append(str(_json['metadata']['entry']['sample']['chemical_formula']))
             list_mass_density.append(str(_json['metadata']['entry']['sample']['mass_density']))
+            list_proton_charge.append(str(_json['metadata']['entry']['proton_charge']))
+            list_device_name.append(str(_json['metadata']['entry']['daslogs']['bl1b:se:sampletemp']['device_name']))
 
         metadata['chemical_formula'] = set(list_chemical_formula)
         metadata['mass_density'] = set(list_mass_density)
+        metadata['proton_charge'] = set(list_proton_charge)
+        metadata['device_name'] = str(list_device_name)
 
         self.metadata = metadata
 

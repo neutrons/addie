@@ -27,4 +27,4 @@ class ConfigurationInitializer:
 
         parent.packing_fraction = data['packing_fraction']
 
-        parent.oncat_metadata_filters = data["oncat_metadata_filters"]
+        parent.oncat_metadata_filters = data["oncat_metadata_filters"][parent.instrument["short_name"]]

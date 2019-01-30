@@ -34,6 +34,8 @@ def pyoncatGetNexus(oncat=None, instrument='', runs=-1, facility='SNS'):
                     'metadata.entry.sample.chemical_formula',
                     'metadata.entry.sample.mass_density',
                     'metadata.entry.title',
+                    'metadata.entry.proton_charge',
+                    'metadata.entry.daslogs.bl1b:se:sampletemp.device_name'
                     ],
         tags=['type/raw'],
         exts=['.nxs.h5'],
@@ -49,6 +51,8 @@ def pyoncatGetRunsFromIpts(oncat=None, instrument='', ipts='', facility='SNS'):
                                                'metadata.entry.sample.chemical_formula',
                                                'metadata.entry.sample.mass_density',
                                                'metadata.entry.title',
+                                               'metadata.entry.proton_charge',
+                                               'metadata.entry.daslogs.bl1b:se:sampletemp.device_name'
                                                ],
                                    tags=['type/raw'],
                                    exts=['.nxs.h5'])
