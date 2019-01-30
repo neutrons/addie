@@ -133,6 +133,11 @@ class ImportFromDatabaseWindow(QDialog):
 
         self.check_import_button()
 
+    def preview_widget_status(self, enabled_widgets=False):
+        self.ui.search_logo_label.setEnabled(enabled_widgets)
+        self.ui.name_search.setEnabled(enabled_widgets)
+        self.ui.clear_search_button.setEnabled(enabled_widgets)
+
     def filter_widget_status(self, enabled_widgets=False):
         self.ui.tableWidget.setEnabled(enabled_widgets)
         self.ui.add_criteria_button.setEnabled(enabled_widgets)
@@ -518,7 +523,18 @@ class ImportFromDatabaseWindow(QDialog):
         o_info.show()
 
     def refresh_preview_table_of_runs(self):
-        print("refresh preview table of runs")
+        if self.ui.import_button.isEnabled():
+            self.import_button(insert_in_table=False)
+
+        nexus_json = self.nexus_json
+
+        enabled_widgets = False
+        if not (nexus_json == {}):
+            enabled_widgets = True
+
+        self.preview_widget_status(enabled_widgets=enabled_widgets)
+        self.refresh_result_table(nexus_json=copy.deepcopy(nexus_json),
+                                  table_ui=self.ui.tableWidget_all_runs)
 
     def toolbox_changed(self, index):
         if index == 0:
