@@ -482,6 +482,11 @@ class ImportFromDatabaseWindow(QDialog):
 
     def isolate_metadata(self):
         '''retrieve the metadata of interest from the json returns by ONCat'''
+
+        # def _format_proton_charge(raw_proton_charge):
+        #     _proton_charge = raw_proton_charge/1e12
+        #     return "{:.3}".format(_proton_charge)
+
         nexus_json = self.nexus_json
         metadata = {}
 
@@ -493,7 +498,9 @@ class ImportFromDatabaseWindow(QDialog):
         for _json in nexus_json:
             list_chemical_formula.append(str(_json['metadata']['entry']['sample']['chemical_formula']))
             list_mass_density.append(str(_json['metadata']['entry']['sample']['mass_density']))
-            list_proton_charge.append(str(_json['metadata']['entry']['proton_charge']))
+            # _proton_charge = _format_proton_charge(_json['metadata']['entry']['proton_charge'])
+            _proton_charge = _json['metadata']['entry']['proton_charge']
+            list_proton_charge.append(str(_proton_charge))
             list_device_name.append(str(_json['metadata']['entry']['daslogs']['bl1b:se:sampletemp']['device_name']))
 
         metadata['chemical_formula'] = set(list_chemical_formula)
@@ -580,9 +587,18 @@ class ImportFromDatabaseWindow(QDialog):
     def set_table_item(self, json=None, metadata_filter={}, row=-1, col=-1, table_ui=None):
         """Populate the filter metadada table from the oncat json file of only the arguments specified in
         the config.json file (oncat_metadata_filters)"""
+
+        def _format_proton_charge(raw_proton_charge):
+            _proton_charge = raw_proton_charge/1e12
+            return "{:.3}".format(_proton_charge)
+
         title = metadata_filter['title']
         list_args = metadata_filter["path"]
         argument_value = self._json_extractor(json=json, list_args=copy.deepcopy(list_args))
+
+        # if title is "Proton Charge" change format of value displayed
+        if title == "Proton Charge":
+            argument_value = _format_proton_charge(argument_value)
 
         if table_ui is None:
             table_ui = self.ui.tableWidget_filter_result
