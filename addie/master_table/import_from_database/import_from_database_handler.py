@@ -4,12 +4,12 @@ import numpy as np
 
 try:
     from PyQt4.QtGui import QDialog, QComboBox, QLineEdit, QPushButton, QWidget, QHBoxLayout, QLabel, \
-        QTableWidgetItem, QApplication
+        QTableWidgetItem, QApplication, QMainWindow
     from PyQt4 import QtGui, QtCore
 except:
     try:
         from PyQt5.QtWidgets import QDialog, QComboBox, QLineEdit, QPushButton, QWidget, QHBoxLayout, QLabel, \
-            QTableWidgetItem, QApplication
+            QTableWidgetItem, QApplication, QMainWindow
         from PyQt5 import QtGui, QtCore
     except:
         raise ImportError("Requires PyQt4 or PyQt5")
@@ -29,6 +29,7 @@ from addie.utilities.general import generate_random_key, remove_white_spaces
 from addie.utilities.list_runs_parser import ListRunsParser
 
 from addie.ui_import_from_database import Ui_Dialog as UiDialog
+from addie.ui_import_from_database_1 import Ui_MainWindow as UiMainWindow
 
 
 class ImportFromDatabaseHandler:
@@ -45,7 +46,8 @@ class ImportFromDatabaseHandler:
             parent.import_from_database_ui.activateWindow()
 
 
-class ImportFromDatabaseWindow(QDialog):
+#class ImportFromDatabaseWindow(QDialog):
+class ImportFromDatabaseWindow(QMainWindow):
 
     filter_column_widths = [10, 50, 200, 100, 300]
     row_height = 40
@@ -69,8 +71,10 @@ class ImportFromDatabaseWindow(QDialog):
     def __init__(self, parent=None):
         self.parent = parent
 
-        QDialog.__init__(self, parent=parent)
-        self.ui = UiDialog()
+        # QDialog.__init__(self, parent=parent)
+        # self.ui = UiDialog()
+        QMainWindow.__init__(self, parent=parent)
+        self.ui = UiMainWindow()
         self.ui.setupUi(self)
 
         self.init_widgets()
@@ -170,8 +174,9 @@ class ImportFromDatabaseWindow(QDialog):
 
         self.ui.import_button.setEnabled(enable_import)
 
-
-    def get_list_of_runs_found_and_not_found(self, str_runs="", oncat_result={}, check_not_found=True):
+    def get_list_of_runs_found_and_not_found(self, str_runs="",
+                                             oncat_result={},
+                                             check_not_found=True):
         if str_runs:
             o_parser = ListRunsParser(current_runs=str_runs)
             list_of_runs = o_parser.list_current_runs
@@ -660,7 +665,6 @@ class ImportFromDatabaseWindow(QDialog):
 
         self.ipts_exist = ipts_exist
         self.check_import_button()
-        self.search_return_pressed()
 
     def run_number_return_pressed(self):
         self.refresh_preview_table_of_runs()
