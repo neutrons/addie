@@ -231,11 +231,6 @@ class ImportFromDatabaseWindow(QDialog):
     def cancel_button_clicked(self):
         self.close()
 
-    def add_criteria_clicked(self):
-        nbr_row = self.ui.tableWidget.rowCount()
-        self._add_row(row=nbr_row)
-        self.check_rule_widgets()
-
     def chemical_formula_pressed(self, key):
         MaterialHandler(parent=self.parent,
                         database_window=self,
@@ -350,6 +345,24 @@ class ImportFromDatabaseWindow(QDialog):
         self.list_ui[_random_key] = _list_ui_for_this_row
         self.check_all_filter_widgets()
 
+    def refresh_global_rule(self, full_reset=False, new_row=-1):
+        if full_reset:
+            list_rule_number = []
+            nbr_row = self.ui.tableWidget.rowCount()
+            for _row in np.arange(nbr_row):
+                rule_number = "#{}".format(str(self.ui.tableWidget.item(_row, 1).text()))
+                list_rule_number.append(rule_number)
+            global_rule = " and ".join(list_rule_number)
+        else:
+            current_global_rule = str(self.ui.global_rule_lineedit.text())
+            name_of_new_row = str(self.ui.tableWidget.item(new_row, 1).text())
+            if current_global_rule == "":
+                global_rule = "#{}".format(name_of_new_row)
+            else:
+                global_rule = current_global_rule + " and #{}".format(name_of_new_row)
+
+        self.ui.global_rule_lineedit.setText(global_rule)
+
     def remove_criteria_clicked(self):
         _select = self.ui.tableWidget.selectedRanges()
         if not _select:
@@ -359,6 +372,13 @@ class ImportFromDatabaseWindow(QDialog):
         self.list_ui.pop(_randome_key, None)
         self.ui.tableWidget.removeRow(row)
         self.check_all_filter_widgets()
+        self.refresh_global_rule(full_reset=True)
+
+    def add_criteria_clicked(self):
+        nbr_row = self.ui.tableWidget.rowCount()
+        self._add_row(row=nbr_row)
+        self.check_rule_widgets()
+        self.refresh_global_rule(new_row=nbr_row)
 
     def check_all_filter_widgets(self):
         self.check_remove_widget()
