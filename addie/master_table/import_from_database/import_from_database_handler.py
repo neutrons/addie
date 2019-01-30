@@ -141,12 +141,18 @@ class ImportFromDatabaseWindow(QDialog):
 
     def clear_ipts(self):
         self.ui.ipts_lineedit.setText("")
+        self.refresh_preview_table_of_runs()
 
     def clear_run(self):
         self.ui.run_number_lineedit.setText("")
+        self.refresh_preview_table_of_runs()
 
     def ipts_selection_changed(self, ipts_selected):
         self.ui.ipts_lineedit.setText("")
+        self.refresh_preview_table_of_runs()
+
+    def ipts_text_return_pressed(self):
+        self.refresh_preview_table_of_runs()
 
     def ipts_text_changed(self, ipts_text):
         if ipts_text.strip() != "":
@@ -180,7 +186,7 @@ class ImportFromDatabaseWindow(QDialog):
         self.ui.import_button.setEnabled(enable_import)
 
     def run_number_return_pressed(self):
-        pass
+        self.refresh_preview_table_of_runs()
 
     def run_number_text_changed(self, text):
         self.check_import_button()
@@ -511,6 +517,9 @@ class ImportFromDatabaseWindow(QDialog):
                                          message=message)
         o_info.show()
 
+    def refresh_preview_table_of_runs(self):
+        print("refresh preview table of runs")
+
     def toolbox_changed(self, index):
         if index == 0:
             self.nexus_json = {}
@@ -531,12 +540,13 @@ class ImportFromDatabaseWindow(QDialog):
             enabled_widgets = True
 
         self.filter_widget_status(enabled_widgets=enabled_widgets)
-        self.refresh_result_of_filter_table(nexus_json=copy.deepcopy(nexus_json))
+        self.refresh_result_table(nexus_json=copy.deepcopy(nexus_json),
+                                  table_ui=self.ui.tableWidget_filter_result)
 
-    def clear_tableWidget_filter_result(self):
-        nbr_row = self.ui.tableWidget_filter_result.rowCount()
-        for _row in np.arange(nbr_row):
-            self.ui.tableWidget_filter_result.removeRow(0)
+    def clear_tableWidget(self, table_ui=None):
+        nbr_row = table_ui.rowCount()
+        for _ in np.arange(nbr_row):
+            table_ui.removeRow(0)
 
     def _json_extractor(self, json=None, list_args=[]):
         if len(list_args) == 1:
@@ -545,35 +555,44 @@ class ImportFromDatabaseWindow(QDialog):
             return self._json_extractor(json[list_args.pop(0)],
                                         list_args=list_args)
 
-    def set_table_item(self, json=None, metadata_filter={}, row=-1, col=-1):
+    def set_table_item(self, json=None, metadata_filter={}, row=-1, col=-1, table_ui=None):
         """Populate the filter metadada table from the oncat json file of only the arguments specified in
         the config.json file (oncat_metadata_filters)"""
         title = metadata_filter['title']
         list_args = metadata_filter["path"]
         argument_value = self._json_extractor(json=json, list_args=copy.deepcopy(list_args))
+
+        if table_ui is None:
+            table_ui = self.ui.tableWidget_filter_result
+
         if self.first_time_filling_table:
-            self.ui.tableWidget_filter_result.insertColumn(col)
+            table_ui.insertColumn(col)
             _item_title = QTableWidgetItem(title)
-            self.ui.tableWidget_filter_result.setHorizontalHeaderItem(col, _item_title)
+            table_ui.setHorizontalHeaderItem(col, _item_title)
             width = metadata_filter["column_width"]
-            self.ui.tableWidget_filter_result.setColumnWidth(col, width)
+            table_ui.setColumnWidth(col, width)
 
         _item = QTableWidgetItem("{}".format(argument_value))
-        self.ui.tableWidget_filter_result.setItem(row, col, _item)
+        table_ui.setItem(row, col, _item)
 
-    def refresh_result_of_filter_table(self, nexus_json=[]):
+    def refresh_result_table(self, nexus_json=[], table_ui=None):
+        """may either be the filter table or the raw preview table"""
+
+        if table_ui is None:
+            table_ui = self.ui.tableWidget_filter_result
 
         oncat_metadata_filters = self.parent.oncat_metadata_filters
         #if nexus_json == []:
-        self.clear_tableWidget_filter_result()
+        self.clear_tableWidget(table_ui=table_ui)
         #else:
         for _row, _json in enumerate(nexus_json):
-            self.ui.tableWidget_filter_result.insertRow(_row)
+            table_ui.insertRow(_row)
             for _column, metadata_filter in enumerate(oncat_metadata_filters):
                 self.set_table_item(json=copy.deepcopy(_json),
                                     metadata_filter=metadata_filter,
                                     row=_row,
-                                    col=_column)
+                                    col=_column,
+                                    table_ui=table_ui)
 
             self.first_time_filling_table = False
 

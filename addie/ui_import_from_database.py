@@ -292,6 +292,7 @@ class Ui_Dialog(object):
         QtCore.QObject.connect(self.run_number_lineedit, QtCore.SIGNAL(_fromUtf8("textChanged(QString)")), Dialog.run_number_text_changed)
         QtCore.QObject.connect(self.toolBox, QtCore.SIGNAL(_fromUtf8("currentChanged(int)")), Dialog.toolbox_changed)
         QtCore.QObject.connect(self.global_rule_button, QtCore.SIGNAL(_fromUtf8("clicked()")), Dialog.edit_global_rule_clicked)
+        QtCore.QObject.connect(self.ipts_lineedit, QtCore.SIGNAL(_fromUtf8("returnPressed()")), Dialog.ipts_text_return_pressed)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
         Dialog.setTabOrder(self.import_button, self.ipts_combobox)
         Dialog.setTabOrder(self.ipts_combobox, self.ipts_lineedit)

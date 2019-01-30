@@ -676,7 +676,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>762</x>
-     <y>745</y>
+     <y>696</y>
     </hint>
     <hint type="destinationlabel">
      <x>80</x>
@@ -692,7 +692,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>845</x>
-     <y>745</y>
+     <y>696</y>
     </hint>
     <hint type="destinationlabel">
      <x>452</x>
@@ -772,7 +772,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>123</x>
-     <y>745</y>
+     <y>696</y>
     </hint>
     <hint type="destinationlabel">
      <x>452</x>
@@ -836,7 +836,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>49</x>
-     <y>287</y>
+     <y>325</y>
     </hint>
     <hint type="destinationlabel">
      <x>85</x>
@@ -852,7 +852,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>835</x>
-     <y>287</y>
+     <y>325</y>
     </hint>
     <hint type="destinationlabel">
      <x>453</x>
@@ -904,7 +904,23 @@
     </hint>
     <hint type="destinationlabel">
      <x>626</x>
-     <y>723</y>
+     <y>706</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ipts_lineedit</sender>
+   <signal>returnPressed()</signal>
+   <receiver>Dialog</receiver>
+   <slot>ipts_text_return_pressed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>745</x>
+     <y>63</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>725</x>
+     <y>3</y>
     </hint>
    </hints>
   </connection>
@@ -930,5 +946,6 @@
   <slot>files_filtered_out_more_clicked()</slot>
   <slot>files_imported_more_clicked()</slot>
   <slot>edit_global_rule_clicked()</slot>
+  <slot>ipts_text_return_pressed()</slot>
  </slots>
 </ui>
