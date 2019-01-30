@@ -139,6 +139,7 @@ class ImportFromDatabaseWindow(QDialog):
         self.ui.search_logo_label.setEnabled(enabled_widgets)
         self.ui.name_search.setEnabled(enabled_widgets)
         self.ui.clear_search_button.setEnabled(enabled_widgets)
+        self.ui.list_of_runs_label.setEnabled(enabled_widgets)
 
     def filter_widget_status(self, enabled_widgets=False):
         self.ui.tableWidget.setEnabled(enabled_widgets)
@@ -154,29 +155,6 @@ class ImportFromDatabaseWindow(QDialog):
         self.ui.run_number_lineedit.setText("")
         self.refresh_preview_table_of_runs()
 
-    def ipts_selection_changed(self, ipts_selected):
-        self.ui.ipts_lineedit.setText("")
-        self.refresh_preview_table_of_runs()
-
-    def ipts_text_return_pressed(self):
-        self.refresh_preview_table_of_runs()
-
-    def ipts_text_changed(self, ipts_text):
-        if ipts_text.strip() != "":
-            str_ipts = "IPTS-{}".format(ipts_text.strip())
-
-            ipts_exist = False
-            if str_ipts in self.list_ipts:
-                ipts_exist = True
-                index = self.ui.ipts_combobox.findText(str_ipts)
-                self.ui.ipts_combobox.blockSignals(True)
-                self.ui.ipts_combobox.setCurrentIndex(index)
-                self.ui.ipts_combobox.blockSignals(False)
-        else:
-            ipts_exist = True # we will use the combobox IPTS
-
-        self.ipts_exist = ipts_exist
-        self.check_import_button()
 
     def check_import_button(self):
         enable_import = False
@@ -192,11 +170,6 @@ class ImportFromDatabaseWindow(QDialog):
 
         self.ui.import_button.setEnabled(enable_import)
 
-    def run_number_return_pressed(self):
-        self.refresh_preview_table_of_runs()
-
-    def run_number_text_changed(self, text):
-        self.check_import_button()
 
     def get_list_of_runs_found_and_not_found(self, str_runs="", oncat_result={}, check_not_found=True):
         if str_runs:
@@ -661,6 +634,40 @@ class ImportFromDatabaseWindow(QDialog):
     #     visible_list_of_runs_filtered_out = False
     #     #FIXME HERE
     #     self.ui.files_filtered_out_more.setVisible(visible_list_of_runs_filtered_out)
+
+    def ipts_selection_changed(self, ipts_selected):
+        self.ui.ipts_lineedit.setText("")
+        self.refresh_preview_table_of_runs()
+        self.search_return_pressed()
+
+    def ipts_text_return_pressed(self):
+        self.refresh_preview_table_of_runs()
+        self.search_return_pressed()
+
+    def ipts_text_changed(self, ipts_text):
+        if ipts_text.strip() != "":
+            str_ipts = "IPTS-{}".format(ipts_text.strip())
+
+            ipts_exist = False
+            if str_ipts in self.list_ipts:
+                ipts_exist = True
+                index = self.ui.ipts_combobox.findText(str_ipts)
+                self.ui.ipts_combobox.blockSignals(True)
+                self.ui.ipts_combobox.setCurrentIndex(index)
+                self.ui.ipts_combobox.blockSignals(False)
+        else:
+            ipts_exist = True  # we will use the combobox IPTS
+
+        self.ipts_exist = ipts_exist
+        self.check_import_button()
+        self.search_return_pressed()
+
+    def run_number_return_pressed(self):
+        self.refresh_preview_table_of_runs()
+        self.search_return_pressed()
+
+    def run_number_text_changed(self, text):
+        self.check_import_button()
 
     def edit_global_rule_clicked(self):
         GlobalRuleHandler(parent=self)

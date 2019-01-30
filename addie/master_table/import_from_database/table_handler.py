@@ -21,5 +21,6 @@ class TableHandler:
 
     def show_list_of_rows(self, list_of_rows):
         self.hide_all_rows()
+        print(list_of_rows)
         self.set_row_visibility(visibility=True, list_of_rows=list_of_rows)
 
