@@ -22,6 +22,8 @@ from addie.master_table.periodic_table.material_handler import MaterialHandler
 from addie.master_table.table_row_handler import TableRowHandler
 from addie.master_table.master_table_loader import AsciiLoaderOptionsInterface
 from addie.master_table.import_from_database.global_rule_handler import GlobalRuleHandler
+from addie.master_table.import_from_database.table_search_engine import TableSearchEngine
+from addie.master_table.import_from_database.table_handler import TableHandler
 
 from addie.utilities.general import generate_random_key, remove_white_spaces
 from addie.utilities.list_runs_parser import ListRunsParser
@@ -669,7 +671,11 @@ class ImportFromDatabaseWindow(QDialog):
 
     def search_text_changed(self, new_text):
         new_text = str(new_text)
-        print(type(new_text))
+        o_search = TableSearchEngine(table_ui=self.ui.tableWidget_all_runs)
+        list_row_matching_string = o_search.locate_string(new_text)
+
+        o_table = TableHandler(table_ui=self.ui.tableWidget_all_runs)
+        o_table.show_list_of_rows(list_of_rows=list_row_matching_string)
 
     def clear_search_text(self):
         self.ui.name_search.setText("")
@@ -678,7 +684,6 @@ class ImportFromDatabaseWindow(QDialog):
     def closeEvent(self, c):
         self.parent.import_from_database_ui = None
         self.parent.import_from_database_ui_position = self.pos()
-
 
 
 class AsciiLoaderOptions(AsciiLoaderOptionsInterface):
