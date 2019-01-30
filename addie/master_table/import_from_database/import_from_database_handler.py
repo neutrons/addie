@@ -663,6 +663,18 @@ class ImportFromDatabaseWindow(QDialog):
     def edit_global_rule_clicked(self):
         GlobalRuleHandler(parent=self)
 
+    def search_return_pressed(self):
+        new_text = str(self.ui.name_search.text())
+        self.search_text_changed(new_text)
+
+    def search_text_changed(self, new_text):
+        new_text = str(new_text)
+        print(type(new_text))
+
+    def clear_search_text(self):
+        self.ui.name_search.setText("")
+        self.search_return_pressed()
+
     def closeEvent(self, c):
         self.parent.import_from_database_ui = None
         self.parent.import_from_database_ui_position = self.pos()

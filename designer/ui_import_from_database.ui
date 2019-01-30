@@ -924,6 +924,54 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>name_search</sender>
+   <signal>returnPressed()</signal>
+   <receiver>Dialog</receiver>
+   <slot>search_return_pressed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>419</x>
+     <y>151</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>437</x>
+     <y>675</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>name_search</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>search_text_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>510</x>
+     <y>152</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>672</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clear_search_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>clear_search_text()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>571</x>
+     <y>155</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>638</x>
+     <y>676</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>cancel_button_clicked()</slot>
@@ -947,5 +995,8 @@
   <slot>files_imported_more_clicked()</slot>
   <slot>edit_global_rule_clicked()</slot>
   <slot>ipts_text_return_pressed()</slot>
+  <slot>search_return_pressed()</slot>
+  <slot>search_text_changed()</slot>
+  <slot>clear_search_text()</slot>
  </slots>
 </ui>
