@@ -97,6 +97,9 @@ class ImportFromDatabaseWindow(QDialog):
         self.ui.clear_ipts.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
         self.ui.clear_run.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
 
+        self.ui.search_logo_label.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
+        self.ui.clear_search_button.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
+
         for _col, _width in enumerate(self.filter_column_widths):
             self.ui.tableWidget.setColumnWidth(_col, _width)
 
