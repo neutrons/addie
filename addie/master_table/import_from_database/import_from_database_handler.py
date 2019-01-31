@@ -69,6 +69,7 @@ class ImportFromDatabaseWindow(QMainWindow):
 
     # first time filling the metadata filter table
     first_time_filling_table = True
+    first_time_filling_preview_table = True
 
     oncat_template = {}
 
@@ -475,13 +476,49 @@ class ImportFromDatabaseWindow(QMainWindow):
         GuiHandler.filter_widget_status(self.ui, enabled_widgets=enabled_widgets)
         self.refresh_filter_table(nexus_json=copy.deepcopy(nexus_json))
 
-    def refresh_preview_table(self, nexus_json=[]):
 
+
+    def _json_extractor(self, json=None, list_args=[]):
+        if len(list_args) == 1:
+            return json[list_args[0]]
+        else:
+            return self._json_extractor(json[list_args.pop(0)],
+                                        list_args=list_args)
+
+
+    def refresh_preview_table(self, nexus_json=[]):
         table_ui = self.ui.tableWidget_all_runs
         TableHandler.clear_table(table_ui)
 
+        import pprint
+        pprint.pprint(nexus_json)
 
-        # fixme
+        oncat_template = self.oncat_template
+        for _row, json in enumerate(nexus_json):
+
+            table_ui.insertRow(_row)
+
+            for _col in oncat_template.keys():
+
+                if self.first_time_filling_preview_table:
+                    title = oncat_template[_col]['title']
+                    units = oncat_template[_col]['title']
+                    if units:
+                        title = "{} ({})".format(title, units)
+
+                    table_ui.insertColumn(_col)
+                    _item_title = QTableWidgetItem(title)
+                    table_ui.setHorizontalHeaderItem(_col, _item_title)
+
+                path = oncat_template[_col]['path']
+                list_path = path.split(".")
+                argument_value = self._json_extractor(json=json, list_args=copy.deepcopy(list_path))
+                print("argument of {} is {}".format(path, argument_value))
+
+                _item = QTableWidgetItem("{}".format(argument_value))
+                table_ui.setItem(_row, _col, _item)
+
+            self.first_time_filling_preview_table = False
 
 
     def refresh_filter_table(self, nexus_json=[]):
