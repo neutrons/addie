@@ -13,8 +13,7 @@ class JobMonitorInterface(QMainWindow):
         self.parent = parent
 
         QMainWindow.__init__(self, parent=parent)
-        self.ui = load_ui(__file__, '../../../designer/ui_jobStatus.ui',
-                          baseinstance=self)
+        self.ui = load_ui('ui_jobStatus.ui', baseinstance=self)
 
         self.init_table()
         self.launch_table_update_thread()

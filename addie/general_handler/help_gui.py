@@ -16,7 +16,7 @@ class HelpGui(QMainWindow):
         self.parent = parent
         self.button_name = button_name
 
-        self.ui = load_ui(__file__, '../../designer/ui_helpGui.ui', baseinstance=self)
+        self.ui = load_ui('ui_helpGui.ui', baseinstance=self)
 
         self.init_global_gui()
         self.init_table()

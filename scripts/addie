@@ -117,8 +117,7 @@ class MainWindow(QMainWindow):
             self.characterization_folder = '/SNS/NOM/shared/CALIBRATION/'
 
         # Initialize the UI widgets
-        self.ui = load_ui(__file__, '../designer/ui_mainWindow.ui',
-                          baseinstance=self)
+        self.ui = load_ui('ui_mainWindow.ui', baseinstance=self)
         self._promote_widgets()
 
         self.ui.graphicsView_sq.set_main(self)

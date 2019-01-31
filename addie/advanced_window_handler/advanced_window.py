@@ -9,7 +9,6 @@ class AdvancedWindow(QMainWindow):
         self.parent = parent
 
         QMainWindow.__init__(self, parent=parent)
-        self.ui = load_ui(__file__, '../../../designer/ui_advanced_window.ui',
-                          baseinstance=self)
+        self.ui = load_ui('ui_advanced_window.ui', baseinstance=self)
 
         self.setWindowTitle("Advanced Window for Super User Only !")
