@@ -128,28 +128,6 @@ class ImportFromDatabaseWindow(QMainWindow):
     	}
     	""")
 
-    # def get_list_of_runs_found_and_not_found(self, str_runs="",
-    #                                          oncat_result={},
-    #                                          check_not_found=True):
-    #     if str_runs:
-    #         o_parser = ListRunsParser(current_runs=str_runs)
-    #         list_of_runs = o_parser.list_current_runs
-    #     else:
-    #         check_not_found = False
-    #
-    #     list_of_runs_found = []
-    #     for _json in oncat_result:
-    #         _run_number = _json['indexed']['run_number']
-    #         list_of_runs_found.append("{}".format(_run_number))
-    #
-    #     if check_not_found:
-    #         list_of_runs_not_found = set(list_of_runs) - set(list_of_runs_found)
-    #     else:
-    #         list_of_runs_not_found = []
-    #
-    #     return {'not_found': list_of_runs_not_found,
-    #             'found': list_of_runs_found}
-
     def insert_in_master_table(self, nexus_json=[]):
         if nexus_json == []:
             return
@@ -473,14 +451,17 @@ class ImportFromDatabaseWindow(QMainWindow):
         GuiHandler.filter_widget_status(self.ui, enabled_widgets=enabled_widgets)
         self.refresh_filter_table(nexus_json=copy.deepcopy(nexus_json))
 
-    def _json_extractor(self, json=None, list_args=[]):
-        if len(list_args) == 1:
-            return json[list_args[0]]
-        else:
-            return self._json_extractor(json[list_args.pop(0)],
-                                        list_args=list_args)
+    # def _json_extractor(self, json=None, list_args=[]):
+    #     if len(list_args) == 1:
+    #         return json[list_args[0]]
+    #     else:
+    #         return self._json_extractor(json[list_args.pop(0)],
+    #                                     list_args=list_args)
 
     def refresh_preview_table(self, nexus_json=[]):
+        """this function will use the template returned by ONCat during the initialization of this
+        window and will, for all the runs specified, or all teh runs of the given IPTS, all the metadata
+        defined in that template"""
         table_ui = self.ui.tableWidget_all_runs
         o_handler = ImportFromDatabaseTableHandler(table_ui=table_ui,
                                                    parent=self)
