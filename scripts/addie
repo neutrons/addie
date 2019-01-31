@@ -11,7 +11,7 @@ from qtpy.QtGui import (QDesktopServices, QIcon)
 from qtpy.QtWidgets import (QApplication, QFileDialog, QMainWindow, QMessageBox, QTableWidgetItem, QVBoxLayout)
 
 
-import addie.ui_mainWindow
+from addie.utilities import load_ui
 import addie.step1
 import addie.step2
 
@@ -61,7 +61,7 @@ from addie.graphicviewlib import BraggView, GofRView, SofQView
 from addie.ipythondockwidget import IPythonDockWidget
 from addie.treelib import BraggTree, GofRTree
 
-class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
+class MainWindow(QMainWindow):
     """ Main addie window
     """
 
@@ -103,13 +103,13 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     o_help_scans = None
     o_help_mantid = None
 
-    def __init__(self):
+    def __init__(self, parent=None):
         """ Initialization
         Parameters
         ----------
         """
         # Base class
-        QMainWindow.__init__(self)
+        QMainWindow.__init__(self, parent)
 
         if self.debugging:
             self.calibration_folder = '/SNS/NOM/IPTS-17118/shared/'
@@ -118,8 +118,8 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         # Initialize the UI widgets
         # self.ui = addie.ui_mainWindow.Ui_MainWindow()
         # self.ui.setupUi(self)
-        ui_path = os.path.join(os.path.dirname(__file__), "ui_mainWindow.ui")
-        self.ui = load_ui(ui_path, baseinstance=self)
+        self.ui = load_ui(__file__, '../designer/ui_mainWindow.ui',
+                          baseinstance=self)
         self._promote_widgets()
 
         self.ui.graphicsView_sq.set_main(self)
