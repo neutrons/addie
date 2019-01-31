@@ -1,4 +1,5 @@
 import numpy as np
+import re
 
 from addie.utilities.oncat import pyoncatGetTemplate
 
@@ -42,6 +43,19 @@ class OncatTemplateRetriever:
     def isolate_relevant_information(self):
         """from all the information provided by the ONCat template, we are only interested by the following infos
         [name, path and units]. We isolate those into the template_information dictionary"""
+
+        def get_formula(oncat_formula):
+            """will need to go from something like
+                "${value/10e11}`"
+                to something more pythonic
+                "{value/10e11}"""
+            regular_expression = r'\$(?P<formula>.+)\`'
+            m = re.search(regular_expression, oncat_formula)
+            if m:
+                return m.group('formula')
+            else:
+                return ""
+
         template_information = {}
         for _index, _element in enumerate(self._oncat_default_template):
             _title = _element["name"]
@@ -50,9 +64,14 @@ class OncatTemplateRetriever:
                 _units = _element["units"]
             else:
                 _units = ""
+            if "transform" in _element:
+                _formula = get_formula(_element["transform"])
+            else:
+                _formula = ""
             template_information[_index] = {'title': _title,
                                             'path': _path,
-                                            'units': _units}
+                                            'units': _units,
+                                            'formula': _formula}
         self.template_information = template_information
 
     def get_template_information(self):

@@ -502,7 +502,7 @@ class ImportFromDatabaseWindow(QMainWindow):
 
                 if self.first_time_filling_preview_table:
                     title = oncat_template[_col]['title']
-                    units = oncat_template[_col]['title']
+                    units = oncat_template[_col]['units']
                     if units:
                         title = "{} ({})".format(title, units)
 
@@ -513,7 +513,11 @@ class ImportFromDatabaseWindow(QMainWindow):
                 path = oncat_template[_col]['path']
                 list_path = path.split(".")
                 argument_value = self._json_extractor(json=json, list_args=copy.deepcopy(list_path))
-                print("argument of {} is {}".format(path, argument_value))
+
+                if oncat_template[_col]['formula']:
+                    value = argument_value
+                    argument_value = eval(oncat_template[_col]['formula'])
+                    argument_value = argument_value.pop()
 
                 _item = QTableWidgetItem("{}".format(argument_value))
                 table_ui.setItem(_row, _col, _item)
