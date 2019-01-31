@@ -475,50 +475,13 @@ class ImportFromDatabaseWindow(QMainWindow):
         GuiHandler.filter_widget_status(self.ui, enabled_widgets=enabled_widgets)
         self.refresh_filter_table(nexus_json=copy.deepcopy(nexus_json))
 
-    # def _json_extractor(self, json=None, list_args=[]):
-    #     if len(list_args) == 1:
-    #         return json[list_args[0]]
-    #     else:
-    #         return self._json_extractor(json[list_args.pop(0)],
-    #                                     list_args=list_args)
-
-#     def set_table_item(self, json=None, metadata_filter={}, row=-1, col=-1, table_ui=None):
-#         """Populate the filter metadada table from the oncat json file of only the arguments specified in
-#         the config.json file (oncat_metadata_filters)"""
-#
-#         def _format_proton_charge(raw_proton_charge):
-#             _proton_charge = raw_proton_charge/1e12
-#             return "{:.3}".format(_proton_charge)
-#
-#         title = metadata_filter['title']
-#         list_args = metadata_filter["path"]
-#         argument_value = self._json_extractor(json=json, list_args=copy.deepcopy(list_args))
-#
-#         # if title is "Proton Charge" change format of value displayed
-#         if title == "Proton Charge (C)":
-#             argument_value = _format_proton_charge(argument_value)
-#
-#         if table_ui is None:
-#             table_ui = self.ui.tableWidget_filter_result
-#
-#         if self.first_time_filling_table:
-#             table_ui.insertColumn(col)
-#             _item_title = QTableWidgetItem(title)
-#             table_ui.setHorizontalHeaderItem(col, _item_title)
-# #            width = metadata_filter["column_width"]
-# #            table_ui.setColumnWidth(col, width)
-#
-#         _item = QTableWidgetItem("{}".format(argument_value))
-#         table_ui.setItem(row, col, _item)
-
     def refresh_preview_table(self, nexus_json=[]):
 
         table_ui = self.ui.tableWidget_all_runs
         TableHandler.clear_table(table_ui)
 
 
-
-
+        # fixme
 
 
     def refresh_filter_table(self, nexus_json=[]):
@@ -533,21 +496,6 @@ class ImportFromDatabaseWindow(QMainWindow):
         o_handler = ImportFromDatabaseTableHandler(table_ui=table_ui,
                                                    parent=self)
         o_handler.refresh_table(nexus_json=nexus_json)
-
-
-        # oncat_metadata_filters = self.parent.oncat_metadata_filters
-        #
-        # TableHandler.clear_table(table_ui)
-        # for _row, _json in enumerate(nexus_json):
-        #     table_ui.insertRow(_row)
-        #     for _column, metadata_filter in enumerate(oncat_metadata_filters):
-        #         self.set_table_item(json=copy.deepcopy(_json),
-        #                             metadata_filter=metadata_filter,
-        #                             row=_row,
-        #                             col=_column,
-        #                             table_ui=table_ui)
-        #
-        #     self.first_time_filling_table = False
 
     # EVENT HANDLER ---------------------------------------------------
 
