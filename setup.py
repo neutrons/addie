@@ -3,6 +3,24 @@ import os
 import sys
 import versioneer  # https://github.com/warner/python-versioneer
 
+banned_ui_files=[
+    'designer/ui_mainWindow.ui',
+    'designer/ui_helpGui.ui',
+#    'designer/step2.ui',
+#    'designer/ui_launchMantid.ui',
+#    'designer/ui_advanced_window.ui',
+#    'designer/ui_mainWindow_no_scroll_bars.ui',
+#    'designer/ui_editSq.ui',
+#    'designer/step1.ui',
+#    'designer/gui_fgr3.ui',
+#    'designer/ui_colorStyleSetup.ui',
+#    'designer/ui_jobStatus.ui',
+#    'designer/ui_previewMantid.ui',
+#    'designer/ui_preview_ascii.ui',
+#    'designer/ui_iptsFileTransfer.ui',
+#    'designer/ui_loadTableIntermediateStep.ui'
+]
+
 if sys.argv[-1] == 'pyuic':
     indir = 'designer'
     outdir = 'addie'
@@ -12,6 +30,9 @@ if sys.argv[-1] == 'pyuic':
 
     done = 0
     for inname in files:
+        if inname in banned_ui_files:
+            print('skipping {}'.format(inname))
+            continue
         outname = inname.replace('.ui', '.py')
         outname = outname.replace(indir, outdir)
         if os.path.exists(outname):
@@ -35,6 +56,9 @@ setup(name="addie",
       long_description="""Should have a longer description""",
       license="The MIT License (MIT)",
       scripts=["scripts/addie"],
+      include_package_data = True,
+      #package_data={'designer': ['*.ui'],
+      #              'icons':['*.png','*.qrc']},
       packages=find_packages(),
       package_dir={},
       install_requires=['numpy', 'matplotlib'],
