@@ -29,6 +29,8 @@ from addie.master_table.import_from_database.oncat_template_retriever import Onc
 
 from addie.utilities.general import generate_random_key, remove_white_spaces
 from addie.utilities.list_runs_parser import ListRunsParser
+from addie.utilities.gui_handler import TableHandler
+
 
 from addie.ui_import_from_database import Ui_MainWindow as UiMainWindow
 
@@ -60,6 +62,7 @@ class ImportFromDatabaseWindow(QMainWindow):
 
     ipts_exist = True
     nexus_json = {}
+    nexus_json_from_template = {}
     metadata = {}
 
     list_of_nexus_found = []
@@ -509,8 +512,7 @@ class ImportFromDatabaseWindow(QMainWindow):
             enabled_widgets = True
 
         self.preview_widget_status(enabled_widgets=enabled_widgets)
-        self.refresh_result_table(nexus_json=copy.deepcopy(nexus_json),
-                                  table_ui=self.ui.tableWidget_all_runs)
+        self.refresh_preview_table(nexus_json=copy.deepcopy(nexus_json))
 
     def refresh_filter_page(self):
         if self.ui.import_button.isEnabled():
@@ -523,13 +525,7 @@ class ImportFromDatabaseWindow(QMainWindow):
             enabled_widgets = True
 
         self.filter_widget_status(enabled_widgets=enabled_widgets)
-        self.refresh_result_table(nexus_json=copy.deepcopy(nexus_json),
-                                  table_ui=self.ui.tableWidget_filter_result)
-
-    def clear_tableWidget(self, table_ui=None):
-        nbr_row = table_ui.rowCount()
-        for _ in np.arange(nbr_row):
-            table_ui.removeRow(0)
+        self.refresh_filter_table(nexus_json=copy.deepcopy(nexus_json))
 
     def _json_extractor(self, json=None, list_args=[]):
         if len(list_args) == 1:
@@ -561,22 +557,30 @@ class ImportFromDatabaseWindow(QMainWindow):
             table_ui.insertColumn(col)
             _item_title = QTableWidgetItem(title)
             table_ui.setHorizontalHeaderItem(col, _item_title)
-            width = metadata_filter["column_width"]
-            table_ui.setColumnWidth(col, width)
+#            width = metadata_filter["column_width"]
+#            table_ui.setColumnWidth(col, width)
 
         _item = QTableWidgetItem("{}".format(argument_value))
         table_ui.setItem(row, col, _item)
 
-    def refresh_result_table(self, nexus_json=[], table_ui=None):
+    def refresh_preview_table(self, nexus_json=[]):
+
+        table_ui = self.ui.tableWidget_all_runs
+        TableHandler.clear_table(table_ui)
+
+
+
+
+
+
+    def refresh_filter_table(self, nexus_json=[]):
         """may either be the filter table or the raw preview table"""
 
-        if table_ui is None:
-            table_ui = self.ui.tableWidget_filter_result
+        table_ui = self.ui.tableWidget_filter_result
 
         oncat_metadata_filters = self.parent.oncat_metadata_filters
-        #if nexus_json == []:
-        self.clear_tableWidget(table_ui=table_ui)
-        #else:
+
+        TableHandler.clear_table(table_ui)
         for _row, _json in enumerate(nexus_json):
             table_ui.insertRow(_row)
             for _column, metadata_filter in enumerate(oncat_metadata_filters):

@@ -1,3 +1,5 @@
+import numpy as np
+
 from addie.utilities.oncat import pyoncatGetTemplate
 
 
@@ -56,8 +58,9 @@ class OncatTemplateRetriever:
         if with_location:
             projection = ['location']
 
-        for _single_metadata in template:
-            projection.append(_single_metadata['path'])
+        nbr_columns = len(template)
+        for _col in np.arange(nbr_columns):
+            projection.append(template[_col]['path'])
 
         return projection
 

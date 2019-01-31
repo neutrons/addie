@@ -1,3 +1,6 @@
+import numpy as np
+
+
 class GuiHandler(object):
     
     def __init__(self, parent=None):
@@ -34,3 +37,9 @@ class TableHandler(object):
 
     def get_current_row(self):
         return self.table_ui.currentRow()
+
+    @staticmethod
+    def clear_table(table_ui):
+        nbr_row = table_ui.rowCount()
+        for _ in np.arange(nbr_row):
+            table_ui.removeRow(0)
