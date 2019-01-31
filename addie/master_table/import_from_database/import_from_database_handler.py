@@ -27,6 +27,7 @@ from addie.master_table.import_from_database.table_search_engine import TableSea
 from addie.master_table.import_from_database.oncat_template_retriever import OncatTemplateRetriever
 from addie.master_table.import_from_database.gui_handler import GuiHandler, ImportFromDatabaseTableHandler
 from addie.master_table.import_from_database import utilities as ImportFromDatabaseUtilities
+from addie.master_table.import_from_database.import_table_from_oncat_handler import ImportTableFromOncat
 
 from addie.utilities.general import generate_random_key, remove_white_spaces
 from addie.utilities.gui_handler import TableHandler
@@ -281,92 +282,92 @@ class ImportFromDatabaseWindow(QMainWindow):
         else:
             self.ui.remove_criteria_button.setEnabled(False)
 
-    def import_table_from_oncat_template(self):
-        """Using ONCat template, this method retrieves the metadata of either the IPTS or
-        runs selected"""
+    # def import_table_from_oncat_template(self):
+    #     """Using ONCat template, this method retrieves the metadata of either the IPTS or
+    #     runs selected"""
+    #
+    #     if self.ui.run_radio_button.isChecked():
+    #         # remove white space to string to make ONCat happy
+    #         str_runs = str(self.ui.run_number_lineedit.text())
+    #         str_runs = remove_white_spaces(str_runs)
+    #
+    #         projection = OncatTemplateRetriever.create_oncat_projection_from_template(with_location=True,
+    #                                                                                   template=self.oncat_template)
+    #
+    #         nexus_json = pyoncatGetNexus(oncat=self.parent.oncat,
+    #                                      instrument=self.parent.instrument['short_name'],
+    #                                      runs=str_runs,
+    #                                      facility=self.parent.facility,
+    #                                      projection=projection,
+    #                                      )
+    #
+    #     else:
+    #         ipts = str(self.ui.ipts_combobox.currentText())
+    #
+    #         projection = OncatTemplateRetriever.create_oncat_projection_from_template(with_location=False,
+    #                                                                                   template=self.oncat_template)
+    #
+    #         nexus_json = pyoncatGetRunsFromIpts(oncat=self.parent.oncat,
+    #                                             instrument=self.parent.instrument['short_name'],
+    #                                             ipts=ipts,
+    #                                             facility=self.parent.facility,
+    #                                             projection=projection,
+    #                                             )
+    #
+    #     self.nexus_json_from_template = nexus_json
 
-        if self.ui.run_radio_button.isChecked():
-            # remove white space to string to make ONCat happy
-            str_runs = str(self.ui.run_number_lineedit.text())
-            str_runs = remove_white_spaces(str_runs)
-
-            projection = OncatTemplateRetriever.create_oncat_projection_from_template(with_location=True,
-                                                                                      template=self.oncat_template)
-
-            nexus_json = pyoncatGetNexus(oncat=self.parent.oncat,
-                                         instrument=self.parent.instrument['short_name'],
-                                         runs=str_runs,
-                                         facility=self.parent.facility,
-                                         projection=projection,
-                                         )
-
-        else:
-            ipts = str(self.ui.ipts_combobox.currentText())
-
-            projection = OncatTemplateRetriever.create_oncat_projection_from_template(with_location=False,
-                                                                                      template=self.oncat_template)
-
-            nexus_json = pyoncatGetRunsFromIpts(oncat=self.parent.oncat,
-                                                instrument=self.parent.instrument['short_name'],
-                                                ipts=ipts,
-                                                facility=self.parent.facility,
-                                                projection=projection,
-                                                )
-
-        self.nexus_json_from_template = nexus_json
-
-    def import_button(self, insert_in_table=True):
-
-        QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
-
-        self.list_of_runs_not_found = []
-
-        if self.ui.run_radio_button.isChecked():
-
-            # remove white space to string to make ONCat happy
-            str_runs = str(self.ui.run_number_lineedit.text())
-            str_runs = remove_white_spaces(str_runs)
-
-            nexus_json = pyoncatGetNexus(oncat=self.parent.oncat,
-                                         instrument=self.parent.instrument['short_name'],
-                                         runs=str_runs,
-                                         facility=self.parent.facility,
-                                         )
-
-
-            result = ImportFromDatabaseUtilities.get_list_of_runs_found_and_not_found(str_runs=str_runs,
-                                                                                    oncat_result=nexus_json)
-            list_of_runs_not_found = result['not_found']
-            self.list_of_runs_not_found = list_of_runs_not_found
-            self.list_of_runs_found = result['found']
-
-            # clear input widget
-#            self.ui.run_number_lineedit.setText("")
-
-        else:
-            ipts = str(self.ui.ipts_combobox.currentText())
-
-            nexus_json = pyoncatGetRunsFromIpts(oncat=self.parent.oncat,
-                                                instrument=self.parent.instrument['short_name'],
-                                                ipts=ipts,
-                                                facility=self.parent.facility)
-
-            result = ImportFromDatabaseUtilities.get_list_of_runs_found_and_not_found(oncat_result=nexus_json,
-                                                                                    check_not_found=False)
-
-            self.list_of_runs_not_found = result['not_found']
-            self.list_of_runs_found = result['found']
-
-        if insert_in_table:
-            self.insert_in_master_table(nexus_json=nexus_json)
-        else:
-            self.nexus_json = nexus_json
-            self.isolate_metadata()
-
-        QApplication.restoreOverrideCursor()
-
-        if insert_in_table:
-            self.close()
+#     def import_button(self, insert_in_table=True):
+#
+#         QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+#
+#         self.list_of_runs_not_found = []
+#
+#         if self.ui.run_radio_button.isChecked():
+#
+#             # remove white space to string to make ONCat happy
+#             str_runs = str(self.ui.run_number_lineedit.text())
+#             str_runs = remove_white_spaces(str_runs)
+#
+#             nexus_json = pyoncatGetNexus(oncat=self.parent.oncat,
+#                                          instrument=self.parent.instrument['short_name'],
+#                                          runs=str_runs,
+#                                          facility=self.parent.facility,
+#                                          )
+#
+#
+#             result = ImportFromDatabaseUtilities.get_list_of_runs_found_and_not_found(str_runs=str_runs,
+#                                                                                     oncat_result=nexus_json)
+#             list_of_runs_not_found = result['not_found']
+#             self.list_of_runs_not_found = list_of_runs_not_found
+#             self.list_of_runs_found = result['found']
+#
+#             # clear input widget
+# #            self.ui.run_number_lineedit.setText("")
+#
+#         else:
+#             ipts = str(self.ui.ipts_combobox.currentText())
+#
+#             nexus_json = pyoncatGetRunsFromIpts(oncat=self.parent.oncat,
+#                                                 instrument=self.parent.instrument['short_name'],
+#                                                 ipts=ipts,
+#                                                 facility=self.parent.facility)
+#
+#             result = ImportFromDatabaseUtilities.get_list_of_runs_found_and_not_found(oncat_result=nexus_json,
+#                                                                                     check_not_found=False)
+#
+#             self.list_of_runs_not_found = result['not_found']
+#             self.list_of_runs_found = result['found']
+#
+#         if insert_in_table:
+#             self.insert_in_master_table(nexus_json=nexus_json)
+#         else:
+#             self.nexus_json = nexus_json
+#             self.isolate_metadata()
+#
+#         QApplication.restoreOverrideCursor()
+#
+#         if insert_in_table:
+#             self.close()
 
     def isolate_metadata(self):
         '''retrieve the metadata of interest from the json returns by ONCat'''
@@ -427,7 +428,8 @@ class ImportFromDatabaseWindow(QMainWindow):
         """using either the IPTS number selected or the runs defined, this will use the ONCat template to
         retrieve all the information from the template and populate the preview table """
         if self.ui.import_button.isEnabled():
-            self.import_table_from_oncat_template()
+            o_import = ImportTableFromOncat(parent=self)
+            o_import.from_oncat_template()
 
         nexus_json = self.nexus_json_from_template
 
@@ -440,7 +442,8 @@ class ImportFromDatabaseWindow(QMainWindow):
 
     def refresh_filter_page(self):
         if self.ui.import_button.isEnabled():
-            self.import_button(insert_in_table=False)
+            o_import = ImportTableFromOncat(parent=self)
+            o_import.from_oncat_config(insert_in_table=False)
 
         nexus_json = self.nexus_json
 
@@ -450,13 +453,6 @@ class ImportFromDatabaseWindow(QMainWindow):
 
         GuiHandler.filter_widget_status(self.ui, enabled_widgets=enabled_widgets)
         self.refresh_filter_table(nexus_json=copy.deepcopy(nexus_json))
-
-    # def _json_extractor(self, json=None, list_args=[]):
-    #     if len(list_args) == 1:
-    #         return json[list_args[0]]
-    #     else:
-    #         return self._json_extractor(json[list_args.pop(0)],
-    #                                     list_args=list_args)
 
     def refresh_preview_table(self, nexus_json=[]):
         """this function will use the template returned by ONCat during the initialization of this
