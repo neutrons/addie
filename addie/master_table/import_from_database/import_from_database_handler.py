@@ -325,9 +325,6 @@ class ImportFromDatabaseWindow(QMainWindow):
         else:
             ipts = str(self.ui.ipts_combobox.currentText())
 
-            import pprint
-            pprint.pprint(self.oncat_template)
-
             projection = OncatTemplateRetriever.create_oncat_projection_from_template(with_location=False,
                                                                                       template=self.oncat_template)
 
@@ -476,8 +473,6 @@ class ImportFromDatabaseWindow(QMainWindow):
         GuiHandler.filter_widget_status(self.ui, enabled_widgets=enabled_widgets)
         self.refresh_filter_table(nexus_json=copy.deepcopy(nexus_json))
 
-
-
     def _json_extractor(self, json=None, list_args=[]):
         if len(list_args) == 1:
             return json[list_args[0]]
@@ -485,45 +480,11 @@ class ImportFromDatabaseWindow(QMainWindow):
             return self._json_extractor(json[list_args.pop(0)],
                                         list_args=list_args)
 
-
     def refresh_preview_table(self, nexus_json=[]):
         table_ui = self.ui.tableWidget_all_runs
-        TableHandler.clear_table(table_ui)
-
-        import pprint
-        pprint.pprint(nexus_json)
-
-        oncat_template = self.oncat_template
-        for _row, json in enumerate(nexus_json):
-
-            table_ui.insertRow(_row)
-
-            for _col in oncat_template.keys():
-
-                if self.first_time_filling_preview_table:
-                    title = oncat_template[_col]['title']
-                    units = oncat_template[_col]['units']
-                    if units:
-                        title = "{} ({})".format(title, units)
-
-                    table_ui.insertColumn(_col)
-                    _item_title = QTableWidgetItem(title)
-                    table_ui.setHorizontalHeaderItem(_col, _item_title)
-
-                path = oncat_template[_col]['path']
-                list_path = path.split(".")
-                argument_value = self._json_extractor(json=json, list_args=copy.deepcopy(list_path))
-
-                if oncat_template[_col]['formula']:
-                    value = argument_value
-                    argument_value = eval(oncat_template[_col]['formula'])
-                    argument_value = argument_value.pop()
-
-                _item = QTableWidgetItem("{}".format(argument_value))
-                table_ui.setItem(_row, _col, _item)
-
-            self.first_time_filling_preview_table = False
-
+        o_handler = ImportFromDatabaseTableHandler(table_ui=table_ui,
+                                                   parent=self)
+        o_handler.refresh_preview_table(nexus_json=nexus_json)
 
     def refresh_filter_table(self, nexus_json=[]):
         """This function takes the nexus_json returns by ONCat and
@@ -532,7 +493,6 @@ class ImportFromDatabaseWindow(QMainWindow):
 
         ex: title, chemical formula, mass density, Sample Env. Device and proton charge
         """
-
         table_ui = self.ui.tableWidget_filter_result
         o_handler = ImportFromDatabaseTableHandler(table_ui=table_ui,
                                                    parent=self)

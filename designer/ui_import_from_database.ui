@@ -501,14 +501,42 @@
                 <property name="enabled">
                  <bool>false</bool>
                 </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>180</width>
+                  <height>0</height>
+                 </size>
+                </property>
                 <property name="maximumSize">
                  <size>
-                  <width>30</width>
+                  <width>200</width>
                   <height>30</height>
                  </size>
                 </property>
                 <property name="text">
-                 <string>-</string>
+                 <string>Remove Selected Rule</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="add_criteria_button">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>200</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>200</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Add a Rule</string>
                 </property>
                </widget>
               </item>
@@ -527,22 +555,6 @@
                  </size>
                 </property>
                </spacer>
-              </item>
-              <item>
-               <widget class="QPushButton" name="add_criteria_button">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>30</width>
-                  <height>30</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string>+</string>
-                </property>
-               </widget>
               </item>
              </layout>
             </item>

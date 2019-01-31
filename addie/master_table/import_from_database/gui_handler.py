@@ -95,7 +95,8 @@ class ImportFromDatabaseTableHandler:
 
         title = metadata_filter['title']
         list_args = metadata_filter["path"]
-        argument_value = self._json_extractor(json=json, list_args=copy.deepcopy(list_args))
+        argument_value = self._json_extractor(json=json,
+                                              list_args=copy.deepcopy(list_args))
 
         # if title is "Proton Charge" change format of value displayed
         if title == "Proton Charge (C)":
@@ -113,3 +114,43 @@ class ImportFromDatabaseTableHandler:
 
         _item = QTableWidgetItem("{}".format(argument_value))
         table_ui.setItem(row, col, _item)
+
+    def refresh_preview_table(self, nexus_json=[]):
+        """This function takes the nexus_json returns by ONCat using the ONCat template.
+        It will then fill the Preview table to just inform the users of what are the
+        infos of all the runs he is about to import or filter.
+        """
+        table_ui = self.table_ui
+        TableHandler.clear_table(table_ui)
+
+        oncat_template = self.parent.oncat_template
+        for _row, json in enumerate(nexus_json):
+
+            table_ui.insertRow(_row)
+
+            for _col in oncat_template.keys():
+
+                if self.parent.first_time_filling_preview_table:
+                    title = oncat_template[_col]['title']
+                    units = oncat_template[_col]['units']
+                    if units:
+                        title = "{} ({})".format(title, units)
+
+                    table_ui.insertColumn(_col)
+                    _item_title = QTableWidgetItem(title)
+                    table_ui.setHorizontalHeaderItem(_col, _item_title)
+
+                path = oncat_template[_col]['path']
+                list_path = path.split(".")
+                argument_value = self._json_extractor(json=json,
+                                                      list_args=copy.deepcopy(list_path))
+
+                if oncat_template[_col]['formula']:
+                    value = argument_value
+                    argument_value = eval(oncat_template[_col]['formula'])
+                    argument_value = argument_value.pop()
+
+                _item = QTableWidgetItem("{}".format(argument_value))
+                table_ui.setItem(_row, _col, _item)
+
+            self.parent.first_time_filling_preview_table = False

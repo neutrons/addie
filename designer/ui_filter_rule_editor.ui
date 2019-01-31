@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>613</width>
-    <height>330</height>
+    <width>728</width>
+    <height>373</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -49,14 +49,20 @@
        <property name="enabled">
         <bool>false</bool>
        </property>
+       <property name="minimumSize">
+        <size>
+         <width>180</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
-         <width>30</width>
+         <width>180</width>
          <height>30</height>
         </size>
        </property>
        <property name="text">
-        <string>-</string>
+        <string>Remove Selected Group</string>
        </property>
       </widget>
      </item>
@@ -78,14 +84,20 @@
        <property name="enabled">
         <bool>true</bool>
        </property>
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
-         <width>30</width>
+         <width>200</width>
          <height>30</height>
         </size>
        </property>
        <property name="text">
-        <string>+</string>
+        <string>Add a Group</string>
        </property>
       </widget>
      </item>

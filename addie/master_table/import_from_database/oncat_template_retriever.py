@@ -37,9 +37,6 @@ class OncatTemplateRetriever:
         _default_template = list_templates[0]["columns"]
         self._oncat_default_template = _default_template
 
-        import pprint
-        pprint.pprint(_default_template)
-
     def isolate_relevant_information(self):
         """from all the information provided by the ONCat template, we are only interested by the following infos
         [name, path and units]. We isolate those into the template_information dictionary"""
