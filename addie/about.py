@@ -1,11 +1,13 @@
 from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QMessageBox)
-from qtpy import PYQT_VERSION
+from qtpy import PYQT_VERSION, PYQT4, PYQT5
 # qtpy does not provide an abstraction for this
-try:
+if PYQT5:
     from PyQt5.QtCore import QT_VERSION_STR
-except ImportError:
+elif PYQT4:
     from PyQt4.QtCore import QT_VERSION_STR
+else:
+    raise RuntimeError('unknown qt version')
 from numpy.version import version as numpy_version_str
 from matplotlib import __version__ as matplotlib_version_str
 import mantid
