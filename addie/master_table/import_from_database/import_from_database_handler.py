@@ -352,6 +352,43 @@ class ImportFromDatabaseWindow(QMainWindow):
         else:
             self.ui.remove_criteria_button.setEnabled(False)
 
+    def import_table_from_oncat_template(self):
+        """Using ONCat template, this method retrieves the metadata of either the IPTS or
+        runs selected"""
+
+        if self.ui.run_radio_button.isChecked():
+            # remove white space to string to make ONCat happy
+            str_runs = str(self.ui.run_number_lineedit.text())
+            str_runs = remove_white_spaces(str_runs)
+
+            projection = OncatTemplateRetriever.create_oncat_projection_from_template(with_location=True,
+                                                                                      template=self.oncat_template)
+
+            nexus_json = pyoncatGetNexus(oncat=self.parent.oncat,
+                                         instrument=self.parent.instrument['short_name'],
+                                         runs=str_runs,
+                                         facility=self.parent.facility,
+                                         projection=projection,
+                                         )
+
+        else:
+            ipts = str(self.ui.ipts_combobox.currentText())
+
+            import pprint
+            pprint.pprint(self.oncat_template)
+
+            projection = OncatTemplateRetriever.create_oncat_projection_from_template(with_location=False,
+                                                                                      template=self.oncat_template)
+
+            nexus_json = pyoncatGetRunsFromIpts(oncat=self.parent.oncat,
+                                                instrument=self.parent.instrument['short_name'],
+                                                ipts=ipts,
+                                                facility=self.parent.facility,
+                                                projection=projection,
+                                                )
+
+        self.nexus_json_from_template = nexus_json
+
     def import_button(self, insert_in_table=True):
 
         QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
@@ -460,10 +497,12 @@ class ImportFromDatabaseWindow(QMainWindow):
         o_info.show()
 
     def refresh_preview_table_of_runs(self):
+        """using either the IPTS number selected or the runs defined, this will use the ONCat template to
+        retrieve all the information from the template and populate the preview table """
         if self.ui.import_button.isEnabled():
-            self.import_button(insert_in_table=False)
+            self.import_table_from_oncat_template()
 
-        nexus_json = self.nexus_json
+        nexus_json = self.nexus_json_from_template
 
         enabled_widgets = False
         if not (nexus_json == {}):
@@ -472,7 +511,6 @@ class ImportFromDatabaseWindow(QMainWindow):
         self.preview_widget_status(enabled_widgets=enabled_widgets)
         self.refresh_result_table(nexus_json=copy.deepcopy(nexus_json),
                                   table_ui=self.ui.tableWidget_all_runs)
-
 
     def refresh_filter_page(self):
         if self.ui.import_button.isEnabled():

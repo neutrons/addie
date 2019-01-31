@@ -25,46 +25,66 @@ class InMemoryTokenStore(object):
         return self._token
 
 
-def pyoncatGetNexus(oncat=None, instrument='', runs=-1, facility='SNS'):
+def pyoncatGetNexus(oncat=None,
+                    instrument='',
+                    runs=-1,
+                    facility='SNS',
+                    projection=[]):
+
+    if projection == []:
+        projection = ['location',
+                      'indexed.run_number',
+                      'metadata.entry.sample.chemical_formula',
+                      'metadata.entry.sample.mass_density',
+                      'metadata.entry.title',
+                      'metadata.entry.proton_charge',
+                      'metadata.entry.daslogs.bl1b:se:sampletemp.device_name'
+                      ]
+
     datafiles = oncat.Datafile.list(
         facility=facility,
         instrument=instrument,
-        projection=['location',
-                    'indexed.run_number',
-                    'metadata.entry.sample.chemical_formula',
-                    'metadata.entry.sample.mass_density',
-                    'metadata.entry.title',
-                    'metadata.entry.proton_charge',
-                    'metadata.entry.daslogs.bl1b:se:sampletemp.device_name'
-                    ],
+        projection=projection,
         tags=['type/raw'],
         exts=['.nxs.h5'],
         ranges_q='indexed.run_number:%s' % runs
     )
     return datafiles
 
-def pyoncatGetTemplate(oncat=None, instrument='', facility='SNS'):
+def pyoncatGetTemplate(oncat=None,
+                       instrument='',
+                       facility='SNS'):
     all_templates = oncat.Template.list(facility=facility,
                                         instrument=instrument,
                                         )
     return all_templates
 
-def pyoncatGetRunsFromIpts(oncat=None, instrument='', ipts='', facility='SNS'):
+def pyoncatGetRunsFromIpts(oncat=None,
+                           instrument='',
+                           ipts='',
+                           facility='SNS',
+                           projection=[]):
+
+    if projection == []:
+        projection = ['indexed.run_number',
+                      'metadata.entry.sample.chemical_formula',
+                      'metadata.entry.sample.mass_density',
+                      'metadata.entry.title',
+                      'metadata.entry.proton_charge',
+                      'metadata.entry.daslogs.bl1b:se:sampletemp.device_name'
+                     ]
+
     run_list = oncat.Datafile.list(facility=facility,
                                    instrument=instrument,
                                    experiment=ipts,
-                                   projection=['indexed.run_number',
-                                               'metadata.entry.sample.chemical_formula',
-                                               'metadata.entry.sample.mass_density',
-                                               'metadata.entry.title',
-                                               'metadata.entry.proton_charge',
-                                               'metadata.entry.daslogs.bl1b:se:sampletemp.device_name'
-                                               ],
+                                   projection=projection,
                                    tags=['type/raw'],
                                    exts=['.nxs.h5'])
     return run_list
 
-def pyoncatGetIptsList(oncat=None, instrument='', facility='SNS'):
+def pyoncatGetIptsList(oncat=None,
+                       instrument='',
+                       facility='SNS'):
     ipts_list = oncat.Experiment.list(
         facility=facility,
         instrument=instrument,
