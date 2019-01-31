@@ -87,8 +87,6 @@ class ImportFromDatabaseWindow(QMainWindow):
     def retrieve_oncat_template(self):
         o_retriever = OncatTemplateRetriever(parent=self.parent)
         self.oncat_template = o_retriever.get_template_information()
-        import pprint
-        pprint.pprint(self.oncat_template)
 
     def init_widgets(self):
         if self.parent.oncat is None:
@@ -161,15 +159,6 @@ class ImportFromDatabaseWindow(QMainWindow):
         self.ui.filter_result_label.setEnabled(enabled_widgets)
         self.ui.tableWidget_filter_result.setEnabled(enabled_widgets)
 
-    def clear_ipts(self):
-        self.ui.ipts_lineedit.setText("")
-        self.refresh_preview_table_of_runs()
-
-    def clear_run(self):
-        self.ui.run_number_lineedit.setText("")
-        self.refresh_preview_table_of_runs()
-
-
     def check_import_button(self):
         enable_import = False
         if self.ui.ipts_radio_button.isChecked():
@@ -206,15 +195,6 @@ class ImportFromDatabaseWindow(QMainWindow):
         return {'not_found': list_of_runs_not_found,
                 'found': list_of_runs_found}
 
-    def build_result_dictionary(self, nexus_json=[]):
-        """isolate the infos I need from ONCat result to insert in the main window, master table"""
-        result_dict = OrderedDict()
-
-        for _json in nexus_json:
-            result_dict[_json['indexed']['run_number']] = {'chemical_formula': "{}".format(_json['metadata']['entry']['sample']['chemical_formula']),
-                                                           'mass_density': "{}".format(_json['metadata']['entry']['sample']['mass_density']),
-                                                           }
-        return result_dict
 
     def insert_in_master_table(self, nexus_json=[]):
         if nexus_json == []:
@@ -321,31 +301,6 @@ class ImportFromDatabaseWindow(QMainWindow):
         if row == 0:
             self.ui.tableWidget.horizontalHeader().setVisible(True)
 
-        # # argument
-        # _layout = QHBoxLayout()
-        # _lineedit = QLineEdit()
-        # _lineedit.setVisible(False)
-        # _label = QLabel()
-        # _label.setVisible(True)
-        # _button = QPushButton("Define Formula")
-        # _button.setFixedHeight(self.button_height)
-        # _button.setFixedWidth(self.button_width)
-        # QtCore.QObject.connect(_button, QtCore.SIGNAL("pressed()"),
-        #                         lambda key=_random_key:
-        #                        self.chemical_formula_pressed(key))
-        # _button.setVisible(True)
-        #
-        # _list_ui_for_this_row['value_lineedit'] = _lineedit
-        # _list_ui_for_this_row['value_label'] = _label
-        # _list_ui_for_this_row['value_button'] = _button
-        #
-        # _layout.addWidget(_lineedit)
-        # _layout.addWidget(_label)
-        # _layout.addWidget(_button)
-        # _widget = QWidget()
-        # _widget.setLayout(_layout)
-        # self.ui.tableWidget.setCellWidget(row, 3, _widget)
-
         self.list_ui[_random_key] = _list_ui_for_this_row
         self.check_all_filter_widgets()
 
@@ -366,23 +321,6 @@ class ImportFromDatabaseWindow(QMainWindow):
                 global_rule = current_global_rule + " and #{}".format(name_of_new_row)
 
         self.ui.global_rule_lineedit.setText(global_rule)
-
-    def remove_criteria_clicked(self):
-        _select = self.ui.tableWidget.selectedRanges()
-        if not _select:
-            return
-        row = _select[0].topRow()
-        _randome_key = str(self.ui.tableWidget.item(row, 0).text())
-        self.list_ui.pop(_randome_key, None)
-        self.ui.tableWidget.removeRow(row)
-        self.check_all_filter_widgets()
-        self.refresh_global_rule(full_reset=True)
-
-    def add_criteria_clicked(self):
-        nbr_row = self.ui.tableWidget.rowCount()
-        self._add_row(row=nbr_row)
-        self.check_rule_widgets()
-        self.refresh_global_rule(new_row=nbr_row)
 
     def check_all_filter_widgets(self):
         self.check_remove_widget()
@@ -413,10 +351,6 @@ class ImportFromDatabaseWindow(QMainWindow):
             self.ui.remove_criteria_button.setEnabled(True)
         else:
             self.ui.remove_criteria_button.setEnabled(False)
-
-    def import_button_clicked(self):
-        o_dialog = AsciiLoaderOptions(parent=self.parent)
-        o_dialog.show()
 
     def import_button(self, insert_in_table=True):
 
@@ -539,14 +473,6 @@ class ImportFromDatabaseWindow(QMainWindow):
         self.refresh_result_table(nexus_json=copy.deepcopy(nexus_json),
                                   table_ui=self.ui.tableWidget_all_runs)
 
-    def toolbox_changed(self, index):
-        if index == 0:
-            self.nexus_json = {}
-        elif index == 1:
-            self.refresh_filter_page()
-
-            # if index == 2: # status page
-            #     self.refresh_status_page()
 
     def refresh_filter_page(self):
         if self.ui.import_button.isEnabled():
@@ -624,31 +550,36 @@ class ImportFromDatabaseWindow(QMainWindow):
 
             self.first_time_filling_table = False
 
-    # def refresh_status_page(self):
-    #     nexus_json = self.nexus_json
-    #     nbr_of_raw_nexus = len(nexus_json)
-    #
-    #     # raw
-    #     self.ui.number_of_files_initially_selected.setText("{}".format(nbr_of_raw_nexus))
-    #     visible_list_of_files_initially_selected = False
-    #     if nbr_of_raw_nexus > 0:
-    #         visible_list_of_files_initially_selected = True
-    #     self.ui.file_initially_selected_more.setVisible(visible_list_of_files_initially_selected)
-    #
-    #     # not found
-    #     list_of_runs_not_found = self.list_of_runs_not_found
-    #     self.ui.number_of_files_not_found.setText("{}".format(len(list_of_runs_not_found)))
-    #     visible_list_of_runs_not_found_button = False
-    #     if list_of_runs_not_found:
-    #         # show button
-    #        # self.inform_of_list_of_runs_not_found(list_of_runs=list_of_runs_not_found)
-    #         visible_list_of_runs_not_found_button = True
-    #     self.ui.file_not_found_more.setVisible(visible_list_of_runs_not_found_button)
-    #
-    #     # list of files filtered out
-    #     visible_list_of_runs_filtered_out = False
-    #     #FIXME HERE
-    #     self.ui.files_filtered_out_more.setVisible(visible_list_of_runs_filtered_out)
+    # EVENT HANDLER ---------------------------------------------------
+
+    def clear_ipts(self):
+        self.ui.ipts_lineedit.setText("")
+        self.refresh_preview_table_of_runs()
+
+    def clear_run(self):
+        self.ui.run_number_lineedit.setText("")
+        self.refresh_preview_table_of_runs()
+
+    def import_button_clicked(self):
+        o_dialog = AsciiLoaderOptions(parent=self.parent)
+        o_dialog.show()
+
+    def remove_criteria_clicked(self):
+        _select = self.ui.tableWidget.selectedRanges()
+        if not _select:
+            return
+        row = _select[0].topRow()
+        _randome_key = str(self.ui.tableWidget.item(row, 0).text())
+        self.list_ui.pop(_randome_key, None)
+        self.ui.tableWidget.removeRow(row)
+        self.check_all_filter_widgets()
+        self.refresh_global_rule(full_reset=True)
+
+    def add_criteria_clicked(self):
+        nbr_row = self.ui.tableWidget.rowCount()
+        self._add_row(row=nbr_row)
+        self.check_rule_widgets()
+        self.refresh_global_rule(new_row=nbr_row)
 
     def ipts_selection_changed(self, ipts_selected):
         self.ui.ipts_lineedit.setText("")
@@ -701,6 +632,22 @@ class ImportFromDatabaseWindow(QMainWindow):
     def clear_search_text(self):
         self.ui.name_search.setText("")
         self.search_return_pressed()
+
+    def toolbox_changed(self, index):
+        if index == 0:
+            self.nexus_json = {}
+        elif index == 1:
+            self.refresh_filter_page()
+
+    def build_result_dictionary(self, nexus_json=[]):
+        """isolate the infos I need from ONCat result to insert in the main window, master table"""
+        result_dict = OrderedDict()
+
+        for _json in nexus_json:
+            result_dict[_json['indexed']['run_number']] = {'chemical_formula': "{}".format(_json['metadata']['entry']['sample']['chemical_formula']),
+                                                           'mass_density': "{}".format(_json['metadata']['entry']['sample']['mass_density']),
+                                                           }
+        return result_dict
 
     def closeEvent(self, c):
         self.parent.import_from_database_ui = None
