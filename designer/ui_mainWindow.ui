@@ -4207,10 +4207,9 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
-<!--
   <connection>
    <sender>actionLoad</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>action_load_configuration_clicked()</slot>
    <hints>
@@ -4224,11 +4223,9 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
--->
-<!--
   <connection>
    <sender>actionSave</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>action_save_configuration_clicked()</slot>
    <hints>
@@ -4242,7 +4239,6 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
--->
   <connection>
    <sender>sum_scans_output_file_name</sender>
    <signal>editingFinished()</signal>
