@@ -2,5 +2,6 @@ include versioneer.py
 include addie/_version.py
 include README.md
 include addie/*
+include designer/*.ui
+include icons/icons.qrc
 recursive-include icons *.png *.svg *.ico
-
