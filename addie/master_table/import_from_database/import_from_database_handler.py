@@ -25,7 +25,7 @@ from addie.master_table.master_table_loader import AsciiLoaderOptionsInterface
 from addie.master_table.import_from_database.global_rule_handler import GlobalRuleHandler
 from addie.master_table.import_from_database.table_search_engine import TableSearchEngine
 from addie.master_table.import_from_database.oncat_template_retriever import OncatTemplateRetriever
-from addie.master_table.import_from_database.gui_handler import GuiHandler
+from addie.master_table.import_from_database.gui_handler import GuiHandler, ImportFromDatabaseTableHandler
 from addie.master_table.import_from_database import utilities as ImportFromDatabaseUtilities
 
 from addie.utilities.general import generate_random_key, remove_white_spaces
@@ -475,41 +475,41 @@ class ImportFromDatabaseWindow(QMainWindow):
         GuiHandler.filter_widget_status(self.ui, enabled_widgets=enabled_widgets)
         self.refresh_filter_table(nexus_json=copy.deepcopy(nexus_json))
 
-    def _json_extractor(self, json=None, list_args=[]):
-        if len(list_args) == 1:
-            return json[list_args[0]]
-        else:
-            return self._json_extractor(json[list_args.pop(0)],
-                                        list_args=list_args)
+    # def _json_extractor(self, json=None, list_args=[]):
+    #     if len(list_args) == 1:
+    #         return json[list_args[0]]
+    #     else:
+    #         return self._json_extractor(json[list_args.pop(0)],
+    #                                     list_args=list_args)
 
-    def set_table_item(self, json=None, metadata_filter={}, row=-1, col=-1, table_ui=None):
-        """Populate the filter metadada table from the oncat json file of only the arguments specified in
-        the config.json file (oncat_metadata_filters)"""
-
-        def _format_proton_charge(raw_proton_charge):
-            _proton_charge = raw_proton_charge/1e12
-            return "{:.3}".format(_proton_charge)
-
-        title = metadata_filter['title']
-        list_args = metadata_filter["path"]
-        argument_value = self._json_extractor(json=json, list_args=copy.deepcopy(list_args))
-
-        # if title is "Proton Charge" change format of value displayed
-        if title == "Proton Charge (C)":
-            argument_value = _format_proton_charge(argument_value)
-
-        if table_ui is None:
-            table_ui = self.ui.tableWidget_filter_result
-
-        if self.first_time_filling_table:
-            table_ui.insertColumn(col)
-            _item_title = QTableWidgetItem(title)
-            table_ui.setHorizontalHeaderItem(col, _item_title)
-#            width = metadata_filter["column_width"]
-#            table_ui.setColumnWidth(col, width)
-
-        _item = QTableWidgetItem("{}".format(argument_value))
-        table_ui.setItem(row, col, _item)
+#     def set_table_item(self, json=None, metadata_filter={}, row=-1, col=-1, table_ui=None):
+#         """Populate the filter metadada table from the oncat json file of only the arguments specified in
+#         the config.json file (oncat_metadata_filters)"""
+#
+#         def _format_proton_charge(raw_proton_charge):
+#             _proton_charge = raw_proton_charge/1e12
+#             return "{:.3}".format(_proton_charge)
+#
+#         title = metadata_filter['title']
+#         list_args = metadata_filter["path"]
+#         argument_value = self._json_extractor(json=json, list_args=copy.deepcopy(list_args))
+#
+#         # if title is "Proton Charge" change format of value displayed
+#         if title == "Proton Charge (C)":
+#             argument_value = _format_proton_charge(argument_value)
+#
+#         if table_ui is None:
+#             table_ui = self.ui.tableWidget_filter_result
+#
+#         if self.first_time_filling_table:
+#             table_ui.insertColumn(col)
+#             _item_title = QTableWidgetItem(title)
+#             table_ui.setHorizontalHeaderItem(col, _item_title)
+# #            width = metadata_filter["column_width"]
+# #            table_ui.setColumnWidth(col, width)
+#
+#         _item = QTableWidgetItem("{}".format(argument_value))
+#         table_ui.setItem(row, col, _item)
 
     def refresh_preview_table(self, nexus_json=[]):
 
@@ -522,23 +522,32 @@ class ImportFromDatabaseWindow(QMainWindow):
 
 
     def refresh_filter_table(self, nexus_json=[]):
-        """may either be the filter table or the raw preview table"""
+        """This function takes the nexus_json returns by ONCat and
+        fill the filter table with only the metadata of interests. Those
+        are defined in the oncat_metadata_filters dictionary (coming from the json config)
+
+        ex: title, chemical formula, mass density, Sample Env. Device and proton charge
+        """
 
         table_ui = self.ui.tableWidget_filter_result
+        o_handler = ImportFromDatabaseTableHandler(table_ui=table_ui,
+                                                   parent=self)
+        o_handler.refresh_table(nexus_json=nexus_json)
 
-        oncat_metadata_filters = self.parent.oncat_metadata_filters
 
-        TableHandler.clear_table(table_ui)
-        for _row, _json in enumerate(nexus_json):
-            table_ui.insertRow(_row)
-            for _column, metadata_filter in enumerate(oncat_metadata_filters):
-                self.set_table_item(json=copy.deepcopy(_json),
-                                    metadata_filter=metadata_filter,
-                                    row=_row,
-                                    col=_column,
-                                    table_ui=table_ui)
-
-            self.first_time_filling_table = False
+        # oncat_metadata_filters = self.parent.oncat_metadata_filters
+        #
+        # TableHandler.clear_table(table_ui)
+        # for _row, _json in enumerate(nexus_json):
+        #     table_ui.insertRow(_row)
+        #     for _column, metadata_filter in enumerate(oncat_metadata_filters):
+        #         self.set_table_item(json=copy.deepcopy(_json),
+        #                             metadata_filter=metadata_filter,
+        #                             row=_row,
+        #                             col=_column,
+        #                             table_ui=table_ui)
+        #
+        #     self.first_time_filling_table = False
 
     # EVENT HANDLER ---------------------------------------------------
 
