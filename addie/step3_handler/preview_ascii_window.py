@@ -9,9 +9,7 @@ class PreviewAsciiWindow(QMainWindow):
         self.parent = parent
 
         QMainWindow.__init__(self, parent=parent)
-        self.ui = load_ui(__file__, '../../../designer/ui_preview_ascii.ui', baseinstance=self)
-        self.ui = UiMainWindow()
-        self.ui.setupUi(self)
+        self.ui = load_ui(__file__, '../../designer/ui_preview_ascii.ui', baseinstance=self)
 
         _title = filename
         self.setWindowTitle(_title)
