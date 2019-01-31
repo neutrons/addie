@@ -130,6 +130,7 @@ class MainWindow(QMainWindow):
         init_step2 = InitStep2(parent=self)
 
         # define the event handling methods
+        self.ui.mantid_run_reduction.clicked.connect(self.do_mantid_run_reduction)
 
         # bragg diffraction tab
         self.ui.pushButton_loadBraggFile.clicked.connect(self.do_load_bragg_file)
@@ -2243,7 +2244,7 @@ class MainWindow(QMainWindow):
         o_mantid_gui = BrowseFileFolderHandler(parent=self)
         o_mantid_gui.browse_folder()
 
-    def mantid_run_reduction(self):
+    def do_mantid_run_reduction(self):
         o_mantid_run = GlobalMantidReduction(parent=self)
         o_mantid_run.run()
 
