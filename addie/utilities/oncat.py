@@ -43,6 +43,12 @@ def pyoncatGetNexus(oncat=None, instrument='', runs=-1, facility='SNS'):
     )
     return datafiles
 
+def pyoncatGetTemplate(oncat=None, instrument='', facility='SNS'):
+    all_templates = oncat.Template.list(facility=facility,
+                                        instrument=instrument,
+                                        )
+    return all_templates
+
 def pyoncatGetRunsFromIpts(oncat=None, instrument='', ipts='', facility='SNS'):
     run_list = oncat.Datafile.list(facility=facility,
                                    instrument=instrument,

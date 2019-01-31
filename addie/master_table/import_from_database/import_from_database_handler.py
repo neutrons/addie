@@ -16,7 +16,8 @@ except:
 
 from addie.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
 from addie.utilities.oncat import OncatErrorMessageWindow
-from addie.utilities.oncat import pyoncatGetIptsList, pyoncatGetNexus, pyoncatGetRunsFromIpts
+from addie.utilities.oncat import pyoncatGetIptsList, pyoncatGetNexus, \
+    pyoncatGetRunsFromIpts, pyoncatGetTemplate
 from addie.master_table.tree_definition import LIST_SEARCH_CRITERIA
 from addie.master_table.periodic_table.material_handler import MaterialHandler
 from addie.master_table.table_row_handler import TableRowHandler
@@ -24,12 +25,12 @@ from addie.master_table.master_table_loader import AsciiLoaderOptionsInterface
 from addie.master_table.import_from_database.global_rule_handler import GlobalRuleHandler
 from addie.master_table.import_from_database.table_search_engine import TableSearchEngine
 from addie.master_table.import_from_database.table_handler import TableHandler
+from addie.master_table.import_from_database.oncat_template_retriever import OncatTemplateRetriever
 
 from addie.utilities.general import generate_random_key, remove_white_spaces
 from addie.utilities.list_runs_parser import ListRunsParser
 
-from addie.ui_import_from_database import Ui_Dialog as UiDialog
-from addie.ui_import_from_database_1 import Ui_MainWindow as UiMainWindow
+from addie.ui_import_from_database import Ui_MainWindow as UiMainWindow
 
 
 class ImportFromDatabaseHandler:
@@ -68,6 +69,8 @@ class ImportFromDatabaseWindow(QMainWindow):
     # first time filling the metadata filter table
     first_time_filling_table = True
 
+    oncat_template = {}
+
     def __init__(self, parent=None):
         self.parent = parent
 
@@ -79,6 +82,13 @@ class ImportFromDatabaseWindow(QMainWindow):
 
         self.init_widgets()
         self.radio_button_changed()
+        self.retrieve_oncat_template()
+
+    def retrieve_oncat_template(self):
+        o_retriever = OncatTemplateRetriever(parent=self.parent)
+        self.oncat_template = o_retriever.get_template_information()
+        import pprint
+        pprint.pprint(self.oncat_template)
 
     def init_widgets(self):
         if self.parent.oncat is None:
