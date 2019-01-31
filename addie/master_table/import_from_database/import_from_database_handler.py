@@ -275,35 +275,35 @@ class ImportFromDatabaseWindow(QMainWindow):
         else:
             self.ui.remove_criteria_button.setEnabled(False)
 
-    def isolate_metadata(self):
-        '''retrieve the metadata of interest from the json returns by ONCat'''
-
-        # def _format_proton_charge(raw_proton_charge):
-        #     _proton_charge = raw_proton_charge/1e12
-        #     return "{:.3}".format(_proton_charge)
-
-        nexus_json = self.nexus_json
-        metadata = {}
-
-        list_chemical_formula = []
-        list_mass_density = []
-        list_proton_charge = []
-        list_device_name = []
-
-        for _json in nexus_json:
-            list_chemical_formula.append(str(_json['metadata']['entry']['sample']['chemical_formula']))
-            list_mass_density.append(str(_json['metadata']['entry']['sample']['mass_density']))
-            # _proton_charge = _format_proton_charge(_json['metadata']['entry']['proton_charge'])
-            _proton_charge = _json['metadata']['entry']['proton_charge']
-            list_proton_charge.append(str(_proton_charge))
-            list_device_name.append(str(_json['metadata']['entry']['daslogs']['bl1b:se:sampletemp']['device_name']))
-
-        metadata['chemical_formula'] = set(list_chemical_formula)
-        metadata['mass_density'] = set(list_mass_density)
-        metadata['proton_charge'] = set(list_proton_charge)
-        metadata['device_name'] = str(list_device_name)
-
-        self.metadata = metadata
+    # def isolate_metadata(self):
+    #     '''retrieve the metadata of interest from the json returns by ONCat'''
+    #
+    #     # def _format_proton_charge(raw_proton_charge):
+    #     #     _proton_charge = raw_proton_charge/1e12
+    #     #     return "{:.3}".format(_proton_charge)
+    #
+    #     nexus_json = self.nexus_json
+    #     metadata = {}
+    #
+    #     list_chemical_formula = []
+    #     list_mass_density = []
+    #     list_proton_charge = []
+    #     list_device_name = []
+    #
+    #     for _json in nexus_json:
+    #         list_chemical_formula.append(str(_json['metadata']['entry']['sample']['chemical_formula']))
+    #         list_mass_density.append(str(_json['metadata']['entry']['sample']['mass_density']))
+    #         # _proton_charge = _format_proton_charge(_json['metadata']['entry']['proton_charge'])
+    #         _proton_charge = _json['metadata']['entry']['proton_charge']
+    #         list_proton_charge.append(str(_proton_charge))
+    #         list_device_name.append(str(_json['metadata']['entry']['daslogs']['bl1b:se:sampletemp']['device_name']))
+    #
+    #     metadata['Chemical Formula'] = set(list_chemical_formula)
+    #     metadata['mass_densi'] = set(list_mass_density)
+    #     metadata['proton_charge'] = set(list_proton_charge)
+    #     metadata['device_name'] = str(list_device_name)
+    #
+    #     self.metadata = metadata
 
     def files_not_found_more_clicked(self):
         list_of_runs_not_found = self.list_of_runs_not_found
@@ -376,6 +376,9 @@ class ImportFromDatabaseWindow(QMainWindow):
 
         ex: title, chemical formula, mass density, Sample Env. Device and proton charge
         """
+        if nexus_json == []:
+            nexus_json = self.nexus_json
+
         table_ui = self.ui.tableWidget_filter_result
         o_handler = ImportFromDatabaseTableHandler(table_ui=table_ui,
                                                    parent=self)
@@ -385,6 +388,7 @@ class ImportFromDatabaseWindow(QMainWindow):
 
     def list_argument_changed(self, value, key):
         print("new value is {}".format(value))
+
 
     def list_argument_index_changed(self, value, key):
         print("index changed and value is now {}".format(value))

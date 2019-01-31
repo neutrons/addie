@@ -11,7 +11,7 @@ except:
         raise ImportError("Requires PyQt4 or PyQt5")
 
 from addie.utilities.gui_handler import TableHandler
-
+from addie.utilities.general import json_extractor
 
 class GuiHandler:
 
@@ -62,7 +62,6 @@ class ImportFromDatabaseTableHandler:
 
               ex: title, chemical formula, mass density, Sample Env. Device and proton charge
               """
-
         oncat_metadata_filters = self.parent_parent.oncat_metadata_filters
 
         TableHandler.clear_table(self.table_ui)
@@ -76,12 +75,12 @@ class ImportFromDatabaseTableHandler:
 
             self.parent.first_time_filling_table = False
 
-    def _json_extractor(self, json=None, list_args=[]):
-        if len(list_args) == 1:
-            return json[list_args[0]]
-        else:
-            return self._json_extractor(json[list_args.pop(0)],
-                                        list_args=list_args)
+    # def _json_extractor(self, json=None, list_args=[]):
+    #     if len(list_args) == 1:
+    #         return json[list_args[0]]
+    #     else:
+    #         return self._json_extractor(json[list_args.pop(0)],
+    #                                     list_args=list_args)
 
     def _set_table_item(self, json=None, metadata_filter={}, row=-1, col=-1):
         """Populate the filter metadada table from the oncat json file of only the arguments specified in
@@ -95,8 +94,8 @@ class ImportFromDatabaseTableHandler:
 
         title = metadata_filter['title']
         list_args = metadata_filter["path"]
-        argument_value = self._json_extractor(json=json,
-                                              list_args=copy.deepcopy(list_args))
+        argument_value = json_extractor(json=json,
+                                        list_args=copy.deepcopy(list_args))
 
         # if title is "Proton Charge" change format of value displayed
         if title == "Proton Charge (C)":
@@ -142,8 +141,8 @@ class ImportFromDatabaseTableHandler:
 
                 path = oncat_template[_col]['path']
                 list_path = path.split(".")
-                argument_value = self._json_extractor(json=json,
-                                                      list_args=copy.deepcopy(list_path))
+                argument_value = json_extractor(json=json,
+                                                list_args=copy.deepcopy(list_path))
 
                 if oncat_template[_col]['formula']:
                     value = argument_value

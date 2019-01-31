@@ -1,8 +1,11 @@
+import copy
+
 from addie.utilities.general import remove_white_spaces
 from addie.master_table.import_from_database.oncat_template_retriever import OncatTemplateRetriever
 from addie.utilities.oncat import pyoncatGetIptsList, pyoncatGetNexus, \
     pyoncatGetRunsFromIpts, pyoncatGetTemplate
 from addie.master_table.import_from_database import utilities as ImportFromDatabaseUtilities
+from addie.utilities.general import json_extractor
 
 try:
     from PyQt4.QtGui import QApplication
@@ -98,10 +101,38 @@ class ImportTableFromOncat:
         if insert_in_table:
             self.parent.insert_in_master_table(nexus_json=nexus_json)
         else:
+            self.isolate_metadata(nexus_json)
             self.parent.nexus_json = nexus_json
-            self.parent.isolate_metadata()
 
         QApplication.restoreOverrideCursor()
 
         if insert_in_table:
             self.parent.close()
+
+    def isolate_metadata(self, nexus_json):
+        '''retrieve the metadata of interest from the json returns by ONCat'''
+
+        # def _format_proton_charge(raw_proton_charge):
+        #     _proton_charge = raw_proton_charge/1e12
+        #     return "{:.3}".format(_proton_charge)
+
+        oncat_metadata_filters = self.parent.parent.oncat_metadata_filters
+
+        # initialization of metadata dictionary
+        metadata = {}
+        for _entry in oncat_metadata_filters:
+            metadata[_entry["title"]] = []
+
+        for _json in nexus_json:
+
+            for _entry in oncat_metadata_filters:
+                _value = json_extractor(json=copy.deepcopy(_json),
+                                        list_args=copy.deepcopy(_entry['path']))
+                metadata[_entry["title"]].append(_value)
+
+        # make sure we only have the unique element in each arrays
+        for _item in metadata.keys():
+            metadata[_item] = set(metadata[_item])
+
+        self.parent.metadata = metadata
+
