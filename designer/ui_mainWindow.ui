@@ -3741,10 +3741,9 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
-<!--
   <connection>
    <sender>action_preview_ascii</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>action_preview_ascii_clicked()</slot>
    <hints>
@@ -3758,7 +3757,6 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
--->
   <connection>
    <sender>create_folder_button</sender>
    <signal>clicked(bool)</signal>
