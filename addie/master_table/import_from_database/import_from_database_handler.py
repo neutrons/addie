@@ -24,13 +24,12 @@ from addie.master_table.table_row_handler import TableRowHandler
 from addie.master_table.master_table_loader import AsciiLoaderOptionsInterface
 from addie.master_table.import_from_database.global_rule_handler import GlobalRuleHandler
 from addie.master_table.import_from_database.table_search_engine import TableSearchEngine
-from addie.master_table.import_from_database.table_handler import TableHandler
 from addie.master_table.import_from_database.oncat_template_retriever import OncatTemplateRetriever
+from addie.master_table.import_from_database.gui_handler import GuiHandler
+from addie.master_table.import_from_database import utilities as ImportFromDatabaseUtilities
 
 from addie.utilities.general import generate_random_key, remove_white_spaces
-from addie.utilities.list_runs_parser import ListRunsParser
 from addie.utilities.gui_handler import TableHandler
-
 
 from addie.ui_import_from_database import Ui_MainWindow as UiMainWindow
 
@@ -49,7 +48,6 @@ class ImportFromDatabaseHandler:
             parent.import_from_database_ui.activateWindow()
 
 
-#class ImportFromDatabaseWindow(QDialog):
 class ImportFromDatabaseWindow(QMainWindow):
 
     filter_column_widths = [10, 50, 200, 100, 300]
@@ -84,10 +82,10 @@ class ImportFromDatabaseWindow(QMainWindow):
         self.ui.setupUi(self)
 
         self.init_widgets()
+        self.init_oncat_template()
         self.radio_button_changed()
-        self.retrieve_oncat_template()
 
-    def retrieve_oncat_template(self):
+    def init_oncat_template(self):
         o_retriever = OncatTemplateRetriever(parent=self.parent)
         self.oncat_template = o_retriever.get_template_information()
 
@@ -126,78 +124,27 @@ class ImportFromDatabaseWindow(QMainWindow):
     	}
     	""")
 
-    def change_user_clicked(self):
-        OncatAuthenticationHandler(parent=self.parent)
-
-    def radio_button_changed(self):
-        ipts_widgets_status = False
-        run_widgets_status = True
-        if self.ui.ipts_radio_button.isChecked():
-            ipts_widgets_status = True
-            run_widgets_status = False
-            self.ipts_text_changed(str(self.ui.ipts_lineedit.text()))
-        else:
-            self.ui.error_message.setVisible(False)
-
-        self.ui.ipts_combobox.setEnabled(ipts_widgets_status)
-        self.ui.ipts_lineedit.setEnabled(ipts_widgets_status)
-        self.ui.ipts_label.setEnabled(ipts_widgets_status)
-        self.ui.clear_ipts.setEnabled(ipts_widgets_status)
-
-        self.ui.run_number_lineedit.setEnabled(run_widgets_status)
-        self.ui.run_number_label.setEnabled(run_widgets_status)
-        self.ui.clear_run.setEnabled(run_widgets_status)
-
-        self.check_import_button()
-
-    def preview_widget_status(self, enabled_widgets=False):
-        self.ui.search_logo_label.setEnabled(enabled_widgets)
-        self.ui.name_search.setEnabled(enabled_widgets)
-        self.ui.clear_search_button.setEnabled(enabled_widgets)
-        self.ui.list_of_runs_label.setEnabled(enabled_widgets)
-
-    def filter_widget_status(self, enabled_widgets=False):
-        self.ui.tableWidget.setEnabled(enabled_widgets)
-        self.ui.add_criteria_button.setEnabled(enabled_widgets)
-        self.ui.filter_result_label.setEnabled(enabled_widgets)
-        self.ui.tableWidget_filter_result.setEnabled(enabled_widgets)
-
-    def check_import_button(self):
-        enable_import = False
-        if self.ui.ipts_radio_button.isChecked():
-            if str(self.ui.ipts_lineedit.text()).strip() != "":
-                if self.ipts_exist:
-                    enable_import = True
-            else:
-                enable_import = True
-        else:
-            if str(self.ui.run_number_lineedit.text()).strip() != "":
-                enable_import = True
-
-        self.ui.import_button.setEnabled(enable_import)
-
-    def get_list_of_runs_found_and_not_found(self, str_runs="",
-                                             oncat_result={},
-                                             check_not_found=True):
-        if str_runs:
-            o_parser = ListRunsParser(current_runs=str_runs)
-            list_of_runs = o_parser.list_current_runs
-        else:
-            check_not_found = False
-
-        list_of_runs_found = []
-        for _json in oncat_result:
-            _run_number = _json['indexed']['run_number']
-            list_of_runs_found.append("{}".format(_run_number))
-
-        if check_not_found:
-            list_of_runs_not_found = set(list_of_runs) - set(list_of_runs_found)
-        else:
-            list_of_runs_not_found = []
-
-        return {'not_found': list_of_runs_not_found,
-                'found': list_of_runs_found}
-
+    # def get_list_of_runs_found_and_not_found(self, str_runs="",
+    #                                          oncat_result={},
+    #                                          check_not_found=True):
+    #     if str_runs:
+    #         o_parser = ListRunsParser(current_runs=str_runs)
+    #         list_of_runs = o_parser.list_current_runs
+    #     else:
+    #         check_not_found = False
+    #
+    #     list_of_runs_found = []
+    #     for _json in oncat_result:
+    #         _run_number = _json['indexed']['run_number']
+    #         list_of_runs_found.append("{}".format(_run_number))
+    #
+    #     if check_not_found:
+    #         list_of_runs_not_found = set(list_of_runs) - set(list_of_runs_found)
+    #     else:
+    #         list_of_runs_not_found = []
+    #
+    #     return {'not_found': list_of_runs_not_found,
+    #             'found': list_of_runs_found}
 
     def insert_in_master_table(self, nexus_json=[]):
         if nexus_json == []:
@@ -215,14 +162,11 @@ class ImportFromDatabaseWindow(QMainWindow):
                            sample_chemical_formula=_chemical_formula,
                            sample_mass_density=_mass_density)
 
-    def cancel_button_clicked(self):
-        self.close()
-
-    def chemical_formula_pressed(self, key):
-        MaterialHandler(parent=self.parent,
-                        database_window=self,
-                        key=key,
-                        data_type='database')
+    # def chemical_formula_pressed(self, key):
+    #     MaterialHandler(parent=self.parent,
+    #                     database_window=self,
+    #                     key=key,
+    #                     data_type='database')
 
     def list_argument_changed(self, value, key):
         print("new value is {}".format(value))
@@ -410,8 +354,9 @@ class ImportFromDatabaseWindow(QMainWindow):
                                          facility=self.parent.facility,
                                          )
 
-            result = self.get_list_of_runs_found_and_not_found(str_runs=str_runs,
-                                                               oncat_result=nexus_json)
+
+            result = ImportFromDatabaseUtilities.get_list_of_runs_found_and_not_found(str_runs=str_runs,
+                                                                                    oncat_result=nexus_json)
             list_of_runs_not_found = result['not_found']
             self.list_of_runs_not_found = list_of_runs_not_found
             self.list_of_runs_found = result['found']
@@ -427,8 +372,8 @@ class ImportFromDatabaseWindow(QMainWindow):
                                                 ipts=ipts,
                                                 facility=self.parent.facility)
 
-            result = self.get_list_of_runs_found_and_not_found(oncat_result=nexus_json,
-                                                               check_not_found=False)
+            result = ImportFromDatabaseUtilities.get_list_of_runs_found_and_not_found(oncat_result=nexus_json,
+                                                                                    check_not_found=False)
 
             self.list_of_runs_not_found = result['not_found']
             self.list_of_runs_found = result['found']
@@ -511,7 +456,7 @@ class ImportFromDatabaseWindow(QMainWindow):
         if not (nexus_json == {}):
             enabled_widgets = True
 
-        self.preview_widget_status(enabled_widgets=enabled_widgets)
+        GuiHandler.preview_widget_status(self.ui, enabled_widgets=enabled_widgets)
         self.refresh_preview_table(nexus_json=copy.deepcopy(nexus_json))
 
     def refresh_filter_page(self):
@@ -524,7 +469,7 @@ class ImportFromDatabaseWindow(QMainWindow):
         if not (nexus_json == {}):
             enabled_widgets = True
 
-        self.filter_widget_status(enabled_widgets=enabled_widgets)
+        GuiHandler.filter_widget_status(self.ui, enabled_widgets=enabled_widgets)
         self.refresh_filter_table(nexus_json=copy.deepcopy(nexus_json))
 
     def _json_extractor(self, json=None, list_args=[]):
@@ -594,6 +539,30 @@ class ImportFromDatabaseWindow(QMainWindow):
 
     # EVENT HANDLER ---------------------------------------------------
 
+    def change_user_clicked(self):
+        OncatAuthenticationHandler(parent=self.parent)
+
+    def radio_button_changed(self):
+        ipts_widgets_status = False
+        run_widgets_status = True
+        if self.ui.ipts_radio_button.isChecked():
+            ipts_widgets_status = True
+            run_widgets_status = False
+            self.ipts_text_changed(str(self.ui.ipts_lineedit.text()))
+        else:
+            self.ui.error_message.setVisible(False)
+
+        self.ui.ipts_combobox.setEnabled(ipts_widgets_status)
+        self.ui.ipts_lineedit.setEnabled(ipts_widgets_status)
+        self.ui.ipts_label.setEnabled(ipts_widgets_status)
+        self.ui.clear_ipts.setEnabled(ipts_widgets_status)
+
+        self.ui.run_number_lineedit.setEnabled(run_widgets_status)
+        self.ui.run_number_label.setEnabled(run_widgets_status)
+        self.ui.clear_run.setEnabled(run_widgets_status)
+
+        GuiHandler.check_import_button(self)
+
     def clear_ipts(self):
         self.ui.ipts_lineedit.setText("")
         self.refresh_preview_table_of_runs()
@@ -647,14 +616,14 @@ class ImportFromDatabaseWindow(QMainWindow):
             ipts_exist = True  # we will use the combobox IPTS
 
         self.ipts_exist = ipts_exist
-        self.check_import_button()
+        GuiHandler.check_import_button(self)
 
     def run_number_return_pressed(self):
         self.refresh_preview_table_of_runs()
         self.search_return_pressed()
 
     def run_number_text_changed(self, text):
-        self.check_import_button()
+        GuiHandler.check_import_button(self)
 
     def edit_global_rule_clicked(self):
         GlobalRuleHandler(parent=self)
@@ -690,6 +659,9 @@ class ImportFromDatabaseWindow(QMainWindow):
                                                            'mass_density': "{}".format(_json['metadata']['entry']['sample']['mass_density']),
                                                            }
         return result_dict
+
+    def cancel_button_clicked(self):
+        self.close()
 
     def closeEvent(self, c):
         self.parent.import_from_database_ui = None
