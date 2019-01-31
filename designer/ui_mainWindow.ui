@@ -4141,24 +4141,6 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
-<!--
-  <connection>
-   <sender>mantid_run_reduction</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>mantid_run_reduction()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>276</x>
-     <y>505</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1220</x>
-     <y>860</y>
-    </hint>
-   </hints>
-  </connection>
--->
   <connection>
    <sender>pdf_qmax_line_edit</sender>
    <signal>editingFinished()</signal>
