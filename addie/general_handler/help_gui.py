@@ -1,7 +1,6 @@
 from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QMainWindow)
-
-from addie.ui_helpGui import Ui_MainWindow as UiMainWindow
+from addie.utilities import load_ui
 from addie.general_handler.help_gui_table_initialization import HelpGuiTableInitialization
 
 
@@ -13,12 +12,11 @@ class HelpGui(QMainWindow):
     column_widths = [330, 40]
 
     def __init__(self, parent=None, button_name=''):
+        QMainWindow.__init__(self, parent)
         self.parent = parent
         self.button_name = button_name
 
-        QMainWindow.__init__(self, parent=parent)
-        self.ui = UiMainWindow()
-        self.ui.setupUi(self)
+        self.ui = load_ui(__file__, '../../designer/ui_helpGui.ui', baseinstance=self)
 
         self.init_global_gui()
         self.init_table()
