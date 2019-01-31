@@ -14,8 +14,8 @@ class IptsFileTransferDialog(QDialog):
         self.parent = parent
 
         QDialog.__init__(self, parent=parent)
-        self.ui = load_ui(__file__, '../../../designer/ui_iptsFileTransfer.ui', baseinstance=self)
-        self.ui.setupUi(self)
+        self.ui = load_ui(__file__, '../../../designer/ui_iptsFileTransfer.ui',
+                          baseinstance=self)
 
     def transfer_clicked(self):
         _input_ipts = str(self.ui.source_ipts_value.text())

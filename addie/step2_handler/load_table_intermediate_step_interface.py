@@ -10,8 +10,7 @@ class loadTableIntermediateStepInterface(QDialog):
         self.parent = parent
 
         QDialog.__init__(self, parent=parent)
-        self.ui = load_ui(__file__, '../../../designer/ui_loadTableIntermediateStep.ui', baseinstance=self)
-        self.ui.setupUi(self)
+        self.ui = load_ui(__file__, '../../designer/ui_loadTableIntermediateStep.ui', baseinstance=self)
         self.parent.load_intermediate_step_ok = False
 
     def closeEvent(self, event=None):

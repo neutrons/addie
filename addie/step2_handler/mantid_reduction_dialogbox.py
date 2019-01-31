@@ -10,8 +10,8 @@ class MantidReductionDialogbox(QDialog):
         self.father = father
 
         QDialog.__init__(self, parent=parent)
-        self.ui = load_ui(__file__, '../../../designer/ui_launchMantid.ui', baseinstance=self)
-        self.ui.setupUi(self)
+        self.ui = load_ui(__file__, '../../../designer/ui_launchMantid.ui',
+                          baseinstance=self)
 
         _title = "Launching Mantid Reduction"
         self.setWindowTitle(_title)
