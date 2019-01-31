@@ -8,9 +8,8 @@ import psutil
 # must be imported through qtpy before any other gui imports
 from qtpy.QtCore import (QProcess, Qt, QUrl)
 from qtpy.QtGui import (QDesktopServices, QIcon)
-from qtpy.QtWidgets import (QApplication, QFileDialog, QMainWindow, QMessageBox, QTableWidgetItem)
+from qtpy.QtWidgets import (QApplication, QFileDialog, QMainWindow, QMessageBox, QTableWidgetItem, QVBoxLayout)
 
-from addie.ipythondockwidget import IPythonDockWidget
 
 import addie.ui_mainWindow
 import addie.step1
@@ -58,7 +57,9 @@ import addie.specify_plots_style as ps
 import addie.edit_sq_dialog
 
 from addie.pdf_lines_manager import PDFPlotManager
-
+from addie.graphicviewlib import BraggView, GofRView, SofQView
+from addie.ipythondockwidget import IPythonDockWidget
+from addie.treelib import BraggTree, GofRTree
 
 class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     """ Main addie window
@@ -115,8 +116,12 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             self.characterization_folder = '/SNS/NOM/shared/CALIBRATION/'
 
         # Initialize the UI widgets
-        self.ui = addie.ui_mainWindow.Ui_MainWindow()
-        self.ui.setupUi(self)
+        # self.ui = addie.ui_mainWindow.Ui_MainWindow()
+        # self.ui.setupUi(self)
+        ui_path = os.path.join(os.path.dirname(__file__), "ui_mainWindow.ui")
+        self.ui = load_ui(ui_path, baseinstance=self)
+        self._promote_widgets()
+
         self.ui.graphicsView_sq.set_main(self)
 
         self.ui.dockWidget_ipython.setup()
@@ -213,6 +218,44 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self._pdfColorManager = PDFPlotManager()
 
         return
+
+    def _promote_widgets(self):
+        # frame_graphicsView_bragg
+        graphicsView_layout = QVBoxLayout()
+        self.ui.frame_graphicsView_bragg.setLayout(graphicsView_layout)
+        self.ui.graphicsView_main = BraggView(self)
+        graphicsView_layout.addWidget(self.ui.graphicsView_main)
+
+        # frame_graphicsView_sq
+        graphicsView_layout = QVBoxLayout()
+        self.ui.frame_graphicsView_sq.setLayout(graphicsView_layout)
+        self.ui.graphicsView_sq= SofQView(self)
+        graphicsView_layout.addWidget(self.ui.graphicsView_sq)
+
+        # frame_graphicsView_gr
+        graphicsView_layout = QVBoxLayout()
+        self.ui.frame_graphicsView_gr.setLayout(graphicsView_layout)
+        self.ui.graphicsView_gr = GofRView(self)
+        graphicsView_layout.addWidget(self.ui.graphicsView_gr)
+
+        # frame_treeWidget_grWsList
+        temp_layout = QVBoxLayout()
+        self.ui.frame_treeWidget_grWsList.setLayout(temp_layout)
+        self.ui.treeWidget_grWsList = GofRTree(self)
+        temp_layout.addWidget(self.ui.treeWidget_grWsList)
+
+        # frame_treeWidget_braggWSList
+        temp_layout = QVBoxLayout()
+        self.ui.frame_treeWidget_braggWSList.setLayout(temp_layout)
+        self.ui.treeWidget_braggWSList = BraggTree(self)
+        temp_layout.addWidget(self.ui.treeWidget_braggWSList)
+
+        # from addie.ipythondockwidget import IPythonDockWidget
+        # frame_dockWidget_ipython
+        temp_layout = QVBoxLayout()
+        self.ui.frame_dockWidget_ipython.setLayout(temp_layout)
+        self.ui.dockWidget_ipython = IPythonDockWidget(self)
+        temp_layout.addWidget(self.ui.dockWidget_ipython)
 
     def _init_widgets(self):
         """ Initialize widgets
