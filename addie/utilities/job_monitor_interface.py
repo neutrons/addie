@@ -1,8 +1,7 @@
 from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QMainWindow, QPushButton, QTableWidgetItem)  # noqa
 import psutil
-
-from addie.ui_jobStatus import Ui_MainWindow as UiMainWindow
+from addie.utilities import load_ui
 from addie.utilities.job_monitor_thread import JobMonitorThread
 
 
@@ -14,7 +13,7 @@ class JobMonitorInterface(QMainWindow):
         self.parent = parent
 
         QMainWindow.__init__(self, parent=parent)
-        self.ui = UiMainWindow()
+        self.ui = load_ui(__file__, '../../../designer/ui_jobStatus.ui', baseinstance=self)
         self.ui.setupUi(self)
 
         self.init_table()
