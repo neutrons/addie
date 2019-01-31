@@ -1,0 +1,100 @@
+import numpy as np
+
+try:
+    from PyQt4.QtGui import QComboBox, QHBoxLayout, QLabel, QTableWidgetItem
+    from PyQt4 import QtGui, QtCore
+except:
+    try:
+        from PyQt5.QtWidgets import QComboBox, QHBoxLayout, QTableWidgetItem
+        from PyQt5 import QtGui, QtCore
+    except:
+        raise ImportError("Requires PyQt4 or PyQt5")
+
+from addie.utilities.general import generate_random_key
+from addie.master_table.tree_definition import LIST_SEARCH_CRITERIA
+
+
+class TableWidgetRuleHandler:
+
+    def __init__(self, parent=None):
+        self.parent = parent
+        self.table_ui = parent.ui.tableWidget
+        self.row_height = parent.row_height
+
+    def define_unique_rule_name(self, row):
+        """this method makes sure that the name of the rule defined is unique and does not exist already"""
+        nbr_row = self.table_ui.rowCount()
+        list_rule_name = []
+        for _row in np.arange(nbr_row):
+            if self.table_ui.item(_row, 1):
+                _rule_name = str(self.table_ui.item(_row, 1).text())
+                list_rule_name.append(_rule_name)
+
+        offset = 0
+        while True:
+            if ("{}".format(offset + row)) in list_rule_name:
+                offset += 1
+            else:
+                return offset + row
+
+    def add_row(self, row=-1):
+        """this add a default row to the table that takes care
+        of the rules"""
+        _random_key = generate_random_key()
+
+        _list_ui_for_this_row = {}
+
+        self.table_ui.insertRow(row)
+        self.table_ui.setRowHeight(row, self.row_height)
+
+        # key
+        _item = QTableWidgetItem("{}".format(_random_key))
+        self.table_ui.setItem(row, 0, _item)
+
+        # rule #
+        _rule_name = self.define_unique_rule_name(row)
+        _item = QTableWidgetItem("{}".format(_rule_name))
+        self.table_ui.setItem(row, 1, _item)
+
+        # search argument
+        _widget = QComboBox()
+        _list_ui_for_this_row['list_items'] = _widget
+        list_items = LIST_SEARCH_CRITERIA[self.parent.parent.instrument['short_name'].lower()]
+        _widget.addItems(list_items)
+        self.table_ui.setCellWidget(row, 2, _widget)
+        QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
+                               lambda value=list_items[0],
+                               key = _random_key:
+                               self.parent.list_item_changed(value, key))
+
+        # criteria
+        list_criteria = ['is', 'contains']
+        _widget = QComboBox()
+        _list_ui_for_this_row['list_criteria'] = _widget
+        _widget.addItems(list_criteria)
+        self.table_ui.setCellWidget(row, 3, _widget)
+        QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
+                               lambda value=list_criteria[0],
+                                      key = _random_key:
+                               self.parent.list_criteria_changed(value, key))
+
+        # argument
+        _widget = QComboBox()
+        _widget.setEditable(True)
+        list_values = list(self.parent.metadata['chemical_formula'])
+        _widget.addItems(list_values)
+        self.table_ui.setCellWidget(row, 4, _widget)
+        QtCore.QObject.connect(_widget, QtCore.SIGNAL("editTextChanged(QString)"),
+                               lambda value=list_values[0],
+                                      key = _random_key:
+                               self.parent.list_argument_changed(value, key))
+        QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
+                               lambda value=list_values[0],
+                                      key = _random_key:
+                               self.parent.list_argument_index_changed(value, key))
+
+        if row == 0:
+            self.table_ui.horizontalHeader().setVisible(True)
+
+        self.parent.list_ui[_random_key] = _list_ui_for_this_row
+        self.parent.check_all_filter_widgets()

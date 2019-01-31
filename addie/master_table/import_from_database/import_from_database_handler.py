@@ -28,6 +28,7 @@ from addie.master_table.import_from_database.oncat_template_retriever import Onc
 from addie.master_table.import_from_database.gui_handler import GuiHandler, ImportFromDatabaseTableHandler
 from addie.master_table.import_from_database import utilities as ImportFromDatabaseUtilities
 from addie.master_table.import_from_database.import_table_from_oncat_handler import ImportTableFromOncat
+from addie.master_table.import_from_database.table_widget_rule_handler import TableWidgetRuleHandler
 
 from addie.utilities.general import generate_random_key, remove_white_spaces
 from addie.utilities.gui_handler import TableHandler
@@ -151,14 +152,6 @@ class ImportFromDatabaseWindow(QMainWindow):
     #                     key=key,
     #                     data_type='database')
 
-    def list_argument_changed(self, value, key):
-        print("new value is {}".format(value))
-
-    def list_argument_index_changed(self, value, key):
-        print("index changed and value is now {}".format(value))
-
-    def list_criteria_changed(self, value, key):
-        pass
 
     def define_unique_rule_name(self, row):
         """this method makes sure that the name of the rule defined is unique and does not exist already"""
@@ -177,62 +170,62 @@ class ImportFromDatabaseWindow(QMainWindow):
                 return offset+row
 
 
-    def _add_row(self, row=-1):
-        """this add a row to the filter table (top table)"""
-        _random_key = generate_random_key()
-
-        _list_ui_for_this_row = {}
-
-        self.ui.tableWidget.insertRow(row)
-        self.ui.tableWidget.setRowHeight(row, self.row_height)
-
-        # key
-        _item = QTableWidgetItem("{}".format(_random_key))
-        self.ui.tableWidget.setItem(row, 0, _item)
-
-        # rule #
-        _rule_name = self.define_unique_rule_name(row)
-        _item = QTableWidgetItem("{}".format(_rule_name))
-        self.ui.tableWidget.setItem(row, 1, _item)
-
-        # search argument
-        _widget = QComboBox()
-        _list_ui_for_this_row['list_items'] = _widget
-        list_items = LIST_SEARCH_CRITERIA[self.parent.instrument['short_name'].lower()]
-        _widget.addItems(list_items)
-        self.ui.tableWidget.setCellWidget(row, 2, _widget)
-        QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-                               lambda value=list_items[0],
-                               key = _random_key:
-                               self.list_criteria_changed(value, key))
-
-        # criteria
-        list_criteria = ['is', 'contains']
-        _widget = QComboBox()
-        _list_ui_for_this_row['list_criteria'] = _widget
-        _widget.addItems(list_criteria)
-        self.ui.tableWidget.setCellWidget(row, 3, _widget)
-
-        # argument
-        _widget = QComboBox()
-        _widget.setEditable(True)
-        list_values = list(self.metadata['chemical_formula'])
-        _widget.addItems(list_values)
-        self.ui.tableWidget.setCellWidget(row, 4, _widget)
-        QtCore.QObject.connect(_widget, QtCore.SIGNAL("editTextChanged(QString)"),
-                               lambda value=list_values[0],
-                                      key = _random_key:
-                               self.list_argument_changed(value, key))
-        QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-                               lambda value=list_values[0],
-                                      key = _random_key:
-                               self.list_argument_index_changed(value, key))
-
-        if row == 0:
-            self.ui.tableWidget.horizontalHeader().setVisible(True)
-
-        self.list_ui[_random_key] = _list_ui_for_this_row
-        self.check_all_filter_widgets()
+    # def _add_row(self, row=-1):
+    #     """this add a row to the filter table (top table)"""
+    #     _random_key = generate_random_key()
+    #
+    #     _list_ui_for_this_row = {}
+    #
+    #     self.ui.tableWidget.insertRow(row)
+    #     self.ui.tableWidget.setRowHeight(row, self.row_height)
+    #
+    #     # key
+    #     _item = QTableWidgetItem("{}".format(_random_key))
+    #     self.ui.tableWidget.setItem(row, 0, _item)
+    #
+    #     # rule #
+    #     _rule_name = self.define_unique_rule_name(row)
+    #     _item = QTableWidgetItem("{}".format(_rule_name))
+    #     self.ui.tableWidget.setItem(row, 1, _item)
+    #
+    #     # search argument
+    #     _widget = QComboBox()
+    #     _list_ui_for_this_row['list_items'] = _widget
+    #     list_items = LIST_SEARCH_CRITERIA[self.parent.instrument['short_name'].lower()]
+    #     _widget.addItems(list_items)
+    #     self.ui.tableWidget.setCellWidget(row, 2, _widget)
+    #     QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
+    #                            lambda value=list_items[0],
+    #                            key = _random_key:
+    #                            self.list_criteria_changed(value, key))
+    #
+    #     # criteria
+    #     list_criteria = ['is', 'contains']
+    #     _widget = QComboBox()
+    #     _list_ui_for_this_row['list_criteria'] = _widget
+    #     _widget.addItems(list_criteria)
+    #     self.ui.tableWidget.setCellWidget(row, 3, _widget)
+    #
+    #     # argument
+    #     _widget = QComboBox()
+    #     _widget.setEditable(True)
+    #     list_values = list(self.metadata['chemical_formula'])
+    #     _widget.addItems(list_values)
+    #     self.ui.tableWidget.setCellWidget(row, 4, _widget)
+    #     QtCore.QObject.connect(_widget, QtCore.SIGNAL("editTextChanged(QString)"),
+    #                            lambda value=list_values[0],
+    #                                   key = _random_key:
+    #                            self.list_argument_changed(value, key))
+    #     QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
+    #                            lambda value=list_values[0],
+    #                                   key = _random_key:
+    #                            self.list_argument_index_changed(value, key))
+    #
+    #     if row == 0:
+    #         self.ui.tableWidget.horizontalHeader().setVisible(True)
+    #
+    #     self.list_ui[_random_key] = _list_ui_for_this_row
+    #     self.check_all_filter_widgets()
 
     def refresh_global_rule(self, full_reset=False, new_row=-1):
         if full_reset:
@@ -281,93 +274,6 @@ class ImportFromDatabaseWindow(QMainWindow):
             self.ui.remove_criteria_button.setEnabled(True)
         else:
             self.ui.remove_criteria_button.setEnabled(False)
-
-    # def import_table_from_oncat_template(self):
-    #     """Using ONCat template, this method retrieves the metadata of either the IPTS or
-    #     runs selected"""
-    #
-    #     if self.ui.run_radio_button.isChecked():
-    #         # remove white space to string to make ONCat happy
-    #         str_runs = str(self.ui.run_number_lineedit.text())
-    #         str_runs = remove_white_spaces(str_runs)
-    #
-    #         projection = OncatTemplateRetriever.create_oncat_projection_from_template(with_location=True,
-    #                                                                                   template=self.oncat_template)
-    #
-    #         nexus_json = pyoncatGetNexus(oncat=self.parent.oncat,
-    #                                      instrument=self.parent.instrument['short_name'],
-    #                                      runs=str_runs,
-    #                                      facility=self.parent.facility,
-    #                                      projection=projection,
-    #                                      )
-    #
-    #     else:
-    #         ipts = str(self.ui.ipts_combobox.currentText())
-    #
-    #         projection = OncatTemplateRetriever.create_oncat_projection_from_template(with_location=False,
-    #                                                                                   template=self.oncat_template)
-    #
-    #         nexus_json = pyoncatGetRunsFromIpts(oncat=self.parent.oncat,
-    #                                             instrument=self.parent.instrument['short_name'],
-    #                                             ipts=ipts,
-    #                                             facility=self.parent.facility,
-    #                                             projection=projection,
-    #                                             )
-    #
-    #     self.nexus_json_from_template = nexus_json
-
-#     def import_button(self, insert_in_table=True):
-#
-#         QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
-#
-#         self.list_of_runs_not_found = []
-#
-#         if self.ui.run_radio_button.isChecked():
-#
-#             # remove white space to string to make ONCat happy
-#             str_runs = str(self.ui.run_number_lineedit.text())
-#             str_runs = remove_white_spaces(str_runs)
-#
-#             nexus_json = pyoncatGetNexus(oncat=self.parent.oncat,
-#                                          instrument=self.parent.instrument['short_name'],
-#                                          runs=str_runs,
-#                                          facility=self.parent.facility,
-#                                          )
-#
-#
-#             result = ImportFromDatabaseUtilities.get_list_of_runs_found_and_not_found(str_runs=str_runs,
-#                                                                                     oncat_result=nexus_json)
-#             list_of_runs_not_found = result['not_found']
-#             self.list_of_runs_not_found = list_of_runs_not_found
-#             self.list_of_runs_found = result['found']
-#
-#             # clear input widget
-# #            self.ui.run_number_lineedit.setText("")
-#
-#         else:
-#             ipts = str(self.ui.ipts_combobox.currentText())
-#
-#             nexus_json = pyoncatGetRunsFromIpts(oncat=self.parent.oncat,
-#                                                 instrument=self.parent.instrument['short_name'],
-#                                                 ipts=ipts,
-#                                                 facility=self.parent.facility)
-#
-#             result = ImportFromDatabaseUtilities.get_list_of_runs_found_and_not_found(oncat_result=nexus_json,
-#                                                                                     check_not_found=False)
-#
-#             self.list_of_runs_not_found = result['not_found']
-#             self.list_of_runs_found = result['found']
-#
-#         if insert_in_table:
-#             self.insert_in_master_table(nexus_json=nexus_json)
-#         else:
-#             self.nexus_json = nexus_json
-#             self.isolate_metadata()
-#
-#         QApplication.restoreOverrideCursor()
-#
-#         if insert_in_table:
-#             self.close()
 
     def isolate_metadata(self):
         '''retrieve the metadata of interest from the json returns by ONCat'''
@@ -475,6 +381,20 @@ class ImportFromDatabaseWindow(QMainWindow):
                                                    parent=self)
         o_handler.refresh_table(nexus_json=nexus_json)
 
+    # EVENT HANDLER CREATED DURING RUN TIME ----------------------------
+
+    def list_argument_changed(self, value, key):
+        print("new value is {}".format(value))
+
+    def list_argument_index_changed(self, value, key):
+        print("index changed and value is now {}".format(value))
+
+    def list_criteria_changed(self, value, key):
+        print("new criteria is {}".format(value))
+
+    def list_item_changed(self, value, key):
+        print("new item is {}".format(value))
+
     # EVENT HANDLER ---------------------------------------------------
 
     def change_user_clicked(self):
@@ -526,7 +446,9 @@ class ImportFromDatabaseWindow(QMainWindow):
 
     def add_criteria_clicked(self):
         nbr_row = self.ui.tableWidget.rowCount()
-        self._add_row(row=nbr_row)
+        o_table_handler = TableWidgetRuleHandler(parent=self)
+        o_table_handler.add_row(row=nbr_row)
+        #self._add_row(row=nbr_row)
         self.check_rule_widgets()
         self.refresh_global_rule(new_row=nbr_row)
 
