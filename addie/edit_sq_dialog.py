@@ -3,8 +3,7 @@ from __future__ import (absolute_import, division, print_function)
 from qtpy.QtCore import (Signal)
 from qtpy.QtWidgets import (QDialog)
 import random
-
-from . import ui_editSq
+from addie.utilities import load_ui
 
 
 class EditSofQDialog(QDialog):
@@ -36,7 +35,7 @@ class EditSofQDialog(QDialog):
         self._scaleSlideMutex = False
 
         # set up UI
-        self.ui = ui_editSq.Ui_Dialog()
+        self.ui = load_ui(__file__, '../designer/ui_colorStyleSetup.ui', baseinstance=self)
         self.ui.setupUi(self)
 
         # set up default value

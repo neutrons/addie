@@ -1,6 +1,6 @@
 from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QDialog, QFileDialog)  # noqa
-from addie.ui_iptsFileTransfer import Ui_Dialog as UiDialog
+from addie.utilities import load_ui
 from addie.utilities.job_status_handler import JobStatusHandler
 import os
 
@@ -14,7 +14,7 @@ class IptsFileTransferDialog(QDialog):
         self.parent = parent
 
         QDialog.__init__(self, parent=parent)
-        self.ui = UiDialog()
+        self.ui = load_ui(__file__, '../../../designer/ui_iptsFileTransfer.ui', baseinstance=self)
         self.ui.setupUi(self)
 
     def transfer_clicked(self):

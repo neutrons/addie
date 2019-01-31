@@ -1,7 +1,6 @@
 from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QFileDialog, QMainWindow)
-
-from addie.ui_previewMantid import Ui_MainWindow as UiMainWindow
+from addie.utilities import load_ui
 from addie.step2_handler.mantid_script_handler import MantidScriptHandler
 from addie.utilities.file_handler import FileHandler
 
@@ -13,6 +12,7 @@ class MantidReductionView(QMainWindow):
         self.father = father
 
         QMainWindow.__init__(self, parent=parent)
+        self.ui = load_ui(__file__, '../../../designer/ui_previewMantid.ui', baseinstance=self)
         self.ui = UiMainWindow()
         self.ui.setupUi(self)
 

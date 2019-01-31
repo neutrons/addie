@@ -1,7 +1,6 @@
 from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QDialog)
-
-from addie.ui_launchMantid import Ui_Dialog as UiDialog
+from addie.utilities import load_ui
 
 
 class MantidReductionDialogbox(QDialog):
@@ -11,7 +10,7 @@ class MantidReductionDialogbox(QDialog):
         self.father = father
 
         QDialog.__init__(self, parent=parent)
-        self.ui = UiDialog()
+        self.ui = load_ui(__file__, '../../../designer/ui_launchMantid.ui', baseinstance=self)
         self.ui.setupUi(self)
 
         _title = "Launching Mantid Reduction"

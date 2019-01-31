@@ -1,7 +1,6 @@
 from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QMainWindow)
-
-from addie.ui_preview_ascii import Ui_MainWindow as UiMainWindow
+from addie.utilities import load_ui
 
 
 class PreviewAsciiWindow(QMainWindow):
@@ -10,6 +9,7 @@ class PreviewAsciiWindow(QMainWindow):
         self.parent = parent
 
         QMainWindow.__init__(self, parent=parent)
+        self.ui = load_ui(__file__, '../../../designer/ui_preview_ascii.ui', baseinstance=self)
         self.ui = UiMainWindow()
         self.ui.setupUi(self)
 
