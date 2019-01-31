@@ -86,6 +86,9 @@ class ImportFromDatabaseWindow(QMainWindow):
         self.radio_button_changed()
 
     def init_oncat_template(self):
+        """In order to display in the first tab all the metadata just like ONCat does
+        on the web site, we need to retrieve the same template as ONCat uses. This is
+        what is going on right here"""
         o_retriever = OncatTemplateRetriever(parent=self.parent)
         self.oncat_template = o_retriever.get_template_information()
 
@@ -98,7 +101,7 @@ class ImportFromDatabaseWindow(QMainWindow):
         self.ui.error_message.setStyleSheet("color: red")
         self.ui.error_message.setVisible(False)
 
-        # retrieve list of IPTS for this user
+        # retrieve list and display of IPTS for this user
         instrument = self.parent.instrument['short_name']
         facility = self.parent.facility
 
@@ -106,9 +109,9 @@ class ImportFromDatabaseWindow(QMainWindow):
                                        instrument=instrument,
                                        facility=facility)
         self.list_ipts = list_ipts
-
         self.ui.ipts_combobox.addItems(list_ipts)
 
+        # add icons on top of widgets (clear, search)
         self.ui.clear_ipts.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
         self.ui.clear_run.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
 
