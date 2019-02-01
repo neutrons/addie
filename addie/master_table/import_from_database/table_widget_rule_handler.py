@@ -81,7 +81,7 @@ class TableWidgetRuleHandler:
         # argument
         _widget = QComboBox()
         _widget.setEditable(True)
-        list_values = list(self.parent.metadata['chemical_formula'])
+        list_values = list(self.parent.metadata['Chemical Formula'])
         _widget.addItems(list_values)
         self.table_ui.setCellWidget(row, 4, _widget)
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("editTextChanged(QString)"),
