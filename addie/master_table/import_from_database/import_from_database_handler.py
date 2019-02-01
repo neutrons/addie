@@ -317,6 +317,9 @@ class ImportFromDatabaseWindow(QMainWindow):
         OncatAuthenticationHandler(parent=self.parent)
 
     def radio_button_changed(self):
+
+        QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+
         ipts_widgets_status = False
         run_widgets_status = True
         if self.ui.ipts_radio_button.isChecked():
@@ -342,6 +345,8 @@ class ImportFromDatabaseWindow(QMainWindow):
         self.ui.clear_run.setEnabled(run_widgets_status)
 
         GuiHandler.check_import_button(self)
+
+        QApplication.restoreOverrideCursor()
 
     def clear_ipts(self):
         self.ui.ipts_lineedit.setText("")

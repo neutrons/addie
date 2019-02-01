@@ -46,7 +46,7 @@ def pyoncatGetNexus(oncat=None,
         instrument=instrument,
         projection=projection,
         tags=['type/raw'],
-        exts=['.nxs.h5'],
+        exts=['.nxs.h5', '.nxs'],
         ranges_q='indexed.run_number:%s' % runs
     )
     return datafiles
@@ -79,7 +79,7 @@ def pyoncatGetRunsFromIpts(oncat=None,
                                    experiment=ipts,
                                    projection=projection,
                                    tags=['type/raw'],
-                                   exts=['.nxs.h5'])
+                                   exts=['.nxs.h5', '.nxs'])
     return run_list
 
 def pyoncatGetIptsList(oncat=None,

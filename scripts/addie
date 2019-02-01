@@ -2777,7 +2777,6 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     def closeEvent(self, eventhere=None):
         pass
 
-
 def main():
     app = QApplication(sys.argv)
     app.setOrganizationName("Qtrac Ltd.")
