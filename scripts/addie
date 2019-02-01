@@ -222,8 +222,8 @@ class MainWindow(QMainWindow):
         # frame_graphicsView_bragg
         graphicsView_layout = QVBoxLayout()
         self.ui.frame_graphicsView_bragg.setLayout(graphicsView_layout)
-        self.ui.graphicsView_main = BraggView(self)
-        graphicsView_layout.addWidget(self.ui.graphicsView_main)
+        self.ui.graphicsView_bragg = BraggView(self)
+        graphicsView_layout.addWidget(self.ui.graphicsView_bragg)
 
         # frame_graphicsView_sq
         graphicsView_layout = QVBoxLayout()
