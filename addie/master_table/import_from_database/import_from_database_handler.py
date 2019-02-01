@@ -309,7 +309,9 @@ class ImportFromDatabaseWindow(QMainWindow):
         print("new criteria is {}".format(value))
 
     def list_item_changed(self, value, key):
-        print("new item is {}".format(value))
+        """this method is reached when the user changes the name of the variable he wants to filter"""
+        o_table = TableWidgetRuleHandler(parent=self)
+        o_table.update_list_value_of_given_item(item_name=value, key=key)
 
     # EVENT HANDLER ---------------------------------------------------
 
@@ -375,7 +377,6 @@ class ImportFromDatabaseWindow(QMainWindow):
         nbr_row = self.ui.tableWidget.rowCount()
         o_table_handler = TableWidgetRuleHandler(parent=self)
         o_table_handler.add_row(row=nbr_row)
-        #self._add_row(row=nbr_row)
         self.check_rule_widgets()
         self.refresh_global_rule(new_row=nbr_row)
 

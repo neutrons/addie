@@ -61,3 +61,11 @@ class TableHandler(object):
         self.hide_all_rows()
         self.set_row_visibility(visibility=True, list_of_rows=list_of_rows)
 
+
+def unlock_signals_ui(list_ui=[]):
+    if list_ui == []:
+        return
+
+    for _ui in list_ui:
+        _ui.blockSignals(False)
+

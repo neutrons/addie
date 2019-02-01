@@ -12,6 +12,7 @@ except:
 
 from addie.utilities.general import generate_random_key
 from addie.master_table.tree_definition import LIST_SEARCH_CRITERIA
+from addie.utilities.gui_handler import unlock_signals_ui
 
 
 class TableWidgetRuleHandler:
@@ -43,6 +44,7 @@ class TableWidgetRuleHandler:
         _random_key = generate_random_key()
 
         _list_ui_for_this_row = {}
+        _list_ui_to_unlock = []
 
         self.table_ui.insertRow(row)
         self.table_ui.setRowHeight(row, self.row_height)
@@ -62,6 +64,8 @@ class TableWidgetRuleHandler:
         list_items = LIST_SEARCH_CRITERIA[self.parent.parent.instrument['short_name'].lower()]
         _widget.addItems(list_items)
         self.table_ui.setCellWidget(row, 2, _widget)
+        _widget.blockSignals(True)
+        _list_ui_to_unlock.append(_widget)
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
                                lambda value=list_items[0],
                                key = _random_key:
@@ -73,6 +77,8 @@ class TableWidgetRuleHandler:
         _list_ui_for_this_row['list_criteria'] = _widget
         _widget.addItems(list_criteria)
         self.table_ui.setCellWidget(row, 3, _widget)
+        _widget.blockSignals(True)
+        _list_ui_to_unlock.append(_widget)
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
                                lambda value=list_criteria[0],
                                       key = _random_key:
@@ -81,9 +87,12 @@ class TableWidgetRuleHandler:
         # argument
         _widget = QComboBox()
         _widget.setEditable(True)
+        _list_ui_for_this_row['list_items_value'] = _widget
         list_values = list(self.parent.metadata['Chemical Formula'])
         _widget.addItems(list_values)
         self.table_ui.setCellWidget(row, 4, _widget)
+        _widget.blockSignals(True)
+        _list_ui_to_unlock.append(_widget)
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("editTextChanged(QString)"),
                                lambda value=list_values[0],
                                       key = _random_key:
@@ -96,5 +105,27 @@ class TableWidgetRuleHandler:
         if row == 0:
             self.table_ui.horizontalHeader().setVisible(True)
 
+        unlock_signals_ui(list_ui=_list_ui_to_unlock)
+
         self.parent.list_ui[_random_key] = _list_ui_for_this_row
         self.parent.check_all_filter_widgets()
+
+    def update_list_value_of_given_item(self, item_name='', key=None):
+        """When user clicks, in the Tablewidget rule, the first row showing the name of the list element,
+         for example 'Chemical formula', the list of available values will update automatically"""
+
+        list_ui = self.parent.list_ui
+        list_metadata = self.parent.metadata
+
+        combobox_values = list_ui[key]['list_items_value']
+        combobox_values.clear()
+        combobox_values.addItems(list(list_metadata[item_name]))
+
+
+
+
+
+
+
+
+
