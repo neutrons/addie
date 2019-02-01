@@ -108,8 +108,8 @@ class ImportFromDatabaseTableHandler:
             table_ui.insertColumn(col)
             _item_title = QTableWidgetItem(title)
             table_ui.setHorizontalHeaderItem(col, _item_title)
-        #            width = metadata_filter["column_width"]
-        #            table_ui.setColumnWidth(col, width)
+            width = metadata_filter["column_width"]
+            table_ui.setColumnWidth(col, width)
 
         _item = QTableWidgetItem("{}".format(argument_value))
         table_ui.setItem(row, col, _item)
