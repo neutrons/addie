@@ -816,6 +816,8 @@ class MainWindow(QMainWindow):
             default_dir = self.getDefaultDir(sub_dir='GSAS')
 
         bragg_file_names = QFileDialog.getOpenFileNames(self, 'Choose Bragg File', default_dir, ext)
+        if isinstance(bragg_file_names, tuple):
+            bragg_file_names = bragg_file_names[0]
         if bragg_file_names is None or bragg_file_names == '' or len(bragg_file_names) == 0:
             return
         bragg_file_names = [str(bragg_file_name) for bragg_file_name in bragg_file_names]
@@ -914,7 +916,8 @@ class MainWindow(QMainWindow):
         # pop out file
         file_filter = 'Data Files (*.dat);;All Files (*.*)'
         g_file_name = str(QFileDialog.getOpenFileName(self, 'Open a G(r) file', default_dir, file_filter))
-
+        if isinstance(g_file_name, tuple):
+            g_file_name = g_file_name[0]
         # return if operation is cancelled
         if g_file_name is None or g_file_name == '':
             return
@@ -1037,12 +1040,14 @@ class MainWindow(QMainWindow):
         # get the file
         ext = 'nxs (*.nxs);;dat (*.dat);;All (*.*)'
         sq_file_names = QFileDialog.getOpenFileNames(self, 'Choose S(Q) File', default_dir, ext)
+        if isinstance(sq_file_names, tuple):
+            sq_file_names = sq_file_names[0]
         if sq_file_names is None or sq_file_names == '' or len(sq_file_names) == 0:
             return
-        else:
-            # update current data directory
-            self._currDataDir = os.path.split(os.path.abspath(sq_file_names[0]))[0]
-            self.check_in_fixed_dir_structure('SofQ')
+
+        # update current data directory
+        self._currDataDir = os.path.split(os.path.abspath(sq_file_names[0]))[0]
+        self.check_in_fixed_dir_structure('SofQ')
 
         # load S(q)
         for sq_file_name in sq_file_names:
