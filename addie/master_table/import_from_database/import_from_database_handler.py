@@ -333,9 +333,10 @@ class ImportFromDatabaseWindow(QMainWindow):
     def refresh_preview_table_of_runs(self):
         """using either the IPTS number selected or the runs defined, this will use the ONCat template to
         retrieve all the information from the template and populate the preview table """
-        if self.ui.import_button.isEnabled():
-            o_import = ImportTableFromOncat(parent=self)
-            o_import.from_oncat_template()
+
+        #if self.ui.import_button.isEnabled():
+        o_import = ImportTableFromOncat(parent=self)
+        o_import.from_oncat_template()
 
         nexus_json = self.nexus_json_from_template
 
@@ -389,7 +390,6 @@ class ImportFromDatabaseWindow(QMainWindow):
     def list_argument_changed(self, value, key):
         print("new value is {}".format(value))
 
-
     def list_argument_index_changed(self, value, key):
         print("index changed and value is now {}".format(value))
 
@@ -416,6 +416,7 @@ class ImportFromDatabaseWindow(QMainWindow):
                 self.ipts_text_changed(str(self.ui.ipts_lineedit.text()))
         else:
             self.ui.error_message.setVisible(False)
+            self.run_number_return_pressed()
 
         self.ui.ipts_combobox.setEnabled(ipts_widgets_status)
         self.ui.ipts_lineedit.setEnabled(ipts_widgets_status)
@@ -459,7 +460,7 @@ class ImportFromDatabaseWindow(QMainWindow):
         self.check_rule_widgets()
         self.refresh_global_rule(new_row=nbr_row)
 
-    def ipts_selection_changed(self, ipts_selected):
+    def ipts_selection_changed(self, ipts_selected=""):
         self.ui.ipts_lineedit.setText("")
         self.refresh_preview_table_of_runs()
         self.search_return_pressed()

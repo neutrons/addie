@@ -32,6 +32,11 @@ class ImportTableFromOncat:
             str_runs = str(self.parent.ui.run_number_lineedit.text())
             str_runs = remove_white_spaces(str_runs)
 
+            if str_runs == "":
+                "no runs provided. nothing to do"
+                self.parent.nexus_json_from_template = {}
+                return
+
             projection = OncatTemplateRetriever.create_oncat_projection_from_template(with_location=True,
                                                                                       template=self.parent.oncat_template)
 
