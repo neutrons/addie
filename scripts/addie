@@ -713,10 +713,6 @@ class MainWindow(QMainWindow):
         :param auto:
         :return:
         """
-        # check
-        assert isinstance(gr_ws_name, str), 'G(r) workspace name {0} must be a string but not a {1}.' \
-                                            ''.format(gr_ws_name, type(gr_ws_name))
-
         # get the value
         vec_r, vec_g, vec_ge = self._myController.get_ws_data(gr_ws_name)
 
@@ -914,18 +910,18 @@ class MainWindow(QMainWindow):
             default_dir = self.getDefaultDir('gofr')
 
         # pop out file
-        file_filter = 'Data Files (*.dat);;All Files (*.*)'
-        g_file_name = str(QFileDialog.getOpenFileName(self, 'Open a G(r) file', default_dir, file_filter))
+        file_filter = 'Data Files (*.dat);; PDFgui (*.gr);;All Files (*.*)'
+        g_file_name = QFileDialog.getOpenFileName(self, 'Open a G(r) file', default_dir, file_filter)
         if isinstance(g_file_name, tuple):
             g_file_name = g_file_name[0]
         # return if operation is cancelled
         if g_file_name is None or g_file_name == '':
             return
-        else:
-            # update current data directory
-            self._currDataDir = os.path.split(os.path.abspath(g_file_name))[0]
-            # set default data directory if in fixed file structure
-            self.check_in_fixed_dir_structure('gofr')
+
+        # update current data directory
+        self._currDataDir = os.path.split(os.path.abspath(g_file_name))[0]
+        # set default data directory if in fixed file structure
+        self.check_in_fixed_dir_structure('gofr')
 
         # read file
         status, ret_obj = self._myController.load_gr(g_file_name)
@@ -940,7 +936,7 @@ class MainWindow(QMainWindow):
         gr_color, gr_style, gr_marker, gr_alpha = self._pdfColorManager.add_gofr(None, gr_ws_name, None)
         gr_label = gr_ws_name
 
-        self.plot_gr([gr_ws_name], [gr_color], [gr_style], [gr_marker], [gr_alpha], [gr_label])
+        self.plot_gr(gr_ws_name, gr_color, gr_style, gr_marker, gr_alpha, gr_label)
 
         # put the loaded G(r) workspace to tree 'workspaces'
         self.ui.treeWidget_grWsList.add_child_main_item('workspaces', gr_ws_name)
@@ -1212,8 +1208,10 @@ class MainWindow(QMainWindow):
 
         for sq_name in sq_name_list:
             # get the output file name first
-            out_file_name = str(QFileDialog.getSaveFileName(self,
-                                                            'Input File Name to Save S(Q) {0}'.format(sq_name), self._currWorkDir, file_filter))
+            out_file_name = QFileDialog.getSaveFileName(self,
+                                                        'Input File Name to Save S(Q) {0}'.format(sq_name), self._currWorkDir, file_filter)
+            if isinstance(out_file_name, tuple):
+                out_file_name = out_file_name[0]
             if out_file_name is None or len(out_file_name) == 0:
                 # skip if the user cancel the operation on this S(Q)
                 continue
