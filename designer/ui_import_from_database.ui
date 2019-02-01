@@ -886,7 +886,7 @@
    <sender>run_number_lineedit</sender>
    <signal>textChanged(QString)</signal>
    <receiver>MainWindow</receiver>
-   <slot>search_text_changed()</slot>
+   <slot>run_number_text_changed()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>456</x>

@@ -304,7 +304,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.clear_run, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.clear_run)
         QtCore.QObject.connect(self.remove_criteria_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.remove_criteria_clicked)
         QtCore.QObject.connect(self.add_criteria_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.add_criteria_clicked)
-        QtCore.QObject.connect(self.run_number_lineedit, QtCore.SIGNAL(_fromUtf8("textChanged(QString)")), MainWindow.search_text_changed)
+        QtCore.QObject.connect(self.run_number_lineedit, QtCore.SIGNAL(_fromUtf8("textChanged(QString)")), MainWindow.run_number_text_changed)
         QtCore.QObject.connect(self.toolBox, QtCore.SIGNAL(_fromUtf8("currentChanged(int)")), MainWindow.toolbox_changed)
         QtCore.QObject.connect(self.global_rule_button, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.edit_global_rule_clicked)
         QtCore.QObject.connect(self.ipts_lineedit, QtCore.SIGNAL(_fromUtf8("returnPressed()")), MainWindow.ipts_text_return_pressed)
