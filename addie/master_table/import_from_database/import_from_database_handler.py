@@ -29,6 +29,7 @@ from addie.master_table.import_from_database.gui_handler import GuiHandler, Impo
 from addie.master_table.import_from_database import utilities as ImportFromDatabaseUtilities
 from addie.master_table.import_from_database.import_table_from_oncat_handler import ImportTableFromOncat
 from addie.master_table.import_from_database.table_widget_rule_handler import TableWidgetRuleHandler
+from addie.master_table.import_from_database.apply_rule_handler import ApplyRuleHandler
 
 from addie.utilities.general import generate_random_key, remove_white_spaces
 from addie.utilities.gui_handler import TableHandler
@@ -145,13 +146,6 @@ class ImportFromDatabaseWindow(QMainWindow):
             o_row.fill_row(sample_runs=_run,
                            sample_chemical_formula=_chemical_formula,
                            sample_mass_density=_mass_density)
-
-    # def chemical_formula_pressed(self, key):
-    #     MaterialHandler(parent=self.parent,
-    #                     database_window=self,
-    #                     key=key,
-    #                     data_type='database')
-
 
     def define_unique_rule_name(self, row):
         """this method makes sure that the name of the rule defined is unique and does not exist already"""
@@ -272,6 +266,7 @@ class ImportFromDatabaseWindow(QMainWindow):
 
         GuiHandler.filter_widget_status(self.ui, enabled_widgets=enabled_widgets)
         self.refresh_filter_table(nexus_json=copy.deepcopy(nexus_json))
+        self.update_rule_filter()
 
     def refresh_preview_table(self, nexus_json=[]):
         """this function will use the template returned by ONCat during the initialization of this
@@ -297,21 +292,26 @@ class ImportFromDatabaseWindow(QMainWindow):
                                                    parent=self)
         o_handler.refresh_table(nexus_json=nexus_json)
 
+    def update_rule_filter(self):
+        o_rule = ApplyRuleHandler(parent=self)
+        o_rule.apply_global_rule()
+
     # EVENT HANDLER CREATED DURING RUN TIME ----------------------------
 
     def list_argument_changed(self, value, key):
-        print("new value is {}".format(value))
+        self.update_rule_filter()
 
     def list_argument_index_changed(self, value, key):
-        print("index changed and value is now {}".format(value))
+        self.update_rule_filter()
 
     def list_criteria_changed(self, value, key):
-        print("new criteria is {}".format(value))
+        self.update_rule_filter()
 
     def list_item_changed(self, value, key):
         """this method is reached when the user changes the name of the variable he wants to filter"""
         o_table = TableWidgetRuleHandler(parent=self)
         o_table.update_list_value_of_given_item(item_name=value, key=key)
+        self.update_rule_filter()
 
     # EVENT HANDLER ---------------------------------------------------
 
@@ -372,6 +372,7 @@ class ImportFromDatabaseWindow(QMainWindow):
         self.ui.tableWidget.removeRow(row)
         self.check_all_filter_widgets()
         self.refresh_global_rule(full_reset=True)
+        self.update_rule_filter()
 
     def add_criteria_clicked(self):
         nbr_row = self.ui.tableWidget.rowCount()
@@ -379,6 +380,7 @@ class ImportFromDatabaseWindow(QMainWindow):
         o_table_handler.add_row(row=nbr_row)
         self.check_rule_widgets()
         self.refresh_global_rule(new_row=nbr_row)
+        self.update_rule_filter()
 
     def ipts_selection_changed(self, ipts_selected=""):
         self.ui.ipts_lineedit.setText("")

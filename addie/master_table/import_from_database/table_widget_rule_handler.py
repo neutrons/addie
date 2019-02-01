@@ -118,8 +118,10 @@ class TableWidgetRuleHandler:
         list_metadata = self.parent.metadata
 
         combobox_values = list_ui[key]['list_items_value']
+        combobox_values.blockSignals(True)
         combobox_values.clear()
         combobox_values.addItems(list(list_metadata[item_name]))
+        combobox_values.blockSignals(False)
 
 
 
