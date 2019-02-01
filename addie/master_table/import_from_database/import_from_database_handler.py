@@ -410,7 +410,10 @@ class ImportFromDatabaseWindow(QMainWindow):
         if self.ui.ipts_radio_button.isChecked():
             ipts_widgets_status = True
             run_widgets_status = False
-            self.ipts_text_changed(str(self.ui.ipts_lineedit.text()))
+            if str(self.ui.ipts_lineedit.text()).strip() != "":
+                self.ipts_selection_changed()
+            else:
+                self.ipts_text_changed(str(self.ui.ipts_lineedit.text()))
         else:
             self.ui.error_message.setVisible(False)
 
