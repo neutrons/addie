@@ -426,7 +426,7 @@ class AddieDriver(object):
 
         """
         # check
-        assert isinstance(gr_file_name, str) and len(gr_file_name) > 0
+        assert len(gr_file_name) > 0
 
         # load
         gr_ws_name = os.path.basename(gr_file_name).split('.')[0]
