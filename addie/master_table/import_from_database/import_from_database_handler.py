@@ -169,64 +169,6 @@ class ImportFromDatabaseWindow(QMainWindow):
             else:
                 return offset+row
 
-
-    # def _add_row(self, row=-1):
-    #     """this add a row to the filter table (top table)"""
-    #     _random_key = generate_random_key()
-    #
-    #     _list_ui_for_this_row = {}
-    #
-    #     self.ui.tableWidget.insertRow(row)
-    #     self.ui.tableWidget.setRowHeight(row, self.row_height)
-    #
-    #     # key
-    #     _item = QTableWidgetItem("{}".format(_random_key))
-    #     self.ui.tableWidget.setItem(row, 0, _item)
-    #
-    #     # rule #
-    #     _rule_name = self.define_unique_rule_name(row)
-    #     _item = QTableWidgetItem("{}".format(_rule_name))
-    #     self.ui.tableWidget.setItem(row, 1, _item)
-    #
-    #     # search argument
-    #     _widget = QComboBox()
-    #     _list_ui_for_this_row['list_items'] = _widget
-    #     list_items = LIST_SEARCH_CRITERIA[self.parent.instrument['short_name'].lower()]
-    #     _widget.addItems(list_items)
-    #     self.ui.tableWidget.setCellWidget(row, 2, _widget)
-    #     QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-    #                            lambda value=list_items[0],
-    #                            key = _random_key:
-    #                            self.list_criteria_changed(value, key))
-    #
-    #     # criteria
-    #     list_criteria = ['is', 'contains']
-    #     _widget = QComboBox()
-    #     _list_ui_for_this_row['list_criteria'] = _widget
-    #     _widget.addItems(list_criteria)
-    #     self.ui.tableWidget.setCellWidget(row, 3, _widget)
-    #
-    #     # argument
-    #     _widget = QComboBox()
-    #     _widget.setEditable(True)
-    #     list_values = list(self.metadata['chemical_formula'])
-    #     _widget.addItems(list_values)
-    #     self.ui.tableWidget.setCellWidget(row, 4, _widget)
-    #     QtCore.QObject.connect(_widget, QtCore.SIGNAL("editTextChanged(QString)"),
-    #                            lambda value=list_values[0],
-    #                                   key = _random_key:
-    #                            self.list_argument_changed(value, key))
-    #     QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-    #                            lambda value=list_values[0],
-    #                                   key = _random_key:
-    #                            self.list_argument_index_changed(value, key))
-    #
-    #     if row == 0:
-    #         self.ui.tableWidget.horizontalHeader().setVisible(True)
-    #
-    #     self.list_ui[_random_key] = _list_ui_for_this_row
-    #     self.check_all_filter_widgets()
-
     def refresh_global_rule(self, full_reset=False, new_row=-1):
         if full_reset:
             list_rule_number = []
@@ -274,36 +216,6 @@ class ImportFromDatabaseWindow(QMainWindow):
             self.ui.remove_criteria_button.setEnabled(True)
         else:
             self.ui.remove_criteria_button.setEnabled(False)
-
-    # def isolate_metadata(self):
-    #     '''retrieve the metadata of interest from the json returns by ONCat'''
-    #
-    #     # def _format_proton_charge(raw_proton_charge):
-    #     #     _proton_charge = raw_proton_charge/1e12
-    #     #     return "{:.3}".format(_proton_charge)
-    #
-    #     nexus_json = self.nexus_json
-    #     metadata = {}
-    #
-    #     list_chemical_formula = []
-    #     list_mass_density = []
-    #     list_proton_charge = []
-    #     list_device_name = []
-    #
-    #     for _json in nexus_json:
-    #         list_chemical_formula.append(str(_json['metadata']['entry']['sample']['chemical_formula']))
-    #         list_mass_density.append(str(_json['metadata']['entry']['sample']['mass_density']))
-    #         # _proton_charge = _format_proton_charge(_json['metadata']['entry']['proton_charge'])
-    #         _proton_charge = _json['metadata']['entry']['proton_charge']
-    #         list_proton_charge.append(str(_proton_charge))
-    #         list_device_name.append(str(_json['metadata']['entry']['daslogs']['bl1b:se:sampletemp']['device_name']))
-    #
-    #     metadata['Chemical Formula'] = set(list_chemical_formula)
-    #     metadata['mass_densi'] = set(list_mass_density)
-    #     metadata['proton_charge'] = set(list_proton_charge)
-    #     metadata['device_name'] = str(list_device_name)
-    #
-    #     self.metadata = metadata
 
     def files_not_found_more_clicked(self):
         list_of_runs_not_found = self.list_of_runs_not_found
@@ -411,9 +323,11 @@ class ImportFromDatabaseWindow(QMainWindow):
             ipts_widgets_status = True
             run_widgets_status = False
             if str(self.ui.ipts_lineedit.text()).strip() != "":
-                self.ipts_selection_changed()
+#                self.ipts_selection_changed()
+                self.ipts_text_return_pressed()
             else:
-                self.ipts_text_changed(str(self.ui.ipts_lineedit.text()))
+                self.ipts_selection_changed()
+                #self.ipts_text_changed(str(self.ui.ipts_lineedit.text()))
         else:
             self.ui.error_message.setVisible(False)
             self.run_number_return_pressed()
