@@ -260,6 +260,10 @@ class ImportFromDatabaseWindow(QMainWindow):
         QtGui.QApplication.processEvents()
 
     def refresh_filter_page(self):
+
+        QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+        QtGui.QApplication.processEvents()
+
         if self.ui.import_button.isEnabled():
             o_import = ImportTableFromOncat(parent=self)
             o_import.from_oncat_config(insert_in_table=False)
@@ -273,6 +277,9 @@ class ImportFromDatabaseWindow(QMainWindow):
         GuiHandler.filter_widget_status(self.ui, enabled_widgets=enabled_widgets)
         self.refresh_filter_table(nexus_json=copy.deepcopy(nexus_json))
         self.update_rule_filter()
+
+        QApplication.restoreOverrideCursor()
+        QtGui.QApplication.processEvents()
 
     def refresh_preview_table(self, nexus_json=[]):
         """this function will use the template returned by ONCat during the initialization of this

@@ -134,6 +134,7 @@ class GlobalRuleWindow(QDialog):
         _widget = QComboBox()
         _widget.blockSignals(True)
         list_of_widgets_to_unlock.append(_widget)
+        _widget.setEnabled(False)
         QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
                                lambda value=list_options[0]:
                                self.combobox_changed(value))
@@ -149,7 +150,28 @@ class GlobalRuleWindow(QDialog):
         for _ui in list_ui:
             _ui.blockSignals(False)
 
+    def check_status_of_inner_rule(self):
+        """the inner rule ['and', 'or'] does not need to be enabled when there is only 1 (or zero)
+        rule checked in the same row"""
+        nbr_row = self.ui.tableWidget.rowCount()
+        nbr_total_columns = self.ui.tableWidget.columnCount()
+        nbr_rules = nbr_total_columns - 3
+
+        for _row in np.arange(nbr_row):
+            enabled_inner_rule_combobox = False
+            if nbr_rules > 1:
+                nbr_rules_checked = 0
+                for _rule_index in np.arange(nbr_rules):
+                    checkbox_ui = self.ui.tableWidget.cellWidget(_row, _rule_index + 2).children()[1]
+                    is_checkbox_checked = checkbox_ui.isChecked()
+                    if is_checkbox_checked:
+                        nbr_rules_checked += 1
+                if nbr_rules_checked > 1:
+                    enabled_inner_rule_combobox = True
+            self.ui.tableWidget.cellWidget(_row, nbr_total_columns-1).setEnabled(enabled_inner_rule_combobox)
+
     def checkbox_changed(self, value):
+        self.check_status_of_inner_rule()
         self.refresh_global_rule()
 
     def combobox_changed(self, value):
