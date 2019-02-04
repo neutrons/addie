@@ -56,6 +56,7 @@ class TableWidgetRuleHandler:
         # rule #
         _rule_name = self.define_unique_rule_name(row)
         _item = QTableWidgetItem("{}".format(_rule_name))
+        _item.setFlags(QtCore.Qt.ItemIsEnabled)
         self.table_ui.setItem(row, 1, _item)
 
         # search argument

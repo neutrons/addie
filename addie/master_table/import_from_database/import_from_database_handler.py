@@ -53,7 +53,7 @@ class ImportFromDatabaseHandler:
 
 class ImportFromDatabaseWindow(QMainWindow):
 
-    filter_column_widths = [15, 50, 200, 100, 300]
+    filter_column_widths = [25, 50, 200, 100, 300]
     row_height = 40
 
     button_height = 30
@@ -76,7 +76,12 @@ class ImportFromDatabaseWindow(QMainWindow):
 
     oncat_template = {}
 
-    global_rule_dict = {}
+    global_rule_dict = {}  # will look like  {'0': {'name': 'group 0',
+    #                                               'list_rules': ['#0'],
+    #                                               'inner_rule': 'and',
+    #                                               'outer_rule': 'and'},
+    #                                         }
+
 
     def __init__(self, parent=None):
         self.parent = parent
@@ -313,7 +318,8 @@ class ImportFromDatabaseWindow(QMainWindow):
 
     def update_global_rule(self, row=-1, is_removed=False, is_added=False):
         """when user adds or removes a rule (criteria), we need to update the global rule dictionary"""
-        print("updating global rule: row:{}, is_removed:{} is_added:{}".format(row, is_removed, is_added))
+        o_rule_handler = ApplyRuleHandler(parent=self)
+        o_rule_handler.change_rule(row=row, is_removed=is_removed, is_added=is_added)
 
     # EVENT HANDLER CREATED DURING RUN TIME ----------------------------
 
