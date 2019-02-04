@@ -90,6 +90,7 @@ class GlobalRuleWindow(QDialog):
         _column = 0
         _group_name = self.define_unique_group_name(row)
         _item = QTableWidgetItem(_group_name)
+        _item.setFlags(QtCore.Qt.ItemIsEnabled)
         self.ui.tableWidget.setItem(row, _column, _item)
 
         # group to group rule

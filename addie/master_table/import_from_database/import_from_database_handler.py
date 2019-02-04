@@ -320,7 +320,9 @@ class ImportFromDatabaseWindow(QMainWindow):
         """when user adds or removes a rule (criteria), we need to update the global rule dictionary"""
         o_rule_handler = ApplyRuleHandler(parent=self)
         o_rule_handler.change_rule(row=row, is_removed=is_removed, is_added=is_added)
-        print(self.global_rule_dict)
+        import pprint
+        pprint.pprint(self.global_rule_dict)
+        print()
 
     # EVENT HANDLER CREATED DURING RUN TIME ----------------------------
 
