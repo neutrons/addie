@@ -76,13 +76,18 @@ class GlobalRuleWindow(QDialog):
                 if _rule in list_of_rules_for_this_group:
                     self.ui.tableWidget.cellWidget(_row, _col_index+2).children()[1].setChecked(True)
 
-            # if _row > 0:
-            #     outer_rule = global_rule_dict[_key]['outer_rule']
-            #     _outer_index = self.ui.tableWidget.cellWidget(_row, nbr_columns-1).findText(outer_rule)
-            #     self.ui.tableWidget.cellWidget(_row, nbr_columns-1).blockSignals(True)
-            #     self.ui.tableWidget.cellWidget(_row, nbr_columns-1).setCurrentIndex(_outer_index)
-            #     self.ui.tableWidget.cellWidget(_row, nbr_columns-1).blockSignals(False)
-            #
+            if _row > 0:
+                outer_rule = global_rule_dict[_key]['outer_rule']
+
+                print("debugging")
+                print(self.ui.tableWidget.cellWidget(_row, nbr_columns-1))
+
+
+                _outer_index = self.ui.tableWidget.cellWidget(_row, nbr_columns-1).findText(outer_rule)
+                self.ui.tableWidget.cellWidget(_row, nbr_columns-1).blockSignals(True)
+                self.ui.tableWidget.cellWidget(_row, nbr_columns-1).setCurrentIndex(_outer_index)
+                self.ui.tableWidget.cellWidget(_row, nbr_columns-1).blockSignals(False)
+
             # inner_rule = global_rule_dict[_key]['inner_rule']
             # _index_inner = self.ui.tableWidget.cellWidget(_row, 1).findText(inner_rule)
             # self.ui.tableWidget.cellWidget(_row, 1).blockSignals(True)
