@@ -311,6 +311,10 @@ class ImportFromDatabaseWindow(QMainWindow):
         o_rule = ApplyRuleHandler(parent=self)
         o_rule.apply_global_rule()
 
+    def update_global_rule(row=-1, is_removed=False, is_added=False):
+        """when user adds or removes a rule (criteria), we need to update the global rule dictionary"""
+        pass
+
     # EVENT HANDLER CREATED DURING RUN TIME ----------------------------
 
     def list_argument_changed(self, value, key):
@@ -386,6 +390,7 @@ class ImportFromDatabaseWindow(QMainWindow):
         row = _select[0].topRow()
         _randome_key = str(self.ui.tableWidget.item(row, 0).text())
         self.list_ui.pop(_randome_key, None)
+        self.update_global_rule(row=row, is_removed=True)
         self.ui.tableWidget.removeRow(row)
         self.check_all_filter_widgets()
         self.refresh_global_rule(full_reset=True)
@@ -398,6 +403,7 @@ class ImportFromDatabaseWindow(QMainWindow):
         self.check_rule_widgets()
         self.refresh_global_rule(new_row=nbr_row)
         self.update_rule_filter()
+        self.update_global_rule(row=nbr_row, is_added=True)
 
     def ipts_selection_changed(self, ipts_selected=""):
         self.ui.ipts_lineedit.setText("")
