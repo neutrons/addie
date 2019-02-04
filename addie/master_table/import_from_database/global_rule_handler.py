@@ -256,8 +256,62 @@ class GlobalRuleWindow(QDialog):
         self.check_widgets()
         self.refresh_global_rule()
 
+    def save_global_rule_dict(self):
+        nbr_row = self.ui.tableWidget.rowCount()
+        total_nbr_columns = self.ui.tableWidget.columnCount()
+        nbr_rules = total_nbr_columns - 3
+        list_of_rule_names = self.list_of_rule_names
+
+        global_rule_dict = {}
+        for _row in np.arange(nbr_row):
+            _row_rule_dict = {}
+
+            rule_name = str(self.ui.tableWidget.item(_row, 0).text())
+
+            if _row == 0:
+                outer_rule = None
+            else:
+                outer_rule = str(self.ui.tableWidget.cellWidget(_row, 1).currentText())
+
+            if self.ui.tableWidget.cellWidget(_row, total_nbr_columns-1).isEnabled():
+                inner_rule = str(self.ui.tableWidget.cellWidget(_row, total_nbr_columns-1).currentText())
+            else:
+                inner_rule = None
+
+            list_rules_checked = []
+            for _rule_index in np.arange(nbr_rules):
+                _is_checked = self.ui.tableWidget.cellWidget(_row, _rule_index+2).children()[1].isChecked()
+
+                if _is_checked:
+                    _name = list_of_rule_names[_rule_index]
+                    list_rules_checked.append(_name)
+
+            _row_rule_dict['name'] = rule_name
+            _row_rule_dict['list_rules'] = list_rules_checked
+            _row_rule_dict['inner_rule'] = inner_rule
+            _row_rule_dict['outer_rule'] = outer_rule
+
+            global_rule_dict[_row] = _row_rule_dict
+
+        self.parent.global_rule_dict = global_rule_dict
+
     def accept(self):
+        # copy global rule into import_from_database ui
         global_rule = str(self.ui.rule_result.text())
         self.parent.ui.global_rule_lineedit.setText(global_rule)
+        # save global rule dict
+        self.save_global_rule_dict()
         self.close()
+
+
+
+
+
+
+
+
+
+
+
+
 

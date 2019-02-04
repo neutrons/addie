@@ -4,4 +4,4 @@ class ApplyRuleHandler:
         self.parent = parent
 
     def apply_global_rule(self):
-        print("apply global_rule")
+        print(self.parent.global_rule_dict)

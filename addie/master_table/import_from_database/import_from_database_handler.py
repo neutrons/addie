@@ -76,6 +76,8 @@ class ImportFromDatabaseWindow(QMainWindow):
 
     oncat_template = {}
 
+    global_rule_dict = {}
+
     def __init__(self, parent=None):
         self.parent = parent
 
