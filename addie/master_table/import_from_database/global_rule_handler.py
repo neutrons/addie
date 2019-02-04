@@ -233,7 +233,7 @@ class GlobalRuleWindow(QDialog):
             _widget = self.ui.tableWidget.cellWidget(row, global_offset_up_to_rule_name+_index_rule).children()[1]
             if _widget.checkState() == QtCore.Qt.Checked:
                 rule_name= str(self.ui.tableWidget.horizontalHeaderItem(global_offset_up_to_rule_name+_index_rule).text())
-                list_of_rules_checked.append(" #{} ".format(rule_name))
+                list_of_rules_checked.append(" #{}".format(rule_name))
 
         return list_of_rules_checked
 
@@ -249,14 +249,14 @@ class GlobalRuleWindow(QDialog):
                 between_group_relation = self._retrieve_group_relation(row=_row, group_type='outer')
 
             # inner group relation
-            inner_group_relation = self._retrieve_group_relation(row=_row)
+            inner_group_relation = " " + self._retrieve_group_relation(row=_row)
 
             # retrieve rule that are checked
             list_of_rules_checked = self._retrieve_rules_checked(row=_row)
 
             if list_of_rules_checked:
                 if len(list_of_rules_checked) > 1:
-                    group_string = "(" + inner_group_relation.join(list_of_rules_checked) + ")"
+                    group_string = "( " + inner_group_relation.join(list_of_rules_checked) + " )"
                 else:
                     group_string = list_of_rules_checked[0]
             else:
@@ -302,10 +302,7 @@ class GlobalRuleWindow(QDialog):
             else:
                 outer_rule = str(self.ui.tableWidget.cellWidget(_row, 1).currentText())
 
-            if self.ui.tableWidget.cellWidget(_row, total_nbr_columns-1).isEnabled():
-                inner_rule = str(self.ui.tableWidget.cellWidget(_row, total_nbr_columns-1).currentText())
-            else:
-                inner_rule = None
+            inner_rule = str(self.ui.tableWidget.cellWidget(_row, total_nbr_columns-1).currentText())
 
             list_rules_checked = []
             for _rule_index in np.arange(nbr_rules):
