@@ -266,7 +266,7 @@ class GlobalRuleWindow(QDialog):
         for _row in np.arange(nbr_row):
             _row_rule_dict = {}
 
-            rule_name = str(self.ui.tableWidget.item(_row, 0).text())
+            group_name = str(self.ui.tableWidget.item(_row, 0).text())
 
             if _row == 0:
                 outer_rule = None
@@ -286,7 +286,7 @@ class GlobalRuleWindow(QDialog):
                     _name = list_of_rule_names[_rule_index]
                     list_rules_checked.append(_name)
 
-            _row_rule_dict['name'] = rule_name
+            _row_rule_dict['name'] = group_name
             _row_rule_dict['list_rules'] = list_rules_checked
             _row_rule_dict['inner_rule'] = inner_rule
             _row_rule_dict['outer_rule'] = outer_rule
