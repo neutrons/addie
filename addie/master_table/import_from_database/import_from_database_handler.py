@@ -240,6 +240,9 @@ class ImportFromDatabaseWindow(QMainWindow):
         """using either the IPTS number selected or the runs defined, this will use the ONCat template to
         retrieve all the information from the template and populate the preview table """
 
+        QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+        QtGui.QApplication.processEvents()
+
         #if self.ui.import_button.isEnabled():
         o_import = ImportTableFromOncat(parent=self)
         o_import.from_oncat_template()
@@ -252,6 +255,9 @@ class ImportFromDatabaseWindow(QMainWindow):
 
         GuiHandler.preview_widget_status(self.ui, enabled_widgets=enabled_widgets)
         self.refresh_preview_table(nexus_json=copy.deepcopy(nexus_json))
+
+        QApplication.restoreOverrideCursor()
+        QtGui.QApplication.processEvents()
 
     def refresh_filter_page(self):
         if self.ui.import_button.isEnabled():
@@ -321,6 +327,7 @@ class ImportFromDatabaseWindow(QMainWindow):
     def radio_button_changed(self):
 
         QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+        QtGui.QApplication.processEvents()
 
         ipts_widgets_status = False
         run_widgets_status = True
@@ -349,6 +356,7 @@ class ImportFromDatabaseWindow(QMainWindow):
         GuiHandler.check_import_button(self)
 
         QApplication.restoreOverrideCursor()
+        QtGui.QApplication.processEvents()
 
     def clear_ipts(self):
         self.ui.ipts_lineedit.setText("")
