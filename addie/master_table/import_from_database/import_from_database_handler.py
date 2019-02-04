@@ -53,7 +53,7 @@ class ImportFromDatabaseHandler:
 
 class ImportFromDatabaseWindow(QMainWindow):
 
-    filter_column_widths = [25, 50, 200, 100, 300]
+    filter_column_widths = [5, 60, 200, 100, 300]
     row_height = 40
 
     button_height = 30

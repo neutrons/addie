@@ -33,7 +33,21 @@ class ApplyRuleHandler:
 
         else:
             # remove the rule from all the groups
-            pass
+            name_of_rule_to_remove = str(self.parent.ui.tableWidget.item(row, 1).text())
+            self.remove_rule_from_global_rule_dict(name_of_rule_to_remove = name_of_rule_to_remove)
+
+
+    def remove_rule_from_global_rule_dict(self, name_of_rule_to_remove=None):
+        global_rule_dict = self.parent.global_rule_dict
+        for _key in global_rule_dict.keys():
+            _list_of_rule = global_rule_dict[_key]['list_rules']
+            new_list_of_rules = [_rule for _rule in _list_of_rule if _rule != name_of_rule_to_remove]
+            if new_list_of_rules == []:
+                _ = global_rule_dict.pop(_key, None)
+            else:
+                global_rule_dict[_key]['list_rules'] = new_list_of_rules
+
+        self.parent.global_rule_dict = global_rule_dict
 
     def get_name_of_group(self):
         # using the current list of groups, this method returns the first index (str) available to name the new group.
