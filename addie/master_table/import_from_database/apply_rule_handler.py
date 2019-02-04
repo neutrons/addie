@@ -1,3 +1,4 @@
+import collections
 import numpy as np
 
 
@@ -19,7 +20,8 @@ class ApplyRuleHandler:
                 _row_rule_dict['list_rules'] = ['0']
                 _row_rule_dict['inner_rule'] = 'and'
                 _row_rule_dict['outer_rule'] = None
-                self.parent.global_rule_dict = {'0': _row_rule_dict}
+                self.parent.global_rule_dict = collections.OrderedDict()
+                self.parent.global_rule_dict['0'] =_row_rule_dict
             else:
                 # not the first time adding a rule
                 # add a group of just this new rule
@@ -35,7 +37,6 @@ class ApplyRuleHandler:
             # remove the rule from all the groups
             name_of_rule_to_remove = str(self.parent.ui.tableWidget.item(row, 1).text())
             self.remove_rule_from_global_rule_dict(name_of_rule_to_remove = name_of_rule_to_remove)
-
 
     def remove_rule_from_global_rule_dict(self, name_of_rule_to_remove=None):
         global_rule_dict = self.parent.global_rule_dict

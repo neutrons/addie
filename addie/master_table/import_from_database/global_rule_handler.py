@@ -24,7 +24,7 @@ class GlobalRuleHandler:
 
 class GlobalRuleWindow(QDialog):
 
-    list_of_rule_names = []
+    list_of_rule_names = []   # ['0', '1', '2']
 
     def __init__(self, parent=None):
         self.parent = parent
@@ -34,6 +34,7 @@ class GlobalRuleWindow(QDialog):
         self.ui.setupUi(self)
 
         self.init_widgets()
+        self.load_global_rule_dict()
         self.refresh_global_rule()
         self.check_widgets()
 
@@ -55,8 +56,38 @@ class GlobalRuleWindow(QDialog):
             item_title = QTableWidgetItem(_name)
             self.ui.tableWidget.setHorizontalHeaderItem(_col_index+2, item_title)
 
-        for _col_index in np.arange(len(list_of_rule_names)):
-            self.add_row(row=_col_index)
+        # for _col_index in np.arange(len(list_of_rule_names)):
+        #     self.add_row(row=_col_index)
+
+    def load_global_rule_dict(self):
+        """Using the global_rule_dict, populate the interface and check the right rules"""
+        global_rule_dict = self.parent.global_rule_dict
+        list_of_rule_names = self.list_of_rule_names
+        nbr_columns = self.ui.tableWidget.columnCount()
+
+        for _row, _key in enumerate(global_rule_dict.keys()):
+            self.add_row(row=_row)
+
+            name_of_group = _key
+            self.ui.tableWidget.item(_row, 0).setText(name_of_group)
+
+            list_of_rules_for_this_group = global_rule_dict[_key]['list_rules']
+            for _col_index, _rule in enumerate(list_of_rule_names):
+                if _rule in list_of_rules_for_this_group:
+                    self.ui.tableWidget.cellWidget(_row, _col_index+2).children()[1].setChecked(True)
+
+            # if _row > 0:
+            #     outer_rule = global_rule_dict[_key]['outer_rule']
+            #     _outer_index = self.ui.tableWidget.cellWidget(_row, nbr_columns-1).findText(outer_rule)
+            #     self.ui.tableWidget.cellWidget(_row, nbr_columns-1).blockSignals(True)
+            #     self.ui.tableWidget.cellWidget(_row, nbr_columns-1).setCurrentIndex(_outer_index)
+            #     self.ui.tableWidget.cellWidget(_row, nbr_columns-1).blockSignals(False)
+            #
+            # inner_rule = global_rule_dict[_key]['inner_rule']
+            # _index_inner = self.ui.tableWidget.cellWidget(_row, 1).findText(inner_rule)
+            # self.ui.tableWidget.cellWidget(_row, 1).blockSignals(True)
+            # self.ui.tableWidget.cellWidget(_row, 1).setCurrentIndex(_index_inner)
+            # self.ui.tableWidget.cellWidget(_row, 1).blockSignals(False)
 
     def check_widgets(self):
         nbr_row = self.ui.tableWidget.rowCount()
@@ -82,7 +113,7 @@ class GlobalRuleWindow(QDialog):
             else:
                 return "{}".format(offset+row)
 
-    def add_row(self, row=-1):
+    def add_row(self, row=-1, check_new_row=False):
         self.ui.tableWidget.insertRow(row)
         list_of_widgets_to_unlock = []
 
@@ -115,7 +146,7 @@ class GlobalRuleWindow(QDialog):
             _row_layout = QHBoxLayout()
             _widget = QCheckBox()
             _widget.blockSignals(True)
-            if _offset == row:
+            if check_new_row and _offset == row:
                 _widget.setCheckState(QtCore.Qt.Checked)
             list_of_widgets_to_unlock.append(_widget)
             QtCore.QObject.connect(_widget, QtCore.SIGNAL("stateChanged(int)"),
@@ -245,7 +276,7 @@ class GlobalRuleWindow(QDialog):
     def add_group(self):
         self.ui.remove_group_button.setEnabled(True)
         nbr_row = self.ui.tableWidget.rowCount()
-        self.add_row(row=nbr_row)
+        self.add_row(row=nbr_row, check_new_row=True)
 
     def remove_group(self):
         _select = self.ui.tableWidget.selectedRanges()
