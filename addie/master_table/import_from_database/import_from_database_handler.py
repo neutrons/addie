@@ -320,9 +320,13 @@ class ImportFromDatabaseWindow(QMainWindow):
         """when user adds or removes a rule (criteria), we need to update the global rule dictionary"""
         o_rule_handler = ApplyRuleHandler(parent=self)
         o_rule_handler.change_rule(row=row, is_removed=is_removed, is_added=is_added)
-        import pprint
-        pprint.pprint(self.global_rule_dict)
-        print()
+        global_rule_string = o_rule_handler.create_global_rule_string()
+        self.ui.global_rule_lineedit.setText(global_rule_string)
+
+    def create_global_rule_string(self):
+        o_rule_handler = ApplyRuleHandler(parent=self)
+        global_rule_string = o_rule_handler.create_global_rule_string()
+        return global_rule_string
 
     # EVENT HANDLER CREATED DURING RUN TIME ----------------------------
 
@@ -410,9 +414,9 @@ class ImportFromDatabaseWindow(QMainWindow):
         o_table_handler = TableWidgetRuleHandler(parent=self)
         o_table_handler.add_row(row=nbr_row)
         self.check_rule_widgets()
-        self.refresh_global_rule(new_row=nbr_row)
-        self.update_rule_filter()
+        #self.refresh_global_rule(new_row=nbr_row)
         self.update_global_rule(row=nbr_row, is_added=True)
+        self.update_rule_filter()
 
     def ipts_selection_changed(self, ipts_selected=""):
         self.ui.ipts_lineedit.setText("")

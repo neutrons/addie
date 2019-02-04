@@ -61,3 +61,24 @@ class ApplyRuleHandler:
             else:
                 return available_global_rule_index
 
+    def create_global_rule_string(self):
+        global_rule_string = ''
+        global_rule_dict = self.parent.global_rule_dict
+
+        is_first_group = True
+        for _group_index in global_rule_dict.keys():
+            _list_rule = global_rule_dict[_group_index]['list_rules']
+            _str_list_rule = ["#" + _rule for _rule in _list_rule]
+            nbr_rules = len(_list_rule)
+            _inner_rule = " " + global_rule_dict[_group_index]['inner_rule'] +  " "
+            str_list_rule = _inner_rule.join(_str_list_rule)
+            if nbr_rules > 1:
+                str_list_rule = "( " + str_list_rule + " )"
+            if is_first_group:
+                global_rule_string = str_list_rule
+                is_first_group = False
+            else:
+                _outer_rule = global_rule_dict[_group_index]['outer_rule']
+                global_rule_string = " {} {}".format(_outer_rule, global_rule_string)
+
+        return global_rule_string
