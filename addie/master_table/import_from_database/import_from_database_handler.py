@@ -82,6 +82,7 @@ class ImportFromDatabaseWindow(QMainWindow):
     #                                               'outer_rule': 'and'},
     #                                         }
 
+    list_of_rows_with_global_rule = set()  # final list of rows to use to import rows into master table
 
     def __init__(self, parent=None):
         self.parent = parent

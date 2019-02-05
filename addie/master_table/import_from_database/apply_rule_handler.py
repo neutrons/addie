@@ -12,11 +12,11 @@ class ApplyRuleHandler:
     def apply_global_rule(self):
         self.retrieve_list_of_rows_for_each_rule()
         self.apply_inner_rules()
+        self.apply_outer_rules()
 
         import pprint
-        pprint.pprint(self.parent.global_rule_dict)
+        pprint.pprint(self.parent.list_of_rows_with_global_rule)
 
-        # self.apply_outer_rules()
 
     def retrieve_list_of_rows_for_each_rule(self):
         global_rule_dict = self.parent.global_rule_dict
@@ -65,14 +65,24 @@ class ApplyRuleHandler:
     def apply_outer_rules(self):
         global_rule_dict = self.parent.global_rule_dict
 
-        import pprint
-        print("apply outer rules")
-
+        is_first_group = True
+        list_of_rows_with_outer_rule = set()
         for _group_key in global_rule_dict.keys():
             _group = global_rule_dict[_group_key]
 
-            pprint.pprint(_group['list_of_rows'])
+            if is_first_group:
+                list_of_rows_with_outer_rule = _group['inner_list_of_rows']
+                is_first_group = False
+            else:
+                new_list_of_rows = _group['inner_list_of_rows']
 
+                outer_rule = _group['outer_rule']
+                if outer_rule == 'and':
+                    list_of_rows_with_outer_rule = list_of_rows_with_outer_rule & new_list_of_rows
+                else:
+                    list_of_rows_with_outer_rule = list_of_rows_with_outer_rule | new_list_of_rows
+
+        self.parent.list_of_rows_with_global_rule = list_of_rows_with_outer_rule
 
     def get_list_of_rows_matching_rule(self, rule_index=-1):
         """This method will retrieve the rule definition, for example
