@@ -91,8 +91,7 @@ _default_empty_row = {"activate": True,
 
 class LoaderOptionsInterface(QDialog):
 
-    def __init__(self, parent=None, is_parent_main_ui=True, table_to_import=[]):
-        self.table_to_import = table_to_import
+    def __init__(self, parent=None, is_parent_main_ui=True):
 
         if is_parent_main_ui:
             self.parent = parent

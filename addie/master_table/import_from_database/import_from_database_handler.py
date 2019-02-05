@@ -486,6 +486,10 @@ class ImportFromDatabaseWindow(QMainWindow):
         return result_dict
 
     def import_button_clicked(self):
+
+        data_handler = DataToImportHandler(parent=self)
+        table_of_data_to_import = data_handler.get_table_of_data_to_import()
+
         o_dialog = AsciiLoaderOptions(parent=self,
                                       is_parent_main_ui=False)
         o_dialog.show()
@@ -502,7 +506,5 @@ class AsciiLoaderOptions(LoaderOptionsInterface):
 
     def accept(self):
         self.parent.ascii_loader_option = self.get_option_selected()
-
-
 
         #self.close()
