@@ -341,5 +341,5 @@ class Ui_MainWindow(object):
         self.toolBox.setItemText(self.toolBox.indexOf(self.page_2), _translate("MainWindow", "Filters and Rules", None))
         self.pushButton.setText(_translate("MainWindow", "Change User ...", None))
         self.cancel_button.setText(_translate("MainWindow", "Close", None))
-        self.import_button.setText(_translate("MainWindow", "Import", None))
+        self.import_button.setText(_translate("MainWindow", "Import All Runs", None))
 

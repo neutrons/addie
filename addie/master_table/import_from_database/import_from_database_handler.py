@@ -474,7 +474,9 @@ class ImportFromDatabaseWindow(QMainWindow):
     def toolbox_changed(self, index):
         if index == 0:
             self.nexus_json = {}
+            self.ui.import_button.setText("Import All Runs")
         elif index == 1:
+            self.ui.import_button.setText("Import Filtered Runs")
             self.refresh_filter_page()
 
     def build_result_dictionary(self, nexus_json=[]):
