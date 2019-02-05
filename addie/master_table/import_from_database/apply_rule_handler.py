@@ -22,6 +22,9 @@ class ApplyRuleHandler:
                 list_of_rows_matching_rule = self.get_list_of_rows_matching_rule(rule_index=_rule)
                 list_of_rows_for_each_rule[_rule] = list_of_rows_matching_rule
 
+            global_rule_dict[_group_key]['list_of_rows'] = list_of_rows_for_each_rule
+
+        self.parent.global_rule_dict = global_rule_dict
 
     def get_list_of_rows_matching_rule(self, rule_index=-1):
         """This method will retrieve the rule definition, for example
@@ -39,7 +42,7 @@ class ApplyRuleHandler:
         string_to_find = table_handler.get_string_to_look_for(row=row)
 
         result_table_handler = FilterResultTableHandler(table_ui=self.parent.ui.tableWidget_filter_result)
-        column_where_to_look_for = result_table_handler.get_column_of_given_keyword(keyword_name=keyword_name)
+        column_where_to_look_for = result_table_handler.get_column_of_given_keyword(keyword=keyword_name)
 
         list_of_rows = result_table_handler.get_rows_of_matching_string(column_to_look_for=column_where_to_look_for,
                                                                         string_to_find=string_to_find,

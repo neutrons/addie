@@ -242,35 +242,6 @@ class GlobalRuleWindow(QDialog):
         global_rule = self.parent.create_global_rule_string()
         self.ui.rule_result.setText(global_rule)
 
-        # nbr_row = self.ui.tableWidget.rowCount()
-        #
-        # global_rule = ""
-        #
-        # for _row in np.arange(nbr_row):
-        #
-        #     if _row > 0:
-        #         #retrieve between group relation
-        #         between_group_relation = self._retrieve_group_relation(row=_row, group_type='outer')
-        #
-        #     # inner group relation
-        #     inner_group_relation = " " + self._retrieve_group_relation(row=_row)
-        #
-        #     # retrieve rule that are checked
-        #     list_of_rules_checked = self._retrieve_rules_checked(row=_row)
-        #
-        #     if list_of_rules_checked:
-        #         if len(list_of_rules_checked) > 1:
-        #             group_string = "( " + inner_group_relation.join(list_of_rules_checked) + " )"
-        #         else:
-        #             group_string = list_of_rules_checked[0]
-        #     else:
-        #         continue
-        #
-        #     if global_rule == "":
-        #         global_rule = group_string
-        #     else:
-        #         global_rule += " " + between_group_relation + " " + group_string
-
     # Event Handler
     def add_group(self):
         self.ui.remove_group_button.setEnabled(True)
@@ -328,17 +299,5 @@ class GlobalRuleWindow(QDialog):
         self.save_global_rule_dict()
         global_rule_string = self.parent.create_global_rule_string()
         self.parent.ui.global_rule_lineedit.setText(global_rule_string)
+        self.parent.update_rule_filter()
         self.close()
-
-
-
-
-
-
-
-
-
-
-
-
-
