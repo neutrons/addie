@@ -1,4 +1,5 @@
 import copy
+import numpy as np
 
 try:
     from PyQt4.QtGui import QTableWidgetItem
@@ -47,6 +48,18 @@ class GuiHandler:
 
         window_ui.import_button.setEnabled(enable_import)
 
+    @staticmethod
+    def return_first_row_for_this_item_value(table_ui=None, string_to_find="", column_to_look_for=-1):
+        """return the first row found where the item value matches the string passed.
+        If the string can not be found, return -1
+        """
+        nbr_rows = table_ui.rowCount()
+        for _row in np.arange(nbr_rows):
+            item_value = table_ui.item(_row, column_to_look_for).text()
+            if string_to_find == item_value:
+                return _row
+
+        return -1
 
 class ImportFromDatabaseTableHandler:
 

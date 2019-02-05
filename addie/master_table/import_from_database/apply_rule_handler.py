@@ -1,6 +1,8 @@
 import collections
 import numpy as np
 
+from addie.master_table.import_from_database.gui_handler import GuiHandler
+
 
 class ApplyRuleHandler:
 
@@ -8,8 +10,40 @@ class ApplyRuleHandler:
         self.parent = parent
 
     def apply_global_rule(self):
-        pass
-        #print(self.parent.global_rule_dict)
+        global_rule_dict = self.parent.global_rule_dict
+
+        for _group_key in global_rule_dict.keys():
+            _group = global_rule_dict[_group_key]
+            list_of_rules_for_this_group = _group['list_rules']
+
+            list_of_rows_for_each_rule = {}  #  {'0': [0,1,2,3,4], '1':[2,3,4,5] ...}
+
+            for _rule in list_of_rules_for_this_group:
+                list_of_rows_matching_rule = self.get_list_of_rows_matching_rule(rule_index=_rule)
+                list_of_rows_for_each_rule[_rule] = list_of_rows_matching_rule
+
+
+    def get_list_of_rows_matching_rule(self, rule_index=-1):
+        """This method will retrieve the rule definition, for example
+                item: sample formula
+                logic: is
+                text: Si
+            meaning that the Sample formula must be Si to accept this row
+        """
+        row = GuiHandler.return_first_row_for_this_item_value(table_ui=self.parent.ui.tableWidget,
+                                                              string_to_find=str(rule_index),
+                                                              column_to_look_for=1)
+
+
+        print("for rule index {}, row is {}".format(rule_index, row))
+
+
+        return []
+
+
+
+
+
 
     def change_rule(self, is_added=False, is_removed=False, row=-1):
         """when user adds or removes a rule (criteria), we need to update the global rule dictionary"""

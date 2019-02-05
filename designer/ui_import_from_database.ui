@@ -18,7 +18,7 @@
     <item>
      <widget class="QToolBox" name="toolBox">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page">
        <property name="geometry">
@@ -873,8 +873,8 @@
    <slot>add_criteria_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>882</x>
-     <y>358</y>
+     <x>405</x>
+     <y>371</y>
     </hint>
     <hint type="destinationlabel">
      <x>458</x>
