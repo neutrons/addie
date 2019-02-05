@@ -1,7 +1,7 @@
 import collections
 import numpy as np
 
-from addie.master_table.import_from_database.gui_handler import GuiHandler
+from addie.master_table.import_from_database.gui_handler import FilterTableHandler
 
 
 class ApplyRuleHandler:
@@ -30,12 +30,14 @@ class ApplyRuleHandler:
                 text: Si
             meaning that the Sample formula must be Si to accept this row
         """
-        row = GuiHandler.return_first_row_for_this_item_value(table_ui=self.parent.ui.tableWidget,
-                                                              string_to_find=str(rule_index),
-                                                              column_to_look_for=1)
+        table_handler = FilterTableHandler(table_ui=self.parent.ui.tableWidget)
+        row = table_handler.return_first_row_for_this_item_value(string_to_find=str(rule_index),
+                                                               column_to_look_for=1)
 
+        keyword_name = table_handler.get_keyword_name(row=row)
+        criteria = table_handler.get_criteria(row=row)
+        string_to_find = table_handler.get_string_to_look_for(row=row)
 
-        print("for rule index {}, row is {}".format(rule_index, row))
 
 
         return []

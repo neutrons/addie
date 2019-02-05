@@ -14,6 +14,41 @@ except:
 from addie.utilities.gui_handler import TableHandler
 from addie.utilities.general import json_extractor
 
+
+class FilterTableHandler:
+    """Class to work with the table filter"""
+
+    def __init__(self, table_ui=None):
+        self.table_ui = table_ui
+
+    def return_first_row_for_this_item_value(self, string_to_find="", column_to_look_for=-1):
+        """return the first row found where the item value matches the string passed.
+        If the string can not be found, return -1
+        """
+        nbr_rows = self.table_ui.rowCount()
+        for _row in np.arange(nbr_rows):
+            item_value = self.table_ui.item(_row, column_to_look_for).text()
+            if string_to_find == item_value:
+                return _row
+        return -1
+
+    def get_combobox_value(self, row=-1, column=-1):
+        combobox = self.table_ui.cellWidget(row, column)
+        return combobox.currentText()
+
+    def get_keyword_name(self, row=-1):
+        """this method returns the value of the keyword selected for the given row"""
+        return self.get_combobox_value(row=row, column=2)
+
+    def get_criteria(self, row=-1):
+        """this method returns the value of the criteria (is or contains) selected for the given row"""
+        return self.get_combobox_value(row=row, column=3)
+
+    def get_string_to_look_for(self, row=-1):
+        """this method returns the value of the string to look for in all the metadata for the given keyword"""
+        return self.get_combobox_value(row=row, column=4)
+
+
 class GuiHandler:
 
     @staticmethod
@@ -48,18 +83,6 @@ class GuiHandler:
 
         window_ui.import_button.setEnabled(enable_import)
 
-    @staticmethod
-    def return_first_row_for_this_item_value(table_ui=None, string_to_find="", column_to_look_for=-1):
-        """return the first row found where the item value matches the string passed.
-        If the string can not be found, return -1
-        """
-        nbr_rows = table_ui.rowCount()
-        for _row in np.arange(nbr_rows):
-            item_value = table_ui.item(_row, column_to_look_for).text()
-            if string_to_find == item_value:
-                return _row
-
-        return -1
 
 class ImportFromDatabaseTableHandler:
 
