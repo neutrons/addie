@@ -27,14 +27,14 @@ class FilterTableHandler:
         """
         nbr_rows = self.table_ui.rowCount()
         for _row in np.arange(nbr_rows):
-            item_value = self.table_ui.item(_row, column_to_look_for).text()
+            item_value = str(self.table_ui.item(_row, column_to_look_for).text())
             if string_to_find == item_value:
                 return _row
         return -1
 
     def get_combobox_value(self, row=-1, column=-1):
         combobox = self.table_ui.cellWidget(row, column)
-        return combobox.currentText()
+        return str(combobox.currentText())
 
     def get_keyword_name(self, row=-1):
         """this method returns the value of the keyword selected for the given row"""
@@ -47,6 +47,36 @@ class FilterTableHandler:
     def get_string_to_look_for(self, row=-1):
         """this method returns the value of the string to look for in all the metadata for the given keyword"""
         return self.get_combobox_value(row=row, column=4)
+
+
+class FilterResultTableHandler:
+    """class to work with the table listing the rows that match the rules"""
+
+    def __init__(self, table_ui=None):
+        self.table_ui = table_ui
+
+    def get_column_of_given_keyword(self, keyword=''):
+        """looking through all the columns headers to find the one that match the keyword argument. If it
+        does, return the column index. If this keyword can not be found, return -1"""
+        nbr_columns = self.table_ui.columnCount()
+        for _col in np.arange(nbr_columns):
+            column_header = str(self.table_ui.horizontalHeaderItem(_col).text())
+            if column_header == keyword:
+                return _col
+        return -1
+
+    def get_rows_of_matching_string(self, column_to_look_for=-1, string_to_find='', criteria='is'):
+        nbr_row = self.table_ui.rowCount()
+        list_matching_rows = []
+        for _row in np.arange(nbr_row):
+            string_at_this_row = str(self.table_ui.item(_row, column_to_look_for).text())
+            if criteria == 'is':
+                if string_at_this_row == string_to_find:
+                    list_matching_rows.append(_row)
+            elif criteria == 'contains':
+                if string_to_find in string_at_this_row:
+                    list_matching_rows.append(_row)
+        return list_matching_rows
 
 
 class GuiHandler:

@@ -1,7 +1,7 @@
 import collections
 import numpy as np
 
-from addie.master_table.import_from_database.gui_handler import FilterTableHandler
+from addie.master_table.import_from_database.gui_handler import FilterTableHandler, FilterResultTableHandler
 
 
 class ApplyRuleHandler:
@@ -38,14 +38,14 @@ class ApplyRuleHandler:
         criteria = table_handler.get_criteria(row=row)
         string_to_find = table_handler.get_string_to_look_for(row=row)
 
+        result_table_handler = FilterResultTableHandler(table_ui=self.parent.ui.tableWidget_filter_result)
+        column_where_to_look_for = result_table_handler.get_column_of_given_keyword(keyword_name=keyword_name)
 
+        list_of_rows = result_table_handler.get_rows_of_matching_string(column_to_look_for=column_where_to_look_for,
+                                                                        string_to_find=string_to_find,
+                                                                        criteria=criteria)
 
-        return []
-
-
-
-
-
+        return list_of_rows
 
     def change_rule(self, is_added=False, is_removed=False, row=-1):
         """when user adds or removes a rule (criteria), we need to update the global rule dictionary"""
