@@ -21,7 +21,7 @@ from addie.utilities.oncat import pyoncatGetIptsList, pyoncatGetNexus, \
 from addie.master_table.tree_definition import LIST_SEARCH_CRITERIA
 from addie.master_table.periodic_table.material_handler import MaterialHandler
 from addie.master_table.table_row_handler import TableRowHandler
-from addie.master_table.master_table_loader import AsciiLoaderOptionsInterface
+from addie.master_table.master_table_loader import LoaderOptionsInterface
 from addie.master_table.import_from_database.global_rule_handler import GlobalRuleHandler
 from addie.master_table.import_from_database.table_search_engine import TableSearchEngine
 from addie.master_table.import_from_database.oncat_template_retriever import OncatTemplateRetriever
@@ -393,10 +393,6 @@ class ImportFromDatabaseWindow(QMainWindow):
         self.ui.run_number_lineedit.setText("")
         self.refresh_preview_table_of_runs()
 
-    def import_button_clicked(self):
-        o_dialog = AsciiLoaderOptions(parent=self.parent)
-        o_dialog.show()
-
     def remove_criteria_clicked(self):
         _select = self.ui.tableWidget.selectedRanges()
         if not _select:
@@ -489,6 +485,11 @@ class ImportFromDatabaseWindow(QMainWindow):
                                                            }
         return result_dict
 
+    def import_button_clicked(self):
+        o_dialog = AsciiLoaderOptions(parent=self,
+                                      is_parent_main_ui=False)
+        o_dialog.show()
+
     def cancel_button_clicked(self):
         self.close()
 
@@ -497,8 +498,11 @@ class ImportFromDatabaseWindow(QMainWindow):
         self.parent.import_from_database_ui_position = self.pos()
 
 
-class AsciiLoaderOptions(AsciiLoaderOptionsInterface):
+class AsciiLoaderOptions(LoaderOptionsInterface):
 
     def accept(self):
-        pass
+        self.parent.ascii_loader_option = self.get_option_selected()
+
+
+
         #self.close()

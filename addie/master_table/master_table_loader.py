@@ -89,20 +89,22 @@ _default_empty_row = {"activate": True,
 #
 # _dictionary_test[1] = copy.deepcopy(_default_empty_row)
 
+class LoaderOptionsInterface(QDialog):
 
-class AsciiLoaderOptionsInterface(QDialog):
+    def __init__(self, parent=None, is_parent_main_ui=True, table_to_import=[]):
+        self.table_to_import = table_to_import
 
-    def __init__(self, parent=None, filename=''):
-        self.parent = parent
-        self.filename = filename
+        if is_parent_main_ui:
+            self.parent = parent
+        else:
+            self.parent = parent.parent
+
         QDialog.__init__(self, parent=parent)
         self.ui = UiDialog()
         self.ui.setupUi(self)
         self.init_widgets()
 
-        short_filename = os.path.basename(filename)
-        self.setWindowTitle("Options to load {}".format(short_filename))
-
+        self.setWindowTitle("Options to load list of runs selected")
         self.parent.ascii_loader_option = None
 
     def init_widgets(self):
@@ -122,6 +124,23 @@ class AsciiLoaderOptionsInterface(QDialog):
         option_selected = self.get_option_selected()
         image = ":/preview/load_csv_case{}.png".format(option_selected)
         self.ui.preview_label.setPixmap(QtGui.QPixmap(image))
+
+
+class AsciiLoaderOptionsInterface(LoaderOptionsInterface):
+
+    def __init__(self, parent=None, filename=''):
+        self.filename = filename
+        self.parent = parent
+
+        QDialog.__init__(self, parent=parent)
+        self.ui = UiDialog()
+        self.ui.setupUi(self)
+        self.init_widgets()
+
+        short_filename = os.path.basename(filename)
+        self.setWindowTitle("Options to load {}".format(short_filename))
+
+        self.parent.ascii_loader_option = None
 
 
 class AsciiLoaderOptions(AsciiLoaderOptionsInterface):
@@ -288,7 +307,7 @@ class AsciiLoader:
         list_titles = o_table['title']
 
         o_format = FormatAsciiList(list1=list_runs,
-                                   list2=list_titleS)
+                                   list2=list_titles)
         # option 1
         # keep raw title and merge lines with exact same title
         if options == 1:
