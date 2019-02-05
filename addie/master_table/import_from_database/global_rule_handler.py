@@ -285,7 +285,7 @@ class GlobalRuleWindow(QDialog):
                     _name = list_of_rule_names[_rule_index]
                     list_rules_checked.append(_name)
 
-            _row_rule_dict['name'] = group_name
+            _row_rule_dict['group_name'] = group_name
             _row_rule_dict['list_rules'] = list_rules_checked
             _row_rule_dict['inner_rule'] = inner_rule
             _row_rule_dict['outer_rule'] = outer_rule

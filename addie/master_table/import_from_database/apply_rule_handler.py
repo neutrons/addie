@@ -10,13 +10,22 @@ class ApplyRuleHandler:
         self.parent = parent
 
     def apply_global_rule(self):
+        self.retrieve_list_of_rows_for_each_rule()
+        self.apply_inner_rules()
+
+        import pprint
+        pprint.pprint(self.parent.global_rule_dict)
+
+        # self.apply_outer_rules()
+
+    def retrieve_list_of_rows_for_each_rule(self):
         global_rule_dict = self.parent.global_rule_dict
 
         for _group_key in global_rule_dict.keys():
             _group = global_rule_dict[_group_key]
             list_of_rules_for_this_group = _group['list_rules']
 
-            list_of_rows_for_each_rule = {}  #  {'0': [0,1,2,3,4], '1':[2,3,4,5] ...}
+            list_of_rows_for_each_rule = {}  # {'0': [0,1,2,3,4], '1':[2,3,4,5] ...}
 
             for _rule in list_of_rules_for_this_group:
                 list_of_rows_matching_rule = self.get_list_of_rows_matching_rule(rule_index=_rule)
@@ -25,6 +34,45 @@ class ApplyRuleHandler:
             global_rule_dict[_group_key]['list_of_rows'] = list_of_rows_for_each_rule
 
         self.parent.global_rule_dict = global_rule_dict
+
+    def apply_inner_rules(self):
+        """within each group, check the inner rule (and, or) and save the corresponding list of rows that
+        follow that rule"""
+        global_rule_dict = self.parent.global_rule_dict
+
+        for _group_key in global_rule_dict.keys():
+            _group = global_rule_dict[_group_key]
+
+            inner_rule = _group['inner_rule']
+
+            is_first_list_of_rows = True
+            for _rule_key in _group['list_of_rows'].keys():
+                if is_first_list_of_rows:
+                    list_of_rows_with_inner_rule = set(_group['list_of_rows'][_rule_key])
+                    is_first_list_of_rows = False
+                else:
+                    new_list_of_rows = set(_group['list_of_rows'][_rule_key])
+
+                    if inner_rule == 'and':
+                        list_of_rows_with_inner_rule = list_of_rows_with_inner_rule & new_list_of_rows
+                    else:
+                        list_of_rows_with_inner_rule = list_of_rows_with_inner_rule | new_list_of_rows
+
+            global_rule_dict[_group_key]['inner_list_of_rows'] = list_of_rows_with_inner_rule
+
+        self.parent.global_rule_dict = global_rule_dict
+
+    def apply_outer_rules(self):
+        global_rule_dict = self.parent.global_rule_dict
+
+        import pprint
+        print("apply outer rules")
+
+        for _group_key in global_rule_dict.keys():
+            _group = global_rule_dict[_group_key]
+
+            pprint.pprint(_group['list_of_rows'])
+
 
     def get_list_of_rows_matching_rule(self, rule_index=-1):
         """This method will retrieve the rule definition, for example
@@ -56,7 +104,7 @@ class ApplyRuleHandler:
             _row_rule_dict = {}
             if self.parent.global_rule_dict == {}:
                 # first time adding a rule = group
-                _row_rule_dict['name'] = "0"
+                _row_rule_dict['group_name'] = "0"
                 _row_rule_dict['list_rules'] = ['0']
                 _row_rule_dict['inner_rule'] = 'and'
                 _row_rule_dict['outer_rule'] = None
@@ -67,7 +115,7 @@ class ApplyRuleHandler:
                 # add a group of just this new rule
                 name_of_new_rule = str(self.parent.ui.tableWidget.item(row, 1).text())
                 name_of_group = self.get_name_of_group()
-                _row_rule_dict['name'] = name_of_group
+                _row_rule_dict['group_name'] = name_of_group
                 _row_rule_dict['list_rules'] = [name_of_new_rule]
                 _row_rule_dict['inner_rule'] = 'and'
                 _row_rule_dict['outer_rule'] = 'and'
