@@ -30,6 +30,7 @@ from addie.master_table.import_from_database import utilities as ImportFromDatab
 from addie.master_table.import_from_database.import_table_from_oncat_handler import ImportTableFromOncat
 from addie.master_table.import_from_database.table_widget_rule_handler import TableWidgetRuleHandler
 from addie.master_table.import_from_database.apply_rule_handler import ApplyRuleHandler
+from addie.master_table.import_from_database.data_to_import_handler import DataToImportHandler
 
 from addie.utilities.general import generate_random_key, remove_white_spaces
 from addie.utilities.gui_handler import TableHandler
