@@ -13,10 +13,16 @@ class ApplyRuleHandler:
         self.retrieve_list_of_rows_for_each_rule()
         self.apply_inner_rules()
         self.apply_outer_rules()
+        self.update_tableWidget_filter_result()
 
-        import pprint
-        pprint.pprint(self.parent.list_of_rows_with_global_rule)
-
+    def update_tableWidget_filter_result(self):
+        list_of_rows_to_show = self.parent.list_of_rows_with_global_rule
+        nbr_row = self.parent.ui.tableWidget_filter_result.rowCount()
+        for _row in np.arange(nbr_row):
+            hide_row = True
+            if _row in list_of_rows_to_show:
+                hide_row = False
+            self.parent.ui.tableWidget_filter_result.setRowHidden(_row, hide_row)
 
     def retrieve_list_of_rows_for_each_rule(self):
         global_rule_dict = self.parent.global_rule_dict
