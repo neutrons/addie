@@ -257,6 +257,7 @@ class ImportFromDatabaseWindow(QMainWindow):
         o_import.from_oncat_template()
 
         nexus_json = self.nexus_json_from_template
+        self.nexus_json = nexus_json
 
         enabled_widgets = False
         if not (nexus_json == {}):
@@ -496,7 +497,7 @@ class ImportFromDatabaseWindow(QMainWindow):
     def import_button_clicked(self):
 
         data_handler = DataToImportHandler(parent=self)
-        table_of_data_to_import = data_handler.get_table_of_data_to_import()
+        json_of_data_to_import = data_handler.get_json_of_data_to_import()
 
         o_dialog = AsciiLoaderOptions(parent=self,
                                       is_parent_main_ui=False)
