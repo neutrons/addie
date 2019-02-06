@@ -257,7 +257,7 @@ class ImportFromDatabaseWindow(QMainWindow):
         o_import.from_oncat_template()
 
         nexus_json = self.nexus_json_from_template
-        self.nexus_json = nexus_json
+        self.nexus_json_all_infos = nexus_json
 
         enabled_widgets = False
         if not (nexus_json == {}):

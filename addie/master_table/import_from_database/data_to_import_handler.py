@@ -24,8 +24,7 @@ class DataToImportHandler:
     def isolate_runs_from_json(self, json=None, list_of_runs=[]):
         clean_json_list = []
         for _entry in json:
-            _run = _entry["indexed"]["run_number"]
-            print("_run is {}".format(_run))
+            _run = str(_entry["indexed"]["run_number"])
             if _run in list_of_runs:
                 clean_json_list.append(_entry)
         return clean_json_list
@@ -45,8 +44,7 @@ class DataToImportHandler:
         import pprint
         pprint.pprint("list_of_runs: {}".format(list_of_runs))
 
-        nexus_json_to_import = self.isolate_runs_from_json(json=self.parent.nexus_json,
+        nexus_json_to_import = self.isolate_runs_from_json(json=self.parent.nexus_json_all_infos,
                                                            list_of_runs=list_of_runs)
-
         pprint.pprint(nexus_json_to_import)
 

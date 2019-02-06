@@ -549,15 +549,16 @@ class H3TableHandler:
 
         # Table
         table = menu.addMenu("Table")
-        table_import_from_config = table.addMenu("Import from Config. File")
-        table_import_from_config_replace = table_import_from_config.addAction("Replace ...")
-        table_import_from_config_append = table_import_from_config.addAction("Append ...")
-        table_import_from_config_append.setEnabled(self.parent.master_table_right_click_buttons['import_from_config_append']['status'])
 
         table_import_from_database = table.addMenu("Import from Database")
         table_import_from_database_replace = table_import_from_database.addAction("Replace ...")
         table_import_from_database_append = table_import_from_database.addAction("Append ...")
         table_import_from_database_append.setEnabled(self.parent.master_table_right_click_buttons['import_from_database_append']['status'])
+
+        table_import_from_config = table.addMenu("Import from Config. File")
+        table_import_from_config_replace = table_import_from_config.addAction("Replace ...")
+        table_import_from_config_append = table_import_from_config.addAction("Append ...")
+        table_import_from_config_append.setEnabled(self.parent.master_table_right_click_buttons['import_from_config_append']['status'])
 
         table_import_from_file = table.addMenu("Import from File(s)")
         table_import_from_file_replace = table_import_from_file.addAction("Replace ...")
