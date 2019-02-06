@@ -31,6 +31,7 @@ from addie.master_table.import_from_database.import_table_from_oncat_handler imp
 from addie.master_table.import_from_database.table_widget_rule_handler import TableWidgetRuleHandler
 from addie.master_table.import_from_database.apply_rule_handler import ApplyRuleHandler
 from addie.master_table.import_from_database.data_to_import_handler import DataToImportHandler
+from addie.master_table.import_from_database.master_table_loader_from_database_ui import MasterTableLoaderFromDatabaseUi
 
 from addie.utilities.general import generate_random_key, remove_white_spaces
 from addie.utilities.gui_handler import TableHandler
@@ -497,11 +498,18 @@ class ImportFromDatabaseWindow(QMainWindow):
     def import_button_clicked(self):
 
         data_handler = DataToImportHandler(parent=self)
-        json_of_data_to_import = data_handler.get_json_of_data_to_import()
+        self.json_of_data_to_import = data_handler.get_json_of_data_to_import()
 
         o_dialog = AsciiLoaderOptions(parent=self,
-                                      is_parent_main_ui=False)
+                                      is_parent_main_ui=False,
+                                      real_parent=self)
         o_dialog.show()
+
+    def import_into_master_table(self):
+        o_import = MasterTableLoaderFromDatabaseUi(parent=self)
+        o_import.run(json=self.json_of_data_to_import,
+                     import_option=self.parent.ascii_loader_option)
+        self.close()
 
     def cancel_button_clicked(self):
         self.close()
@@ -515,5 +523,5 @@ class AsciiLoaderOptions(LoaderOptionsInterface):
 
     def accept(self):
         self.parent.ascii_loader_option = self.get_option_selected()
-
-        #self.close()
+        self.real_parent.import_into_master_table()
+        self.close()

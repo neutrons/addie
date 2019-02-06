@@ -41,10 +41,8 @@ class DataToImportHandler:
 
         list_of_runs = self.get_runs_from_row_number(list_of_rows_to_load)
 
-        import pprint
-        pprint.pprint("list_of_runs: {}".format(list_of_runs))
-
         nexus_json_to_import = self.isolate_runs_from_json(json=self.parent.nexus_json_all_infos,
                                                            list_of_runs=list_of_runs)
-        pprint.pprint(nexus_json_to_import)
+
+        return nexus_json_to_import
 

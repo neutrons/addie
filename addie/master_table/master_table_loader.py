@@ -91,11 +91,23 @@ _default_empty_row = {"activate": True,
 
 class LoaderOptionsInterface(QDialog):
 
-    def __init__(self, parent=None, is_parent_main_ui=True):
+    real_parent = None
+
+    def __init__(self, parent=None, is_parent_main_ui=True, real_parent=None):
+        """
+        This class can be called from different level of ui. In the case of the import from database ui,
+        real_parent parameter is needed to be able to close this ui and the ui above it as well as running a function
+        in the parent ui before closing.
+
+        :param parent:
+        :param is_parent_main_ui:
+        :param real_parent:
+        """
 
         if is_parent_main_ui:
             self.parent = parent
         else:
+            self.real_parent = real_parent
             self.parent = parent.parent
 
         QDialog.__init__(self, parent=parent)
@@ -206,7 +218,6 @@ class JsonLoader:
         # load json
         with open(self.filename) as f:
             data = json.load(f)
-
 
         # convert into UI dictionary
         list_keys = [_key for _key in data.keys()]
@@ -530,6 +541,18 @@ class FormatAsciiList:
 
         [self.new_list1, self.new_list2] = self.__combine_identical_elements(check_list=list2_with_run_number,
                                                                              combine_list=self.list1)
+
+    def apply_option(self, option=1):
+        if option == 1:
+            return self.option1()
+        elif option == 2:
+            return self.option2()
+        elif option == 3:
+            return self.option3()
+        elif option == 4:
+            return self.option4()
+        else:
+            raise NotImplementedError
 
 
 class TableFileLoader:
