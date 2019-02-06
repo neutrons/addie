@@ -334,18 +334,22 @@ class ImportFromDatabaseWindow(QMainWindow):
 
     def list_argument_changed(self, value, key):
         self.update_rule_filter()
+        GuiHandler.check_import_button(self)
 
     def list_argument_index_changed(self, value, key):
         self.update_rule_filter()
+        GuiHandler.check_import_button(self)
 
     def list_criteria_changed(self, value, key):
         self.update_rule_filter()
+        GuiHandler.check_import_button(self)
 
     def list_item_changed(self, value, key):
         """this method is reached when the user changes the name of the variable he wants to filter"""
         o_table = TableWidgetRuleHandler(parent=self)
         o_table.update_list_value_of_given_item(item_name=value, key=key)
         self.update_rule_filter()
+        GuiHandler.check_import_button(self)
 
     # EVENT HANDLER ---------------------------------------------------
 
@@ -406,15 +410,16 @@ class ImportFromDatabaseWindow(QMainWindow):
         self.check_all_filter_widgets()
         self.refresh_global_rule(full_reset=True)
         self.update_rule_filter()
+        GuiHandler.check_import_button(self)
 
     def add_criteria_clicked(self):
         nbr_row = self.ui.tableWidget.rowCount()
         o_table_handler = TableWidgetRuleHandler(parent=self)
         o_table_handler.add_row(row=nbr_row)
         self.check_rule_widgets()
-        #self.refresh_global_rule(new_row=nbr_row)
         self.update_global_rule(row=nbr_row, is_added=True)
         self.update_rule_filter()
+        GuiHandler.check_import_button(self)
 
     def ipts_selection_changed(self, ipts_selected=""):
         self.ui.ipts_lineedit.setText("")
@@ -455,6 +460,7 @@ class ImportFromDatabaseWindow(QMainWindow):
     def search_return_pressed(self):
         new_text = str(self.ui.name_search.text())
         self.search_text_changed(new_text)
+        GuiHandler.check_import_button(self)
 
     def search_text_changed(self, new_text):
         new_text = str(new_text)
@@ -475,6 +481,7 @@ class ImportFromDatabaseWindow(QMainWindow):
         elif index == 1:
             self.ui.import_button.setText("Import Filtered Runs")
             self.refresh_filter_page()
+        GuiHandler.check_import_button(self)
 
     def build_result_dictionary(self, nexus_json=[]):
         """isolate the infos I need from ONCat result to insert in the main window, master table"""

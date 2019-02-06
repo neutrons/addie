@@ -16,7 +16,7 @@ from addie.utilities.general import json_extractor
 
 
 class FilterTableHandler:
-    """Class to work with the table filter"""
+    """Class to work with the table filter (top table of second tab)"""
 
     def __init__(self, table_ui=None):
         self.table_ui = table_ui
@@ -78,6 +78,14 @@ class FilterResultTableHandler:
                     list_matching_rows.append(_row)
         return list_matching_rows
 
+    def get_number_of_visible_rows(self):
+        nbr_row = self.table_ui.rowCount()
+        nbr_visible_row = 0
+        for _row in np.arange(nbr_row):
+            if not self.table_ui.isRowHidden(_row):
+                nbr_visible_row += 1
+
+        return nbr_visible_row
 
 class GuiHandler:
 
@@ -100,15 +108,30 @@ class GuiHandler:
     @staticmethod
     def check_import_button(parent):
         window_ui = parent.ui
+
         enable_import = False
-        if window_ui.ipts_radio_button.isChecked():
-            if str(window_ui.ipts_lineedit.text()).strip() != "":
-                if parent.ipts_exist:
-                    enable_import = True
-            else:
+
+        if window_ui.toolBox.currentIndex() == 0: # import everything
+
+            nbr_row = window_ui.tableWidget_all_runs.rowCount()
+            if nbr_row > 0:
                 enable_import = True
-        else:
-            if str(window_ui.run_number_lineedit.text()).strip() != "":
+
+            # if window_ui.ipts_radio_button.isChecked():
+            #     if str(window_ui.ipts_lineedit.text()).strip() != "":
+            #         if parent.ipts_exist:
+            #             enable_import = True
+            #     else:
+            #         enable_import = True
+            # else:
+            #     if str(window_ui.run_number_lineedit.text()).strip() != "":
+            #         enable_import = True
+
+        else: # rule tab
+
+            o_gui = FilterResultTableHandler(table_ui=window_ui.tableWidget_filter_result)
+            nbr_row_visible = o_gui.get_number_of_visible_rows()
+            if nbr_row_visible > 0:
                 enable_import = True
 
         window_ui.import_button.setEnabled(enable_import)
