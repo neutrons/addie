@@ -1,5 +1,6 @@
 import six
 import numpy as np 
+from mantid.simpleapi import mtd, LoadDiffCal, CalculateDIFC
 import matplotlib.pyplot as plt
 import matplotlib
 from matplotlib import cm
