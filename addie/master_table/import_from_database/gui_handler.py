@@ -117,16 +117,6 @@ class GuiHandler:
             if nbr_row > 0:
                 enable_import = True
 
-            # if window_ui.ipts_radio_button.isChecked():
-            #     if str(window_ui.ipts_lineedit.text()).strip() != "":
-            #         if parent.ipts_exist:
-            #             enable_import = True
-            #     else:
-            #         enable_import = True
-            # else:
-            #     if str(window_ui.run_number_lineedit.text()).strip() != "":
-            #         enable_import = True
-
         else: # rule tab
 
             o_gui = FilterResultTableHandler(table_ui=window_ui.tableWidget_filter_result)
