@@ -5,9 +5,9 @@ import itertools
 class ListRunsParser(object):
     """
     will clean up the current_list_of_runs with the new added runs
-    ex: [1,2,3,4,7] -> 1:4,7
+    ex: [1,2,3,4,7] -> 1-4,7
     if a new run is already in the list of runs, it will then be removed from the list
-    ex: [1,2,3,4] with new run [1] -> 2:4
+    ex: [1,2,3,4] with new run [1] -> 2-4
     """
 
     list_current_runs = []  # ['1','10','2','30','4']
@@ -18,6 +18,7 @@ class ListRunsParser(object):
             self.make_discrete_list_of_runs(str_current_runs=current_runs)
 
     def make_discrete_list_of_runs(self, str_current_runs=''):
+        """this method allows a combine list of runs (1-4,7) into the expanded version (1,2,3,4,7)"""
         spans = (el.partition('-')[::2] for el in str_current_runs.split(','))
         ranges = (np.arange(int(s), int(e) + 1 if e else int(s) + 1)
                   for s, e in spans)
