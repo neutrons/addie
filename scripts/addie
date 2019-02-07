@@ -79,7 +79,6 @@ from addie.master_table.periodic_table.material_handler import MaterialHandler
 from addie.master_table.mass_density_handler import MassDensityHandler
 from addie.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
 from addie.master_table.import_from_run_number_handler import ImportFromRunNumberHandler
-from addie.master_table.import_from_database.conflicts_solver import ConflictsSolverHandler
 
 import addie.addiedriver as driver
 import addie.specify_plots_style as ps
@@ -2771,8 +2770,8 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         if _calibration_file:
             self.ui.calibration_file.setText(_calibration_file)
 
-    def solve_import_conflicts(self):
-        ConflictsSolverHandler(parent=self)
+    def from_oncat_to_master_table(self, json=None, with_conflict=False):
+        LoadIntoMasterTable(parent=self, json=json, with_conflict=with_conflict)
 
     def apply_clicked(self):
         # do stuff

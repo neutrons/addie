@@ -31,7 +31,7 @@ from addie.master_table.import_from_database.import_table_from_oncat_handler imp
 from addie.master_table.import_from_database.table_widget_rule_handler import TableWidgetRuleHandler
 from addie.master_table.import_from_database.apply_rule_handler import ApplyRuleHandler
 from addie.master_table.import_from_database.data_to_import_handler import DataToImportHandler
-from addie.master_table.import_from_database.master_table_loader_from_database_ui import MasterTableLoaderFromDatabaseUi
+from addie.master_table.import_from_database.format_json_from_database_to_master_table import FormatJsonFromDatabaseToMasterTable
 
 from addie.utilities.general import generate_random_key, remove_white_spaces
 from addie.utilities.gui_handler import TableHandler
@@ -506,10 +506,11 @@ class ImportFromDatabaseWindow(QMainWindow):
         o_dialog.show()
 
     def import_into_master_table(self):
-        o_import = MasterTableLoaderFromDatabaseUi(parent=self)
-        o_import.run(json=self.json_of_data_to_import,
+        o_format = FormatJsonFromDatabaseToMasterTable(parent=self)
+        o_format.run(json=self.json_of_data_to_import,
                      import_option=self.parent.ascii_loader_option)
-        self.parent.json_to_import = o_import.final_json
+        self.parent.from_oncat_to_master_table(json=o_format.final_json,
+                                               with_conflict=o_format.any_conflict)
         self.close()
 
     def cancel_button_clicked(self):

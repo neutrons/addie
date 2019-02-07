@@ -13,8 +13,8 @@ from addie.ui_solve_import_conflicts import Ui_MainWindow as UiMainWindow
 
 class ConflictsSolverHandler:
 
-    def __init__(self, parent=None):
-        o_solver = ConflictsSolverWindow(parent=parent)
+    def __init__(self, parent=None, json_conflicts={}):
+        o_solver = ConflictsSolverWindow(parent=parent, json_conflicts=json_conflicts)
         o_solver.show()
         if parent.parent.conflicts_solver_ui_position:
             o_solver.move(parent.parent.conflicts_solver_ui_position)
@@ -22,8 +22,9 @@ class ConflictsSolverHandler:
 
 class ConflictsSolverWindow(QMainWindow):
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, json_conflicts={}):
         self.parent = parent
+        self.json_conflicts = json_conflicts
 
         QMainWindow.__init__(self, parent=parent)
         self.ui = UiMainWindow()
