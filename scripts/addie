@@ -79,6 +79,7 @@ from addie.master_table.periodic_table.material_handler import MaterialHandler
 from addie.master_table.mass_density_handler import MassDensityHandler
 from addie.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
 from addie.master_table.import_from_run_number_handler import ImportFromRunNumberHandler
+from addie.master_table.import_from_database.conflicts_solver import ConflictsSolverHandler
 
 import addie.addiedriver as driver
 import addie.specify_plots_style as ps
@@ -116,8 +117,11 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     # list of arguments to use in Import from ONCat and to display for filters
     oncat_metadata_filters = []
-
     # end of config.json
+
+    # Master json created by master_table_loader_from_database where keys are "1-10,15,16" with list of json and
+    # list of titles (used to fix conflicts when loading)
+    json_to_import = None
 
     # load los.csv options
     ascii_loader_option = None   # None, 1, 2, 3, 4
@@ -141,6 +145,8 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     import_from_run_number_ui_position = None
 
     oncat_authentication_ui_position = None
+
+    conflicts_solver_ui_position = None
 
     advanced_window_ui = None
     make_calibration_ui = None
@@ -2759,6 +2765,9 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                                                               filter = self.calibration_extension)
         if _calibration_file:
             self.ui.calibration_file.setText(_calibration_file)
+
+    def solve_import_conflicts(self):
+        ConflictsSolverHandler(parent=self)
 
     def apply_clicked(self):
         # do stuff

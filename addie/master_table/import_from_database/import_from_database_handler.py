@@ -509,6 +509,7 @@ class ImportFromDatabaseWindow(QMainWindow):
         o_import = MasterTableLoaderFromDatabaseUi(parent=self)
         o_import.run(json=self.json_of_data_to_import,
                      import_option=self.parent.ascii_loader_option)
+        self.parent.json_to_import = o_import.final_json
         self.close()
 
     def cancel_button_clicked(self):
