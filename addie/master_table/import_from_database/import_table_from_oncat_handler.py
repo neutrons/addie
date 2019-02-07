@@ -70,18 +70,19 @@ class ImportTableFromOncat:
         QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
 
         self.parent.list_of_runs_not_found = []
+        nexus_json = self.parent.nexus_json_from_template
 
         if self.parent.ui.run_radio_button.isChecked():
 
             # remove white space to string to make ONCat happy
             str_runs = str(self.parent.ui.run_number_lineedit.text())
             str_runs = remove_white_spaces(str_runs)
-
-            nexus_json = pyoncatGetNexus(oncat=self.parent.parent.oncat,
-                                         instrument=self.parent.parent.instrument['short_name'],
-                                         runs=str_runs,
-                                         facility=self.parent.parent.facility,
-                                         )
+            #
+            # nexus_json = pyoncatGetNexus(oncat=self.parent.parent.oncat,
+            #                              instrument=self.parent.parent.instrument['short_name'],
+            #                              runs=str_runs,
+            #                              facility=self.parent.parent.facility,
+            #                              )
 
             result = ImportFromDatabaseUtilities.get_list_of_runs_found_and_not_found(str_runs=str_runs,
                                                                                       oncat_result=nexus_json)
@@ -90,12 +91,12 @@ class ImportTableFromOncat:
             self.parent.list_of_runs_found = result['found']
 
         else:
-            ipts = str(self.parent.ui.ipts_combobox.currentText())
-
-            nexus_json = pyoncatGetRunsFromIpts(oncat=self.parent.parent.oncat,
-                                                instrument=self.parent.parent.instrument['short_name'],
-                                                ipts=ipts,
-                                                facility=self.parent.parent.facility)
+            # ipts = str(self.parent.ui.ipts_combobox.currentText())
+            #
+            # nexus_json = pyoncatGetRunsFromIpts(oncat=self.parent.parent.oncat,
+            #                                     instrument=self.parent.parent.instrument['short_name'],
+            #                                     ipts=ipts,
+            #                                     facility=self.parent.parent.facility)
 
             result = ImportFromDatabaseUtilities.get_list_of_runs_found_and_not_found(oncat_result=nexus_json,
                                                                                       check_not_found=False)
