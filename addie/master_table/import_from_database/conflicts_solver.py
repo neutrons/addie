@@ -16,8 +16,8 @@ class ConflictsSolverHandler:
     def __init__(self, parent=None, json_conflicts={}):
         o_solver = ConflictsSolverWindow(parent=parent, json_conflicts=json_conflicts)
         o_solver.show()
-        if parent.parent.conflicts_solver_ui_position:
-            o_solver.move(parent.parent.conflicts_solver_ui_position)
+        if parent.conflicts_solver_ui_position:
+            o_solver.move(parent.conflicts_solver_ui_position)
 
 
 class ConflictsSolverWindow(QMainWindow):

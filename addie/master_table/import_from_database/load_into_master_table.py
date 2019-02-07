@@ -8,8 +8,10 @@ class LoadIntoMasterTable:
         self.json = json
         self.with_conflict = with_conflict
 
+        self.run()
+
     def run(self):
-        prin("loading json into master table now")
+        print("loading json into master table now")
 
         if self.with_conflict:
-            ConflictsSolverHandler(parent=self.parent, json_conflicts=self.json
+            ConflictsSolverHandler(parent=self.parent, json_conflicts=self.json)
