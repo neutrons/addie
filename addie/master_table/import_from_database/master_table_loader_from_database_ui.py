@@ -1,7 +1,9 @@
 import collections
+import copy
 
 from addie.master_table.master_table_loader import FormatAsciiList
 from addie.utilities.list_runs_parser import ListRunsParser
+from addie.utilities.general import json_extractor
 
 
 class MasterTableLoaderFromDatabaseUi:
@@ -80,18 +82,15 @@ class MasterTableLoaderFromDatabaseUi:
 
         self.reformated_json = new_json
 
-    def is_there_a_conflict(self, list_json):
+    def check_conflict(self, list_json):
         """this method will check if all the metadata of interest are identical. If they are not,
         the method will return False"""
 
-        list_of_metadata_to_check = ['']
+        o_conflict = ConflictHandler(list_json=list_json)
+        is_conflict = o_conflict.is_conflict
+        conflict = o_conflict.conflict
 
-        # FIXME
-
-
-
-        return False
-
+        return [is_conflict, conflict]
 
     def _make_final_json(self):
         """if runs are group together, those runs are regroup and final list of json is created"""
@@ -115,8 +114,17 @@ class MasterTableLoaderFromDatabaseUi:
             final_json[_combine_run]['list_of_json'] = list_of_json_for_this_combine_run
             final_json[_combine_run]['title'] = list_of_title[_index]
 
-            is_conflict = self.is_there_a_conflict(list_of_json_for_this_combine_run)
+            [is_conflict, conflict] = self.check_conflict(list_of_json_for_this_combine_run)
             final_json[_combine_run]['any_conflict'] = is_conflict
+            final_json[_combine_run]['conflict_dict'] = conflict
+
+            if is_conflict:
+                import pprint
+                print("print conflict dictionary")
+                pprint.pprint(final_json[_combine_run]['conflict_dict'])
+
+
+
 
         # final_json = {'1,2,5-10': {'list_of_json': [json1, json2, json5, json6, json7, ... json10],
         #                            'title': "title_1_1,2,5-10'},
@@ -124,7 +132,76 @@ class MasterTableLoaderFromDatabaseUi:
         #                         'title': "title_20-30"},
         #               .... }
 
-        import pprint
-        pprint.pprint(final_json)
-
         self.final_json = final_json
+
+
+class ConflictHandler:
+
+    list_of_metadata_to_check = {"Mass Density": ["metadata", "entry", "sample", "mass_density"],
+                                 "Sample Env. Device": ["metadata", "entry", "daslogs", "bl1b:se:sampletemp", "device_name"],
+                                 "Chemical Formula": ["metadata", "entry", "sample", "chemical_formula"],
+                                 "Geometry": ["metadata", "entry", "sample", "container_name"]}
+
+    run_number_path = ["indexed", "run_number"]
+
+    is_conflict = False  # inform if there is a conflict or not
+    conflict = {}  # this dictionary will inform of the conflict as defined here
+                    # {"1,3-5": {'Sample Env. Device" : "N/A",
+                    #            'Geometry": "N/A"},
+                    #  "2": {"Sample Env. Device" : "yoyou",
+                    #        "Geometry": "yaha"} }
+
+    def __init__(self, list_json=[]):
+        self.check(list_json)
+
+    def check(self, list_json):
+        """Check the conflict by creating a master dictionary defined as followed
+
+        master_dict = {"0": {"Run Number": ["123", "124"],
+                             "Sample Env. Device": "device 1",
+                             "Geometry": "geometry 1",
+                             ... },
+                       "1": {"run Number": ["125"],
+                             "Sample Env. Device": "device 2",
+                             "Geometry": "geometry 1",
+                             ... },
+                       }
+        """
+        master_dict = {}
+        master_key = 0
+        for _json in list_json:
+            run_number = str(json_extractor(_json, self.run_number_path))
+            mass_density = str(json_extractor(_json, self.list_of_metadata_to_check["Mass Density"]))
+            sample_env_device = str(json_extractor(_json, self.list_of_metadata_to_check["Sample Env. Device"]))
+            chemical_formula = str(json_extractor(_json, self.list_of_metadata_to_check["Chemical Formula"]))
+            geometry = str(json_extractor(_json, self.list_of_metadata_to_check["Geometry"]))
+
+            if master_dict == {}:
+
+                master_dict[master_key] = {"Run Number": [run_number],
+                                           "sample_env_device": sample_env_device,
+                                           "mass_density": mass_density,
+                                           "chemical_formula": chemical_formula,
+                                           "geometry": geometry}
+
+            else:
+
+                for _key in master_dict.keys():
+
+                    if (mass_density == master_dict[_key]["mass_density"]) and \
+                        (sample_env_device == master_dict[_key]["sample_env_device"]) and \
+                        (chemical_formula == master_dict[_key]["chemical_formula"]) and \
+                            (geometry == master_dict[_key]["geometry"]):
+                        master_dict[_key]["Run Number"].append(run_number)
+                        break
+                else:
+                    # we found a conflict
+                    master_key += 1
+                    master_dict[master_key] = {"Run Number": [run_number],
+                                               "sample_env_device": sample_env_device,
+                                               "mass_density": mass_density,
+                                               "chemical_formula": chemical_formula,
+                                               "geometry": geometry}
+                    self.is_conflict = True
+
+        self.conflict = master_dict
