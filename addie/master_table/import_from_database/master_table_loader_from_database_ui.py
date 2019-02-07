@@ -80,6 +80,19 @@ class MasterTableLoaderFromDatabaseUi:
 
         self.reformated_json = new_json
 
+    def is_there_a_conflict(self, list_json):
+        """this method will check if all the metadata of interest are identical. If they are not,
+        the method will return False"""
+
+        list_of_metadata_to_check = ['']
+
+
+
+
+
+        return False
+
+
     def _make_final_json(self):
         """if runs are group together, those runs are regroup and final list of json is created"""
         json = self.reformated_json
@@ -102,10 +115,16 @@ class MasterTableLoaderFromDatabaseUi:
             final_json[_combine_run]['list_of_json'] = list_of_json_for_this_combine_run
             final_json[_combine_run]['title'] = list_of_title[_index]
 
+            is_conflict = self.is_there_a_conflict(list_of_json_for_this_combine_run)
+            final_json[_combine_run]['any_conflict'] = is_conflict
+
         # final_json = {'1,2,5-10': {'list_of_json': [json1, json2, json5, json6, json7, ... json10],
         #                            'title': "title_1_1,2,5-10'},
         #               '20-30': {'list_of_json': [...',
         #                         'title': "title_20-30"},
         #               .... }
-        self.final_json = final_json
 
+        import pprint
+        pprint.pprint(final_json)
+
+        self.final_json = final_json
