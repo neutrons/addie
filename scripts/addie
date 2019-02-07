@@ -2771,9 +2771,13 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         if _calibration_file:
             self.ui.calibration_file.setText(_calibration_file)
 
-    def from_oncat_to_master_table(self, json=None, with_conflict=False):
-        self.import_from_database_ui.close()
-        LoadIntoMasterTable(parent=self, json=json, with_conflict=with_conflict)
+    def from_oncat_to_master_table(self, json=None, with_conflict=False, ignore_conflicts=False):
+        if self.import_from_database_ui:
+            self.import_from_database_ui.close()
+
+        LoadIntoMasterTable(parent=self, json=json,
+                            with_conflict=with_conflict,
+                            ignore_conflicts=ignore_conflicts)
 
     def apply_clicked(self):
         # do stuff

@@ -3,16 +3,19 @@ from addie.master_table.import_from_database.conflicts_solver import ConflictsSo
 
 class LoadIntoMasterTable:
 
-    def __init__(self, parent=None, json=None, with_conflict=False):
+    def __init__(self, parent=None, json=None, with_conflict=False, ignore_conflicts=False):
         self.parent = parent
         self.json = json
         self.with_conflict = with_conflict
 
-        self.run()
+        if ignore_conflicts:
+            self.load()
+        else:
+            if with_conflict:
+                ConflictsSolverHandler(parent=self.parent, json_conflicts=self.json)
+            else:
+                self.load()
 
-    def run(self):
-        print("loading json into master table now")
-
-        if self.with_conflict:
-            ConflictsSolverHandler(parent=self.parent, json_conflicts=self.json)
+    def load(self):
+        pass
 

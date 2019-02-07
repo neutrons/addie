@@ -31,9 +31,12 @@ class ConflictsSolverWindow(QMainWindow):
         self.ui.setupUi(self)
 
     def accept(self):
-        pass
+        self.parent.from_oncat_to_master_table(json=self.json_conflicts,
+                                               with_conflict=False)
 
     def reject(self):
+        self.parent.from_oncat_to_master_table(json=self.json_conflicts,
+                                               ignore_conflicts=True)
         self.close()
 
     def closeEvent(self, c):
