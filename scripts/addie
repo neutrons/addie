@@ -97,7 +97,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     first_oncat_authentication = True
     oncat = None # object to use to retrieve IPTS numbers...etc. Created by oncat_authentication_handler.py
 
-    # config.json
+    # config.json ======================================================
     # those infos will be automatically retrieve from the config.json file
     facility = ''
     instrument = {"full_name": "",   # Powgen, Nomad ...
@@ -117,10 +117,15 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     # list of arguments to use in Import from ONCat and to display for filters
     oncat_metadata_filters = []
-    # end of config.json
+    # end of config.json ======================================================
 
     # Master json created by master_table_loader_from_database where keys are "1-10,15,16" with list of json and
     # list of titles (used to fix conflicts when loading)
+    # json_to_import = {'1,2,5-10': {'list_of_json': [json1, json2, json5, json6, json7, ... json10],
+    #                                'title': "title_1_1,2,5-10'},
+    #                   '20-30': {'list_of_json': [...',
+    #                             'title': "title_20-30"},
+    #                   ... }
     json_to_import = None
 
     # load los.csv options

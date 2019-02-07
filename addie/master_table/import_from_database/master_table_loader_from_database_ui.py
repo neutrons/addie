@@ -102,5 +102,10 @@ class MasterTableLoaderFromDatabaseUi:
             final_json[_combine_run]['list_of_json'] = list_of_json_for_this_combine_run
             final_json[_combine_run]['title'] = list_of_title[_index]
 
+        # final_json = {'1,2,5-10': {'list_of_json': [json1, json2, json5, json6, json7, ... json10],
+        #                            'title': "title_1_1,2,5-10'},
+        #               '20-30': {'list_of_json': [...',
+        #                         'title': "title_20-30"},
+        #               .... }
         self.final_json = final_json
 
