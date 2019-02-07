@@ -15,3 +15,4 @@ class LoadIntoMasterTable:
 
         if self.with_conflict:
             ConflictsSolverHandler(parent=self.parent, json_conflicts=self.json)
+

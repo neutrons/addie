@@ -30,3 +30,11 @@ class ConflictsSolverWindow(QMainWindow):
         self.ui = UiMainWindow()
         self.ui.setupUi(self)
 
+    def accept(self):
+        pass
+
+    def reject(self):
+        self.close()
+
+    def closeEvent(self, c):
+        pass

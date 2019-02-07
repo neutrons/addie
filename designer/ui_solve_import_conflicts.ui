@@ -71,5 +71,42 @@
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>reject</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>81</x>
+     <y>557</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>226</x>
+     <y>552</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>accept</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>759</x>
+     <y>560</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>554</x>
+     <y>549</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>reject()</slot>
+  <slot>accept()</slot>
+ </slots>
 </ui>

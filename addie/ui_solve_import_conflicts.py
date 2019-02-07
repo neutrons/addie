@@ -31,11 +31,9 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.verticalLayout = QtGui.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
-        self.tableWidget = QtGui.QTableWidget(self.centralwidget)
-        self.tableWidget.setObjectName(_fromUtf8("tableWidget"))
-        self.tableWidget.setColumnCount(0)
-        self.tableWidget.setRowCount(0)
-        self.verticalLayout.addWidget(self.tableWidget)
+        self.tabWidget = QtGui.QTabWidget(self.centralwidget)
+        self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
+        self.verticalLayout.addWidget(self.tabWidget)
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
         self.reject = QtGui.QPushButton(self.centralwidget)
@@ -57,6 +55,9 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
+        self.tabWidget.setCurrentIndex(-1)
+        QtCore.QObject.connect(self.reject, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.reject)
+        QtCore.QObject.connect(self.accept, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.accept)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
