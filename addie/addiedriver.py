@@ -6,11 +6,6 @@ import sys
 import math
 import numpy as np
 
-# add a python path for local development
-sys.path.append('/opt/mantid38/bin/')
-sys.path.append('/Users/wzz/MantidBuild/debug-stable/bin/')
-
-
 class AddieDriver(object):
     """
     Driver for addie application
