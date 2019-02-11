@@ -50,7 +50,7 @@ class GenerateSumthing(object):
             return False
         return True
 
-    def check_for_write_permissions(self, full_output_file_name):
+    def open_output_file_if_writable(self, full_output_file_name):
         _o_file = FileHandler(filename=full_output_file_name)
         if _o_file.is_file_writable():
             outfile = open(full_output_file_name, "w")
@@ -116,7 +116,7 @@ class GenerateSumthing(object):
                 name_list.append(word)
 
         full_output_file_name = os.path.join(self.folder, self.output_inp_file)
-        outfile = self.check_for_write_permissions(full_output_file_name)
+        outfile = self.open_output_file_if_writable(full_output_file_name)
 
         if outfile:
             self.write_outfile(outfile, run_nums)
@@ -151,7 +151,7 @@ class GenerateSumthing(object):
         full_output_file_name = os.path.join(self.folder, self.output_inp_file)
 
         full_output_file_name = os.path.join(self.folder, self.output_inp_file)
-        outfile = self.check_for_write_permissions(full_output_file_name)
+        outfile = self.open_output_file_if_writable(full_output_file_name)
 
         if outfile:
             self.write_outfile(outfile, run_nums)
