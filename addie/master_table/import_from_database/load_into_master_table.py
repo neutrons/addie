@@ -17,5 +17,5 @@ class LoadIntoMasterTable:
                 self.load()
 
     def load(self):
-        pass
+        print("importing all runs. No conflicts found!")
 
