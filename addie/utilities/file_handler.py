@@ -46,3 +46,13 @@ class FileHandler(object):
 
         config.write(cfgfile)
         cfgfile.close()
+
+    def check_file_writable(self):
+        if os.path.exists(self.filename):
+            if os.path.isfile(self.filename):
+                return os.access(self.filename, os.W_OK)
+            else:
+                return False
+        pdir = os.path.dirname(self.filename)
+        if not pdir: pdir = '.'
+        return os.access(pdir, os.W_OK)
