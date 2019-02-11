@@ -47,7 +47,7 @@ class FileHandler(object):
         config.write(cfgfile)
         cfgfile.close()
 
-    def check_file_writable(self):
+    def is_file_writable(self):
         if os.path.exists(self.filename):
             if os.path.isfile(self.filename):
                 return os.access(self.filename, os.W_OK)

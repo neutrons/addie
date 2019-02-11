@@ -52,7 +52,7 @@ class GenerateSumthing(object):
 
     def check_for_write_permissions(self, full_output_file_name):
         _o_file = FileHandler(filename=full_output_file_name)
-        if _o_file.check_file_writable():
+        if _o_file.is_file_writable():
             outfile = open(full_output_file_name, "w")
         else:
             title = "No write permissions!"
