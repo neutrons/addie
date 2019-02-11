@@ -29,7 +29,11 @@ class ConflictsSolverHandler:
 class ConflictsSolverWindow(QMainWindow):
 
     list_table = [] # name of table in each of the tabs
-    table_width_per_character = 15
+    table_width_per_character = 20
+    table_header_per_character = 15
+
+    list_keys = ["Run Number", 'chemical_formula', 'geometry', 'mass_density', 'sample_env_device']
+    columns_label = ["Run Number", "Chemical Formula", "Geometry", "Mass Density", "Sample Env. Device"]
 
     def __init__(self, parent=None, json_conflicts={}):
         self.parent = parent
@@ -51,9 +55,7 @@ class ConflictsSolverWindow(QMainWindow):
     def _calculate_columns_width(self, json=None):
         """will loop through all the conflict keys to figure out which one, for each column label, the string
         is the longest"""
-        list_key = []
-        for _key in json[0].keys():
-            list_key.append(_key)
+        list_key = self.list_keys
 
         columns_width = defaultdict(list)
         for _key in list_key:
@@ -62,7 +64,7 @@ class ConflictsSolverWindow(QMainWindow):
 
         final_columns_width = []
         for _key in list_key:
-            _max_width = np.max([np.array(columns_width[_key]).max(), len(_key)* self.table_width_per_character])
+            _max_width = np.max([np.array(columns_width[_key]).max(), len(_key)* self.table_header_per_character])
             final_columns_width.append(_max_width)
 
         return final_columns_width
@@ -84,8 +86,7 @@ class ConflictsSolverWindow(QMainWindow):
             _table.insertRow(_row)
         self.list_table.append(_table)
 
-        columns_label = [_label for _label in json[0].keys()]
-        _table.setHorizontalHeaderLabels(columns_label)
+        _table.setHorizontalHeaderLabels(self.columns_label)
 
         for _row in np.arange(len(json)):
 
