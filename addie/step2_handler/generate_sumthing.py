@@ -50,6 +50,31 @@ class GenerateSumthing(object):
             return False
         return True
 
+    def check_for_write_permissions(self, full_output_file_name):
+        _o_file = FileHandler(filename=full_output_file_name)
+        if _o_file.check_file_writable():
+            outfile = open(full_output_file_name, "w")
+        else:
+            title = "No write permissions!"
+            error_msg = "Unable to write cached table. " + \
+                        "Will not be able to write output files to this directory. " + \
+                        "\n\nCheck file and directory for write permissions!"
+            _error_box = QMessageBox.warning(self.parent, title, error_msg)
+            outfile = None
+        return outfile
+
+    def write_outfile(self, outfile, run_nums):
+        outfile.write("background \n")
+        for key in sorted(run_nums.keys()):
+            outbit = str(run_nums[key])
+            outbit = outbit.replace("[", "")
+            outbit = outbit.replace("]", "")
+            outbit = outbit.replace(" ", "")
+            outfile.write(key + " " + outbit+"\n")
+
+        outfile.close()
+
+
     def create_sum_inp_file_from_new_format(self,  full_input_file_name):
 
         #        print("]LOG]  Format: comma separated, no scan infos")
@@ -91,25 +116,11 @@ class GenerateSumthing(object):
                 name_list.append(word)
 
         full_output_file_name = os.path.join(self.folder, self.output_inp_file)
+        outfile = self.check_for_write_permissions(full_output_file_name)
 
-        _o_file = FileHandler(filename=full_output_file_name)
-        if _o_file.check_file_writable():
-            outfile = open(full_output_file_name, "w")
-        else:
-            _error_box = QMessageBox.warning(self.parent, "No write permissions", "Check file and directory for write permissions!")
-            return
-        outfile.write("background \n")
+        if outfile:
+            self.write_outfile(outfile, run_nums)
 
-        #print(">creating file %s" %full_output_file_name)
-        for key in sorted(run_nums.keys()):
-            outbit = str(run_nums[key])
-            outbit = outbit.replace("[", "")
-            outbit = outbit.replace("]", "")
-            outbit = outbit.replace(" ", "")
-            outfile.write(key + " " + outbit+"\n")
-
-        outfile.close()
-#        print("[LOG] Created %s" %full_output_file_name)
 
     def create_sum_inp_file_from_old_format(self, full_input_file_name):
 
@@ -139,15 +150,12 @@ class GenerateSumthing(object):
 
         full_output_file_name = os.path.join(self.folder, self.output_inp_file)
 
+        full_output_file_name = os.path.join(self.folder, self.output_inp_file)
+        outfile = self.check_for_write_permissions(full_output_file_name)
+
+        if outfile:
+            self.write_outfile(outfile, run_nums)
+
+
         outfile = open(full_output_file_name, "w")
         outfile.write("background \n")
-
-        #print(">creating file %s" %full_output_file_name)
-        for key in sorted(run_nums.keys()):
-            outbit = str(run_nums[key])
-            outbit = outbit.replace("[", "")
-            outbit = outbit.replace("]", "")
-            outbit = outbit.replace(" ", "")
-            outfile.write(key + " " + outbit+"\n")
-
-        outfile.close()
