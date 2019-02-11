@@ -7,6 +7,8 @@ from collections import defaultdict
 import sys
 import os.path
 import re
+from qtpy.QtWidgets import QMessageBox
+
 from addie.utilities.file_handler import FileHandler
 
 
@@ -90,7 +92,12 @@ class GenerateSumthing(object):
 
         full_output_file_name = os.path.join(self.folder, self.output_inp_file)
 
-        outfile = open(full_output_file_name, "w")
+        _o_file = FileHandler(filename=full_output_file_name)
+        if _o_file.check_file_writable():
+            outfile = open(full_output_file_name, "w")
+        else:
+            _error_box = QMessageBox.warning(self.parent, "No write permissions", "Check file and directory for write permissions!")
+            return
         outfile.write("background \n")
 
         #print(">creating file %s" %full_output_file_name)
