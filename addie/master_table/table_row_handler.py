@@ -21,6 +21,7 @@ except ImportError:
 
 from addie.master_table.placzek_handler import PlaczekHandler
 from addie.master_table.selection_handler import TransferH3TableWidgetState
+from addie.master_table.periodic_table.chemical_formula_handler import format_chemical_formula_equation
 from addie.master_table.tree_definition import COLUMN_DEFAULT_HEIGHT, CONFIG_BUTTON_HEIGHT, CONFIG_BUTTON_WIDTH
 
 from addie.ui_dimensions_setter import Ui_Dialog as UiDialog
@@ -127,7 +128,7 @@ class TableRowHandler:
         self.transfer_widget_states(from_key=key, data_type=data_type)
 
     def placzek_button_pressed(self, key=None, data_type='sample'):
-        o_placzek = PlaczekHandler(parent=self.parent, key=key, data_type=data_type)
+        PlaczekHandler(parent=self.parent, key=key, data_type=data_type)
 
     def activated_row_changed(self, key=None, state=None):
         data_type = 'sample'
@@ -144,8 +145,6 @@ class TableRowHandler:
                                                 ext)
         if file_name is None:
             return
-
-        # FIXME
 
     # utilities
 
@@ -167,6 +166,7 @@ class TableRowHandler:
                         sample_chemical_formula=sample_chemical_formula)
 
     def insert_row(self, row=-1,
+                   title='',
                    sample_runs='',
                    sample_mass_density='N/A',
                    sample_chemical_formula='N/A',
@@ -269,7 +269,7 @@ class TableRowHandler:
 
         column += 1
         # column 1 - title
-        _item = QTableWidgetItem("")
+        _item = QTableWidgetItem(title)
         _master_table_row_ui['title'] = _item
         self.table_ui.setItem(row, column, _item)
 
@@ -293,7 +293,8 @@ class TableRowHandler:
 
         # column 5 - material (chemical formula)
         column += 1
-        _material_text = QLineEdit(sample_chemical_formula)
+        clean_sample_chemical_formula = format_chemical_formula_equation(sample_chemical_formula)
+        _material_text = QLineEdit(clean_sample_chemical_formula)
         _material_text.setEnabled(False)
         QtCore.QObject.connect(_material_text, QtCore.SIGNAL("returnPressed()"),
                                lambda key=random_key:

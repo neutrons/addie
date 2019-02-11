@@ -5,6 +5,11 @@ from addie.master_table.master_table_loader import FormatAsciiList
 from addie.utilities.list_runs_parser import ListRunsParser
 from addie.utilities.general import json_extractor
 
+LIST_OF_METADATA_TO_CHECK = {"Mass Density": ["metadata", "entry", "sample", "mass_density"],
+                             "Sample Env. Device": ["metadata", "entry", "daslogs", "bl1b:se:sampletemp",
+                                                    "device_name"],
+                             "Chemical Formula": ["metadata", "entry", "sample", "chemical_formula"],
+                             "Geometry": ["metadata", "entry", "sample", "container_name"]}
 
 class FormatJsonFromDatabaseToMasterTable:
 
@@ -93,6 +98,17 @@ class FormatJsonFromDatabaseToMasterTable:
 
         return [is_conflict, conflict]
 
+    def _create_resolved_conflict_dictionary(self, json=None):
+        mass_density = str(json_extractor(json, LIST_OF_METADATA_TO_CHECK["Mass Density"]))
+        sample_env_device = str(json_extractor(json, LIST_OF_METADATA_TO_CHECK["Sample Env. Device"]))
+        chemical_formula = str(json_extractor(json, LIST_OF_METADATA_TO_CHECK["Chemical Formula"]))
+        geometry = str(json_extractor(json, LIST_OF_METADATA_TO_CHECK["Geometry"]))
+
+        return {'chemical_formula': chemical_formula,
+                'geometry': geometry,
+                'mass_density': mass_density,
+                'sample_env_device': sample_env_device}
+
     def _make_final_json(self):
         """if runs are group together, those runs are regroup and final list of json is created"""
         json = self.reformated_json
@@ -122,6 +138,10 @@ class FormatJsonFromDatabaseToMasterTable:
 
             if is_conflict:
                 self.any_conflict = True
+            else:
+                # put inside a "resolved_conflict" key the result of the none conflicts values
+                resolved_conflict = self._create_resolved_conflict_dictionary(json=list_of_json_for_this_combine_run[0])
+                final_json[_combine_run]['resolved_conflict'] = resolved_conflict
 
         # final_json = {'1,2,5-10': {'list_of_json': [json1, json2, json5, json6, json7, ... json10],
         #                            'title': "title_1_1,2,5-10'},
@@ -134,11 +154,11 @@ class FormatJsonFromDatabaseToMasterTable:
 
 class ConflictHandler:
 
-    list_of_metadata_to_check = {"Mass Density": ["metadata", "entry", "sample", "mass_density"],
-                                 "Sample Env. Device": ["metadata", "entry", "daslogs", "bl1b:se:sampletemp",
-                                                        "device_name"],
-                                 "Chemical Formula": ["metadata", "entry", "sample", "chemical_formula"],
-                                 "Geometry": ["metadata", "entry", "sample", "container_name"]}
+    # LIST_OF_METADATA_TO_CHECK = {"Mass Density": ["metadata", "entry", "sample", "mass_density"],
+    #                              "Sample Env. Device": ["metadata", "entry", "daslogs", "bl1b:se:sampletemp",
+    #                                                     "device_name"],
+    #                              "Chemical Formula": ["metadata", "entry", "sample", "chemical_formula"],
+    #                              "Geometry": ["metadata", "entry", "sample", "container_name"]}
 
     run_number_path = ["indexed", "run_number"]
 
@@ -171,10 +191,10 @@ class ConflictHandler:
         master_key = 0
         for _json in list_json:
             run_number = str(json_extractor(_json, self.run_number_path))
-            mass_density = str(json_extractor(_json, self.list_of_metadata_to_check["Mass Density"]))
-            sample_env_device = str(json_extractor(_json, self.list_of_metadata_to_check["Sample Env. Device"]))
-            chemical_formula = str(json_extractor(_json, self.list_of_metadata_to_check["Chemical Formula"]))
-            geometry = str(json_extractor(_json, self.list_of_metadata_to_check["Geometry"]))
+            mass_density = str(json_extractor(_json, LIST_OF_METADATA_TO_CHECK["Mass Density"]))
+            sample_env_device = str(json_extractor(_json, LIST_OF_METADATA_TO_CHECK["Sample Env. Device"]))
+            chemical_formula = str(json_extractor(_json, LIST_OF_METADATA_TO_CHECK["Chemical Formula"]))
+            geometry = str(json_extractor(_json, LIST_OF_METADATA_TO_CHECK["Geometry"]))
 
             if master_dict == {}:
 
