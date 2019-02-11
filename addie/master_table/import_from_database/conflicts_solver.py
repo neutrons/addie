@@ -3,14 +3,16 @@ import numpy as np
 import pprint
 
 try:
-    from PyQt4.QtGui import QComboBox, QApplication, QMainWindow, QWidget, QTableWidget
+    from PyQt4.QtGui import QApplication, QMainWindow, QWidget, QTableWidget, QCheckBox, QTableWidgetItem
     from PyQt4 import QtGui, QtCore
 except:
     try:
-        from PyQt5.QtWidgets import QComboBox, QApplication, QMainWindow, QWidget, QTableWidget
+        from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QTableWidget, QCheckBox, QTableWidgetItem
         from PyQt5 import QtGui, QtCore
     except:
         raise ImportError("Requires PyQt4 or PyQt5")
+
+from addie.utilities.list_runs_parser import ListRunsParser
 
 from addie.ui_solve_import_conflicts import Ui_MainWindow as UiMainWindow
 
@@ -27,7 +29,7 @@ class ConflictsSolverHandler:
 class ConflictsSolverWindow(QMainWindow):
 
     list_table = [] # name of table in each of the tabs
-    table_width_per_character = 13
+    table_width_per_character = 15
 
     def __init__(self, parent=None, json_conflicts={}):
         self.parent = parent
@@ -85,7 +87,36 @@ class ConflictsSolverWindow(QMainWindow):
         columns_label = [_label for _label in json[0].keys()]
         _table.setHorizontalHeaderLabels(columns_label)
 
+        for _row in np.arange(len(json)):
 
+                # run number
+                _col = 0
+                list_runs = json[_row]["Run Number"]
+                o_parser = ListRunsParser()
+                checkbox = QCheckBox(o_parser.new_runs(list_runs=list_runs))
+                if _row == 0:
+                    checkbox.setChecked(True)
+                _table.setCellWidget(_row, _col, checkbox)
+
+                _col += 1
+                # chemical formula
+                item = QTableWidgetItem(json[_row]["chemical_formula"])
+                _table.setItem(_row, _col, item)
+
+                _col += 1
+                # geometry
+                item = QTableWidgetItem(json[_row]["geometry"])
+                _table.setItem(_row, _col, item)
+
+                _col += 1
+                # mass_density
+                item = QTableWidgetItem(json[_row]["mass_density"])
+                _table.setItem(_row, _col, item)
+
+                _col += 1
+                # sample_env_device
+                item = QTableWidgetItem(json[_row]["sample_env_device"])
+                _table.setItem(_row, _col, item)
 
         self.ui.tabWidget.insertTab(number_of_tabs, _table, "Conflict #{}".format(number_of_tabs))
 
