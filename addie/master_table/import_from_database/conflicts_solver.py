@@ -3,11 +3,11 @@ import numpy as np
 import pprint
 
 try:
-    from PyQt4.QtGui import QApplication, QMainWindow, QWidget, QTableWidget, QCheckBox, QTableWidgetItem
+    from PyQt4.QtGui import QApplication, QMainWindow, QWidget, QTableWidget, QRadioButton, QTableWidgetItem
     from PyQt4 import QtGui, QtCore
 except:
     try:
-        from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QTableWidget, QCheckBox, QTableWidgetItem
+        from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QTableWidget, QRadioButton, QTableWidgetItem
         from PyQt5 import QtGui, QtCore
     except:
         raise ImportError("Requires PyQt4 or PyQt5")
@@ -94,9 +94,12 @@ class ConflictsSolverWindow(QMainWindow):
                 _col = 0
                 list_runs = json[_row]["Run Number"]
                 o_parser = ListRunsParser()
-                checkbox = QCheckBox(o_parser.new_runs(list_runs=list_runs))
+                checkbox = QRadioButton(o_parser.new_runs(list_runs=list_runs))
                 if _row == 0:
                     checkbox.setChecked(True)
+                # QtCore.QObject.connect(checkbox, QtCore.SIGNAL("clicked(bool)"),
+                #                        lambda bool, row=_row, table_id=_table:
+                #                        self._changed_conflict_checkbox(bool, row, table_id))
                 _table.setCellWidget(_row, _col, checkbox)
 
                 _col += 1
@@ -121,9 +124,8 @@ class ConflictsSolverWindow(QMainWindow):
 
         self.ui.tabWidget.insertTab(number_of_tabs, _table, "Conflict #{}".format(number_of_tabs))
 
-
-
-
+    # def _changed_conflict_checkbox(self, state, row, table_id):
+    #     print("state is {} in row {} from table_id {}".format(state, row, table_id))
 
     def accept(self):
         self.parent.from_oncat_to_master_table(json=self.json_conflicts,
