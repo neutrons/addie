@@ -47,7 +47,7 @@ class OncatAuthenticationWindow(QMainWindow):
 
     def center(self):
         frameGm = self.frameGeometry()
-        screen = QApplication.desktop().screenNumber(QtGui.QApplication.desktop().cursor().pos())
+        screen = QApplication.desktop().screenNumber(QApplication.desktop().cursor().pos())
         centerPoint = QApplication.desktop().screenGeometry(screen).center()
         frameGm.moveCenter(centerPoint)
         self.move(frameGm.topLeft())

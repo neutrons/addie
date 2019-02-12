@@ -15,6 +15,7 @@ from addie.ipythondockwidget import IPythonDockWidget
 from addie.ipythondockwidget import IPythonDockWidget
 from qtpy.QtCore import (QProcess, Qt, QUrl)
 from qtpy.QtGui import (QDesktopServices, QIcon)
+from qtpy import QtGui
 from qtpy.QtWidgets import (QApplication, QFileDialog, QMainWindow, QMessageBox, QTableWidgetItem, QVBoxLayout)
 
 # try:
@@ -76,7 +77,7 @@ from addie.master_table.master_table_loader import FromDictionaryToTableUi, Asci
 from addie.master_table.table_tree_handler import TableTreeHandler, TableInitialization, TableConfig, H3TableHandler
 from addie.master_table.table_tree_handler import SaveConfigInterface, TableTree
 from addie.master_table.tree_definition import *
-from addie.ui_table_tree_save_config import Ui_Dialog as UiDialogSave
+# from addie.ui_table_tree_save_config import Ui_Dialog as UiDialogSave
 from addie.master_table.table_row_handler import TableRowHandler
 from addie.master_table.geometry_handler import DimensionsSetter
 from addie.master_table.selection_handler import TableHandler
@@ -88,14 +89,14 @@ from addie.master_table.import_from_database.import_from_database_handler import
 from addie.master_table.import_from_run_number_handler import ImportFromRunNumberHandler
 from addie.master_table.import_from_database.load_into_master_table import LoadIntoMasterTable
 
-# import addie.addiedriver as driver
-# import addie.specify_plots_style as ps
-# import addie.edit_sq_dialog
-#
-# from addie.pdf_lines_manager import PDFPlotManager
-# from addie.graphicviewlib import BraggView, GofRView, SofQView
-# from addie.ipythondockwidget import IPythonDockWidget
-# from addie.treelib import BraggTree, GofRTree
+import addie.addiedriver as driver
+import addie.specify_plots_style as ps
+import addie.edit_sq_dialog
+
+from addie.pdf_lines_manager import PDFPlotManager
+from addie.graphicviewlib import BraggView, GofRView, SofQView
+from addie.ipythondockwidget import IPythonDockWidget
+from addie.treelib import BraggTree, GofRTree
 
 DEBUG = False
 
@@ -332,7 +333,7 @@ class MainWindow(QMainWindow):
         self.init_master_table()
 
         # define the event handling methods
-        self.ui.mantid_run_reduction.clicked.connect(self.do_mantid_run_reduction)
+        #self.ui.mantid_run_reduction.clicked.connect(self.do_mantid_run_reduction)
 
         # bragg diffraction tab
         self.ui.pushButton_loadBraggFile.clicked.connect(self.do_load_bragg_file)
@@ -2833,7 +2834,6 @@ def main():
     form = MainWindow()
     form.show()
     app.exec_()
-
 
 if __name__ == '__main__':
     main()
