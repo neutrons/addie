@@ -7,6 +7,7 @@ import pickle
 
 from qtpy.QtWidgets import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QFileDialog
 from addie.utilities import load_ui
+from qtpy import QtCore, QtGui
 
 from addie.utilities.file_handler import FileHandler
 from addie.master_table.tree_definition import tree_dict, COLUMN_DEFAULT_WIDTH, CONFIG_FILE

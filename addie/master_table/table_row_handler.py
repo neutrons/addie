@@ -1,6 +1,7 @@
-from __future__ import (QMainWindow, QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton,
+from __future__ import (absolute_import, division, print_function)
+
+from qtpy.QtWidgets import (QMainWindow, QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton,
         QComboBox, QWidget, QGridLayout, QVBoxLayout, QHBoxLayout, QDialog, QLineEdit)
-from qtpy.QtWidgets import QMainWindow, QLineEdit, QApplication
 from addie.utilities import load_ui
 from qtpy import QtGui, QtCore
 import copy

@@ -1,16 +1,9 @@
+from __future__ import (absolute_import, division, print_function)
 import pyoncat
 
-try:
-    from PyQt4.QtGui import QDialog
-    from PyQt4 import QtGui, QtCore
-except:
-    try:
-        from PyQt5.QtWidgets import QDialog
-        from PyQt5 import QtGui, QtCore
-    except:
-        raise ImportError("Requires PyQt4 or PyQt5")
-
-from addie.ui_oncat_error_message import Ui_Dialog as UiDialog
+from qtpy.QtWidgets import QDialog
+from addie.utilities import load_ui
+from qtpy import QtGui
 
 
 # Create token store
@@ -127,9 +120,7 @@ class OncatErrorMessageWindow(QDialog):
 
     def __init__(self, parent=None, list_of_runs=[], message=''):
         QDialog.__init__(self, parent=parent)
-        self.ui = UiDialog()
-        self.ui.setupUi(self)
-
+        self.ui = load_ui('ui_oncat_error_message.ui', baseinstance=self)
         self.init_widgets(list_of_runs=list_of_runs)
         self.ui.message.setText(message)
 

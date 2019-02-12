@@ -1,4 +1,9 @@
-from PyQt4 import QtGui, QtCore
+from __future__ import (absolute_import, division, print_function)
+
+from qtpy.QtWidgets import (QMainWindow, QComboBox, QFileDialog, QHBoxLayout, QLabel, QLineEdit, QPushButton, QTableWidgetItem, QVBoxLayout, QWidget)
+from addie.utilities import load_ui
+from qtpy import QtGui, QtCore
+
 import datetime
 from collections import namedtuple
 import numpy as np
@@ -6,7 +11,6 @@ import os
 import json
 import re
 
-from addie.ui_make_calibration import Ui_MainWindow as UiMainWindow
 from addie.utilities.gui_handler import TableHandler
 
 
@@ -28,7 +32,7 @@ class MakeCalibrationLauncher(object):
             parent.make_calibration_ui.activateWindow()
 
 
-class MakeCalibrationWindow(QtGui.QMainWindow):
+class MakeCalibrationWindow(QMainWindow):
 
     table_column_width = [60, 250, 350, 350, 90, 300]
     table_row_height = 85
@@ -59,10 +63,8 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
     def __init__(self, parent=None):
         self.parent = parent
 
-        QtGui.QMainWindow.__init__(self, parent=parent)
-        self.ui = UiMainWindow()
-        self.ui.setupUi(self)
-
+        QMainWindow.__init__(self, parent=parent)
+        self.ui = load_ui('ui_make_calibration.ui', baseinstance=self)
         self.addie_config_file = parent.addie_config_file
 
         self.init_widgets()
@@ -107,9 +109,9 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         self.check_run_calibration_status()
 
     def master_browse_button_clicked(self):
-        _master_folder = QtGui.QFileDialog.getExistingDirectory(caption="Select Output Folder ...",
+        _master_folder = QFileDialog.getExistingDirectory(caption="Select Output Folder ...",
                                                                 directory=self.parent.output_folder,
-                                                                options=QtGui.QFileDialog.ShowDirsOnly)
+                                                                options=QFileDialog.ShowDirsOnly)
         if _master_folder:
             self.ui.master_output_directory_label.setText(str(_master_folder))
             self.master_folder = _master_folder
@@ -138,7 +140,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
     def _general_browser_clicked(self,
                                  sample_type='',
                                  value_ui=None):
-        _file = QtGui.QFileDialog.getOpenFileName(parent=self,
+        _file = QFileDialog.getOpenFileName(parent=self,
                                                   caption="Select {} File ...".format(sample_type),
                                                   directory=self.master_folder,
                                                   filter="NeXus (*.nxs*);; All (*.*)")
@@ -196,9 +198,9 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
             self.check_run_calibration_status()
 
     def local_output_dir_clicked(self, entry=""):
-        _local_folder = QtGui.QFileDialog.getExistingDirectory(caption="Select Output Folder ...",
+        _local_folder = QFileDialog.getExistingDirectory(caption="Select Output Folder ...",
                                                                 directory=self.master_folder,
-                                                                options=QtGui.QFileDialog.ShowDirsOnly)
+                                                                options=QFileDialog.ShowDirsOnly)
         if _local_folder:
             _master_list_ui = self.master_list_ui[entry]
             _local_label = _master_list_ui.output_dir_value
@@ -225,49 +227,49 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         #column0 - entry
         col=0
         _name = str(new_entry_level)
-        item = QtGui.QTableWidgetItem(str(_name))
+        item = QTableWidgetItem(str(_name))
         self.ui.tableWidget.setItem(row, col, item)
 
         #new column - sample environment
         col = 1
-        sample_combobox = QtGui.QComboBox()
+        sample_combobox = QComboBox()
         sample_combobox.setEditable(True)
         sample_combobox.setMaximumHeight(40)
         master_list_sample_environment = self.get_master_list_sample_environment()
         sample_combobox.addItems(master_list_sample_environment)
         master_list_sample_environment_index_selected = self.ui.sample_environment_combobox.currentIndex()
         sample_combobox.setCurrentIndex(master_list_sample_environment_index_selected)
-        label = QtGui.QLabel("Select or Edit!")
-        verti_layout = QtGui.QVBoxLayout()
+        label = QLabel("Select or Edit!")
+        verti_layout = QVBoxLayout()
         verti_layout.addWidget(sample_combobox)
         verti_layout.addWidget(label)
-        widget = QtGui.QWidget()
+        widget = QWidget()
         widget.setLayout(verti_layout)
         self.ui.tableWidget.setCellWidget(row, col, widget)
 
         # new column - calibration
         col = 2
         # first row
-        label = QtGui.QLabel("Run #:")
-        cali_value = QtGui.QLineEdit("")
+        label = QLabel("Run #:")
+        cali_value = QLineEdit("")
         cali_value.returnPressed.connect(lambda entry=_name: self.run_entered(entry))
-        cali_browser_button = QtGui.QPushButton("Browse...")
+        cali_browser_button = QPushButton("Browse...")
         cali_browser_button.setMinimumWidth(button_width)
         cali_browser_button.setMaximumWidth(button_width)
         cali_browser_button.clicked.connect(lambda state, entry=_name:  self.calibration_browser_clicked(entry))
-        first_row = QtGui.QHBoxLayout()
+        first_row = QHBoxLayout()
         first_row.addWidget(label)
         first_row.addWidget(cali_value)
         first_row.addWidget(cali_browser_button)
-        first_row_widget = QtGui.QWidget()
+        first_row_widget = QWidget()
         first_row_widget.setLayout(first_row)
         # second row
-        cali_browser_button_value = QtGui.QLabel("N/A")
+        cali_browser_button_value = QLabel("N/A")
 
-        verti_layout = QtGui.QVBoxLayout()
+        verti_layout = QVBoxLayout()
         verti_layout.addWidget(first_row_widget)
         verti_layout.addWidget(cali_browser_button_value)
-        col1_widget = QtGui.QWidget()
+        col1_widget = QWidget()
         col1_widget.setLayout(verti_layout)
         self.ui.tableWidget.setCellWidget(row, col, col1_widget)
 
@@ -275,26 +277,26 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
         col = 3
         # first row
         # first row
-        label = QtGui.QLabel("Run #:")
-        vana_value = QtGui.QLineEdit("")
+        label = QLabel("Run #:")
+        vana_value = QLineEdit("")
         vana_value.returnPressed.connect(lambda entry=_name: self.run_entered(entry))
-        vana_browser_button = QtGui.QPushButton("Browse...")
+        vana_browser_button = QPushButton("Browse...")
         vana_browser_button.setMinimumWidth(button_width)
         vana_browser_button.setMaximumWidth(button_width)
         vana_browser_button.clicked.connect(lambda state, entry=_name:  self.vanadium_browser_clicked(entry))
-        first_row = QtGui.QHBoxLayout()
+        first_row = QHBoxLayout()
         first_row.addWidget(label)
         first_row.addWidget(vana_value)
         first_row.addWidget(vana_browser_button)
-        first_row_widget = QtGui.QWidget()
+        first_row_widget = QWidget()
         first_row_widget.setLayout(first_row)
         # second row
-        vana_browser_button_value = QtGui.QLabel("N/A")
+        vana_browser_button_value = QLabel("N/A")
 
-        verti_layout = QtGui.QVBoxLayout()
+        verti_layout = QVBoxLayout()
         verti_layout.addWidget(first_row_widget)
         verti_layout.addWidget(vana_browser_button_value)
-        col1_widget = QtGui.QWidget()
+        col1_widget = QWidget()
         col1_widget.setLayout(verti_layout)
         self.ui.tableWidget.setCellWidget(row, col, col1_widget)
 
@@ -306,20 +308,20 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
 
         # new column - output dir
         col = 5
-        browser_button = QtGui.QPushButton("Browse...")
+        browser_button = QPushButton("Browse...")
         browser_button.setMinimumWidth(button_width)
         browser_button.setMaximumWidth(button_width)
         browser_button.clicked.connect(lambda state, entry=_name: self.local_output_dir_clicked(entry))
-        browser_value = QtGui.QLabel(self.master_folder)
-        reset = QtGui.QPushButton("Use Master")
+        browser_value = QLabel(self.master_folder)
+        reset = QPushButton("Use Master")
         reset.setMinimumWidth(button_width)
         reset.setMaximumWidth(button_width)
         reset.clicked.connect(lambda state, entry=_name: self.local_reset_dir_clicked(entry))
-        hori_layout = QtGui.QHBoxLayout()
+        hori_layout = QHBoxLayout()
         hori_layout.addWidget(browser_button)
         hori_layout.addWidget(browser_value)
         hori_layout.addWidget(reset)
-        widget = QtGui.QWidget()
+        widget = QWidget()
         widget.setLayout(hori_layout)
         self.ui.tableWidget.setCellWidget(row, col, widget)
 
@@ -395,7 +397,7 @@ class MakeCalibrationWindow(QtGui.QMainWindow):
     def run_calibration_button_clicked(self):
         # make dictionary of all infos
         o_dict = MakeCalibrationDictionary(parent=self)
-        _file = QtGui.QFileDialog.getSaveFileName(parent=self,
+        _file = QFileDialog.getSaveFileName(parent=self,
                                                   caption="Select where and name of json file to create...",
                                                   directory = '/SNS/users/ntm/')
         if _file:

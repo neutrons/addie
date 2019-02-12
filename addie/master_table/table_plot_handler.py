@@ -56,7 +56,6 @@ class TablePlotHandler:
             samp_x, samp_y = samp_env.getDataFromFile(data['file'], 'samp')
             envi_x, envi_y = samp_env.getDataFromFile(data['file'], 'envi')
 
-            print data['file']
             datasets.append({'run': data['run'] + '_samp',
                              'x': samp_x,
                              'y': samp_y,

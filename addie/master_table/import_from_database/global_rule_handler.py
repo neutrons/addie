@@ -6,20 +6,6 @@ from qtpy.QtWidgets import QDialog, QTableWidgetItem, QComboBox, QCheckBox, QSpa
 from addie.utilities import load_ui
 from qtpy import QtCore
 
-# try:
-#     from PyQt4.QtGui import QDialog, QTableWidgetItem, QComboBox, QCheckBox, QSpacerItem, QSizePolicy, QHBoxLayout, \
-#         QWidget
-#     from PyQt4 import QtGui, QtCore
-# except:
-#     try:
-#         from PyQt5.QtWidgets import QDialog, QTableWidgetItem, QComboBox, QCheckBox, QSpacerItem, QSizePolicy, \
-#             QHBoxLayout, QWidget
-#         from PyQt5 import QtGui, QtCore
-#     except:
-#         raise ImportError("Requires PyQt4 or PyQt5")
-
-from addie.ui_filter_rule_editor import Ui_Dialog as UiDialog
-
 
 class GlobalRuleHandler:
 
