@@ -1,15 +1,10 @@
+from __future__ import (absolute_import, division, print_function)
 from collections import OrderedDict
 import copy
 import numpy as np
 import json
 
-try:
-    from PyQt4.QtCore import Qt
-except ImportError:
-    try:
-        from PyQt5.QtCore import Qt
-    except ImportError:
-        raise ImportError("Requires PyQt4 or PyQt5")
+from qtpy.QtCore import Qt
 
 from addie.master_table.tree_definition import SAMPLE_FIRST_COLUMN, NORMALIZATION_FIRST_COLUMN
 from addie.master_table.utilities import Utilities

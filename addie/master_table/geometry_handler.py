@@ -1,31 +1,18 @@
+from __future__ import (absolute_import, division, print_function)
 import copy
 import numpy as np
 import random
 
-try:
-    from PyQt4.QtGui import QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton, \
+from qtpy.QtWidgets import QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton, \
         QComboBox, QWidget, QGridLayout, QVBoxLayout, QHBoxLayout, QDialog, QLineEdit
-    from PyQt4.QtGui import QFileDialog
-    from PyQt4 import QtCore, QtGui
-except ImportError:
-    try:
-        from PyQt5.QtWidgets import QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton, \
-            QWidget, QComboBox, QGridLayout, QVBoxLayout, QHBoxLayout, QDialog, QLineEdit
-        from PyQt5.QtWidgets import QFileDialog
-        from PyQt5 import QtCore, QtGui
-    except ImportError:
-        raise ImportError("Requires PyQt4 or PyQt5")
+from addie.utilities import load_ui
+from qtpy import QtGui
 
-# from qtpy.QWidgets import QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton, QWidget, QComboBox
-# from qtpy import QtCore, QtGui
 from addie.master_table.table_row_handler import TableRowHandler
 from addie.master_table.placzek_handler import PlaczekHandler
 from addie.master_table.selection_handler import TransferH3TableWidgetState
 from addie.master_table.tree_definition import COLUMN_DEFAULT_HEIGHT
-
 from addie.utilities.math_tools import is_number
-
-from addie.ui_dimensions_setter import Ui_Dialog as UiDialog
 
 
 class DimensionsSetter(QDialog):
@@ -38,8 +25,7 @@ class DimensionsSetter(QDialog):
         self.data_type =  data_type
 
         QDialog.__init__(self, parent=parent)
-        self.ui = UiDialog()
-        self.ui.setupUi(self)
+        self.ui = load_ui('ui_dimensions_setter.ui', baseinstance=self)
 
         self.group_widgets()
         self.init_widgets_layout()

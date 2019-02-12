@@ -1,3 +1,4 @@
+from __future__ import (absolute_import, division, print_function)
 import os
 import numpy as np
 from collections import OrderedDict
@@ -105,10 +106,7 @@ class LoaderOptionsInterface(QDialog):
 
         QDialog.__init__(self, parent=parent)
         self.ui = load('ui_list_of_scan_loader_dialog.ui', baseinstance=self)
-        #self.ui = UiDialog()
-        #self.ui.setupUi(self)
         self.init_widgets()
-
         self.setWindowTitle("Options to load list of runs selected")
         self.parent.ascii_loader_option = None
 
@@ -139,8 +137,6 @@ class AsciiLoaderOptionsInterface(LoaderOptionsInterface):
 
         QDialog.__init__(self, parent=parent)
         self.ui = load('ui_list_of_scan_loader_dialog.ui', baseinstance=self)
-        # self.ui = UiDialog()
-        # self.ui.setupUi(self)
         self.init_widgets()
 
         short_filename = os.path.basename(filename)

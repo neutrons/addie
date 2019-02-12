@@ -1,14 +1,9 @@
-try:
-    from PyQt4.QtGui import QDialog
-except:
-    try:
-        from PyQt5.QtWidgets import QDialog
-    except:
-        raise ImportError("Requires PyQt4 or PyQt5")
+from __future__ import (absolute_import, division, print_function)
+
+from qtpy.QtWidgets import QDialog
+from addie.utilities import load_ui
 
 from addie.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
-
-from addie.ui_import_from_run_number import Ui_Dialog as UiDialog
 
 
 class ImportFromRunNumberHandler:
@@ -31,9 +26,7 @@ class ImportFromRunNumberWindow(QDialog):
         self.parent = parent
 
         QDialog.__init__(self, parent=parent)
-        self.ui = UiDialog()
-        self.ui.setupUi(self)
-
+        self.ui = load_ui('ui_import_from_run_number.ui', baseinstance=self)
         self.init_widgets()
 
     def init_widgets(self):

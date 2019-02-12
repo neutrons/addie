@@ -1,6 +1,8 @@
 from __future__ import (absolute_import, division, print_function)
+
 from qtpy.QtWidgets import QMainWindow, QLineEdit, QApplication
 from addie.utilities import load_ui
+from qtpy import QtGui
 
 import pyoncat
 import oauthlib

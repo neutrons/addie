@@ -7,6 +7,7 @@ import numpy as np
 from qtpy.QtWidgets import QDialog, QComboBox, QLineEdit, QPushButton, QWidget, QHBoxLayout, QLabel, \
         QTableWidgetItem, QApplication, QMainWindow
 from addie.utilities import load_ui
+from qtpy import QtGui, QtCore
 
 from addie.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
 from addie.utilities.oncat import OncatErrorMessageWindow
@@ -29,8 +30,6 @@ from addie.master_table.import_from_database.format_json_from_database_to_master
 
 from addie.utilities.general import generate_random_key, remove_white_spaces
 from addie.utilities.gui_handler import TableHandler
-
-# from addie.ui_import_from_database import Ui_MainWindow as UiMainWindow
 
 
 class ImportFromDatabaseHandler:
@@ -246,7 +245,7 @@ class ImportFromDatabaseWindow(QMainWindow):
         retrieve all the information from the template and populate the preview table """
 
         QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
-        QtGui.QApplication.processEvents()
+        QApplication.processEvents()
 
         #if self.ui.import_button.isEnabled():
         o_import = ImportTableFromOncat(parent=self)
@@ -263,12 +262,12 @@ class ImportFromDatabaseWindow(QMainWindow):
         self.refresh_preview_table(nexus_json=copy.deepcopy(nexus_json))
 
         QApplication.restoreOverrideCursor()
-        QtGui.QApplication.processEvents()
+        QApplication.processEvents()
 
     def refresh_filter_page(self):
 
         QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
-        QtGui.QApplication.processEvents()
+        QApplication.processEvents()
 
         if self.ui.import_button.isEnabled():
             o_import = ImportTableFromOncat(parent=self)
@@ -285,7 +284,7 @@ class ImportFromDatabaseWindow(QMainWindow):
         self.update_rule_filter()
 
         QApplication.restoreOverrideCursor()
-        QtGui.QApplication.processEvents()
+        QApplication.processEvents()
 
     def refresh_preview_table(self, nexus_json=[]):
         """this function will use the template returned by ONCat during the initialization of this
@@ -356,7 +355,7 @@ class ImportFromDatabaseWindow(QMainWindow):
     def radio_button_changed(self):
 
         QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
-        QtGui.QApplication.processEvents()
+        QApplication.processEvents()
 
         ipts_widgets_status = False
         run_widgets_status = True
@@ -385,7 +384,7 @@ class ImportFromDatabaseWindow(QMainWindow):
         GuiHandler.check_import_button(self)
 
         QApplication.restoreOverrideCursor()
-        QtGui.QApplication.processEvents()
+        QApplication.processEvents()
 
     def clear_ipts(self):
         self.ui.ipts_lineedit.setText("")

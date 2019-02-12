@@ -1,15 +1,10 @@
+from __future__ import (absolute_import, division, print_function)
+
+from qtpy.QtWidgets import QTableWidgetItem
+from addie.utilities import load_ui
+
 import copy
 import numpy as np
-
-try:
-    from PyQt4.QtGui import QTableWidgetItem
-    from PyQt4 import QtGui, QtCore
-except:
-    try:
-        from PyQt5.QtWidgets import QTableWidgetItem
-        from PyQt5 import QtGui, QtCore
-    except:
-        raise ImportError("Requires PyQt4 or PyQt5")
 
 from addie.utilities.gui_handler import TableHandler
 from addie.utilities.general import json_extractor

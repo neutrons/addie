@@ -1,3 +1,8 @@
+from __future__ import (absolute_import, division, print_function)
+
+from qtpy.QtWidgets import QApplication
+from qtpy import QtCore
+
 import copy
 
 from addie.utilities.general import remove_white_spaces
@@ -6,16 +11,6 @@ from addie.utilities.oncat import pyoncatGetIptsList, pyoncatGetNexus, \
     pyoncatGetRunsFromIpts, pyoncatGetTemplate
 from addie.master_table.import_from_database import utilities as ImportFromDatabaseUtilities
 from addie.utilities.general import json_extractor
-
-try:
-    from PyQt4.QtGui import QApplication
-    from PyQt4 import QtGui, QtCore
-except:
-    try:
-        from PyQt5.QtWidgets import QApplication
-        from PyQt5 import QtGui, QtCore
-    except:
-        raise ImportError("Requires PyQt4 or PyQt5")
 
 
 class ImportTableFromOncat:

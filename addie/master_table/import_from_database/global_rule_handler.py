@@ -1,16 +1,22 @@
+from __future__ import (absolute_import, division, print_function)
 import numpy as np
 
-try:
-    from PyQt4.QtGui import QDialog, QTableWidgetItem, QComboBox, QCheckBox, QSpacerItem, QSizePolicy, QHBoxLayout, \
+from qtpy.QtWidgets import QDialog, QTableWidgetItem, QComboBox, QCheckBox, QSpacerItem, QSizePolicy, QHBoxLayout, \
         QWidget
-    from PyQt4 import QtGui, QtCore
-except:
-    try:
-        from PyQt5.QtWidgets import QDialog, QTableWidgetItem, QComboBox, QCheckBox, QSpacerItem, QSizePolicy, \
-            QHBoxLayout, QWidget
-        from PyQt5 import QtGui, QtCore
-    except:
-        raise ImportError("Requires PyQt4 or PyQt5")
+from addie.utilities import load_ui
+from qtpy import QtCore
+
+# try:
+#     from PyQt4.QtGui import QDialog, QTableWidgetItem, QComboBox, QCheckBox, QSpacerItem, QSizePolicy, QHBoxLayout, \
+#         QWidget
+#     from PyQt4 import QtGui, QtCore
+# except:
+#     try:
+#         from PyQt5.QtWidgets import QDialog, QTableWidgetItem, QComboBox, QCheckBox, QSpacerItem, QSizePolicy, \
+#             QHBoxLayout, QWidget
+#         from PyQt5 import QtGui, QtCore
+#     except:
+#         raise ImportError("Requires PyQt4 or PyQt5")
 
 from addie.ui_filter_rule_editor import Ui_Dialog as UiDialog
 
@@ -30,8 +36,9 @@ class GlobalRuleWindow(QDialog):
         self.parent = parent
 
         QDialog.__init__(self, parent=parent)
-        self.ui = UiDialog()
-        self.ui.setupUi(self)
+        self.ui = load_ui('ui_filter_rule_editor.ui', baseinstance=self)
+        #self.ui = UiDialog()
+        #self.ui.setupUi(self)
 
         self.init_widgets()
         self.load_global_rule_dict()

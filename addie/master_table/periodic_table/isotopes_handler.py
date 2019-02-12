@@ -1,16 +1,9 @@
+from __future__ import (absolute_import, division, print_function)
 import periodictable
+from qtpy.QtWidgets import QDialog
+from addie.utilities import load_ui
 
-try:
-    from PyQt4.QtGui import QDialog
-    from PyQt4 import QtCore, QtGui
-except ImportError:
-    try:
-        from PyQt5.QtWidgets import QDialog
-        from PyQt5 import QtCore, QtGui
-    except ImportError:
-        raise ImportError("Requires PyQt4 or PyQt5")
-
-from addie.ui_isotopes import Ui_Dialog as UiDialog
+#from addie.ui_isotopes import Ui_Dialog as UiDialog
 
 
 class IsotopesHandler:
@@ -31,8 +24,9 @@ class IsotopeDialog(QDialog):
     def __init__(self, parent=None, element=''):
         self.parent = parent
         QDialog.__init__(self, parent=parent)
-        self.ui = UiDialog()
-        self.ui.setupUi(self)
+        self.ui = load_ui('ui_isotopes.ui', baseinstance=self)
+        # self.ui = UiDialog()
+        # self.ui.setupUi(self)
 
         self.init_widgets(element)
 

@@ -1,17 +1,11 @@
+from __future__ import (absolute_import, division, print_function)
 import numpy as np
 import scipy.constants
 
-try:
-    from PyQt4.QtGui import QMainWindow
-except:
-    try:
-        from PyQt5.QtWidgets import QMainWindow
-    except:
-        raise ImportError("Requires PyQt4 or PyQt5")
+from qtpy.QtWidgets import QMainWindow
+from addie.utilities import load_ui
 
 from addie.master_table.table_row_handler import TableRowHandler
-
-from addie.ui_mass_density import Ui_MainWindow as UiMainWindow
 from addie.utilities.math_tools import is_number, volume_of_cylinder, volume_of_hollow_cylinder, volume_of_sphere
 
 
@@ -43,9 +37,7 @@ class MassDensityWindow(QMainWindow):
         self.data_type = data_type
 
         QMainWindow.__init__(self, parent=parent)
-        self.ui = UiMainWindow()
-        self.ui.setupUi(self)
-
+        self.ui = load_ui('ui_mass_density.ui', baseinstance=self)
         self.init_widgets()
 
     def init_widgets(self):

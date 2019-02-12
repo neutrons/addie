@@ -1,20 +1,15 @@
+from __future__ import (absolute_import, division, print_function)
+
 from collections import defaultdict
 import numpy as np
 import pprint
 
-try:
-    from PyQt4.QtGui import QApplication, QMainWindow, QWidget, QTableWidget, QRadioButton, QTableWidgetItem
-    from PyQt4 import QtGui, QtCore
-except:
-    try:
-        from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QTableWidget, QRadioButton, QTableWidgetItem
-        from PyQt5 import QtGui, QtCore
-    except:
-        raise ImportError("Requires PyQt4 or PyQt5")
+from qtpy.QtWidgets import QApplication, QMainWindow, QWidget, QTableWidget, QRadioButton, QTableWidgetItem
+from addie.utilities import load_ui
 
 from addie.utilities.list_runs_parser import ListRunsParser
 
-from addie.ui_solve_import_conflicts import Ui_MainWindow as UiMainWindow
+#from addie.ui_solve_import_conflicts import Ui_MainWindow as UiMainWindow
 
 
 class ConflictsSolverHandler:
@@ -42,8 +37,9 @@ class ConflictsSolverWindow(QMainWindow):
         self.json_conflicts = json_conflicts
 
         QMainWindow.__init__(self, parent=parent)
-        self.ui = UiMainWindow()
-        self.ui.setupUi(self)
+        self.ui = load_ui('ui_solve_import_conflicts.ui', baseinstance=self)
+        #self.ui = UiMainWindow()
+        #self.ui.setupUi(self)
 
         self.init_widgets()
 

@@ -1,14 +1,10 @@
+from __future__ import (absolute_import, division, print_function)
+
 import numpy as np
 
-try:
-    from PyQt4.QtGui import QComboBox, QHBoxLayout, QLabel, QTableWidgetItem
-    from PyQt4 import QtGui, QtCore
-except:
-    try:
-        from PyQt5.QtWidgets import QComboBox, QHBoxLayout, QTableWidgetItem
-        from PyQt5 import QtGui, QtCore
-    except:
-        raise ImportError("Requires PyQt4 or PyQt5")
+from qtpy.QtWidgets import QComboBox, QHBoxLayout, QLabel, QTableWidgetItem
+from addie.utilities import load_ui
+from qtpy import QtCore
 
 from addie.utilities.general import generate_random_key
 from addie.master_table.tree_definition import LIST_SEARCH_CRITERIA

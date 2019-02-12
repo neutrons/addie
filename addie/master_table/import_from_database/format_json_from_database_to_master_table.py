@@ -1,3 +1,5 @@
+from __future__ import (absolute_import, division, print_function)
+
 import collections
 import copy
 
@@ -10,6 +12,7 @@ LIST_OF_METADATA_TO_CHECK = {"Mass Density": ["metadata", "entry", "sample", "ma
                                                     "device_name"],
                              "Chemical Formula": ["metadata", "entry", "sample", "chemical_formula"],
                              "Geometry": ["metadata", "entry", "sample", "container_name"]}
+
 
 class FormatJsonFromDatabaseToMasterTable:
 
