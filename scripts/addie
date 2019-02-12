@@ -27,10 +27,10 @@ from qtpy.QtWidgets import (QApplication, QFileDialog, QMainWindow, QMessageBox,
 #     except ImportError:
 #         raise ImportError("Requires PyQt4 or PyQt5")
 
-import addie.ui_mainWindow
-import addie.ui_table_tree
-import addie.step1
-import addie.step2
+#import addie.ui_mainWindow
+#import addie.ui_table_tree
+#import addie.step1
+#import addie.step2
 from addie.configuration_initializer import ConfigurationInitializer
 from addie.utilities.general import get_ucams
 from addie.utilities import load_ui

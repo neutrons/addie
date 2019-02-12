@@ -1,16 +1,8 @@
+from __future__ import (absolute_import, division, print_function)
 import json
-
-try:
-    from PyQt4.QtGui import QDialog, QFileDialog
-    from PyQt4 import QtCore, QtGui
-except ImportError:
-    try:
-        from PyQt5.QtWidgets import QDialog, QFileDialog
-        from PyQt5 import QtCore, QtGui
-    except ImportError:
-        raise ImportError("Requires PyQt4 or PyQt5")
-
-from addie.ui_reduction_configuration_dialog import Ui_Dialog as UiDialog
+from qtpy.QtWidgets import QDialog, QFileDialog
+from addie.utilities import load_ui
+from qtpy import QtGui, QtCore
 
 from addie.make_calibration_handler.make_calibration import MakeCalibrationLauncher
 from addie.master_table.utilities import LoadGroupingFile
@@ -38,8 +30,7 @@ class ReductionConfiguration(QDialog):
     def __init__(self, parent=None):
         self.parent = parent
         QDialog.__init__(self, parent=parent)
-        self.ui = UiDialog()
-        self.ui.setupUi(self)
+        self.ui = load_ui('ui_reduction_configuration_dialog.ui', baseinstance=self)
         self.init_widgets()
         self.parent.set_default_folders_path()
 
@@ -120,7 +111,7 @@ class ReductionConfiguration(QDialog):
 
     def intermediate_browse_button_clicked(self):
         _characterization_folder = self.parent.characterization_folder
-        _intermediate_group_file = QtGui.QFileDialog.getOpenFileName(parent=self.parent,
+        _intermediate_group_file = QFileDialog.getOpenFileName(parent=self.parent,
                                                                    caption="Select Grouping File",
                                                                    directory=_characterization_folder,
                                                                    filter="XML (*.xml)")
@@ -134,7 +125,7 @@ class ReductionConfiguration(QDialog):
 
     def output_browse_button_clicked(self):
         _characterization_folder = self.parent.characterization_folder
-        _output_group_file = QtGui.QFileDialog.getOpenFileName(parent=self.parent,
+        _output_group_file = QFileDialog.getOpenFileName(parent=self.parent,
                                                                    caption="Select Grouping File",
                                                                    directory=_characterization_folder,
                                                                    filter="XML (*.xml)")
@@ -157,7 +148,7 @@ class ReductionConfiguration(QDialog):
     #
     # def browse_calibration_clicked(self):
     #     _calibration_folder = self.parent.calibration_folder
-    #     _calibration_file = QtGui.QFileDialog.getOpenFileName(parent = self.parent,
+    #     _calibration_file = QFileDialog.getOpenFileName(parent = self.parent,
     #                                                           caption = "Select Calibration File",
     #                                                           directory = _calibration_folder,
     #                                                           filter = self.parent.calibration_extension)
@@ -166,7 +157,7 @@ class ReductionConfiguration(QDialog):
 
     def pdf_browse_characterization_clicked(self):
         _characterization_folder = self.parent.characterization_folder
-        _characterization_file = QtGui.QFileDialog.getOpenFileName(parent=self.parent,
+        _characterization_file = QFileDialog.getOpenFileName(parent=self.parent,
                                                                    caption="Select Characterization File",
                                                                    directory=_characterization_folder,
                                                                    filter=self.parent.characterization_extension)

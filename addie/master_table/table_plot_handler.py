@@ -1,21 +1,13 @@
+from __future__ import (absolute_import, division, print_function)
+from addie.utilities import load_ui
+from qtpy import QtGui, QtCore
+from qtpy.QtCore import Qt
 import os
 import numpy as np
 import re
-
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 import matplotlib.cm as cm
-
-try:
-    from PyQt4 import QtCore, QtGui
-    from PyQt4.QtCore import Qt
-
-except ImportError:
-    try:
-        from PyQt5 import QtCore, QtGui
-        from PyQt5.QtCore import Qt
-    except ImportError:
-        raise ImportError("Requires PyQt4 or PyQt5")
 
 from addie.step2_handler.sample_environment_handler import SampleEnvironmentHandler
 

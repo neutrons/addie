@@ -1,17 +1,9 @@
+from __future__ import (absolute_import, division, print_function)
+from qtpy.QtWidgets import QCheckBox, QLabel, QPushButton, QComboBox, QTableWidgetItem
+from addie.utilities import load_ui
+from qtpy import QtGui
 import numpy as np
 import pprint
-
-try:
-    from PyQt4.QtGui import QCheckBox, QLabel, QPushButton, QComboBox, QTableWidgetItem
-    from PyQt4 import QtGui
-    from PyQt4.QtCore import Qt
-except ImportError:
-    try:
-        from PyQt5.QtWidgets import QCheckBox, QLabel, QPushButton, QComboBox, QTableWidgetItem
-        from PyQt5 import QtGui
-        from PyQt5.QtCore import Qt
-    except ImportError:
-        raise ImportError("Requires PyQt4 or PyQt5")
 
 from addie.master_table.tree_definition import INDEX_OF_COLUMNS_SEARCHABLE
 from addie.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_COMBOBOX
@@ -244,7 +236,7 @@ class RowsHandler(SelectionHandlerMaster):
 
         _table_ui = self.parent.ui.h3_table
         nbr_col = _table_ui.columnCount()
-        _row_selection = QtGui.QTableWidgetSelectionRange(row, 0, row, nbr_col-1)
+        _row_selection = QTableWidgetSelectionRange(row, 0, row, nbr_col-1)
         _table_ui.setRangeSelected(_row_selection, True)
         self.parent.ui.statusbar.setStyleSheet("color: green")
         self.parent.ui.statusbar.showMessage("Select another row to copy the current selected row!",
@@ -259,7 +251,7 @@ class RowsHandler(SelectionHandlerMaster):
         if row is None:
             list_to_row = self.o_selection.get_list_row()
             nbr_col = self.table_ui.columnCount()
-            _row_selection = QtGui.QTableWidgetSelectionRange(list_to_row[0],
+            _row_selection = QTableWidgetSelectionRange(list_to_row[0],
                                                               0,
                                                               list_to_row[-1],
                                                               nbr_col - 1)

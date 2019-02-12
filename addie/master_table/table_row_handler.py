@@ -1,19 +1,16 @@
+from __future__ import (QMainWindow, QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton,
+        QComboBox, QWidget, QGridLayout, QVBoxLayout, QHBoxLayout, QDialog, QLineEdit)
+from qtpy.QtWidgets import QMainWindow, QLineEdit, QApplication
+from addie.utilities import load_ui
+from qtpy import QtGui, QtCore
 import copy
 import numpy as np
 import random
-
-from qtpy.QtWidgets import (QMainWindow, QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton,
-        QComboBox, QWidget, QGridLayout, QVBoxLayout, QHBoxLayout, QDialog, QLineEdit)
-
-# from qtpy.QWidgets import QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton, QWidget, QComboBox
-# from qtpy import QtCore, QtGui
 
 from addie.master_table.placzek_handler import PlaczekHandler
 from addie.master_table.selection_handler import TransferH3TableWidgetState
 from addie.master_table.periodic_table.chemical_formula_handler import format_chemical_formula_equation
 from addie.master_table.tree_definition import COLUMN_DEFAULT_HEIGHT, CONFIG_BUTTON_HEIGHT, CONFIG_BUTTON_WIDTH
-
-#from addie.ui_dimensions_setter import Ui_Dialog as UiDialog
 
 
 class TableRowHandler:
@@ -786,7 +783,7 @@ class TableRowHandler:
 
         # # column 28 - Input Grouping
         # column += 1
-        # _row1_layout = QtGui.QHBoxLayout()
+        # _row1_layout = QHBoxLayout()
         # _row1_layout.setMargin(0)
         # _label = QLabel("Default  or  ")
         # _button = QPushButton("...")
@@ -801,7 +798,7 @@ class TableRowHandler:
         # _row1_layout.addWidget(_button)
         # _row1_widget.setLayout(_row1_layout)
         #
-        # _row2_layout = QtGui.QHBoxLayout()
+        # _row2_layout = QHBoxLayout()
         # _row2_layout.setMargin(0)
         # _label = QLabel("(6 groups)")
         # _master_table_row_ui['input_grouping_label'] = _label
@@ -817,7 +814,7 @@ class TableRowHandler:
         # _row2_widget = QWidget()
         # _row2_widget.setLayout(_row2_layout)
         #
-        # _verti_layout = QtGui.QVBoxLayout()
+        # _verti_layout = QVBoxLayout()
         # _verti_layout.setMargin(0)
         # _verti_widget = QWidget()
         # _verti_layout.addWidget(_row1_widget)
@@ -827,7 +824,7 @@ class TableRowHandler:
         #
         # # column 29 - Output Grouping
         # column += 1
-        # _row1_layout = QtGui.QHBoxLayout()
+        # _row1_layout = QHBoxLayout()
         # _row1_layout.setMargin(0)
         # _label = QLabel("Default  or  ")
         # _button = QPushButton("...")
@@ -841,7 +838,7 @@ class TableRowHandler:
         # _row1_layout.addWidget(_label)
         # _row1_layout.addWidget(_button)
         # _row1_widget.setLayout(_row1_layout)
-        # _row2_layout = QtGui.QHBoxLayout()
+        # _row2_layout = QHBoxLayout()
         # _row2_layout.setMargin(0)
         # _label = QLabel("(6 groups)")
         # _master_table_row_ui['output_grouping_label'] = _label
@@ -856,7 +853,7 @@ class TableRowHandler:
         # _row2_layout.addItem(_spacer)
         # _row2_widget = QWidget()
         # _row2_widget.setLayout(_row2_layout)
-        # _verti_layout = QtGui.QVBoxLayout()
+        # _verti_layout = QVBoxLayout()
         # _verti_layout.setMargin(0)
         # _verti_widget = QWidget()
         # _verti_layout.addWidget(_row1_widget)

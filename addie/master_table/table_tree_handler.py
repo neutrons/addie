@@ -9,7 +9,6 @@ from qtpy.QtWidgets import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QF
 from addie.utilities import load_ui
 
 from addie.utilities.file_handler import FileHandler
-#from addie.ui_table_tree import Ui_Dialog as UiDialog
 from addie.master_table.tree_definition import tree_dict, COLUMN_DEFAULT_WIDTH, CONFIG_FILE
 from addie.master_table.tree_definition import h1_COLUMNS_WIDTH, h2_COLUMNS_WIDTH, h3_COLUMNS_WIDTH
 from addie.master_table.table_row_handler import TableRowHandler
