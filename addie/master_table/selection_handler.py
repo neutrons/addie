@@ -565,7 +565,10 @@ class TableHandler(SelectionHandlerMaster):
                         hide_it = False
 
                 for _col in INDEX_OF_SPECIAL_COLUMNS_SEARCHABLE:
-                    _text_widget = str(self.table_ui.cellWidget(_row, _col).children()[1].text()).lower()
+                    if (_col == 6) or (_col == 17): # layout inside a layout for these cells
+                        _text_widget = str(self.table_ui.cellWidget(_row, _col).children()[1].children()[1].text()).lower()
+                    else:
+                        _text_widget = str(self.table_ui.cellWidget(_row, _col).children()[1].text()).lower()
                     if text.lower() in _text_widget:
                         hide_it = False
 
