@@ -2710,9 +2710,9 @@ class MainWindow(QMainWindow):
         o_table = TableRowHandler(parent=self)
         o_table.transfer_widget_states(from_key=key, data_type='sample')
 
-    def master_table_sample_shape_changed(self, text, key):
+    def master_table_sample_shape_changed(self, index, key):
         o_table = TableRowHandler(parent=self)
-        o_table.shape_changed(shape=text, key=key, data_type='sample')
+        o_table.shape_changed(shape_index=index, key=key, data_type='sample')
 
     def master_table_sample_abs_correction_changed(self, text, key):
         o_table = TableRowHandler(parent=self)

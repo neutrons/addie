@@ -29,7 +29,7 @@ class TableRowHandler:
         o_transfer.transfer_states(from_key=from_key, data_type=data_type)
 
     # global methods
-    def shape_changed(self, shape='cylindrical', key=None, data_type='sample'):
+    def shape_changed(self, shape_index=0, key=None, data_type='sample'):
 
         def update_ui(ui=None, new_list=[]):
             '''repopulate the ui with the new list and select old item selected
@@ -56,12 +56,12 @@ class TableRowHandler:
 
         # abs. correction
         absorption_correction_ui = self.parent.master_table_list_ui[key][data_type]['abs_correction']
-        list_abs_correction = self.get_absorption_correction_list(shape=shape)
+        list_abs_correction = self.get_absorption_correction_list(shape=shape_index)
         update_ui(ui=absorption_correction_ui, new_list=list_abs_correction)
 
         # mult. scat. correction
         mult_scat_correction_ui = self.parent.master_table_list_ui[key][data_type]['mult_scat_correction']
-        list_mult_scat_correction = self.get_multi_scat_correction_list(shape=shape)
+        list_mult_scat_correction = self.get_multi_scat_correction_list(shape=shape_index)
         update_ui(ui=mult_scat_correction_ui, new_list=list_mult_scat_correction)
 
         _enabled_radius_1 = True
@@ -69,9 +69,9 @@ class TableRowHandler:
         _enabled_height = True
         _label_radius_1 = 'Radius'
         _label_radius_2 = 'Outer Radius'
-        if shape == 'cylindrical':
+        if shape_index == 0: # cylindrical
             _enabled_radius_2 = False
-        elif shape == 'spherical':
+        elif shape_index == 1: # spherical
             _enabled_height = False
             _enabled_radius_2 = False
         else:
@@ -243,9 +243,6 @@ class TableRowHandler:
         _layout.addStretch()
         _new_widget = QWidget()
         _new_widget.setLayout(_layout)
-        # QtCore.QObject.connect(_widget, QtCore.SIGNAL("stateChanged(int)"),
-        #                        lambda state=0, key=random_key:
-        #                        self.parent.master_table_select_state_changed(state, key))
         _widget.stateChanged.connect(lambda state=0, key=random_key:
                                self.parent.master_table_select_state_changed(state, key))
 #        _widget.blockSignals(True)
@@ -283,17 +280,11 @@ class TableRowHandler:
         clean_sample_chemical_formula = format_chemical_formula_equation(sample_chemical_formula)
         _material_text = QLineEdit(clean_sample_chemical_formula)
         _material_text.setEnabled(False)
-        # QtCore.QObject.connect(_material_text, QtCore.SIGNAL("returnPressed()"),
-        #                        lambda key=random_key:
-        #                        self.parent.master_table_sample_material_line_edit_entered(key))
         _material_text.returnPressed.connect(lambda key=random_key:
                                self.parent.master_table_sample_material_line_edit_entered(key))
         _material_button = QPushButton("...")
         _material_button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
         _material_button.setFixedWidth(CONFIG_BUTTON_WIDTH)
-        # QtCore.QObject.connect(_material_button, QtCore.SIGNAL("pressed()"),
-        #                        lambda key=random_key:
-        #                        self.parent.master_table_sample_material_button_pressed(key))
         _material_button.pressed.connect(lambda key=random_key:
                                self.parent.master_table_sample_material_button_pressed(key))
 
@@ -307,16 +298,9 @@ class TableRowHandler:
         _master_table_row_ui['sample']['material']['text'] = _material_text
         _master_table_row_ui['sample']['material']['button'] = _material_button
 
-#        _item = QTableWidgetItem("")
-#        _master_table_row_ui['sample']['material'] = _item
-#        self.table_ui.setItem(row, column, _item)
-
         # column 6 - mass density
         column += 1
         _mass_text = QLineEdit(sample_mass_density)
-        # QtCore.QObject.connect(_mass_text, QtCore.SIGNAL("returnPressed()"),
-        #                        lambda key=random_key:
-        #                        self.parent.master_table_sample_mass_density_line_edit_entered(key))
         _mass_text.returnPressed.connect(                               lambda key=random_key:
                                self.parent.master_table_sample_mass_density_line_edit_entered(key))
 
@@ -329,9 +313,6 @@ class TableRowHandler:
         _mass_button = QPushButton("...")
         _mass_button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
         _mass_button.setFixedWidth(CONFIG_BUTTON_WIDTH)
-        # QtCore.QObject.connect(_mass_button, QtCore.SIGNAL("pressed()"),
-        #                        lambda key=random_key:
-        #                        self.parent.master_table_sample_mass_density_button_pressed(key))
         _mass_button.pressed.connect(                               lambda key=random_key:
                                self.parent.master_table_sample_mass_density_button_pressed(key))
         _verti_layout = QVBoxLayout()
@@ -356,14 +337,10 @@ class TableRowHandler:
         _layout = QHBoxLayout()
         _layout.setContentsMargins(0, 0, 0, 0)
         _widget = QComboBox()
-        _shape_default_value = 'Cylindrical'
-        _widget.currentIndexChanged.connect(lambda value=_shape_default_value,
+        _shape_default_index = 0
+        _widget.currentIndexChanged.connect(lambda index=_shape_default_index,
                                key=random_key:
-                               self.parent.master_table_sample_shape_changed(value, key))
-        # QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-        #                        lambda value=_shape_default_value,
-        #                        key=random_key:
-        #                        self.parent.master_table_sample_shape_changed(value, key))
+                               self.parent.master_table_sample_shape_changed(index, key))
         _list_ui_to_unlock.append(_widget)
         _widget.blockSignals(True)
         _widget.addItem("cylindrical")
@@ -429,35 +406,8 @@ class TableRowHandler:
         _verti_widget = QWidget()
         _verti_widget.setLayout(_verti_layout)
 
-        # # Layout 2
-        # _label1 = QLabel("Ri:")
-        # _value1 = QLabel("N/A")
-        # _label2 = QLabel(";Ro:")
-        # _value2 = QLabel("N/A")
-        # _label3 = QLabel(";D:")
-        # _value3 = QLabel("N/A")
-        # _hori_layout = QHBoxLayout()
-        # _hori_layout.addWidget(_label1)
-        # _hori_layout.addWidget(_value1)
-        # _hori_layout.addWidget(_label2)
-        # _hori_layout.addWidget(_value2)
-        # _hori_layout.addWidget(_label3)
-        # _hori_layout.addWidget(_value3)
-        # _hori_widget = QWidget()
-        # _hori_widget.setLayout(_hori_layout)
-        #
-        # _set_button = QPushButton("...")
-        # _verti_layout = QVBoxLayout()
-        # _verti_layout.addWidget(_hori_widget)
-        # _verti_layout.addWidget(_set_button)
-        # _verti_widget = QWidget()
-        # _verti_widget.setLayout(_verti_layout)
-
         _set_dimensions_button.pressed.connect(lambda key=random_key:
                                                self.parent.master_table_sample_dimensions_setter_button_pressed(key))
-        # QtCore.QObject.connect(_set_dimensions_button, QtCore.SIGNAL("pressed()"),
-        #                        lambda key=random_key:
-        #                        self.parent.master_table_sample_dimensions_setter_button_pressed(key))
 
         self.table_ui.setCellWidget(row, column, _verti_widget)
 
@@ -466,14 +416,11 @@ class TableRowHandler:
         _layout = QHBoxLayout()
         _layout.setContentsMargins(0, 0, 0, 0)
         _widget = QComboBox()
+        _shape_default_value = 0
         list_abs_correction = self.get_absorption_correction_list(shape=_shape_default_value)
         _widget.currentIndexChanged.connect(lambda value=list_abs_correction[0],
                                key = random_key:
                                self.parent.master_table_sample_abs_correction_changed(value, key))
-        # QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-        #                        lambda value=list_abs_correction[0],
-        #                        key = random_key:
-        #                        self.parent.master_table_sample_abs_correction_changed(value, key))
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
         for _item in list_abs_correction:
@@ -493,10 +440,6 @@ class TableRowHandler:
         _widget.currentIndexChanged.connect(lambda value=list_multi_scat_correction[0],
                                key=random_key:
                                self.parent.master_table_sample_multi_scattering_correction_changed(value, key))
-        # QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-        #                        lambda value=list_multi_scat_correction[0],
-        #                        key=random_key:
-        #                        self.parent.master_table_sample_multi_scattering_correction_changed(value, key))
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
         for _item in list_multi_scat_correction:
@@ -522,9 +465,6 @@ class TableRowHandler:
         _button.setFixedWidth(CONFIG_BUTTON_WIDTH)
         _button.pressed.connect(lambda key=random_key:
                                self.parent.master_table_sample_placzek_button_pressed(key))
-        # QtCore.QObject.connect(_button, QtCore.SIGNAL("pressed()"),
-        #                        lambda key=random_key:
-        #                        self.parent.master_table_sample_placzek_button_pressed(key))
         _master_table_row_ui['sample']['placzek_button'] = _button
         _button.setVisible(False)
         _master_table_row_ui['sample']['placzek_button'] = _button
@@ -536,10 +476,6 @@ class TableRowHandler:
         _widget1.currentIndexChanged.connect(lambda value=_default_value,
                                key=random_key:
                                self.parent.master_table_sample_inelastic_correction_changed(value, key))
-        # QtCore.QObject.connect(_widget1, QtCore.SIGNAL("currentIndexChanged(QString)"),
-        #                        lambda value=_default_value,
-        #                        key=random_key:
-        #                        self.parent.master_table_sample_inelastic_correction_changed(value, key))
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
         self.table_ui.setCellWidget(row, column, _widget)
@@ -570,15 +506,9 @@ class TableRowHandler:
         _material_text.setEnabled(False)
         _material_text.returnPressed.connect(lambda key=random_key:
                                              self.parent.master_table_normalization_material_line_edit_entered(key))
-        # QtCore.QObject.connect(_material_text, QtCore.SIGNAL("returnPressed()"),
-        #                        lambda key=random_key:
-        #                        self.parent.master_table_normalization_material_line_edit_entered(key))
         _material_button = QPushButton("...")
         _material_button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
         _material_button.setFixedWidth(CONFIG_BUTTON_WIDTH)
-        # QtCore.QObject.connect(_material_button, QtCore.SIGNAL("pressed()"),
-        #                        lambda key=random_key:
-        #                        self.parent.master_table_normalization_material_button_pressed(key))
         _material_button.pressed.connect(lambda key=random_key:
                                          self.parent.master_table_normalization_material_button_pressed(key))
         _verti_layout = QVBoxLayout()
@@ -590,15 +520,9 @@ class TableRowHandler:
         _master_table_row_ui['normalization']['material']['text'] = _material_text
         _master_table_row_ui['normalization']['material']['button'] = _material_button
 
-#        _item = QTableWidgetItem("")
-#        self.table_ui.setItem(row, column, _item)
-
         # column 17 - mass density
         column += 1
         _mass_text = QLineEdit("N/A")
-        # QtCore.QObject.connect(_mass_text, QtCore.SIGNAL("returnPressed()"),
-        #                        lambda key=random_key:
-        #                        self.parent.master_table_normalization_mass_density_line_edit_entered(key))
         _mass_text.returnPressed.connect(lambda key=random_key:
                                          self.parent.master_table_normalization_mass_density_line_edit_entered(key))
         _mass_units = QLabel("g/cc")
@@ -610,9 +534,6 @@ class TableRowHandler:
         _mass_button = QPushButton("...")
         _mass_button.setFixedWidth(CONFIG_BUTTON_WIDTH)
         _mass_button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
-        # QtCore.QObject.connect(_mass_button, QtCore.SIGNAL("pressed()"),
-        #                        lambda key=random_key:
-        #                        self.parent.master_table_normalization_mass_density_button_pressed(key))
         _mass_button.pressed.connect(lambda key=random_key:
                                      self.parent.master_table_normalization_mass_density_button_pressed(key))
         _verti_layout = QVBoxLayout()
@@ -634,14 +555,9 @@ class TableRowHandler:
         _layout = QHBoxLayout()
         _layout.setContentsMargins(0, 0, 0, 0)
         _widget = QComboBox()
-        _shape_default_value = 'Cylindrical'
         _widget.currentIndexChanged.connect(lambda value=_shape_default_value,
                                key=random_key:
                                self.parent.master_table_normalization_shape_changed(value, key))
-        # QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-        #                        lambda value=_shape_default_value,
-        #                        key=random_key:
-        #                        self.parent.master_table_normalization_shape_changed(value, key))
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
         _widget.addItem("cylindrical")
@@ -707,9 +623,6 @@ class TableRowHandler:
         _verti_widget = QWidget()
         _verti_widget.setLayout(_verti_layout)
 
-        # QtCore.QObject.connect(_set_dimensions_button, QtCore.SIGNAL("pressed()"),
-        #                        lambda key=random_key:
-        #                        self.parent.master_table_normalization_dimensions_setter_button_pressed(key))
         _set_dimensions_button.pressed.connect(lambda key=random_key:
                                                self.parent.master_table_normalization_dimensions_setter_button_pressed(key))
 
@@ -723,13 +636,8 @@ class TableRowHandler:
         _widget.currentIndexChanged.connect(lambda value=list_abs_correction[0],
                                    key=random_key:
                                self.parent.master_table_normalization_abs_correction_changed(value, key))
-        # QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-        #                        lambda value=list_abs_correction[0],
-        #                            key=random_key:
-        #                        self.parent.master_table_normalization_abs_correction_changed(value, key))
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
-#        list_abs_correction = self.get_absorption_correction_list(shape=_shape_default_value)
         for _item in list_abs_correction:
             _widget.addItem(_item)
         _widget.setCurrentIndex(0)
@@ -747,13 +655,8 @@ class TableRowHandler:
         _widget.currentIndexChanged.connect(lambda value=list_multi_scat_correction[0],
                                    key=random_key:
                                self.parent.master_table_normalization_multi_scattering_correction_changed(value, key))
-        # QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-        #                        lambda value=list_multi_scat_correction[0],
-        #                            key=random_key:
-        #                        self.parent.master_table_normalization_multi_scattering_correction_changed(value, key))
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
-        # list_multi_scat_correction = self.get_multi_scat_correction_list(shape=_shape_default_value)
         for _item in list_multi_scat_correction:
             _widget.addItem(_item)
         _widget.setCurrentIndex(0)
@@ -779,9 +682,6 @@ class TableRowHandler:
         _button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
         _button.pressed.connect(lambda key=random_key:
                                self.parent.master_table_normalization_placzek_button_pressed(key))
-        # QtCore.QObject.connect(_button, QtCore.SIGNAL("pressed()"),
-        #                        lambda key=random_key:
-        #                        self.parent.master_table_normalization_placzek_button_pressed(key))
         _master_table_row_ui['normalization']['placzek_button'] = _button
         _button.setVisible(False)
         _layout.addWidget(_widget1)
@@ -792,10 +692,6 @@ class TableRowHandler:
         _widget1.currentIndexChanged.connect( lambda value=_default_value,
                                key=random_key:
                                self.parent.master_table_normalization_inelastic_correction_changed(value, key))
-        # QtCore.QObject.connect(_widget1, QtCore.SIGNAL("currentIndexChanged(QString)"),
-        #                        lambda value=_default_value,
-        #                        key=random_key:
-        #                        self.parent.master_table_normalization_inelastic_correction_changed(value, key))
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
         self.table_ui.setCellWidget(row, column, _widget)
@@ -805,7 +701,6 @@ class TableRowHandler:
 
         ## recap
 
-        #list_ui = self._get_list_ui_from_master_table_row_ui(_master_table_row_ui)
         self.parent.master_table_list_ui[random_key] = _master_table_row_ui
         self.unlock_signals_ui(list_ui=_list_ui_to_unlock)
         self.parent.check_status_of_right_click_buttons()
@@ -848,14 +743,14 @@ class TableRowHandler:
         for _ui in list_ui:
             _ui.blockSignals(False)
 
-    def get_multi_scat_correction_list(self, shape='cylindrical'):
-        if shape.lower() == 'cylindrical':
+    def get_multi_scat_correction_list(self, shape=0):
+        if shape == 0: # cylindrical
             return ['None',
                     'Carpenter',
                     'Mayers']
-        elif shape.lower() == 'spherical':
+        elif shape == 1: # spherical
             return ['None']
-        elif shape.lower() == 'hollow cylindrical':
+        elif shape == 2: # hollow cylindrical
             return ['None']
 
         return ['None']
@@ -865,8 +760,8 @@ class TableRowHandler:
                 'Placzek',
                 ]
 
-    def get_absorption_correction_list(self, shape='cylindrical'):
-        if shape.lower() == 'cylindrical':
+    def get_absorption_correction_list(self, shape=0):
+        if shape == 0: # cylindrical
             return ['None',
                     'Carpenter',
                     'Mayers',
@@ -874,11 +769,11 @@ class TableRowHandler:
                     'Monte-Carlo',
                     'Numerical',
                     ]
-        elif shape.lower() == 'spherical':
+        elif shape == 1: # spherical
             return ['None',
                     'Monte-Carlo',
                     ]
-        elif shape.lower() == 'hollow cylinder':
+        elif shape== 2: # hollow cylinder
             return ['None',
                     'Monte-Carlo']
 
