@@ -1,5 +1,7 @@
 from addie.master_table.import_from_database.conflicts_solver import ConflictsSolverHandler
 from addie.master_table.table_row_handler import TableRowHandler
+from addie.utilities.gui_handler import TableHandler
+
 
 class LoadIntoMasterTable:
 
@@ -19,6 +21,9 @@ class LoadIntoMasterTable:
     def load(self):
 
         o_table = TableRowHandler(parent=self.parent)
+
+        if self.parent.clear_master_table_before_loading:
+            TableHandler.clear_table(self.parent.ui.h3_table)
 
         for _row, _key in enumerate(self.json.keys()):
 

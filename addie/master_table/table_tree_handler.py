@@ -819,7 +819,7 @@ class H3TableHandler:
         self.check_status_of_right_click_buttons()
 
     def _import_table_from_database(self, clear_table=True):
-        #ImportFromDatabaseHandler(parent=self.parent)
+        self.parent.clear_master_table_before_loading = clear_table
         OncatAuthenticationHandler(parent=self.parent, next_ui='from_database_ui')
 
     def _import_table_from_file(self, clear_table=True):

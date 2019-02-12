@@ -128,6 +128,9 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     #                   ... }
     json_to_import = None
 
+    # flag that will clear or not the master table before loading data
+    clear_master_table_before_loading = True
+
     # load los.csv options
     ascii_loader_option = None   # None, 1, 2, 3, 4
     ascii_loader_dictionary = {}
