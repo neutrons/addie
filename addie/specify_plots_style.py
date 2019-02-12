@@ -1,13 +1,14 @@
-from PyQt4 import QtCore, QtGui
+from __future__ import (absolute_import, division, print_function)
+from qtpy.QtWidgets import (QDialog)  # noqa
+from addie.utilities import load_ui
+from . import mplgraphicsview as mplview
 
-import ui_colorStyleSetup
-import mplgraphicsview as mplview
 
-
-class PlotStyleDialog(QtGui.QDialog):
+class PlotStyleDialog(QDialog):
     """
     Dialog class for user to specify the color and marker of a certain line
     """
+
     def __init__(self, parent=None):
         """
 
@@ -17,17 +18,14 @@ class PlotStyleDialog(QtGui.QDialog):
         """
         super(PlotStyleDialog, self).__init__(parent)
 
-        self.ui = ui_colorStyleSetup.Ui_Dialog()
-        self.ui.setupUi(self)
+        self.ui = load_ui('ui_colorStyleSetup.ui', baseinstance=self)
 
         # init widgets
         self._init_widgets()
 
         # define event handlers
-        self.connect(self.ui.pushButton_apply, QtCore.SIGNAL('clicked()'),
-                     self.do_accept_quit)
-        self.connect(self.ui.pushButton_quit, QtCore.SIGNAL('clicked()'),
-                     self.do_cancel_quit)
+        self.ui.pushButton_apply.clicked.connect(self.do_accept_quit)
+        self.ui.pushButton_quit.clicked.connect(self.do_cancel_quit)
 
         # class variable
         self._acceptSelection = False
@@ -181,4 +179,3 @@ def get_plots_color_marker(parent_window, plot_label_list):
         plot_id_list, color, marker = None, None, None
 
     return plot_id_list, color, marker
-

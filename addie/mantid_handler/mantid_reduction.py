@@ -1,3 +1,4 @@
+from __future__ import (absolute_import, division, print_function)
 import os
 
 import addie.step2_handler.table_handler
@@ -7,7 +8,7 @@ from addie.utilities.job_status_handler import JobStatusHandler
 
 
 class GlobalMantidReduction(object):
-    
+
     parameters = {'max_chunk_size': 8,
                   'preserve_events': True,
                   'exp_ini_filename': 'exp.ini',
@@ -30,16 +31,16 @@ class GlobalMantidReduction(object):
                   'corp_wavelength_max': None,
                   'output_directory':  '',
                   'vanadium_radius': None}
-    
+
     def __init__(self, parent=None):
         self.parent = parent
         self.collect_parameters()
         self.collect_runs()
         self.create_output_folder()
-        
+
     def collect_parameters(self):
         _parameters = self.parameters
-        
+
         _current_folder = self.parent.current_folder
         _exp_ini = os.path.join(_current_folder, _parameters['exp_ini_filename'])
         _parameters['exp_ini_filename'] = str(_exp_ini)
@@ -67,9 +68,9 @@ class GlobalMantidReduction(object):
             _parameters['vanadium_radius'] = 0.58
 
         self.parameters = _parameters
-        
+
     def collect_runs(self):
-        o_table_handler = addie.step2_handler.table_handler.TableHandler(parent = self.parent)
+        o_table_handler = addie.step2_handler.table_handler.TableHandler(parent=self.parent)
         o_table_handler.retrieve_list_of_selected_rows()
         list_of_selected_row = o_table_handler.list_selected_row
         runs = []
@@ -84,25 +85,25 @@ class GlobalMantidReduction(object):
             return str(self.parent.ui.background_line_edit.text())
         else:
             return str(self.parent.ui.background_no_field.text())
-        
+
     def run(self):
         # display message
-        o_mantid_launcher = MantidReductionDialogbox(parent = self.parent, father = self)
+        o_mantid_launcher = MantidReductionDialogbox(parent=self.parent, father=self)
         o_mantid_launcher.show()
-    
+
     def run_reduction(self):
         for index, runs in enumerate(self.parameters['runs']):
             _o_mantid = self.parent._mantid_thread_array[index]
-            _o_mantid.setup(runs = runs, parameters = self.parameters)
+            _o_mantid.setup(runs=runs, parameters=self.parameters)
             _o_mantid.start()
-            
+
             self.parent.launch_job_manager(job_name='Mantid', thread_index=index)
-            
+
     def create_output_folder(self):
         output_folder = self.parameters['output_directory']
         if not os.path.exists(output_folder):
             os.makedirs(output_folder)
 
     def view_jobs(self):
-        o_view_launcher = MantidReductionView(parent = self.parent, father = self)
+        o_view_launcher = MantidReductionView(parent=self.parent, father=self)
         o_view_launcher.show()

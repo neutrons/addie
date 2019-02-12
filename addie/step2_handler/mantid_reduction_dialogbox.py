@@ -1,32 +1,31 @@
-from PyQt4 import QtGui
+from __future__ import (absolute_import, division, print_function)
+from qtpy.QtWidgets import (QDialog)
+from addie.utilities import load_ui
 
-from addie.ui_launchMantid import Ui_Dialog as UiDialog
 
+class MantidReductionDialogbox(QDialog):
 
-class MantidReductionDialogbox(QtGui.QDialog):
-    
-    def __init__(self, parent = None, father = None):
+    def __init__(self, parent=None, father=None):
         self.parent = parent
         self.father = father
-        
-        QtGui.QDialog.__init__(self, parent = parent)
-        self.ui = UiDialog()
-        self.ui.setupUi(self)
-        
+
+        QDialog.__init__(self, parent=parent)
+        self.ui = load_ui('ui_launchMantid.ui', baseinstance=self)
+
         _title = "Launching Mantid Reduction"
         self.setWindowTitle(_title)
-        
+
         _runs = self.father.parameters['runs']
         nbr_jobs = len(_runs)
         _message = 'You are about to launch {} Mantid Reductions jobs!'.format(nbr_jobs)
         self.ui.label.setText(_message)
-        
+
     def cancel_clicked(self):
         self.close()
-        
+
     def view_jobs_clicked(self):
         self.father.view_jobs()
-        
+
     def launch_jobs_clicked(self):
         self.father.run_reduction()
         self.close()

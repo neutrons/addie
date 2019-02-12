@@ -1,16 +1,17 @@
 # Dialog to edit S(Q)
-from PyQt4 import QtGui, QtCore
+from __future__ import (absolute_import, division, print_function)
+from qtpy.QtCore import (Signal)
+from qtpy.QtWidgets import (QDialog)
 import random
+from addie.utilities import load_ui
 
-import ui_editSq
 
-
-class EditSofQDialog(QtGui.QDialog):
+class EditSofQDialog(QDialog):
     """
     Extended dialog class to edit S(Q)
     """
-    MyEditSignal = QtCore.pyqtSignal(str, float, float)
-    MySaveSignal = QtCore.pyqtSignal(str)
+    MyEditSignal = Signal(str, float, float)
+    MySaveSignal = Signal(str)
 
     def __init__(self, parent_window):
         """
@@ -34,35 +35,26 @@ class EditSofQDialog(QtGui.QDialog):
         self._scaleSlideMutex = False
 
         # set up UI
-        self.ui = ui_editSq.Ui_Dialog()
-        self.ui.setupUi(self)
+        self.ui = load_ui('ui_colorStyleSetup.ui', baseinstance=self)
 
         # set up default value
         self._init_widgets()
 
         # set up event handlers
-        self.connect(self.ui.pushButton_quit, QtCore.SIGNAL('clicked()'),
-                     self.do_quit)
+        self.ui.pushButton_quit.clicked.connect(self.do_quit)
 
-        self.connect(self.ui.pushButton_saveNewSq, QtCore.SIGNAL('clicked()'),
-                     self.do_save)
+        self.ui.pushButton_saveNewSq.clicked.connect(self.do_save)
 
         # connect widgets' events with methods
-        self.connect(self.ui.pushButton_editSQ, QtCore.SIGNAL('clicked()'),
-                     self.do_edit_sq)
-        self.connect(self.ui.pushButton_cache, QtCore.SIGNAL('clicked()'),
-                     self.do_cache_edited_sq)
+        self.ui.pushButton_editSQ.clicked.connect(self.do_edit_sq)
+        self.ui.pushButton_cache.clicked.connect(self.do_cache_edited_sq)
 
-        self.connect(self.ui.pushButton_setScaleRange, QtCore.SIGNAL('clicked()'),
-                     self.do_set_scale_range)
-        self.connect(self.ui.pushButton_setShiftRange, QtCore.SIGNAL('clicked()'),
-                     self.do_set_shift_range)
+        self.ui.pushButton_setScaleRange.clicked.connect(self.do_set_scale_range)
+        self.ui.pushButton_setShiftRange.clicked.connect(self.do_set_shift_range)
 
         # connect q-slide
-        self.connect(self.ui.horizontalSlider_scale, QtCore.SIGNAL('valueChanged(int)'),
-                     self.event_cal_sq)
-        self.connect(self.ui.horizontalSlider_shift, QtCore.SIGNAL('valueChanged(int)'),
-                     self.event_cal_sq)
+        self.ui.horizontalSlider_scale.valueChanged.connect(self.event_cal_sq)
+        self.ui.horizontalSlider_shift.valueChanged.connect(self.event_cal_sq)
 
         # connect signals
         self.MyEditSignal.connect(self._myParentWindow.edit_sq)
@@ -127,8 +119,8 @@ class EditSofQDialog(QtGui.QDialog):
 
         # check whether any workspace has these key: shift_str/scale_str
         if self._myParentWindow.has_edit_sofq(curr_ws_name, key_shift, key_scale):
-            print ('Workspace {0} with shift = {1} and scale factor = {2} has already been cached.'
-                   ''.format(curr_ws_name, key_shift, key_scale))
+            print('Workspace {0} with shift = {1} and scale factor = {2} has already been cached.'
+                  ''.format(curr_ws_name, key_shift, key_scale))
             return
 
         # get the name of current S(Q) with random sequence
@@ -148,8 +140,8 @@ class EditSofQDialog(QtGui.QDialog):
         :return:
         """
         # read the scale and shift value
-        print '[DB...BAT] Shift = {0} Scale Factor = {1}'.format(self.ui.lineEdit_shift.text(),
-                                                                 self.ui.lineEdit_scaleFactor.text())
+        print('[DB...BAT] Shift = {0} Scale Factor = {1}'.format(self.ui.lineEdit_shift.text(),
+                                                                 self.ui.lineEdit_scaleFactor.text()))
 
         shift_str = str(self.ui.lineEdit_shift.text())
         scale_str = str(self.ui.lineEdit_scaleFactor.text())
@@ -168,8 +160,8 @@ class EditSofQDialog(QtGui.QDialog):
             else:
                 scale_factor = float(scale_str)
         except ValueError as val_error:
-            print '[ERROR] Shift {0} or scale factor {1} cannot be converted to float due to {2}.' \
-                  ''.format(shift_str, scale_str, val_error)
+            print('[ERROR] Shift {0} or scale factor {1} cannot be converted to float due to {2}.' \
+                  ''.format(shift_str, scale_str, val_error))
             return
 
         # call edit_sq()
@@ -252,8 +244,8 @@ class EditSofQDialog(QtGui.QDialog):
         # check valid or not!
         if min_scale >= max_scale:
             # if not valid: set the values back to stored original
-            print '[ERROR] Minimum scale factor value {0} cannot exceed maximum scale factor value {1}.' \
-                  ''.format(min_scale, max_scale)
+            print('[ERROR] Minimum scale factor value {0} cannot exceed maximum scale factor value {1}.' \
+                  ''.format(min_scale, max_scale))
             return
         else:
             # re-set the class variable as the new min/max is accepted
@@ -285,8 +277,8 @@ class EditSofQDialog(QtGui.QDialog):
         # check valid or not!
         if min_shift >= max_shift:
             # if not valid: set the values back to stored original
-            print '[ERROR] Minimum scale factor value {0} cannot exceed maximum scale factor value {1}.' \
-                  ''.format(min_shift, max_shift)
+            print('[ERROR] Minimum scale factor value {0} cannot exceed maximum scale factor value {1}.' \
+                  ''.format(min_shift, max_shift))
             return
         else:
             # re-set the class variable as the new min/max is accepted
@@ -362,7 +354,7 @@ class EditSofQDialog(QtGui.QDialog):
         # get the workspace name
         workspace_name = str(self.ui.comboBox_workspaces.currentText())
         if len(workspace_name) == 0:
-            print '[INFO] No workspace is selected'
+            print('[INFO] No workspace is selected')
             return
 
         # set out the signal

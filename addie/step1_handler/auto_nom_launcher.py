@@ -1,19 +1,22 @@
-import addie.step1_handler.autoNOM
+from __future__ import (absolute_import, division, print_function)
+import addie.setp1_handler.autoNOM
 import numpy as np
 import os
-from PyQt4 import QtCore, QtGui
+from qtpy.QtWidgets import (QApplication, QMainWindow, QStyleFactory)
 import sys
 
-class MyApp(QtGui.QMainWindow, autoNOM.Ui_MainWindow):
+
+class MyApp(QMainWindow, autoNOM.Ui_MainWindow):
 
     def __init__(self):
-        QtGui.QApplication.setStyle(QtGui.QStyleFactory.create("Cleanlooks"))
-        QtGui.QMainWindow.__init__(self)
+        QApplication.setStyle(QStyleFactory.create("Cleanlooks"))
+        QMainWindow.__init__(self)
         autoNOM.Ui_MainWindow.__init__(self)
         self.setupUi(self)
 
+
 if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     window = MyApp()
     window.show()
     sys.exit(app.exec_())

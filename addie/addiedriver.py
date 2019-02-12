@@ -1,20 +1,16 @@
+from __future__ import (absolute_import, division, print_function)
+from mantid.api import AnalysisDataService
+import mantid.simpleapi as simpleapi
 import os
 import sys
 import math
 import numpy as np
 
-# add a python path for local development
-sys.path.append('/opt/mantid38/bin/')
-sys.path.append('/Users/wzz/MantidBuild/debug-stable/bin/')
-
-import mantid.simpleapi as simpleapi
-from mantid.api import AnalysisDataService
-
-
 class AddieDriver(object):
     """
     Driver for addie application
     """
+
     def __init__(self):
         """ Initialization
         Returns
@@ -87,7 +83,7 @@ class AddieDriver(object):
         else:
             pdf_filter = True
             if pdf_filter != 'lorch':
-                print '[WARNING] PDF filter {0} is not supported.'.format(pdf_filter)
+                print('[WARNING] PDF filter {0} is not supported.'.format(pdf_filter))
 
         gr_ws_name = '%s(R)_%s_%d' % (prefix, self._currSqWsName, ws_seq_index)
         kwargs = {'OutputWorkspace': gr_ws_name,
@@ -191,7 +187,7 @@ class AddieDriver(object):
             simpleapi.RenameWorkspace(InputWorkspace=sq_ws, OutputWorkspace=edited_sq_name)
 
         assert sq_ws is not None, 'S(Q) workspace cannot be None.'
-        print '[DB...BAT] S(Q) workspace that is edit is {0}'.format(sq_ws)
+        print('[DB...BAT] S(Q) workspace that is edit is {0}'.format(sq_ws))
 
         return
 
@@ -206,10 +202,11 @@ class AddieDriver(object):
         # check inputs
         assert isinstance(ws_name, str), 'Workspace name {0} must be a string but not a {1}.'.format(ws_name,
                                                                                                      str(ws_name))
-        assert isinstance(output_file_name, str), 'Output file name {0} must be a string but not a {1}.'.format(
-            output_file_name, type(output_file_name))
+        assert isinstance(output_file_name, str), 'Output file name {0} must be a string but not a {1}.'.format(output_file_name,
+                                                                                                                type(output_file_name))
         assert isinstance(comment, str), 'Comment {0} must be a string but not a {1}.'.format(comment, type(comment))
-        assert isinstance(ws_index, int), 'Workspace index must be an integer but not a {1}.'.format(ws_index, type(ws_index))
+        assert isinstance(ws_index, int), 'Workspace index must be an integer but not a {1}.'.format(ws_index,
+                                                                                                     type(ws_index))
 
         # convert to point data from histogram
         simpleapi.ConvertToPointData(InputWorkspace=ws_name, OutputWorkspace=ws_name)
@@ -254,9 +251,9 @@ class AddieDriver(object):
         """
         # check
         assert isinstance(bank_id, int) and bank_id > 0
-        assert ws_group_name in self._braggDataDict, 'Workspace groups %s does not exist in controller.' \
-                                                     'Current existing are %s.' % (ws_group_name,
-                                                                                   str(self._braggDataDict.keys()))
+        msg = 'Workspace groups {} does not exist in controller.'.format(ws_group_name)
+        msg += 'Current existing are {}.'.format(self._braggDataDict.keys())
+        assert ws_group_name in self._braggDataDict, msg
 
         ws_name = '%s_bank%d' % (ws_group_name.split('_group')[0], bank_id)
         error_message = 'Bank %d is not found in group %s. Available bank IDs are %s.' % (
@@ -274,7 +271,7 @@ class AddieDriver(object):
         if curr_unit != x_unit:
             simpleapi.ConvertToHistogram(InputWorkspace=ws_name, OutputWorkspace=ws_name)
             simpleapi.ConvertUnits(InputWorkspace=ws_name, OutputWorkspace=ws_name,
-                                       Target=x_unit, EMode='Elastic')
+                                   Target=x_unit, EMode='Elastic')
 
         # convert to point data for plotting
         simpleapi.ConvertToPointData(InputWorkspace=ws_name, OutputWorkspace=ws_name)
@@ -309,8 +306,8 @@ class AddieDriver(object):
         :return: 3-tuple for numpy.array
         """
         # check... find key in dictionary
-        error_msg = 'R-range and delta R are not support. Current stored G(R) parameters are %s.' \
-                    '' % str(self._grWsNameDict.keys())
+        error_msg = 'R-range and delta R are not support. Current stored G(R) parameters' \
+                    ' are {}.'.format(list(self._grWsNameDict.keys()))
         assert (min_q, max_q) in self._grWsNameDict, error_msg
 
         # get the workspace
@@ -398,11 +395,14 @@ class AddieDriver(object):
         gss_ws_name = os.path.basename(file_name).split('.')[0]
         if base_file_name.endswith('.gss') or base_file_name.endswith('.gsa') or base_file_name.endswith('.gda'):
             simpleapi.LoadGSS(Filename=file_name,
-                        OutputWorkspace=gss_ws_name)
+                              OutputWorkspace=gss_ws_name)
+        elif base_file_name.endswith('.nxs'):
+            simpleapi.LoadNexusProcessed(Filename=file_name, OutputWorkspace=gss_ws_name)
+            simpleapi.ConvertUnits(InputWorkspace=gss_ws_name, OutputWorkspace=gss_ws_name, EMode='Elastic', Target='TOF')
         elif base_file_name.endswith('.dat'):
             simpleapi.LoadAscii(Filename=file_name,
-                          OutputWorkspace=gss_ws_name,
-                          Unit='TOF')
+                                OutputWorkspace=gss_ws_name,
+                                Unit='TOF')
         else:
             raise RuntimeError('File %s is not of a supported type.' % file_name)
 
@@ -421,7 +421,7 @@ class AddieDriver(object):
 
         """
         # check
-        assert isinstance(gr_file_name, str) and len(gr_file_name) > 0
+        assert len(gr_file_name) > 0
 
         # load
         gr_ws_name = os.path.basename(gr_file_name).split('.')[0]
@@ -450,7 +450,14 @@ class AddieDriver(object):
         sq_ws_name = os.path.basename(file_name).split('.')[0]
 
         # call mantid LoadAscii
-        simpleapi.LoadAscii(Filename=file_name, OutputWorkspace=sq_ws_name, Unit='MomentumTransfer')
+        ext = file_name.upper().split('.')[-1]
+        if ext == 'NXS':
+            simpleapi.LoadNexusProcessed(Filename=file_name, OutputWorkspace=sq_ws_name)
+            simpleapi.ConvertUnits(InputWorkspace=sq_ws_name, OutputWorkspace=sq_ws_name, EMode='Elastic', Target='MomentumTransfer')
+            simpleapi.ConvertToPointData(InputWorkspace=sq_ws_name, OutputWorkspace=sq_ws_name)  # TODO REMOVE THIS LINE
+        elif ext == 'DAT' or ext == 'txt':
+            simpleapi.LoadAscii(Filename=file_name, OutputWorkspace=sq_ws_name, Unit='MomentumTransfer')
+
         assert AnalysisDataService.doesExist(sq_ws_name), 'Unable to load S(Q) file %s.' % file_name
 
         # The S(Q) file is in fact S(Q)-1 in sq file.  So need to add 1 to the workspace

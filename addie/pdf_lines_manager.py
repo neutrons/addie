@@ -1,6 +1,6 @@
 # A managing class (like database) for color and style of lines of all the G(r) and thus S(q) that are loaded and/or
 # calculated.
-
+from __future__ import (absolute_import, division, print_function)
 
 LineColorBase = ['black', 'red', 'blue', 'green', 'brown', 'orange']
 LineStyleBase = ['-', '--', '-.']
@@ -14,6 +14,7 @@ class PDFPlotManager(object):
     """
     class to manage the color and line styles of G(r) and S(Q)
     """
+
     def __init__(self):
         """ initialization
         """
@@ -56,7 +57,7 @@ class PDFPlotManager(object):
         -------
 
         """
-        marker_index = style_marker_index / len(LineStyleBase)
+        marker_index = style_marker_index // len(LineStyleBase)
         style_index = style_marker_index % len(LineStyleBase)
 
         return LineStyleBase[style_index], LineMarkerBase[marker_index]

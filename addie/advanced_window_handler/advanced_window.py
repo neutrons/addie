@@ -1,7 +1,9 @@
-from PyQt4 import QtGui
+from __future__ import (absolute_import, division, print_function)
+from qtpy.QtWidgets import QMainWindow
+from addie.utilities import load_ui
 
-from addie.ui_advanced_window import Ui_MainWindow as UiMainWindow
 
+#class AdvancedWindow(QMainWindow):
 
 class AdvancedWindowLauncher(object):
 
@@ -17,14 +19,17 @@ class AdvancedWindowLauncher(object):
             self.parent.advanced_window_ui.activateWindow()
 
 
-class AdvancedWindow(QtGui.QMainWindow):
+class AdvancedWindow(QMainWindow):
     
     def __init__(self, parent=None):
         self.parent = parent
         
-        QtGui.QMainWindow.__init__(self, parent=parent)
-        self.ui = UiMainWindow()
-        self.ui.setupUi(self)
+        #QtGui.QMainWindow.__init__(self, parent=parent)
+        QMainWindow.__init__(self, parent=parent)
+        self.ui = load_ui('ui_advanced_window.ui', baseinstance=self)
+
+        #self.ui = UiMainWindow()
+        #self.ui.setupUi(self)
         
         self.setWindowTitle("Advanced Window for Super User Only !")
         self.init_widgets()
@@ -90,3 +95,12 @@ class AdvancedWindow(QtGui.QMainWindow):
     def closeEvent(self, c):
         self.parent.advanced_window_ui = None
 
+# =======
+#     def __init__(self, parent=None):
+#         self.parent = parent
+#
+#         QMainWindow.__init__(self, parent=parent)
+#         self.ui = load_ui('ui_advanced_window.ui', baseinstance=self)
+#
+#         self.setWindowTitle("Advanced Window for Super User Only !")
+# >>>>>>> master

@@ -1,18 +1,17 @@
-from PyQt4 import QtGui
+from __future__ import (absolute_import, division, print_function)
+from qtpy.QtWidgets import (QMainWindow)
+from addie.utilities import load_ui
 
-from addie.ui_preview_ascii import Ui_MainWindow as UiMainWindow
 
+class PreviewAsciiWindow(QMainWindow):
 
-class PreviewAsciiWindow(QtGui.QMainWindow):
-    
-    def __init__(self, parent = None, text=None, filename=None):
+    def __init__(self, parent=None, text=None, filename=None):
         self.parent = parent
-        
-        QtGui.QMainWindow.__init__(self, parent = parent)
-        self.ui = UiMainWindow()
-        self.ui.setupUi(self)
-        
+
+        QMainWindow.__init__(self, parent=parent)
+        self.ui = load_ui('ui_preview_ascii.ui', baseinstance=self)
+
         _title = filename
         self.setWindowTitle(_title)
-        
+
         self.ui.preview_ascii_text_edit.setText(text)

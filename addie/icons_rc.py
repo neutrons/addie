@@ -6,7 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt4 import QtCore
+from qtpy.QtCore import (qRegisterResourceData, qUnregisterResourceData)
 
 qt_resource_data = "\
 \x00\x00\x06\xed\
@@ -17502,10 +17502,13 @@ qt_resource_struct = "\
 \x00\x00\x02\xda\x00\x00\x00\x00\x00\x01\x00\x03\xcf\x71\
 "
 
+
 def qInitResources():
-    QtCore.qRegisterResourceData(0x01, qt_resource_struct, qt_resource_name, qt_resource_data)
+    qRegisterResourceData(0x01, qt_resource_struct, qt_resource_name, qt_resource_data)
+
 
 def qCleanupResources():
-    QtCore.qUnregisterResourceData(0x01, qt_resource_struct, qt_resource_name, qt_resource_data)
+    qUnregisterResourceData(0x01, qt_resource_struct, qt_resource_name, qt_resource_data)
+
 
 qInitResources()

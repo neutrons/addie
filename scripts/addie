@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import (absolute_import, division, print_function)
 
 import copy
 import sys
@@ -10,16 +11,21 @@ import psutil
 import pprint
 
 from addie.ipythondockwidget import IPythonDockWidget
+# must be imported through qtpy before any other gui imports
+from addie.ipythondockwidget import IPythonDockWidget
+from qtpy.QtCore import (QProcess, Qt, QUrl)
+from qtpy.QtGui import (QDesktopServices, QIcon)
+from qtpy.QtWidgets import (QApplication, QFileDialog, QMainWindow, QMessageBox, QTableWidgetItem, QVBoxLayout)
 
-try:
-    from PyQt4.QtGui import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QMainWindow, QApplication, QMainWindow
-    from PyQt4 import QtCore, QtGui
-except ImportError:
-    try:
-        from PyQt5.QtWidgets import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QMainWindow, QApplication
-        from PyQt5 import QtCore, QtGui
-    except ImportError:
-        raise ImportError("Requires PyQt4 or PyQt5")
+# try:
+#     from PyQt4.QtGui import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QMainWindow, QApplication, QMainWindow
+#     from PyQt4 import QtCore, QtGui
+# except ImportError:
+#     try:
+#         from PyQt5.QtWidgets import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QMainWindow, QApplication
+#         from PyQt5 import QtCore, QtGui
+#     except ImportError:
+#         raise ImportError("Requires PyQt4 or PyQt5")
 
 import addie.ui_mainWindow
 import addie.ui_table_tree
@@ -27,6 +33,7 @@ import addie.step1
 import addie.step2
 from addie.configuration_initializer import ConfigurationInitializer
 from addie.utilities.general import get_ucams
+from addie.utilities import load_ui
 
 from addie.about import AboutDialog
 from addie.advanced_window_handler.advanced_window import AdvancedWindowLauncher
@@ -81,16 +88,19 @@ from addie.master_table.import_from_database.import_from_database_handler import
 from addie.master_table.import_from_run_number_handler import ImportFromRunNumberHandler
 from addie.master_table.import_from_database.load_into_master_table import LoadIntoMasterTable
 
-import addie.addiedriver as driver
-import addie.specify_plots_style as ps
-import addie.edit_sq_dialog
-
-from addie.pdf_lines_manager import PDFPlotManager
+# import addie.addiedriver as driver
+# import addie.specify_plots_style as ps
+# import addie.edit_sq_dialog
+#
+# from addie.pdf_lines_manager import PDFPlotManager
+# from addie.graphicviewlib import BraggView, GofRView, SofQView
+# from addie.ipythondockwidget import IPythonDockWidget
+# from addie.treelib import BraggTree, GofRTree
 
 DEBUG = False
 
 
-class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
+class MainWindow(QMainWindow):
     """ Main addie window
     """
 
@@ -292,21 +302,23 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     o_help_scans = None
     o_help_mantid = None
 
-    def __init__(self):
+    def __init__(self, parent=None):
         """ Initialization
         Parameters
         ----------
         """
         # Base class
-        QMainWindow.__init__(self)
+        # QMainWindow.__init__(self)
+        QMainWindow.__init__(self, parent)
 
         # if self.debugging:
         #     self.calibration_folder = '/SNS/NOM/IPTS-17118/shared/'
         #     self.characterization_folder = '/SNS/NOM/shared/CALIBRATION/'
 
         # Initialize the UI widgets
-        self.ui = addie.ui_mainWindow.Ui_MainWindow()
-        self.ui.setupUi(self)
+        self.ui = load_ui('ui_mainWindow.ui', baseinstance=self)
+        self._promote_widgets()
+
         self.ui.graphicsView_sq.set_main(self)
 
         self.ui.dockWidget_ipython.setup()
@@ -320,83 +332,51 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self.init_master_table()
 
         # define the event handling methods
+        self.ui.mantid_run_reduction.clicked.connect(self.do_mantid_run_reduction)
 
         # bragg diffraction tab
-        self.connect(self.ui.pushButton_loadBraggFile, QtCore.SIGNAL('clicked()'),
-                     self.do_load_bragg_file)
-        self.connect(self.ui.checkBox_bank1, QtCore.SIGNAL('toggled(bool)'),
-                     self.evt_plot_bragg_bank)
-        self.connect(self.ui.checkBox_bank2, QtCore.SIGNAL('toggled(bool)'),
-                     self.evt_plot_bragg_bank)
-        self.connect(self.ui.checkBox_bank3, QtCore.SIGNAL('toggled(bool)'),
-                     self.evt_plot_bragg_bank)
-        self.connect(self.ui.checkBox_bank4, QtCore.SIGNAL('toggled(bool)'),
-                     self.evt_plot_bragg_bank)
-        self.connect(self.ui.checkBox_bank5, QtCore.SIGNAL('toggled(bool)'),
-                     self.evt_plot_bragg_bank)
-        self.connect(self.ui.checkBox_bank6, QtCore.SIGNAL('toggled(bool)'),
-                     self.evt_plot_bragg_bank)
-        self.connect(self.ui.comboBox_xUnit, QtCore.SIGNAL('currentIndexChanged(int)'),
-                     self.evt_switch_bragg_unit)
-        self.connect(self.ui.radioButton_multiBank, QtCore.SIGNAL('toggled(bool)'),
-                     self.evt_change_gss_mode)
+        self.ui.pushButton_loadBraggFile.clicked.connect(self.do_load_bragg_file)
+        self.ui.checkBox_bank1.toggled.connect(self.evt_plot_bragg_bank)
+        self.ui.checkBox_bank2.toggled.connect(self.evt_plot_bragg_bank)
+        self.ui.checkBox_bank3.toggled.connect(self.evt_plot_bragg_bank)
+        self.ui.checkBox_bank4.toggled.connect(self.evt_plot_bragg_bank)
+        self.ui.checkBox_bank5.toggled.connect(self.evt_plot_bragg_bank)
+        self.ui.checkBox_bank6.toggled.connect(self.evt_plot_bragg_bank)
+        self.ui.comboBox_xUnit.currentIndexChanged.connect(self.evt_switch_bragg_unit)
+        self.ui.radioButton_multiBank.toggled.connect(self.evt_change_gss_mode)
 
-        self.connect(self.ui.pushButton_rescaleGSAS, QtCore.SIGNAL('clicked()'),
-                     self.do_rescale_bragg)
+        self.ui.pushButton_rescaleGSAS.clicked.connect(self.do_rescale_bragg)
 
-        self.connect(self.ui.pushButton_gsasColorStyle, QtCore.SIGNAL('clicked()'),
-                     self.do_set_bragg_color_marker)
-        self.connect(self.ui.pushButton_clearBraggCanvas, QtCore.SIGNAL('clicked()'),
-                     self.do_clear_bragg_canvas)
+        self.ui.pushButton_gsasColorStyle.clicked.connect(self.do_set_bragg_color_marker)
+        self.ui.pushButton_clearBraggCanvas.clicked.connect(self.do_clear_bragg_canvas)
 
         # for tab G(R)
-        self.connect(self.ui.pushButton_loadSQ, QtCore.SIGNAL('clicked()'),
-                     self.do_load_sq)
-        self.connect(self.ui.comboBox_SofQType, QtCore.SIGNAL('currentIndexChanged(int)'),
-                     self.evt_change_sq_type)
-        self.connect(self.ui.pushButton_clearSofQ, QtCore.SIGNAL('clicked()'),
-                     self.do_clear_sq)
-        self.connect(self.ui.pushButton_showQMinMax, QtCore.SIGNAL('clicked()'),
-                     self.do_show_sq_bound)
-        self.connect(self.ui.pushButton_generateGR, QtCore.SIGNAL('clicked()'),
-                     self.do_generate_gr)
-        self.connect(self.ui.pushButton_loadGofR, QtCore.SIGNAL('clicked()'),
-                     self.do_load_gr)
-        self.connect(self.ui.pushButton_saveGR, QtCore.SIGNAL('clicked()'),
-                     self.do_save_gr)
-        self.connect(self.ui.pushButton_clearGrCanvas, QtCore.SIGNAL('clicked()'),
-                     self.do_clear_gr)
-        self.connect(self.ui.pushButton_saveSQ, QtCore.SIGNAL('clicked()'),
-                     self.do_save_sq)
-        self.connect(self.ui.pushButton_editSofQ, QtCore.SIGNAL('clicked()'),
-                     self.do_edit_sq)
-        self.connect(self.ui.pushButton_generateSQ, QtCore.SIGNAL('clicked()'),
-                     self.do_generate_sq)
+        self.ui.pushButton_loadSQ.clicked.connect(self.do_load_sq)
+        self.ui.comboBox_SofQType.currentIndexChanged.connect(self.evt_change_sq_type)
+        self.ui.pushButton_clearSofQ.clicked.connect(self.do_clear_sq)
+        self.ui.pushButton_showQMinMax.clicked.connect(self.do_show_sq_bound)
+        self.ui.pushButton_generateGR.clicked.connect(self.do_generate_gr)
+        self.ui.pushButton_loadGofR.clicked.connect(self.do_load_gr)
+        self.ui.pushButton_saveGR.clicked.connect(self.do_save_gr)
+        self.ui.pushButton_clearGrCanvas.clicked.connect(self.do_clear_gr)
+        self.ui.pushButton_saveSQ.clicked.connect(self.do_save_sq)
+        self.ui.pushButton_editSofQ.clicked.connect(self.do_edit_sq)
+        self.ui.pushButton_generateSQ.clicked.connect(self.do_generate_sq)
 
-        self.connect(self.ui.doubleSpinBoxQmin, QtCore.SIGNAL('valueChanged(double)'),
-                     self.evt_qmin_changed)
-        self.connect(self.ui.doubleSpinBoxQmax, QtCore.SIGNAL('valueChanged(double)'),
-                     self.evt_qmax_changed)
+        self.ui.doubleSpinBoxQmin.valueChanged.connect(self.evt_qmin_changed)
+        self.ui.doubleSpinBoxQmax.valueChanged.connect(self.evt_qmax_changed)
 
-        self.connect(self.ui.pushButton_rescaleSq, QtCore.SIGNAL('clicked()'),
-                     self.do_rescale_sofq)
-        self.connect(self.ui.pushButton_rescaleGr, QtCore.SIGNAL('clicked()'),
-                     self.do_rescale_gofr)
+        self.ui.pushButton_rescaleSq.clicked.connect(self.do_rescale_sofq)
+        self.ui.pushButton_rescaleGr.clicked.connect(self.do_rescale_gofr)
 
-        self.connect(self.ui.pushButton_grColorStyle, QtCore.SIGNAL('clicked()'),
-                     self.do_set_gofr_color_marker)
-        self.connect(self.ui.pushButton_sqColorStyle, QtCore.SIGNAL('clicked()'),
-                     self.do_set_sq_color_marker)
+        self.ui.pushButton_grColorStyle.clicked.connect(self.do_set_gofr_color_marker)
+        self.ui.pushButton_sqColorStyle.clicked.connect(self.do_set_sq_color_marker)
 
         #  menu operations
-        self.connect(self.ui.actionReset_GofR_tab, QtCore.SIGNAL('triggered()'),
-                     self.do_reset_gr_tab)
-        self.connect(self.ui.actionReset_GSAS_tab, QtCore.SIGNAL('triggered()'),
-                     self.do_reset_gsas_tab)
-        self.connect(self.ui.actionQuit, QtCore.SIGNAL('triggered()'),
-                     self.evt_quit)
-        self.connect(self.ui.actionCheat_sheet, QtCore.SIGNAL('triggered()'),
-                     self.do_show_help)
+        self.ui.actionReset_GofR_tab.triggered.connect(self.do_reset_gr_tab)
+        self.ui.actionReset_GSAS_tab.triggered.connect(self.do_reset_gsas_tab)
+        self.ui.actionQuit.triggered.connect(self.evt_quit)
+        self.ui.actionCheat_sheet.triggered.connect(self.do_show_help)
 
         # organize widgets group
         self._braggBankWidgets = {1: self.ui.checkBox_bank1,
@@ -406,7 +386,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
                                   5: self.ui.checkBox_bank5,
                                   6: self.ui.checkBox_bank6}
         self._braggBankWidgetRecords = dict()
-        for bank_id in self._braggBankWidgets.keys():
+        for bank_id in self._braggBankWidgets:
             checked = self._braggBankWidgets[bank_id].isChecked()
             self._braggBankWidgetRecords[bank_id] = checked
 
@@ -429,7 +409,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self._noEventBankWidgets = False
 
         # help (refer to DGSPlanner and HFIR Powder reduction GUI)
-        self._assistantProcess = QtCore.QProcess(self)
+        self._assistantProcess = QProcess(self)
 
         # a collection of sub window
         self._editSqDialog = None
@@ -484,6 +464,44 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         o_table.init_master_table()
         o_table.init_signals()
 
+    def _promote_widgets(self):
+        # frame_graphicsView_bragg
+        graphicsView_layout = QVBoxLayout()
+        self.ui.frame_graphicsView_bragg.setLayout(graphicsView_layout)
+        self.ui.graphicsView_bragg = BraggView(self)
+        graphicsView_layout.addWidget(self.ui.graphicsView_bragg)
+
+        # frame_graphicsView_sq
+        graphicsView_layout = QVBoxLayout()
+        self.ui.frame_graphicsView_sq.setLayout(graphicsView_layout)
+        self.ui.graphicsView_sq= SofQView(self)
+        graphicsView_layout.addWidget(self.ui.graphicsView_sq)
+
+        # frame_graphicsView_gr
+        graphicsView_layout = QVBoxLayout()
+        self.ui.frame_graphicsView_gr.setLayout(graphicsView_layout)
+        self.ui.graphicsView_gr = GofRView(self)
+        graphicsView_layout.addWidget(self.ui.graphicsView_gr)
+
+        # frame_treeWidget_grWsList
+        temp_layout = QVBoxLayout()
+        self.ui.frame_treeWidget_grWsList.setLayout(temp_layout)
+        self.ui.treeWidget_grWsList = GofRTree(self)
+        temp_layout.addWidget(self.ui.treeWidget_grWsList)
+
+        # frame_treeWidget_braggWSList
+        temp_layout = QVBoxLayout()
+        self.ui.frame_treeWidget_braggWSList.setLayout(temp_layout)
+        self.ui.treeWidget_braggWSList = BraggTree(self)
+        temp_layout.addWidget(self.ui.treeWidget_braggWSList)
+
+        # from addie.ipythondockwidget import IPythonDockWidget
+        # frame_dockWidget_ipython
+        temp_layout = QVBoxLayout()
+        self.ui.frame_dockWidget_ipython.setLayout(temp_layout)
+        self.ui.dockWidget_ipython = IPythonDockWidget(self)
+        temp_layout.addWidget(self.ui.dockWidget_ipython)
+
     def _init_widgets(self):
         """ Initialize widgets
         Returns
@@ -511,7 +529,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         self.ui.comboBox_xUnit.clear()
         self.ui.comboBox_xUnit.addItems(['TOF', 'dSpacing', 'Q'])
-        index = self.ui.comboBox_xUnit.findText('dSpacing',QtCore.Qt.MatchFixedString)
+        index = self.ui.comboBox_xUnit.findText('dSpacing', Qt.MatchFixedString)
         self.ui.comboBox_xUnit.setCurrentIndex(index)
 
         self.ui.treeWidget_braggWSList.set_main_window(self)
@@ -635,9 +653,9 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self._assistantProcess.waitForFinished()
 
         # launch
-        # helper_url = QtCore.QUrl('addie_helper.html')
-        helper_url = QtCore.QUrl('https://neutrons.github.io/addie/index.html')
-        QtGui.QDesktopServices.openUrl(helper_url)
+        # helper_url = QUrl('addie_helper.html')
+        helper_url = QUrl('https://neutrons.github.io/addie/index.html')
+        QDesktopServices.openUrl(helper_url)
 
         return
 
@@ -832,7 +850,6 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self.ui.comboBox_SofQ.clear()
         self.ui.comboBox_SofQ.addItem('All')
 
-
         return
 
     def do_reset_gsas_tab(self):
@@ -876,7 +893,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     def clear_bank_checkboxes(self):
         self._noEventBankWidgets = True
-        for check_box in self._braggBankWidgets.values():
+        for check_box in list(self._braggBankWidgets.values()):
             check_box.setChecked(False)
         self._noEventBankWidgets = False
 
@@ -949,17 +966,13 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         :param auto:
         :return:
         """
-        # check
-        assert isinstance(gr_ws_name, str), 'G(r) workspace name {0} must be a string but not a {1}.' \
-                                            ''.format(gr_ws_name, type(gr_ws_name))
-
         # get the value
         vec_r, vec_g, vec_ge = self._myController.get_ws_data(gr_ws_name)
 
         # check whether the workspace is on the figure
-        print '[DB...BAT] G(r) graphic has plot {0} is {1}. Keys are {2}' \
+        print('[DB...BAT] G(r) graphic has plot {0} is {1}. Keys are {2}' \
               ''.format(gr_ws_name, self.ui.graphicsView_gr.has_gr(gr_ws_name),
-                        self.ui.graphicsView_gr.get_current_grs())
+                        self.ui.graphicsView_gr.get_current_grs()))
 
         if self.ui.graphicsView_gr.has_gr(gr_ws_name):
             # update G(r) value of an existing plot
@@ -971,11 +984,11 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
             # check
             assert isinstance(gr_line_color, str), 'G(r) line color {0} must be a string but not {1}.' \
-                                                   ''.format(gr_line_color ,type(gr_line_color))
+                                                   ''.format(gr_line_color, type(gr_line_color))
             assert isinstance(gr_line_style, str), 'G(r) line style {0} must be given by str but not {1}.' \
                                                    ''.format(gr_line_style, type(gr_line_style))
             assert isinstance(gr_line_alpha, float), 'G(r) line alpha {0} must be given by float but not {1}.' \
-                                                   ''.format(gr_line_alpha, type(gr_line_alpha))
+                ''.format(gr_line_alpha, type(gr_line_alpha))
             assert isinstance(gr_line_marker, str) or gr_line_marker is None,\
                 'G(r) line marker {0} must be given by str or None but not {1}.' \
                 ''.format(gr_line_marker, type(gr_line_marker))
@@ -1043,7 +1056,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         -------
         """
         # get file
-        ext = 'GSAS (*.gsa);;DAT (*.dat);;All (*.*)'
+        ext = 'GSAS (*.gsa *.gda *.gss);;Processed Nexus (*.nxs);;dat (*.dat);;All (*.*)'
 
         # get default dir
         if self._currDataDir is None:
@@ -1051,10 +1064,12 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         else:
             default_dir = self.getDefaultDir(sub_dir='GSAS')
 
-        bragg_file_names = QtGui.QFileDialog.getOpenFileNames(self, 'Choose Bragg File', default_dir, ext)
+        bragg_file_names = QFileDialog.getOpenFileNames(self, 'Choose Bragg File', default_dir, ext)
+        if isinstance(bragg_file_names, tuple):
+            bragg_file_names = bragg_file_names[0]
         if bragg_file_names is None or bragg_file_names == '' or len(bragg_file_names) == 0:
             return
-        bragg_file_names = [ str(bragg_file_name) for bragg_file_name in bragg_file_names ]
+        bragg_file_names = [str(bragg_file_name) for bragg_file_name in bragg_file_names]
 
         # update stored data directory
         try:
@@ -1090,7 +1105,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         if multi_bank_mode:
             # single-GSS/multi-bank mode
             # rename bank
-            for bank_id in self._braggBankWidgets.keys():
+            for bank_id in self._braggBankWidgets:
                 bank_check_box = self._braggBankWidgets[bank_id]
 
                 if bank_id > len(bank_angles) or bank_angles[bank_id - 1] is None:
@@ -1148,23 +1163,24 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             default_dir = self.getDefaultDir('gofr')
 
         # pop out file
-        file_filter = 'Data Files (*.dat);;All Files (*.*)'
-        g_file_name = str(QtGui.QFileDialog.getOpenFileName(self, 'Open a G(r) file', default_dir, file_filter))
-
+        file_filter = 'Data Files (*.dat);; PDFgui (*.gr);;All Files (*.*)'
+        g_file_name = QFileDialog.getOpenFileName(self, 'Open a G(r) file', default_dir, file_filter)
+        if isinstance(g_file_name, tuple):
+            g_file_name = g_file_name[0]
         # return if operation is cancelled
         if g_file_name is None or g_file_name == '':
             return
-        else:
-            # update current data directory
-            self._currDataDir = os.path.split(os.path.abspath(g_file_name))[0]
-            # set default data directory if in fixed file structure
-            self.check_in_fixed_dir_structure('gofr')
+
+        # update current data directory
+        self._currDataDir = os.path.split(os.path.abspath(g_file_name))[0]
+        # set default data directory if in fixed file structure
+        self.check_in_fixed_dir_structure('gofr')
 
         # read file
         status, ret_obj = self._myController.load_gr(g_file_name)
         if not status:
             err_msg = ret_obj
-            print '[Error]: %s' % err_msg
+            print('[Error]: %s' % err_msg)
             return
         else:
             gr_ws_name = ret_obj
@@ -1173,7 +1189,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         gr_color, gr_style, gr_marker, gr_alpha = self._pdfColorManager.add_gofr(None, gr_ws_name, None)
         gr_label = gr_ws_name
 
-        self.plot_gr([gr_ws_name], [gr_color], [gr_style], [gr_marker], [gr_alpha], [gr_label])
+        self.plot_gr(gr_ws_name, gr_color, gr_style, gr_marker, gr_alpha, gr_label)
 
         # put the loaded G(r) workspace to tree 'workspaces'
         self.ui.treeWidget_grWsList.add_child_main_item('workspaces', gr_ws_name)
@@ -1200,7 +1216,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             self._inFixedDirectoryStructure = False
         # END-IF-ELSE
 
-        return 
+        return
 
     def getDefaultDir(self, sub_dir):
         """ Get the default data directory.
@@ -1235,17 +1251,17 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         assert isinstance(default_dir, str), 'Default directory {0} must be a string but not a {1}.' \
                                              ''.format(default_dir, type(default_dir))
         assert isinstance(file_filter, str), 'File filter {0} must be a string but not a {1}.' \
-                                               ''.format(file_filter, type(file_filter))
+            ''.format(file_filter, type(file_filter))
 
         # generate a dialog to get the file name to save G(r)
-        export_dialog = QtGui.QFileDialog()
+        export_dialog = QFileDialog()
         export_dialog.setWindowTitle(caption)
         export_dialog.setDirectory(default_dir)
-        export_dialog.setAcceptMode(QtGui.QFileDialog.AcceptSave)
+        export_dialog.setAcceptMode(QFileDialog.AcceptSave)
         export_dialog.setNameFilter(file_filter)
 
         # quit if it is not accepted
-        if export_dialog.exec_() != QtGui.QFileDialog.Accepted:
+        if export_dialog.exec_() != QFileDialog.Accepted:
             return None
         elif len(export_dialog.selectedFiles()) == 0:
             return None
@@ -1271,14 +1287,16 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             default_dir = self.getDefaultDir(sub_dir='SofQ')
 
         # get the file
-        ext = 'DAT (*.dat);;All (*.*)'
-        sq_file_names = QtGui.QFileDialog.getOpenFileNames(self, 'Choose S(Q) File', default_dir, ext)
-        if sq_file_names is None or sq_file_names == '':
+        ext = 'nxs (*.nxs);;dat (*.dat);;All (*.*)'
+        sq_file_names = QFileDialog.getOpenFileNames(self, 'Choose S(Q) File', default_dir, ext)
+        if isinstance(sq_file_names, tuple):
+            sq_file_names = sq_file_names[0]
+        if sq_file_names is None or sq_file_names == '' or len(sq_file_names) == 0:
             return
-        else:
-            # update current data directory
-            self._currDataDir = os.path.split(os.path.abspath(sq_file_names[0]))[0]
-            self.check_in_fixed_dir_structure('SofQ')
+
+        # update current data directory
+        self._currDataDir = os.path.split(os.path.abspath(sq_file_names[0]))[0]
+        self.check_in_fixed_dir_structure('SofQ')
 
         # load S(q)
         for sq_file_name in sq_file_names:
@@ -1372,7 +1390,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         # check the arguments
         for required_param in ['Qmin', 'Qmax', 'Rmin', 'Rmax', 'DeltaR']:
-            if required_param not in arg_dict.keys():
+            if required_param not in list(arg_dict.keys()):
                 raise RuntimeError('Not sufficient parameter (missing {0}) to generate S(Q) from G(r).'
                                    ''.format(required_param))
 
@@ -1394,7 +1412,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         if len(gr_name_list) != 1:
             err_msg = 'Error! Only 1 workspace of G(r) that can be selected.  So far %d is selected.' \
                 'They are %s.' % (len(gr_name_list), str(gr_name_list))
-            QtGui.QMessageBox.warning(self, 'Error', err_msg)
+            QMessageBox.warning(self, 'Error', err_msg)
             return
         else:
             gr_ws_name = gr_name_list[0]
@@ -1443,8 +1461,10 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         for sq_name in sq_name_list:
             # get the output file name first
-            out_file_name = str(QtGui.QFileDialog.getSaveFileName(self, 
-                'Input File Name to Save S(Q) {0}'.format(sq_name), self._currWorkDir, file_filter))
+            out_file_name = QFileDialog.getSaveFileName(self,
+                                                        'Input File Name to Save S(Q) {0}'.format(sq_name), self._currWorkDir, file_filter)
+            if isinstance(out_file_name, tuple):
+                out_file_name = out_file_name[0]
             if out_file_name is None or len(out_file_name) == 0:
                 # skip if the user cancel the operation on this S(Q)
                 continue
@@ -1490,7 +1510,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         """
         bank_id_list = list()
-        for bank_id in self._braggBankWidgets.keys():
+        for bank_id in self._braggBankWidgets:
             # access the checkbox
             bank_checkbox = self._braggBankWidgets[bank_id]
             # append
@@ -1524,7 +1544,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self._pdfColorManager.add_sofq(edit_sq_name)
 
         color, marker = self.ui.graphicsView_sq.get_plot_info(sq_name)
-        print '[DB...BAT] Original SofQ {0} has color {0} marker {1}'.format(color, marker)
+        print('[DB...BAT] Original SofQ {0} has color {0} marker {1}'.format(color, marker))
 
         # re-plot
         vec_q, vec_s, vec_e = self._myController.get_sq(edit_sq_name)
@@ -1595,7 +1615,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
             # disable all the banks except the one to plot. Notice the mutex must be on
             self._noEventBankWidgets = True
-            for bank_id in self._braggBankWidgets.keys():
+            for bank_id in self._braggBankWidgets:
                 if bank_id != bank_on_canvas:
                     self._braggBankWidgets[bank_id].setChecked(False)
             self._noEventBankWidgets = False
@@ -1706,7 +1726,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         else:
             self.ui.graphicsView_bragg.set_to_single_gss(True)
             status, ws_name_list = self.ui.treeWidget_braggWSList.get_current_main_nodes()
-            plot_data_dict = { ws_name_list[0] : plot_data_dict[ws_name_list[0]]  } 
+            plot_data_dict = {ws_name_list[0]: plot_data_dict[ws_name_list[0]]}
 
         # plot new
         self.ui.graphicsView_bragg.plot_banks(plot_data_dict, self._currBraggXUnit)
@@ -1758,8 +1778,8 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         # check
         assert len(bank_list) == 1 or len(ws_group_list) == 1, 'Must be either single bank (%d now) or ' \
-               'single GSS (%d now).' % (len(bank_list),
-                                         len(ws_group_list))
+            'single GSS (%d now).' % (len(bank_list),
+                                      len(ws_group_list))
 
         # get data and plot
         plot_data_dict = dict()
@@ -1893,7 +1913,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         """
         # check input
         assert isinstance(new_ws_list, list), 'Input workspace list must be a list of string' \
-               'but not %s.' % str(type(new_ws_list))
+            'but not %s.' % str(type(new_ws_list))
 
         # print 'current tab = ', self.ui.tabWidget_2.currentIndex(), self.ui.tabWidget_2.currentWidget(),
         # print self.ui.tabWidget_2.currentWidget().objectName()
@@ -1948,7 +1968,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         """
         # check
         assert isinstance(gss_group_name, str), 'GSS group workspace name must be a string but not %s.' \
-               '' % str(type(gss_group_name))
+            '' % str(type(gss_group_name))
         assert isinstance(gss_bank_ws_name_list, list), 'GSAS-single-bank workspace names {0} must be given by ' \
                                                         'list but not {1}.'.format(gss_bank_ws_name_list,
                                                                                    type(gss_bank_ws_name_list))
@@ -1974,7 +1994,6 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         # turn off the mutex lock
         self._noEventBankWidgets = False
-
 
         return
 
@@ -2036,11 +2055,11 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         """
         # check
         assert isinstance(gss_group_name, str), 'GSS workspace group name is expected to be a string, but not' \
-               ' %s.' % str(type(gss_group_name))
+            ' %s.' % str(type(gss_group_name))
 
         # rule out the unsupported situation
         assert gss_group_name.endswith('_group'), 'GSAS workspace group\' name must be ends with _group, ' \
-               'but not as %s.' % gss_group_name
+            'but not as %s.' % gss_group_name
         root_ws_name = gss_group_name.split('_group')[0]
 
         # process
@@ -2165,15 +2184,15 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     # menu
     def action_preview_ascii_clicked(self):
-        o_gui = Step3GuiHandler(parent = self)
+        o_gui = Step3GuiHandler(parent=self)
         o_gui.browse_file()
 
     def action_load_configuration_clicked(self):
-        o_import_config = ImportConfiguration(parent = self)
+        o_import_config = ImportConfiguration(parent=self)
         o_import_config.run()
 
     def action_save_configuration_clicked(self):
-        o_export_config = ExportConfiguration(parent = self)
+        o_export_config = ExportConfiguration(parent=self)
         o_export_config.run()
 
     def action_undo_clicked(self):
@@ -2189,7 +2208,12 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         _about.display()
 
     def advanced_option_clicked(self):
+#<<<<<<< HEAD
         AdvancedWindowLauncher(parent = self)
+#=======
+#        _advanced = AdvancedWindow(parent=self)
+#        _advanced.show()
+#>>>>>>> master
 
     def menu_ipts_file_transfer_clicked(self):
         _o_ipts = IptsFileTransferDialog(parent=self)
@@ -2197,10 +2221,10 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     def main_tab_widget_changed(self, tab_selected):
         if tab_selected == 0:
-            o_gui = Step1GuiHandler(parent = self)
+            o_gui = Step1GuiHandler(parent=self)
             self.check_step1_gui()
         if tab_selected == 1:
-            _o_gui = Step2GuiHandler(parent = self)
+            _o_gui = Step2GuiHandler(parent=self)
             _o_gui.check_gui()
 
     def window_job_monitor_clicked(self):
@@ -2212,8 +2236,8 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     # job utility
     def launch_job_manager(self, job_name='', script_to_run=None, thread_index=-1):
         job_handler = JobStatusHandler(parent=self, job_name=job_name,
-                                       script_to_run = script_to_run,
-                                       thread_index = thread_index)
+                                       script_to_run=script_to_run,
+                                       thread_index=thread_index)
         job_handler.start()
 
     def kill_job(self, row=-1):
@@ -2226,7 +2250,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         table_widget = self.job_monitor_interface.ui.tableWidget
         table_widget.removeCellWidget(row, 2)
-        _item = QtGui.QTableWidgetItem('Killed')
+        _item = QTableWidgetItem('Killed')
         table_widget.setItem(row, 2, _item)
         job_row['status'] = "killed"
         job_row['pid'] = None
@@ -2234,9 +2258,9 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     def start_refresh_text_thread(self):
         _run_thread = self.logbook_thread
-        _run_thread.setup(parent = self)
+        _run_thread.setup(parent=self)
         _run_thread.update_text.connect(self.update_logbook)
-        _run_thread.start()	
+        _run_thread.start()
 
     def update_logbook(self, text):
         if self.job_monitor_interface == None:
@@ -2246,7 +2270,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     # tab1
     def select_current_folder_clicked(self):
-        o_gui = Step1GuiHandler(parent = self)
+        o_gui = Step1GuiHandler(parent=self)
         o_gui.select_working_folder()
         self.check_step1_gui()
 
@@ -2266,8 +2290,8 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self.check_step1_gui()
 
     def create_new_autonom_folder_button_clicked(self, status):
-        o_gui_handler = Step1GuiHandler(parent = self)
-        o_gui_handler.new_autonom_group_box(status = status)
+        o_gui_handler = Step1GuiHandler(parent=self)
+        o_gui_handler.new_autonom_group_box(status=status)
 
     def output_folder_radio_buttons(self):
         o_gui_handler = Step1GuiHandler(parent=self)
@@ -2278,7 +2302,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         self.check_step1_gui()
 
     def manual_output_folder_button_clicked(self):
-        o_gui = Step1GuiHandler(parent = self)
+        o_gui = Step1GuiHandler(parent=self)
         o_gui.select_manual_output_folder()
         self.check_step1_gui()
 
@@ -2289,16 +2313,16 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
     def run_autonom(self):
         """Will first create the output folder, then create the exp.ini file"""
-        _run_autonom = RunStep1(parent = self)
+        _run_autonom = RunStep1(parent=self)
         _run_autonom.create_folder()
         print(os.getcwd())
         _run_autonom.create_exp_ini_file()
 
     def help_button_clicked_autonom(self):
-        self.help_button_clicked(button_name = 'autonom')
+        self.help_button_clicked(button_name='autonom')
 
     def create_exp_ini_clicked(self):
-        _run_autonom = RunStep1(parent = self, run_autonom=False)
+        _run_autonom = RunStep1(parent=self, run_autonom=False)
         _run_autonom.create_folder()
         _run_autonom.create_exp_ini_file()
 
@@ -2307,14 +2331,14 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
         pass
 
     def move_to_folder_clicked(self):
-        o_load_table = loadTableIntermediateStepInterface(parent = self)
+        o_load_table = loadTableIntermediateStepInterface(parent=self)
         o_load_table.show()
 
     def move_to_folder_step2(self):
         if not self.load_intermediate_step_ok:
             return
 
-        o_gui = Step2GuiHandler(parent = self)
+        o_gui = Step2GuiHandler(parent=self)
         o_gui.move_to_folder()
         self.populate_table_clicked()
 
@@ -2322,7 +2346,7 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
 
         self.ui.table.blockSignals(True)
 
-        _pop_table = PopulateMasterTable(parent = self)
+        _pop_table = PopulateMasterTable(parent=self)
         _pop_table.run()
         _error_reported = _pop_table.error_reported
 
@@ -2330,14 +2354,14 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             self.ui.table.blockSignals(False)
             return
 
-        _pop_back_wdg = PopulateBackgroundWidgets(parent = self)
+        _pop_back_wdg = PopulateBackgroundWidgets(parent=self)
         _pop_back_wdg.run()
         self.name_search_clicked()
 
-        _o_gui = Step2GuiHandler(parent = self)
+        _o_gui = Step2GuiHandler(parent=self)
         _o_gui.check_gui()
 
-        o_undo = UndoHandler(parent = self)
+        o_undo = UndoHandler(parent=self)
         o_undo.save_table(first_save=True)
 
         self.ui.table.blockSignals(False)
@@ -2345,39 +2369,39 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
     def import_table_clicked(self):
         self.ui.table.blockSignals(True)
 
-        _o_table = TableHandler(parent = self)
+        _o_table = TableHandler(parent=self)
         _o_table._import()
         self.name_search_clicked()
 
-        o_undo = UndoHandler(parent = self)
+        o_undo = UndoHandler(parent=self)
         o_undo.save_table(first_save=True)
 
         self.ui.table.blockSignals(False)
 
     def export_table_clicked(self):
-        _o_table = TableHandler(parent = self)
+        _o_table = TableHandler(parent=self)
         _o_table._export()
 
     def table_select_state_changed(self, state, row):
         _o_table_handler = TableHandler(parent=self)
         _o_table_handler.check_selection_status(state, row)
 
-        _o_gui = Step2GuiHandler(parent = self)
+        _o_gui = Step2GuiHandler(parent=self)
         _o_gui.check_gui()
         _o_gui.define_new_ndabs_output_file_name()
         _o_gui.define_new_sum_scans_output_file_name()
 
     def name_search_clicked(self):
-        o_table = TableHandler(parent = self)
+        o_table = TableHandler(parent=self)
         o_table.name_search()
 
     def clear_name_search_clicked(self):
-        o_table = TableHandler(parent = self)
+        o_table = TableHandler(parent=self)
         self.ui.name_search.setText('')
         o_table.name_search()
 
     def check_step2_gui(self, row, column):
-        _o_gui = Step2GuiHandler(parent = self)
+        _o_gui = Step2GuiHandler(parent=self)
         _o_gui.check_gui()
 
         _o_gui.step2_background_flag()
@@ -2387,109 +2411,110 @@ class MainWindow(QMainWindow, addie.ui_mainWindow.Ui_MainWindow):
             o_pop = PopulateBackgroundWidgets(parent=self)
             o_pop.refresh_contain()
 
-        o_undo = UndoHandler(parent = self)
+        o_undo = UndoHandler(parent=self)
         o_undo.save_table()
 
     # PDF
 
     def check_q_range(self):
-        _o_gui = Step2GuiHandler(parent = self)
+        _o_gui = Step2GuiHandler(parent=self)
         _o_gui.check_gui()
 
     def hidrogen_clicked(self):
-        o_gui = Step2GuiHandler(parent = self)
+        o_gui = Step2GuiHandler(parent=self)
         o_gui.hidrogen_clicked()
 
     def no_hidrogen_clicked(self):
-        o_gui = Step2GuiHandler(parent = self)
+        o_gui = Step2GuiHandler(parent=self)
         o_gui.no_hidrogen_clicked()
 
     def yes_background_clicked(self):
-        o_gui = Step2GuiHandler(parent = self)
+        o_gui = Step2GuiHandler(parent=self)
         o_gui.yes_background_clicked()
 
     def no_background_clicked(self):
-        o_gui = Step2GuiHandler(parent = self)
+        o_gui = Step2GuiHandler(parent=self)
         o_gui.no_background_clicked()
 
     def background_combobox_changed(self, index):
-        o_gui = Step2GuiHandler(parent = self)
-        o_gui.background_index_changed(row_index = index)
+        o_gui = Step2GuiHandler(parent=self)
+        o_gui.background_index_changed(row_index=index)
 
     def reset_q_range(self):
-        o_gui = Step2GuiHandler(parent = self)
+        o_gui = Step2GuiHandler(parent=self)
         o_gui.reset_q_range()
 
     def run_ndabs_clicked(self):
-        o_create_sample_files = CreateSampleFiles(parent = self)
+        o_create_sample_files = CreateSampleFiles(parent=self)
         o_create_sample_files.run()
 
         list_sample_files = o_create_sample_files.list_sample_files
 
-        o_create_ndsum_file = CreateNdsumFile(parent = self)
+        o_create_ndsum_file = CreateNdsumFile(parent=self)
         o_create_ndsum_file.run()
 
-        o_run_ndsum = RunNDabs(parent = self, list_sample_files = list_sample_files)
+        o_run_ndsum = RunNDabs(parent=self, list_sample_files=list_sample_files)
         o_run_ndsum.run()
 
     def check_fourier_filter_widgets(self):
-        o_gui = Step2GuiHandler(parent = self)
+        o_gui = Step2GuiHandler(parent=self)
         o_gui.check_gui()
 
     def check_plazcek_widgets(self):
-        o_gui = Step2GuiHandler(parent = self)
+        o_gui = Step2GuiHandler(parent=self)
         o_gui.check_gui()
 
     def table_right_click(self, position):
-        _o_table = TableHandler(parent = self)
-        _o_table.right_click(position = position)
+        _o_table = TableHandler(parent=self)
+        _o_table.right_click(position=position)
 
     def run_sum_scans_clicked(self):
-        o_run_sum_scans = RunSumScans(parent = self)
+        o_run_sum_scans = RunSumScans(parent=self)
         o_run_sum_scans.run()
 
     def output_file_name_changed(self):
-        o_gui = Step2GuiHandler(parent = self)
+        o_gui = Step2GuiHandler(parent=self)
         o_gui.check_gui()
 
     def pdf_qmax_line_edit_changed(self):
-        o_gui = Step2GuiHandler(parent = self)
-        o_gui.check_gui()	
+        o_gui = Step2GuiHandler(parent=self)
+        o_gui.check_gui()
 
     def sum_scans_output_file_name_changed(self):
-        o_gui = Step2GuiHandler(parent = self)
-        o_gui.check_gui()	
+        o_gui = Step2GuiHandler(parent=self)
+        o_gui.check_gui()
 
     def help_button_clicked_ndabs(self):
-        self.help_button_clicked(button_name = 'ndabs')
+        self.help_button_clicked(button_name='ndabs')
 
     def help_button_clicked_scans(self):
-        self.help_button_clicked(button_name = 'scans')
+        self.help_button_clicked(button_name='scans')
 
     # Rietveld
 
     def mantid_browse_calibration_clicked(self):
-        o_mantid_gui = BrowseFileFolderHandler(parent = self)
-        o_mantid_gui.browse_file(type = 'calibration')
+        o_mantid_gui = BrowseFileFolderHandler(parent=self)
+        o_mantid_gui.browse_file(type='calibration')
 
     def mantid_browse_characterization_clicked(self):
-        o_mantid_gui = BrowseFileFolderHandler(parent = self)
-        o_mantid_gui.browse_file(type = 'characterization')
+        o_mantid_gui = BrowseFileFolderHandler(parent=self)
+        o_mantid_gui.browse_file(type='characterization')
 
     def mantid_output_directory_clicked(self):
-        o_mantid_gui = BrowseFileFolderHandler(parent = self)
+        o_mantid_gui = BrowseFileFolderHandler(parent=self)
         o_mantid_gui.browse_folder()
 
-    def mantid_run_reduction(self):
-        o_mantid_run = GlobalMantidReduction(parent = self)
+    def do_mantid_run_reduction(self):
+        o_mantid_run = GlobalMantidReduction(parent=self)
         o_mantid_run.run()
 
     def check_mantid_gui(self):
-        o_gui = Step2GuiHandler(parent = self)
+        o_gui = Step2GuiHandler(parent=self)
         o_gui.check_gui()
 
     def help_button_clicked_mantid(self):
-        self.help_button_clicked(button_name = 'mantid')
+        self.help_button_clicked(button_name='mantid')
+
 
     # Mantid
 
@@ -2804,10 +2829,11 @@ def main():
     app.setOrganizationName("Qtrac Ltd.")
     app.setOrganizationDomain("qtrac.eu")
     app.setApplicationName("Image Changer")
-    app.setWindowIcon(QtGui.QIcon(":/icon.png"))
+    app.setWindowIcon(QIcon(":/icon.png"))
     form = MainWindow()
     form.show()
     app.exec_()
+
 
 if __name__ == '__main__':
     main()

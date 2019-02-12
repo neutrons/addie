@@ -1,14 +1,18 @@
 #
 # An extension on QTreeView for file system
 #
+from __future__ import (absolute_import, division, print_function)
 import os
 
-from PyQt4 import QtGui, QtCore
-import customtreeview as base
+from qtpy.QtCore import (QModelIndex)
+from qtpy.QtGui import (QStandardItem, QStandardItemModel)
+from qtpy.QtWidgets import (QAction, QFileDialog)
+from . import customtreeview as base
 
 
 class BraggTree(base.CustomizedTreeView):
     """ Tree widget to store Bragg workspace """
+
     def __init__(self, parent):
         """
         Initialize
@@ -19,27 +23,27 @@ class BraggTree(base.CustomizedTreeView):
         base.CustomizedTreeView.__init__(self, parent)
 
         # set up actions
-        self._action_plot = QtGui.QAction('Plot', self)
+        self._action_plot = QAction('Plot', self)
         self._action_plot.triggered.connect(self.do_plot_ws)
 
         # to python
-        self._action_ipython = QtGui.QAction('To IPython', self)
+        self._action_ipython = QAction('To IPython', self)
         self._action_ipython.triggered.connect(self.do_copy_to_ipython)
 
         # to delete
-        self._action_delete = QtGui.QAction('Delete workspace', self)
+        self._action_delete = QAction('Delete workspace', self)
         self._action_delete.triggered.connect(self.do_delete_gsas)
 
         # to merge GSAS file
-        self._action_merge_gss = QtGui.QAction('Merge to GSAS', self)
+        self._action_merge_gss = QAction('Merge to GSAS', self)
         self._action_merge_gss.triggered.connect(self.do_merge_to_gss)
 
         # to select
-        self._action_select_node = QtGui.QAction('Plot', self)
+        self._action_select_node = QAction('Plot', self)
         self._action_select_node.triggered.connect(self.do_select_gss_node)
 
         # to de-select
-        self._action_deselect_node = QtGui.QAction('Remove from plotting', self)
+        self._action_deselect_node = QAction('Remove from plotting', self)
         self._action_deselect_node.triggered.connect(self.do_remove_from_plot)
 
         # class variables
@@ -69,7 +73,7 @@ class BraggTree(base.CustomizedTreeView):
 
         # re-initialize the model
         self._myNumCols = 1
-        model = QtGui.QStandardItemModel()
+        model = QStandardItemModel()
         model.setColumnCount(self._myNumCols)
         self.setModel(model)
 
@@ -121,9 +125,9 @@ class BraggTree(base.CustomizedTreeView):
             elif item.parent() is not None and leaf_level == -1:
                 leaf_level = 2
             elif item.parent() is None and leaf_level != 1:
-                print '[Error] Nodes of different levels are selected.'
+                print('[Error] Nodes of different levels are selected.')
             elif item.parent() is None and leaf_level != 2:
-                print '[Error] Nodes of different levels are selected.'
+                print('[Error] Nodes of different levels are selected.')
         # END-FOR
 
         if leaf_level == 1:
@@ -197,15 +201,15 @@ class BraggTree(base.CustomizedTreeView):
 
         # Get current index and item
         current_index = self.currentIndex()
-        if isinstance(current_index, QtCore.QModelIndex) is False:
+        if isinstance(current_index, QModelIndex) is False:
             return False, 'Current index is not QModelIndex instance, but %s.' % str(type(current_index))
 
-        assert (isinstance(current_index, QtCore.QModelIndex))
+        assert (isinstance(current_index, QModelIndex))
 
         current_item = self.model().itemFromIndex(current_index)
-        if isinstance(current_item, QtGui.QStandardItem) is False:
+        if isinstance(current_item, QStandardItem) is False:
             return False, 'Current item is not QStandardItem instance, but %s.' % str(type(current_item))
-        assert (isinstance(current_item, QtGui.QStandardItem))
+        assert (isinstance(current_item, QStandardItem))
 
         ws_name = str(current_item.text())
 
@@ -250,7 +254,7 @@ class BraggTree(base.CustomizedTreeView):
             gsas_name = str(gsas_node.text())
             gss_ws_name = gsas_name.split('_group')[0]
             self._mainWindow.get_workflow().delete_workspace(gss_ws_name)
-            
+
             # get the sub nodes and delete the workspaces
             sub_leaves = self.get_child_nodes(parent_node=gsas_node, output_str=True)
             for ws_name in sub_leaves:
@@ -258,7 +262,7 @@ class BraggTree(base.CustomizedTreeView):
                 try:
                     self._mainWindow.remove_gss_from_plot(gss_group_name=gsas_name, gss_bank_ws_name_list=[ws_name])
                 except AssertionError as ass_err:
-                    print 'Workspace %s is not on canvas.' % ws_name
+                    print('Workspace %s is not on canvas.' % ws_name)
 
             # delete the node from the tree
             self.delete_node(gsas_node)
@@ -278,19 +282,19 @@ class BraggTree(base.CustomizedTreeView):
         # get the selected GSAS node's name
         status, ret_obj = self.get_current_main_nodes()
         if not status:
-            print '[Error] Get current main nodes: %s.' % str(ret_obj)
+            print('[Error] Get current main nodes: %s.' % str(ret_obj))
             return
-        
+
         gss_node_list = ret_obj
         if len(gss_node_list) == 0:
             return
         elif len(gss_node_list) > 1:
-            print '[Error] Only 1 GSS node can be selected.  Current selected nodes are %s.' % str(gss_node_list)
+            print('[Error] Only 1 GSS node can be selected.  Current selected nodes are %s.' % str(gss_node_list))
             return
 
         # pop-out a file dialog for GSAS file's name
         file_ext = 'GSAS File (*.gsa);;Any File (*.*)'
-        new_gss_file_name = str(QtGui.QFileDialog.getSaveFileName(self, 'New GSAS file name',
+        new_gss_file_name = str(QFileDialog.getSaveFileName(self, 'New GSAS file name',
                                                                   self._mainWindow.get_default_data_dir(), file_ext))
 
         # quit
@@ -355,10 +359,10 @@ class BraggTree(base.CustomizedTreeView):
         """
         # Get current index and item
         current_index = self.currentIndex()
-        if isinstance(current_index, QtCore.QModelIndex) is False:
+        if isinstance(current_index, QModelIndex) is False:
             return False, 'Current index is not QModelIndex instance, but %s.' % str(type(current_index))
 
-        assert (isinstance(current_index, QtCore.QModelIndex))
+        assert (isinstance(current_index, QModelIndex))
 
         # Get all selected indexes and get their main-node (or itself)'s name
         main_node_list = list()
@@ -367,7 +371,7 @@ class BraggTree(base.CustomizedTreeView):
             # get item by QIndex
             this_item = self.model().itemFromIndex(q_index)
             # check
-            if isinstance(this_item, QtGui.QStandardItem) is False:
+            if isinstance(this_item, QStandardItem) is False:
                 return False, 'Current item is not QStandardItem instance, but %s.' % str(type(this_item))
 
             # get node name of parent's node name
@@ -402,6 +406,7 @@ class BraggTree(base.CustomizedTreeView):
 class GofRTree(base.CustomizedTreeView):
     """ Tree to record G(R) workspaces
     """
+
     def __init__(self, parent):
         """
 
@@ -411,19 +416,19 @@ class GofRTree(base.CustomizedTreeView):
         base.CustomizedTreeView.__init__(self, parent)
 
         # define actions
-        self._action_plot = QtGui.QAction('Plot', self)
+        self._action_plot = QAction('Plot', self)
         self._action_plot.triggered.connect(self.do_plot)
 
         # to python
-        self._action_ipython = QtGui.QAction('To IPython', self)
+        self._action_ipython = QAction('To IPython', self)
         self._action_ipython.triggered.connect(self.do_copy_to_ipython)
 
         # remove from plot
-        self._action_remove_plot = QtGui.QAction('Remove from plot', self)
+        self._action_remove_plot = QAction('Remove from plot', self)
         self._action_remove_plot.triggered.connect(self.do_remove_from_plot)
 
         # delete workspace/data
-        self._action_delete = QtGui.QAction('Delete data', self)
+        self._action_delete = QAction('Delete data', self)
         self._action_delete.triggered.connect(self.do_delete_selected_items)
 
         self._mainWindow = None
@@ -476,9 +481,9 @@ class GofRTree(base.CustomizedTreeView):
             elif item.parent() is not None and leaf_level == -1:
                 leaf_level = 2
             elif item.parent() is None and leaf_level != 1:
-                print '[Error] Nodes of different levels are selected.'
+                print('[Error] Nodes of different levels are selected.')
             elif item.parent() is None and leaf_level != 2:
-                print '[Error] Nodes of different levels are selected.'
+                print('[Error] Nodes of different levels are selected.')
         # END-FOR
 
         if leaf_level == 1:
@@ -509,7 +514,7 @@ class GofRTree(base.CustomizedTreeView):
         main_leaf_value = str(gr_parameter)
         status, message = self.add_main_item(main_leaf_value, False, True)
         if status is False:
-            print '[Log] %s' % message
+            print('[Log] %s' % message)
 
         # Add workspace name as a leaf
         child_value = gr_ws_name
@@ -581,7 +586,7 @@ class GofRTree(base.CustomizedTreeView):
 
         # re-initialize the model
         self._myNumCols = 1
-        model = QtGui.QStandardItemModel()
+        model = QStandardItemModel()
         model.setColumnCount(self._myNumCols)
         self.setModel(model)
 
@@ -600,15 +605,15 @@ class GofRTree(base.CustomizedTreeView):
         """
         # Get current index and item
         current_index = self.currentIndex()
-        if isinstance(current_index, QtCore.QModelIndex) is False:
+        if isinstance(current_index, QModelIndex) is False:
             return False, 'Current index is not QModelIndex instance, but %s.' % str(type(current_index))
 
-        assert (isinstance(current_index, QtCore.QModelIndex))
+        assert (isinstance(current_index, QModelIndex))
 
         current_item = self.model().itemFromIndex(current_index)
-        if isinstance(current_item, QtGui.QStandardItem) is False:
+        if isinstance(current_item, QStandardItem) is False:
             return False, 'Current item is not QStandardItem instance, but %s.' % str(type(current_item))
-        assert (isinstance(current_item, QtGui.QStandardItem))
+        assert (isinstance(current_item, QStandardItem))
 
         # get the workspace name.  if it is on main node, then use its child's value
         if current_item.parent() is None:
@@ -729,7 +734,7 @@ class GofRTree(base.CustomizedTreeView):
             else:
                 self._mainWindow.remove_sq_from_plot(leaf_node_name)
         except AssertionError as ass_err:
-            print 'Unable to remove %s from canvas due to %s.' % (leaf_node_name, str(ass_err))
+            print('Unable to remove %s from canvas due to %s.' % (leaf_node_name, str(ass_err)))
         # delete node
         self.delete_node(ws_item)
 
@@ -807,15 +812,15 @@ class GofRTree(base.CustomizedTreeView):
         """
         # Get current index and item
         current_index = self.currentIndex()
-        if isinstance(current_index, QtCore.QModelIndex) is False:
+        if isinstance(current_index, QModelIndex) is False:
             return False, 'Current index is not QModelIndex instance, but %s.' % str(type(current_index))
 
-        assert(isinstance(current_index, QtCore.QModelIndex))
+        assert(isinstance(current_index, QModelIndex))
 
         current_item = self.model().itemFromIndex(current_index)
-        if isinstance(current_item, QtGui.QStandardItem) is False:
+        if isinstance(current_item, QStandardItem) is False:
             return False, 'Current item is not QStandardItem instance, but %s.' % str(type(current_item))
-        assert(isinstance(current_item, QtGui.QStandardItem))
+        assert(isinstance(current_item, QStandardItem))
 
         if current_item.parent() is None:
             # Top-level leaf, IPTS number
@@ -844,7 +849,7 @@ class GofRTree(base.CustomizedTreeView):
         """ Override event handling method
         """
         status, current_run = self.get_current_run()
-        print '[INFO] Status = {0}; Current run number = {1}'.format(status, current_run)
+        print('[INFO] Status = {0}; Current run number = {1}'.format(status, current_run))
 
         # if self._mainWindow is not None:
         #     self._mainWindow.set_run(current_run)
@@ -860,4 +865,3 @@ class GofRTree(base.CustomizedTreeView):
         self._mainWindow = main_window
 
         return
-
