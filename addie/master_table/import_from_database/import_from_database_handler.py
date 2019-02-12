@@ -1,18 +1,12 @@
+from __future__ import (absolute_import, division, print_function)
+
 from collections import OrderedDict
 import copy
 import numpy as np
 
-try:
-    from PyQt4.QtGui import QDialog, QComboBox, QLineEdit, QPushButton, QWidget, QHBoxLayout, QLabel, \
+from qtpy.QtWidgets import QDialog, QComboBox, QLineEdit, QPushButton, QWidget, QHBoxLayout, QLabel, \
         QTableWidgetItem, QApplication, QMainWindow
-    from PyQt4 import QtGui, QtCore
-except:
-    try:
-        from PyQt5.QtWidgets import QDialog, QComboBox, QLineEdit, QPushButton, QWidget, QHBoxLayout, QLabel, \
-            QTableWidgetItem, QApplication, QMainWindow
-        from PyQt5 import QtGui, QtCore
-    except:
-        raise ImportError("Requires PyQt4 or PyQt5")
+from addie.utilities import load_ui
 
 from addie.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
 from addie.utilities.oncat import OncatErrorMessageWindow
@@ -36,7 +30,7 @@ from addie.master_table.import_from_database.format_json_from_database_to_master
 from addie.utilities.general import generate_random_key, remove_white_spaces
 from addie.utilities.gui_handler import TableHandler
 
-from addie.ui_import_from_database import Ui_MainWindow as UiMainWindow
+# from addie.ui_import_from_database import Ui_MainWindow as UiMainWindow
 
 
 class ImportFromDatabaseHandler:
@@ -92,8 +86,9 @@ class ImportFromDatabaseWindow(QMainWindow):
         # QDialog.__init__(self, parent=parent)
         # self.ui = UiDialog()
         QMainWindow.__init__(self, parent=parent)
-        self.ui = UiMainWindow()
-        self.ui.setupUi(self)
+        self.ui = load('ui_import_from_database.ui', baseinstance=self)
+        # self.ui = UiMainWindow()
+        # self.ui.setupUi(self)
 
         self.init_widgets()
         self.init_oncat_template()

@@ -1,17 +1,11 @@
+from __future__ import (absolute_import, division, print_function)
+from qtpy.QtWidgets import QMainWindow, QLineEdit, QApplication
+from addie.utilities import load_ui
+
 import pyoncat
 import oauthlib
 
-try:
-    from PyQt4.QtGui import QMainWindow, QLineEdit, QApplication
-    from PyQt4 import QtGui
-except:
-    try:
-        from PyQt5.QtWidgets import QMainWindow, QLineEdit, QApplication
-        from PyQt5 import QtGui
-    except:
-        raise ImportError("Requires PyQt4 or PyQt5")
-
-from addie.ui_oncat_authentication import Ui_MainWindow as UiMainWindow
+# from addie.ui_oncat_authentication import Ui_MainWindow as UiMainWindow
 
 
 # Create token store
@@ -42,8 +36,9 @@ class OncatAuthenticationWindow(QMainWindow):
         self.parent = parent
         self.next_ui = next_ui
 
-        self.ui = UiMainWindow()
-        self.ui.setupUi(self)
+        self.ui = load_ui('ui_oncat_authentication.ui', baseinstance=self)
+        # self.ui = UiMainWindow()
+        # self.ui.setupUi(self)
 
         self.center()
         self.init_widgets()

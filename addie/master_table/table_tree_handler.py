@@ -1,21 +1,15 @@
+from __future__ import (absolute_import, division, print_function)
+
 from collections import OrderedDict
 import numpy as np
 import os
 import pickle
 
-
-try:
-    from PyQt4.QtGui import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QFileDialog
-    from PyQt4 import QtCore, QtGui
-except ImportError:
-    try:
-        from PyQt5.QtWidgets import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QFileDialog
-        from PyQt5 import QtCore, QtGui
-    except ImportError:
-        raise ImportError("Requires PyQt4 or PyQt5")
+from qtpy.QtWidgets import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QFileDialog
+from addie.utilities import load_ui
 
 from addie.utilities.file_handler import FileHandler
-from addie.ui_table_tree import Ui_Dialog as UiDialog
+#from addie.ui_table_tree import Ui_Dialog as UiDialog
 from addie.master_table.tree_definition import tree_dict, COLUMN_DEFAULT_WIDTH, CONFIG_FILE
 from addie.master_table.tree_definition import h1_COLUMNS_WIDTH, h2_COLUMNS_WIDTH, h3_COLUMNS_WIDTH
 from addie.master_table.table_row_handler import TableRowHandler
@@ -263,8 +257,9 @@ class TableTree(QDialog):
     def __init__(self, parent=None):
         self.parent = parent
         QDialog.__init__(self, parent=parent)
-        self.ui = UiDialog()
-        self.ui.setupUi(self)
+        self.ui = load('ui_table_tree.ui', baseinstance=self)
+        # self.ui = UiDialog()
+        # self.ui.setupUi(self)
 
         self.init_tree()
 

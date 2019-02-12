@@ -4,15 +4,8 @@ from collections import OrderedDict
 import copy
 import json
 
-try:
-    from PyQt4 import QtCore, QtGui
-    from PyQt4.QtGui import QDialog
-except ImportError:
-    try:
-        from PyQt5 import QtCore, QtGui
-        from PyQt5.QtWidgets import QDialog
-    except ImportError:
-        raise ImportError("Requires PyQt4 or PyQt5")
+from qtpy.QtWidgets import QDialog
+from addie.utilities import load_ui
 
 from addie.utilities.file_handler import FileHandler
 from addie.utilities.list_runs_parser import ListRunsParser
@@ -20,7 +13,7 @@ from addie.master_table.table_row_handler import TableRowHandler
 from addie.utilities.set import Set
 from addie.master_table.utilities import LoadGroupingFile
 
-from addie.ui_list_of_scan_loader_dialog import Ui_Dialog as UiDialog
+#from addie.ui_list_of_scan_loader_dialog import Ui_Dialog as UiDialog
 
 # init test dictionary (to test loader
 _dictionary_test = OrderedDict()
@@ -111,8 +104,9 @@ class LoaderOptionsInterface(QDialog):
             self.parent = parent.parent
 
         QDialog.__init__(self, parent=parent)
-        self.ui = UiDialog()
-        self.ui.setupUi(self)
+        self.ui = load('ui_list_of_scan_loader_dialog.ui', baseinstance=self)
+        #self.ui = UiDialog()
+        #self.ui.setupUi(self)
         self.init_widgets()
 
         self.setWindowTitle("Options to load list of runs selected")
@@ -144,8 +138,9 @@ class AsciiLoaderOptionsInterface(LoaderOptionsInterface):
         self.parent = parent
 
         QDialog.__init__(self, parent=parent)
-        self.ui = UiDialog()
-        self.ui.setupUi(self)
+        self.ui = load('ui_list_of_scan_loader_dialog.ui', baseinstance=self)
+        # self.ui = UiDialog()
+        # self.ui.setupUi(self)
         self.init_widgets()
 
         short_filename = os.path.basename(filename)

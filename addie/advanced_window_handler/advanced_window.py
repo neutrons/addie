@@ -1,5 +1,5 @@
 from __future__ import (absolute_import, division, print_function)
-from qtpy.QtWidgets import QMainWindow
+from qtpy.QtWidgets import QMainWindow, QFileDialog
 from addie.utilities import load_ui
 
 
@@ -77,17 +77,17 @@ class AdvancedWindow(QMainWindow):
         self.parent.set_default_folders_path()
 
     def cache_dir_button_clicked(self):
-        _cache_folder = QtGui.QFileDialog.getExistingDirectory(caption="Select Cache Folder ...",
+        _cache_folder = QFileDialog.getExistingDirectory(caption="Select Cache Folder ...",
                                                               directory=self.parent.cache_folder,
-                                                              options=QtGui.QFileDialog.ShowDirsOnly)
+                                                              options=QFileDialog.ShowDirsOnly)
         if _cache_folder:
             self.ui.cache_dir_label.setText(str(_cache_folder))
             self.parent.cache_folder = str(_cache_folder)
 
     def output_dir_button_clicked(self):
-        _output_folder = QtGui.QFileDialog.getExistingDirectory(caption="Select Output Folder ...",
+        _output_folder = QFileDialog.getExistingDirectory(caption="Select Output Folder ...",
                                                               directory=self.parent.output_folder,
-                                                              options=QtGui.QFileDialog.ShowDirsOnly)
+                                                              options=QFileDialog.ShowDirsOnly)
         if _output_folder:
             self.ui.output_dir_label.setText(str(_output_folder))
             self.parent.output_folder = str(_output_folder)

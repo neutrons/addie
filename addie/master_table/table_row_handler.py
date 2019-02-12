@@ -2,19 +2,8 @@ import copy
 import numpy as np
 import random
 
-try:
-    from PyQt4.QtGui import QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton, \
-        QComboBox, QWidget, QGridLayout, QVBoxLayout, QHBoxLayout, QDialog, QLineEdit
-    from PyQt4.QtGui import QFileDialog
-    from PyQt4 import QtCore, QtGui
-except ImportError:
-    try:
-        from PyQt5.QtWidgets import QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton, \
-            QWidget, QComboBox, QGridLayout, QVBoxLayout, QHBoxLayout, QDialog, QLineEdit
-        from PyQt5.QtWidgets import QFileDialog
-        from PyQt5 import QtCore, QtGui
-    except ImportError:
-        raise ImportError("Requires PyQt4 or PyQt5")
+from qtpy.QtWidgets import (QMainWindow, QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton,
+        QComboBox, QWidget, QGridLayout, QVBoxLayout, QHBoxLayout, QDialog, QLineEdit)
 
 # from qtpy.QWidgets import QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton, QWidget, QComboBox
 # from qtpy import QtCore, QtGui
@@ -24,7 +13,7 @@ from addie.master_table.selection_handler import TransferH3TableWidgetState
 from addie.master_table.periodic_table.chemical_formula_handler import format_chemical_formula_equation
 from addie.master_table.tree_definition import COLUMN_DEFAULT_HEIGHT, CONFIG_BUTTON_HEIGHT, CONFIG_BUTTON_WIDTH
 
-from addie.ui_dimensions_setter import Ui_Dialog as UiDialog
+#from addie.ui_dimensions_setter import Ui_Dialog as UiDialog
 
 
 class TableRowHandler:

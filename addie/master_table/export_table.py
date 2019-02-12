@@ -1,4 +1,6 @@
-from PyQt4.QtCore import Qt
+from __future__ import (absolute_import, division, print_function)
+
+#from PyQt4.QtCore import Qt
 from addie.utilities.file_handler import FileHandler
 
 
