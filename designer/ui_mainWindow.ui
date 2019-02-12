@@ -4310,7 +4310,7 @@ p, li { white-space: pre-wrap; }
                      </layout>
                     </item>
                     <item>
-                     <widget class="BraggView" name="graphicsView_bragg"/>
+                     <widget class="QFrame" name="frame_graphicsView_bragg"/>
                     </item>
                     <item>
                      <layout class="QHBoxLayout" name="horizontalLayout_75">
@@ -4639,16 +4639,19 @@ p, li { white-space: pre-wrap; }
                </layout>
               </item>
               <item>
-               <widget class="BraggTree" name="treeWidget_braggWSList">
+               <widget class="QFrame" name="frame_treeWidget_braggWSList">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
-                <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;List of workspace names.  Each workspace is an individual bank&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                </property>
+		<property name="frameShape">
+		  <enum>QFrame::StyledPanel</enum>
+		</property>
+		<property name="frameShadow">
+		  <enum>QFrame::Raised</enum>
+	      </property>
                 <column>
                  <property name="text">
                   <string notr="true">1</string>
@@ -4664,7 +4667,7 @@ p, li { white-space: pre-wrap; }
              </attribute>
              <layout class="QGridLayout" name="gridLayout">
               <item row="1" column="0">
-               <widget class="GofRView" name="graphicsView_gr">
+               <widget class="QFrame" name="frame_graphicsView_gr">
                 <property name="minimumSize">
                  <size>
                   <width>50</width>
@@ -4674,7 +4677,7 @@ p, li { white-space: pre-wrap; }
                </widget>
               </item>
               <item row="0" column="0">
-               <widget class="SofQView" name="graphicsView_sq">
+               <widget class="QFrame" name="frame_graphicsView_sq">
                 <property name="minimumSize">
                  <size>
                   <width>50</width>
@@ -5064,16 +5067,19 @@ p, li { white-space: pre-wrap; }
                  </layout>
                 </item>
                 <item>
-                 <widget class="GofRTree" name="treeWidget_grWsList">
+                 <widget class="QFrame" name="frame_treeWidget_grWsList">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
-                  <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;write click on the workspace name should give user the option to plot/over plot &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
+		  <property name="frameShape">
+		    <enum>QFrame::StyledPanel</enum>
+		  </property>
+		  <property name="frameShadow">
+		    <enum>QFrame::Raised</enum>
+		</property>
                   <column>
                    <property name="text">
                     <string notr="true">1</string>
@@ -5164,23 +5170,16 @@ p, li { white-space: pre-wrap; }
          </layout>
         </item>
         <item>
-         <widget class="IPythonDockWidget" name="dockWidget_ipython">
-          <property name="minimumSize">
-           <size>
-            <width>800</width>
-            <height>41</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>524287</width>
-            <height>300</height>
-           </size>
-          </property>
-          <widget class="QWidget" name="dockWidgetContents"/>
-         </widget>
-        </item>
-       </layout>
+	  <widget class="QFrame" name="frame_dockWidget_ipython">
+	    <property name="frameShape">
+	      <enum>QFrame::StyledPanel</enum>
+	    </property>
+	    <property name="frameShadow">
+	      <enum>QFrame::Raised</enum>
+	    </property>
+	  </widget>
+	</item>
+	</layout>
       </widget>
      </widget>
     </item>
@@ -5327,39 +5326,6 @@ p, li { white-space: pre-wrap; }
    </property>
   </action>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>IPythonDockWidget</class>
-   <extends>QDockWidget</extends>
-   <header>ipythondockwidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>GofRView</class>
-   <extends>QGraphicsView</extends>
-   <header>graphicviewlib.h</header>
-  </customwidget>
-  <customwidget>
-   <class>SofQView</class>
-   <extends>QGraphicsView</extends>
-   <header>graphicviewlib.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BraggView</class>
-   <extends>QGraphicsView</extends>
-   <header>graphicviewlib.h</header>
-  </customwidget>
-  <customwidget>
-   <class>GofRTree</class>
-   <extends>QTreeWidget</extends>
-   <header>treelib.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BraggTree</class>
-   <extends>QTreeWidget</extends>
-   <header>treelib.h</header>
-  </customwidget>
- </customwidgets>
  <tabstops>
   <tabstop>select_current_folder_button</tabstop>
   <tabstop>diamond</tabstop>
@@ -5415,7 +5381,9 @@ p, li { white-space: pre-wrap; }
   <tabstop>pdf_qmax_line_edit</tabstop>
   <tabstop>interactive_mode_checkbox</tabstop>
   <tabstop>run_sum_scans_button</tabstop>
-  <tabstop>graphicsView_bragg</tabstop>
+<!--
+    <tabstop>graphicsView_bragg</tabstop>
+ -->
   <tabstop>comboBox_xUnit</tabstop>
   <tabstop>pushButton_loadBraggFile</tabstop>
   <tabstop>checkBox_bank1</tabstop>
@@ -5428,9 +5396,11 @@ p, li { white-space: pre-wrap; }
   <tabstop>radioButton_multiGSS</tabstop>
   <tabstop>pushButton_rescaleGSAS</tabstop>
   <tabstop>pushButton_gsasColorStyle</tabstop>
+<!--
   <tabstop>treeWidget_braggWSList</tabstop>
   <tabstop>graphicsView_gr</tabstop>
   <tabstop>graphicsView_sq</tabstop>
+-->
   <tabstop>pushButton_clearSofQ</tabstop>
   <tabstop>pushButton_loadSQ</tabstop>
   <tabstop>pushButton_sqColorStyle</tabstop>
@@ -5446,7 +5416,9 @@ p, li { white-space: pre-wrap; }
   <tabstop>doubleSpinBoxRmin</tabstop>
   <tabstop>doubleSpinBoxDelR</tabstop>
   <tabstop>doubleSpinBoxRmax</tabstop>
-  <tabstop>treeWidget_grWsList</tabstop>
+  <!--
+      <tabstop>treeWidget_grWsList</tabstop>
+  -->
   <tabstop>pushButton_loadGofR</tabstop>
   <tabstop>pushButton_saveGR</tabstop>
   <tabstop>pushButton_clearGrCanvas</tabstop>
@@ -5479,7 +5451,7 @@ p, li { white-space: pre-wrap; }
   </connection>
   <connection>
    <sender>action_preview_ascii</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>action_preview_ascii_clicked()</slot>
    <hints>
@@ -5511,7 +5483,7 @@ p, li { white-space: pre-wrap; }
   </connection>
   <connection>
    <sender>actionLoad</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>action_load_configuration_clicked()</slot>
    <hints>
@@ -5527,7 +5499,7 @@ p, li { white-space: pre-wrap; }
   </connection>
   <connection>
    <sender>actionSave</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>action_save_configuration_clicked()</slot>
    <hints>
