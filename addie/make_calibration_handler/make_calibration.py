@@ -1,6 +1,6 @@
 from __future__ import (absolute_import, division, print_function)
 
-from qtpy.QtWidgets import (QMainWindow, QComboBox, QFileDialog, QHBoxLayout, QLabel, QLineEdit, QPushButton,
+from qtpy.QtWidgets import (QMainWindow, QComboBox, QFileDialog, QHBoxLayout, QLabel, QDateEdit, QLineEdit, QPushButton,
                             QTableWidgetItem, QVBoxLayout, QWidget)
 from addie.utilities import load_ui
 from qtpy import QtGui, QtCore
@@ -141,7 +141,7 @@ class MakeCalibrationWindow(QMainWindow):
     def _general_browser_clicked(self,
                                  sample_type='',
                                  value_ui=None):
-        _file = QFileDialog.getOpenFileName(parent=self,
+        [_file, _] = QFileDialog.getOpenFileName(parent=self,
                                                   caption="Select {} File ...".format(sample_type),
                                                   directory=self.master_folder,
                                                   filter="NeXus (*.nxs*);; All (*.*)")
@@ -303,7 +303,7 @@ class MakeCalibrationWindow(QMainWindow):
 
         # new column - date
         col = 4
-        date = QtGui.QDateEdit()
+        date = QDateEdit()
         date.setDate(self.master_date_value)
         self.ui.tableWidget.setCellWidget(row, col, date)
 
@@ -398,7 +398,7 @@ class MakeCalibrationWindow(QMainWindow):
     def run_calibration_button_clicked(self):
         # make dictionary of all infos
         o_dict = MakeCalibrationDictionary(parent=self)
-        _file = QFileDialog.getSaveFileName(parent=self,
+        [_file, _] = QFileDialog.getSaveFileName(parent=self,
                                                   caption="Select where and name of json file to create...",
                                                   directory = '/SNS/users/ntm/')
         if _file:
