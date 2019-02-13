@@ -137,7 +137,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="clear_ipts">
+           <widget class="QPushButton" name="clear_ipts_button">
             <property name="minimumSize">
              <size>
               <width>25</width>
@@ -173,7 +173,7 @@
            <widget class="QLineEdit" name="run_number_lineedit"/>
           </item>
           <item>
-           <widget class="QPushButton" name="clear_run">
+           <widget class="QPushButton" name="clear_run_button">
             <property name="minimumSize">
              <size>
               <width>25</width>
@@ -326,8 +326,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>414</width>
-         <height>265</height>
+         <width>900</width>
+         <height>594</height>
         </rect>
        </property>
        <attribute name="label">
@@ -691,38 +691,6 @@
  <resources/>
  <connections>
   <connection>
-   <sender>cancel_button</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>cancel_button_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>789</x>
-     <y>705</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>458</x>
-     <y>375</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>import_button</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>import_button_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>870</x>
-     <y>705</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>458</x>
-     <y>375</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>ipts_radio_button</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
@@ -787,22 +755,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>change_user_button</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>change_user_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>65</x>
-     <y>705</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>458</x>
-     <y>375</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>ipts_lineedit</sender>
    <signal>textChanged(QString)</signal>
    <receiver>MainWindow</receiver>
@@ -811,70 +763,6 @@
     <hint type="sourcelabel">
      <x>817</x>
      <y>85</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>458</x>
-     <y>375</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>clear_ipts</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>clear_ipts()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>886</x>
-     <y>85</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>458</x>
-     <y>375</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>clear_run</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>clear_run()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>824</x>
-     <y>120</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>458</x>
-     <y>375</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>remove_criteria_button</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>remove_criteria_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>34</x>
-     <y>358</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>458</x>
-     <y>375</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>add_criteria_button</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>add_criteria_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>405</x>
-     <y>371</y>
     </hint>
     <hint type="destinationlabel">
      <x>458</x>
@@ -907,22 +795,6 @@
     <hint type="sourcelabel">
      <x>458</x>
      <y>357</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>458</x>
-     <y>375</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>global_rule_button</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>edit_global_rule_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>860</x>
-     <y>393</y>
     </hint>
     <hint type="destinationlabel">
      <x>458</x>
@@ -979,6 +851,86 @@
    </hints>
   </connection>
   <connection>
+   <sender>global_rule_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>edit_global_rule_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>860</x>
+     <y>393</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>458</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>add_criteria_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>add_criteria_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>405</x>
+     <y>371</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>458</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>remove_criteria_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>remove_criteria_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>34</x>
+     <y>358</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>458</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clear_ipts_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>clear_ipts()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>886</x>
+     <y>85</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>458</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clear_run_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>clear_run()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>824</x>
+     <y>120</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>458</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
    <sender>clear_search_button</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
@@ -987,6 +939,54 @@
     <hint type="sourcelabel">
      <x>665</x>
      <y>165</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>458</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>import_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>import_button_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>870</x>
+     <y>705</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>458</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cancel_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>cancel_button_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>789</x>
+     <y>705</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>458</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>change_user_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>change_user_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>65</x>
+     <y>705</y>
     </hint>
     <hint type="destinationlabel">
      <x>458</x>

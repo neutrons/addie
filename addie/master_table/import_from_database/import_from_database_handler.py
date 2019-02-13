@@ -85,9 +85,9 @@ class ImportFromDatabaseWindow(QMainWindow):
         QMainWindow.__init__(self, parent=parent)
         self.ui = load_ui('ui_import_from_database.ui', baseinstance=self)
 
-        self.init_widgets()
-        self.init_oncat_template()
-        self.radio_button_changed()
+        # self.init_widgets()
+        # self.init_oncat_template()
+        # self.radio_button_changed()
 
     def init_oncat_template(self):
         """In order to display in the first tab all the metadata just like ONCat does
