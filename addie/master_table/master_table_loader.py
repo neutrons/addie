@@ -7,6 +7,7 @@ import json
 
 from qtpy.QtWidgets import QDialog
 from addie.utilities import load_ui
+from qtpy import QtCore
 
 from addie.utilities.file_handler import FileHandler
 from addie.utilities.list_runs_parser import ListRunsParser
