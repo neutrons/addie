@@ -374,8 +374,9 @@ class SaveConfigInterface(QDialog):
         self.grand_parent = grand_parent
 
         QDialog.__init__(self, parent=grand_parent)
-        self.ui = UiDialogSave()
-        self.ui.setupUi(self)
+        self.ui = load_ui('ui_table_tree_save_config.ui', baseinstance=self)
+        #self.ui = UiDialogSave()
+        #self.ui.setupUi(self)
 
         self.ui.save_as_value.setPlaceholderText("undefined")
 
