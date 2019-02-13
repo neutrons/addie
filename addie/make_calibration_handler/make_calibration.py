@@ -79,7 +79,7 @@ class MakeCalibrationWindow(QMainWindow):
         month = now.month
         year = now.year
         today = QtCore.QDate(year, month, day)
-        self.master_date = today
+        self.master_date_value = today
         self.ui.master_date.setDate(today)
 
     def init_widgets(self):
@@ -304,7 +304,7 @@ class MakeCalibrationWindow(QMainWindow):
         # new column - date
         col = 4
         date = QtGui.QDateEdit()
-        date.setDate(self.master_date)
+        date.setDate(self.master_date_value)
         self.ui.tableWidget.setCellWidget(row, col, date)
 
         # new column - output dir
@@ -388,7 +388,7 @@ class MakeCalibrationWindow(QMainWindow):
         return True
 
     def master_date_changed(self, datetime):
-        self.master_date = datetime.date()
+        self.master_date_value = datetime.date()
 
     def check_run_calibration_status(self):
         """Disable the Run Calibration button if any of the infos is missing"""
@@ -439,8 +439,8 @@ class MakeCalibrationDictionary:
         dictionary['SampleEnvironment'] = master_sample_env
 
         # Date
-        master_date = self.parent.ui.master_date.date()
-        [year, month, day] =master_date.getDate()
+        master_date_value = self.parent.ui.master_date.date()
+        [year, month, day] =master_date_value.getDate()
         dictionary['date'] = "{}_{:02}_{:02}".format(year, month, day)
 
         calibrants = {}
