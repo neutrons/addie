@@ -819,10 +819,10 @@ class H3TableHandler:
 
     def _import_table_from_file(self, clear_table=True):
         _current_folder = self.parent.current_folder
-        table_file = str(QFileDialog.getOpenFileName(parent=self.parent,
+        [table_file, _] = QFileDialog.getOpenFileName(parent=self.parent,
                                                       caption='Select Table File ...',
                                                       directory=_current_folder,
-                                                      filter=("NeXus (*.nxsh5);; Raw (*.raw);; NeXus_old (*.nxs)")))
+                                                      filter="NeXus (*.nxsh5);; Raw (*.raw);; NeXus_old (*.nxs)")
         if table_file:
             new_path = os.path.dirname(table_file)
             self.parent.current_folder = new_path
@@ -833,10 +833,10 @@ class H3TableHandler:
 
     def _import_table_from_config(self, clear_table=True):
         _current_folder = self.parent.current_folder
-        table_file = str(QFileDialog.getOpenFileName(parent=self.parent,
+        [table_file, _] = QFileDialog.getOpenFileName(parent=self.parent,
                                                       caption='Select Table File ...',
                                                       directory=_current_folder,
-                                                      filter=("json (*.json);; Log (*.csv)")))
+                                                      filter="json (*.json);; Log (*.csv)")
         if table_file:
             new_path = os.path.dirname(table_file)
             self.parent.current_folder = new_path
@@ -855,10 +855,10 @@ class H3TableHandler:
 
     def _export_table(self):
         _current_folder = self.parent.current_folder
-        _table_file = str(QFileDialog.getSaveFileName(parent=self.parent,
+        [_table_file, _] = QFileDialog.getSaveFileName(parent=self.parent,
                                                       caption="Define Output File Name ...",
                                                       directory=_current_folder,
-                                                      filter=("json (*.json)")))
+                                                      filter="json (*.json)")
 
         if _table_file:
             _file_handler = FileHandler(filename = _table_file)
