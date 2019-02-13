@@ -26,6 +26,8 @@ class ReductionConfiguration(QDialog):
 
     list_grouping_intermediate_browse_widgets = []
     list_grouping_output_browse_widgets = []
+    list_grouping_intermediate_widgets = []
+    list_grouping_output_widgets = []
 
     def __init__(self, parent=None):
         self.parent = parent
@@ -111,10 +113,10 @@ class ReductionConfiguration(QDialog):
 
     def intermediate_browse_button_clicked(self):
         _characterization_folder = self.parent.characterization_folder
-        _intermediate_group_file = QFileDialog.getOpenFileName(parent=self.parent,
-                                                                   caption="Select Grouping File",
-                                                                   directory=_characterization_folder,
-                                                                   filter="XML (*.xml)")
+        [_intermediate_group_file, _] = QFileDialog.getOpenFileName(parent=self.parent,
+                                                                    caption="Select Grouping File",
+                                                                    directory=_characterization_folder,
+                                                                    filter="XML (*.xml)")
         if _intermediate_group_file:
             self.ui.intermediate_browse_value.setText(_intermediate_group_file)
             o_grouping = LoadGroupingFile(filename=_intermediate_group_file)
@@ -125,10 +127,10 @@ class ReductionConfiguration(QDialog):
 
     def output_browse_button_clicked(self):
         _characterization_folder = self.parent.characterization_folder
-        _output_group_file = QFileDialog.getOpenFileName(parent=self.parent,
-                                                                   caption="Select Grouping File",
-                                                                   directory=_characterization_folder,
-                                                                   filter="XML (*.xml)")
+        [_output_group_file, _] = QFileDialog.getOpenFileName(parent=self.parent,
+                                                              caption="Select Grouping File",
+                                                              directory=_characterization_folder,
+                                                              filter="XML (*.xml)")
         if _output_group_file:
             self.ui.output_browse_value.setText(_output_group_file)
             o_grouping = LoadGroupingFile(filename=_output_group_file)
@@ -143,21 +145,9 @@ class ReductionConfiguration(QDialog):
     def pdf_reset_r_range_button(self):
         pass
 
-    # def make_calibration_clicked(self):
-    #     MakeCalibrationLauncher(parent=self, grand_parent=self.parent)
-    #
-    # def browse_calibration_clicked(self):
-    #     _calibration_folder = self.parent.calibration_folder
-    #     _calibration_file = QFileDialog.getOpenFileName(parent = self.parent,
-    #                                                           caption = "Select Calibration File",
-    #                                                           directory = _calibration_folder,
-    #                                                           filter = self.parent.calibration_extension)
-    #     if _calibration_file:
-    #         self.ui.calibration_file.setText(_calibration_file)
-
     def pdf_browse_characterization_clicked(self):
         _characterization_folder = self.parent.characterization_folder
-        _characterization_file = QFileDialog.getOpenFileName(parent=self.parent,
+        [_characterization_file, _] = QFileDialog.getOpenFileName(parent=self.parent,
                                                                    caption="Select Characterization File",
                                                                    directory=_characterization_folder,
                                                                    filter=self.parent.characterization_extension)
@@ -178,17 +168,6 @@ class ReductionConfiguration(QDialog):
     def cancel_clicked(self):
         self.close()
 
-# class LoadGroupingFile:
-#     '''This class reads the XML file and will return the number of groups <group ID=""> found in that file'''
-#
-#     def __init__(self, filename=''):
-#         self.filename = filename
-#
-#     def get_number_of_groups(self):
-#         xmldoc = minidom.parse(self.filename)
-#         itemlist = xmldoc.getElementsByTagName('group')
-#         return len(itemlist)
-#
 
 class LoadReductionConfiguration:
 
