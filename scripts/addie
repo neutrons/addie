@@ -2793,7 +2793,7 @@ class MainWindow(QMainWindow):
 
     def browse_calibration_clicked(self):
         _calibration_folder = self.calibration_folder
-        _calibration_file = QtGui.QFileDialog.getOpenFileName(parent = self,
+        [_calibration_file, ext] = QFileDialog.getOpenFileName(parent = self,
                                                               caption = "Select Calibration File",
                                                               directory = _calibration_folder,
                                                               filter = self.calibration_extension)

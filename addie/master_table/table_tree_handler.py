@@ -257,7 +257,7 @@ class TableTree(QDialog):
     def __init__(self, parent=None):
         self.parent = parent
         QDialog.__init__(self, parent=parent)
-        self.ui = load('ui_table_tree.ui', baseinstance=self)
+        self.ui = load_ui('ui_table_tree.ui', baseinstance=self)
         # self.ui = UiDialog()
         # self.ui.setupUi(self)
 

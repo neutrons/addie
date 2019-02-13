@@ -1,6 +1,7 @@
 from __future__ import (absolute_import, division, print_function)
 
-from qtpy.QtWidgets import (QMainWindow, QComboBox, QFileDialog, QHBoxLayout, QLabel, QLineEdit, QPushButton, QTableWidgetItem, QVBoxLayout, QWidget)
+from qtpy.QtWidgets import (QMainWindow, QComboBox, QFileDialog, QHBoxLayout, QLabel, QLineEdit, QPushButton,
+                            QTableWidgetItem, QVBoxLayout, QWidget)
 from addie.utilities import load_ui
 from qtpy import QtGui, QtCore
 
