@@ -101,7 +101,7 @@ class TableRowHandler:
 
     def inelastic_correction_changed(self, value=None, key=None, data_type='sample'):
         show_button = True
-        if value.lower() == 'none':
+        if value == 0:
             show_button = False
 
         _ui = self.parent.master_table_list_ui[key][data_type]['placzek_button']
