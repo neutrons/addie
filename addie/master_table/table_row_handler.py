@@ -279,9 +279,10 @@ class TableRowHandler:
         column += 1
         clean_sample_chemical_formula = format_chemical_formula_equation(sample_chemical_formula)
         _material_text = QLineEdit(clean_sample_chemical_formula)
-        _material_text.setEnabled(False)
-        _material_text.returnPressed.connect(lambda key=random_key:
-                               self.parent.master_table_sample_material_line_edit_entered(key))
+        _material_text = QLabel(clean_sample_chemical_formula)
+#        _material_text.setEnabled(True)
+#         _material_text.returnPressed.connect(lambda key=random_key:
+#                                self.parent.master_table_sample_material_line_edit_entered(key))
         _material_button = QPushButton("...")
         _material_button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
         _material_button.setFixedWidth(CONFIG_BUTTON_WIDTH)
@@ -500,12 +501,13 @@ class TableRowHandler:
         _item = QTableWidgetItem("")
         self.table_ui.setItem(row, column, _item)
 
-        # column 16 - material
+        # column 16 - material (chemical formula)
         column += 1
-        _material_text = QLineEdit("")
-        _material_text.setEnabled(False)
-        _material_text.returnPressed.connect(lambda key=random_key:
-                                             self.parent.master_table_normalization_material_line_edit_entered(key))
+        #_material_text = QLineEdit("")
+        _material_text = QLabel("N/A")
+        #_material_text.setEnabled(False)
+        # _material_text.returnPressed.connect(lambda key=random_key:
+        #                                      self.parent.master_table_normalization_material_line_edit_entered(key))
         _material_button = QPushButton("...")
         _material_button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
         _material_button.setFixedWidth(CONFIG_BUTTON_WIDTH)

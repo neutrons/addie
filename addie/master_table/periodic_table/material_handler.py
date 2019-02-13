@@ -197,6 +197,8 @@ class PeriodicTable(QMainWindow):
         else:
             # retrieve value from sample or normalization columns in master table
             text = str(self.parent.master_table_list_ui[self.key][self.data_type]['material']['text'].text())
+        if text == 'N/A':
+            text = ""
         self.ui.chemical_formula.setText(text)
 
         # set color of buttons
