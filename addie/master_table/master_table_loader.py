@@ -7,7 +7,7 @@ import json
 
 from qtpy.QtWidgets import QDialog
 from addie.utilities import load_ui
-from qtpy import QtCore
+from qtpy import QtCore, QtGui
 
 from addie.utilities.file_handler import FileHandler
 from addie.utilities.list_runs_parser import ListRunsParser
@@ -106,7 +106,7 @@ class LoaderOptionsInterface(QDialog):
             self.parent = parent.parent
 
         QDialog.__init__(self, parent=parent)
-        self.ui = load('ui_list_of_scan_loader_dialog.ui', baseinstance=self)
+        self.ui = load_ui('ui_list_of_scan_loader_dialog.ui', baseinstance=self)
         self.init_widgets()
         self.setWindowTitle("Options to load list of runs selected")
         self.parent.ascii_loader_option = None
@@ -137,7 +137,7 @@ class AsciiLoaderOptionsInterface(LoaderOptionsInterface):
         self.parent = parent
 
         QDialog.__init__(self, parent=parent)
-        self.ui = load('ui_list_of_scan_loader_dialog.ui', baseinstance=self)
+        self.ui = load_ui('ui_list_of_scan_loader_dialog.ui', baseinstance=self)
         self.init_widgets()
 
         short_filename = os.path.basename(filename)
