@@ -85,9 +85,9 @@ class ImportFromDatabaseWindow(QMainWindow):
         QMainWindow.__init__(self, parent=parent)
         self.ui = load_ui('ui_import_from_database.ui', baseinstance=self)
 
-        # self.init_widgets()
-        # self.init_oncat_template()
-        # self.radio_button_changed()
+        self.init_widgets()
+        self.init_oncat_template()
+        self.radio_button_changed()
 
     def init_oncat_template(self):
         """In order to display in the first tab all the metadata just like ONCat does
@@ -116,8 +116,8 @@ class ImportFromDatabaseWindow(QMainWindow):
         self.ui.ipts_combobox.addItems(list_ipts)
 
         # add icons on top of widgets (clear, search)
-        self.ui.clear_ipts.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
-        self.ui.clear_run.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
+        self.ui.clear_ipts_button.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
+        self.ui.clear_run_button.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
 
         self.ui.search_logo_label.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
         self.ui.clear_search_button.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
@@ -371,11 +371,11 @@ class ImportFromDatabaseWindow(QMainWindow):
         self.ui.ipts_combobox.setEnabled(ipts_widgets_status)
         self.ui.ipts_lineedit.setEnabled(ipts_widgets_status)
         self.ui.ipts_label.setEnabled(ipts_widgets_status)
-        self.ui.clear_ipts.setEnabled(ipts_widgets_status)
+        self.ui.clear_ipts_button.setEnabled(ipts_widgets_status)
 
         self.ui.run_number_lineedit.setEnabled(run_widgets_status)
         self.ui.run_number_label.setEnabled(run_widgets_status)
-        self.ui.clear_run.setEnabled(run_widgets_status)
+        self.ui.clear_run_button.setEnabled(run_widgets_status)
 
         GuiHandler.check_import_button(self)
 
