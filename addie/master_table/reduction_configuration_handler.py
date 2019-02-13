@@ -145,6 +145,15 @@ class ReductionConfiguration(QDialog):
     def pdf_reset_r_range_button(self):
         pass
 
+    def bragg_browse_characterization_clicked(self):
+        _characterization_folder = self.parent.characterization_folder
+        [_characterization_file, _] = QFileDialog.getOpenFileName(parent=self.parent,
+                                                                   caption="Select Characterization File",
+                                                                   directory=_characterization_folder,
+                                                                   filter=self.parent.characterization_extension)
+        if _characterization_file:
+            self.ui.bragg_characterization_file.setText(_characterization_file)
+
     def pdf_browse_characterization_clicked(self):
         _characterization_folder = self.parent.characterization_folder
         [_characterization_file, _] = QFileDialog.getOpenFileName(parent=self.parent,

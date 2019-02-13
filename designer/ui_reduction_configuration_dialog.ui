@@ -903,7 +903,7 @@ p, li { white-space: pre-wrap; }
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_38">
             <item>
-             <widget class="QPushButton" name="mantid_browse_characterization_button_2">
+             <widget class="QPushButton" name="bragg_browse_characterization_button">
               <property name="minimumSize">
                <size>
                 <width>200</width>
@@ -1353,13 +1353,28 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>bragg_browse_characterization_button</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>bragg_browse_characterization_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>132</x>
+     <y>660</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>366</x>
+     <y>438</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>make_calibration_clicked()</slot>
   <slot>pdf_reset_q_range_button()</slot>
   <slot>pdf_reset_r_range_button()</slot>
   <slot>close_button()</slot>
-  <slot>browse_calibration_clicked()</slot>
   <slot>pdf_browse_characterization_clicked()</slot>
   <slot>intermediate_radio_button_clicked()</slot>
   <slot>intermediate_browse_radio_button_clicked()</slot>
@@ -1368,5 +1383,6 @@ p, li { white-space: pre-wrap; }
   <slot>intermediate_browse_button_clicked()</slot>
   <slot>output_browse_button_clicked()</slot>
   <slot>cancel_clicked()</slot>
+  <slot>bragg_browse_characterization_clicked()</slot>
  </slots>
 </ui>
