@@ -1,4 +1,6 @@
 from __future__ import (absolute_import, division, print_function)
+from qtpy import QtCore
+from qtpy.QtWidgets import QApplication
 
 from addie.master_table.import_from_database.conflicts_solver import ConflictsSolverHandler
 from addie.master_table.table_row_handler import TableRowHandler
@@ -22,6 +24,8 @@ class LoadIntoMasterTable:
 
     def load(self):
 
+        QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+
         o_table = TableRowHandler(parent=self.parent)
 
         if self.parent.clear_master_table_before_loading:
@@ -44,7 +48,7 @@ class LoadIntoMasterTable:
                                sample_mass_density=mass_density,
                                sample_chemical_formula=chemical_formula)
 
-
+        QApplication.restoreOverrideCursor()
 
 
 
