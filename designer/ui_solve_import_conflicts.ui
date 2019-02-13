@@ -28,7 +28,7 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QPushButton" name="reject">
+       <widget class="QPushButton" name="reject_button">
         <property name="text">
          <string>Reject All Runs</string>
         </property>
@@ -48,7 +48,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="accept">
+       <widget class="QPushButton" name="accept_button">
         <property name="text">
          <string>Accept Import</string>
         </property>
@@ -73,7 +73,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>reject</sender>
+   <sender>reject_button</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
    <slot>reject()</slot>
@@ -89,7 +89,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>accept</sender>
+   <sender>accept_button</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
    <slot>accept()</slot>
