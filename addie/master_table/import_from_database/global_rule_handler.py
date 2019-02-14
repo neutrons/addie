@@ -131,6 +131,7 @@ class GlobalRuleWindow(QDialog):
 
         else:
             _item = QTableWidgetItem("N/A")
+            _item.setFlags(QtCore.Qt.ItemIsEnabled)
             self.ui.tableWidget.setItem(row, _column, _item)
 
         # rule columns
