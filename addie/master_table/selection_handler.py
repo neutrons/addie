@@ -1,5 +1,5 @@
 from __future__ import (absolute_import, division, print_function)
-from qtpy.QtWidgets import QCheckBox, QLabel, QPushButton, QComboBox, QTableWidgetItem
+from qtpy.QtWidgets import QCheckBox, QLabel, QPushButton, QComboBox, QTableWidgetItem, QTableWidgetSelectionRange
 from addie.utilities import load_ui
 from qtpy import QtGui
 import numpy as np
