@@ -123,9 +123,6 @@ class GlobalRuleWindow(QDialog):
             self.ui.tableWidget.setCellWidget(row, _column, _widget)
             _widget.blockSignals(True)
             list_of_widgets_to_unlock.append(_widget)
-            # QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-            #                        lambda value=list_options[0]:
-            #                        self.combobox_changed(value))
             _widget.currentIndexChanged.connect(lambda value=list_options[0]:
                                                 self.combobox_changed(value))
 
@@ -143,9 +140,6 @@ class GlobalRuleWindow(QDialog):
             if check_new_row and _offset == row:
                 _widget.setCheckState(QtCore.Qt.Checked)
             list_of_widgets_to_unlock.append(_widget)
-            # QtCore.QObject.connect(_widget, QtCore.SIGNAL("stateChanged(int)"),
-            #                        lambda value=0:
-            #                        self.checkbox_changed(value))
             _widget.stateChanged.connect(lambda value=0:
                                          self.checkbox_changed(value))
 
@@ -164,9 +158,6 @@ class GlobalRuleWindow(QDialog):
         _widget.blockSignals(True)
         list_of_widgets_to_unlock.append(_widget)
         _widget.setEnabled(False)
-        # QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-        #                        lambda value=list_options[0]:
-        #                        self.combobox_changed(value))
         _widget.currentIndexChanged.connect(lambda value=list_options[0]:
                                             self.combobox_changed(value))
 
