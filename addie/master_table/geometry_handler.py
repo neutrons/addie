@@ -25,7 +25,7 @@ class DimensionsSetter(QDialog):
         self.data_type =  data_type
 
         QDialog.__init__(self, parent=parent)
-        self.ui = load_ui('ui_dimensions_setter.ui', baseinstance=self)
+        self.ui = load_ui('dimensions_setter.ui', baseinstance=self)
 
         self.group_widgets()
         self.init_widgets_layout()

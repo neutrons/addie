@@ -37,7 +37,7 @@ class ConflictsSolverWindow(QMainWindow):
         self.json_conflicts = json_conflicts
 
         QMainWindow.__init__(self, parent=parent)
-        self.ui = load_ui('ui_solve_import_conflicts.ui', baseinstance=self)
+        self.ui = load_ui('solve_import_conflicts.ui', baseinstance=self)
         #self.ui = UiMainWindow()
         #self.ui.setupUi(self)
 

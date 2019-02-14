@@ -37,7 +37,7 @@ class MassDensityWindow(QMainWindow):
         self.data_type = data_type
 
         QMainWindow.__init__(self, parent=parent)
-        self.ui = load_ui('ui_mass_density.ui', baseinstance=self)
+        self.ui = load_ui('mass_density.ui', baseinstance=self)
         self.init_widgets()
 
     def init_widgets(self):

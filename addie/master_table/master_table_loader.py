@@ -106,7 +106,7 @@ class LoaderOptionsInterface(QDialog):
             self.parent = parent.parent
 
         QDialog.__init__(self, parent=parent)
-        self.ui = load_ui('ui_list_of_scan_loader_dialog.ui', baseinstance=self)
+        self.ui = load_ui('list_of_scan_loader_dialog.ui', baseinstance=self)
         self.init_widgets()
         self.setWindowTitle("Options to load list of runs selected")
         self.parent.ascii_loader_option = None
@@ -137,7 +137,7 @@ class AsciiLoaderOptionsInterface(LoaderOptionsInterface):
         self.parent = parent
 
         QDialog.__init__(self, parent=parent)
-        self.ui = load_ui('ui_list_of_scan_loader_dialog.ui', baseinstance=self)
+        self.ui = load_ui('list_of_scan_loader_dialog.ui', baseinstance=self)
         self.init_widgets()
 
         short_filename = os.path.basename(filename)
@@ -303,7 +303,7 @@ class AsciiLoader:
 
         filename = self.filename
         o_file = FileHandler(filename=filename)
-        o_table = o_file.pandas_parser()
+        o_table = o_file.csv_parser()
 
         list_runs = o_table['#Scan']
         list_titles = o_table['title']

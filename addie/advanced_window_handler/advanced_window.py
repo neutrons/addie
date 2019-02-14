@@ -26,7 +26,7 @@ class AdvancedWindow(QMainWindow):
         
         #QtGui.QMainWindow.__init__(self, parent=parent)
         QMainWindow.__init__(self, parent=parent)
-        self.ui = load_ui('ui_advanced_window.ui', baseinstance=self)
+        self.ui = load_ui('advanced_window.ui', baseinstance=self)
 
         #self.ui = UiMainWindow()
         #self.ui.setupUi(self)
@@ -100,7 +100,7 @@ class AdvancedWindow(QMainWindow):
 #         self.parent = parent
 #
 #         QMainWindow.__init__(self, parent=parent)
-#         self.ui = load_ui('ui_advanced_window.ui', baseinstance=self)
+#         self.ui = load_ui('advanced_window.ui', baseinstance=self)
 #
 #         self.setWindowTitle("Advanced Window for Super User Only !")
 # >>>>>>> master

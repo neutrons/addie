@@ -53,7 +53,7 @@ class PeriodicTable(QMainWindow):
         self.data_type = data_type
 
         QMainWindow.__init__(self, parent=parent)
-        self.ui = load_ui('ui_periodic_table.ui', baseinstance=self)
+        self.ui = load_ui('periodic_table.ui', baseinstance=self)
         self.setWindowTitle("Define Chemical Formula")
 
         self.init_ui_color_dictionary()

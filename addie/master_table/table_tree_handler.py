@@ -257,7 +257,7 @@ class TableTree(QDialog):
     def __init__(self, parent=None):
         self.parent = parent
         QDialog.__init__(self, parent=parent)
-        self.ui = load_ui('ui_table_tree.ui', baseinstance=self)
+        self.ui = load_ui('table_tree.ui', baseinstance=self)
         # self.ui = UiDialog()
         # self.ui.setupUi(self)
 
@@ -374,7 +374,7 @@ class SaveConfigInterface(QDialog):
         self.grand_parent = grand_parent
 
         QDialog.__init__(self, parent=grand_parent)
-        self.ui = load_ui('ui_table_tree_save_config.ui', baseinstance=self)
+        self.ui = load_ui('table_tree_save_config.ui', baseinstance=self)
 
         self.ui.save_as_value.setPlaceholderText("undefined")
 

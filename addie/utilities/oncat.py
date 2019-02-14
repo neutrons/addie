@@ -120,7 +120,7 @@ class OncatErrorMessageWindow(QDialog):
 
     def __init__(self, parent=None, list_of_runs=[], message=''):
         QDialog.__init__(self, parent=parent)
-        self.ui = load_ui('ui_oncat_error_message.ui', baseinstance=self)
+        self.ui = load_ui('oncat_error_message.ui', baseinstance=self)
         self.init_widgets(list_of_runs=list_of_runs)
         self.ui.message.setText(message)
 

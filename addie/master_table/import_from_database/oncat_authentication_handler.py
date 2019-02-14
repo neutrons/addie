@@ -38,7 +38,7 @@ class OncatAuthenticationWindow(QMainWindow):
         self.parent = parent
         self.next_ui = next_ui
 
-        self.ui = load_ui('ui_oncat_authentication.ui', baseinstance=self)
+        self.ui = load_ui('oncat_authentication.ui', baseinstance=self)
         # self.ui = UiMainWindow()
         # self.ui.setupUi(self)
 

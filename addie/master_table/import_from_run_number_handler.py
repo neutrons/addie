@@ -26,7 +26,7 @@ class ImportFromRunNumberWindow(QDialog):
         self.parent = parent
 
         QDialog.__init__(self, parent=parent)
-        self.ui = load_ui('ui_import_from_run_number.ui', baseinstance=self)
+        self.ui = load_ui('import_from_run_number.ui', baseinstance=self)
         self.init_widgets()
 
     def init_widgets(self):

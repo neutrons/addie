@@ -18,7 +18,7 @@ class PlotStyleDialog(QDialog):
         """
         super(PlotStyleDialog, self).__init__(parent)
 
-        self.ui = load_ui('ui_colorStyleSetup.ui', baseinstance=self)
+        self.ui = load_ui('colorStyleSetup.ui', baseinstance=self)
 
         # init widgets
         self._init_widgets()

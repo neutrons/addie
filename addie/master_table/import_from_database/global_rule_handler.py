@@ -22,7 +22,7 @@ class GlobalRuleWindow(QDialog):
         self.parent = parent
 
         QDialog.__init__(self, parent=parent)
-        self.ui = load_ui('ui_filter_rule_editor.ui', baseinstance=self)
+        self.ui = load_ui('filter_rule_editor.ui', baseinstance=self)
         #self.ui = UiDialog()
         #self.ui.setupUi(self)
 

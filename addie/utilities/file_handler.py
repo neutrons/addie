@@ -1,7 +1,7 @@
 from __future__ import (absolute_import, division, print_function)
 import os
 import configparser
-import pandas as pd
+import numpy as np
 
 
 class FileHandler(object):
@@ -18,8 +18,8 @@ class FileHandler(object):
             return True
         return False
 
-    def pandas_parser(self):
-        obj = pd.read_csv(self.filename)
+    def csv_parser(self):
+        obj = np.loadtxt(self.filename, delimiter=',')
         return obj
 
     def retrieve_contain(self):

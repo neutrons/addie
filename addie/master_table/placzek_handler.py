@@ -39,7 +39,7 @@ class PlaczekWindow(QMainWindow):
 
         QMainWindow.__init__(self, parent=parent)
         #self.ui = UiMainWindow()
-        self.ui = load_ui('ui_placzek.ui', baseinstance=self)
+        self.ui = load_ui('placzek.ui', baseinstance=self)
         #self.ui.setupUi(self)
 
         self.init_widgets()

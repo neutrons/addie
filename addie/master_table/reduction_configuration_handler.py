@@ -32,7 +32,7 @@ class ReductionConfiguration(QDialog):
     def __init__(self, parent=None):
         self.parent = parent
         QDialog.__init__(self, parent=parent)
-        self.ui = load_ui('ui_reduction_configuration_dialog.ui', baseinstance=self)
+        self.ui = load_ui('reduction_configuration_dialog.ui', baseinstance=self)
         self.init_widgets()
         self.parent.set_default_folders_path()
 

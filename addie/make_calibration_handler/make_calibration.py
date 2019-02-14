@@ -65,7 +65,7 @@ class MakeCalibrationWindow(QMainWindow):
         self.parent = parent
 
         QMainWindow.__init__(self, parent=parent)
-        self.ui = load_ui('ui_make_calibration.ui', baseinstance=self)
+        self.ui = load_ui('make_calibration.ui', baseinstance=self)
         self.addie_config_file = parent.addie_config_file
 
         self.init_widgets()
