@@ -19,7 +19,11 @@ class FileHandler(object):
         return False
 
     def csv_parser(self):
-        obj = np.loadtxt(self.filename, delimiter=',')
+        data = np.genfromtxt(self.filename,dtype='str',delimiter=',',comments=None)
+        headers = data[0,:]
+        obj = dict()
+        for col_id, col_name in enumerate(headers):
+            obj[col_name] = data[1:,col_id]
         return obj
 
     def retrieve_contain(self):
