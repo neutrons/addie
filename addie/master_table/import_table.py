@@ -78,7 +78,7 @@ class ImportTable(object):
 
             #if _entry[0] == "True":
              #   _widget.setChecked(True)
-            QtCore.QObject.connect(_widget, QtCore.SIGNAL("stateChanged(int)"), lambda state = 0,
+            _widget.stateChanged.connect(lambda state = 0,
                                    row = _row: self.parent.table_select_state_changed(state, row))
             self.parent.ui.table.setCellWidget(_row, 0, _new_widget)
                 
