@@ -123,9 +123,12 @@ class GlobalRuleWindow(QDialog):
             self.ui.tableWidget.setCellWidget(row, _column, _widget)
             _widget.blockSignals(True)
             list_of_widgets_to_unlock.append(_widget)
-            QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-                                   lambda value=list_options[0]:
-                                   self.combobox_changed(value))
+            # QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
+            #                        lambda value=list_options[0]:
+            #                        self.combobox_changed(value))
+            _widget.currentIndexChanged.connect(lambda value=list_options[0]:
+                                                self.combobox_changed(value))
+
         else:
             _item = QTableWidgetItem("N/A")
             self.ui.tableWidget.setItem(row, _column, _item)
@@ -139,9 +142,12 @@ class GlobalRuleWindow(QDialog):
             if check_new_row and _offset == row:
                 _widget.setCheckState(QtCore.Qt.Checked)
             list_of_widgets_to_unlock.append(_widget)
-            QtCore.QObject.connect(_widget, QtCore.SIGNAL("stateChanged(int)"),
-                                   lambda value=0:
-                                   self.checkbox_changed(value))
+            # QtCore.QObject.connect(_widget, QtCore.SIGNAL("stateChanged(int)"),
+            #                        lambda value=0:
+            #                        self.checkbox_changed(value))
+            _widget.stateChanged.connect(lambda value=0:
+                                         self.checkbox_changed(value))
+
             _spacer1 = QSpacerItem(40,20, QSizePolicy.Expanding, QSizePolicy.Minimum)
             _row_layout.addItem(_spacer1)
             _row_layout.addWidget(_widget)
@@ -157,9 +163,12 @@ class GlobalRuleWindow(QDialog):
         _widget.blockSignals(True)
         list_of_widgets_to_unlock.append(_widget)
         _widget.setEnabled(False)
-        QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-                               lambda value=list_options[0]:
-                               self.combobox_changed(value))
+        # QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
+        #                        lambda value=list_options[0]:
+        #                        self.combobox_changed(value))
+        _widget.currentIndexChanged.connect(lambda value=list_options[0]:
+                                            self.combobox_changed(value))
+
         list_options = ["and", "or"]
         _widget.addItems(list_options)
         self.ui.tableWidget.setCellWidget(row, _column, _widget)
