@@ -150,7 +150,7 @@ class TableInitialization:
             table_ui.setColumnWidth(_col, table_width[_col])
 
     def init_table_dimensions(self):
-        td = self.tree_dict
+        # td = self.tree_dict
 
         table_width = {'h1': [], 'h2': [], 'h3': []}
 
@@ -160,52 +160,52 @@ class TableInitialization:
         table_width['h1'] = h1_COLUMNS_WIDTH
         self.table_width = table_width
 
-        return
-
-
-
-        # check all the h1 headers
-        for _key_h1 in td.keys():
-
-            # if h1 header has children
-            if td[_key_h1]['children']:
-
-                absolute_nbr_h3_for_this_h1 = 0
-
-                # loop through list of h2 header for this h1 header
-                for _key_h2 in td[_key_h1]['children'].keys():
-
-                    # if h2 has children, just count how many children
-                    if td[_key_h1]['children'][_key_h2]['children']:
-                        nbr_h3 = len(td[_key_h1]['children'][_key_h2]['children'])
-
-                        for _ in np.arange(nbr_h3):
-                            table_width['h3'].append(self.default_width)
-
-                        ## h2 header will be as wide as the number of h3 children
-                        table_width['h2'].append(nbr_h3 * self.default_width)
-
-                        ## h1 header will be += the number of h3 children
-                        absolute_nbr_h3_for_this_h1 += nbr_h3
-
-                    # if h2 has no children
-                    else:
-
-                        ## h2 header is 1 wide
-                        table_width['h2'].append(self.default_width)
-                        table_width['h3'].append(self.default_width)
-
-                        ## h2 header will be += 1
-                        absolute_nbr_h3_for_this_h1 += 1
-
-                table_width['h1'].append(absolute_nbr_h3_for_this_h1 * self.default_width)
-
-            # if h1 has no children
-            else:
-                # h1, h2 and h3 are 1 wide
-                table_width['h1'].append(self.default_width)
-                table_width['h2'].append(self.default_width)
-                table_width['h3'].append(self.default_width)
+        # return
+        #
+        #
+        #
+        # # check all the h1 headers
+        # for _key_h1 in td.keys():
+        #
+        #     # if h1 header has children
+        #     if td[_key_h1]['children']:
+        #
+        #         absolute_nbr_h3_for_this_h1 = 0
+        #
+        #         # loop through list of h2 header for this h1 header
+        #         for _key_h2 in td[_key_h1]['children'].keys():
+        #
+        #             # if h2 has children, just count how many children
+        #             if td[_key_h1]['children'][_key_h2]['children']:
+        #                 nbr_h3 = len(td[_key_h1]['children'][_key_h2]['children'])
+        #
+        #                 for _ in np.arange(nbr_h3):
+        #                     table_width['h3'].append(self.default_width)
+        #
+        #                 ## h2 header will be as wide as the number of h3 children
+        #                 table_width['h2'].append(nbr_h3 * self.default_width)
+        #
+        #                 ## h1 header will be += the number of h3 children
+        #                 absolute_nbr_h3_for_this_h1 += nbr_h3
+        #
+        #             # if h2 has no children
+        #             else:
+        #
+        #                 ## h2 header is 1 wide
+        #                 table_width['h2'].append(self.default_width)
+        #                 table_width['h3'].append(self.default_width)
+        #
+        #                 ## h2 header will be += 1
+        #                 absolute_nbr_h3_for_this_h1 += 1
+        #
+        #         table_width['h1'].append(absolute_nbr_h3_for_this_h1 * self.default_width)
+        #
+        #     # if h1 has no children
+        #     else:
+        #         # h1, h2 and h3 are 1 wide
+        #         table_width['h1'].append(self.default_width)
+        #         table_width['h2'].append(self.default_width)
+        #         table_width['h3'].append(self.default_width)
 
         self.table_width = table_width
 
@@ -1442,13 +1442,10 @@ class TableConfig:
         h3_counter = 0
 
         td = self.parent.tree_dict
+
         for h1_counter, _key_h1 in enumerate(td.keys()):
 
             _h1_boolean_status = get_boolean_state(td[_key_h1])
-
-            set_column_visibility(column=h1_counter,
-                                  table_ui=self.parent.ui.h1_table,
-                                  visible=_h1_boolean_status)
 
             if td[_key_h1]['children']:
 
@@ -1481,15 +1478,22 @@ class TableConfig:
             else:
 
                 # h2 and h3 should have the same status as h1
-                set_column_visibility(column=h2_counter,
-                                      table_ui=self.parent.ui.h2_table,
-                                      visible=_h1_boolean_status)
                 set_column_visibility(column=h3_counter,
                                       table_ui=self.parent.ui.h3_table,
                                       visible=_h1_boolean_status)
 
+                set_column_visibility(column=h2_counter,
+                                      table_ui=self.parent.ui.h2_table,
+                                      visible=_h1_boolean_status)
+
+
                 h2_counter += 1
                 h3_counter += 1
+
+            set_column_visibility(column=h1_counter,
+                                  table_ui=self.parent.ui.h1_table,
+                                  visible=_h1_boolean_status)
+
 
     def resizing_table(self, tree_dict={}, block_ui=True):
         '''updating the size of the columns using visibility of the various elements of the tree'''
