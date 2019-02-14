@@ -59,7 +59,7 @@
          <x>0</x>
          <y>0</y>
          <width>1691</width>
-         <height>943</height>
+         <height>941</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -80,7 +80,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>2</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
@@ -4646,17 +4646,12 @@ p, li { white-space: pre-wrap; }
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
-		<property name="frameShape">
-		  <enum>QFrame::StyledPanel</enum>
-		</property>
-		<property name="frameShadow">
-		  <enum>QFrame::Raised</enum>
-	      </property>
-                <column>
-                 <property name="text">
-                  <string notr="true">1</string>
-                 </property>
-                </column>
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
                </widget>
               </item>
              </layout>
@@ -5074,17 +5069,12 @@ p, li { white-space: pre-wrap; }
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
-		  <property name="frameShape">
-		    <enum>QFrame::StyledPanel</enum>
-		  </property>
-		  <property name="frameShadow">
-		    <enum>QFrame::Raised</enum>
-		</property>
-                  <column>
-                   <property name="text">
-                    <string notr="true">1</string>
-                   </property>
-                  </column>
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
                  </widget>
                 </item>
                 <item>
@@ -5170,16 +5160,16 @@ p, li { white-space: pre-wrap; }
          </layout>
         </item>
         <item>
-	  <widget class="QFrame" name="frame_dockWidget_ipython">
-	    <property name="frameShape">
-	      <enum>QFrame::StyledPanel</enum>
-	    </property>
-	    <property name="frameShadow">
-	      <enum>QFrame::Raised</enum>
-	    </property>
-	  </widget>
-	</item>
-	</layout>
+         <widget class="QFrame" name="frame_dockWidget_ipython">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>
@@ -5191,7 +5181,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>1711</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -5381,9 +5371,6 @@ p, li { white-space: pre-wrap; }
   <tabstop>pdf_qmax_line_edit</tabstop>
   <tabstop>interactive_mode_checkbox</tabstop>
   <tabstop>run_sum_scans_button</tabstop>
-<!--
-    <tabstop>graphicsView_bragg</tabstop>
- -->
   <tabstop>comboBox_xUnit</tabstop>
   <tabstop>pushButton_loadBraggFile</tabstop>
   <tabstop>checkBox_bank1</tabstop>
@@ -5396,11 +5383,6 @@ p, li { white-space: pre-wrap; }
   <tabstop>radioButton_multiGSS</tabstop>
   <tabstop>pushButton_rescaleGSAS</tabstop>
   <tabstop>pushButton_gsasColorStyle</tabstop>
-<!--
-  <tabstop>treeWidget_braggWSList</tabstop>
-  <tabstop>graphicsView_gr</tabstop>
-  <tabstop>graphicsView_sq</tabstop>
--->
   <tabstop>pushButton_clearSofQ</tabstop>
   <tabstop>pushButton_loadSQ</tabstop>
   <tabstop>pushButton_sqColorStyle</tabstop>
@@ -5416,9 +5398,6 @@ p, li { white-space: pre-wrap; }
   <tabstop>doubleSpinBoxRmin</tabstop>
   <tabstop>doubleSpinBoxDelR</tabstop>
   <tabstop>doubleSpinBoxRmax</tabstop>
-  <!--
-      <tabstop>treeWidget_grWsList</tabstop>
-  -->
   <tabstop>pushButton_loadGofR</tabstop>
   <tabstop>pushButton_saveGR</tabstop>
   <tabstop>pushButton_clearGrCanvas</tabstop>

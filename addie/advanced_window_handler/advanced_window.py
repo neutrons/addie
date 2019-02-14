@@ -70,6 +70,7 @@ class AdvancedWindow(QMainWindow):
 
         self.parent.ui.stackedWidget.setCurrentIndex(_index)
         self.parent.post_processing = _post
+        self.parent.activate_reduction_tabs() # hide or show right tabs
 
     def instrument_changed(self, index):
         self.parent.instrument["short_name"] = self.list_instrument_short_name[index]

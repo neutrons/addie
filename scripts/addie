@@ -271,7 +271,7 @@ class MainWindow(QMainWindow):
     undo_index = max_undo_list
     undo_button_enabled = False
     redo_button_enabled = False
-    post_processing = 'idl'  # or 'mantid'
+    post_processing = 'mantid'  # or 'idl'
 
     debugging = False
     load_intermediate_step_ok = False
@@ -310,8 +310,6 @@ class MainWindow(QMainWindow):
         Parameters
         ----------
         """
-        # Base class
-        # QMainWindow.__init__(self)
         QMainWindow.__init__(self, parent)
 
         # if self.debugging:
@@ -573,7 +571,7 @@ class MainWindow(QMainWindow):
         self.ui.doubleSpinBoxQmin.setDecimals(6)
         self.ui.doubleSpinBoxQmin.setMinimum(1.E-10)
 
-        return
+        self.activate_reduction_tabs()
 
     @property
     def controller(self):
@@ -2211,12 +2209,17 @@ class MainWindow(QMainWindow):
         _about.display()
 
     def advanced_option_clicked(self):
-#<<<<<<< HEAD
         AdvancedWindowLauncher(parent = self)
-#=======
-#        _advanced = AdvancedWindow(parent=self)
-#        _advanced.show()
-#>>>>>>> master
+
+    def activate_reduction_tabs(self):
+        if self.post_processing == 'idl':
+            tab_1 = True
+            tab_2 = False
+        else:
+            tab_1 = False
+            tab_2 = True
+        self.ui.main_tab.setTabEnabled(1, tab_1)
+        self.ui.main_tab.setTabEnabled(2, tab_2)
 
     def menu_ipts_file_transfer_clicked(self):
         _o_ipts = IptsFileTransferDialog(parent=self)
