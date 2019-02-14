@@ -34,6 +34,6 @@ setup(name="addie",
       #              'icons':['*.png','*.qrc']},
       packages=find_packages(),
       package_dir={},
-      install_requires=['numpy', 'matplotlib'],
+      install_requires=['numpy', 'matplotlib', 'periodictable'],
       setup_requires=[],
       )
