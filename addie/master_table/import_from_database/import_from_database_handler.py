@@ -31,6 +31,8 @@ from addie.master_table.import_from_database.format_json_from_database_to_master
 from addie.utilities.general import generate_random_key, remove_white_spaces
 from addie.utilities.gui_handler import TableHandler
 
+from addie.icons import icons_rc
+
 
 class ImportFromDatabaseHandler:
 

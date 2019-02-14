@@ -98,6 +98,8 @@ from addie.graphicviewlib import BraggView, GofRView, SofQView
 from addie.ipythondockwidget import IPythonDockWidget
 from addie.treelib import BraggTree, GofRTree
 
+from addie.icons import icons_rc
+
 DEBUG = False
 
 

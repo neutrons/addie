@@ -14,6 +14,7 @@ from addie.master_table.selection_handler import TransferH3TableWidgetState
 from addie.master_table.tree_definition import COLUMN_DEFAULT_HEIGHT
 from addie.utilities.math_tools import is_number
 
+from addie.icons import icons_rc
 
 class DimensionsSetter(QDialog):
 
