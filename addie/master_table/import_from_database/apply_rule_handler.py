@@ -146,7 +146,7 @@ class ApplyRuleHandler:
 
     def remove_rule_from_global_rule_dict(self, name_of_rule_to_remove=None):
         global_rule_dict = self.parent.global_rule_dict
-        for _key in global_rule_dict.keys():
+        for _key in list(global_rule_dict.keys()):
             _list_of_rule = global_rule_dict[_key]['list_rules']
             new_list_of_rules = [_rule for _rule in _list_of_rule if _rule != name_of_rule_to_remove]
             if new_list_of_rules == []:
