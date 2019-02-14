@@ -186,7 +186,7 @@ class MainWindow(QMainWindow):
 
     # config file to initialize the widgets (example Q and R range in PDF tab)
     current_path = os.path.dirname(os.path.dirname(__file__))
-    addie_config_file = os.path.join(current_path, "addie", "config.json")
+    addie_config_file = os.path.join(os.path.dirname(addie.__file__),  "config.json")
 
     # master table reduction configuration
     reduction_configuration = {}
