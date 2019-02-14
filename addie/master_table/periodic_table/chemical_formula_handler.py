@@ -7,6 +7,9 @@ def format_chemical_formula_equation(raw_chemical_formula='N/A'):
     if raw_chemical_formula == 'N/A':
         return raw_chemical_formula
 
+    if raw_chemical_formula.lower() == 'none':
+        return 'N/A'
+
     list_of_formula = list(raw_chemical_formula)
     clean_list = []
     for _c in list_of_formula:
