@@ -336,10 +336,10 @@ class ImportFromDatabaseWindow(QMainWindow):
         self.update_rule_filter()
         GuiHandler.check_import_button(self)
 
-    def list_item_changed(self, value, key):
+    def list_item_changed(self, index, key):
         """this method is reached when the user changes the name of the variable he wants to filter"""
         o_table = TableWidgetRuleHandler(parent=self)
-        o_table.update_list_value_of_given_item(item_name=value, key=key)
+        o_table.update_list_value_of_given_item(index=index, key=key)
         self.update_rule_filter()
         GuiHandler.check_import_button(self)
 

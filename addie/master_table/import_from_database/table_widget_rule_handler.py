@@ -63,10 +63,9 @@ class TableWidgetRuleHandler:
         self.table_ui.setCellWidget(row, 2, _widget)
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
-        QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-                               lambda value=list_items[0],
-                               key = _random_key:
-                               self.parent.list_item_changed(value, key))
+        _widget.currentIndexChanged.connect(lambda value=list_items[0],
+                                            key = _random_key:
+                                            self.parent.list_item_changed(value, key))
 
         # criteria
         list_criteria = ['is', 'contains']
@@ -76,10 +75,9 @@ class TableWidgetRuleHandler:
         self.table_ui.setCellWidget(row, 3, _widget)
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
-        QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-                               lambda value=list_criteria[0],
-                                      key = _random_key:
-                               self.parent.list_criteria_changed(value, key))
+        _widget.currentIndexChanged.connect(lambda value=list_criteria[0],
+                                            key = _random_key:
+                                            self.parent.list_criteria_changed(value, key))
 
         # argument
         _widget = QComboBox()
@@ -90,14 +88,12 @@ class TableWidgetRuleHandler:
         self.table_ui.setCellWidget(row, 4, _widget)
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
-        QtCore.QObject.connect(_widget, QtCore.SIGNAL("editTextChanged(QString)"),
-                               lambda value=list_values[0],
-                                      key = _random_key:
-                               self.parent.list_argument_changed(value, key))
-        QtCore.QObject.connect(_widget, QtCore.SIGNAL("currentIndexChanged(QString)"),
-                               lambda value=list_values[0],
-                                      key = _random_key:
-                               self.parent.list_argument_index_changed(value, key))
+        _widget.editTextChanged.connect(lambda value=list_values[0],
+                                        key = _random_key:
+                                        self.parent.list_argument_changed(value, key))
+        _widget.currentIndexChanged.connect(lambda value=list_values[0],
+                                            key = _random_key:
+                                            self.parent.list_argument_index_changed(value, key))
 
         if row == 0:
             self.table_ui.horizontalHeader().setVisible(True)
@@ -107,12 +103,14 @@ class TableWidgetRuleHandler:
         self.parent.list_ui[_random_key] = _list_ui_for_this_row
         self.parent.check_all_filter_widgets()
 
-    def update_list_value_of_given_item(self, item_name='', key=None):
+    def update_list_value_of_given_item(self, index=-1, key=None):
         """When user clicks, in the Tablewidget rule, the first row showing the name of the list element,
          for example 'Chemical formula', the list of available values will update automatically"""
 
         list_ui = self.parent.list_ui
         list_metadata = self.parent.metadata
+
+        item_name = list_ui[key]['list_items'].itemText(index)
 
         combobox_values = list_ui[key]['list_items_value']
         combobox_values.blockSignals(True)
