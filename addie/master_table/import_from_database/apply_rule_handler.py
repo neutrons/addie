@@ -173,26 +173,27 @@ class ApplyRuleHandler:
 
         is_first_group = True
         # looping through the groups
+
         for _group_index in global_rule_dict.keys():
 
             # list of rules for this group
-            _list_rule = global_rule_dict[_group_index]['list_rules']
+            _list_rules = global_rule_dict[_group_index]['list_rules']
 
             # adding '#' in front of each rule name for this group
-            _str_list_rule = ["#{}".format(_rule) for _rule in _list_rule]
+            _str_list_rules = ["#{}".format(_rule) for _rule in _list_rules]
 
             # keeping record of the number of rules to see if we need or not to specify inner logic
-            nbr_rules = len(_list_rule)
+            nbr_rules = len(_list_rules)
             _inner_rule = " " + global_rule_dict[_group_index]['inner_rule'] +  " "
-            str_rule_for_this_group = _inner_rule.join(_str_list_rule)
+            str_rule_for_this_group = _inner_rule.join(_str_list_rules)
 
             if nbr_rules > 1:
                 str_rule_for_this_group = "( " + str_rule_for_this_group + " )"
 
-            if is_first_group:
+            if is_first_group and (str_rule_for_this_group != ""):
                 global_rule_string = str_rule_for_this_group
                 is_first_group = False
-            else:
+            elif str_rule_for_this_group != "":
                 _outer_logic = global_rule_dict[_group_index]['outer_rule']
                 global_rule_string = "{} {} {}".format(global_rule_string, _outer_logic, str_rule_for_this_group)
 
