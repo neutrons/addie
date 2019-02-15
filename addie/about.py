@@ -13,6 +13,13 @@ from matplotlib import __version__ as matplotlib_version_str
 import mantid
 import sys
 import addie._version as addie_version
+try:
+    import pyoncat
+    # module doesn't have an obvious way to get version information
+    pyoncat_version = 'enabled'
+except ImportError:
+    pyoncat_version = 'disabled'
+
 
 
 class AboutDialog(object):
@@ -38,6 +45,7 @@ class AboutDialog(object):
            - Numpy: %s
            - Mantid: %s
            - Matplotlib: %s
+           - pyoncat: %s
            - Qt: %s
            - PyQt: %s
         ''' % (addie_version,
@@ -45,6 +53,7 @@ class AboutDialog(object):
                numpy_version,
                mantid_version,
                matplotlib_version,
+               pyoncat_version,
                qt_version,
                pyqt_version)
 
