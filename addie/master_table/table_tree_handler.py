@@ -19,8 +19,13 @@ from addie.master_table.import_table import ImportTable
 from addie.master_table.export_table import ExportTable
 from addie.master_table.master_table_loader import TableFileLoader
 from addie.master_table.master_table_exporter import TableFileExporter
-from addie.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
-from addie.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
+try:
+    ONCAT_ENABLED = True
+    from addie.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
+    from addie.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
+except ImportError:
+    print('pyoncat module not found. Functionality disabled')
+    ONCAT_ENABLED = False
 
 
 class TableInitialization:
@@ -544,10 +549,15 @@ class H3TableHandler:
         # Table
         table = menu.addMenu("Table")
 
-        table_import_from_database = table.addMenu("Import from Database")
-        table_import_from_database_replace = table_import_from_database.addAction("Replace ...")
-        table_import_from_database_append = table_import_from_database.addAction("Append ...")
-        table_import_from_database_append.setEnabled(self.parent.master_table_right_click_buttons['import_from_database_append']['status'])
+        if ONCAT_ENABLED:
+            table_import_from_database = table.addMenu("Import from Database")
+            table_import_from_database_replace = table_import_from_database.addAction("Replace ...")
+            table_import_from_database_append = table_import_from_database.addAction("Append ...")
+            table_import_from_database_append.setEnabled(self.parent.master_table_right_click_buttons['import_from_database_append']['status'])
+        else:
+            table_import_from_database = None
+            table_import_from_database_replace = None
+            table_import_from_database_append = None
 
         table_import_from_config = table.addMenu("Import from Config. File")
         table_import_from_config_replace = table_import_from_config.addAction("Replace ...")
@@ -636,7 +646,9 @@ class H3TableHandler:
         action = menu.exec_(QtGui.QCursor.pos())
 
         # selection
-        if action == activate_check_all:
+        if not action:
+            pass
+        elif action == activate_check_all:
             self.check_all()
         elif action == activate_uncheck_all:
             self.uncheck_all()

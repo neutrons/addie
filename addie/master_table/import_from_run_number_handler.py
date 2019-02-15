@@ -3,8 +3,6 @@ from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import QDialog
 from addie.utilities import load_ui
 
-from addie.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
-
 
 class ImportFromRunNumberHandler:
 
@@ -33,7 +31,7 @@ class ImportFromRunNumberWindow(QDialog):
         pass
 
     def change_user_clicked(self):
-        OncatAuthenticationHandler(parent=self.parent)
+        pass
 
     def run_number_return_pressed(self):
         pass
