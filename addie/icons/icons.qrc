@@ -1,0 +1,25 @@
+<RCC>
+  <qresource prefix="MPL Toolbar">
+    <file>settings_icon.png</file>
+    <file>reset_logo.png</file>
+    <file>search_icon.png</file>
+    <file>clear_icon.png</file>
+    <file>splitter_icon.png</file>
+    <file>go-home.png</file>
+    <file>zoom-previous.png</file>
+    <file>zoom-next.png</file>
+    <file>transform-move.png</file>
+    <file>zoom-select.png</file>
+    <file>document-save.png</file>
+    <file>document-print.png</file>
+  </qresource>
+  <qresource prefix="preview">
+    <file>hollow_cylindrical_reference.png</file>
+    <file>spherical_reference.png</file>
+    <file>cylindrical_reference.png</file>
+    <file>load_csv_case1.png</file>
+    <file>load_csv_case2.png</file>
+    <file>load_csv_case3.png</file>
+    <file>load_csv_case4.png</file>
+  </qresource>
+</RCC>

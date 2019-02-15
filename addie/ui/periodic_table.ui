@@ -1,0 +1,3989 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1060</width>
+    <height>560</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Select your Chemical Formula</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_3">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="5" column="1">
+         <widget class="QPushButton" name="ba">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Ba</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="3">
+         <widget class="QPushButton" name="ti">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Ti</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="13">
+         <widget class="QPushButton" name="si">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Si</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QPushButton" name="k">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>K</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="14">
+         <widget class="QPushButton" name="p">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>P</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="12">
+         <widget class="QPushButton" name="b">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>B</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="16">
+         <widget class="QPushButton" name="cl">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Cl</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="12">
+         <widget class="QPushButton" name="al">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Al</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QPushButton" name="sc">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Sc</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="17">
+         <widget class="QPushButton" name="ne">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Ne</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QPushButton" name="ca">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Ca</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="9">
+         <widget class="QPushButton" name="ni">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Ni</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="15">
+         <widget class="QPushButton" name="s">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>S</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QPushButton" name="mg">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Mg</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="16">
+         <widget class="QPushButton" name="i">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>I</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QPushButton" name="be">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Be</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="17">
+         <widget class="QPushButton" name="kr">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Kr</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="7">
+         <widget class="QPushButton" name="fe">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Fe</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="16">
+         <widget class="QPushButton" name="br">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Br</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QPushButton" name="h">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>H</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="8">
+         <widget class="QPushButton" name="co">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Co</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="13">
+         <widget class="QPushButton" name="ge">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Ge</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="11">
+         <widget class="QPushButton" name="zn">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Zn</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="4">
+         <widget class="QPushButton" name="v">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>V</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QPushButton" name="na">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Na</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="5">
+         <widget class="QPushButton" name="cr">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Cr</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="6">
+         <widget class="QPushButton" name="mn">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Mn</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="17">
+         <widget class="QPushButton" name="ar">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Ar</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="12">
+         <widget class="QPushButton" name="ga">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Ga</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QPushButton" name="li">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Li</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="17">
+         <widget class="QPushButton" name="he">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>He</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="10">
+         <widget class="QPushButton" name="cu">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Cu</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="13">
+         <widget class="QPushButton" name="c">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>C</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="15">
+         <widget class="QPushButton" name="o">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>O</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="16">
+         <widget class="QPushButton" name="f">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>F</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="3">
+         <widget class="QPushButton" name="hf">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Hf</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="2">
+         <widget class="QPushButton" name="lu">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Lu</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="4">
+         <widget class="QPushButton" name="nb">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Nb</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="15">
+         <widget class="QPushButton" name="se">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Se</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="14">
+         <widget class="QPushButton" name="arsenic">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>As</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="10">
+         <widget class="QPushButton" name="ag">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Ag</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QPushButton" name="sr">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Sr</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="3">
+         <widget class="QPushButton" name="zr">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Zr</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QPushButton" name="rb">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Rb</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="17">
+         <widget class="QPushButton" name="og">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Og</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="16">
+         <widget class="QPushButton" name="ts">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Ts</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="15">
+         <widget class="QPushButton" name="lv">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Lv</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="14">
+         <widget class="QPushButton" name="mc">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Mc</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="11">
+         <widget class="QPushButton" name="cd">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Cd</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="13">
+         <widget class="QPushButton" name="fl">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Fl</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="12">
+         <widget class="QPushButton" name="nh">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Nh</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QPushButton" name="cs">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Cs</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="11">
+         <widget class="QPushButton" name="cn">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Cn</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="10">
+         <widget class="QPushButton" name="rg">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Rg</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="7">
+         <widget class="QPushButton" name="ru">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Ru</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="9">
+         <widget class="QPushButton" name="ds">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Ds</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="8">
+         <widget class="QPushButton" name="mt">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Mt</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="12">
+         <widget class="QPushButton" name="indium">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>In</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="7">
+         <widget class="QPushButton" name="hs">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Hs</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="6">
+         <widget class="QPushButton" name="bh">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Bh</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="15">
+         <widget class="QPushButton" name="te">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Te</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="5">
+         <widget class="QPushButton" name="sg">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Sg</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="4">
+         <widget class="QPushButton" name="db">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Db</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="5">
+         <widget class="QPushButton" name="mo">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Mo</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="3">
+         <widget class="QPushButton" name="rf">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Rf</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="2">
+         <widget class="QPushButton" name="lr">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Lr</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="17">
+         <widget class="QPushButton" name="xe">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Xe</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1">
+         <widget class="QPushButton" name="ra">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Ra</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="0">
+         <widget class="QPushButton" name="fr">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Fr</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="17">
+         <widget class="QPushButton" name="rn">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Rn</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="16">
+         <widget class="QPushButton" name="at">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>At</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="14">
+         <widget class="QPushButton" name="sb">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Sb</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="15">
+         <widget class="QPushButton" name="po">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Po</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="14">
+         <widget class="QPushButton" name="bi">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Bi</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="9">
+         <widget class="QPushButton" name="pd">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Pd</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="13">
+         <widget class="QPushButton" name="pb">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Pb</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="12">
+         <widget class="QPushButton" name="tl">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Tl</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="11">
+         <widget class="QPushButton" name="hg">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Hg</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="6">
+         <widget class="QPushButton" name="tc">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Tc</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="10">
+         <widget class="QPushButton" name="au">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Au</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="9">
+         <widget class="QPushButton" name="pt">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Pt</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <widget class="QPushButton" name="y">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Y</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="8">
+         <widget class="QPushButton" name="ir">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Ir</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="7">
+         <widget class="QPushButton" name="os">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Os</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="13">
+         <widget class="QPushButton" name="sn">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Sn</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="6">
+         <widget class="QPushButton" name="re">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Re</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="5">
+         <widget class="QPushButton" name="w">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>W</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="8">
+         <widget class="QPushButton" name="rh">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Rh</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="4">
+         <widget class="QPushButton" name="ta">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Ta</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="14">
+         <widget class="QPushButton" name="n">
+          <property name="minimumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>52</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>N</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Chemical Formula: </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="chemical_formula">
+        <property name="minimumSize">
+         <size>
+          <width>300</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="placeholderText">
+         <string extracomment="Click elements in table or Define manually Formula"/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="clear_button">
+        <property name="minimumSize">
+         <size>
+          <width>30</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>30</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>(Li7)2 (O16)3 (Sb103) C</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QPushButton" name="cancel_button">
+        <property name="text">
+         <string>Cancel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="save_button">
+        <property name="text">
+         <string>Save</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1060</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <tabstops>
+  <tabstop>chemical_formula</tabstop>
+  <tabstop>save_button</tabstop>
+  <tabstop>cancel_button</tabstop>
+  <tabstop>clear_button</tabstop>
+  <tabstop>h</tabstop>
+  <tabstop>he</tabstop>
+  <tabstop>li</tabstop>
+  <tabstop>be</tabstop>
+  <tabstop>b</tabstop>
+  <tabstop>c</tabstop>
+  <tabstop>n</tabstop>
+  <tabstop>o</tabstop>
+  <tabstop>f</tabstop>
+  <tabstop>ne</tabstop>
+  <tabstop>na</tabstop>
+  <tabstop>mg</tabstop>
+  <tabstop>al</tabstop>
+  <tabstop>si</tabstop>
+  <tabstop>p</tabstop>
+  <tabstop>s</tabstop>
+  <tabstop>cl</tabstop>
+  <tabstop>ar</tabstop>
+  <tabstop>k</tabstop>
+  <tabstop>ca</tabstop>
+  <tabstop>sc</tabstop>
+  <tabstop>ti</tabstop>
+  <tabstop>v</tabstop>
+  <tabstop>cr</tabstop>
+  <tabstop>mn</tabstop>
+  <tabstop>fe</tabstop>
+  <tabstop>co</tabstop>
+  <tabstop>ni</tabstop>
+  <tabstop>cu</tabstop>
+  <tabstop>zn</tabstop>
+  <tabstop>ga</tabstop>
+  <tabstop>ge</tabstop>
+  <tabstop>arsenic</tabstop>
+  <tabstop>se</tabstop>
+  <tabstop>br</tabstop>
+  <tabstop>kr</tabstop>
+  <tabstop>rb</tabstop>
+  <tabstop>sr</tabstop>
+  <tabstop>y</tabstop>
+  <tabstop>zr</tabstop>
+  <tabstop>nb</tabstop>
+  <tabstop>mo</tabstop>
+  <tabstop>tc</tabstop>
+  <tabstop>ru</tabstop>
+  <tabstop>rh</tabstop>
+  <tabstop>pd</tabstop>
+  <tabstop>ag</tabstop>
+  <tabstop>cd</tabstop>
+  <tabstop>indium</tabstop>
+  <tabstop>sn</tabstop>
+  <tabstop>sb</tabstop>
+  <tabstop>te</tabstop>
+  <tabstop>i</tabstop>
+  <tabstop>xe</tabstop>
+  <tabstop>cs</tabstop>
+  <tabstop>ba</tabstop>
+  <tabstop>lu</tabstop>
+  <tabstop>hf</tabstop>
+  <tabstop>ta</tabstop>
+  <tabstop>w</tabstop>
+  <tabstop>re</tabstop>
+  <tabstop>os</tabstop>
+  <tabstop>ir</tabstop>
+  <tabstop>pt</tabstop>
+  <tabstop>au</tabstop>
+  <tabstop>hg</tabstop>
+  <tabstop>tl</tabstop>
+  <tabstop>pb</tabstop>
+  <tabstop>bi</tabstop>
+  <tabstop>po</tabstop>
+  <tabstop>at</tabstop>
+  <tabstop>rn</tabstop>
+  <tabstop>fr</tabstop>
+  <tabstop>ra</tabstop>
+  <tabstop>lr</tabstop>
+  <tabstop>rf</tabstop>
+  <tabstop>db</tabstop>
+  <tabstop>sg</tabstop>
+  <tabstop>bh</tabstop>
+  <tabstop>hs</tabstop>
+  <tabstop>mt</tabstop>
+  <tabstop>ds</tabstop>
+  <tabstop>rg</tabstop>
+  <tabstop>cn</tabstop>
+  <tabstop>nh</tabstop>
+  <tabstop>fl</tabstop>
+  <tabstop>mc</tabstop>
+  <tabstop>lv</tabstop>
+  <tabstop>ts</tabstop>
+  <tabstop>og</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>h</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>h_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>48</x>
+     <y>49</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>102</x>
+     <y>46</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>he</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>he_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1089</x>
+     <y>52</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1056</x>
+     <y>48</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>li</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>li_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>50</x>
+     <y>114</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>14</x>
+     <y>105</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>be</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>be_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>103</x>
+     <y>108</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>150</x>
+     <y>95</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>b_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>780</x>
+     <y>107</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>754</x>
+     <y>101</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>c</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>c_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>855</x>
+     <y>116</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>822</x>
+     <y>119</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>n</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>n_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>911</x>
+     <y>103</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>896</x>
+     <y>72</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>o</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>o_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>980</x>
+     <y>109</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>949</x>
+     <y>78</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>f</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>f_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1037</x>
+     <y>116</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1004</x>
+     <y>71</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ne</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ne_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1107</x>
+     <y>117</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1143</x>
+     <y>109</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>na</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>na_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>49</x>
+     <y>158</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>11</x>
+     <y>163</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mg</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>mg_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>114</x>
+     <y>167</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>155</x>
+     <y>158</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>al</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>al_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>785</x>
+     <y>160</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>753</x>
+     <y>154</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>si</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>si_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>846</x>
+     <y>163</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>888</x>
+     <y>158</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>p</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>p_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>916</x>
+     <y>183</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>884</x>
+     <y>189</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>s</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>s_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>978</x>
+     <y>171</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1011</x>
+     <y>156</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cl</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>cl_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1039</x>
+     <y>180</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1074</x>
+     <y>175</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ar</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ar_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1100</x>
+     <y>158</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1145</x>
+     <y>154</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>k</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>k_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>49</x>
+     <y>215</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>14</x>
+     <y>217</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ca</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ca_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>115</x>
+     <y>216</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>78</x>
+     <y>203</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sc</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>sc_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>181</x>
+     <y>217</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>181</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ti</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ti_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>231</x>
+     <y>214</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>265</x>
+     <y>194</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>v</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>v_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>303</x>
+     <y>219</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>326</x>
+     <y>223</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cr</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>cr_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>368</x>
+     <y>204</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>372</x>
+     <y>166</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mn</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>mn_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>419</x>
+     <y>209</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>421</x>
+     <y>136</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fe</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>fe_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>478</x>
+     <y>215</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>490</x>
+     <y>164</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>co</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>co_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>542</x>
+     <y>213</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>544</x>
+     <y>179</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ni</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ni_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>599</x>
+     <y>213</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>604</x>
+     <y>147</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cu</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>cu_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>662</x>
+     <y>218</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>665</x>
+     <y>166</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>zn</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>zn_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>717</x>
+     <y>208</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>720</x>
+     <y>180</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ga</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ga_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>790</x>
+     <y>214</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>762</x>
+     <y>211</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ge</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ge_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>842</x>
+     <y>221</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>820</x>
+     <y>222</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>arsenic</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>as_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>920</x>
+     <y>220</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>885</x>
+     <y>238</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>se</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>se_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>982</x>
+     <y>223</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>947</x>
+     <y>213</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>br</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>br_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1038</x>
+     <y>220</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1010</x>
+     <y>229</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>kr</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>kr_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1106</x>
+     <y>219</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1139</x>
+     <y>206</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rb</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>rb_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>46</x>
+     <y>267</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>14</x>
+     <y>267</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sr</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>sr_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>115</x>
+     <y>281</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>80</x>
+     <y>284</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>y</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>y_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>160</x>
+     <y>276</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>140</x>
+     <y>263</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>zr</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>zr_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>237</x>
+     <y>272</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>200</x>
+     <y>278</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nb</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>nb_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>298</x>
+     <y>274</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>264</x>
+     <y>265</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mo</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>mo_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>352</x>
+     <y>278</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>326</x>
+     <y>278</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tc</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>tc_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>418</x>
+     <y>275</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>388</x>
+     <y>254</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ru</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ru_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>476</x>
+     <y>274</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>450</x>
+     <y>277</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rh</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>rh_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>541</x>
+     <y>267</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>515</x>
+     <y>262</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pd</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>pd_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>608</x>
+     <y>277</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>576</x>
+     <y>279</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ag</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ag_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>660</x>
+     <y>272</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>637</x>
+     <y>256</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cd</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>cd_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>726</x>
+     <y>276</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>696</x>
+     <y>276</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>indium</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>in_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>796</x>
+     <y>279</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>763</x>
+     <y>260</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sn</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>sn_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>848</x>
+     <y>279</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>817</x>
+     <y>277</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sb</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>sb_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>922</x>
+     <y>279</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>883</x>
+     <y>289</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>te</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>te_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>978</x>
+     <y>275</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>945</x>
+     <y>267</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>i</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>i_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1035</x>
+     <y>273</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1008</x>
+     <y>281</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>xe</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>xe_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1106</x>
+     <y>274</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1138</x>
+     <y>258</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cs</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>cs_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>47</x>
+     <y>335</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>7</x>
+     <y>312</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ba</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ba_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>103</x>
+     <y>332</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>78</x>
+     <y>334</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lu</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>lu_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>168</x>
+     <y>319</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>139</x>
+     <y>315</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hf</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>hf_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>235</x>
+     <y>325</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>201</x>
+     <y>333</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ta</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ta_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>297</x>
+     <y>332</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>263</x>
+     <y>316</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>w</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>w_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>364</x>
+     <y>332</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>325</x>
+     <y>333</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>re</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>re_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>411</x>
+     <y>333</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>389</x>
+     <y>312</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>os</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>os_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>480</x>
+     <y>329</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>448</x>
+     <y>333</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ir</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ir_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>538</x>
+     <y>332</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>512</x>
+     <y>314</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pt</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>pt_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>610</x>
+     <y>333</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>574</x>
+     <y>334</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>au</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>au_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>669</x>
+     <y>324</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>637</x>
+     <y>316</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hg</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>hg_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>735</x>
+     <y>333</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>696</x>
+     <y>334</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tl</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>tl_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>794</x>
+     <y>326</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>761</x>
+     <y>315</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>pb_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>850</x>
+     <y>333</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>821</x>
+     <y>333</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bi</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>bi_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>913</x>
+     <y>335</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>881</x>
+     <y>346</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>po</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>po_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>978</x>
+     <y>327</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>946</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>at</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>at_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1042</x>
+     <y>334</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1010</x>
+     <y>338</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rn</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>rn_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1096</x>
+     <y>335</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1138</x>
+     <y>318</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fr</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>fr_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>54</x>
+     <y>391</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>40</x>
+     <y>417</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ra</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ra_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>98</x>
+     <y>386</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>56</x>
+     <y>451</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lr</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>lr_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>174</x>
+     <y>382</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>78</x>
+     <y>429</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rf</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>rf_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>227</x>
+     <y>387</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>129</x>
+     <y>451</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>db</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>db_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>292</x>
+     <y>397</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>193</x>
+     <y>437</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sg</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>sg_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>355</x>
+     <y>387</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>255</x>
+     <y>418</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bh</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>bh_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>418</x>
+     <y>389</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>255</x>
+     <y>464</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hs</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>hs_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>465</x>
+     <y>392</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>320</x>
+     <y>451</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mt</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>mt_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>541</x>
+     <y>384</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>353</x>
+     <y>482</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ds</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ds_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>612</x>
+     <y>380</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>466</x>
+     <y>476</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rg</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>rg_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>665</x>
+     <y>392</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>498</x>
+     <y>512</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cn</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>cn_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>730</x>
+     <y>382</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>592</x>
+     <y>463</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nh</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>nh_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>787</x>
+     <y>387</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>736</x>
+     <y>481</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fl</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>fl_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>849</x>
+     <y>384</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>749</x>
+     <y>507</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mc</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>mc_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>923</x>
+     <y>384</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>865</x>
+     <y>444</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lv</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>lv_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>985</x>
+     <y>384</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>935</x>
+     <y>461</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ts</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ts_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1039</x>
+     <y>391</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>967</x>
+     <y>482</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>og</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>og_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1099</x>
+     <y>395</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1079</x>
+     <y>442</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cancel_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>cancel()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>74</x>
+     <y>537</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>145</x>
+     <y>533</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>save_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ok()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1102</x>
+     <y>528</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1031</x>
+     <y>525</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clear_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>reset_text_field()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>806</x>
+     <y>429</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>878</x>
+     <y>423</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chemical_formula</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>chemical_formula_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>587</x>
+     <y>438</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>617</x>
+     <y>496</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>cancel()</slot>
+  <slot>ok()</slot>
+  <slot>h_button()</slot>
+  <slot>he_button()</slot>
+  <slot>li_button()</slot>
+  <slot>be_button()</slot>
+  <slot>b_button()</slot>
+  <slot>c_button()</slot>
+  <slot>n_button()</slot>
+  <slot>o_button()</slot>
+  <slot>f_button()</slot>
+  <slot>ne_button()</slot>
+  <slot>na_button()</slot>
+  <slot>mg_button()</slot>
+  <slot>al_button()</slot>
+  <slot>si_button()</slot>
+  <slot>p_button()</slot>
+  <slot>s_button()</slot>
+  <slot>cl_button()</slot>
+  <slot>ar_button()</slot>
+  <slot>k_button()</slot>
+  <slot>ca_button()</slot>
+  <slot>sc_button()</slot>
+  <slot>ti_button()</slot>
+  <slot>v_button()</slot>
+  <slot>cr_button()</slot>
+  <slot>mn_button()</slot>
+  <slot>fe_button()</slot>
+  <slot>co_button()</slot>
+  <slot>ni_button()</slot>
+  <slot>cu_button()</slot>
+  <slot>zn_button()</slot>
+  <slot>ga_button()</slot>
+  <slot>ge_button()</slot>
+  <slot>as_button()</slot>
+  <slot>se_button()</slot>
+  <slot>br_button()</slot>
+  <slot>kr_button()</slot>
+  <slot>rb_button()</slot>
+  <slot>sr_button()</slot>
+  <slot>y_button()</slot>
+  <slot>zr_button()</slot>
+  <slot>nb_button()</slot>
+  <slot>mo_button()</slot>
+  <slot>tc_button()</slot>
+  <slot>ru_button()</slot>
+  <slot>rh_button()</slot>
+  <slot>pd_button()</slot>
+  <slot>ag_button()</slot>
+  <slot>cd_button()</slot>
+  <slot>in_button()</slot>
+  <slot>sn_button()</slot>
+  <slot>sb_button()</slot>
+  <slot>te_button()</slot>
+  <slot>i_button()</slot>
+  <slot>xe_button()</slot>
+  <slot>cs_button()</slot>
+  <slot>ba_button()</slot>
+  <slot>lu_button()</slot>
+  <slot>hf_button()</slot>
+  <slot>ta_button()</slot>
+  <slot>w_button()</slot>
+  <slot>re_button()</slot>
+  <slot>os_button()</slot>
+  <slot>ir_button()</slot>
+  <slot>pt_button()</slot>
+  <slot>au_button()</slot>
+  <slot>hg_button()</slot>
+  <slot>tl_button()</slot>
+  <slot>pb_button()</slot>
+  <slot>bi_button()</slot>
+  <slot>po_button()</slot>
+  <slot>at_button()</slot>
+  <slot>rn_button()</slot>
+  <slot>fr_button()</slot>
+  <slot>ra_button()</slot>
+  <slot>lr_button()</slot>
+  <slot>rf_button()</slot>
+  <slot>db_button()</slot>
+  <slot>sg_button()</slot>
+  <slot>bh_button()</slot>
+  <slot>hs_button()</slot>
+  <slot>mt_button()</slot>
+  <slot>ds_button()</slot>
+  <slot>rg_button()</slot>
+  <slot>cn_button()</slot>
+  <slot>nh_button()</slot>
+  <slot>fl_button()</slot>
+  <slot>mc_button()</slot>
+  <slot>lv_button()</slot>
+  <slot>ts_button()</slot>
+  <slot>og_button()</slot>
+  <slot>reset_text_field()</slot>
+  <slot>chemical_formula_changed()</slot>
+ </slots>
+</ui>

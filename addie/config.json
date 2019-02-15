@@ -1,0 +1,154 @@
+{
+  "sample_environment": [
+    "shifter",
+    "orange_cryostat",
+    "stick_furnace",
+    "aerodynamic_levitator"
+  ],
+  "pdf": {
+    "q_range": {
+      "min": 0,
+      "max": 40,
+      "delta": 0.02
+    },
+    "r_range": {
+      "min": 0,
+      "max": 40,
+      "delta": 1.02
+    },
+    "reduction_configuration_file": "",
+    "characterization_file": ""
+  },
+  "bragg": {
+    "characterization_file": "",
+    "number_of_bins": -6000,
+    "wavelength": {
+      "min": 0.1,
+      "max": 2.9
+    }
+  },
+  "pdf_bragg": {
+    "calibration_file": ""
+  },
+  "advanced": {
+    "push_data_positive": false
+  },
+  "instrument": {
+    "current": {
+      "full_name": "Nomad",
+      "short_name": "NOM"
+    },
+    "list": {
+      "full_name": [
+        "Nomad",
+        "Powgen"
+      ],
+      "short_name": [
+        "NOM",
+        "PG3"
+      ]
+    }
+  },
+  "calibration_folder": {
+    "pre": "/SNS/",
+    "post": "shared/CALIBRATION/"
+  },
+  "calibration_extension": "NeXus (*.h5);; Calibration (*.cal)",
+  "characterization_folder": {
+    "pre": "/SNS/",
+    "post": "shared/CALIBRATION/"
+  },
+  "characterization_extension": "NeXus (*.h5);; Calibration (*.cal)",
+  "facility": "SNS",
+  "cacheDir": "./tmp",
+  "outputDir": "./output",
+  "packing_fraction": 1,
+  "placzek": {
+    "order": {
+      "name_list": [
+        "1st"
+      ],
+      "index_selected": 0
+    },
+    "self": true,
+    "interference": false,
+    "fit_spectrum_with": {
+      "short_name_list": [
+        "GaussConvCubicSpline"
+      ],
+      "long_name_list": [
+        "Gauss Conv. Cubic Spline"
+      ],
+      "index_selected": 0
+    },
+    "lambda_binning_for_fit": {
+      "min": 0.16,
+      "max": 2.8,
+      "delta": 0.04
+    },
+    "lambda_binning_for_calc": {
+      "min": 0.1,
+      "max": 3.0,
+      "delta": 0.0001
+    }
+  },
+  "oncat_metadata_filters": {
+    "NOM": [
+      {
+        "title": "Run Number",
+        "path": [
+          "indexed",
+          "run_number"
+        ],
+        "column_width": 150
+      },
+      {
+        "title": "Title",
+        "path": [
+          "metadata",
+          "entry",
+          "title"
+        ],
+        "column_width": 300
+      },
+      {
+        "title": "Chemical Formula",
+        "path": [
+          "metadata",
+          "entry",
+          "sample",
+          "chemical_formula"
+        ],
+        "column_width": 150
+      },
+      {
+        "title": "Mass Density",
+        "path": [
+          "metadata",
+          "entry",
+          "sample",
+          "mass_density"
+        ],
+        "column_width": 100
+      },
+      {"title": "Sample Env. Device",
+      "path": [
+        "metadata",
+      "entry",
+      "daslogs",
+      "bl1b:se:sampletemp",
+      "device_name"
+      ],
+      "column_width": 150
+      },
+      {"title": "Proton Charge (C)",
+      "path": [
+        "metadata",
+        "entry",
+        "proton_charge"
+      ],
+      "column_width": 150}
+    ],
+    "POW": []
+  }
+}

@@ -17,6 +17,9 @@ addie/ui_mainWindow.py
 addie/ui_preview_ascii.py
 addie/ui_previewMantid.py
 
+# virtualenv
+venv/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

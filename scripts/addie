@@ -1,23 +1,43 @@
 #!/usr/bin/env python
 from __future__ import (absolute_import, division, print_function)
+
+import copy
 import sys
 import numpy as np
 import os
 import itertools
+import pickle
 import psutil
+import pprint
+
+from addie.ipythondockwidget import IPythonDockWidget
 # must be imported through qtpy before any other gui imports
 from addie.ipythondockwidget import IPythonDockWidget
 from qtpy.QtCore import (QProcess, Qt, QUrl)
 from qtpy.QtGui import (QDesktopServices, QIcon)
+from qtpy import QtGui
 from qtpy.QtWidgets import (QApplication, QFileDialog, QMainWindow, QMessageBox, QTableWidgetItem, QVBoxLayout)
 
+# try:
+#     from PyQt4.QtGui import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QMainWindow, QApplication, QMainWindow
+#     from PyQt4 import QtCore, QtGui
+# except ImportError:
+#     try:
+#         from PyQt5.QtWidgets import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QMainWindow, QApplication
+#         from PyQt5 import QtCore, QtGui
+#     except ImportError:
+#         raise ImportError("Requires PyQt4 or PyQt5")
 
-from addie.utilities import load_ui
+#import addie.ui_mainWindow
+#import addie.ui_table_tree
 #import addie.step1
 #import addie.step2
+from addie.configuration_initializer import ConfigurationInitializer
+from addie.utilities.general import get_ucams
+from addie.utilities import load_ui
 
 from addie.about import AboutDialog
-from addie.advanced_window_handler.advanced_window import AdvancedWindow
+from addie.advanced_window_handler.advanced_window import AdvancedWindowLauncher
 from addie.configuration.export_configuration import ExportConfiguration
 from addie.configuration.import_configuration import ImportConfiguration
 
@@ -53,6 +73,22 @@ from addie.mantid_handler.browse_file_folder_handler import BrowseFileFolderHand
 from addie.mantid_handler.mantid_reduction import GlobalMantidReduction
 from addie.mantid_handler.mantid_thread import MantidThread
 
+from addie.master_table.master_table_loader import FromDictionaryToTableUi, AsciiLoader
+from addie.master_table.table_tree_handler import TableTreeHandler, TableInitialization, TableConfig, H3TableHandler
+from addie.master_table.table_tree_handler import SaveConfigInterface, TableTree
+from addie.master_table.tree_definition import *
+# from addie.ui_table_tree_save_config import Ui_Dialog as UiDialogSave
+from addie.master_table.table_row_handler import TableRowHandler
+from addie.master_table.geometry_handler import DimensionsSetter
+from addie.master_table.selection_handler import TableHandler
+from addie.master_table.reduction_configuration_handler import ReductionConfigurationHandler
+from addie.make_calibration_handler.make_calibration import MakeCalibrationLauncher
+from addie.master_table.periodic_table.material_handler import MaterialHandler
+from addie.master_table.mass_density_handler import MassDensityHandler
+from addie.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
+from addie.master_table.import_from_run_number_handler import ImportFromRunNumberHandler
+from addie.master_table.import_from_database.load_into_master_table import LoadIntoMasterTable
+
 import addie.addiedriver as driver
 import addie.specify_plots_style as ps
 import addie.edit_sq_dialog
@@ -62,23 +98,188 @@ from addie.graphicviewlib import BraggView, GofRView, SofQView
 from addie.ipythondockwidget import IPythonDockWidget
 from addie.treelib import BraggTree, GofRTree
 
+from addie.icons import icons_rc
+
+DEBUG = False
+
+
 class MainWindow(QMainWindow):
     """ Main addie window
     """
+
+    first_oncat_authentication = True
+    oncat = None # object to use to retrieve IPTS numbers...etc. Created by oncat_authentication_handler.py
+
+    # config.json ======================================================
+    # those infos will be automatically retrieve from the config.json file
+    facility = ''
+    instrument = {"full_name": "",   # Powgen, Nomad ...
+                  "short_name": ""}  # PG3, NOM ...
+    list_instrument = {"full_name": [],
+                       "short_name": []}
+    config_calibration_folder = {"pre": "", "post": ""}
+    config_characterization_folder = {"pre": "", "post": ""}
+
+    calibration_extension = ""
+    characterization_extension = ""
+
+    cache_folder = './' # defined in the advanced window
+    output_folder = './' # defined in the advanced window
+
+    placzek_default = {}
+
+    # list of arguments to use in Import from ONCat and to display for filters
+    oncat_metadata_filters = []
+    # end of config.json ======================================================
+
+    # Master json created by master_table_loader_from_database where keys are "1-10,15,16" with list of json and
+    # list of titles (used to fix conflicts when loading)
+    # json_to_import = {'1,2,5-10': {'list_of_json': [json1, json2, json5, json6, json7, ... json10],
+    #                                'title': "title_1_1,2,5-10'},
+    #                   '20-30': {'list_of_json': [...',
+    #                             'title': "title_20-30"},
+    #                   ... }
+    json_to_import = None
+
+    # flag that will clear or not the master table before loading data
+    clear_master_table_before_loading = True
+
+    # load los.csv options
+    ascii_loader_option = None   # None, 1, 2, 3, 4
+    ascii_loader_dictionary = {}
+
+    # intermediate and output grouping files
+    grouping_dict = {'filename': "",
+                     'nbr_groups': "N/A",
+                     'enabled': False}
+    intermediate_grouping = copy.deepcopy(grouping_dict)
+    output_grouping = copy.deepcopy(grouping_dict)
+
+
+    statusbar_display_time = 5000  # 5s
+
+    # external ui (use to make sure there is only one open at a time
+    import_from_database_ui = None
+    import_from_database_ui_position = None
+
+    import_from_run_number_ui = None
+    import_from_run_number_ui_position = None
+
+    oncat_authentication_ui_position = None
+
+    conflicts_solver_ui_position = None
+
+    advanced_window_ui = None
+    make_calibration_ui = None
+    make_calibration_ui_position = None
+    table_tree_ui = None
+    table_tree_ui_position = None
+    placzek_ui = None
+    reduction_configuration_ui = None
+    reduction_configuration_ui_position = None
+
+    material_ui = None
+    material_ui_position = None
+
+    mass_density_ui = None
+    mass_density_ui_position = None
+
+    geometry_ui_position = None
+
+    # config file to initialize the widgets (example Q and R range in PDF tab)
+    current_path = os.path.dirname(os.path.dirname(__file__))
+    addie_config_file = os.path.join(os.path.dirname(addie.__file__),  "config.json")
+
+    # master table reduction configuration
+    reduction_configuration = {}
+
+    # configuration of master table
+    config_dict = OrderedDict()
+    reset_config_dict = OrderedDict()
+    active_config_name = ''
+    list_config_displayed = []
+
+    # will list the various ui for each row using a random number as key
+    dict_widget = {'ui': None,
+                   'status': False}
+    master_table_right_click_buttons = {'activate': copy.deepcopy(dict_widget),
+                                        'activate_check_all': copy.deepcopy(dict_widget),
+                                        'activate_uncheck_all': copy.deepcopy(dict_widget),
+                                        'activate_inverse': copy.deepcopy(dict_widget),
+                                        'cells': copy.deepcopy(dict_widget),
+                                        'cells_paste': copy.deepcopy(dict_widget),
+                                        'cells_copy': copy.deepcopy(dict_widget),
+                                        'cells_clear': copy.deepcopy(dict_widget),
+                                        'rows_paste': copy.deepcopy(dict_widget),
+                                        'rows_copy': copy.deepcopy(dict_widget),
+                                        'rows_duplicate': copy.deepcopy(dict_widget),
+                                        'rows_remove': copy.deepcopy(dict_widget),
+                                        'reset': copy.deepcopy(dict_widget),
+                                        'clear': copy.deepcopy(dict_widget),
+                                        'import_from_config_append': copy.deepcopy(dict_widget),
+                                        'import_from_file_append': copy.deepcopy(dict_widget),
+                                        'import_from_database_append': copy.deepcopy(dict_widget),
+                                        'export': copy.deepcopy(dict_widget),
+                                        'plot': copy.deepcopy(dict_widget),
+                                        }
+
+    placzek_info_dict = {'order_text': None,
+                         'order_index': None,
+                         'is_self': None,
+                         'is_interference': None,
+                         'fit_spectrum_text': None,
+                         'fit_spectrum_index': None,
+                         'lambda_fit_min': None,
+                         'lambda_fit_max': None,
+                         'lambda_fit_delta': None,
+                         'lambda_calc_min': None,
+                         'lambda_calc_max': None,
+                         'lambda_calc_delta': None,
+                         }
+
+    master_table_list_ui = OrderedDict()
+    master_table_cells_copy = {'temp': [],
+                               'list_column': [],
+                               'row': [],
+                               }
+
+    table_headers = {'h1': [],
+                     'h2': [],
+                     'h3': [],
+                     }
+
+    table_width = {'h1': [],
+                   'h2': [],
+                   'h3': []}
+
+    # to find which h1 column goes with wich h2 and which h3
+    table_columns_links = {'h1': [],
+                           'h2': [],
+                           'h3': [],
+                           }
+    tree_dict = None
+    tree_ui = None
+    minimum_col_width = 10
+
+    # headers from master table
+    h1_header_table = None
+    h2_header_table = None
+    h3_header_table = None
 
     undo_table = {}
     max_undo_list = 10
     undo_index = max_undo_list
     undo_button_enabled = False
     redo_button_enabled = False
+    post_processing = 'mantid'  # or 'idl'
 
     debugging = False
     load_intermediate_step_ok = False
     remove_dynamic_temperature_flag = False
     current_folder = os.getcwd()
     configuration_folder = current_folder
-    calibration_folder = '/SNS/lustre/NOM/shared/CALIBRATION/2016_2_1B_CAL/'
-    characterization_folder = '/SNS/lustre/NOM/shared/CALIBRATION/2016_2_1B_CAL/'
+    calibration_folder = ''
+    characterization_folder = ''
     file_path = os.getcwd()
     table_selection_buffer = {}
     _run_thread_sum_scans = RunThread()
@@ -109,15 +310,14 @@ class MainWindow(QMainWindow):
         Parameters
         ----------
         """
-        # Base class
         QMainWindow.__init__(self, parent)
 
-        if self.debugging:
-            self.calibration_folder = '/SNS/NOM/IPTS-17118/shared/'
-            self.characterization_folder = '/SNS/NOM/shared/CALIBRATION/'
+        # if self.debugging:
+        #     self.calibration_folder = '/SNS/NOM/IPTS-17118/shared/'
+        #     self.characterization_folder = '/SNS/NOM/shared/CALIBRATION/'
 
         # Initialize the UI widgets
-        self.ui = load_ui('ui_mainWindow.ui', baseinstance=self)
+        self.ui = load_ui('mainWindow.ui', baseinstance=self)
         self._promote_widgets()
 
         self.ui.graphicsView_sq.set_main(self)
@@ -125,12 +325,15 @@ class MainWindow(QMainWindow):
         self.ui.dockWidget_ipython.setup()
 
         # set widgets
+        self.init_parameters()
+        self.set_default_folders_path()
         self._init_widgets()
         init_step1 = InitStep1(parent=self)
         init_step2 = InitStep2(parent=self)
+        self.init_master_table()
 
         # define the event handling methods
-        self.ui.mantid_run_reduction.clicked.connect(self.do_mantid_run_reduction)
+        #self.ui.mantid_run_reduction.clicked.connect(self.do_mantid_run_reduction)
 
         # bragg diffraction tab
         self.ui.pushButton_loadBraggFile.clicked.connect(self.do_load_bragg_file)
@@ -216,7 +419,51 @@ class MainWindow(QMainWindow):
         # color management
         self._pdfColorManager = PDFPlotManager()
 
-        return
+        self.save_raw_config()
+
+        if DEBUG:
+            o_row = TableRowHandler(parent=self)
+            for _row in np.arange(10):
+                o_row.insert_row(row=_row)
+
+        self.ucams = get_ucams()
+
+    def save_raw_config(self):
+        '''this will allow the user to reset the full table and get it back in its initial state'''
+        o_current_table_config = TableConfig(parent=self)
+        current_config = o_current_table_config.get_current_config()
+
+        inside_dict = OrderedDict()
+        inside_dict['table'] = current_config
+        inside_dict['active'] = False
+
+        self.reset_config_dict = inside_dict
+
+    def init_parameters(self):
+        ConfigurationInitializer(parent=self)
+
+    def set_default_folders_path(self):
+        '''Where the calibration_folder and characterization folder will be initialized
+        using instrument name...
+
+        this is very important when the instrument changed
+        '''
+        instrument_short_name = self.instrument["short_name"]
+        config_calibration_folder = self.config_calibration_folder
+
+        self.calibration_folder = os.path.join(config_calibration_folder["pre"],
+                                               instrument_short_name,
+                                               config_calibration_folder["post"])
+
+        config_characterization_file = self.config_characterization_folder
+        self.characterization_folder = os.path.join(config_characterization_file["pre"],
+                                                    instrument_short_name,
+                                                    config_characterization_file["post"])
+
+    def init_master_table(self):
+        o_table = TableInitialization(parent=self)
+        o_table.init_master_table()
+        o_table.init_signals()
 
     def _promote_widgets(self):
         # frame_graphicsView_bragg
@@ -274,6 +521,13 @@ class MainWindow(QMainWindow):
 	}
 	""")
 
+        self.ui.label_25.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
+        self.ui.search_logo_label.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
+        self.ui.clear_name_search_2.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
+        self.ui.clear_search_button.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
+
+        self.ui.settings_table_button.setIcon(QtGui.QIcon(":/MPL Toolbar/settings_icon.png"))
+
         self.ui.comboBox_xUnit.clear()
         self.ui.comboBox_xUnit.addItems(['TOF', 'dSpacing', 'Q'])
         index = self.ui.comboBox_xUnit.findText('dSpacing', Qt.MatchFixedString)
@@ -311,13 +565,13 @@ class MainWindow(QMainWindow):
         self.ui.comboBox_pdfCorrection.addItem('Lorch')
 
         # set the tab to 0
-        self.ui.tabWidget_2.setCurrentIndex(0)
+        self.ui.main_tab.setCurrentIndex(0)
 
         # set the lower limit on Qmin
         self.ui.doubleSpinBoxQmin.setDecimals(6)
         self.ui.doubleSpinBoxQmin.setMinimum(1.E-10)
 
-        return
+        self.activate_reduction_tabs()
 
     @property
     def controller(self):
@@ -1955,8 +2209,17 @@ class MainWindow(QMainWindow):
         _about.display()
 
     def advanced_option_clicked(self):
-        _advanced = AdvancedWindow(parent=self)
-        _advanced.show()
+        AdvancedWindowLauncher(parent = self)
+
+    def activate_reduction_tabs(self):
+        if self.post_processing == 'idl':
+            tab_1 = True
+            tab_2 = False
+        else:
+            tab_1 = False
+            tab_2 = True
+        self.ui.main_tab.setTabEnabled(1, tab_1)
+        self.ui.main_tab.setTabEnabled(2, tab_2)
 
     def menu_ipts_file_transfer_clicked(self):
         _o_ipts = IptsFileTransferDialog(parent=self)
@@ -2259,6 +2522,314 @@ class MainWindow(QMainWindow):
         self.help_button_clicked(button_name='mantid')
 
 
+    # Mantid
+
+    # master table
+    def personalization_table_clicked(self):
+        o_master_table_tree = TableTreeHandler(parent=self)
+        _table_config = TableConfig(parent=self)
+        current_config = _table_config.get_current_config()
+        _table_config.update_tree_dict_and_tree(config_to_load=current_config)
+
+    def closeEvent(self, c):
+        if self.advanced_window_ui:
+            self.advanced_window_ui.closeEvent(c)
+        if self.make_calibration_ui:
+            self.make_calibration_ui.closeEvent(c)
+        if self.table_tree_ui:
+            self.table_tree_ui.closeEvent(c)
+
+    # events of the table and the tree
+
+    def table_search(self, text):
+        o_table = TableHandler(parent=self)
+        o_table.search(text)
+
+    def table_search_clear(self):
+        o_table = TableHandler(parent=self)
+        o_table.clear_search()
+
+    def load_this_config(self, key='', resize=False):
+        if key == '':
+            return
+
+        if key == 'FULL_RESET':
+            config_to_load = self.reset_config_dict['table']
+        else:
+            config_to_load = self.config_dict[key]['table']
+
+        h1_dict = config_to_load['h1']
+        h2_dict = config_to_load['h2']
+        h3_dict = config_to_load['h3']
+
+        o_table = TableConfig(parent=self)
+        o_table.disconnect_table_ui()
+
+        for _col in h1_dict:
+            _visible = h1_dict[_col]['visible']
+            _width = h1_dict[_col]['width']
+            o_table.set_size_and_visibility_column(h1=_col, width=_width, visibility=_visible, resize=resize)
+
+        for _col in h2_dict:
+            _visible = h2_dict[_col]['visible']
+            _width = h2_dict[_col]['width']
+            o_table.set_size_and_visibility_column(h2=_col, width=_width, visibility=_visible, resize=resize)
+
+        for _col in h3_dict:
+            _visible = h3_dict[_col]['visible']
+            _width = h3_dict[_col]['width']
+            o_table.set_size_and_visibility_column(h3=_col, width=_width, visibility=_visible, resize=resize)
+
+        o_table.update_tree_dict_and_tree(config_to_load)
+
+        o_table.disconnect_table_ui(unblock_all=True)
+
+    def h3_table_right_click(self, position):
+        o_h3_table = H3TableHandler(parent=self)
+        o_h3_table.right_click()
+
+    def check_status_of_right_click_buttons(self):
+        o_h3_table = H3TableHandler(parent=self)
+        o_h3_table.check_status_of_right_click_buttons()
+
+    def scroll_h1_table(self, value):
+        self.ui.h2_table.horizontalScrollBar().setValue(value)
+        self.ui.h3_table.horizontalScrollBar().setValue(value)
+
+    def scroll_h2_table(self, value):
+        self.ui.h1_table.horizontalScrollBar().setValue(value)
+        self.ui.h3_table.horizontalScrollBar().setValue(value)
+
+    def scroll_h3_table(self, value):
+        self.ui.h1_table.horizontalScrollBar().setValue(value)
+        self.ui.h2_table.horizontalScrollBar().setValue(value)
+
+    def resizing_h1(self, index_column, old_size, new_size):
+
+        o_table = TableConfig(parent=self)
+        o_table.disconnect_table_ui()
+
+        h2_children = o_table.get_h2_children_from_h1(h1=index_column)
+        last_h2_visible = o_table.get_last_h2_visible(list_h2=h2_children)
+        list_h3 = o_table.get_h3_children_from_h2(h2=last_h2_visible)
+        last_h3_visible = o_table.get_last_h3_visible(list_h3=list_h3)
+
+        size_diff = new_size - old_size
+
+        # add this size_diff to last_h2 and last_h3
+        last_h3_visible_size = o_table.get_size_column(h3=last_h3_visible)
+        if (last_h3_visible_size < self.minimum_col_width) and \
+                (new_size < old_size):
+            o_table.set_size_column(h1=index_column, width=old_size)
+        else:
+            last_h2_visible_size = o_table.get_size_column(h2=last_h2_visible)
+            o_table.set_size_column(h2=last_h2_visible, width=last_h2_visible_size + size_diff)
+            o_table.set_size_column(h3=last_h3_visible, width=last_h3_visible_size + size_diff)
+
+        o_table.disconnect_table_ui(unblock_all=True)
+
+    def resizing_h2(self, index_column, old_size, new_size):
+
+        o_table = TableConfig(parent=self)
+        o_table.disconnect_table_ui()
+
+        h1_parent = o_table.get_h1_parent_from_h2(h2=index_column)
+        h3_children = o_table.get_h3_children_from_h2(h2=index_column)
+        last_h3_visible = o_table.get_last_h3_visible(list_h3=h3_children)
+
+        size_diff = new_size - old_size
+
+        last_h3_visible_size = o_table.get_size_column(h3=last_h3_visible)
+        if (last_h3_visible_size < self.minimum_col_width) and \
+                (new_size < old_size):
+            o_table.set_size_column(h2=index_column, width=old_size)
+        else:
+            # add this size_diff to parent and last h3
+            parent_size = o_table.get_size_column(h1=h1_parent)
+            o_table.set_size_column(h1=h1_parent, width=parent_size + size_diff)
+            o_table.set_size_column(h3=last_h3_visible, width=last_h3_visible_size + size_diff)
+
+        o_table.disconnect_table_ui(unblock_all=True)
+
+    def resizing_h3(self, index_column, old_size, new_size):
+
+        o_table = TableConfig(parent=self)
+        o_table.disconnect_table_ui()
+
+        [h1_parent, h2_parent] = o_table.get_h1_h2_parent_from_h3(h3=index_column)
+
+        size_diff = new_size - old_size
+
+        h1_parent_size = o_table.get_size_column(h1=h1_parent)
+        o_table.set_size_column(h1=h1_parent, width=h1_parent_size + size_diff)
+        h2_parent_size = o_table.get_size_column(h2=h2_parent)
+        o_table.set_size_column(h2=h2_parent, width=h2_parent_size + size_diff)
+
+        o_table.disconnect_table_ui(unblock_all=True)
+
+    def init_widgets(self):
+        pass
+
+    def init_tree(self):
+        # fill the self.ui.treeWidget
+        # self.addItems(self.ui.treeWidget.invisibleRootItem())
+        self.addItems(self.ui.treeWidget.invisibleRootItem())
+        self.ui.treeWidget.itemChanged.connect(self.tree_item_changed)
+
+    def tree_item_changed(self, item, _):
+        """this will change the way the big table will look like by hidding or showing columns"""
+
+        o_table = TableConfig(parent=self)
+        o_table.block_table_header_ui(block_all=False,
+                                      block_h1=True,
+                                      block_h2=True)
+
+        h_columns_affected = o_table.get_h_columns_from_item_name(item_name=o_table.get_item_name(item))
+
+        o_table.change_state_tree(list_ui=h_columns_affected['list_tree_ui'],
+                                  list_parent_ui=h_columns_affected['list_parent_ui'],
+                                  state=item.checkState(0))
+
+        o_table.update_table_columns_visibility()
+        o_table.resizing_table(tree_dict=h_columns_affected, block_ui=False)
+
+        o_table.block_table_header_ui(unblock_all=True)
+
+    # widgets from master table
+    def master_table_select_state_changed(self, state, key):
+        o_table = TableRowHandler(parent=self)
+        o_table.activated_row_changed(key=key, state=state)
+
+    ## sample columns
+    def master_table_sample_material_button_pressed(self, key):
+        MaterialHandler(parent=self, key=key, data_type='sample')
+
+    def master_table_sample_material_line_edit_entered(self, key):
+        o_table = TableRowHandler(parent=self)
+        o_table.transfer_widget_states(from_key=key, data_type='sample')
+
+    def master_table_sample_mass_density_button_pressed(self, key):
+        MassDensityHandler(parent=self, data_type='sample', key=key)
+
+    def master_table_sample_mass_density_line_edit_entered(self, key):
+        o_table = TableRowHandler(parent=self)
+        o_table.transfer_widget_states(from_key=key, data_type='sample')
+
+    def master_table_sample_shape_changed(self, index, key):
+        o_table = TableRowHandler(parent=self)
+        o_table.shape_changed(shape_index=index, key=key, data_type='sample')
+
+    def master_table_sample_abs_correction_changed(self, text, key):
+        o_table = TableRowHandler(parent=self)
+        o_table.abs_correction_changed(value=text, key=key, data_type='sample')
+
+    def master_table_sample_multi_scattering_correction_changed(self, text, key):
+        o_table = TableRowHandler(parent=self)
+        o_table.multi_scattering_correction(value=text, key=key, data_type='sample')
+
+    def master_table_sample_inelastic_correction_changed(self, text, key):
+        o_table = TableRowHandler(parent=self)
+        o_table.inelastic_correction_changed(value=text, key=key, data_type='sample')
+
+    def master_table_sample_placzek_button_pressed(self, key):
+        o_table = TableRowHandler(parent=self)
+        o_table.placzek_button_pressed(key=key, data_type='sample')
+
+    def master_table_sample_dimensions_setter_button_pressed(self, key):
+        o_dimensions_ui = DimensionsSetter(parent=self, key=key, data_type='sample')
+        o_dimensions_ui.show()
+
+    # normalization columns
+    def master_table_normalization_material_button_pressed(self, key):
+        MaterialHandler(parent=self, key=key, data_type='normalization')
+
+    def master_table_normalization_material_line_edit_entered(self, key):
+        o_table = TableRowHandler(parent=self)
+        o_table.transfer_widget_states(from_key=key, data_type='normalization')
+
+    def master_table_normalization_mass_density_button_pressed(self, key):
+        MassDensityHandler(parent=self, data_type='normalization', key=key)
+
+    def master_table_normalization_mass_density_line_edit_entered(self, key):
+        o_table = TableRowHandler(parent=self)
+        o_table.transfer_widget_states(from_key=key, data_type='normalization')
+
+    def master_table_normalization_shape_changed(self, text, key):
+        o_table = TableRowHandler(parent=self)
+        o_table.shape_changed(shape_index=text, key=key, data_type='normalization')
+
+    def master_table_normalization_abs_correction_changed(self, text, key):
+        o_table = TableRowHandler(parent=self)
+        o_table.abs_correction_changed(value=text, key=key, data_type='normalization')
+
+    def master_table_normalization_multi_scattering_correction_changed(self, text, key):
+        o_table = TableRowHandler(parent=self)
+        o_table.multi_scattering_correction(value=text, key=key, data_type='normalization')
+
+    def master_table_normalization_inelastic_correction_changed(self, text, key):
+        o_table = TableRowHandler(parent=self)
+        o_table.inelastic_correction_changed(value=text, key=key, data_type='normalization')
+
+    def master_table_normalization_placzek_button_pressed(self, key):
+        o_table = TableRowHandler(parent=self)
+        o_table.placzek_button_pressed(key=key, data_type='normalization')
+
+    def master_table_normalization_dimensions_setter_button_pressed(self, key):
+        o_dimensions_ui = DimensionsSetter(parent=self, key=key, data_type='normalization')
+        o_dimensions_ui.show()
+
+    def launch_import_from_database_handler(self):
+        ImportFromDatabaseHandler(parent=self)
+
+    def launch_import_from_run_number_handler(self):
+        ImportFromRunNumberHandler(parent=self)
+
+    # def master_table_input_grouping_button_pressed(self, key):
+    #     o_table = TableRowHandler(parent=self)
+    #     o_table.grouping_button(key=key, grouping_type='input')
+    #
+    # def master_table_output_grouping_button_pressed(self, key):
+    #     o_table = TableRowHandler(parent=self)
+    #     o_table.grouping_button(key=key, grouping_type='output')
+
+    # calibrations
+    def make_calibration_clicked(self):
+        MakeCalibrationLauncher(parent=self)
+
+    def browse_calibration_clicked(self):
+        _calibration_folder = self.calibration_folder
+        [_calibration_file, ext] = QFileDialog.getOpenFileName(parent = self,
+                                                              caption = "Select Calibration File",
+                                                              directory = _calibration_folder,
+                                                              filter = self.calibration_extension)
+        if _calibration_file:
+            self.ui.calibration_file.setText(_calibration_file)
+
+    def from_oncat_to_master_table(self, json=None, with_conflict=False, ignore_conflicts=False):
+        if self.import_from_database_ui:
+            self.import_from_database_ui.close()
+
+        LoadIntoMasterTable(parent=self, json=json,
+                            with_conflict=with_conflict,
+                            ignore_conflicts=ignore_conflicts)
+
+    def apply_clicked(self):
+        # do stuff
+        self.close()
+
+    def cancel_clicked(self):
+        self.close()
+
+    def _load_ascii(self, filename=''):
+        o_ascii_loader = AsciiLoader(parent=self, filename=filename)
+        o_ascii_loader.load()
+
+    def reduction_configuration_button_clicked(self):
+        ReductionConfigurationHandler(parent=self)
+
+    def closeEvent(self, eventhere=None):
+        pass
+
 def main():
     app = QApplication(sys.argv)
     app.setOrganizationName("Qtrac Ltd.")
@@ -2268,7 +2839,6 @@ def main():
     form = MainWindow()
     form.show()
     app.exec_()
-
 
 if __name__ == '__main__':
     main()

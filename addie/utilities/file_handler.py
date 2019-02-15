@@ -1,6 +1,7 @@
 from __future__ import (absolute_import, division, print_function)
 import os
 import configparser
+import numpy as np
 
 
 class FileHandler(object):
@@ -9,6 +10,21 @@ class FileHandler(object):
 
     def __init__(self, filename=None):
         self.filename = filename
+
+    @staticmethod
+    def is_file_correct_extension(filename='', ext_requested='csv'):
+        [_, _ext] = os.path.splitext(filename)
+        if _ext == ".{}".format(ext_requested):
+            return True
+        return False
+
+    def csv_parser(self):
+        data = np.genfromtxt(self.filename,dtype='str',delimiter=',',comments=None)
+        headers = data[0,:]
+        obj = dict()
+        for col_id, col_name in enumerate(headers):
+            obj[col_name] = data[1:,col_id]
+        return obj
 
     def retrieve_contain(self):
         file_contain = []

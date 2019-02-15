@@ -90,7 +90,7 @@ class Step2GuiHandler(object):
     def check_gui(self):
         self.check_run_ndabs_button()
         self.check_run_sum_scans_button()
-        self.check_run_mantid_reduction_button()
+        #self.check_run_mantid_reduction_button()
         self.check_import_export_buttons()
 
     def define_new_ndabs_output_file_name(self):
