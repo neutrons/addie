@@ -85,7 +85,12 @@ from addie.master_table.reduction_configuration_handler import ReductionConfigur
 from addie.make_calibration_handler.make_calibration import MakeCalibrationLauncher
 from addie.master_table.periodic_table.material_handler import MaterialHandler
 from addie.master_table.mass_density_handler import MassDensityHandler
-from addie.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
+try:
+    from addie.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
+    ONCAT_ENABLED = True
+except ImportError:
+    print('pyoncat module not found. Functionality disabled')
+    ONCAT_ENABLED = False
 from addie.master_table.import_from_run_number_handler import ImportFromRunNumberHandler
 from addie.master_table.import_from_database.load_into_master_table import LoadIntoMasterTable
 
@@ -2779,7 +2784,10 @@ class MainWindow(QMainWindow):
         o_dimensions_ui.show()
 
     def launch_import_from_database_handler(self):
-        ImportFromDatabaseHandler(parent=self)
+        if ONCAT_ENABLED:
+            ImportFromDatabaseHandler(parent=self)
+        else:
+            print('oncat functionality disabled')
 
     def launch_import_from_run_number_handler(self):
         ImportFromRunNumberHandler(parent=self)
