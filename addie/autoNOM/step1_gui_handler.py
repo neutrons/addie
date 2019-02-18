@@ -3,7 +3,7 @@ from qtpy.QtWidgets import (QFileDialog)
 import os
 
 from addie.autoNOM.auto_populate_widgets import AutoPopulateWidgets
-from addie.general_handler.help_gui import check_status
+from addie.help_handler.help_gui import check_status
 
 
 class Step1GuiHandler(object):

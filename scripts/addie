@@ -41,7 +41,7 @@ from addie.menu.file.settings.advanced_file_window import AdvancedWindowLauncher
 from addie.menu.file.configuration.export_configuration import ExportConfiguration
 from addie.menu.file.configuration.import_configuration import ImportConfiguration
 
-from addie.general_handler.help_gui import HelpGui, help_button_activator
+from addie.help_handler.help_gui import HelpGui, help_button_activator
 
 from addie.utilities.job_status_handler import JobStatusHandler
 from addie.utilities.job_monitor_thread import JobMonitorThread

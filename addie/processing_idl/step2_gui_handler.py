@@ -5,7 +5,7 @@ import os
 
 import addie.processing_idl.table_handler
 from addie.utilities.math_tools import is_int, is_float
-from addie.general_handler.help_gui import check_status
+from addie.help_handler.help_gui import check_status
 
 
 class Step2GuiHandler(object):

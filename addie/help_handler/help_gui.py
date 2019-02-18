@@ -1,7 +1,7 @@
 from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QMainWindow)
 from addie.utilities import load_ui
-from addie.general_handler.help_gui_table_initialization import HelpGuiTableInitialization
+from addie.help_handler.help_gui_table_initialization import HelpGuiTableInitialization
 
 
 class HelpGui(QMainWindow):
