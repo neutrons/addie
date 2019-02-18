@@ -3,7 +3,7 @@ from qtpy.QtWidgets import (QFileDialog)
 import os
 
 from addie.utilities.file_handler import FileHandler
-from addie.step3_handler.preview_ascii_window import PreviewAsciiWindow
+from addie.menu.step3_handler.preview_ascii_window import PreviewAsciiWindow
 
 
 class Step3GuiHandler(object):
