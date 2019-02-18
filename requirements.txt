@@ -3,6 +3,6 @@ mock==2.0.0
 numpy==1.15.4
 pytest==4.2.1
 periodictable==1.5.0
-psutil==5.4.2
+psutil
 QtPy==1.6.0
 six==1.11.0
