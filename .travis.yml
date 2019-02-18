@@ -17,9 +17,9 @@ before_install:
   wget -O miniconda.sh https://repo.continuum.io/miniconda/Miniconda${CONDA:0:1}-latest-$OS.sh
   bash miniconda.sh -b -p $HOME/miniconda
   export PATH="$HOME/miniconda/bin:$PATH"
-  conda create -q -n test-environment python=$CONDA
   conda config --set always_yes yes --set changeps1 no
   conda config --add channels conda-forge
+  conda create -q -n test-environment python=$CONDA
   conda update -q conda
   conda install -q conda-build
   conda install -c mantid nexus poco
