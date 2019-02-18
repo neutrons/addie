@@ -24,13 +24,9 @@ class AdvancedWindow(QMainWindow):
     def __init__(self, parent=None):
         self.parent = parent
         
-        #QtGui.QMainWindow.__init__(self, parent=parent)
         QMainWindow.__init__(self, parent=parent)
         self.ui = load_ui('advanced_window.ui', baseinstance=self)
 
-        #self.ui = UiMainWindow()
-        #self.ui.setupUi(self)
-        
         self.setWindowTitle("Advanced Window for Super User Only !")
         self.init_widgets()
 
@@ -59,6 +55,8 @@ class AdvancedWindow(QMainWindow):
 
         self.ui.cache_dir_label.setText(self.parent.cache_folder)
         self.ui.output_dir_label.setText(self.parent.output_folder)
+
+        self.ui.centralwidget.setContentsMargins(10, 10, 10, 10)
 
     def post_processing_clicked(self):
         if self.ui.idl_post_processing_button.isChecked():
