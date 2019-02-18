@@ -95,7 +95,7 @@ from addie.processing.mantid.master_table.import_from_run_number_handler import 
 from addie.processing.mantid.master_table.import_from_database.load_into_master_table import LoadIntoMasterTable
 
 import addie.addiedriver as driver
-import addie.specify_plots_style as ps
+import addie.utilities.specify_plots_style as ps
 import addie.calculate_gr.edit_sq_dialog
 
 from addie.calculate_gr.pdf_lines_manager import PDFPlotManager
