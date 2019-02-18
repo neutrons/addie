@@ -23,10 +23,9 @@ before_install:
   conda install -q conda-build
   conda install -c mantid nexus poco
   conda install --yes -c mantid/label/nightly mantid-framework
-  conda install --yes qt pyqt qtpy
+  conda install --yes qt pyqt qtpy 
 install:
 - |
-  conda install --yes --file requirements.txt
   conda create -q -n test-environment python=$CONDA
   source activate test-environment
   conda list
