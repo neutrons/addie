@@ -1,7 +1,6 @@
 from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QDialog)  # noqa
-from addie.utilities import load_ui
-from . import mplgraphicsview as mplview
+from addie.utilities import load_ui, mplgraphicsview as mplview
 
 
 class PlotStyleDialog(QDialog):

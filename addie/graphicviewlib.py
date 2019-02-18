@@ -6,7 +6,7 @@ from qtpy.QtCore import (Signal)
 from qtpy.QtGui import (QCursor)
 from qtpy.QtWidgets import (QAction, QMenu)
 
-from . import mplgraphicsview as base
+from addie.utilities import mplgraphicsview as base
 
 
 class BraggView(base.MplGraphicsView):
