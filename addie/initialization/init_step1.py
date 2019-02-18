@@ -1,6 +1,6 @@
 from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QLabel)
-from addie.step1_handler.step1_gui_handler import Step1GuiHandler
+from addie.autoNOM.step1_gui_handler import Step1GuiHandler
 
 
 class InitStep1(object):

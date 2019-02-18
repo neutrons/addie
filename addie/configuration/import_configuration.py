@@ -5,7 +5,7 @@ import os
 from addie.configuration.config_file_name_handler import ConfigFileNameHandler
 from addie.utilities.conversion import str2bool
 from addie.utilities.gui_handler import GuiHandler
-from addie.step1_handler.step1_gui_handler import Step1GuiHandler
+from addie.autoNOM.step1_gui_handler import Step1GuiHandler
 from addie.step2_handler.import_table import ImportTable
 from addie.step2_handler.step2_gui_handler import Step2GuiHandler
 

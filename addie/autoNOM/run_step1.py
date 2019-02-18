@@ -3,7 +3,7 @@ import os
 from qtpy.QtWidgets import (QMessageBox)
 import glob
 
-from addie.step1_handler.make_exp_ini_file_and_run_autonom import MakeExpIniFileAndRunAutonom
+from addie.autoNOM.make_exp_ini_file_and_run_autonom import MakeExpIniFileAndRunAutonom
 
 
 class RunStep1(object):

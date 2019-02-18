@@ -1,7 +1,7 @@
 from __future__ import (absolute_import, division, print_function)
 import os
 from addie.utilities.file_handler import FileHandler
-from addie.step1_handler.step1_widgets_handler import Step1WidgetsHandler
+from addie.autoNOM.step1_widgets_handler import Step1WidgetsHandler
 
 
 class AutoPopulateWidgets(object):

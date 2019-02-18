@@ -2,7 +2,7 @@ from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QFileDialog)
 import os
 
-from addie.step1_handler.auto_populate_widgets import AutoPopulateWidgets
+from addie.autoNOM.auto_populate_widgets import AutoPopulateWidgets
 from addie.general_handler.help_gui import check_status
 
 

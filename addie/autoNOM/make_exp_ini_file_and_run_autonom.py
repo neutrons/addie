@@ -4,7 +4,7 @@ import time
 import json
 from datetime import datetime
 
-from addie.step1_handler.step1_gui_handler import Step1GuiHandler
+from addie.autoNOM.step1_gui_handler import Step1GuiHandler
 
 
 class MakeExpIniFileAndRunAutonom(object):

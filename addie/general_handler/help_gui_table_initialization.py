@@ -1,7 +1,7 @@
 from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QPushButton, QTextEdit)  # noqa
 
-from addie.step1_handler.step1_utilities import Step1Utilities
+from addie.autoNOM.step1_utilities import Step1Utilities
 from addie.step2_handler.step2_utilities import Step2Utilities
 
 
