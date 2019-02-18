@@ -32,4 +32,4 @@ install:
   conda list
 script:
 - python -c "import mantid"
-- python -c "import PyQt5"
+- python -c "import qtpy"
