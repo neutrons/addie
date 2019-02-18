@@ -33,7 +33,7 @@ from qtpy.QtWidgets import (QApplication, QFileDialog, QMainWindow, QMessageBox,
 #import addie.ui_table_tree
 #import addie.step1
 #import addie.step2
-from addie.configuration_initializer import ConfigurationInitializer
+from addie.initialization.configuration import ConfigurationInitializer
 from addie.utilities.general import get_ucams
 from addie.utilities import load_ui
 
