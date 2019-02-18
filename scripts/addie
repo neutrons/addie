@@ -98,7 +98,7 @@ import addie.addiedriver as driver
 import addie.specify_plots_style as ps
 import addie.calculate_gr.edit_sq_dialog
 
-from addie.pdf_lines_manager import PDFPlotManager
+from addie.calculate_gr.pdf_lines_manager import PDFPlotManager
 from addie.graphicviewlib import BraggView, GofRView, SofQView
 from addie.ipythondockwidget import IPythonDockWidget
 from addie.treelib import BraggTree, GofRTree
