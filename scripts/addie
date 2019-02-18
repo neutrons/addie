@@ -2222,16 +2222,22 @@ class MainWindow(QMainWindow):
             tab_1 = True
             tab_2 = False
             current_index=0
+            visible_menu_configuration = True
         else:
             tab_0 = False
             tab_1 = False
             tab_2 = True
             current_index=2
+            visible_menu_configuration = False
         self.ui.main_tab.setTabEnabled(0, tab_0)
         self.ui.main_tab.setTabEnabled(1, tab_1)
         self.ui.main_tab.setTabEnabled(2, tab_2)
         self.setStyleSheet("QTabBar::tab::disabled {width: 0; height: 0; margin: 0; padding: 0; border: none;} ")
         self.ui.main_tab.setCurrentIndex(current_index)
+
+        # also hide the file>configration buttons when working with Mantid
+        self.ui.menuLoad_Configuration.menuAction().setVisible(visible_menu_configuration)
+
 
     def menu_ipts_file_transfer_clicked(self):
         _o_ipts = IptsFileTransferDialog(parent=self)
