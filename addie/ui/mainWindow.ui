@@ -58,7 +58,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1691</width>
+         <width>1689</width>
          <height>941</height>
         </rect>
        </property>
@@ -80,11 +80,11 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
-              <string>Autoreduce</string>
+              <string>autoNOM</string>
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_7">
               <item>
@@ -3745,7 +3745,7 @@ p, li { white-space: pre-wrap; }
             </widget>
             <widget class="QWidget" name="tab_2">
              <attribute name="title">
-              <string>Page</string>
+              <string>Processing</string>
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_15">
               <item>
@@ -4270,7 +4270,7 @@ p, li { white-space: pre-wrap; }
             </widget>
             <widget class="QWidget" name="tab_bragg">
              <attribute name="title">
-              <string>Bragg Peaks</string>
+              <string>Rietveld</string>
              </attribute>
              <layout class="QHBoxLayout" name="horizontalLayout_72">
               <item>
@@ -5181,7 +5181,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>1711</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
    <property name="sizePolicy">
