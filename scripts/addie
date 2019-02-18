@@ -38,8 +38,8 @@ from addie.utilities import load_ui
 
 from addie.about import AboutDialog
 from addie.menu.file.settings.advanced_file_window import AdvancedWindowLauncher
-from addie.configuration.export_configuration import ExportConfiguration
-from addie.configuration.import_configuration import ImportConfiguration
+from addie.menu.file.configuration.export_configuration import ExportConfiguration
+from addie.menu.file.configuration.import_configuration import ImportConfiguration
 
 from addie.general_handler.help_gui import HelpGui, help_button_activator
 

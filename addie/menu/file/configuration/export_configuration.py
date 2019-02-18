@@ -3,7 +3,7 @@ import os
 
 from addie.utilities.gui_handler import GuiHandler
 from addie.processing_idl.export_table import ExportTable
-from addie.configuration.config_file_name_handler import ConfigFileNameHandler
+from addie.menu.file.configuration.config_file_name_handler import ConfigFileNameHandler
 from addie.utilities.file_handler import FileHandler
 
 

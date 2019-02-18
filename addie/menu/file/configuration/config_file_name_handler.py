@@ -26,10 +26,12 @@ class ConfigFileNameHandler(object):
                                                 filter=_filter,
                                                 caption=_caption,
                                                 directory=_current_folder)
-        if not _file:
-            return
         if isinstance(_file, tuple):
             _file = _file[0]
+
+        if not _file:
+            self.filename = ''
+            return
 
         _new_path = os.path.dirname(_file)
         self.parent.configuration_folder = _new_path
