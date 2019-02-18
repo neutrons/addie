@@ -3,8 +3,6 @@ from qtpy.QtWidgets import QMainWindow, QFileDialog
 from addie.utilities import load_ui
 
 
-#class AdvancedWindow(QMainWindow):
-
 class AdvancedWindowLauncher(object):
 
     def __init__(self, parent=None):
@@ -93,13 +91,3 @@ class AdvancedWindow(QMainWindow):
 
     def closeEvent(self, c):
         self.parent.advanced_window_ui = None
-
-# =======
-#     def __init__(self, parent=None):
-#         self.parent = parent
-#
-#         QMainWindow.__init__(self, parent=parent)
-#         self.ui = load_ui('advanced_window.ui', baseinstance=self)
-#
-#         self.setWindowTitle("Advanced Window for Super User Only !")
-# >>>>>>> master

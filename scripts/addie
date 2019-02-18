@@ -37,7 +37,7 @@ from addie.utilities.general import get_ucams
 from addie.utilities import load_ui
 
 from addie.about import AboutDialog
-from addie.advanced_window_handler.advanced_window import AdvancedWindowLauncher
+from addie.menu.file.settings.advanced_file_window import AdvancedWindowLauncher
 from addie.configuration.export_configuration import ExportConfiguration
 from addie.configuration.import_configuration import ImportConfiguration
 
