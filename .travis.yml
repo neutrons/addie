@@ -7,8 +7,10 @@ matrix:
   - os: linux
     env: CONDA=3.6
   - os: osx
+    osx_image: xcode6.4
     env: CONDA=2.7
   - os: osx
+    osx_image: xcode6.4
     env: CONDA=3.6
 before_install:
 - |
