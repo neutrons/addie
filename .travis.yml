@@ -30,4 +30,4 @@ install:
   source activate test-environment
   conda list
 script:
-- bash addiedevel.sh
+- python -c "import PyQt5"
