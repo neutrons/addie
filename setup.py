@@ -19,7 +19,7 @@ setup(name="addie",
       install_requires=[
         'matplotlib <= 2.2.3',
         'numpy == 1.15.4',
-        'periodictable == 1.5.0'
+        'periodictable == 1.5.0',
         'psutil==5.4.2',
         'QtPy==1.6.0' ],
       setup_requires=[],
