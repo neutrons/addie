@@ -2,7 +2,7 @@ from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QPushButton, QTextEdit)  # noqa
 
 from addie.autoNOM.step1_utilities import Step1Utilities
-from addie.processing_idl.step2_utilities import Step2Utilities
+from addie.processing.idl.step2_utilities import Step2Utilities
 
 
 class HelpGuiTableInitialization(object):

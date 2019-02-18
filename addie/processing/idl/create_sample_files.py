@@ -1,7 +1,7 @@
 from __future__ import (absolute_import, division, print_function)
 import os
 
-from addie.processing_idl.table_handler import TableHandler
+from addie.processing.idl.table_handler import TableHandler
 
 
 class CreateSampleFiles(object):

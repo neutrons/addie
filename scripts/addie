@@ -53,19 +53,19 @@ from addie.initialization.init_step1 import InitStep1
 
 from addie.autoNOM.step1_gui_handler import Step1GuiHandler
 from addie.autoNOM.run_step1 import RunStep1
-from addie.processing_idl.load_table_intermediate_step_interface import loadTableIntermediateStepInterface
-from addie.processing_idl.undo_handler import UndoHandler
+from addie.processing.idl.load_table_intermediate_step_interface import loadTableIntermediateStepInterface
+from addie.processing.idl.undo_handler import UndoHandler
 
 from addie.initialization.init_step2 import InitStep2
-from addie.processing_idl.populate_master_table import PopulateMasterTable
-from addie.processing_idl.populate_background_widgets import PopulateBackgroundWidgets
-from addie.processing_idl.step2_gui_handler import Step2GuiHandler
-from addie.processing_idl.table_handler import TableHandler
-from addie.processing_idl.create_sample_files import CreateSampleFiles
-from addie.processing_idl.create_ndsum_file import CreateNdsumFile
-from addie.processing_idl.run_ndabs import RunNDabs
-from addie.processing_idl.run_sum_scans import RunSumScans
-from addie.processing_idl.run_thread import RunThread
+from addie.processing.idl.populate_master_table import PopulateMasterTable
+from addie.processing.idl.populate_background_widgets import PopulateBackgroundWidgets
+from addie.processing.idl.step2_gui_handler import Step2GuiHandler
+from addie.processing.idl.table_handler import TableHandler
+from addie.processing.idl.create_sample_files import CreateSampleFiles
+from addie.processing.idl.create_ndsum_file import CreateNdsumFile
+from addie.processing.idl.run_ndabs import RunNDabs
+from addie.processing.idl.run_sum_scans import RunSumScans
+from addie.processing.idl.run_thread import RunThread
 
 from addie.menu.preview_ascii.step3_gui_handler import Step3GuiHandler
 
@@ -82,7 +82,7 @@ from addie.master_table.table_row_handler import TableRowHandler
 from addie.master_table.geometry_handler import DimensionsSetter
 from addie.master_table.selection_handler import TableHandler
 from addie.master_table.reduction_configuration_handler import ReductionConfigurationHandler
-from addie.processing.make_calibration_handler.make_calibration import MakeCalibrationLauncher
+from addie.processing.mantid.make_calibration_handler.make_calibration import MakeCalibrationLauncher
 from addie.master_table.periodic_table.material_handler import MaterialHandler
 from addie.master_table.mass_density_handler import MassDensityHandler
 try:

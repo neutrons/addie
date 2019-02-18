@@ -3,8 +3,8 @@ import os
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import (QCheckBox, QComboBox, QHBoxLayout, QMessageBox, QTableWidgetItem, QWidget)
 
-from addie.processing_idl.generate_sumthing import GenerateSumthing
-import addie.processing_idl.table_handler
+from addie.processing.idl.generate_sumthing import GenerateSumthing
+import addie.processing.idl.table_handler
 
 
 class PopulateMasterTable(object):

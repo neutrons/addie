@@ -6,8 +6,8 @@ from addie.menu.file.configuration.config_file_name_handler import ConfigFileNam
 from addie.utilities.conversion import str2bool
 from addie.utilities.gui_handler import GuiHandler
 from addie.autoNOM.step1_gui_handler import Step1GuiHandler
-from addie.processing_idl.import_table import ImportTable
-from addie.processing_idl.step2_gui_handler import Step2GuiHandler
+from addie.processing.idl.import_table import ImportTable
+from addie.processing.idl.step2_gui_handler import Step2GuiHandler
 
 
 class ImportConfiguration(object):

@@ -1,7 +1,7 @@
 from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QFileDialog, QMainWindow)
 from addie.utilities import load_ui
-from addie.processing_idl.mantid_script_handler import MantidScriptHandler
+from addie.processing.idl.mantid_script_handler import MantidScriptHandler
 from addie.utilities.file_handler import FileHandler
 
 

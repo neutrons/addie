@@ -1,9 +1,9 @@
 from __future__ import (absolute_import, division, print_function)
 import os
 
-import addie.processing_idl.table_handler
-from addie.processing_idl.mantid_reduction_dialogbox import MantidReductionDialogbox
-from addie.processing_idl.mantid_reduction_view import MantidReductionView
+import addie.processing.idl.table_handler
+from addie.processing.idl.mantid_reduction_dialogbox import MantidReductionDialogbox
+from addie.processing.idl.mantid_reduction_view import MantidReductionView
 from addie.utilities.job_status_handler import JobStatusHandler
 
 
@@ -70,7 +70,7 @@ class GlobalMantidReduction(object):
         self.parameters = _parameters
 
     def collect_runs(self):
-        o_table_handler = addie.processing_idl.table_handler.TableHandler(parent=self.parent)
+        o_table_handler = addie.processing.idl.table_handler.TableHandler(parent=self.parent)
         o_table_handler.retrieve_list_of_selected_rows()
         list_of_selected_row = o_table_handler.list_selected_row
         runs = []
