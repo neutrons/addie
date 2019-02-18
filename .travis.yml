@@ -1,16 +1,30 @@
-sudo: required
-
+language: cpp
 dist: trusty
-
-language: python
-
-python:
-- 2.7_with_system_site_packages  # For importing PyQt5 in virtual environment
-
+matrix:
+  include:
+  - os: linux
+    env: CONDA=2.7
+  - os: linux
+    env: CONDA=3.6
+  - os: osx
+    env: CONDA=2.7
+  - os: osx
+    env: CONDA=3.6
 before_install:
-- bash .ci/install_qt.sh
-
-before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"  # For testing UI in travis-ci
-  - sleep 3
+- |
+  if [ "$TRAVIS_OS_NAME" = "linux" ]; then export CXX=g++-4.8 CC=gcc-4.8; fi
+  if [ "$TRAVIS_OS_NAME" = "linux" ]; then OS=Linux-x86_64; else OS=MacOSX-x86_64; fi
+  wget -O miniconda.sh https://repo.continuum.io/miniconda/Miniconda${CONDA:0:1}-latest-$OS.sh
+  bash miniconda.sh -b -p $HOME/miniconda
+  export PATH="$HOME/miniconda/bin:$PATH"
+  conda config --set always_yes yes --set changeps1 no
+  conda config --add channels conda-forge
+  conda update -q conda
+  conda install -q conda-build
+install:
+- |
+  conda create -q -n test-environment python=$CONDA
+  source activate test-environment
+  conda list
+script:
+- echo "Success!" 
