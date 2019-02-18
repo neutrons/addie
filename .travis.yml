@@ -19,16 +19,16 @@ before_install:
   export PATH="$HOME/miniconda/bin:$PATH"
   conda config --set always_yes yes --set changeps1 no
   conda config --add channels conda-forge
-  conda create -q -n test-environment python=$CONDA
-  conda update -q conda
-  conda install -q conda-build
-  conda install -c mantid nexus poco
-  conda install --yes -c mantid/label/nightly mantid-framework
-  conda install --yes qt pyqt qtpy 
+  conda create  -n test-environment -q python=$CONDA
+  conda update  -n test-environment -q conda
+  conda install -n test-environment -q conda-build
+  conda install -n test-environment -c mantid nexus poco
+  conda install -n test-environment -c mantid/label/nightly mantid-framework
+  conda install -n test-environment qt pyqt qtpy 
 install:
 - |
   source activate test-environment
   conda list
 script:
-- python -c "import PyQt5"
 - python -c "import mantid"
+- python -c "import PyQt5"
