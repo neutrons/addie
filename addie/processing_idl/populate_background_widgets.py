@@ -1,6 +1,6 @@
 from __future__ import (absolute_import, division, print_function)
 import os
-from addie.step2_handler.exp_ini_file_loader import ExpIniFileLoader
+from addie.processing_idl.exp_ini_file_loader import ExpIniFileLoader
 
 
 class PopulateBackgroundWidgets(object):

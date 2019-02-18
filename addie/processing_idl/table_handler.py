@@ -7,13 +7,13 @@ from qtpy.QtCore import (Qt)
 from qtpy.QtGui import (QCursor)
 from qtpy.QtWidgets import (QFileDialog, QMenu, QMessageBox, QTableWidgetSelectionRange)
 
-import addie.step2_handler.populate_master_table
-from addie.step2_handler.export_table import ExportTable
-from addie.step2_handler.import_table import ImportTable
+import addie.processing_idl.populate_master_table
+from addie.processing_idl.export_table import ExportTable
+from addie.processing_idl.import_table import ImportTable
 from addie.utilities.file_handler import FileHandler
-from addie.step2_handler.populate_background_widgets import PopulateBackgroundWidgets
-from addie.step2_handler.sample_environment_handler import SampleEnvironmentHandler
-import addie.step2_handler.step2_gui_handler
+from addie.processing_idl.populate_background_widgets import PopulateBackgroundWidgets
+from addie.processing_idl.sample_environment_handler import SampleEnvironmentHandler
+import addie.processing_idl.step2_gui_handler
 
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
@@ -209,7 +209,7 @@ class TableHandler(object):
         _pop_back_wdg = PopulateBackgroundWidgets(parent=self.parent_no_ui)
         _pop_back_wdg.run()
 
-        _o_gui = addie.step2_handler.step2_gui_handler.Step2GuiHandler(parent=self.parent_no_ui)
+        _o_gui = addie.processing_idl.step2_gui_handler.Step2GuiHandler(parent=self.parent_no_ui)
         _o_gui.check_gui()
 
     def _export(self):
@@ -336,7 +336,7 @@ class TableHandler(object):
                 _selected_widget = self.parent.table.cellWidget(_row, 0).children()[1]
                 _selected_widget.setChecked(status)
 
-        _o_gui = addie.step2_handler.step2_gui_handler.Step2GuiHandler(parent=self.parent_no_ui)
+        _o_gui = addie.processing_idl.step2_gui_handler.Step2GuiHandler(parent=self.parent_no_ui)
         _o_gui.check_gui()
 
     def check_selection_status(self, state, row):
@@ -352,7 +352,7 @@ class TableHandler(object):
                     _selected_widget = self.parent.table.cellWidget(_row, 0).children()[1]
                     _selected_widget.setChecked(state)
 
-        _o_gui = addie.step2_handler.step2_gui_handler.Step2GuiHandler(parent=self.parent_no_ui)
+        _o_gui = addie.processing_idl.step2_gui_handler.Step2GuiHandler(parent=self.parent_no_ui)
         _o_gui.check_gui()
 
     def _cut(self):
@@ -362,7 +362,7 @@ class TableHandler(object):
     def _duplicate_row(self):
         _row = self.current_row
         metadata_to_copy = self._collect_metadata(row_index=_row)
-        o_populate = addie.step2_handler.populate_master_table.PopulateMasterTable(parent=self.parent_no_ui)
+        o_populate = addie.processing_idl.populate_master_table.PopulateMasterTable(parent=self.parent_no_ui)
         o_populate.add_new_row(metadata_to_copy, row=_row)
 
     def _plot_fetch_files(self, file_type='SofQ'):
@@ -473,7 +473,7 @@ class TableHandler(object):
         _row = self.current_row
         if _row == -1:
             _row = 0
-        o_populate = addie.step2_handler.populate_master_table.PopulateMasterTable(parent=self.parent_no_ui)
+        o_populate = addie.processing_idl.populate_master_table.PopulateMasterTable(parent=self.parent_no_ui)
         _metadata = o_populate.empty_metadata()
         o_populate.add_new_row(_metadata, row=_row)
 
@@ -498,13 +498,13 @@ class TableHandler(object):
             row = self.current_row
         self.parent.table.removeRow(row)
 
-        _o_gui = addie.step2_handler.step2_gui_handler.Step2GuiHandler(parent=self.parent_no_ui)
+        _o_gui = addie.processing_idl.step2_gui_handler.Step2GuiHandler(parent=self.parent_no_ui)
         _o_gui.check_gui()
 
     def _refresh_table(self):
         self.parent_no_ui.populate_table_clicked()
 
-        _o_gui = addie.step2_handler.step2_gui_handler.Step2GuiHandler(parent=self.parent_no_ui)
+        _o_gui = addie.processing_idl.step2_gui_handler.Step2GuiHandler(parent=self.parent_no_ui)
         _o_gui.check_gui()
 
     def _clear_table(self):
@@ -515,7 +515,7 @@ class TableHandler(object):
         self.parent.background_line_edit.setText("")
         self.parent.background_comboBox.clear()
 
-        _o_gui = addie.step2_handler.step2_gui_handler.Step2GuiHandler(parent=self.parent_no_ui)
+        _o_gui = addie.processing_idl.step2_gui_handler.Step2GuiHandler(parent=self.parent_no_ui)
         _o_gui.check_gui()
 
     def set_widget_state(self, _widget_state, _row):

@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 import matplotlib.cm as cm
 
-from addie.step2_handler.sample_environment_handler import SampleEnvironmentHandler
+from addie.processing_idl.sample_environment_handler import SampleEnvironmentHandler
 
 
 class TablePlotHandler:

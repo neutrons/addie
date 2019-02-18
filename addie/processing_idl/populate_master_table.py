@@ -3,8 +3,8 @@ import os
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import (QCheckBox, QComboBox, QHBoxLayout, QMessageBox, QTableWidgetItem, QWidget)
 
-from addie.step2_handler.generate_sumthing import GenerateSumthing
-import addie.step2_handler.table_handler
+from addie.processing_idl.generate_sumthing import GenerateSumthing
+import addie.processing_idl.table_handler
 
 
 class PopulateMasterTable(object):
@@ -60,7 +60,7 @@ class PopulateMasterTable(object):
         In this new version, the table will append the new entries
         '''
 
-        #o_table = addie.step2_handler.table_handler.TableHandler(parent = self.parent)
+        #o_table = addie.processing_idl.table_handler.TableHandler(parent = self.parent)
         # o_table._clear_table()
 
         # disable sorting

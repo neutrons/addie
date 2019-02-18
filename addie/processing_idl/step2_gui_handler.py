@@ -3,7 +3,7 @@ from qtpy.QtCore import (Qt)
 from qtpy.QtWidgets import (QFileDialog)
 import os
 
-import addie.step2_handler.table_handler
+import addie.processing_idl.table_handler
 from addie.utilities.math_tools import is_int, is_float
 from addie.general_handler.help_gui import check_status
 
@@ -105,7 +105,7 @@ class Step2GuiHandler(object):
 
     def define_new_output_file_name(self):
         """retrieve name of first row selected and use it to define output file name"""
-        o_table_handler = addie.step2_handler.table_handler.TableHandler(parent=self.parent_no_ui)
+        o_table_handler = addie.processing_idl.table_handler.TableHandler(parent=self.parent_no_ui)
         o_table_handler.retrieve_list_of_selected_rows()
         list_of_selected_row = o_table_handler.list_selected_row
         if len(list_of_selected_row) > 0:
@@ -208,7 +208,7 @@ class Step2GuiHandler(object):
         check_status(parent=self.parent_no_ui, button_name='ndabs')
 
     def at_least_one_row_checked(self):
-        o_table_handler = addie.step2_handler.table_handler.TableHandler(parent=self.parent_no_ui)
+        o_table_handler = addie.processing_idl.table_handler.TableHandler(parent=self.parent_no_ui)
         o_table_handler.retrieve_list_of_selected_rows()
         list_of_selected_row = o_table_handler.list_selected_row
         if len(list_of_selected_row) > 0:
@@ -221,7 +221,7 @@ class Step2GuiHandler(object):
         _selected_widget = self.parent.table.cellWidget(row, 0).children()
         if len(_selected_widget) > 0:
             if (_selected_widget[1].checkState() == Qt.Checked):
-                _table_handler = addie.step2_handler.table_handler.TableHandler(parent=self.parent_no_ui)
+                _table_handler = addie.processing_idl.table_handler.TableHandler(parent=self.parent_no_ui)
                 for _column in range(1, 7):
                     if _table_handler.retrieve_item_text(row, _column) == '':
                         _status_ok = False

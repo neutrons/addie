@@ -2,7 +2,7 @@ from __future__ import (absolute_import, division, print_function)
 import os
 
 from addie.utilities.gui_handler import GuiHandler
-from addie.step2_handler.export_table import ExportTable
+from addie.processing_idl.export_table import ExportTable
 from addie.configuration.config_file_name_handler import ConfigFileNameHandler
 from addie.utilities.file_handler import FileHandler
 

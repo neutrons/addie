@@ -1,8 +1,8 @@
 from __future__ import (absolute_import, division, print_function)
-from addie.step2_handler.export_table import ExportTable
-from addie.step2_handler.import_table import ImportTable
-from addie.step2_handler.table_handler import TableHandler
-from addie.step2_handler.populate_background_widgets import PopulateBackgroundWidgets
+from addie.processing_idl.export_table import ExportTable
+from addie.processing_idl.import_table import ImportTable
+from addie.processing_idl.table_handler import TableHandler
+from addie.processing_idl.populate_background_widgets import PopulateBackgroundWidgets
 
 
 class UndoHandler(object):
