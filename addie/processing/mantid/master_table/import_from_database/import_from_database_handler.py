@@ -10,8 +10,8 @@ from addie.utilities import load_ui
 from qtpy import QtGui, QtCore
 
 from addie.processing.mantid.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
-from addie.utilities.oncat import OncatErrorMessageWindow
-from addie.utilities.oncat import pyoncatGetIptsList, pyoncatGetNexus, \
+from addie.databases.oncat.oncat import OncatErrorMessageWindow
+from addie.databases.oncat.oncat import pyoncatGetIptsList, pyoncatGetNexus, \
     pyoncatGetRunsFromIpts, pyoncatGetTemplate
 from addie.processing.mantid.master_table.tree_definition import LIST_SEARCH_CRITERIA
 from addie.processing.mantid.master_table.periodic_table.material_handler import MaterialHandler

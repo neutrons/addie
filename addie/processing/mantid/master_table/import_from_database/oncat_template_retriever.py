@@ -3,7 +3,7 @@ from __future__ import (absolute_import, division, print_function)
 import numpy as np
 import re
 
-from addie.utilities.oncat import pyoncatGetTemplate
+from addie.databases.oncat.oncat import pyoncatGetTemplate
 
 
 class OncatTemplateRetriever:
