@@ -31,3 +31,4 @@ install:
   conda list
 script:
 - python setup.py install 
+- addie
