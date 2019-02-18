@@ -96,7 +96,7 @@ from addie.processing.mantid.master_table.import_from_database.load_into_master_
 
 import addie.addiedriver as driver
 import addie.specify_plots_style as ps
-import addie.edit_sq_dialog
+import addie.calculate_gr.edit_sq_dialog
 
 from addie.pdf_lines_manager import PDFPlotManager
 from addie.graphicviewlib import BraggView, GofRView, SofQView
@@ -1337,7 +1337,7 @@ class MainWindow(QMainWindow):
         """
         # create dialog instance if it does not exist
         if self._editSqDialog is None:
-            self._editSqDialog = addie.edit_sq_dialog.EditSofQDialog(self)
+            self._editSqDialog = addie.calculate_gr.edit_sq_dialog.EditSofQDialog(self)
 
         # get current S(Q) list and add to dialog
         sq_name_list = list()
