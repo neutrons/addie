@@ -8,10 +8,10 @@ import copy
 import numpy as np
 import random
 
-from addie.master_table.placzek_handler import PlaczekHandler
-from addie.master_table.selection_handler import TransferH3TableWidgetState
-from addie.master_table.periodic_table.chemical_formula_handler import format_chemical_formula_equation
-from addie.master_table.tree_definition import COLUMN_DEFAULT_HEIGHT, CONFIG_BUTTON_HEIGHT, CONFIG_BUTTON_WIDTH
+from addie.processing.mantid.master_table.placzek_handler import PlaczekHandler
+from addie.processing.mantid.master_table.selection_handler import TransferH3TableWidgetState
+from addie.processing.mantid.master_table.periodic_table.chemical_formula_handler import format_chemical_formula_equation
+from addie.processing.mantid.master_table.tree_definition import COLUMN_DEFAULT_HEIGHT, CONFIG_BUTTON_HEIGHT, CONFIG_BUTTON_WIDTH
 
 
 class TableRowHandler:

@@ -9,24 +9,24 @@ from qtpy.QtWidgets import QDialog, QComboBox, QLineEdit, QPushButton, QWidget, 
 from addie.utilities import load_ui
 from qtpy import QtGui, QtCore
 
-from addie.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
+from addie.processing.mantid.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
 from addie.utilities.oncat import OncatErrorMessageWindow
 from addie.utilities.oncat import pyoncatGetIptsList, pyoncatGetNexus, \
     pyoncatGetRunsFromIpts, pyoncatGetTemplate
-from addie.master_table.tree_definition import LIST_SEARCH_CRITERIA
-from addie.master_table.periodic_table.material_handler import MaterialHandler
-from addie.master_table.table_row_handler import TableRowHandler
-from addie.master_table.master_table_loader import LoaderOptionsInterface
-from addie.master_table.import_from_database.global_rule_handler import GlobalRuleHandler
-from addie.master_table.import_from_database.table_search_engine import TableSearchEngine
-from addie.master_table.import_from_database.oncat_template_retriever import OncatTemplateRetriever
-from addie.master_table.import_from_database.gui_handler import GuiHandler, ImportFromDatabaseTableHandler
-from addie.master_table.import_from_database import utilities as ImportFromDatabaseUtilities
-from addie.master_table.import_from_database.import_table_from_oncat_handler import ImportTableFromOncat
-from addie.master_table.import_from_database.table_widget_rule_handler import TableWidgetRuleHandler
-from addie.master_table.import_from_database.apply_rule_handler import ApplyRuleHandler
-from addie.master_table.import_from_database.data_to_import_handler import DataToImportHandler
-from addie.master_table.import_from_database.format_json_from_database_to_master_table import FormatJsonFromDatabaseToMasterTable
+from addie.processing.mantid.master_table.tree_definition import LIST_SEARCH_CRITERIA
+from addie.processing.mantid.master_table.periodic_table.material_handler import MaterialHandler
+from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
+from addie.processing.mantid.master_table.master_table_loader import LoaderOptionsInterface
+from addie.processing.mantid.master_table.import_from_database.global_rule_handler import GlobalRuleHandler
+from addie.processing.mantid.master_table.import_from_database.table_search_engine import TableSearchEngine
+from addie.processing.mantid.master_table.import_from_database.oncat_template_retriever import OncatTemplateRetriever
+from addie.processing.mantid.master_table.import_from_database.gui_handler import GuiHandler, ImportFromDatabaseTableHandler
+#from addie.processing.mantid.master_table.import_from_database import utilities as ImportFromDatabaseUtilities
+from addie.processing.mantid.master_table.import_from_database.import_table_from_oncat_handler import ImportTableFromOncat
+from addie.processing.mantid.master_table.import_from_database.table_widget_rule_handler import TableWidgetRuleHandler
+from addie.processing.mantid.master_table.import_from_database.apply_rule_handler import ApplyRuleHandler
+from addie.processing.mantid.master_table.import_from_database.data_to_import_handler import DataToImportHandler
+from addie.processing.mantid.master_table.import_from_database.format_json_from_database_to_master_table import FormatJsonFromDatabaseToMasterTable
 
 from addie.utilities.general import generate_random_key, remove_white_spaces
 from addie.utilities.gui_handler import TableHandler

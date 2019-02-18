@@ -5,7 +5,7 @@ import scipy.constants
 from qtpy.QtWidgets import QMainWindow
 from addie.utilities import load_ui
 
-from addie.master_table.table_row_handler import TableRowHandler
+from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
 from addie.utilities.math_tools import is_number, volume_of_cylinder, volume_of_hollow_cylinder, volume_of_sphere
 
 

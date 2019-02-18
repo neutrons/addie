@@ -5,16 +5,16 @@ from qtpy import QtGui
 import numpy as np
 import pprint
 
-from addie.master_table.tree_definition import INDEX_OF_COLUMNS_SEARCHABLE
-from addie.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_COMBOBOX
-from addie.master_table.tree_definition import INDEX_OF_SPECIAL_COLUMNS_SEARCHABLE
-from addie.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS
-from addie.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA
-from addie.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_MASS_DENSITY
-from addie.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_ITEMS
-from addie.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_CHECKBOX
+from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_SEARCHABLE
+from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_COMBOBOX
+from addie.processing.mantid.master_table.tree_definition import INDEX_OF_SPECIAL_COLUMNS_SEARCHABLE
+from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS
+from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA
+from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_MASS_DENSITY
+from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_ITEMS
+from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_CHECKBOX
 
-from addie.master_table.utilities import Utilities
+from addie.processing.mantid.master_table.utilities import Utilities
 
 
 class SelectionHandler:

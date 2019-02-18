@@ -6,10 +6,10 @@ from qtpy import QtCore
 import copy
 
 from addie.utilities.general import remove_white_spaces
-from addie.master_table.import_from_database.oncat_template_retriever import OncatTemplateRetriever
+from addie.processing.mantid.master_table.import_from_database.oncat_template_retriever import OncatTemplateRetriever
 from addie.utilities.oncat import pyoncatGetIptsList, pyoncatGetNexus, \
     pyoncatGetRunsFromIpts, pyoncatGetTemplate
-from addie.master_table.import_from_database import utilities as ImportFromDatabaseUtilities
+#from addie.processing.mantid.master_table.import_from_database import utilities as ImportFromDatabaseUtilities
 from addie.utilities.general import json_extractor
 
 

@@ -8,8 +8,8 @@ from qtpy.QtWidgets import QMainWindow, QApplication
 from addie.utilities import load_ui
 from qtpy import QtGui
 
-from addie.master_table.table_row_handler import TableRowHandler
-from addie.master_table.periodic_table.isotopes_handler import IsotopesHandler
+from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
+from addie.processing.mantid.master_table.periodic_table.isotopes_handler import IsotopesHandler
 
 from addie.icons import icons_rc
 

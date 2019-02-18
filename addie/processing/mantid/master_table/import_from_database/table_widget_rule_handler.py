@@ -7,7 +7,7 @@ from addie.utilities import load_ui
 from qtpy import QtCore
 
 from addie.utilities.general import generate_random_key
-from addie.master_table.tree_definition import LIST_SEARCH_CRITERIA
+from addie.processing.mantid.master_table.tree_definition import LIST_SEARCH_CRITERIA
 from addie.utilities.gui_handler import unlock_signals_ui
 
 

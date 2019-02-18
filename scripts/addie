@@ -9,6 +9,7 @@ import itertools
 import pickle
 import psutil
 import pprint
+from collections import OrderedDict
 
 from addie.ipythondockwidget import IPythonDockWidget
 # must be imported through qtpy before any other gui imports
@@ -73,26 +74,25 @@ from addie.mantid_handler.browse_file_folder_handler import BrowseFileFolderHand
 from addie.mantid_handler.mantid_reduction import GlobalMantidReduction
 from addie.mantid_handler.mantid_thread import MantidThread
 
-from addie.master_table.master_table_loader import FromDictionaryToTableUi, AsciiLoader
-from addie.master_table.table_tree_handler import TableTreeHandler, TableInitialization, TableConfig, H3TableHandler
-from addie.master_table.table_tree_handler import SaveConfigInterface, TableTree
-from addie.master_table.tree_definition import *
-# from addie.ui_table_tree_save_config import Ui_Dialog as UiDialogSave
-from addie.master_table.table_row_handler import TableRowHandler
-from addie.master_table.geometry_handler import DimensionsSetter
-from addie.master_table.selection_handler import TableHandler
-from addie.master_table.reduction_configuration_handler import ReductionConfigurationHandler
+from addie.processing.mantid.master_table.master_table_loader import FromDictionaryToTableUi, AsciiLoader
+from addie.processing.mantid.master_table.table_tree_handler import TableTreeHandler, TableInitialization, TableConfig, H3TableHandler
+from addie.processing.mantid.master_table.table_tree_handler import SaveConfigInterface, TableTree
+from addie.processing.mantid.master_table import *
+from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
+from addie.processing.mantid.master_table.geometry_handler import DimensionsSetter
+from addie.processing.mantid.master_table.selection_handler import TableHandler
+from addie.processing.mantid.master_table.reduction_configuration_handler import ReductionConfigurationHandler
 from addie.processing.mantid.make_calibration_handler.make_calibration import MakeCalibrationLauncher
-from addie.master_table.periodic_table.material_handler import MaterialHandler
-from addie.master_table.mass_density_handler import MassDensityHandler
+from addie.processing.mantid.master_table.periodic_table.material_handler import MaterialHandler
+from addie.processing.mantid.master_table.mass_density_handler import MassDensityHandler
 try:
-    from addie.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
+    from addie.processing.mantid.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
     ONCAT_ENABLED = True
 except ImportError:
     print('pyoncat module not found. Functionality disabled')
     ONCAT_ENABLED = False
-from addie.master_table.import_from_run_number_handler import ImportFromRunNumberHandler
-from addie.master_table.import_from_database.load_into_master_table import LoadIntoMasterTable
+from addie.processing.mantid.master_table.import_from_run_number_handler import ImportFromRunNumberHandler
+from addie.processing.mantid.master_table.import_from_database.load_into_master_table import LoadIntoMasterTable
 
 import addie.addiedriver as driver
 import addie.specify_plots_style as ps

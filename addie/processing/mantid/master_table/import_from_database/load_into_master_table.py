@@ -2,8 +2,8 @@ from __future__ import (absolute_import, division, print_function)
 from qtpy import QtCore
 from qtpy.QtWidgets import QApplication
 
-from addie.master_table.import_from_database.conflicts_solver import ConflictsSolverHandler
-from addie.master_table.table_row_handler import TableRowHandler
+from addie.processing.mantid.master_table.import_from_database.conflicts_solver import ConflictsSolverHandler
+from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
 from addie.utilities.gui_handler import TableHandler
 
 

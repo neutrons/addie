@@ -8,10 +8,10 @@ from qtpy.QtWidgets import QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem
 from addie.utilities import load_ui
 from qtpy import QtGui
 
-from addie.master_table.table_row_handler import TableRowHandler
-from addie.master_table.placzek_handler import PlaczekHandler
-from addie.master_table.selection_handler import TransferH3TableWidgetState
-from addie.master_table.tree_definition import COLUMN_DEFAULT_HEIGHT
+from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
+from addie.processing.mantid.master_table.placzek_handler import PlaczekHandler
+from addie.processing.mantid.master_table.selection_handler import TransferH3TableWidgetState
+from addie.processing.mantid.master_table.tree_definition import COLUMN_DEFAULT_HEIGHT
 from addie.utilities.math_tools import is_number
 
 from addie.icons import icons_rc

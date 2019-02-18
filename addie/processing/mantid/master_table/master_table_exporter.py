@@ -6,8 +6,8 @@ import json
 
 from qtpy.QtCore import Qt
 
-from addie.master_table.tree_definition import SAMPLE_FIRST_COLUMN, NORMALIZATION_FIRST_COLUMN
-from addie.master_table.utilities import Utilities
+from addie.processing.mantid.master_table.tree_definition import SAMPLE_FIRST_COLUMN, NORMALIZATION_FIRST_COLUMN
+from addie.processing.mantid.master_table.utilities import Utilities
 
 _export_dictionary = OrderedDict()
 

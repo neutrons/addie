@@ -3,7 +3,7 @@ from __future__ import (absolute_import, division, print_function)
 import collections
 import numpy as np
 
-from addie.master_table.import_from_database.gui_handler import FilterTableHandler, FilterResultTableHandler
+from addie.processing.mantid.master_table.import_from_database.gui_handler import FilterTableHandler, FilterResultTableHandler
 
 
 class ApplyRuleHandler:
