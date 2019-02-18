@@ -4,7 +4,7 @@ from qtpy.QtWidgets import QDialog, QFileDialog
 from addie.utilities import load_ui
 from qtpy import QtGui, QtCore
 
-from addie.make_calibration_handler.make_calibration import MakeCalibrationLauncher
+from addie.processing.make_calibration_handler.make_calibration import MakeCalibrationLauncher
 from addie.master_table.utilities import LoadGroupingFile
 
 from addie.icons import icons_rc
