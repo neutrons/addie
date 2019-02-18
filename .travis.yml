@@ -21,6 +21,7 @@ before_install:
   conda config --add channels conda-forge
   conda update -q conda
   conda install -q conda-build
+  conda install -c mantid/label/nightly mantid-framework
 install:
 - |
   conda create -q -n test-environment python=$CONDA
