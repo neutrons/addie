@@ -21,10 +21,9 @@ before_install:
   conda config --add channels conda-forge
   conda update -q conda
   conda install -q conda-build
-  conda install -c mantid nexus
-  conda install -c mantid poco
+  conda install -c mantid nexus poco
   conda install --yes -c mantid/label/nightly mantid-framework
-  conda install --yes qt=5 pyqt=5 qtpy=1.1.2 --force
+  conda install --yes qt pyqt qtpy
 install:
 - |
   conda install --yes --file requirements.txt
@@ -32,5 +31,4 @@ install:
   source activate test-environment
   conda list
 script:
-- python setup.py install 
-- addie
+- bash addiedevel.sh
