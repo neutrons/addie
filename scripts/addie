@@ -67,7 +67,7 @@ from addie.processing_idl.run_ndabs import RunNDabs
 from addie.processing_idl.run_sum_scans import RunSumScans
 from addie.processing_idl.run_thread import RunThread
 
-from addie.menu.step3_handler.step3_gui_handler import Step3GuiHandler
+from addie.menu.preview_ascii.step3_gui_handler import Step3GuiHandler
 
 from addie.mantid_handler.browse_file_folder_handler import BrowseFileFolderHandler
 from addie.mantid_handler.mantid_reduction import GlobalMantidReduction
