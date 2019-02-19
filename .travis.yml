@@ -6,16 +6,9 @@ matrix:
     env: CONDA=2.7
   - os: linux
     env: CONDA=3.6
-  - os: osx
-    osx_image: xcode7.3
-    env: CONDA=2.7
-  - os: osx
-    osx_image: xcode7.3
-    env: CONDA=3.6
 before_install:
 - |
   if [ "$TRAVIS_OS_NAME" = "linux" ]; then export CXX=g++-4.8 CC=gcc-4.8; fi
-  if [ "$TRAVIS_OS_NAME" = "linux" ]; then OS=Linux-x86_64; else OS=MacOSX-x86_64; fi
   wget -O miniconda.sh https://repo.continuum.io/miniconda/Miniconda${CONDA:0:1}-latest-$OS.sh
   bash miniconda.sh -b -p $HOME/miniconda
   export PATH="$HOME/miniconda/bin:$PATH"
