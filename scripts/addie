@@ -333,8 +333,8 @@ class MainWindow(QMainWindow):
         self.init_parameters()
         self.set_default_folders_path()
         self._init_widgets()
-        init_step1 = InitStep1(parent=self)
-        init_step2 = InitStep2(parent=self)
+        InitStep1(parent=self)
+        InitStep2(parent=self)
         self.init_master_table()
 
         # define the event handling methods
