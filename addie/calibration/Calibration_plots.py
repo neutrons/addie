@@ -74,9 +74,9 @@ def plot_delta_d_ttheta(ddwkspc,groupwkspc=None,cmapstr='viridis'):
         grp, g_bool, h_g = extractY(groupwkspc)
         if len(grp)!=len(res_y):
             raise RuntimeError("the groping workspace and the Delta d/ d workspace should have the same number of detector specta")
+        grp = np.reshape(grp, -1)
     else:
         grp='b'
-    #print(grp)
     #determine theta values
     ttheta = np.zeros(len(res_y))
     h_sI = h_nr.spectrumInfo()

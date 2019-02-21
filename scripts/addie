@@ -11,23 +11,11 @@ import psutil
 import pprint
 from collections import OrderedDict
 
-from addie.ipythondockwidget import IPythonDockWidget
 # must be imported through qtpy before any other gui imports
-from addie.ipythondockwidget import IPythonDockWidget
 from qtpy.QtCore import (QProcess, Qt, QUrl)
 from qtpy.QtGui import (QDesktopServices, QIcon)
 from qtpy import QtGui
 from qtpy.QtWidgets import (QApplication, QFileDialog, QMainWindow, QMessageBox, QTableWidgetItem, QVBoxLayout)
-
-# try:
-#     from PyQt4.QtGui import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QMainWindow, QApplication, QMainWindow
-#     from PyQt4 import QtCore, QtGui
-# except ImportError:
-#     try:
-#         from PyQt5.QtWidgets import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QMainWindow, QApplication
-#         from PyQt5 import QtCore, QtGui
-#     except ImportError:
-#         raise ImportError("Requires PyQt4 or PyQt5")
 
 #import addie.ui_mainWindow
 #import addie.ui_table_tree
@@ -100,13 +88,17 @@ import addie.calculate_gr.edit_sq_dialog
 
 from addie.calculate_gr.pdf_lines_manager import PDFPlotManager
 from addie.graphicviewlib import BraggView, GofRView, SofQView
-from addie.ipythondockwidget import IPythonDockWidget
+# use mantid's ipython widget
+from mantidqt.widgets.jupyterconsole import InProcessJupyterConsole
 from addie.treelib import BraggTree, GofRTree
 
 from addie.icons import icons_rc
 
 DEBUG = False
 
+IPYTHON_STARTUP_CODE = '''import numpy as np
+from mantid.simpleapi import *
+'''
 
 class MainWindow(QMainWindow):
     """ Main addie window
@@ -327,8 +319,6 @@ class MainWindow(QMainWindow):
 
         self.ui.graphicsView_sq.set_main(self)
 
-        self.ui.dockWidget_ipython.setup()
-
         # set widgets
         self.init_parameters()
         self.set_default_folders_path()
@@ -501,18 +491,16 @@ class MainWindow(QMainWindow):
         self.ui.treeWidget_braggWSList = BraggTree(self)
         temp_layout.addWidget(self.ui.treeWidget_braggWSList)
 
-        # from addie.ipythondockwidget import IPythonDockWidget
         # frame_dockWidget_ipython
         temp_layout = QVBoxLayout()
         self.ui.frame_dockWidget_ipython.setLayout(temp_layout)
-        self.ui.dockWidget_ipython = IPythonDockWidget(self)
+        self.ui.dockWidget_ipython = InProcessJupyterConsole(self, startup_code=IPYTHON_STARTUP_CODE)
         temp_layout.addWidget(self.ui.dockWidget_ipython)
 
     def _init_widgets(self):
         """ Initialize widgets
         Returns
         -------
-
         """
 
         #init_size_splitter = self.ui.splitter.size()
@@ -544,8 +532,6 @@ class MainWindow(QMainWindow):
         self.ui.treeWidget_grWsList.set_main_window(self)
         self.ui.treeWidget_grWsList.add_main_item('workspaces', append=True, as_current_index=False)
         self.ui.treeWidget_grWsList.add_main_item('SofQ', append=True, as_current_index=False)
-
-        self.ui.dockWidget_ipython.iPythonWidget.set_main_application(self)
 
         self.ui.comboBox_SofQType.clear()
         self.ui.comboBox_SofQType.addItem('S(Q)')
