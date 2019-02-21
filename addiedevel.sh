@@ -8,8 +8,8 @@ else
 fi
 
 # select the python to start with
-if [ $1 ]; then
-    CMD=$1
+if [ -n "$1" ]; then
+    CMD="$@"
 else
     CMD="$(command -v mantidpythonnightly) --classic"
 fi
