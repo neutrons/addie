@@ -10,8 +10,10 @@ fi
 # select the python to start with
 if [ -n "$1" ]; then
     CMD="$@"
-else
+elif [ "$(command -v mantidpythonnightly --classic)" ]; then
     CMD="$(command -v mantidpythonnightly) --classic"
+else
+    CMD="$(command -v mantidpython) --classic"
 fi
 
 PYTHON_VERSION=`$CMD -c 'import sys; version=sys.version_info[:3]; print("{0}.{1}".format(*version))'`
