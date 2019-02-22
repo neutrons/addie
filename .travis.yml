@@ -19,8 +19,8 @@ before_install:
   conda create  -n test-environment -q python=$CONDA
   conda update  -n test-environment -q conda
   conda install -n test-environment -q conda-build
-  conda install -n test-environment -c mantid nexus poco
-  conda install -n test-environment -c mantid mantid-framework
+  #conda install -n test-environment -c mantid nexus poco
+  conda install -n test-environment -c mantid/label/nightly mantid-framework
   conda install -n test-environment qt pyqt qtpy pygments ipython qtconsole
 install:
 - |
@@ -30,4 +30,4 @@ script:
 - python -c "import mantid"
 - python -c "import qtpy"
 - python setup.py install
-- addie
+#- addie
