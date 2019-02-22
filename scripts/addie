@@ -737,9 +737,9 @@ class MainWindow(QMainWindow):
         else:
             raise RuntimeError('PDF filter {0} is not recognized.'.format(use_filter_str))
         rho0_str = str(self.ui.lineEdit_rho.text())
-        if rho0_str.isdigit():
-            rho0 = float(rho0_str)
-        else:
+        try:
+            rho0=float(rho0_str)
+        except ValueError:
             rho0 = None
 
         # PDF type
