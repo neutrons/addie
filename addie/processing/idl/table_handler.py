@@ -102,6 +102,11 @@ class TableHandler(object):
         _uncheck_all = -1
         _undo = -1
         _redo = -1
+        _plot_sofq_diff_first_run_row = -1
+        _plot_sofq_diff_average_row = -1
+        _plot_cryostat = -1
+        _plot_furnace = -1
+        _invert_selection = -1
 
         menu = QMenu(self.parent_no_ui)
 
