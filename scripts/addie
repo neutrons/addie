@@ -49,7 +49,7 @@ from addie.initialization.init_step2 import InitStep2
 from addie.processing.idl.populate_master_table import PopulateMasterTable
 from addie.processing.idl.populate_background_widgets import PopulateBackgroundWidgets
 from addie.processing.idl.step2_gui_handler import Step2GuiHandler
-from addie.processing.idl.table_handler import TableHandler
+from addie.processing.idl.table_handler import TableHandler as IdlTableHandler
 from addie.processing.idl.create_sample_files import CreateSampleFiles
 from addie.processing.idl.create_ndsum_file import CreateNdsumFile
 from addie.processing.idl.run_ndabs import RunNDabs
@@ -68,7 +68,7 @@ from addie.processing.mantid.master_table.table_tree_handler import SaveConfigIn
 from addie.processing.mantid.master_table import *
 from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
 from addie.processing.mantid.master_table.geometry_handler import DimensionsSetter
-from addie.processing.mantid.master_table.selection_handler import TableHandler
+from addie.processing.mantid.master_table.selection_handler import TableHandler as MtdTableHandler
 from addie.processing.mantid.master_table.reduction_configuration_handler import ReductionConfigurationHandler
 from addie.processing.mantid.make_calibration_handler.make_calibration import MakeCalibrationLauncher
 from addie.processing.mantid.master_table.periodic_table.material_handler import MaterialHandler
@@ -2379,7 +2379,7 @@ class MainWindow(QMainWindow):
     def import_table_clicked(self):
         self.ui.table.blockSignals(True)
 
-        _o_table = TableHandler(parent=self)
+        _o_table = IdlTableHandler(parent=self)
         _o_table._import()
         self.name_search_clicked()
 
@@ -2389,7 +2389,7 @@ class MainWindow(QMainWindow):
         self.ui.table.blockSignals(False)
 
     def export_table_clicked(self):
-        _o_table = TableHandler(parent=self)
+        _o_table = IdlTableHandler(parent=self)
         _o_table._export()
 
     def table_select_state_changed(self, state, row):
@@ -2402,11 +2402,11 @@ class MainWindow(QMainWindow):
         _o_gui.define_new_sum_scans_output_file_name()
 
     def name_search_clicked(self):
-        o_table = TableHandler(parent=self)
+        o_table = IdlTableHandler(parent=self)
         o_table.name_search()
 
     def clear_name_search_clicked(self):
-        o_table = TableHandler(parent=self)
+        o_table = IdlTableHandler(parent=self)
         self.ui.name_search.setText('')
         o_table.name_search()
 
@@ -2475,7 +2475,7 @@ class MainWindow(QMainWindow):
         o_gui.check_gui()
 
     def table_right_click(self, position):
-        _o_table = TableHandler(parent=self)
+        _o_table = IdlTableHandler(parent=self)
         _o_table.right_click(position=position)
 
     def run_sum_scans_clicked(self):
@@ -2546,11 +2546,11 @@ class MainWindow(QMainWindow):
     # events of the table and the tree
 
     def table_search(self, text):
-        o_table = TableHandler(parent=self)
+        o_table = MtdTableHandler(parent=self)
         o_table.search(text)
 
     def table_search_clear(self):
-        o_table = TableHandler(parent=self)
+        o_table = MtdTableHandler(parent=self)
         o_table.clear_search()
 
     def load_this_config(self, key='', resize=False):
