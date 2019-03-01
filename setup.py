@@ -1,6 +1,4 @@
 from setuptools import setup, find_packages
-import os
-import sys
 import versioneer  # https://github.com/warner/python-versioneer
 
 setup(name="addie",
@@ -18,4 +16,4 @@ setup(name="addie",
       include_package_data=True,
       install_requires=['numpy', 'matplotlib', 'periodictable'],
       setup_requires=[],
-)
+      )
