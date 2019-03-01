@@ -6,7 +6,7 @@ from qtpy.QtCore import (Signal)
 from qtpy.QtGui import (QCursor)
 from qtpy.QtWidgets import (QAction, QMenu)
 
-from . import mplgraphicsview as base
+from addie.utilities import mplgraphicsview as base
 
 
 class BraggView(base.MplGraphicsView):
@@ -169,9 +169,9 @@ class BraggView(base.MplGraphicsView):
         print('[DB] Index = ', self._currColorStyleMarkerIndex)
 
         # get color with current color index
-        marker_index = self._currColorStyleMarkerIndex / (num_style * num_color)
-        style_index = self._currColorStyleMarkerIndex % (num_style * num_color) / num_color
-        color_index = self._currColorStyleMarkerIndex % (num_style * num_color) % num_color
+        marker_index = int(self._currColorStyleMarkerIndex / (num_style * num_color))
+        style_index = int(self._currColorStyleMarkerIndex % (num_style * num_color) / num_color)
+        color_index = int(self._currColorStyleMarkerIndex % (num_style * num_color) % num_color)
 
         color = self._gssColorList[color_index]
         style = self._gssLineStyleList[style_index]

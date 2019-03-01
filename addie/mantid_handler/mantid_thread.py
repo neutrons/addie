@@ -5,7 +5,7 @@ import os
 from mantid.simpleapi import *
 import mantid
 
-from addie.step2_handler.mantid_script_handler import MantidScriptHandler
+from addie.processing.idl.mantid_script_handler import MantidScriptHandler
 
 
 class MantidThread(QThread):

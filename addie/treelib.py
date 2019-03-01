@@ -7,7 +7,7 @@ import os
 from qtpy.QtCore import (QModelIndex)
 from qtpy.QtGui import (QStandardItem, QStandardItemModel)
 from qtpy.QtWidgets import (QAction, QFileDialog)
-from . import customtreeview as base
+from addie.utilities import customtreeview as base
 
 
 class BraggTree(base.CustomizedTreeView):

@@ -9,6 +9,7 @@ import itertools
 import pickle
 import psutil
 import pprint
+from collections import OrderedDict
 
 # must be imported through qtpy before any other gui imports
 from qtpy.QtCore import (QProcess, Qt, QUrl)
@@ -20,16 +21,16 @@ from qtpy.QtWidgets import (QApplication, QFileDialog, QMainWindow, QMessageBox,
 #import addie.ui_table_tree
 #import addie.step1
 #import addie.step2
-from addie.configuration_initializer import ConfigurationInitializer
+from addie.initialization.configuration import ConfigurationInitializer
 from addie.utilities.general import get_ucams
 from addie.utilities import load_ui
 
 from addie.about import AboutDialog
-from addie.advanced_window_handler.advanced_window import AdvancedWindowLauncher
-from addie.configuration.export_configuration import ExportConfiguration
-from addie.configuration.import_configuration import ImportConfiguration
+from addie.menu.file.settings.advanced_file_window import AdvancedWindowLauncher
+from addie.menu.file.configuration.export_configuration import ExportConfiguration
+from addie.menu.file.configuration.import_configuration import ImportConfiguration
 
-from addie.general_handler.help_gui import HelpGui, help_button_activator
+from addie.help_handler.help_gui import HelpGui, help_button_activator
 
 from addie.utilities.job_status_handler import JobStatusHandler
 from addie.utilities.job_monitor_thread import JobMonitorThread
@@ -39,54 +40,53 @@ from addie.utilities.ipts_file_transfer_dialog import IptsFileTransferDialog
 
 from addie.initialization.init_step1 import InitStep1
 
-from addie.step1_handler.step1_gui_handler import Step1GuiHandler
-from addie.step1_handler.run_step1 import RunStep1
-from addie.step2_handler.load_table_intermediate_step_interface import loadTableIntermediateStepInterface
-from addie.step2_handler.undo_handler import UndoHandler
+from addie.autoNOM.step1_gui_handler import Step1GuiHandler
+from addie.autoNOM.run_step1 import RunStep1
+from addie.processing.idl.load_table_intermediate_step_interface import loadTableIntermediateStepInterface
+from addie.processing.idl.undo_handler import UndoHandler
 
 from addie.initialization.init_step2 import InitStep2
-from addie.step2_handler.populate_master_table import PopulateMasterTable
-from addie.step2_handler.populate_background_widgets import PopulateBackgroundWidgets
-from addie.step2_handler.step2_gui_handler import Step2GuiHandler
-from addie.step2_handler.table_handler import TableHandler
-from addie.step2_handler.create_sample_files import CreateSampleFiles
-from addie.step2_handler.create_ndsum_file import CreateNdsumFile
-from addie.step2_handler.run_ndabs import RunNDabs
-from addie.step2_handler.run_sum_scans import RunSumScans
-from addie.step2_handler.run_thread import RunThread
+from addie.processing.idl.populate_master_table import PopulateMasterTable
+from addie.processing.idl.populate_background_widgets import PopulateBackgroundWidgets
+from addie.processing.idl.step2_gui_handler import Step2GuiHandler
+from addie.processing.idl.table_handler import TableHandler
+from addie.processing.idl.create_sample_files import CreateSampleFiles
+from addie.processing.idl.create_ndsum_file import CreateNdsumFile
+from addie.processing.idl.run_ndabs import RunNDabs
+from addie.processing.idl.run_sum_scans import RunSumScans
+from addie.processing.idl.run_thread import RunThread
 
-from addie.step3_handler.step3_gui_handler import Step3GuiHandler
+from addie.menu.preview_ascii.step3_gui_handler import Step3GuiHandler
 
 from addie.mantid_handler.browse_file_folder_handler import BrowseFileFolderHandler
 from addie.mantid_handler.mantid_reduction import GlobalMantidReduction
 from addie.mantid_handler.mantid_thread import MantidThread
 
-from addie.master_table.master_table_loader import FromDictionaryToTableUi, AsciiLoader
-from addie.master_table.table_tree_handler import TableTreeHandler, TableInitialization, TableConfig, H3TableHandler
-from addie.master_table.table_tree_handler import SaveConfigInterface, TableTree
-from addie.master_table.tree_definition import *
-# from addie.ui_table_tree_save_config import Ui_Dialog as UiDialogSave
-from addie.master_table.table_row_handler import TableRowHandler
-from addie.master_table.geometry_handler import DimensionsSetter
-from addie.master_table.selection_handler import TableHandler
-from addie.master_table.reduction_configuration_handler import ReductionConfigurationHandler
-from addie.make_calibration_handler.make_calibration import MakeCalibrationLauncher
-from addie.master_table.periodic_table.material_handler import MaterialHandler
-from addie.master_table.mass_density_handler import MassDensityHandler
+from addie.processing.mantid.master_table.master_table_loader import FromDictionaryToTableUi, AsciiLoader
+from addie.processing.mantid.master_table.table_tree_handler import TableTreeHandler, TableInitialization, TableConfig, H3TableHandler
+from addie.processing.mantid.master_table.table_tree_handler import SaveConfigInterface, TableTree
+from addie.processing.mantid.master_table import *
+from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
+from addie.processing.mantid.master_table.geometry_handler import DimensionsSetter
+from addie.processing.mantid.master_table.selection_handler import TableHandler
+from addie.processing.mantid.master_table.reduction_configuration_handler import ReductionConfigurationHandler
+from addie.processing.mantid.make_calibration_handler.make_calibration import MakeCalibrationLauncher
+from addie.processing.mantid.master_table.periodic_table.material_handler import MaterialHandler
+from addie.processing.mantid.master_table.mass_density_handler import MassDensityHandler
 try:
-    from addie.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
+    from addie.processing.mantid.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
     ONCAT_ENABLED = True
 except ImportError:
     print('pyoncat module not found. Functionality disabled')
     ONCAT_ENABLED = False
-from addie.master_table.import_from_run_number_handler import ImportFromRunNumberHandler
-from addie.master_table.import_from_database.load_into_master_table import LoadIntoMasterTable
+from addie.processing.mantid.master_table.import_from_run_number_handler import ImportFromRunNumberHandler
+from addie.processing.mantid.master_table.import_from_database.load_into_master_table import LoadIntoMasterTable
 
 import addie.addiedriver as driver
-import addie.specify_plots_style as ps
-import addie.edit_sq_dialog
+import addie.utilities.specify_plots_style as ps
+import addie.calculate_gr.edit_sq_dialog
 
-from addie.pdf_lines_manager import PDFPlotManager
+from addie.calculate_gr.pdf_lines_manager import PDFPlotManager
 from addie.graphicviewlib import BraggView, GofRView, SofQView
 # use mantid's ipython widget
 from mantidqt.widgets.jupyterconsole import InProcessJupyterConsole
@@ -323,8 +323,8 @@ class MainWindow(QMainWindow):
         self.init_parameters()
         self.set_default_folders_path()
         self._init_widgets()
-        init_step1 = InitStep1(parent=self)
-        init_step2 = InitStep2(parent=self)
+        InitStep1(parent=self)
+        InitStep2(parent=self)
         self.init_master_table()
 
         # define the event handling methods
@@ -1323,7 +1323,7 @@ class MainWindow(QMainWindow):
         """
         # create dialog instance if it does not exist
         if self._editSqDialog is None:
-            self._editSqDialog = addie.edit_sq_dialog.EditSofQDialog(self)
+            self._editSqDialog = addie.calculate_gr.edit_sq_dialog.EditSofQDialog(self)
 
         # get current S(Q) list and add to dialog
         sq_name_list = list()
@@ -2204,13 +2204,26 @@ class MainWindow(QMainWindow):
 
     def activate_reduction_tabs(self):
         if self.post_processing == 'idl':
+            tab_0 = True
             tab_1 = True
             tab_2 = False
+            current_index=0
+            visible_menu_configuration = True
         else:
+            tab_0 = False
             tab_1 = False
             tab_2 = True
+            current_index=2
+            visible_menu_configuration = False
+        self.ui.main_tab.setTabEnabled(0, tab_0)
         self.ui.main_tab.setTabEnabled(1, tab_1)
         self.ui.main_tab.setTabEnabled(2, tab_2)
+        self.setStyleSheet("QTabBar::tab::disabled {width: 0; height: 0; margin: 0; padding: 0; border: none;} ")
+        self.ui.main_tab.setCurrentIndex(current_index)
+
+        # also hide the file>configration buttons when working with Mantid
+        self.ui.menuLoad_Configuration.menuAction().setVisible(visible_menu_configuration)
+
 
     def menu_ipts_file_transfer_clicked(self):
         _o_ipts = IptsFileTransferDialog(parent=self)
