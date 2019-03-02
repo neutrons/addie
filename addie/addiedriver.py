@@ -2,9 +2,8 @@ from __future__ import (absolute_import, division, print_function)
 from mantid.api import AnalysisDataService
 import mantid.simpleapi as simpleapi
 import os
-import sys
 import math
-import numpy as np
+
 
 class AddieDriver(object):
     """
@@ -200,13 +199,15 @@ class AddieDriver(object):
         """ Export a workspace 2D to a 2 column data for RMCProfile
         """
         # check inputs
-        assert isinstance(ws_name, str), 'Workspace name {0} must be a string but not a {1}.'.format(ws_name,
-                                                                                                     str(ws_name))
-        assert isinstance(output_file_name, str), 'Output file name {0} must be a string but not a {1}.'.format(output_file_name,
-                                                                                                                type(output_file_name))
-        assert isinstance(comment, str), 'Comment {0} must be a string but not a {1}.'.format(comment, type(comment))
-        assert isinstance(ws_index, int), 'Workspace index must be an integer but not a {1}.'.format(ws_index,
-                                                                                                     type(ws_index))
+        assert isinstance(ws_name, str), \
+            'Workspace name {0} must be a string but not a {1}.'.format(ws_name, str(ws_name))
+        assert isinstance(output_file_name, str), \
+            'Output file name {0} must be a string but not a {1}.'.format(output_file_name,
+                                                                          type(output_file_name))
+        assert isinstance(comment, str), \
+            'Comment {0} must be a string but not a {1}.'.format(comment, type(comment))
+        assert isinstance(ws_index, int), \
+            'Workspace index must be an integer but not a {1}.'.format(ws_index, type(ws_index))
 
         # convert to point data from histogram
         simpleapi.ConvertToPointData(InputWorkspace=ws_name, OutputWorkspace=ws_name)
@@ -453,7 +454,8 @@ class AddieDriver(object):
         ext = file_name.upper().split('.')[-1]
         if ext == 'NXS':
             simpleapi.LoadNexusProcessed(Filename=file_name, OutputWorkspace=sq_ws_name)
-            simpleapi.ConvertUnits(InputWorkspace=sq_ws_name, OutputWorkspace=sq_ws_name, EMode='Elastic', Target='MomentumTransfer')
+            simpleapi.ConvertUnits(InputWorkspace=sq_ws_name, OutputWorkspace=sq_ws_name,
+                                   EMode='Elastic', Target='MomentumTransfer')
             simpleapi.ConvertToPointData(InputWorkspace=sq_ws_name, OutputWorkspace=sq_ws_name)  # TODO REMOVE THIS LINE
         elif ext == 'DAT' or ext == 'txt':
             simpleapi.LoadAscii(Filename=file_name, OutputWorkspace=sq_ws_name, Unit='MomentumTransfer')
