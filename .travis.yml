@@ -10,4 +10,7 @@ python:
 install:
   - pip install flake8
 script:
-  - flake8
+  # lint the code changes generating an error if warning introduced
+  - git diff -U0 $TRAVIS_COMMIT_RANGE | flake8 --diff
+  # print the other warnings but don't report it as an error
+  - flake8 --exit-zero
