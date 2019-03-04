@@ -1,9 +1,7 @@
 from __future__ import (absolute_import, division, print_function)
 from qtpy.QtCore import (QThread)
-import os
 
 from mantid.simpleapi import *
-import mantid
 
 from addie.processing.idl.mantid_script_handler import MantidScriptHandler
 

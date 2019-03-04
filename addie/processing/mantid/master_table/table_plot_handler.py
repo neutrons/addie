@@ -1,6 +1,4 @@
 from __future__ import (absolute_import, division, print_function)
-from addie.utilities import load_ui
-from qtpy import QtGui, QtCore
 from qtpy.QtCore import Qt
 import os
 import numpy as np
@@ -180,4 +178,3 @@ class TablePlotHandler:
             return 'go'
         else:
             return 'nogo'
-

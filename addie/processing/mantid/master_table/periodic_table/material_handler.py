@@ -11,10 +11,8 @@ from qtpy import QtGui
 from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
 from addie.processing.mantid.master_table.periodic_table.isotopes_handler import IsotopesHandler
 
-from addie.icons import icons_rc
 
 class MaterialHandler:
-
     def __init__(self, parent=None, database_window=None, key=None, data_type='sample'):
         if parent.material_ui is None:
             o_material = PeriodicTable(parent=parent,
@@ -103,7 +101,7 @@ class PeriodicTable(QMainWindow):
                                          self.ui.sb,
                                          self.ui.te,
                                          self.ui.po,
-                                        ]
+                                         ]
         self.list_color[3]['color'] = "#eef8b9"
 
         # dark yellow
@@ -186,7 +184,6 @@ class PeriodicTable(QMainWindow):
                                          ]
         self.list_color[7]['color'] = "#f79d83"
 
-
     def init_widgets(self):
 
         self.ui.save_button.setEnabled(False)
@@ -208,7 +205,6 @@ class PeriodicTable(QMainWindow):
             _color = self.list_color[_key]['color']
             for _ui in _list_ui:
                 _ui.setStyleSheet("background-color:{}".format(_color))
-
 
         # clear button icon
         self.ui.clear_button.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
@@ -526,29 +522,29 @@ class PeriodicTable(QMainWindow):
         # if we have a single stable element
         regular_expression_1 = r'^(?P<stable_element>[A-Z]{1}[a-z]{0,1}$)'
         m1 = re.search(regular_expression_1, element)
-        if not m1 is None:
+        if m1 is not None:
             return [m1.group('stable_element'), 1.]
 
         # stable with stochiometric coefficient
         regular_expression_2 = r'^(?P<stable_element>[A-Z]{1}[a-z]{0,1})(?P<stochiometric_coefficient>\d*\.{0,1}\d*)$'
         m2 = re.search(regular_expression_2, element)
-        if not m2 is None:
+        if m2 is not None:
             return ["{}{}".format(m2.group('stable_element'), m2.group('stochiometric_coefficient')),
                     np.float(m2.group('stochiometric_coefficient'))]
 
         # isotope with or without stochiometric coefficient
-        regular_expression_3 = r'\((?P<isotope_element>[A-Z]{1}[a-z]{0,1})(?P<isotope_number>\d+)\)(?P<stochiometric_coefficient>\d*\.{0,1}\d*)'
+        regular_expression_3 = r'\((?P<isotope_element>[A-Z]{1}[a-z]{0,1})(?P<isotope_number>\d+)\)' \
+                               r'(?P<stochiometric_coefficient>\d*\.{0,1}\d*)'
         m3 = re.search(regular_expression_3, element)
-        if not m3 is None:
+        if m3 is not None:
             if m3.group('stochiometric_coefficient') == "":
                 number_of_atoms = 1.
             else:
                 number_of_atoms = np.float(m3.group('stochiometric_coefficient'))
-            return ["{}[{}]{}".format(m3.group('isotope_element'), m3.group('isotope_number'), m3.group('stochiometric_coefficient')),
-            number_of_atoms]
+            return ["{}[{}]{}".format(m3.group('isotope_element'), m3.group('isotope_number'),
+                                      m3.group('stochiometric_coefficient')), number_of_atoms]
 
         raise ValueError
-
 
     def retrieving_molecular_mass_and_number_of_atoms_worked(self, chemical_formula):
         '''this method will parse the formula to go from Nantid format to periodictable library format, in order
@@ -592,13 +588,15 @@ class PeriodicTable(QMainWindow):
                 self.calculate_full_molecular_mass()
                 o_table = TableRowHandler(parent=self.parent)
                 o_table.transfer_widget_states(from_key=self.key, data_type=self.data_type)
-                self.parent.master_table_list_ui[self.key][self.data_type]['mass_density_infos']['molecular_mass'] = self.molecular_mass
-                self.parent.master_table_list_ui[self.key][self.data_type]['mass_density_infos']['total_number_of_atoms'] = self.total_number_of_atoms
+                self.parent.master_table_list_ui[self.key][self.data_type]['mass_density_infos']['molecular_mass'] \
+                    = self.molecular_mass
+                self.parent.master_table_list_ui[self.key][self.data_type]['mass_density_infos']['total_number_of_atoms'] \
+                    = self.total_number_of_atoms
             self.close()
         else:
             self.ui.statusbar.setStyleSheet("color: red")
             self.ui.statusbar.showMessage("Unable to calculate Molecular Mass! CHECK YOUR FORMULA!",
-                                                 self.parent.statusbar_display_time)
+                                          self.parent.statusbar_display_time)
 
     def check_status_save_button(self):
         if str(self.ui.chemical_formula.text()) != "":

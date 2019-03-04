@@ -2,12 +2,8 @@ from __future__ import (absolute_import, division, print_function)
 
 from qtpy.QtWidgets import QMainWindow, QLineEdit, QApplication
 from addie.utilities import load_ui
-from qtpy import QtGui
 
 import pyoncat
-import oauthlib
-
-# from addie.ui_oncat_authentication import Ui_MainWindow as UiMainWindow
 
 
 # Create token store
@@ -23,7 +19,6 @@ class InMemoryTokenStore(object):
 
 
 class OncatAuthenticationHandler:
-
     def __init__(self, parent=None, next_ui='from_database_ui'):
         o_oncat = OncatAuthenticationWindow(parent=parent, next_ui=next_ui)
         o_oncat.show()
@@ -32,7 +27,6 @@ class OncatAuthenticationHandler:
 
 
 class OncatAuthenticationWindow(QMainWindow):
-
     def __init__(self, parent=None, next_ui='from_database_ui'):
         QMainWindow.__init__(self, parent=parent)
         self.parent = parent

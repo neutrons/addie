@@ -2,8 +2,7 @@ from __future__ import (absolute_import, division, print_function)
 
 import numpy as np
 
-from qtpy.QtWidgets import QComboBox, QHBoxLayout, QLabel, QTableWidgetItem
-from addie.utilities import load_ui
+from qtpy.QtWidgets import QComboBox, QTableWidgetItem
 from qtpy import QtCore
 
 from addie.utilities.general import generate_random_key
@@ -117,12 +116,3 @@ class TableWidgetRuleHandler:
         combobox_values.clear()
         combobox_values.addItems(list(list_metadata[item_name]))
         combobox_values.blockSignals(False)
-
-
-
-
-
-
-
-
-

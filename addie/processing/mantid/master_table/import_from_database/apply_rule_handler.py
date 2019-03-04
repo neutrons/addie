@@ -101,7 +101,7 @@ class ApplyRuleHandler:
         """
         table_handler = FilterTableHandler(table_ui=self.parent.ui.tableWidget)
         row = table_handler.return_first_row_for_this_item_value(string_to_find=str(rule_index),
-                                                               column_to_look_for=1)
+                                                                 column_to_look_for=1)
 
         keyword_name = table_handler.get_keyword_name(row=row)
         criteria = table_handler.get_criteria(row=row)

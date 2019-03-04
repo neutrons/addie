@@ -2,9 +2,8 @@ from __future__ import (absolute_import, division, print_function)
 
 from collections import defaultdict
 import numpy as np
-import pprint
 
-from qtpy.QtWidgets import QApplication, QMainWindow, QWidget, QTableWidget, QRadioButton, QTableWidgetItem
+from qtpy.QtWidgets import QMainWindow, QTableWidget, QRadioButton, QTableWidgetItem
 from addie.utilities import load_ui
 
 from addie.utilities.list_runs_parser import ListRunsParser

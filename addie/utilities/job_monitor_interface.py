@@ -2,7 +2,6 @@ from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QMainWindow, QPushButton, QTableWidgetItem)  # noqa
 import psutil
 from addie.utilities import load_ui
-from addie.utilities.job_monitor_thread import JobMonitorThread
 
 
 class JobMonitorInterface(QMainWindow):

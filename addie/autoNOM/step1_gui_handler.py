@@ -49,7 +49,8 @@ class Step1GuiHandler(object):
             return False
 
         if self.parent.create_folder_button.isChecked():
-            if self.parent.manual_output_folder.isChecked() and (str(self.parent.manual_output_folder_field.text()).strip() == ""):
+            if self.parent.manual_output_folder.isChecked() \
+               and (str(self.parent.manual_output_folder_field.text()).strip() == ""):
                 return False
 
         return True

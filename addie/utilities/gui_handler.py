@@ -31,6 +31,7 @@ class GuiHandler(object):
     def radiobutton_set_state(self, widget_id = None, state = True):
         widget_id.setChecked(state)
 
+
 class TableHandler(object):
 
     def __init__(self, table_ui=None):
@@ -69,4 +70,3 @@ def unlock_signals_ui(list_ui=[]):
 
     for _ui in list_ui:
         _ui.blockSignals(False)
-

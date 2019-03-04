@@ -2,9 +2,10 @@ from __future__ import (absolute_import, division, print_function, unicode_liter
 
 # import mantid algorithms, numpy and matplotlib
 import mantid.simpleapi as ms
-from mantid import plots
 import matplotlib.pyplot as plt
 import numpy as np
+
+
 def plot_gr_nr(gr_wksp,nr_wksp,xlims=(0,10),nrylims=(0,30),expected_n=None):
     """
     plots the g(r) workspace (gr_wksp) and coordination number, n(r) (nr_wksp)
@@ -32,10 +33,11 @@ def plot_gr_nr(gr_wksp,nr_wksp,xlims=(0,10),nrylims=(0,30),expected_n=None):
     ax2.set_ylim(nrylims)
     ax1.set_xlim(xlims)
     ax2.set_ylabel('n(r)')
-    if expected_n != None:
+    if expected_n is not None:
         for n_val in expected_n:
             ax2.plot(xlims,[n_val,n_val],'g-')
     return f1
+
 
 def isMonitor(wkspc_h):
     """
@@ -48,6 +50,7 @@ def isMonitor(wkspc_h):
         mon_bool[histnum] = wkspc_h.spectrumInfo().isMonitor(histnum)
     return mon_bool
 
+
 def extractY(wkspc):
     """
     given a workspace name extractY from detectors only
@@ -58,6 +61,7 @@ def extractY(wkspc):
     y = h_w.extractY()
     y = y[mon_bool==False]
     return y, mon_bool, h_w
+
 
 def plot_delta_d_ttheta(ddwkspc,groupwkspc=None,cmapstr='viridis'):
     """
@@ -70,10 +74,11 @@ def plot_delta_d_ttheta(ddwkspc,groupwkspc=None,cmapstr='viridis'):
     #extract Delta d/ d values and populate a numpy array
     res_y, res_mon_bool, h_nr = extractY(ddwkspc)
     # if a group workspace is present use it to determine a grouping array
-    if groupwkspc!=None:
+    if groupwkspc is not None:
         grp, g_bool, h_g = extractY(groupwkspc)
         if len(grp)!=len(res_y):
-            raise RuntimeError("the groping workspace and the Delta d/ d workspace should have the same number of detector specta")
+            raise RuntimeError('the groping workspace and the Delta d/ d workspace should'
+                               ' have the same number of detector specta')
         grp = np.reshape(grp, -1)
     else:
         grp='b'
@@ -93,7 +98,7 @@ def plot_delta_d_ttheta(ddwkspc,groupwkspc=None,cmapstr='viridis'):
     ax1.set_ylabel(r'$\frac{\Delta d}{d}$')
     #ax1.set_ylabel('Delta d /d')
     ax1.set_xlabel(r'$2\theta (^\circ)$')
-    if groupwkspc!=None:
+    if groupwkspc is not None:
         cbar = f1.colorbar(im,ax = ax1)
         cbar.ax.set_ylabel('group number')
 

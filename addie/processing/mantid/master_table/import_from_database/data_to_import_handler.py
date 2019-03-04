@@ -46,4 +46,3 @@ class DataToImportHandler:
                                                            list_of_runs=list_of_runs)
 
         return nexus_json_to_import
-

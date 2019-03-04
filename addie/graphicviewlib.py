@@ -298,8 +298,8 @@ class BraggView(base.MplGraphicsView):
                     bank_color, style, marker = self.get_multi_gss_color()
                 # END-IF-ELSE
 
-                print('[DB...BAT] Plot Mode (singel bank) = {0}, group = {1}, bank = {2}, color = {3}, marker = {4},' \
-                      'style = {5}' \
+                print('[DB...BAT] Plot Mode (singel bank) = {0}, group = {1}, bank = {2}, color = {3}, marker = {4},'
+                      'style = {5}'
                       ''.format(self._singleGSSMode, ws_group, bank_id, bank_color, marker, style))
 
                 # plot
