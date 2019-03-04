@@ -1,7 +1,6 @@
 from __future__ import (absolute_import, division, print_function)
 from qtpy.QtCore import (QThread)  # noqa
 from qtpy.QtWidgets import (QTableWidgetItem)  # noqa
-import os
 import time
 import psutil
 

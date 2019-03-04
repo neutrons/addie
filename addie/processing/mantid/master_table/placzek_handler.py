@@ -19,12 +19,13 @@ class PlaczekHandler:
 
     def __init__(self, parent=None, key=None, data_type='sample'):
 
-        if parent.placzek_ui == None:
+        if parent.placzek_ui is None:
             parent.placzek_ui = PlaczekWindow(parent=parent, key=key, data_type=data_type)
             parent.placzek_ui.show()
         else:
             parent.placzek_ui.activateWindow()
             parent.placzek_ui.setFocus()
+
 
 class PlaczekWindow(QMainWindow):
 

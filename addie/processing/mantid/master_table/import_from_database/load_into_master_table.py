@@ -49,7 +49,3 @@ class LoadIntoMasterTable:
                                sample_chemical_formula=chemical_formula)
 
         QApplication.restoreOverrideCursor()
-
-
-
-

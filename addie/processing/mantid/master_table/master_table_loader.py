@@ -15,7 +15,6 @@ from addie.utilities.set import Set
 from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
 from addie.processing.mantid.master_table.utilities import LoadGroupingFile
 
-from addie.icons import icons_rc
 
 #from addie.ui_list_of_scan_loader_dialog import Ui_Dialog as UiDialog
 
@@ -48,22 +47,22 @@ _default_empty_row = {"activate": True,
                                  "placzek": {},
                                  },
                       "normalization": {"runs": "",
-                                 "background": {"runs": "",
-                                                "background": "",
-                                                },
-                                 "material": "",
-                                 "mass_density": copy.deepcopy(_mass_density_dict),
-                                 "packing_fraction": "",
-                                 "geometry": {"shape": "cylindrical",
-                                              "radius": "N/A",
-                                              "radius2": "N/A",
-                                              "height": "N/A",
-                                              },
-                                 "abs_correction": "",
-                                 "multi_scattering_correction": "",
-                                 "inelastic_correction": "",
-                                 "placzek": {},
-                                 },
+                                        "background": {"runs": "",
+                                                       "background": "",
+                                                       },
+                                        "material": "",
+                                        "mass_density": copy.deepcopy(_mass_density_dict),
+                                        "packing_fraction": "",
+                                        "geometry": {"shape": "cylindrical",
+                                                     "radius": "N/A",
+                                                     "radius2": "N/A",
+                                                     "height": "N/A",
+                                                     },
+                                        "abs_correction": "",
+                                        "multi_scattering_correction": "",
+                                        "inelastic_correction": "",
+                                        "placzek": {},
+                                        },
 
                       "input_grouping": "",
                       "output_grouping": "",
@@ -85,6 +84,7 @@ _default_empty_row = {"activate": True,
 # _dictionary_test[0]["sample"]["inelastic_correction"] = "Placzek"
 #
 # _dictionary_test[1] = copy.deepcopy(_default_empty_row)
+
 
 class LoaderOptionsInterface(QDialog):
 
@@ -192,7 +192,8 @@ class JsonLoader:
         _target_row_entry["placzek"]["order"]["name_list"] = _source_entry["InelasticCorrection"]["Order"]
         _target_row_entry["placzek"]["self"] = _source_entry["InelasticCorrection"]["Self"]
         _target_row_entry["placzek"]["interference"] = _source_entry["InelasticCorrection"]["Interference"]
-        _target_row_entry["placzek"]["fit_spectrum_with"]["short_name_list"] = _source_entry["InelasticCorrection"]["FitSpectrumWith"]
+        _target_row_entry["placzek"]["fit_spectrum_with"]["short_name_list"] = \
+            _source_entry["InelasticCorrection"]["FitSpectrumWith"]
 
         lambda_binning_for_fit = _source_entry["InelasticCorrection"]["LambdaBinningForFit"].split(",")
         if len(lambda_binning_for_fit) == 3:
@@ -280,7 +281,7 @@ class JsonLoader:
 
         self.parent.ui.statusbar.setStyleSheet("color: blue")
         self.parent.ui.statusbar.showMessage("File {} has been imported".format(self.filename),
-                                            self.parent.statusbar_display_time)
+                                             self.parent.statusbar_display_time)
 
 
 class AsciiLoader:
@@ -355,7 +356,7 @@ class AsciiLoader:
 
         self.parent.ui.statusbar.setStyleSheet("color: blue")
         self.parent.ui.statusbar.showMessage("File {} has been imported".format(self.filename),
-                                            self.parent.statusbar_display_time)
+                                             self.parent.statusbar_display_time)
 
 
 class FormatAsciiList:
@@ -625,7 +626,8 @@ class FromDictionaryToTableUi:
 
         # mass density
         column += 1
-        self.parent.master_table_list_ui[key][data_type]['mass_density']['text'].setText(entry[data_type]["mass_density"]["mass_density"]["value"])
+        self.parent.master_table_list_ui[key][data_type]['mass_density']['text'].setText(
+            entry[data_type]["mass_density"]["mass_density"]["value"])
 
         # packing_fraction
         column +=1
@@ -638,9 +640,12 @@ class FromDictionaryToTableUi:
 
         # geometry
         column += 1
-        self.parent.master_table_list_ui[key][data_type]['geometry']['radius']['value'].setText(entry[data_type]['geometry']['radius'])
-        self.parent.master_table_list_ui[key][data_type]['geometry']['radius2']['value'].setText(entry[data_type]['geometry']['radius2'])
-        self.parent.master_table_list_ui[key][data_type]['geometry']['height']['value'].setText(entry[data_type]['geometry']['height'])
+        self.parent.master_table_list_ui[key][data_type]['geometry']['radius']['value'].setText(
+            entry[data_type]['geometry']['radius'])
+        self.parent.master_table_list_ui[key][data_type]['geometry']['radius2']['value'].setText(
+            entry[data_type]['geometry']['radius2'])
+        self.parent.master_table_list_ui[key][data_type]['geometry']['height']['value'].setText(
+            entry[data_type]['geometry']['height'])
 
         # abs correction
         column += 1
@@ -679,8 +684,3 @@ class FromDictionaryToTableUi:
 
         # normalization
         self.__fill_data_type(data_type='normalization', starting_col=13, row=row, entry=entry, key=key)
-
-
-
-
-

@@ -70,5 +70,6 @@ class FileHandler(object):
             else:
                 return False
         pdir = os.path.dirname(self.filename)
-        if not pdir: pdir = '.'
+        if not pdir:
+            pdir = '.'
         return os.access(pdir, os.W_OK)

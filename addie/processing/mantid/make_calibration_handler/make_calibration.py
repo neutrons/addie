@@ -3,7 +3,7 @@ from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QMainWindow, QComboBox, QFileDialog, QHBoxLayout, QLabel, QDateEdit, QLineEdit, QPushButton,
                             QTableWidgetItem, QVBoxLayout, QWidget)
 from addie.utilities import load_ui
-from qtpy import QtGui, QtCore
+from qtpy import QtCore
 
 import datetime
 from collections import namedtuple
@@ -111,8 +111,8 @@ class MakeCalibrationWindow(QMainWindow):
 
     def master_browse_button_clicked(self):
         _master_folder = QFileDialog.getExistingDirectory(caption="Select Output Folder ...",
-                                                                directory=self.parent.output_folder,
-                                                                options=QFileDialog.ShowDirsOnly)
+                                                          directory=self.parent.output_folder,
+                                                          options=QFileDialog.ShowDirsOnly)
         if _master_folder:
             self.ui.master_output_directory_label.setText(str(_master_folder))
             self.master_folder = _master_folder
@@ -142,9 +142,9 @@ class MakeCalibrationWindow(QMainWindow):
                                  sample_type='',
                                  value_ui=None):
         [_file, _] = QFileDialog.getOpenFileName(parent=self,
-                                                  caption="Select {} File ...".format(sample_type),
-                                                  directory=self.master_folder,
-                                                  filter="NeXus (*.nxs*);; All (*.*)")
+                                                 caption="Select {} File ...".format(sample_type),
+                                                 directory=self.master_folder,
+                                                 filter="NeXus (*.nxs*);; All (*.*)")
         if _file:
             # display base name of file selected (without path)
             value_ui.setText(os.path.basename(_file))
@@ -174,7 +174,7 @@ class MakeCalibrationWindow(QMainWindow):
         result = nexus_regex.match(base_file_name)
         if result:
             return result.group(1)
-        return NoNe
+        return None
 
     def vanadium_browser_clicked(self, entry=""):
         sample_type = "Vanadium"
@@ -200,8 +200,8 @@ class MakeCalibrationWindow(QMainWindow):
 
     def local_output_dir_clicked(self, entry=""):
         _local_folder = QFileDialog.getExistingDirectory(caption="Select Output Folder ...",
-                                                                directory=self.master_folder,
-                                                                options=QFileDialog.ShowDirsOnly)
+                                                         directory=self.master_folder,
+                                                         options=QFileDialog.ShowDirsOnly)
         if _local_folder:
             _master_list_ui = self.master_list_ui[entry]
             _local_label = _master_list_ui.output_dir_value
@@ -399,10 +399,9 @@ class MakeCalibrationWindow(QMainWindow):
         # make dictionary of all infos
         o_dict = MakeCalibrationDictionary(parent=self)
         [_file, _] = QFileDialog.getSaveFileName(parent=self,
-                                                  caption="Select where and name of json file to create...",
-                                                  directory = '/SNS/users/ntm/')
+                                                 caption="Select where and name of json file to create...",
+                                                 directory = '/SNS/users/ntm/')
         if _file:
-
             # if missing extension, add it
             [filename, ext] = os.path.splitext(_file)
             if ext == '':

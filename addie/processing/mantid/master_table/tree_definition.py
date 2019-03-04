@@ -32,7 +32,7 @@ h3_COLUMNS_WIDTH = [90,  #activate
                     150,  # shape
                     200, # geometry dimensions
                     150, 200, 150,  # correction
-#                    50, 50, # grouping
+                    #50, 50, # grouping
                     ]
 
 h2_COLUMNS_WIDTH = [h3_COLUMNS_WIDTH[0],
@@ -62,8 +62,8 @@ h1_COLUMNS_WIDTH = [h3_COLUMNS_WIDTH[0],
                     h3_COLUMNS_WIDTH[1],
                     np.sum(h3_COLUMNS_WIDTH[2:13]),
                     np.sum(h3_COLUMNS_WIDTH[13:24]),
-#                    h3_COLUMNS_WIDTH[28],
-#                    h3_COLUMNS_WIDTH[29]
+                    #h3_COLUMNS_WIDTH[28],
+                    #h3_COLUMNS_WIDTH[29]
                     ]
 
 INDEX_OF_COLUMNS_SEARCHABLE = [1, 2, 3, 4, 7, 13, 14, 15, 18]

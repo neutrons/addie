@@ -136,4 +136,3 @@ class ImportTableFromOncat:
             metadata[_item] = set(metadata[_item])
 
         self.parent.metadata = metadata
-

@@ -1,9 +1,6 @@
 from __future__ import (absolute_import, division, print_function)
-from qtpy.QtWidgets import QCheckBox, QLabel, QPushButton, QComboBox, QTableWidgetItem, QTableWidgetSelectionRange
-from addie.utilities import load_ui
-from qtpy import QtGui
+from qtpy.QtWidgets import QTableWidgetSelectionRange
 import numpy as np
-import pprint
 
 from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_SEARCHABLE
 from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_COMBOBOX
@@ -77,14 +74,14 @@ class SelectionHandlerMaster:
         for _key in _table_list_ui.keys():
             if _table_list_ui[_key]['active'] == _check_box_ui_of_this_row:
                 list_ui = [_check_box_ui_of_this_row,
-                        _table_list_ui[_key]['sample']['shape'],
-                        _table_list_ui[_key]['sample']['abs_correction'],
-                        _table_list_ui[_key]['sample']['mult_scat_correction'],
-                        _table_list_ui[_key]['sample']['inelastic_correction'],
-                        _table_list_ui[_key]['normalization']['abs_correction'],
-                        _table_list_ui[_key]['normalization']['mult_scat_correction'],
-                        _table_list_ui[_key]['normalization']['inelastic_correction'],
-                        ]
+                           _table_list_ui[_key]['sample']['shape'],
+                           _table_list_ui[_key]['sample']['abs_correction'],
+                           _table_list_ui[_key]['sample']['mult_scat_correction'],
+                           _table_list_ui[_key]['sample']['inelastic_correction'],
+                           _table_list_ui[_key]['normalization']['abs_correction'],
+                           _table_list_ui[_key]['normalization']['mult_scat_correction'],
+                           _table_list_ui[_key]['normalization']['inelastic_correction'],
+                           ]
                 self.parent.master_table_list_ui[_key] = {}
                 return list_ui
         return []
@@ -252,9 +249,9 @@ class RowsHandler(SelectionHandlerMaster):
             list_to_row = self.o_selection.get_list_row()
             nbr_col = self.table_ui.columnCount()
             _row_selection = QTableWidgetSelectionRange(list_to_row[0],
-                                                              0,
-                                                              list_to_row[-1],
-                                                              nbr_col - 1)
+                                                        0,
+                                                        list_to_row[-1],
+                                                        nbr_col - 1)
             self.table_ui.setRangeSelected(_row_selection, True)
 
             list_to_row = self.o_selection.get_list_row()
@@ -509,27 +506,28 @@ class CopyCells:
             self.parent.master_table_list_ui[_to_key][data_type]['mass_density']['text'].setText(_mass_density)
 
             self.parent.master_table_list_ui[_to_key][data_type]['mass_density_infos']['number_density']['value'] = \
-            self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['number_density']['value']
+                self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['number_density']['value']
 
             self.parent.master_table_list_ui[_to_key][data_type]['mass_density_infos']['number_density']['selected'] = \
-            self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['number_density']['selected']
+                self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['number_density']['selected']
 
             self.parent.master_table_list_ui[_to_key][data_type]['mass_density_infos']['mass_density']['value'] = \
-            self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['mass_density']['value']
+                self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['mass_density']['value']
 
             self.parent.master_table_list_ui[_to_key][data_type]['mass_density_infos']['mass_density']['selected'] = \
-            self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['mass_density']['selected']
+                self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['mass_density']['selected']
 
             self.parent.master_table_list_ui[_to_key][data_type]['mass_density_infos']['mass']['value'] = \
-            self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['mass']['value']
+                self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['mass']['value']
 
             self.parent.master_table_list_ui[_to_key][data_type]['mass_density_infos']['mass']['selected'] = \
-            self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['mass']['selected']
+                self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['mass']['selected']
 
         else:
             self.parent.ui.statusbar.setStyleSheet("color: red")
-            self.parent.ui.statusbar.showMessage("Don't know how to copy/paste the cell from row #{} to row #{} at the column #{}".format(from_row, to_row, from_col),
-                                                 self.parent.statusbar_display_time*2)
+            msg = "Don't know how to copy/paste the cell from row #{} to row #{} at the column #{}".format(from_row, to_row,
+                                                                                                           from_col)
+            self.parent.ui.statusbar.showMessage(msg, self.parent.statusbar_display_time*2)
 
 
 class TableHandler(SelectionHandlerMaster):
@@ -569,8 +567,3 @@ class TableHandler(SelectionHandlerMaster):
     def clear_search(self):
         self.parent.ui.name_search_3.setText("")
         self.search("")
-
-
-
-
-

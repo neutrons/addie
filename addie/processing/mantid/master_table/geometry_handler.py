@@ -1,20 +1,12 @@
 from __future__ import (absolute_import, division, print_function)
-import copy
-import numpy as np
-import random
 
-from qtpy.QtWidgets import QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton, \
-        QComboBox, QWidget, QGridLayout, QVBoxLayout, QHBoxLayout, QDialog, QLineEdit
+from qtpy.QtWidgets import QDialog
 from addie.utilities import load_ui
 from qtpy import QtGui
 
 from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
-from addie.processing.mantid.master_table.placzek_handler import PlaczekHandler
-from addie.processing.mantid.master_table.selection_handler import TransferH3TableWidgetState
-from addie.processing.mantid.master_table.tree_definition import COLUMN_DEFAULT_HEIGHT
 from addie.utilities.math_tools import is_number
 
-from addie.icons import icons_rc
 
 class DimensionsSetter(QDialog):
 
@@ -149,7 +141,6 @@ class DimensionsSetter(QDialog):
 
         self.ui.ok.setEnabled(save_button_status)
 
-
     def accept(self):
 
         radius = str(self.ui.radius_value.text())
@@ -175,4 +166,3 @@ class DimensionsSetter(QDialog):
 
     def closeEvent(self, c):
         self.parent.geometry_ui_position = self.pos()
-

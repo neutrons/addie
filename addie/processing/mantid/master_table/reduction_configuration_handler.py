@@ -4,16 +4,14 @@ from qtpy.QtWidgets import QDialog, QFileDialog
 from addie.utilities import load_ui
 from qtpy import QtGui, QtCore
 
-from addie.processing.mantid.make_calibration_handler.make_calibration import MakeCalibrationLauncher
 from addie.processing.mantid.master_table.utilities import LoadGroupingFile
 
-from addie.icons import icons_rc
 
 class ReductionConfigurationHandler:
 
     def __init__(self, parent=None):
 
-        if parent.reduction_configuration_ui == None:
+        if parent.reduction_configuration_ui is None:
             parent.reduction_configuration_ui = ReductionConfiguration(parent=parent)
             parent.reduction_configuration_ui.show()
             if parent.reduction_configuration_ui_position:
@@ -55,12 +53,12 @@ class ReductionConfiguration(QDialog):
                                                    self.ui.intermediate_from_calibration_groups_value]
 
         self.list_grouping_output_browse_widgets = [self.ui.output_browse_button,
-                                                          self.ui.output_browse_value,
-                                                          self.ui.output_browse_groups_value,
-                                                          self.ui.output_browse_groups_label]
+                                                    self.ui.output_browse_value,
+                                                    self.ui.output_browse_groups_value,
+                                                    self.ui.output_browse_groups_label]
         self.list_grouping_output_widgets = [self.ui.output_from_calibration_label,
-                                                   self.ui.output_from_calibration_groups_label,
-                                                   self.ui.output_from_calibration_groups_value]
+                                             self.ui.output_from_calibration_groups_label,
+                                             self.ui.output_from_calibration_groups_value]
 
         intermediate_grouping = self.parent.intermediate_grouping
         status_intermediate = intermediate_grouping['enabled']
@@ -149,18 +147,18 @@ class ReductionConfiguration(QDialog):
     def bragg_browse_characterization_clicked(self):
         _characterization_folder = self.parent.characterization_folder
         [_characterization_file, _] = QFileDialog.getOpenFileName(parent=self.parent,
-                                                                   caption="Select Characterization File",
-                                                                   directory=_characterization_folder,
-                                                                   filter=self.parent.characterization_extension)
+                                                                  caption="Select Characterization File",
+                                                                  directory=_characterization_folder,
+                                                                  filter=self.parent.characterization_extension)
         if _characterization_file:
             self.ui.bragg_characterization_file.setText(_characterization_file)
 
     def pdf_browse_characterization_clicked(self):
         _characterization_folder = self.parent.characterization_folder
         [_characterization_file, _] = QFileDialog.getOpenFileName(parent=self.parent,
-                                                                   caption="Select Characterization File",
-                                                                   directory=_characterization_folder,
-                                                                   filter=self.parent.characterization_extension)
+                                                                  caption="Select Characterization File",
+                                                                  directory=_characterization_folder,
+                                                                  filter=self.parent.characterization_extension)
         if _characterization_file:
             self.ui.pdf_characterization_file.setText(_characterization_file)
 
@@ -321,4 +319,3 @@ class SaveReductionConfiguration:
             return True
         else:
             return False
-

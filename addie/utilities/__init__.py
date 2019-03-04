@@ -2,6 +2,7 @@ import os
 from qtpy.uic import loadUi
 from addie import ui
 
+
 def load_ui(ui_filename, baseinstance):
     ui_filename = os.path.split(ui_filename)[-1]
     ui_path = os.path.dirname(ui.__file__)

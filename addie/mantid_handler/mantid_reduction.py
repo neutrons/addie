@@ -4,7 +4,6 @@ import os
 import addie.processing.idl.table_handler
 from addie.processing.idl.mantid_reduction_dialogbox import MantidReductionDialogbox
 from addie.processing.idl.mantid_reduction_view import MantidReductionView
-from addie.utilities.job_status_handler import JobStatusHandler
 
 
 class GlobalMantidReduction(object):

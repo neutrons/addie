@@ -18,10 +18,10 @@ class AdvancedWindowLauncher(object):
 
 
 class AdvancedWindow(QMainWindow):
-    
+
     def __init__(self, parent=None):
         self.parent = parent
-        
+
         QMainWindow.__init__(self, parent=parent)
         self.ui = load_ui('advanced_window.ui', baseinstance=self)
 
@@ -75,16 +75,16 @@ class AdvancedWindow(QMainWindow):
 
     def cache_dir_button_clicked(self):
         _cache_folder = QFileDialog.getExistingDirectory(caption="Select Cache Folder ...",
-                                                              directory=self.parent.cache_folder,
-                                                              options=QFileDialog.ShowDirsOnly)
+                                                         directory=self.parent.cache_folder,
+                                                         options=QFileDialog.ShowDirsOnly)
         if _cache_folder:
             self.ui.cache_dir_label.setText(str(_cache_folder))
             self.parent.cache_folder = str(_cache_folder)
 
     def output_dir_button_clicked(self):
         _output_folder = QFileDialog.getExistingDirectory(caption="Select Output Folder ...",
-                                                              directory=self.parent.output_folder,
-                                                              options=QFileDialog.ShowDirsOnly)
+                                                          directory=self.parent.output_folder,
+                                                          options=QFileDialog.ShowDirsOnly)
         if _output_folder:
             self.ui.output_dir_label.setText(str(_output_folder))
             self.parent.output_folder = str(_output_folder)

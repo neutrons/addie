@@ -4,17 +4,13 @@ from collections import OrderedDict
 import copy
 import numpy as np
 
-from qtpy.QtWidgets import QDialog, QComboBox, QLineEdit, QPushButton, QWidget, QHBoxLayout, QLabel, \
-        QTableWidgetItem, QApplication, QMainWindow
+from qtpy.QtWidgets import QApplication, QMainWindow
 from addie.utilities import load_ui
 from qtpy import QtGui, QtCore
 
 from addie.processing.mantid.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
 from addie.databases.oncat.oncat import OncatErrorMessageWindow
-from addie.databases.oncat.oncat import pyoncatGetIptsList, pyoncatGetNexus, \
-    pyoncatGetRunsFromIpts, pyoncatGetTemplate
-from addie.processing.mantid.master_table.tree_definition import LIST_SEARCH_CRITERIA
-from addie.processing.mantid.master_table.periodic_table.material_handler import MaterialHandler
+from addie.databases.oncat.oncat import pyoncatGetIptsList
 from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
 from addie.processing.mantid.master_table.master_table_loader import LoaderOptionsInterface
 from addie.processing.mantid.master_table.import_from_database.global_rule_handler import GlobalRuleHandler
@@ -26,12 +22,9 @@ from addie.processing.mantid.master_table.import_from_database.import_table_from
 from addie.processing.mantid.master_table.import_from_database.table_widget_rule_handler import TableWidgetRuleHandler
 from addie.processing.mantid.master_table.import_from_database.apply_rule_handler import ApplyRuleHandler
 from addie.processing.mantid.master_table.import_from_database.data_to_import_handler import DataToImportHandler
-from addie.processing.mantid.master_table.import_from_database.format_json_from_database_to_master_table import FormatJsonFromDatabaseToMasterTable
-
-from addie.utilities.general import generate_random_key, remove_white_spaces
+from addie.processing.mantid.master_table.import_from_database.format_json_from_database_to_master_table \
+    import FormatJsonFromDatabaseToMasterTable
 from addie.utilities.gui_handler import TableHandler
-
-from addie.icons import icons_rc
 
 
 class ImportFromDatabaseHandler:
@@ -128,10 +121,10 @@ class ImportFromDatabaseWindow(QMainWindow):
             self.ui.tableWidget.setColumnWidth(_col, _width)
 
             self.ui.splitter.setStyleSheet("""
-    	QSplitter::handle {
-    	   image: url(':/MPL Toolbar/splitter_icon.png');
-    	}
-    	""")
+           QSplitter::handle {
+           image: url(':/MPL Toolbar/splitter_icon.png');
+        }
+        """)
 
     def insert_in_master_table(self, nexus_json=[]):
         if nexus_json == []:
@@ -482,8 +475,10 @@ class ImportFromDatabaseWindow(QMainWindow):
         result_dict = OrderedDict()
 
         for _json in nexus_json:
-            result_dict[_json['indexed']['run_number']] = {'chemical_formula': "{}".format(_json['metadata']['entry']['sample']['chemical_formula']),
-                                                           'mass_density': "{}".format(_json['metadata']['entry']['sample']['mass_density']),
+            chemical_formula = "{}".format(_json['metadata']['entry']['sample']['chemical_formula'])
+            mass_density = "{}".format(_json['metadata']['entry']['sample']['mass_density'])
+            result_dict[_json['indexed']['run_number']] = {'chemical_formula': chemical_formula,
+                                                           'mass_density': mass_density
                                                            }
         return result_dict
 

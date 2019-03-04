@@ -27,8 +27,8 @@ class OncatTemplateRetriever:
         facility = self.parent.facility
 
         list_templates = pyoncatGetTemplate(oncat=self.parent.oncat,
-                                       instrument=instrument,
-                                       facility=facility)
+                                            instrument=instrument,
+                                            facility=facility)
 
         for template in list_templates:
             if hasattr(template, "default"):
@@ -91,5 +91,3 @@ class OncatTemplateRetriever:
             projection.append(template[_col]['path'])
 
         return projection
-
-

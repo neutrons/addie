@@ -22,4 +22,3 @@ class TableSearchEngine:
                     break
 
         return list_of_row_to_show
-
