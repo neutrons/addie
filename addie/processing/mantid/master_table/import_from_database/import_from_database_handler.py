@@ -28,6 +28,7 @@ from addie.utilities.gui_handler import TableHandler
 try:
     ONCAT_ENABLED = True
     from addie.processing.mantid.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
+    import pyoncat
 except ImportError:
     print('pyoncat module not found. Functionality disabled')
     ONCAT_ENABLED = False
@@ -255,22 +256,29 @@ class ImportFromDatabaseWindow(QMainWindow):
         QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
         QApplication.processEvents()
 
-        #if self.ui.import_button.isEnabled():
         o_import = ImportTableFromOncat(parent=self)
-        o_import.from_oncat_template()
+        try:
+            o_import.from_oncat_template()
+            nexus_json = self.nexus_json_from_template
+            self.nexus_json_all_infos = nexus_json
 
-        nexus_json = self.nexus_json_from_template
-        self.nexus_json_all_infos = nexus_json
+            enabled_widgets = False
+            if not (nexus_json == {}):
+                enabled_widgets = True
 
-        enabled_widgets = False
-        if not (nexus_json == {}):
-            enabled_widgets = True
+            GuiHandler.preview_widget_status(self.ui, enabled_widgets=enabled_widgets)
+            self.refresh_preview_table(nexus_json=copy.deepcopy(nexus_json))
 
-        GuiHandler.preview_widget_status(self.ui, enabled_widgets=enabled_widgets)
-        self.refresh_preview_table(nexus_json=copy.deepcopy(nexus_json))
+            QApplication.restoreOverrideCursor()
+            QApplication.processEvents()
 
-        QApplication.restoreOverrideCursor()
-        QApplication.processEvents()
+        except pyoncat.InvalidRefreshTokenError:
+
+            QApplication.restoreOverrideCursor()
+            QApplication.processEvents()
+
+            OncatAuthenticationHandler(parent=self.parent,
+                                       next_function=self.refresh_preview_table_of_runs)
 
     def refresh_filter_page(self):
 
@@ -371,11 +379,9 @@ class ImportFromDatabaseWindow(QMainWindow):
             ipts_widgets_status = True
             run_widgets_status = False
             if str(self.ui.ipts_lineedit.text()).strip() != "":
-#                self.ipts_selection_changed()
                 self.ipts_text_return_pressed()
             else:
                 self.ipts_selection_changed()
-                #self.ipts_text_changed(str(self.ui.ipts_lineedit.text()))
         else:
             self.ui.error_message.setVisible(False)
             self.run_number_return_pressed()

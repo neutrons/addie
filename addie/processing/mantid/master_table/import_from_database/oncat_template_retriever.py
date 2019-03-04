@@ -7,6 +7,7 @@ from addie.databases.oncat.oncat import pyoncatGetTemplate
 try:
     ONCAT_ENABLED = True
     from addie.processing.mantid.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
+    import pyoncat
 except ImportError:
     print('pyoncat module not found. Functionality disabled')
     ONCAT_ENABLED = False
@@ -26,8 +27,14 @@ class OncatTemplateRetriever:
         self.parent = parent
 
         if self.parent.oncat:
-            self.retrieve_template()
-            self.isolate_relevant_information()
+
+            try:
+                self.retrieve_template()
+                self.isolate_relevant_information()
+
+            except pyoncat.InvalidRefreshTokenError:
+                self.template_information = {}
+                return
         else:
             return None
 
