@@ -17,7 +17,6 @@ from addie.processing.mantid.master_table.import_from_database.global_rule_handl
 from addie.processing.mantid.master_table.import_from_database.table_search_engine import TableSearchEngine
 from addie.processing.mantid.master_table.import_from_database.oncat_template_retriever import OncatTemplateRetriever
 from addie.processing.mantid.master_table.import_from_database.gui_handler import GuiHandler, ImportFromDatabaseTableHandler
-#from addie.processing.mantid.master_table.import_from_database import utilities as ImportFromDatabaseUtilities
 from addie.processing.mantid.master_table.import_from_database.import_table_from_oncat_handler import ImportTableFromOncat
 from addie.processing.mantid.master_table.import_from_database.table_widget_rule_handler import TableWidgetRuleHandler
 from addie.processing.mantid.master_table.import_from_database.apply_rule_handler import ApplyRuleHandler
@@ -25,6 +24,14 @@ from addie.processing.mantid.master_table.import_from_database.data_to_import_ha
 from addie.processing.mantid.master_table.import_from_database.format_json_from_database_to_master_table \
     import FormatJsonFromDatabaseToMasterTable
 from addie.utilities.gui_handler import TableHandler
+
+try:
+    ONCAT_ENABLED = True
+    from addie.processing.mantid.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
+except ImportError:
+    print('pyoncat module not found. Functionality disabled')
+    ONCAT_ENABLED = False
+
 
 
 class ImportFromDatabaseHandler:
@@ -82,7 +89,9 @@ class ImportFromDatabaseWindow(QMainWindow):
 
         self.init_widgets()
         self.init_oncat_template()
-        self.radio_button_changed()
+
+    def next_function(self):
+        self.init_oncat_template()
 
     def init_oncat_template(self):
         """In order to display in the first tab all the metadata just like ONCat does
@@ -90,16 +99,15 @@ class ImportFromDatabaseWindow(QMainWindow):
         what is going on right here"""
         o_retriever = OncatTemplateRetriever(parent=self.parent)
         self.oncat_template = o_retriever.get_template_information()
+        if self.oncat_template == {}:
+            OncatAuthenticationHandler(parent=self.parent,
+                                       next_ui='from_database_ui',
+                                       next_function=self.next_function)
+        else:
+            self.radio_button_changed()
+            self.init_list_ipts()
 
-    def init_widgets(self):
-        if self.parent.oncat is None:
-            return
-
-        self.ui.tableWidget.setColumnHidden(0, True)
-
-        self.ui.error_message.setStyleSheet("color: red")
-        self.ui.error_message.setVisible(False)
-
+    def init_list_ipts(self):
         # retrieve list and display of IPTS for this user
         instrument = self.parent.instrument['short_name']
         facility = self.parent.facility
@@ -109,6 +117,15 @@ class ImportFromDatabaseWindow(QMainWindow):
                                        facility=facility)
         self.list_ipts = list_ipts
         self.ui.ipts_combobox.addItems(list_ipts)
+
+    def init_widgets(self):
+        if self.parent.oncat is None:
+            return
+
+        self.ui.tableWidget.setColumnHidden(0, True)
+
+        self.ui.error_message.setStyleSheet("color: red")
+        self.ui.error_message.setVisible(False)
 
         # add icons on top of widgets (clear, search)
         self.ui.clear_ipts_button.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))

@@ -830,7 +830,9 @@ class H3TableHandler:
 
     def _import_table_from_database(self, clear_table=True):
         self.parent.clear_master_table_before_loading = clear_table
-        OncatAuthenticationHandler(parent=self.parent, next_ui='from_database_ui')
+        self.parent.launch_import_from_database_handler()
+
+#        OncatAuthenticationHandler(parent=self.parent, next_ui='from_database_ui')
 
     def _import_table_from_file(self, clear_table=True):
         _current_folder = self.parent.current_folder
