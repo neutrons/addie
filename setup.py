@@ -1,6 +1,4 @@
 from setuptools import setup, find_packages
-import os
-import sys
 import versioneer  # https://github.com/warner/python-versioneer
 
 setup(name="addie",
@@ -23,4 +21,4 @@ setup(name="addie",
         'psutil==5.4.2',
         'QtPy==1.6.0' ],
       setup_requires=[],
-)
+      )

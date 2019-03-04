@@ -1,5 +1,8 @@
-language: cpp
+language: python
 dist: trusty
+cache:
+  directories:
+    - $HOME/.cache/pip
 matrix:
   include:
   - os: linux
@@ -22,11 +25,16 @@ before_install:
   conda install -n test-environment -c mantid nexus poco
   conda install -n test-environment -c mantid/label/nightly mantid-framework
   conda install -n test-environment qt pyqt qtpy pygments ipython qtconsole
+  conda install -n test-environment flake8
 install:
 - |
   source activate test-environment
   conda list
 script:
+# lint the code changes generating an error if warning introduced
+- git diff -U0 $TRAVIS_COMMIT_RANGE | flake8 --diff
+# print the other warnings but don't report it as an error
+- flake8 --exit-zero
 - python -c "import mantid"
 - python -c "import qtpy"
 - python setup.py install

@@ -58,7 +58,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1691</width>
+         <width>1689</width>
          <height>941</height>
         </rect>
        </property>
@@ -80,11 +80,11 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="tab_5">
              <attribute name="title">
-              <string>Autoreduce</string>
+              <string>autoNOM</string>
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_7">
               <item>
@@ -3745,7 +3745,7 @@ p, li { white-space: pre-wrap; }
             </widget>
             <widget class="QWidget" name="tab_2">
              <attribute name="title">
-              <string>Page</string>
+              <string>Processing</string>
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_15">
               <item>
@@ -4270,7 +4270,7 @@ p, li { white-space: pre-wrap; }
             </widget>
             <widget class="QWidget" name="tab_bragg">
              <attribute name="title">
-              <string>Bragg Peaks</string>
+              <string>Rietveld</string>
              </attribute>
              <layout class="QHBoxLayout" name="horizontalLayout_72">
               <item>
@@ -5181,7 +5181,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>1711</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -5204,6 +5204,7 @@ p, li { white-space: pre-wrap; }
     <addaction name="action_preview_ascii"/>
     <addaction name="separator"/>
     <addaction name="menuLoad_Configuration"/>
+    <addaction name="actionSettings"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -5220,8 +5221,6 @@ p, li { white-space: pre-wrap; }
     </property>
     <addaction name="actionCheat_sheet"/>
     <addaction name="actionAbout"/>
-    <addaction name="separator"/>
-    <addaction name="actionAdvanced"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -5313,6 +5312,11 @@ p, li { white-space: pre-wrap; }
   <action name="actionIPTS_File_Transfer">
    <property name="text">
     <string>IPTS File Transfer ...</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Settings ...</string>
    </property>
   </action>
  </widget>
@@ -6337,6 +6341,22 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>847</x>
      <y>981</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSettings</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>advanced_option_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>855</x>
+     <y>503</y>
     </hint>
    </hints>
   </connection>

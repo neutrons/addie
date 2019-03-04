@@ -1,25 +1,22 @@
 from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QMessageBox)
 from qtpy import PYQT_VERSION, PYQT4, PYQT5
-# qtpy does not provide an abstraction for this
-if PYQT5:
-    from PyQt5.QtCore import QT_VERSION_STR
-elif PYQT4:
-    from PyQt4.QtCore import QT_VERSION_STR
-else:
-    raise RuntimeError('unknown qt version')
 from numpy.version import version as numpy_version_str
 from matplotlib import __version__ as matplotlib_version_str
-import mantid
 import sys
+import mantid
 import addie._version as addie_version
+# qtpy does not provide an abstraction for this
+if PYQT5:
+    from PyQt5.QtCore import QT_VERSION_STR  # noqa
+elif PYQT4:
+    from PyQt4.QtCore import QT_VERSION_STR  # noqa
+else:
+    raise RuntimeError('unknown qt version')
 try:
-    import pyoncat
-    # module doesn't have an obvious way to get version information
-    pyoncat_version = 'enabled'
+    from pyoncat import __version__ as pyoncat_version  # noqa
 except ImportError:
     pyoncat_version = 'disabled'
-
 
 
 class AboutDialog(object):
