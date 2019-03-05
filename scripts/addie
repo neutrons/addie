@@ -527,6 +527,18 @@ class MainWindow(QMainWindow):
                     }
                     """)
 
+        self.ui.splitter_4.setStyleSheet("""
+                    QSplitter::handle {
+                       image: url(':/MPL Toolbar/splitter_icon.png');
+                    }
+                    """)
+
+        self.ui.splitter_5.setStyleSheet("""
+                    QSplitter::handle {
+                       image: url(':/MPL Toolbar/vertical_splitter_icon.png');
+                    }
+                    """)
+
         self.ui.label_25.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
         self.ui.search_logo_label.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
         self.ui.clear_name_search_2.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
