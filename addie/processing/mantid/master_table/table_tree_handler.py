@@ -822,7 +822,7 @@ class H3TableHandler:
     def clear_table(self):
         '''clean up table'''
         nbr_row = self.parent.ui.h3_table.rowCount()
-        for _row in np.arange(nbr_row):
+        for _ in np.arange(nbr_row):
             self.parent.ui.h3_table.removeRow(0)
 
         self.parent.master_table_list_ui = {}
