@@ -6,7 +6,6 @@ import re
 from addie.databases.oncat.oncat import pyoncatGetTemplate
 try:
     ONCAT_ENABLED = True
-    from addie.processing.mantid.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
     import pyoncat
 except ImportError:
     print('pyoncat module not found. Functionality disabled')

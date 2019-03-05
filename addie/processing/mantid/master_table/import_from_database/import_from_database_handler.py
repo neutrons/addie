@@ -8,7 +8,6 @@ from qtpy.QtWidgets import QApplication, QMainWindow
 from addie.utilities import load_ui
 from qtpy import QtGui, QtCore
 
-from addie.processing.mantid.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
 from addie.databases.oncat.oncat import OncatErrorMessageWindow
 from addie.databases.oncat.oncat import pyoncatGetIptsList
 from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
@@ -32,7 +31,6 @@ try:
 except ImportError:
     print('pyoncat module not found. Functionality disabled')
     ONCAT_ENABLED = False
-
 
 
 class ImportFromDatabaseHandler:
