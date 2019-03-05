@@ -1,7 +1,7 @@
 from __future__ import (absolute_import, division, print_function)
 
-#from PyQt4.QtCore import Qt
 from addie.utilities.file_handler import FileHandler
+from qtpy.QtCore import Qt
 
 
 class ExportTable(object):
@@ -116,7 +116,7 @@ class ExportTable(object):
         if self.parent.ui.table.cellWidget(row, 8) is None:
             return "False"
         _widget = self.parent.ui.table.cellWidget(row, 8).children()[1]
-        if (_widget.checkState() == Qt.Checked):
+        if _widget.checkState() == Qt.Checked:
             return 'True'
         else:
             return 'False'
