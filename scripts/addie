@@ -88,7 +88,6 @@ import addie.calculate_gr.edit_sq_dialog
 
 from addie.calculate_gr.pdf_lines_manager import PDFPlotManager
 from addie.graphicviewlib import BraggView, GofRView, SofQView
-# use mantid's ipython widget
 from mantidqt.widgets.jupyterconsole import InProcessJupyterConsole
 from addie.treelib import BraggTree, GofRTree
 
@@ -103,13 +102,6 @@ from mantid.simpleapi import *
 class MainWindow(QMainWindow):
     """ Main addie window
     """
-
-    import time
-    debugging_start_time = time.time()
-    debugging_delta_time = 5 # s
-
-
-
 
     first_oncat_authentication = True
     oncat = None # object to use to retrieve IPTS numbers...etc. Created by oncat_authentication_handler.py
