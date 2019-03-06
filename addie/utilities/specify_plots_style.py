@@ -167,7 +167,7 @@ def get_plots_color_marker(parent_window, plot_label_list):
     child_window.set_plot_labels(plot_labels=plot_label_list)
 
     # launch window
-    r = child_window.exec_()
+    child_window.exec_()
 
     # get result
     if child_window.is_to_apply():
