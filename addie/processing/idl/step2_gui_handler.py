@@ -15,7 +15,7 @@ class Step2GuiHandler(object):
     current_folder = ""
     default_q_range = [0.2, 31.4]
     default_ndabs_output_file_name = "sample_name"
-    use_canceled = False
+    user_canceled = False
 
     def __init__(self, parent=None):
         self.parent_no_ui = parent
@@ -23,7 +23,6 @@ class Step2GuiHandler(object):
         self.current_folder = parent.current_folder
 
     def move_to_folder(self):
-        _current_folder = self.current_folder
         _new_folder = QFileDialog.getExistingDirectory(parent=self.parent_no_ui,
                                                        caption="Select working directory",
                                                        directory=self.current_folder)
