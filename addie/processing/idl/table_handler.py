@@ -1,7 +1,7 @@
 from __future__ import (absolute_import, division, print_function)
-import os
-import re
+#import re
 import glob
+import os
 import numpy as np
 from qtpy.QtCore import (Qt)
 from qtpy.QtGui import (QCursor)
