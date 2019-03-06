@@ -3,7 +3,6 @@ from qtpy.QtCore import Qt
 import os
 import numpy as np
 import glob
-import re
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 import matplotlib.cm as cm
