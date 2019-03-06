@@ -311,7 +311,7 @@ class CellsHandler(SelectionHandlerMaster):
                 elif _column in INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS:
                     o_utilities = Utilities(parent=self.parent)
                     _key = o_utilities.get_row_key_from_row_index(row=_row)
-                    _master_table_row_ui = self.parent.master_table_list_ui
+                    # _master_table_row_ui = self.parent.master_table_list_ui
                     if _column == INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS[0]:  # sample
                         data_type = 'sample'
                     else:
@@ -324,7 +324,7 @@ class CellsHandler(SelectionHandlerMaster):
                 elif _column in INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA:
                     o_utilities = Utilities(parent=self.parent)
                     _key = o_utilities.get_row_key_from_row_index(row=_row)
-                    _master_table_row_ui = self.parent.master_table_list_ui
+                    # _master_table_row_ui = self.parent.master_table_list_ui
                     if _column == INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA[0]:  # sample
                         data_type = 'sample'
                     else:
