@@ -170,7 +170,7 @@ class MakeCalibrationWindow(QMainWindow):
         if ext == h5_ext:
             [base_file_name, _] = os.path.splitext(base_file_name)
 
-        nexus_regex = re.compile("\w+_(\d+)") # noqa: W605
+        nexus_regex = re.compile(r"\w+_(\d+)")
         result = nexus_regex.match(base_file_name)
         if result:
             return result.group(1)
