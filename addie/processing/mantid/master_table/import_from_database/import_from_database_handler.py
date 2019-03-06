@@ -104,6 +104,9 @@ class ImportFromDatabaseWindow(QMainWindow):
             OncatAuthenticationHandler(parent=self.parent,
                                        next_ui='from_database_ui',
                                        next_function=self.next_function)
+            self.parent.oncat_authentication_ui.activateWindow()
+            self.parent.oncat_authentication_ui.setFocus()
+
         else:
             self.radio_button_changed()
             self.init_list_ipts()
