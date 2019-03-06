@@ -79,7 +79,7 @@ class ImportTableFromOncat:
             #                              )
 
             result = database_utilities.get_list_of_runs_found_and_not_found(str_runs=str_runs,
-                                                                                      oncat_result=nexus_json)
+                                                                             oncat_result=nexus_json)
             list_of_runs_not_found = result['not_found']
             self.parent.list_of_runs_not_found = list_of_runs_not_found
             self.parent.list_of_runs_found = result['found']
