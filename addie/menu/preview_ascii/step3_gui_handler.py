@@ -13,7 +13,6 @@ class Step3GuiHandler(object):
         self.current_folder = parent.current_folder
 
     def browse_file(self):
-        _current_folder = self.current_folder
         _ascii_file = QFileDialog.getOpenFileName(parent=self.parent_no_ui,
                                                   caption='Select file to display',
                                                   directory=self.current_folder)
@@ -22,6 +21,7 @@ class Step3GuiHandler(object):
         if isinstance(_ascii_file, tuple):
             _ascii_file = _ascii_file[0]
         _ascii_file = str(_ascii_file)
+
         o_file_handler = FileHandler(filename=_ascii_file)
         o_file_handler.retrieve_contain()
         text_contain = o_file_handler.file_contain
