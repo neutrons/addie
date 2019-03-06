@@ -86,35 +86,34 @@ def pyoncatGetIptsList(oncat=None,
     )
     return [ipts.name for ipts in ipts_list]
 
-
-if __name__ == "__main__":
-    useRcFile = True
-    dashes = 35
-    oncat = pyoncatForADDIE(useRcFile=useRcFile)
-
-    print("-" * dashes)
-    print("NOMAD file 11000")
-    print("-" * dashes)
-    datafiles = pyoncatGetRuns(oncat, 'NOM', 111000)
-    for datafile in datafiles:
-        print(datafile.location)
-
-    print("-" * dashes)
-    print("ARCS file 11000")
-    print("-" * dashes)
-    datafiles = pyoncatGetRuns(oncat, 'ARCS', 11000)
-    for datafile in datafiles:
-        print(datafile.location)
-
-    print("-" * dashes)
-    print("NOMAD IPTSs")
-    print("-" * dashes)
-    print(pyoncatGetIptsList(oncat, 'NOM'))
-
-    print("-" * dashes)
-    print("VISION IPTSs")
-    print("-" * dashes)
-    print(pyoncatGetIptsList(oncat, 'VIS'))
+# if __name__ == "__main__":
+#     useRcFile = True
+#     dashes = 35
+#     oncat = pyoncatForADDIE(useRcFile=useRcFile)
+#
+#     print("-" * dashes)
+#     print("NOMAD file 11000")
+#     print("-" * dashes)
+#     datafiles = pyoncatGetRuns(oncat, 'NOM', 111000)
+#     for datafile in datafiles:
+#         print(datafile.location)
+#
+#     print("-" * dashes)
+#     print("ARCS file 11000")
+#     print("-" * dashes)
+#     datafiles = pyoncatGetRuns(oncat, 'ARCS', 11000)
+#     for datafile in datafiles:
+#         print(datafile.location)
+#
+#     print("-" * dashes)
+#     print("NOMAD IPTSs")
+#     print("-" * dashes)
+#     print(pyoncatGetIptsList(oncat, 'NOM'))
+#
+#     print("-" * dashes)
+#     print("VISION IPTSs")
+#     print("-" * dashes)
+#     print(pyoncatGetIptsList(oncat, 'VIS'))
 
 
 class OncatErrorMessageWindow(QDialog):
