@@ -1,12 +1,11 @@
 from __future__ import (absolute_import, division, print_function, unicode_literals)
 
-# import mantid algorithms, numpy and matplotlib
 import time
 import mantid.simpleapi as ms
-from mantid import plots
-import matplotlib.pyplot as plt
+# from mantid import plots
+# import matplotlib.pyplot as plt
 
-import numpy as np
+# import numpy as np
 
 import os
 from addie.calibration.Calibration_plots import plot_gr_nr
