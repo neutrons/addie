@@ -14,14 +14,11 @@ from addie.processing.mantid.master_table.tree_definition import tree_dict, COLU
 from addie.processing.mantid.master_table.tree_definition import h1_COLUMNS_WIDTH, h2_COLUMNS_WIDTH, h3_COLUMNS_WIDTH
 from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
 from addie.processing.mantid.master_table.table_plot_handler import TablePlotHandler
-from addie.processing.mantid.master_table.selection_handler import SelectionHandler, CellsHandler, RowsHandler
-from addie.processing.mantid.master_table.import_table import ImportTable
-from addie.processing.mantid.master_table.export_table import ExportTable
+from addie.processing.mantid.master_table.selection_handler import CellsHandler, RowsHandler
 from addie.processing.mantid.master_table.master_table_loader import TableFileLoader
 from addie.processing.mantid.master_table.master_table_exporter import TableFileExporter
 try:
     ONCAT_ENABLED = True
-    from addie.processing.mantid.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
     from addie.processing.mantid.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
 except ImportError:
     print('pyoncat module not found. Functionality disabled')
