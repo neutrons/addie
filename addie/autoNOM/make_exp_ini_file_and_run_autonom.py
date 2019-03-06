@@ -86,7 +86,7 @@ class MakeExpIniFileAndRunAutonom(object):
 
     def check_calfiles_in_calpath(calpath, calibrant, samp_env, same_samp_env_dict=None, file_extension='.h5'):
 
-        cal_list = [os.path.splitext(filename) for filename in os.listdir(_calpath)]
+        cal_list = [os.path.splitext(filename) for filename in os.listdir(calpath)]
 
         if same_samp_env_dict is None:
             same_samp_env_dict = dict()
@@ -143,7 +143,7 @@ class MakeExpIniFileAndRunAutonom(object):
                                            file_extention='.h5')
 
         # Check previous cycle for calibration
-        _calpath = getPreviousCycleCalPath(_cycle, _year)
+        _calpath = self.get_previous_cycle_cal_path(_cycle, _year)
         found_in_previous_cycle, same_sample_env_dict, old_cal_file = \
             self.check_calfiles_in_calpath(calpath=_calpath, calibrant=_diamond,
                                            samp_env=_samp_env, same_samp_env_dict=same_sample_env_dict,
