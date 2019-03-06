@@ -219,7 +219,6 @@ class ImportFromDatabaseTableHandler:
                                                 list_args=copy.deepcopy(list_path))
 
                 if oncat_template[_col]['formula']:
-                    value = argument_value
                     argument_value = eval(oncat_template[_col]['formula'])
                     argument_value = argument_value.pop()
 
