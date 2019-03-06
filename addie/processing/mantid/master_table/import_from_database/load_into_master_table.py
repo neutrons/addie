@@ -38,9 +38,9 @@ class LoadIntoMasterTable:
             run_number = _key
             title = _entry['title']
             chemical_formula = _entry['resolved_conflict']['chemical_formula']
-            geometry = _entry['resolved_conflict']['geometry']
+            # geometry = _entry['resolved_conflict']['geometry']
             mass_density = _entry['resolved_conflict']['mass_density']
-            sample_env_device = _entry['resolved_conflict']['sample_env_device']
+            # sample_env_device = _entry['resolved_conflict']['sample_env_device']
 
             o_table.insert_row(row=_row,
                                title=title,
