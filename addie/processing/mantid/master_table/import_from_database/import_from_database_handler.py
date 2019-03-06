@@ -87,6 +87,8 @@ class ImportFromDatabaseWindow(QMainWindow):
         self.ui = load_ui('import_from_database.ui', baseinstance=self)
 
         self.init_widgets()
+        QApplication.processEvents()
+
         self.init_oncat_template()
 
     def next_function(self):
