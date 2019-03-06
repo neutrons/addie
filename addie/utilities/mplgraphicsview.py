@@ -16,8 +16,8 @@ elif PYQT4:
 else:
     raise ImportError('do not know which matplotlib backend to use')
 
-import matplotlib.image
-from matplotlib.figure import Figure
+import matplotlib.image  # noqa
+from matplotlib.figure import Figure  # noqa
 
 MplLineStyles = ['-', '--', '-.', ':', 'None', ' ', '']
 MplLineMarkers = [

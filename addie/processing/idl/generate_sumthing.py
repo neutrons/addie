@@ -4,7 +4,6 @@ reads in a los.txt file, writes out auto_sum.inp file
 """
 from __future__ import (absolute_import, division, print_function)
 from collections import defaultdict
-import sys
 import os.path
 import re
 from qtpy.QtWidgets import QMessageBox
@@ -74,7 +73,6 @@ class GenerateSumthing(object):
 
         outfile.close()
 
-
     def create_sum_inp_file_from_new_format(self,  full_input_file_name):
 
         #        print("]LOG]  Format: comma separated, no scan infos")
@@ -121,7 +119,6 @@ class GenerateSumthing(object):
         if outfile:
             self.write_outfile(outfile, run_nums)
 
-
     def create_sum_inp_file_from_old_format(self, full_input_file_name):
 
         #        print("]LOG]  Format: space separated, with scan infos")
@@ -155,7 +152,6 @@ class GenerateSumthing(object):
 
         if outfile:
             self.write_outfile(outfile, run_nums)
-
 
         outfile = open(full_output_file_name, "w")
         outfile.write("background \n")

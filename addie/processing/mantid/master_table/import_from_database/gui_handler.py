@@ -1,7 +1,6 @@
 from __future__ import (absolute_import, division, print_function)
 
 from qtpy.QtWidgets import QTableWidgetItem
-from addie.utilities import load_ui
 
 import copy
 import numpy as np
@@ -82,6 +81,7 @@ class FilterResultTableHandler:
 
         return nbr_visible_row
 
+
 class GuiHandler:
 
     @staticmethod
@@ -143,9 +143,9 @@ class ImportFromDatabaseTableHandler:
             self.table_ui.insertRow(_row)
             for _column, metadata_filter in enumerate(oncat_metadata_filters):
                 self._set_table_item(json=copy.deepcopy(_json),
-                                    metadata_filter=metadata_filter,
-                                    row=_row,
-                                    col=_column)
+                                     metadata_filter=metadata_filter,
+                                     row=_row,
+                                     col=_column)
 
             self.parent.first_time_filling_table = False
 

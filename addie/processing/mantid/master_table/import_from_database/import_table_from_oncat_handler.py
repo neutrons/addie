@@ -9,7 +9,6 @@ from addie.utilities.general import remove_white_spaces
 from addie.processing.mantid.master_table.import_from_database.oncat_template_retriever import OncatTemplateRetriever
 from addie.databases.oncat.oncat import pyoncatGetIptsList, pyoncatGetNexus, \
     pyoncatGetRunsFromIpts, pyoncatGetTemplate
-#from addie.processing.mantid.master_table.import_from_database import utilities as ImportFromDatabaseUtilities
 from addie.utilities.general import json_extractor
 
 
@@ -136,4 +135,3 @@ class ImportTableFromOncat:
             metadata[_item] = set(metadata[_item])
 
         self.parent.metadata = metadata
-

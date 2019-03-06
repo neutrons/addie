@@ -4,34 +4,33 @@ from collections import OrderedDict
 import copy
 import numpy as np
 
-from qtpy.QtWidgets import QDialog, QComboBox, QLineEdit, QPushButton, QWidget, QHBoxLayout, QLabel, \
-        QTableWidgetItem, QApplication, QMainWindow
+from qtpy.QtWidgets import QApplication, QMainWindow
 from addie.utilities import load_ui
 from qtpy import QtGui, QtCore
 
-from addie.processing.mantid.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
 from addie.databases.oncat.oncat import OncatErrorMessageWindow
-from addie.databases.oncat.oncat import pyoncatGetIptsList, pyoncatGetNexus, \
-    pyoncatGetRunsFromIpts, pyoncatGetTemplate
-from addie.processing.mantid.master_table.tree_definition import LIST_SEARCH_CRITERIA
-from addie.processing.mantid.master_table.periodic_table.material_handler import MaterialHandler
+from addie.databases.oncat.oncat import pyoncatGetIptsList
 from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
 from addie.processing.mantid.master_table.master_table_loader import LoaderOptionsInterface
 from addie.processing.mantid.master_table.import_from_database.global_rule_handler import GlobalRuleHandler
 from addie.processing.mantid.master_table.import_from_database.table_search_engine import TableSearchEngine
 from addie.processing.mantid.master_table.import_from_database.oncat_template_retriever import OncatTemplateRetriever
 from addie.processing.mantid.master_table.import_from_database.gui_handler import GuiHandler, ImportFromDatabaseTableHandler
-#from addie.processing.mantid.master_table.import_from_database import utilities as ImportFromDatabaseUtilities
 from addie.processing.mantid.master_table.import_from_database.import_table_from_oncat_handler import ImportTableFromOncat
 from addie.processing.mantid.master_table.import_from_database.table_widget_rule_handler import TableWidgetRuleHandler
 from addie.processing.mantid.master_table.import_from_database.apply_rule_handler import ApplyRuleHandler
 from addie.processing.mantid.master_table.import_from_database.data_to_import_handler import DataToImportHandler
-from addie.processing.mantid.master_table.import_from_database.format_json_from_database_to_master_table import FormatJsonFromDatabaseToMasterTable
-
-from addie.utilities.general import generate_random_key, remove_white_spaces
+from addie.processing.mantid.master_table.import_from_database.format_json_from_database_to_master_table \
+    import FormatJsonFromDatabaseToMasterTable
 from addie.utilities.gui_handler import TableHandler
 
-from addie.icons import icons_rc
+try:
+    ONCAT_ENABLED = True
+    from addie.processing.mantid.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
+    import pyoncat
+except ImportError:
+    print('pyoncat module not found. Functionality disabled')
+    ONCAT_ENABLED = False
 
 
 class ImportFromDatabaseHandler:
@@ -89,7 +88,9 @@ class ImportFromDatabaseWindow(QMainWindow):
 
         self.init_widgets()
         self.init_oncat_template()
-        self.radio_button_changed()
+
+    def next_function(self):
+        self.init_oncat_template()
 
     def init_oncat_template(self):
         """In order to display in the first tab all the metadata just like ONCat does
@@ -97,16 +98,15 @@ class ImportFromDatabaseWindow(QMainWindow):
         what is going on right here"""
         o_retriever = OncatTemplateRetriever(parent=self.parent)
         self.oncat_template = o_retriever.get_template_information()
+        if self.oncat_template == {}:
+            OncatAuthenticationHandler(parent=self.parent,
+                                       next_ui='from_database_ui',
+                                       next_function=self.next_function)
+        else:
+            self.radio_button_changed()
+            self.init_list_ipts()
 
-    def init_widgets(self):
-        if self.parent.oncat is None:
-            return
-
-        self.ui.tableWidget.setColumnHidden(0, True)
-
-        self.ui.error_message.setStyleSheet("color: red")
-        self.ui.error_message.setVisible(False)
-
+    def init_list_ipts(self):
         # retrieve list and display of IPTS for this user
         instrument = self.parent.instrument['short_name']
         facility = self.parent.facility
@@ -116,6 +116,15 @@ class ImportFromDatabaseWindow(QMainWindow):
                                        facility=facility)
         self.list_ipts = list_ipts
         self.ui.ipts_combobox.addItems(list_ipts)
+
+    def init_widgets(self):
+        if self.parent.oncat is None:
+            return
+
+        self.ui.tableWidget.setColumnHidden(0, True)
+
+        self.ui.error_message.setStyleSheet("color: red")
+        self.ui.error_message.setVisible(False)
 
         # add icons on top of widgets (clear, search)
         self.ui.clear_ipts_button.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
@@ -128,10 +137,10 @@ class ImportFromDatabaseWindow(QMainWindow):
             self.ui.tableWidget.setColumnWidth(_col, _width)
 
             self.ui.splitter.setStyleSheet("""
-    	QSplitter::handle {
-    	   image: url(':/MPL Toolbar/splitter_icon.png');
-    	}
-    	""")
+           QSplitter::handle {
+           image: url(':/MPL Toolbar/splitter_icon.png');
+        }
+        """)
 
     def insert_in_master_table(self, nexus_json=[]):
         if nexus_json == []:
@@ -245,22 +254,29 @@ class ImportFromDatabaseWindow(QMainWindow):
         QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
         QApplication.processEvents()
 
-        #if self.ui.import_button.isEnabled():
         o_import = ImportTableFromOncat(parent=self)
-        o_import.from_oncat_template()
+        try:
+            o_import.from_oncat_template()
+            nexus_json = self.nexus_json_from_template
+            self.nexus_json_all_infos = nexus_json
 
-        nexus_json = self.nexus_json_from_template
-        self.nexus_json_all_infos = nexus_json
+            enabled_widgets = False
+            if not (nexus_json == {}):
+                enabled_widgets = True
 
-        enabled_widgets = False
-        if not (nexus_json == {}):
-            enabled_widgets = True
+            GuiHandler.preview_widget_status(self.ui, enabled_widgets=enabled_widgets)
+            self.refresh_preview_table(nexus_json=copy.deepcopy(nexus_json))
 
-        GuiHandler.preview_widget_status(self.ui, enabled_widgets=enabled_widgets)
-        self.refresh_preview_table(nexus_json=copy.deepcopy(nexus_json))
+            QApplication.restoreOverrideCursor()
+            QApplication.processEvents()
 
-        QApplication.restoreOverrideCursor()
-        QApplication.processEvents()
+        except pyoncat.InvalidRefreshTokenError:
+
+            QApplication.restoreOverrideCursor()
+            QApplication.processEvents()
+
+            OncatAuthenticationHandler(parent=self.parent,
+                                       next_function=self.refresh_preview_table_of_runs)
 
     def refresh_filter_page(self):
 
@@ -361,11 +377,9 @@ class ImportFromDatabaseWindow(QMainWindow):
             ipts_widgets_status = True
             run_widgets_status = False
             if str(self.ui.ipts_lineedit.text()).strip() != "":
-#                self.ipts_selection_changed()
                 self.ipts_text_return_pressed()
             else:
                 self.ipts_selection_changed()
-                #self.ipts_text_changed(str(self.ui.ipts_lineedit.text()))
         else:
             self.ui.error_message.setVisible(False)
             self.run_number_return_pressed()
@@ -482,8 +496,10 @@ class ImportFromDatabaseWindow(QMainWindow):
         result_dict = OrderedDict()
 
         for _json in nexus_json:
-            result_dict[_json['indexed']['run_number']] = {'chemical_formula': "{}".format(_json['metadata']['entry']['sample']['chemical_formula']),
-                                                           'mass_density': "{}".format(_json['metadata']['entry']['sample']['mass_density']),
+            chemical_formula = "{}".format(_json['metadata']['entry']['sample']['chemical_formula'])
+            mass_density = "{}".format(_json['metadata']['entry']['sample']['mass_density'])
+            result_dict[_json['indexed']['run_number']] = {'chemical_formula': chemical_formula,
+                                                           'mass_density': mass_density
                                                            }
         return result_dict
 

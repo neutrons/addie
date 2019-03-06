@@ -4,6 +4,12 @@ import numpy as np
 import re
 
 from addie.databases.oncat.oncat import pyoncatGetTemplate
+try:
+    ONCAT_ENABLED = True
+    import pyoncat
+except ImportError:
+    print('pyoncat module not found. Functionality disabled')
+    ONCAT_ENABLED = False
 
 
 class OncatTemplateRetriever:
@@ -19,16 +25,25 @@ class OncatTemplateRetriever:
     def __init__(self, parent=None):
         self.parent = parent
 
-        self.retrieve_template()
-        self.isolate_relevant_information()
+        if self.parent.oncat:
+
+            try:
+                self.retrieve_template()
+                self.isolate_relevant_information()
+
+            except pyoncat.InvalidRefreshTokenError:
+                self.template_information = {}
+                return
+        else:
+            return None
 
     def retrieve_template(self):
         instrument = self.parent.instrument['short_name']
         facility = self.parent.facility
 
         list_templates = pyoncatGetTemplate(oncat=self.parent.oncat,
-                                       instrument=instrument,
-                                       facility=facility)
+                                            instrument=instrument,
+                                            facility=facility)
 
         for template in list_templates:
             if hasattr(template, "default"):
@@ -91,5 +106,3 @@ class OncatTemplateRetriever:
             projection.append(template[_col]['path'])
 
         return projection
-
-

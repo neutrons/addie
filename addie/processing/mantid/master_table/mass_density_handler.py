@@ -60,7 +60,8 @@ class MassDensityWindow(QMainWindow):
         self.chemical_formula_defined = self._is_chemical_formula_defined()
 
         if self.chemical_formula_defined:
-            self.total_number_of_atoms = self.parent.master_table_list_ui[self.key][self.data_type]['mass_density_infos']['total_number_of_atoms']
+            self.total_number_of_atoms = self.parent.master_table_list_ui[self.key][
+                self.data_type]['mass_density_infos']['total_number_of_atoms']
             self.total_molecular_mass = self.parent.master_table_list_ui[self.key][self.data_type]['mass_density_infos']['molecular_mass']
 
         mass_density_list_ui = self.parent.master_table_list_ui[self.key][self.data_type]
@@ -222,7 +223,7 @@ class MassDensityWindow(QMainWindow):
         else:
             string_value = str(self.ui.mass_line_edit.text())
             if is_number(string_value) and self.chemical_formula_defined and \
-                self.geometry_dimensions_defined:
+                    self.geometry_dimensions_defined:
                 enabled_save_button = True
         self.ui.ok.setEnabled(enabled_save_button)
 
@@ -273,4 +274,3 @@ class MassDensityWindow(QMainWindow):
     def closeEvent(self, c):
         self.parent.mass_density_ui = None
         self.parent.mass_density_ui_position = self.pos()
-

@@ -43,7 +43,8 @@ class Step1Utilities(object):
 
     def is_create_folder_button_status_ok(self):
         if self.parent.ui.create_folder_button.isChecked():
-            if self.parent.ui.manual_output_folder.isChecked() and (str(self.parent.ui.manual_output_folder_field.text()).strip() == ""):
+            if self.parent.ui.manual_output_folder.isChecked() \
+               and (str(self.parent.ui.manual_output_folder_field.text()).strip() == ""):
                 return False
             else:
                 return True

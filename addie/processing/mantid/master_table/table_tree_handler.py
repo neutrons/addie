@@ -241,12 +241,11 @@ class TableInitialization:
             table_ui.setHorizontalHeaderItem(_index, item)
 
 
-
 class TableTreeHandler:
 
     def __init__(self, parent=None):
 
-        if parent.table_tree_ui == None:
+        if parent.table_tree_ui is None:
             parent.table_tree_ui = TableTree(parent=parent)
             parent.table_tree_ui.show()
             if parent.table_tree_ui_position:
@@ -254,6 +253,7 @@ class TableTreeHandler:
         else:
             parent.table_tree_ui.activateWindow()
             parent.table_tree_ui.setFocus()
+
 
 class TableTree(QDialog):
 
@@ -369,6 +369,7 @@ class TableTree(QDialog):
     def closeEvent(self, c):
         self.parent.table_tree_ui = None
         self.parent.table_tree_ui_position = self.pos()
+
 
 class SaveConfigInterface(QDialog):
 
@@ -553,7 +554,8 @@ class H3TableHandler:
             table_import_from_database = table.addMenu("Import from Database")
             table_import_from_database_replace = table_import_from_database.addAction("Replace ...")
             table_import_from_database_append = table_import_from_database.addAction("Append ...")
-            table_import_from_database_append.setEnabled(self.parent.master_table_right_click_buttons['import_from_database_append']['status'])
+            table_import_from_database_append.setEnabled(
+                self.parent.master_table_right_click_buttons['import_from_database_append']['status'])
         else:
             table_import_from_database = None
             table_import_from_database_replace = None
@@ -562,12 +564,14 @@ class H3TableHandler:
         table_import_from_config = table.addMenu("Import from Config. File")
         table_import_from_config_replace = table_import_from_config.addAction("Replace ...")
         table_import_from_config_append = table_import_from_config.addAction("Append ...")
-        table_import_from_config_append.setEnabled(self.parent.master_table_right_click_buttons['import_from_config_append']['status'])
+        table_import_from_config_append.setEnabled(
+            self.parent.master_table_right_click_buttons['import_from_config_append']['status'])
 
         table_import_from_file = table.addMenu("Import from File(s)")
         table_import_from_file_replace = table_import_from_file.addAction("Replace ...")
         table_import_from_file_append = table_import_from_file.addAction("Append ...")
-        table_import_from_file_append.setEnabled(self.parent.master_table_right_click_buttons['import_from_file_append']['status'])
+        table_import_from_file_append.setEnabled(
+            self.parent.master_table_right_click_buttons['import_from_file_append']['status'])
 
         # table_import = table.addAction("Import & Replace ...")
         # self.parent.master_table_right_click_buttons['import']['ui'] = table_import
@@ -826,7 +830,9 @@ class H3TableHandler:
 
     def _import_table_from_database(self, clear_table=True):
         self.parent.clear_master_table_before_loading = clear_table
-        OncatAuthenticationHandler(parent=self.parent, next_ui='from_database_ui')
+        self.parent.launch_import_from_database_handler()
+
+#        OncatAuthenticationHandler(parent=self.parent, next_ui='from_database_ui')
 
     def _import_table_from_file(self, clear_table=True):
         _current_folder = self.parent.current_folder
@@ -867,9 +873,9 @@ class H3TableHandler:
     def _export_table(self):
         _current_folder = self.parent.current_folder
         [_table_file, _] = QFileDialog.getSaveFileName(parent=self.parent,
-                                                      caption="Define Output File Name ...",
-                                                      directory=_current_folder,
-                                                      filter="json (*.json)")
+                                                       caption="Define Output File Name ...",
+                                                       directory=_current_folder,
+                                                       filter="json (*.json)")
 
         if _table_file:
             _file_handler = FileHandler(filename = _table_file)
@@ -991,7 +997,6 @@ class H3TableHandler:
             # plot enabled if only user clicked a cell with runs
 
 
-
 class TableConfig:
     '''This class will look at the h1, h2 and h3 table to create the config use width and visibility of each column'''
 
@@ -1025,10 +1030,10 @@ class TableConfig:
         return _dict
 
     def block_table_header_ui(self, block_all=True,
-                       unblock_all=False,
-                       block_h1=False,
-                       block_h2=False,
-                       block_h3=False):
+                              unblock_all=False,
+                              block_h1=False,
+                              block_h2=False,
+                              block_h3=False):
 
         if block_all:
             block_h1 = True
@@ -1045,10 +1050,10 @@ class TableConfig:
         self.parent.h3_header_table.blockSignals(block_h3)
 
     def disconnect_table_ui(self, block_all=True,
-                       unblock_all=False,
-                       block_h1=False,
-                       block_h2=False,
-                       block_h3=False):
+                            unblock_all=False,
+                            block_h1=False,
+                            block_h2=False,
+                            block_h3=False):
 
         if block_all:
             block_h1 = True
@@ -1136,11 +1141,11 @@ class TableConfig:
 
     def get_table_ui(self, h1=None, h2=None, h3=None):
         '''h1, h2 or h3 are column indexes'''
-        if not h1 is None:
+        if h1 is not None:
             table_ui = self.parent.ui.h1_table
-        elif not h2 is None:
+        elif h2 is not None:
             table_ui = self.parent.ui.h2_table
-        elif not h3 is None:
+        elif h3 is not None:
             table_ui = self.parent.ui.h3_table
         else:
             table_ui = None
@@ -1148,11 +1153,11 @@ class TableConfig:
 
     def get_master_h(self, h1=None, h2=None, h3=None):
         '''return the only defined column index from h1, h2 or h3 table'''
-        if not h1 is None:
+        if h1 is not None:
             return h1
-        elif not h2 is None:
+        elif h2 is not None:
             return h2
-        elif not h3 is None:
+        elif h3 is not None:
             return h3
         else:
             return None
@@ -1201,7 +1206,7 @@ class TableConfig:
         #                       'list_tree_ui': [],
         #                       'list_parent_ui': []}
 
-        if item_name == None:
+        if item_name is None:
             return
 
         h1_columns = []
@@ -1498,14 +1503,12 @@ class TableConfig:
                                       table_ui=self.parent.ui.h2_table,
                                       visible=_h1_boolean_status)
 
-
                 h2_counter += 1
                 h3_counter += 1
 
             set_column_visibility(column=h1_counter,
                                   table_ui=self.parent.ui.h1_table,
                                   visible=_h1_boolean_status)
-
 
     def resizing_table(self, tree_dict={}, block_ui=True):
         '''updating the size of the columns using visibility of the various elements of the tree'''

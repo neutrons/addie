@@ -1,7 +1,6 @@
 from __future__ import (absolute_import, division, print_function)
 
 import collections
-import copy
 
 from addie.processing.mantid.master_table.master_table_loader import FormatAsciiList
 from addie.utilities.list_runs_parser import ListRunsParser

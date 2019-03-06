@@ -126,4 +126,3 @@ class ListRunsParser(object):
         str_runs = ",".join(list_runs)
         # print(str_runs)
         return str_runs
-

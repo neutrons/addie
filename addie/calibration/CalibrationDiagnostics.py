@@ -1,19 +1,18 @@
 import six
-import numpy as np 
+import numpy as np
 from mantid.simpleapi import mtd, LoadDiffCal, CalculateDIFC
 import matplotlib.pyplot as plt
-import matplotlib
-from matplotlib import cm
 from matplotlib.patches import Circle
 from matplotlib.collections import PatchCollection
 
+
 def PlotCalibration(group, cal, mask):
-    
+
     A = CalculateDIFC(InputWorkspace=group, CalibrationWorkspace=cal)
     B = CalculateDIFC(InputWorkspace=group)
     offset = 1 - mtd['A']/mtd['B']
-    
-    #Accept either name or pointer to mask   
+
+    #Accept either name or pointer to mask
     if isinstance(mask, six.string_types):
         mask = mtd[mask]
 
@@ -27,16 +26,16 @@ def PlotCalibration(group, cal, mask):
     masked_phi_array = []
     info = offset.spectrumInfo()
     for idx, x in enumerate(info):
-          pos = x.position
-          theta =  np.arccos(pos[2] / pos.norm())
-          phi = np.arctan2(pos[1], pos[0])
-          if mask.dataY(idx) == True:
-              masked_theta_array.append(theta)
-              masked_phi_array.append(phi)          
-          else:
-              theta_array.append(theta)
-              phi_array.append(phi)
-              value_array.append(np.sum(offset.dataY(idx)))
+        pos = x.position
+        theta =  np.arccos(pos[2] / pos.norm())
+        phi = np.arctan2(pos[1], pos[0])
+        if mask.dataY(idx) == True:
+            masked_theta_array.append(theta)
+            masked_phi_array.append(phi)
+        else:
+            theta_array.append(theta)
+            phi_array.append(phi)
+            value_array.append(np.sum(offset.dataY(idx)))
 
     #Use the largest solid angle for circle radius
     sample_position = info.samplePosition()
@@ -78,12 +77,16 @@ def PlotCalibration(group, cal, mask):
     ax.set_ylim(-np.pi,np.pi)
     return fig, ax
 
+
 #Input for NOMAD
-LoadDiffCal(InstrumentName='NOMAD', Filename='/SNS/NOM/shared/CALIBRATION/2019_1_1B_CAL/NOM_calibrate_d122825_2019_01_17.h5', WorkspaceName='NOM')
+LoadDiffCal(InstrumentName='NOMAD',
+            Filename='/SNS/NOM/shared/CALIBRATION/2019_1_1B_CAL/NOM_calibrate_d122825_2019_01_17.h5', WorkspaceName='NOM')
 mask = mtd['NOM_mask']
 
 #Input for POWGEN
-#LoadDiffCal(InstrumentName='POWGEN', Filename='/SNS/PG3/shared/CALIBRATION/2019_1_11A_CAL/PG3_PAC_d2817_2019_01_22.h5', WorkspaceName='PG3')
+#LoadDiffCal(InstrumentName='POWGEN',
+#            Filename='/SNS/PG3/shared/CALIBRATION/2019_1_11A_CAL/PG3_PAC_d2817_2019_01_22.h5',
+#            WorkspaceName='PG3')
 #mask = mtd['PG3_mask']
 
 fig, ax = PlotCalibration('NOM_group', 'NOM_cal', mask)

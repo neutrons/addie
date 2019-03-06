@@ -137,11 +137,16 @@ class TableFileExporter:
         column += 1
         mass_density = str(self.parent.master_table_list_ui[key][element]['mass_density']['text'].text())
         dict_element["MassDensity"]["MassDensity"] = mass_density
-        dict_element["MassDensity"]["UseMassDensity"] = self.parent.master_table_list_ui[key][element]['mass_density_infos']['mass_density']['selected']
-        dict_element["MassDensity"]["NumberDensity"] = self.parent.master_table_list_ui[key][element]['mass_density_infos']['number_density']['value']
-        dict_element["MassDensity"]["UseNumberDensity"] = self.parent.master_table_list_ui[key][element]['mass_density_infos']['number_density']['selected']
-        dict_element["MassDensity"]["Mass"] = self.parent.master_table_list_ui[key][element]['mass_density_infos']['mass']['value']
-        dict_element["MassDensity"]["UseMass"] = self.parent.master_table_list_ui[key][element]['mass_density_infos']['mass']['selected']
+        dict_element["MassDensity"]["UseMassDensity"] = \
+            self.parent.master_table_list_ui[key][element]['mass_density_infos']['mass_density']['selected']
+        dict_element["MassDensity"]["NumberDensity"] = \
+            self.parent.master_table_list_ui[key][element]['mass_density_infos']['number_density']['value']
+        dict_element["MassDensity"]["UseNumberDensity"] = \
+            self.parent.master_table_list_ui[key][element]['mass_density_infos']['number_density']['selected']
+        dict_element["MassDensity"]["Mass"] = \
+            self.parent.master_table_list_ui[key][element]['mass_density_infos']['mass']['value']
+        dict_element["MassDensity"]["UseMass"] = \
+            self.parent.master_table_list_ui[key][element]['mass_density_infos']['mass']['selected']
 
         column += 1
         packing_fraction =  self._get_item_value(row=row, column=column)
@@ -187,11 +192,11 @@ class TableFileExporter:
         dict_element["InelasticCorrection"]["Interference"] = placzek_infos["is_interference"]
         dict_element["InelasticCorrection"]["FitSpectrumWith"] = placzek_infos["fit_spectrum_index"]
         dict_element["InelasticCorrection"]["LambdaBinningForFit"] = "{},{},{}".format(placzek_infos["lambda_fit_min"],
-                                                                                  placzek_infos["lambda_fit_delta"],
-                                                                                  placzek_infos["lambda_fit_max"])
+                                                                                       placzek_infos["lambda_fit_delta"],
+                                                                                       placzek_infos["lambda_fit_max"])
         dict_element["InelasticCorrection"]["LambdaBinningForCalc"] = "{},{},{}".format(placzek_infos["lambda_calc_min"],
-                                                                                   placzek_infos["lambda_calc_delta"],
-                                                                                   placzek_infos["lambda_calc_max"])
+                                                                                        placzek_infos["lambda_calc_delta"],
+                                                                                        placzek_infos["lambda_calc_max"])
 
         return dict_element
 
@@ -213,7 +218,7 @@ class TableFileExporter:
             activate = self._get_checkbox_state(row=_row, column=0)
             title = self._get_item_value(row=_row, column=1)
             _export_dictionary_sample = self._retrieve_element_infos(element='sample',
-                                                                        row=_row)
+                                                                     row=_row)
             _export_dictionary_normalization = self._retrieve_element_infos(element='normalization',
                                                                             row=_row)
             _calibration = str(self.parent.ui.calibration_file.text())
@@ -239,5 +244,3 @@ class TableFileExporter:
                                            }
 
         return full_export_dictionary
-
-

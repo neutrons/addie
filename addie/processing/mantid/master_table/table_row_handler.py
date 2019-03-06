@@ -1,9 +1,8 @@
 from __future__ import (absolute_import, division, print_function)
 
-from qtpy.QtWidgets import (QMainWindow, QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton,
-        QComboBox, QWidget, QGridLayout, QVBoxLayout, QHBoxLayout, QDialog, QLineEdit)
-from addie.utilities import load_ui
-from qtpy import QtGui, QtCore
+from qtpy.QtWidgets import QCheckBox, QSpacerItem, QSizePolicy, QTableWidgetItem, QLabel, QPushButton, \
+    QComboBox, QFileDialog, QWidget, QGridLayout, QVBoxLayout, QHBoxLayout, QLineEdit
+from qtpy import QtCore
 import copy
 import numpy as np
 import random
@@ -198,24 +197,24 @@ class TableRowHandler:
                                            'inelastic_correction': None,
                                            'placzek_button': None,
                                            'placzek_infos': None,
-                                            },
+                                           },
                                 'normalization': {'runs': None,
-                                           'background': {'runs': None,
-                                                          'background': None,
-                                                          },
-                                           'material': copy.deepcopy(_text_button),
-                                           'material_infos': copy.deepcopy(_material_infos),
-                                           'mass_density': copy.deepcopy(_text_button),
-                                           'mass_density_infos': copy.deepcopy(_mass_density_infos),
-                                           'packing_fraction': None,
-                                           'geometry': copy.deepcopy(_full_dimension_widgets),
-                                           'shape': None,
-                                           'abs_correction': None,
-                                           'mult_scat_correction': None,
-                                           'inelastic_correction': None,
-                                           'placzek_button': None,
-                                           'placzek_infos': None,
-                                            },
+                                                  'background': {'runs': None,
+                                                                 'background': None,
+                                                                 },
+                                                  'material': copy.deepcopy(_text_button),
+                                                  'material_infos': copy.deepcopy(_material_infos),
+                                                  'mass_density': copy.deepcopy(_text_button),
+                                                  'mass_density_infos': copy.deepcopy(_mass_density_infos),
+                                                  'packing_fraction': None,
+                                                  'geometry': copy.deepcopy(_full_dimension_widgets),
+                                                  'shape': None,
+                                                  'abs_correction': None,
+                                                  'mult_scat_correction': None,
+                                                  'inelastic_correction': None,
+                                                  'placzek_button': None,
+                                                  'placzek_infos': None,
+                                                  },
                                 'input_grouping_button': None,
                                 'input_grouping_label': None,
                                 'output_grouping_button': None,
@@ -232,19 +231,19 @@ class TableRowHandler:
         _widget.setEnabled(True)
         _master_table_row_ui['active'] = _widget
         _spacer = QSpacerItem(40, 20,
-                               QSizePolicy.Expanding,
-                               QSizePolicy.Minimum)
+                              QSizePolicy.Expanding,
+                              QSizePolicy.Minimum)
         _layout.addItem(_spacer)
         _layout.addWidget(_widget)
         _spacer = QSpacerItem(40, 20,
-                               QSizePolicy.Expanding,
-                               QSizePolicy.Minimum)
+                              QSizePolicy.Expanding,
+                              QSizePolicy.Minimum)
         _layout.addItem(_spacer)
         _layout.addStretch()
         _new_widget = QWidget()
         _new_widget.setLayout(_layout)
         _widget.stateChanged.connect(lambda state=0, key=random_key:
-                               self.parent.master_table_select_state_changed(state, key))
+                                     self.parent.master_table_select_state_changed(state, key))
 #        _widget.blockSignals(True)
         column = 0
         self.table_ui.setCellWidget(row, column, _new_widget)
@@ -287,8 +286,7 @@ class TableRowHandler:
         _material_button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
         _material_button.setFixedWidth(CONFIG_BUTTON_WIDTH)
         _material_button.pressed.connect(lambda key=random_key:
-                               self.parent.master_table_sample_material_button_pressed(key))
-
+                                         self.parent.master_table_sample_material_button_pressed(key))
 
         _verti_layout = QVBoxLayout()
         _verti_layout.addWidget(_material_text)
@@ -302,8 +300,8 @@ class TableRowHandler:
         # column 6 - mass density
         column += 1
         _mass_text = QLineEdit(sample_mass_density)
-        _mass_text.returnPressed.connect(                               lambda key=random_key:
-                               self.parent.master_table_sample_mass_density_line_edit_entered(key))
+        _mass_text.returnPressed.connect(lambda key=random_key:
+                                         self.parent.master_table_sample_mass_density_line_edit_entered(key))
 
         _mass_units = QLabel("g/cc")
         _top_widget = QWidget()
@@ -314,8 +312,8 @@ class TableRowHandler:
         _mass_button = QPushButton("...")
         _mass_button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
         _mass_button.setFixedWidth(CONFIG_BUTTON_WIDTH)
-        _mass_button.pressed.connect(                               lambda key=random_key:
-                               self.parent.master_table_sample_mass_density_button_pressed(key))
+        _mass_button.pressed.connect(lambda key=random_key:
+                                     self.parent.master_table_sample_mass_density_button_pressed(key))
         _verti_layout = QVBoxLayout()
         _verti_layout.addWidget(_top_widget)
         _verti_layout.addWidget(_mass_button)
@@ -340,8 +338,8 @@ class TableRowHandler:
         _widget = QComboBox()
         _shape_default_index = 0
         _widget.currentIndexChanged.connect(lambda index=_shape_default_index,
-                               key=random_key:
-                               self.parent.master_table_sample_shape_changed(index, key))
+                                            key=random_key:
+                                            self.parent.master_table_sample_shape_changed(index, key))
         _list_ui_to_unlock.append(_widget)
         _widget.blockSignals(True)
         _widget.addItem("cylindrical")
@@ -420,8 +418,8 @@ class TableRowHandler:
         _shape_default_value = 0
         list_abs_correction = self.get_absorption_correction_list(shape=_shape_default_value)
         _widget.currentIndexChanged.connect(lambda value=list_abs_correction[0],
-                               key = random_key:
-                               self.parent.master_table_sample_abs_correction_changed(value, key))
+                                            key = random_key:
+                                            self.parent.master_table_sample_abs_correction_changed(value, key))
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
         for _item in list_abs_correction:
@@ -439,8 +437,8 @@ class TableRowHandler:
         _widget = QComboBox()
         list_multi_scat_correction = self.get_multi_scat_correction_list(shape=_shape_default_value)
         _widget.currentIndexChanged.connect(lambda value=list_multi_scat_correction[0],
-                               key=random_key:
-                               self.parent.master_table_sample_multi_scattering_correction_changed(value, key))
+                                            key=random_key:
+                                            self.parent.master_table_sample_multi_scattering_correction_changed(value, key))
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
         for _item in list_multi_scat_correction:
@@ -459,13 +457,13 @@ class TableRowHandler:
         _widget1.setMinimumHeight(20)
         list_inelastic_correction = self.get_inelastic_scattering_list(shape=_shape_default_value)
         for _item in list_inelastic_correction:
-                _widget1.addItem(_item)
+            _widget1.addItem(_item)
         _master_table_row_ui['sample']['inelastic_correction'] = _widget1
         _button = QPushButton("...")
         _button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
         _button.setFixedWidth(CONFIG_BUTTON_WIDTH)
         _button.pressed.connect(lambda key=random_key:
-                               self.parent.master_table_sample_placzek_button_pressed(key))
+                                self.parent.master_table_sample_placzek_button_pressed(key))
         _master_table_row_ui['sample']['placzek_button'] = _button
         _button.setVisible(False)
         _master_table_row_ui['sample']['placzek_button'] = _button
@@ -475,8 +473,8 @@ class TableRowHandler:
         _widget.setLayout(_layout)
         _default_value = 'None'
         _widget1.currentIndexChanged.connect(lambda value=_default_value,
-                               key=random_key:
-                               self.parent.master_table_sample_inelastic_correction_changed(value, key))
+                                             key=random_key:
+                                             self.parent.master_table_sample_inelastic_correction_changed(value, key))
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
         self.table_ui.setCellWidget(row, column, _widget)
@@ -558,8 +556,8 @@ class TableRowHandler:
         _layout.setContentsMargins(0, 0, 0, 0)
         _widget = QComboBox()
         _widget.currentIndexChanged.connect(lambda value=_shape_default_value,
-                               key=random_key:
-                               self.parent.master_table_normalization_shape_changed(value, key))
+                                            key=random_key:
+                                            self.parent.master_table_normalization_shape_changed(value, key))
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
         _widget.addItem("cylindrical")
@@ -636,8 +634,8 @@ class TableRowHandler:
         _layout.setContentsMargins(0, 0, 0, 0)
         _widget = QComboBox()
         _widget.currentIndexChanged.connect(lambda value=list_abs_correction[0],
-                                   key=random_key:
-                               self.parent.master_table_normalization_abs_correction_changed(value, key))
+                                            key=random_key:
+                                            self.parent.master_table_normalization_abs_correction_changed(value, key))
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
         for _item in list_abs_correction:
@@ -655,8 +653,8 @@ class TableRowHandler:
         _layout.setContentsMargins(0, 0, 0, 0)
         _widget = QComboBox()
         _widget.currentIndexChanged.connect(lambda value=list_multi_scat_correction[0],
-                                   key=random_key:
-                               self.parent.master_table_normalization_multi_scattering_correction_changed(value, key))
+                                            key=random_key:
+                                            self.parent.master_table_normalization_multi_scattering_correction_changed(value, key))  # noqa
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
         for _item in list_multi_scat_correction:
@@ -676,14 +674,14 @@ class TableRowHandler:
         _widget1.setMinimumHeight(20)
         list_inelastic_correction = self.get_inelastic_scattering_list(shape=_shape_default_value)
         for _item in list_inelastic_correction:
-                _widget1.addItem(_item)
+            _widget1.addItem(_item)
         _widget1.setCurrentIndex(0)
         _master_table_row_ui['normalization']['inelastic_correction'] = _widget1
         _button = QPushButton("...")
         _button.setFixedWidth(CONFIG_BUTTON_WIDTH)
         _button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
         _button.pressed.connect(lambda key=random_key:
-                               self.parent.master_table_normalization_placzek_button_pressed(key))
+                                self.parent.master_table_normalization_placzek_button_pressed(key))
         _master_table_row_ui['normalization']['placzek_button'] = _button
         _button.setVisible(False)
         _layout.addWidget(_widget1)
@@ -692,8 +690,8 @@ class TableRowHandler:
         _widget.setLayout(_layout)
         _default_value = 'None'
         _widget1.currentIndexChanged.connect( lambda value=_default_value,
-                               key=random_key:
-                               self.parent.master_table_normalization_inelastic_correction_changed(value, key))
+                                              key=random_key:
+                                              self.parent.master_table_normalization_inelastic_correction_changed(value, key))
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
         self.table_ui.setCellWidget(row, column, _widget)

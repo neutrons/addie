@@ -88,7 +88,6 @@ import addie.calculate_gr.edit_sq_dialog
 
 from addie.calculate_gr.pdf_lines_manager import PDFPlotManager
 from addie.graphicviewlib import BraggView, GofRView, SofQView
-# use mantid's ipython widget
 from mantidqt.widgets.jupyterconsole import InProcessJupyterConsole
 from addie.treelib import BraggTree, GofRTree
 
@@ -509,10 +508,35 @@ class MainWindow(QMainWindow):
         #self.init_width = init_width.width()
 
         self.ui.splitter.setStyleSheet("""
-	QSplitter::handle {
-	   image: url(':/MPL Toolbar/splitter_icon.png');
-	}
-	""")
+            QSplitter::handle {
+               image: url(':/MPL Toolbar/splitter_icon.png');
+            }
+            """)
+
+        self.ui.splitter_2.setStyleSheet("""
+        	QSplitter::handle {
+        	   image: url(':/MPL Toolbar/vertical_splitter_icon.png');
+        	}
+        	""")
+        self.ui.splitter_2.setSizes([1000,1])
+
+        self.ui.splitter_3.setStyleSheet("""
+                    QSplitter::handle {
+                       image: url(':/MPL Toolbar/splitter_icon.png');
+                    }
+                    """)
+
+        self.ui.splitter_4.setStyleSheet("""
+                    QSplitter::handle {
+                       image: url(':/MPL Toolbar/splitter_icon.png');
+                    }
+                    """)
+
+        self.ui.splitter_5.setStyleSheet("""
+                    QSplitter::handle {
+                       image: url(':/MPL Toolbar/vertical_splitter_icon.png');
+                    }
+                    """)
 
         self.ui.label_25.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
         self.ui.search_logo_label.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))

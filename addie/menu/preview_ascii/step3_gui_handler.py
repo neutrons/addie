@@ -1,6 +1,5 @@
 from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QFileDialog)
-import os
 
 from addie.utilities.file_handler import FileHandler
 from addie.menu.preview_ascii.preview_ascii_window import PreviewAsciiWindow

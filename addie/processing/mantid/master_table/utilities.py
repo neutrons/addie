@@ -13,7 +13,7 @@ class Utilities:
     def get_row_index_from_row_key(self, row_key=None):
         '''this methods returns the row for the given row key'''
 
-        if row_key == None:
+        if row_key is None:
             return -1
 
         master_table_row_ui = self.parent.master_table_list_ui
@@ -63,4 +63,3 @@ class LoadGroupingFile:
             return len(itemlist)
         except:
             return 'N/A'
-

@@ -2,12 +2,8 @@ from __future__ import (absolute_import, division, print_function)
 
 from qtpy.QtWidgets import QMainWindow, QLineEdit, QApplication
 from addie.utilities import load_ui
-from qtpy import QtGui
 
 import pyoncat
-import oauthlib
-
-# from addie.ui_oncat_authentication import Ui_MainWindow as UiMainWindow
 
 
 # Create token store
@@ -23,24 +19,23 @@ class InMemoryTokenStore(object):
 
 
 class OncatAuthenticationHandler:
-
-    def __init__(self, parent=None, next_ui='from_database_ui'):
-        o_oncat = OncatAuthenticationWindow(parent=parent, next_ui=next_ui)
+    def __init__(self, parent=None, next_ui='from_database_ui', next_function=None):
+        o_oncat = OncatAuthenticationWindow(parent=parent,
+                                            next_ui=next_ui,
+                                            next_function=next_function)
         o_oncat.show()
         if parent.oncat_authentication_ui_position:
             o_oncat.move(parent.oncat_authentication_ui_position)
 
 
 class OncatAuthenticationWindow(QMainWindow):
-
-    def __init__(self, parent=None, next_ui='from_database_ui'):
+    def __init__(self, parent=None, next_ui='from_database_ui', next_function=None):
         QMainWindow.__init__(self, parent=parent)
         self.parent = parent
         self.next_ui = next_ui
+        self.next_function = next_function
 
         self.ui = load_ui('oncat_authentication.ui', baseinstance=self)
-        # self.ui = UiMainWindow()
-        # self.ui.setupUi(self)
 
         self.center()
         self.init_widgets()
@@ -100,11 +95,11 @@ class OncatAuthenticationWindow(QMainWindow):
         # do something
         if self.is_valid_password():
             self.close()
-
-            if self.next_ui == 'from_database_ui':
-                self.parent.launch_import_from_database_handler()
-            elif self.next_ui == 'from_run_number_ui':
-                self.parent.launch_import_from_run_number_handler()
+            self.next_function()
+            # if self.next_ui == 'from_database_ui':
+            #     self.parent.launch_import_from_database_handler()
+            # elif self.next_ui == 'from_run_number_ui':
+            #     self.parent.launch_import_from_run_number_handler()
 
         else:
             self.ui.password.setText("")

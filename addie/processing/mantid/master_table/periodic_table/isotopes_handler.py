@@ -19,6 +19,7 @@ class IsotopesHandler:
             parent.isotope_ui.setFocus()
             parent.isotope_ui.activateWindow()
 
+
 class IsotopeDialog(QDialog):
 
     def __init__(self, parent=None, element=''):

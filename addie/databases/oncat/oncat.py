@@ -1,9 +1,7 @@
 from __future__ import (absolute_import, division, print_function)
-import pyoncat
 
 from qtpy.QtWidgets import QDialog
 from addie.utilities import load_ui
-from qtpy import QtGui
 
 
 # Create token store
@@ -44,6 +42,7 @@ def pyoncatGetNexus(oncat=None,
     )
     return datafiles
 
+
 def pyoncatGetTemplate(oncat=None,
                        instrument='',
                        facility='SNS'):
@@ -51,6 +50,7 @@ def pyoncatGetTemplate(oncat=None,
                                         instrument=instrument,
                                         )
     return all_templates
+
 
 def pyoncatGetRunsFromIpts(oncat=None,
                            instrument='',
@@ -65,7 +65,7 @@ def pyoncatGetRunsFromIpts(oncat=None,
                       'metadata.entry.title',
                       'metadata.entry.proton_charge',
                       'metadata.entry.daslogs.bl1b:se:sampletemp.device_name'
-                     ]
+                      ]
 
     run_list = oncat.Datafile.list(facility=facility,
                                    instrument=instrument,
@@ -74,6 +74,7 @@ def pyoncatGetRunsFromIpts(oncat=None,
                                    tags=['type/raw'],
                                    exts=['.nxs.h5', '.nxs'])
     return run_list
+
 
 def pyoncatGetIptsList(oncat=None,
                        instrument='',
@@ -127,7 +128,3 @@ class OncatErrorMessageWindow(QDialog):
     def init_widgets(self, list_of_runs=[]):
         str_list_of_runs = "\n".join(list_of_runs)
         self.ui.list_of_runs.setText(str_list_of_runs)
-
-
-
-
