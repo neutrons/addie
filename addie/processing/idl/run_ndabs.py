@@ -18,9 +18,9 @@ class RunNDabs(object):
         _script_to_run = self.script_to_run + ' ' + str(self.parent.ui.run_ndabs_output_file_name.text()) + '.ndsum'
         _script_to_run += ' ' + _str_list_sample_files
 
-        job_handler = JobStatusHandler(parent=self.parent,
-                                       script_to_run=_script_to_run,
-                                       job_name='NDabs')
+        JobStatusHandler(parent=self.parent,
+                         script_to_run=_script_to_run,
+                         job_name='NDabs')
         # job_handler.launch(script_to_run=_script_to_run)
 
         #_run_thread = self.parent._run_thread
