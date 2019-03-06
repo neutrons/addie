@@ -48,7 +48,7 @@ class PlaczekWindow(QMainWindow):
     def init_widgets(self):
         '''initialize the widgets in the state we left them last time (for the same row)'''
         master_table_list_ui = self.parent.master_table_list_ui[self.key]
-        if master_table_list_ui[self.data_type]['placzek_infos'] == None:
+        if master_table_list_ui[self.data_type]['placzek_infos'] is None:
             return
 
         # initialize the widgets using previous values set
