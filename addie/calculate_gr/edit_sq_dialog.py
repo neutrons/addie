@@ -243,8 +243,9 @@ class EditSofQDialog(QDialog):
             current_scale_factor = max_scale
 
         # TODO/ISSUE/NOW - clean up to multiple steps and check!
-        scale_factor_int = int(current_scale_factor/(max_scale - min_scale)*(self.ui.horizontalSlider_scale.maximum() -
-                                                                             self.ui.horizontalSlider_scale.minimum()))
+        scale_factor_int = int(current_scale_factor/(max_scale - \
+                                                     min_scale)*(self.ui.horizontalSlider_scale.maximum() -
+                                                                 self.ui.horizontalSlider_scale.minimum()))
         self.ui.horizontalSlider_scale.setValue(scale_factor_int)
 
     def do_set_shift_range(self):
@@ -274,7 +275,7 @@ class EditSofQDialog(QDialog):
             curr_shift = max_shift
 
         # TODO/ISSUE/NOW - clean up to multiple steps and check!
-        shift_int = int(curr_shift/(max_shift - min_shift) *
+        shift_int = int(curr_shift/(max_shift - min_shift) * \
                         (self.ui.horizontalSlider_shift.maximum() - self.ui.horizontalSlider_shift.minimum()))
         self.ui.horizontalSlider_shift.setValue(shift_int)
 

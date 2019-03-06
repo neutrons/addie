@@ -31,6 +31,7 @@ class OncatAuthenticationHandler:
         parent.oncat_authentication_ui.activateWindow()
         parent.oncat_authentication_ui.setFocus()
 
+
 class OncatAuthenticationWindow(QMainWindow):
     def __init__(self, parent=None, next_ui='from_database_ui', next_function=None):
         QMainWindow.__init__(self, parent=parent)
