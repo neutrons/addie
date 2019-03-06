@@ -154,7 +154,7 @@ class EditSofQDialog(QDialog):
             else:
                 scale_factor = float(scale_str)
         except ValueError as val_error:
-            print('[ERROR] Shift {0} or scale factor {1} cannot be converted to float due to {2}.' +
+            print('[ERROR] Shift {0} or scale factor {1} cannot be converted to float due to {2}.'
                   ''.format(shift_str, scale_str, val_error))
 
         # call edit_sq()
