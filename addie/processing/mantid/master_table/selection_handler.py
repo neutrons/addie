@@ -389,7 +389,7 @@ class CellsHandler(SelectionHandlerMaster):
         # nbr_row_paste = len(list_row_paste)
         # nbr_column_paste = len(list_column_paste)
         #
-        row_columns_items_to_copy = self.parent.master_table_cells_copy['temp']
+        #row_columns_items_to_copy = self.parent.master_table_cells_copy['temp']
         #[nbr_row_copy, nbr_column_copy] = np.shape(row_columns_items_to_copy)
 
         # if we don't select the same amount of columns, we stop here (and inform
