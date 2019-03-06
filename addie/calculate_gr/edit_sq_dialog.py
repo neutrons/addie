@@ -189,8 +189,6 @@ class EditSofQDialog(QDialog):
 
         self.MyEditSignal.emit(sq_ws_name)
 
-        return
-
     def add_sq_by_name(self, sq_name_list):
         """
         add a list of S(Q) by workspace name
@@ -198,7 +196,7 @@ class EditSofQDialog(QDialog):
         :return:
         """
         # check
-        assert isinstance(sq_name_list, list), 'S(Q) workspace names {0} must be given by list but not {1}' \
+        assert isinstance(sq_name_list, list), 'S(Q) workspace names {0} must be given by list but not {1}'
                                                ''.format(sq_name_list, type(sq_name_list))
 
         # add
@@ -229,7 +227,7 @@ class EditSofQDialog(QDialog):
         # check valid or not!
         if min_scale >= max_scale:
             # if not valid: set the values back to stored original
-            print('[ERROR] Minimum scale factor value {0} cannot exceed maximum scale factor value {1}.' +
+            print('[ERROR] Minimum scale factor value {0} cannot exceed maximum scale factor value {1}.'
                   ''.format(min_scale, max_scale))
             return
         else:
@@ -260,7 +258,7 @@ class EditSofQDialog(QDialog):
         # check valid or not!
         if min_shift >= max_shift:
             # if not valid: set the values back to stored original
-            print('[ERROR] Minimum scale factor value {0} cannot exceed maximum scale factor value {1}.' \
+            print('[ERROR] Minimum scale factor value {0} cannot exceed maximum scale factor value {1}.'
                   ''.format(min_shift, max_shift))
             return
         else:
@@ -327,14 +325,13 @@ class EditSofQDialog(QDialog):
         # check
         assert isinstance(shift, float), 'Shift {0} must be a float but not a {1}.' \
                                          ''.format(shift, type(shift))
-        assert isinstance(scale_factor, float), 'Scale factor {0} must be a float but not a {1}.' \
+        assert isinstance(scale_factor, float), 'Scale factor {0} must be a float but not a {1}.'
                                                 ''.format(scale_factor, type(scale_factor))
 
         # get the workspace name
         workspace_name = str(self.ui.comboBox_workspaces.currentText())
         if len(workspace_name) == 0:
             print('[INFO] No workspace is selected')
-            return
 
         # set out the signal
         self.MyEditSignal.emit(workspace_name, scale_factor, shift)
@@ -360,4 +357,3 @@ class EditSofQDialog(QDialog):
 
         # set the shift value
         self.ui.horizontalSlider_shift.setValue(slide_value)
-

@@ -2,7 +2,7 @@
 # An extension on QTreeView for file system
 #
 from __future__ import (absolute_import, division, print_function)
-import os
+# import os
 
 from qtpy.QtCore import (QModelIndex)
 from qtpy.QtGui import (QStandardItem, QStandardItemModel)
