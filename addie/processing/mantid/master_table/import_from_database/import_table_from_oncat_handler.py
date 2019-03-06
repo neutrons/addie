@@ -9,7 +9,7 @@ from addie.utilities.general import remove_white_spaces
 from addie.processing.mantid.master_table.import_from_database.oncat_template_retriever import OncatTemplateRetriever
 from addie.databases.oncat.oncat import pyoncatGetNexus, pyoncatGetRunsFromIpts
 from addie.utilities.general import json_extractor
-import addie.mantid.master_table.import_from_database.utilities as  database_utilities
+import addie.processing.mantid.master_table.import_from_database.utilities as  database_utilities
 
 
 class ImportTableFromOncat:
