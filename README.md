@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/neutrons/addie.svg?branch=master)](https://travis-ci.org/neutrons/addie
+[![Build Status](https://travis-ci.org/neutrons/addie.svg?branch=master)](https://travis-ci.org/neutrons/addie)
 
 Addie
 ======
