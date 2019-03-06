@@ -2,6 +2,7 @@ from __future__ import (absolute_import, division, print_function)
 from qtpy.QtCore import Qt
 import os
 import numpy as np
+import glob
 import re
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
