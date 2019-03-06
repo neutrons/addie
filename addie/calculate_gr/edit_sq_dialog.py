@@ -196,7 +196,7 @@ class EditSofQDialog(QDialog):
         :return:
         """
         # check
-        assert isinstance(sq_name_list, list), 'S(Q) workspace names {0} must be given by list but not {1}'
+        assert isinstance(sq_name_list, list), 'S(Q) workspace names {0} must be given by list but not {1}' \
                                                ''.format(sq_name_list, type(sq_name_list))
 
         # add
@@ -325,7 +325,7 @@ class EditSofQDialog(QDialog):
         # check
         assert isinstance(shift, float), 'Shift {0} must be a float but not a {1}.' \
                                          ''.format(shift, type(shift))
-        assert isinstance(scale_factor, float), 'Scale factor {0} must be a float but not a {1}.'
+        assert isinstance(scale_factor, float), 'Scale factor {0} must be a float but not a {1}.' \
                                                 ''.format(scale_factor, type(scale_factor))
 
         # get the workspace name
