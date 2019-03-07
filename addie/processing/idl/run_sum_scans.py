@@ -80,7 +80,7 @@ class RunSumScans(object):
 
         # qrangeft
         [q_range_min, q_range_max] = o_gui_handler.get_q_range()
-        if (q_range_min != "") and (q_range_max != ""):
+        if q_range_min and q_range_max:
             f.write("qrangeft {},{}\n".format(q_range_min, q_range_max))
 
         # rmax
