@@ -31,10 +31,8 @@ install:
   source activate test-environment
   conda list
 script:
-  # lint the code changes generating an error if warning introduced
-  - git diff -U0 $TRAVIS_COMMIT_RANGE | flake8 --diff
-  # print the other warnings but don't report it as an error
-  - flake8 --exit-zero
+  # lint the code and generate an error if a warning is introduced
+  - flake8
   - python -c "import mantid"
   - python -c "import qtpy"
   - python setup.py install
