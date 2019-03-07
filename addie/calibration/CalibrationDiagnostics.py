@@ -8,7 +8,7 @@ from matplotlib.collections import PatchCollection
 
 def PlotCalibration(group, cal, mask):
 
-    CalculateDIFC(InputWorkspace=group, CalibrationWorkspace=cal)
+    CalculateDIFC(InputWorkspace=group, CalibrationWorkspace=cal, OutputWorkspace='A')
     CalculateDIFC(InputWorkspace=group)
     offset = 1 - mtd['A']/mtd['B']
 
