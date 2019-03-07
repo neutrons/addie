@@ -1,12 +1,13 @@
-#
-# An extension on QTreeView for file system
-#
 from __future__ import (absolute_import, division, print_function)
 
 from qtpy.QtCore import (QModelIndex)
 from qtpy.QtGui import (QStandardItem, QStandardItemModel)
 from qtpy.QtWidgets import (QAction, QFileDialog)
 from addie.utilities import customtreeview as base
+
+#
+# An extension of QTreeView for file system
+#
 
 
 class BraggTree(base.CustomizedTreeView):
@@ -127,7 +128,6 @@ class BraggTree(base.CustomizedTreeView):
                 print('[Error] Nodes of different levels are selected.')
             elif item.parent() is None and leaf_level != 2:
                 print('[Error] Nodes of different levels are selected.')
-        # END-FOR
 
         if leaf_level == 1:
             self.removeAction(self._action_plot)
