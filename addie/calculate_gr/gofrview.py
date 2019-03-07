@@ -1,9 +1,7 @@
 from __future__ import (absolute_import, division, print_function)
 import numpy as np
-import time
 
-from qtpy.QtCore import (Signal)
-from qtpy.QtGui import (QCursor)
+from qtpy.QtGui import QCursor
 from qtpy.QtWidgets import (QAction, QMenu)
 
 from addie.utilities import mplgraphicsview as base
