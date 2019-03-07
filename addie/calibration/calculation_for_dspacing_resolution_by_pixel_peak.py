@@ -13,7 +13,7 @@ def get_fit_params_from_instrument_preselected_file(instrument):
     # Load files
     filename = "%s_pdcalibration_diagnostics.nxs" % instrument
 
-    cal_wksp = LoadNexusProcessed(Filename=filename)
+    LoadNexusProcessed(Filename=filename)
 
     # Get the fitting parameters workspace
     if instrument == "NOM":
@@ -69,9 +69,9 @@ if __name__ == "__main__":
        step 2 - vector operate on tof_widths to get tof_fwhms
        step 3 - vector operate on tof_fwhms / tof_centers * dvalues to get dspace_fwhms
      TODO: then, use histogramming (probably with a set number of bins) to reduce the number of points plotted.
-           could do an array of len(n_histograms)*len(dvalues) that can be plotted quickly and easily and easier for linear regression
-           would also be necessary before interactivity could be introduced for say: displaying number of pixels per dspacing,
-                                                                                     changing sigma for inclusion around linear regression line, etc.
+           could do an array of len(n_histograms)*len(dvalues) that can be plotted quickly and easily and easier for
+           linear regression  would also be necessary before interactivity could be introduced for say: displaying
+           number of pixels per dspacing, changing sigma for inclusion around linear regression line, etc.
     '''
     pixel_deltaD = np.zeros((len(pixels), len(dvalues)))
     fig, ax = plt.subplots(1)
