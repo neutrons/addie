@@ -91,7 +91,10 @@ import addie.calculate_gr.edit_sq_dialog
 from addie.calculate_gr.pdf_lines_manager import PDFPlotManager
 from addie.graphicviewlib import BraggView, GofRView, SofQView
 from mantidqt.widgets.jupyterconsole import InProcessJupyterConsole
-from addie.treelib import BraggTree, GofRTree
+
+from addie.rietveld.braggtree import BraggTree
+from addie.calculate_gr.gofrtree import GofRTree
+
 
 from addie.icons import icons_rc
 
