@@ -71,7 +71,7 @@ class RunSumScans(object):
 
         # platrange
         [plarange_min, plarange_max] = o_gui_handler.get_plazcek_range()
-        if (plarange_min != "") and (plarange_max != ""):
+        if plarange_min and plarange_max:
             f.write("plarange {},{}\n".format(plarange_min, plarange_max))
 
         # poly degree
