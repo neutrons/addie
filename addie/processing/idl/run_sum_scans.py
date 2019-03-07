@@ -71,7 +71,7 @@ class RunSumScans(object):
 
         # platrange
         [plarange_min, plarange_max] = o_gui_handler.get_plazcek_range()
-        if (plarange_min is not "") and (plarange_max is not ""):
+        if plarange_min and plarange_max:
             f.write("plarange {},{}\n".format(plarange_min, plarange_max))
 
         # poly degree
@@ -80,7 +80,7 @@ class RunSumScans(object):
 
         # qrangeft
         [q_range_min, q_range_max] = o_gui_handler.get_q_range()
-        if (q_range_min is not "") and (q_range_max is not ""):
+        if q_range_min and q_range_max:
             f.write("qrangeft {},{}\n".format(q_range_min, q_range_max))
 
         # rmax

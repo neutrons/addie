@@ -87,6 +87,8 @@ class ImportFromDatabaseWindow(QMainWindow):
         self.ui = load_ui('import_from_database.ui', baseinstance=self)
 
         self.init_widgets()
+        QApplication.processEvents()
+
         self.init_oncat_template()
 
     def next_function(self):
@@ -102,6 +104,9 @@ class ImportFromDatabaseWindow(QMainWindow):
             OncatAuthenticationHandler(parent=self.parent,
                                        next_ui='from_database_ui',
                                        next_function=self.next_function)
+            self.parent.oncat_authentication_ui.activateWindow()
+            self.parent.oncat_authentication_ui.setFocus()
+
         else:
             self.radio_button_changed()
             self.init_list_ipts()

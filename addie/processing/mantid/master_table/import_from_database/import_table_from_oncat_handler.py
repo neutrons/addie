@@ -7,9 +7,9 @@ import copy
 
 from addie.utilities.general import remove_white_spaces
 from addie.processing.mantid.master_table.import_from_database.oncat_template_retriever import OncatTemplateRetriever
-from addie.databases.oncat.oncat import pyoncatGetIptsList, pyoncatGetNexus, \
-    pyoncatGetRunsFromIpts, pyoncatGetTemplate
+from addie.databases.oncat.oncat import pyoncatGetNexus, pyoncatGetRunsFromIpts
 from addie.utilities.general import json_extractor
+import addie.processing.mantid.master_table.import_from_database.utilities as  database_utilities
 
 
 class ImportTableFromOncat:
@@ -78,8 +78,8 @@ class ImportTableFromOncat:
             #                              facility=self.parent.parent.facility,
             #                              )
 
-            result = ImportFromDatabaseUtilities.get_list_of_runs_found_and_not_found(str_runs=str_runs,
-                                                                                      oncat_result=nexus_json)
+            result = database_utilities.get_list_of_runs_found_and_not_found(str_runs=str_runs,
+                                                                             oncat_result=nexus_json)
             list_of_runs_not_found = result['not_found']
             self.parent.list_of_runs_not_found = list_of_runs_not_found
             self.parent.list_of_runs_found = result['found']
@@ -92,8 +92,8 @@ class ImportTableFromOncat:
             #                                     ipts=ipts,
             #                                     facility=self.parent.parent.facility)
 
-            result = ImportFromDatabaseUtilities.get_list_of_runs_found_and_not_found(oncat_result=nexus_json,
-                                                                                      check_not_found=False)
+            result = database_utilities.get_list_of_runs_found_and_not_found(oncat_result=nexus_json,
+                                                                             check_not_found=False)
 
             self.parent.list_of_runs_not_found = result['not_found']
             self.parent.list_of_runs_found = result['found']

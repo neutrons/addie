@@ -83,7 +83,7 @@ class Step1GuiHandler(object):
         o_auto_populate.run()
 
     def select_manual_output_folder(self):
-        _current_folder = self.parent_no_ui.current_folder
+        # _current_folder = self.parent_no_ui.current_folder
         dlg = QFileDialog(parent=self.parent_no_ui,
                           caption="Select or Define Output Directory")
         dlg.setFileMode(QFileDialog.Directory)

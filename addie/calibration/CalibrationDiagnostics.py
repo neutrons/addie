@@ -8,8 +8,8 @@ from matplotlib.collections import PatchCollection
 
 def PlotCalibration(group, cal, mask):
 
-    A = CalculateDIFC(InputWorkspace=group, CalibrationWorkspace=cal)
-    B = CalculateDIFC(InputWorkspace=group)
+    CalculateDIFC(InputWorkspace=group, CalibrationWorkspace=cal, OutputWorkspace='A')
+    CalculateDIFC(InputWorkspace=group, OutputWorkspace='B')
     offset = 1 - mtd['A']/mtd['B']
 
     #Accept either name or pointer to mask
@@ -29,7 +29,7 @@ def PlotCalibration(group, cal, mask):
         pos = x.position
         theta =  np.arccos(pos[2] / pos.norm())
         phi = np.arctan2(pos[1], pos[0])
-        if mask.dataY(idx) == True:
+        if mask.dataY(idx):
             masked_theta_array.append(theta)
             masked_phi_array.append(phi)
         else:

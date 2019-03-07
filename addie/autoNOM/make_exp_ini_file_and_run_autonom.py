@@ -3,6 +3,7 @@ import os
 import time
 import json
 from datetime import datetime
+import re
 
 from addie.autoNOM.step1_gui_handler import Step1GuiHandler
 
@@ -75,17 +76,17 @@ class MakeExpIniFileAndRunAutonom(object):
         self._dict_optional = _dict_optional
 
     def get_previous_cycle_cal_path(cycle, year, calstring="/SNS/NOM/shared/CALIBRATION/%s_%d_1B_CAL/"):
-        if _cycle == 1:
-            _old_year = int(_year) - 1
+        if cycle == 1:
+            _old_year = int(year) - 1
             _calpath = calstring % (_old_year, 2)
         else:
-            _calpath = calstring % (_year, 1)
+            _calpath = calstring % (year, 1)
 
         return _calpath
 
     def check_calfiles_in_calpath(calpath, calibrant, samp_env, same_samp_env_dict=None, file_extension='.h5'):
 
-        cal_list = [os.path.splitext(filename) for filename in os.listdir(_calpath)]
+        cal_list = [os.path.splitext(filename) for filename in os.listdir(calpath)]
 
         if same_samp_env_dict is None:
             same_samp_env_dict = dict()
@@ -94,16 +95,16 @@ class MakeExpIniFileAndRunAutonom(object):
         cal_file = None
         for basename, ext in cal_list:
             if file_extension in ext:
-                _pulled_run = re.search('d(\d+)', basename.split('_')[1]).group(1)  # parses "d####" str for number
+                _pulled_run = re.search(r'd(\d+)', basename.split('_')[1]).group(1)  # parses "d####" str for number
                 _pulled_samp_env = basename.split('_')[-1]
 
-                _full_path = _calpath+basename+ext
+                _full_path = calpath+basename+ext
 
                 if _pulled_run == calibrant and _pulled_samp_env == samp_env:
                     found_in_cycle = True
                     cal_file = _full_path
 
-                if _pulled_run != calibratn and _pulled_samp_env == _samp_env:
+                if _pulled_run != calibrant and _pulled_samp_env == samp_env:
                     same_samp_env_dict[int(_pulled_run)] = _full_path
 
         return found_in_cycle, same_samp_env_dict, cal_file
@@ -114,7 +115,7 @@ class MakeExpIniFileAndRunAutonom(object):
                                  calstring="/SNS/NOM/shared/CALIBRATION/%s_%d_1B_CAL/",
                                  calformat="NOM_d%d_%s_%s.h5"):
 
-         # Setup calibration input
+        # Setup calibration input
         _diamond = self._dict_mandatory['Dia']
         _vanadium = self._dict_mandatory['Vana']
         _today = datetime.now().date().strftime("%Y_%m_%d")
@@ -137,16 +138,16 @@ class MakeExpIniFileAndRunAutonom(object):
 
         # Check current cycle for calibration
         found_in_current_cycle, same_sample_env_dict, current_cal_file = \
-            check_calfiles_in_calpath(calpath=_calpath, calibrant=_diamond,
-                                      samp_env=_samp_env, same_samp_env_dict=None,
-                                      file_extention='.h5')
+            self.check_calfiles_in_calpath(calpath=_calpath, calibrant=_diamond,
+                                           samp_env=_samp_env, same_samp_env_dict=None,
+                                           file_extention='.h5')
 
         # Check previous cycle for calibration
-        _calpath = getPreviousCycleCalPath(_cycle, _year)
+        _calpath = self.get_previous_cycle_cal_path(_cycle, _year)
         found_in_previous_cycle, same_sample_env_dict, old_cal_file = \
-              check_calfiles_in_calpath(calpath=_calpath, calibrant=_diamond,
-                                        samp_env=_samp_env, same_samp_env_dict=same_sample_env_dict,
-                                        file_extention='.h5')
+            self.check_calfiles_in_calpath(calpath=_calpath, calibrant=_diamond,
+                                           samp_env=_samp_env, same_samp_env_dict=same_sample_env_dict,
+                                           file_extention='.h5')
         # Get old calibration to use
         old_cal = None
         if same_sample_env_dict:

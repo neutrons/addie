@@ -2,7 +2,7 @@ from __future__ import (absolute_import, division, print_function)
 from qtpy.QtCore import Qt
 import os
 import numpy as np
-import re
+import glob
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 import matplotlib.cm as cm
@@ -91,7 +91,7 @@ class TablePlotHandler:
             search_dir = cwd[:cwd.find('shared')] + '/nexus'
             prefix = 'NOM_'
             suffix = '.nxs.h5'
-            ipts = int(re.search(r"IPTS-(\d*)\/", os.getcwd()).group(1))
+            # ipts = int(re.search(r"IPTS-(\d*)\/", os.getcwd()).group(1))
 
         _row = self.current_row
         _row_runs = self._collect_metadata(row_index=_row)['runs'].split(',')

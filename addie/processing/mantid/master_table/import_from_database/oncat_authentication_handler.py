@@ -24,8 +24,12 @@ class OncatAuthenticationHandler:
                                             next_ui=next_ui,
                                             next_function=next_function)
         o_oncat.show()
+        parent.oncat_authentication_ui = o_oncat
         if parent.oncat_authentication_ui_position:
             o_oncat.move(parent.oncat_authentication_ui_position)
+
+        parent.oncat_authentication_ui.activateWindow()
+        parent.oncat_authentication_ui.setFocus()
 
 
 class OncatAuthenticationWindow(QMainWindow):
@@ -39,6 +43,7 @@ class OncatAuthenticationWindow(QMainWindow):
 
         self.center()
         self.init_widgets()
+        self.ui.password.setFocus()
 
     def center(self):
         frameGm = self.frameGeometry()

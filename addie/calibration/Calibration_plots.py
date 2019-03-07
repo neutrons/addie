@@ -57,9 +57,9 @@ def extractY(wkspc):
     """
     h_w = ms.mtd[wkspc]
     mon_bool = isMonitor(h_w)
-    total_hist = h_w.getNumberHistograms()
+    # total_hist = h_w.getNumberHistograms()
     y = h_w.extractY()
-    y = y[mon_bool==False]
+    y = y[not mon_bool]
     return y, mon_bool, h_w
 
 
@@ -88,7 +88,7 @@ def plot_delta_d_ttheta(ddwkspc,groupwkspc=None,cmapstr='viridis'):
     tthetaidx = 0
     total_hist=h_nr.getNumberHistograms()
     for histnum in range(total_hist):
-        if res_mon_bool[histnum]==False:
+        if not res_mon_bool[histnum]:
             ttheta[tthetaidx]=np.degrees(h_sI.twoTheta(histnum))
             tthetaidx+=1
     f1,ax1=plt.subplots()

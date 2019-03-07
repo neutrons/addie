@@ -13,7 +13,6 @@ class MantidReductionView(QMainWindow):
 
         QMainWindow.__init__(self, parent=parent)
         self.ui = load_ui('previewMantid.ui', baseinstance=self)
-        self.ui = UiMainWindow()
 
         self.populate_view()
 

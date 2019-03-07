@@ -1,7 +1,7 @@
 from __future__ import (absolute_import, division, print_function)
-import os
-import re
+#import re
 import glob
+import os
 import numpy as np
 from qtpy.QtCore import (Qt)
 from qtpy.QtGui import (QCursor)
@@ -62,13 +62,6 @@ class TableHandler(object):
 
         return _metadata
 
-    def retrieve_item_text(self, row, column):
-        _item = self.parent.table.item(row, column)
-        if _item is None:
-            return ''
-        else:
-            return str(_item.text())
-
     def _retrieve_sample_shape(self, row_index):
         _widget = self.parent.table.cellWidget(row_index, 7)
         _selected_index = _widget.currentIndex()
@@ -96,9 +89,8 @@ class TableHandler(object):
         _cut = -1
         _refresh_table = -1
         _clear_table = -1
-        _import = -1
-        _export = -1
-        _check_all = -1
+        # _import = -1
+        # _export = -1        _check_all = -1
         _uncheck_all = -1
         _undo = -1
         _redo = -1
@@ -259,9 +251,9 @@ class TableHandler(object):
         _paste_left_column = _paste_selection[0].leftColumn()
 
         if not (_copy_left_column == _paste_left_column):
-            _error_box = QMessageBox.warning(self.parent_no_ui,
-                                             "Check copy/paste selection!",
-                                             "Check your selection!                   ")
+            QMessageBox.warning(self.parent_no_ui,
+                                "Check copy/paste selection!",
+                                "Check your selection!                   ")
             return
 
         _copy_right_column = _copy_selection["right_column"]
@@ -313,7 +305,7 @@ class TableHandler(object):
     def select_all(self, status=True):
         nbr_row = self.parent.table.rowCount()
         nbr_column = self.parent.table.columnCount()
-        selected_range = self.parent_no_ui.ui.table.selectedRanges()
+        # selected_range = self.parent_no_ui.ui.table.selectedRanges()
         _full_range = QTableWidgetSelectionRange(0, 0, nbr_row-1, nbr_column-1)
         self.parent.table.setRangeSelected(_full_range, status)
 
@@ -380,7 +372,7 @@ class TableHandler(object):
             search_dir = cwd[:cwd.find('shared')]+'/nexus'
             prefix = 'NOM_'
             suffix = '.nxs.h5'
-            ipts = int(re.search(r"IPTS-(\d*)\/", os.getcwd()).group(1))
+            #ipts = int(re.search(r"IPTS-(\d*)\/", os.getcwd()).group(1))
 
         _row = self.current_row
         _row_runs = self._collect_metadata(row_index=_row)['runs'].split(',')

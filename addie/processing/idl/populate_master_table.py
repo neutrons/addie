@@ -24,8 +24,7 @@ class PopulateMasterTable(object):
             self.read_auto_sum_file()
             self.populate_table()
         except IOError:
-            _error_box = QMessageBox.warning(self.parent, "File does not exist!", "Check your folder!         ")
-#            _error_box.show()
+            QMessageBox.warning(self.parent, "File does not exist!", "Check your folder!         ")
             self.error_reported = True
 
     def empty_metadata(self):

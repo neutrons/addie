@@ -1,5 +1,7 @@
 from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import QTableWidgetSelectionRange
+from qtpy.QtCore import Qt
+
 import numpy as np
 
 from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_SEARCHABLE
@@ -309,7 +311,7 @@ class CellsHandler(SelectionHandlerMaster):
                 elif _column in INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS:
                     o_utilities = Utilities(parent=self.parent)
                     _key = o_utilities.get_row_key_from_row_index(row=_row)
-                    _master_table_row_ui = self.parent.master_table_list_ui
+                    # _master_table_row_ui = self.parent.master_table_list_ui
                     if _column == INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS[0]:  # sample
                         data_type = 'sample'
                     else:
@@ -322,7 +324,7 @@ class CellsHandler(SelectionHandlerMaster):
                 elif _column in INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA:
                     o_utilities = Utilities(parent=self.parent)
                     _key = o_utilities.get_row_key_from_row_index(row=_row)
-                    _master_table_row_ui = self.parent.master_table_list_ui
+                    # _master_table_row_ui = self.parent.master_table_list_ui
                     if _column == INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA[0]:  # sample
                         data_type = 'sample'
                     else:
@@ -332,7 +334,7 @@ class CellsHandler(SelectionHandlerMaster):
                 elif _column in INDEX_OF_COLUMNS_WITH_MASS_DENSITY:
                     o_utilities = Utilities(parent=self.parent)
                     _key = o_utilities.get_row_key_from_row_index(row=_row)
-                    _master_table_row_ui = self.parent.master_table_list_ui
+                    #_master_table_row_ui = self.parent.master_table_list_ui
                     if _column == INDEX_OF_COLUMNS_WITH_MASS_DENSITY[0]:  # sample
                         data_type = 'sample'
                     else:
@@ -384,10 +386,10 @@ class CellsHandler(SelectionHandlerMaster):
         list_row_paste= self.o_selection.get_list_row()
         list_column_paste = self.o_selection.get_list_column()
 
-        nbr_row_paste = len(list_row_paste)
-        nbr_column_paste = len(list_column_paste)
-
-        row_columns_items_to_copy = self.parent.master_table_cells_copy['temp']
+        # nbr_row_paste = len(list_row_paste)
+        # nbr_column_paste = len(list_column_paste)
+        #
+        #row_columns_items_to_copy = self.parent.master_table_cells_copy['temp']
         #[nbr_row_copy, nbr_column_copy] = np.shape(row_columns_items_to_copy)
 
         # if we don't select the same amount of columns, we stop here (and inform

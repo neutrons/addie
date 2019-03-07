@@ -58,7 +58,7 @@ class GenerateSumthing(object):
             error_msg = "Unable to write cached table. " + \
                         "Will not be able to write output files to this directory. " + \
                         "\n\nCheck file and directory for write permissions!"
-            _error_box = QMessageBox.warning(self.parent, title, error_msg)
+            QMessageBox.warning(self.parent, title, error_msg)
             outfile = None
         return outfile
 

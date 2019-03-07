@@ -25,12 +25,9 @@ class IptsFileTransferDialog(QDialog):
         _full_script += " -f " + _input_autonom
         _full_script += " -t " + _target_autonom
 
-        print(_full_script)
-
-        job_handler = JobStatusHandler(parent=self.parent,
-                                       script_to_run=_full_script,
-                                       job_name='IPTS File Transfer')
-
+        JobStatusHandler(parent=self.parent,
+                         script_to_run=_full_script,
+                         job_name='IPTS File Transfer')
         self.close()
 
     def cancel_clicked(self):

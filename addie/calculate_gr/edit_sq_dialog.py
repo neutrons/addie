@@ -63,8 +63,6 @@ class EditSofQDialog(QDialog):
         # random number
         random.seed(1)
 
-        return
-
     def _init_widgets(self):
         """
         initialize widgets by their default values
@@ -100,8 +98,6 @@ class EditSofQDialog(QDialog):
         self.ui.horizontalSlider_scale.setValue(20)
         self._scaleSlideMutex = False
 
-        return
-
     def do_cache_edited_sq(self):
         """
         cache the currently edited S(Q)
@@ -133,8 +129,6 @@ class EditSofQDialog(QDialog):
         # clone G(r) to new name and add to tree
         self._myParentWindow.generate_gr([new_sq_ws_name])
 
-        return
-
     def do_edit_sq(self):
         """handling for push button 'edit S(Q)' by reading the scale factor and shift
         :return:
@@ -160,9 +154,8 @@ class EditSofQDialog(QDialog):
             else:
                 scale_factor = float(scale_str)
         except ValueError as val_error:
-            print('[ERROR] Shift {0} or scale factor {1} cannot be converted to float due to {2}.' \
+            print('[ERROR] Shift {0} or scale factor {1} cannot be converted to float due to {2}.'
                   ''.format(shift_str, scale_str, val_error))
-            return
 
         # call edit_sq()
         self.edit_sq(shift, scale_factor)
@@ -179,16 +172,12 @@ class EditSofQDialog(QDialog):
         self._scaleSlideMutex = False
         self._shiftSlideMutex = False
 
-        return
-
     def do_quit(self):
         """
         close the window and quit
         :return:
         """
         self.close()
-
-        return
 
     def do_save(self):
         """
@@ -199,8 +188,6 @@ class EditSofQDialog(QDialog):
         sq_ws_name = str(self.ui.comboBox_workspaces.currentText())
 
         self.MyEditSignal.emit(sq_ws_name)
-
-        return
 
     def add_sq_by_name(self, sq_name_list):
         """
@@ -218,8 +205,6 @@ class EditSofQDialog(QDialog):
             if sq_ws_name != 'All':
                 self.add_workspace(sq_ws_name)
 
-        return
-
     def add_workspace(self, ws_name):
         """
         add workspace name
@@ -230,8 +215,6 @@ class EditSofQDialog(QDialog):
             format(ws_name, type(ws_name))
 
         self.ui.comboBox_workspaces.addItem(ws_name)
-
-        return
 
     def do_set_scale_range(self):
         """set the range of scale factor slider bar
@@ -244,7 +227,7 @@ class EditSofQDialog(QDialog):
         # check valid or not!
         if min_scale >= max_scale:
             # if not valid: set the values back to stored original
-            print('[ERROR] Minimum scale factor value {0} cannot exceed maximum scale factor value {1}.' \
+            print('[ERROR] Minimum scale factor value {0} cannot exceed maximum scale factor value {1}.'
                   ''.format(min_scale, max_scale))
             return
         else:
@@ -260,11 +243,11 @@ class EditSofQDialog(QDialog):
             current_scale_factor = max_scale
 
         # TODO/ISSUE/NOW - clean up to multiple steps and check!
-        scale_factor_int = int(current_scale_factor/(max_scale - min_scale) *
-                               (self.ui.horizontalSlider_scale.maximum() - self.ui.horizontalSlider_scale.minimum()))
-        self.ui.horizontalSlider_scale.setValue(scale_factor_int)
+        delta_scale = max_scale - min_scale
+        delta_slider_scale = self.ui.horizontalSlider_scale.maximum() - self.ui.horizontalSlider_scale.minimum()
+        scale_factor_int = int(current_scale_factor/delta_scale * delta_slider_scale)
 
-        return
+        self.ui.horizontalSlider_scale.setValue(scale_factor_int)
 
     def do_set_shift_range(self):
         """set the new range of shift slider
@@ -277,7 +260,7 @@ class EditSofQDialog(QDialog):
         # check valid or not!
         if min_shift >= max_shift:
             # if not valid: set the values back to stored original
-            print('[ERROR] Minimum scale factor value {0} cannot exceed maximum scale factor value {1}.' \
+            print('[ERROR] Minimum scale factor value {0} cannot exceed maximum scale factor value {1}.'
                   ''.format(min_shift, max_shift))
             return
         else:
@@ -293,11 +276,11 @@ class EditSofQDialog(QDialog):
             curr_shift = max_shift
 
         # TODO/ISSUE/NOW - clean up to multiple steps and check!
-        shift_int = int(curr_shift/(max_shift - min_shift) *
-                        (self.ui.horizontalSlider_shift.maximum() - self.ui.horizontalSlider_shift.minimum()))
-        self.ui.horizontalSlider_shift.setValue(shift_int)
+        delta_shift = max_shift - min_shift
+        delta_slider_shift = self.ui.horizontalSlider_shift.maximum() - self.ui.horizontalSlider_shift.minimum()
 
-        return
+        shift_int = int(curr_shift/delta_shift * delta_slider_shift)
+        self.ui.horizontalSlider_shift.setValue(shift_int)
 
     def event_cal_sq(self):
         """handling the events from a moving sliding bar such that a new S(Q) will be calculated
@@ -337,8 +320,6 @@ class EditSofQDialog(QDialog):
         self._shiftSlideMutex = False
         self._scaleSlideMutex = False
 
-        return
-
     def edit_sq(self, shift, scale_factor):
         """ edit S(Q)
         :param shift:
@@ -355,16 +336,13 @@ class EditSofQDialog(QDialog):
         workspace_name = str(self.ui.comboBox_workspaces.currentText())
         if len(workspace_name) == 0:
             print('[INFO] No workspace is selected')
-            return
 
         # set out the signal
         self.MyEditSignal.emit(workspace_name, scale_factor, shift)
 
-        return
-
     def set_slider_scale_value(self, scale_factor):
         # TODO/ISSUE/NOW
-        return
+        pass
 
     def set_slider_shift_value(self, shift):
         """
@@ -383,5 +361,3 @@ class EditSofQDialog(QDialog):
 
         # set the shift value
         self.ui.horizontalSlider_shift.setValue(slide_value)
-
-        return

@@ -512,8 +512,8 @@ class PeriodicTable(QMainWindow):
     def og_button(self):
         self.click_button('og')
 
-    def calculate_full_molecular_mass(self):
-        chemical_formula = str(self.ui.chemical_formula.text())
+    # def calculate_full_molecular_mass(self):
+    #     chemical_formula = str(self.ui.chemical_formula.text())
 
     def get_periodictable_formatted_element_and_number_of_atoms(self, element):
         '''The goal of this method is to go from Mantid format of an element (Si28)2 to
@@ -585,7 +585,7 @@ class PeriodicTable(QMainWindow):
             else: # 'sample' or 'normalization'
                 text_ui = self.parent.master_table_list_ui[self.key][self.data_type]['material']['text']
                 text_ui.setText(chemical_formula)
-                self.calculate_full_molecular_mass()
+                # self.calculate_full_molecular_mass()
                 o_table = TableRowHandler(parent=self.parent)
                 o_table.transfer_widget_states(from_key=self.key, data_type=self.data_type)
                 self.parent.master_table_list_ui[self.key][self.data_type]['mass_density_infos']['molecular_mass'] \

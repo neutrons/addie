@@ -62,7 +62,9 @@ class MassDensityWindow(QMainWindow):
         if self.chemical_formula_defined:
             self.total_number_of_atoms = self.parent.master_table_list_ui[self.key][
                 self.data_type]['mass_density_infos']['total_number_of_atoms']
-            self.total_molecular_mass = self.parent.master_table_list_ui[self.key][self.data_type]['mass_density_infos']['molecular_mass']
+            list_ui_of_key = self.parent.master_table_list_ui[self.key]
+            molecular_mass = list_ui_of_key[self.data_type]['mass_density_infos']['molecular_mass']
+            self.total_molecular_mass = molecular_mass
 
         mass_density_list_ui = self.parent.master_table_list_ui[self.key][self.data_type]
         mass_density_infos = mass_density_list_ui['mass_density_infos']

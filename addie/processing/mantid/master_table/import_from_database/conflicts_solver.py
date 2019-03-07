@@ -88,37 +88,37 @@ class ConflictsSolverWindow(QMainWindow):
 
         for _row in np.arange(len(json)):
 
-                # run number
-                _col = 0
-                list_runs = json[_row]["Run Number"]
-                o_parser = ListRunsParser()
-                checkbox = QRadioButton(o_parser.new_runs(list_runs=list_runs))
-                if _row == 0:
-                    checkbox.setChecked(True)
-                # QtCore.QObject.connect(checkbox, QtCore.SIGNAL("clicked(bool)"),
-                #                        lambda bool, row=_row, table_id=_table:
-                #                        self._changed_conflict_checkbox(bool, row, table_id))
-                _table.setCellWidget(_row, _col, checkbox)
+            # run number
+            _col = 0
+            list_runs = json[_row]["Run Number"]
+            o_parser = ListRunsParser()
+            checkbox = QRadioButton(o_parser.new_runs(list_runs=list_runs))
+            if _row == 0:
+                checkbox.setChecked(True)
+            # QtCore.QObject.connect(checkbox, QtCore.SIGNAL("clicked(bool)"),
+            #                        lambda bool, row=_row, table_id=_table:
+            #                        self._changed_conflict_checkbox(bool, row, table_id))
+            _table.setCellWidget(_row, _col, checkbox)
 
-                _col += 1
-                # chemical formula
-                item = QTableWidgetItem(json[_row]["chemical_formula"])
-                _table.setItem(_row, _col, item)
+            _col += 1
+            # chemical formula
+            item = QTableWidgetItem(json[_row]["chemical_formula"])
+            _table.setItem(_row, _col, item)
 
-                _col += 1
-                # geometry
-                item = QTableWidgetItem(json[_row]["geometry"])
-                _table.setItem(_row, _col, item)
+            _col += 1
+            # geometry
+            item = QTableWidgetItem(json[_row]["geometry"])
+            _table.setItem(_row, _col, item)
 
-                _col += 1
-                # mass_density
-                item = QTableWidgetItem(json[_row]["mass_density"])
-                _table.setItem(_row, _col, item)
+            _col += 1
+            # mass_density
+            item = QTableWidgetItem(json[_row]["mass_density"])
+            _table.setItem(_row, _col, item)
 
-                _col += 1
-                # sample_env_device
-                item = QTableWidgetItem(json[_row]["sample_env_device"])
-                _table.setItem(_row, _col, item)
+            _col += 1
+            # sample_env_device
+            item = QTableWidgetItem(json[_row]["sample_env_device"])
+            _table.setItem(_row, _col, item)
 
         self.ui.tabWidget.insertTab(number_of_tabs, _table, "Conflict #{}".format(number_of_tabs))
 

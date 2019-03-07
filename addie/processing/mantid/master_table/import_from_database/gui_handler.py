@@ -218,8 +218,12 @@ class ImportFromDatabaseTableHandler:
                 argument_value = json_extractor(json=json,
                                                 list_args=copy.deepcopy(list_path))
 
+                # used to evaluate expression returned by ONCat
                 if oncat_template[_col]['formula']:
-                    value = argument_value
+
+                    # the expression will look like '{value/10e11}'
+                    # so value will be replaced by argument_value and the expression will be evaluated using eval
+                    value = argument_value  # noqa: F841
                     argument_value = eval(oncat_template[_col]['formula'])
                     argument_value = argument_value.pop()
 

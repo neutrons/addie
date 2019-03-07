@@ -73,12 +73,14 @@ from addie.processing.mantid.master_table.reduction_configuration_handler import
 from addie.processing.mantid.make_calibration_handler.make_calibration import MakeCalibrationLauncher
 from addie.processing.mantid.master_table.periodic_table.material_handler import MaterialHandler
 from addie.processing.mantid.master_table.mass_density_handler import MassDensityHandler
+
 try:
     from addie.processing.mantid.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
     ONCAT_ENABLED = True
 except ImportError:
     print('pyoncat module not found. Functionality disabled')
     ONCAT_ENABLED = False
+
 from addie.processing.mantid.master_table.import_from_run_number_handler import ImportFromRunNumberHandler
 from addie.processing.mantid.master_table.import_from_database.load_into_master_table import LoadIntoMasterTable
 
