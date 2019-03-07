@@ -245,7 +245,7 @@ class EditSofQDialog(QDialog):
         # TODO/ISSUE/NOW - clean up to multiple steps and check!
         delta_scale = max_scale - min_scale
         delta_slider_scale = self.ui.horizontalSlider_scale.maximum() - self.ui.horizontalSlider_scale.minimum()
-        scale_factor_int = int(current_scale_factor/(delta_scale * delta_slider_scale))
+        scale_factor_int = int(current_scale_factor/delta_scale * delta_slider_scale)
 
         self.ui.horizontalSlider_scale.setValue(scale_factor_int)
 
@@ -276,8 +276,10 @@ class EditSofQDialog(QDialog):
             curr_shift = max_shift
 
         # TODO/ISSUE/NOW - clean up to multiple steps and check!
-        shift_int = int(curr_shift/(max_shift - min_shift)
-                        * (self.ui.horizontalSlider_shift.maximum() - self.ui.horizontalSlider_shift.minimum()))
+        delta_shift = max_shift - min_shift
+        delta_slider_shift = self.ui.horizontalSlider_shift.maximum() - self.ui.horizontalSlider_shift.minimum()
+
+        shift_int = int(curr_shift/delta_shift * delta_slider_shift)
         self.ui.horizontalSlider_shift.setValue(shift_int)
 
     def event_cal_sq(self):
