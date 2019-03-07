@@ -96,7 +96,6 @@ class AddieDriver(object):
             kwargs['rho0'] = rho0
 
         # get the input unit
-        AnalysisDataService.retrieve(self._currSqWsName)
         sofq_type = 'S(Q)'
 
         # do the FFT
