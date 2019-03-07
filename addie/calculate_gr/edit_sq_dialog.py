@@ -276,7 +276,7 @@ class EditSofQDialog(QDialog):
             curr_shift = max_shift
 
         # TODO/ISSUE/NOW - clean up to multiple steps and check!
-        shift_int = int(curr_shift/(max_shift - min_shift) * \
+        shift_int = int(curr_shift/(max_shift - min_shift) * 
                         (self.ui.horizontalSlider_shift.maximum() - self.ui.horizontalSlider_shift.minimum()))
         self.ui.horizontalSlider_shift.setValue(shift_int)
 
