@@ -245,7 +245,7 @@ class EditSofQDialog(QDialog):
         # TODO/ISSUE/NOW - clean up to multiple steps and check!
         delta_scale = max_scale - min_scale
         delta_slider_scale = self.ui.horizontalSlider_scale.maximum() - self.ui.horizontalSlider_scale.minimum()
-        scale_factor_int = int(current_scale_factor/(delta_scale - delta_slider_scale))
+        scale_factor_int = int(current_scale_factor/(delta_scale * delta_slider_scale))
 
         self.ui.horizontalSlider_scale.setValue(scale_factor_int)
 
