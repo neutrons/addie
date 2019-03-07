@@ -82,7 +82,7 @@ class RunStep1(object):
             _folder_split = _folder.split('_')
             if len(_folder_split) > 1:
                 try:
-                    _ = int(_folder_split[1])
+                    _ = int(_folder_split[1]) # checking that the variable is an integer
                     _list_index.append(_folder_split[1])
                 except:
                     pass
