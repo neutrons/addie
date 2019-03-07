@@ -1,11 +1,8 @@
-#
-# An extension on QTreeView for file system
-#
 from __future__ import (absolute_import, division, print_function)
 
 from qtpy.QtCore import (QModelIndex)
 from qtpy.QtGui import (QStandardItem, QStandardItemModel)
-from qtpy.QtWidgets import (QAction, QFileDialog)
+from qtpy.QtWidgets import QAction
 from addie.utilities import customtreeview as base
 
 

@@ -89,9 +89,14 @@ import addie.utilities.specify_plots_style as ps
 import addie.calculate_gr.edit_sq_dialog
 
 from addie.calculate_gr.pdf_lines_manager import PDFPlotManager
-from addie.graphicviewlib import BraggView, GofRView, SofQView
 from mantidqt.widgets.jupyterconsole import InProcessJupyterConsole
-from addie.treelib import BraggTree, GofRTree
+
+from addie.rietveld.braggview import BraggView
+from addie.rietveld.braggtree import BraggTree
+
+from addie.calculate_gr.gofrtree import GofRTree
+from addie.calculate_gr.gofrview import GofRView
+from addie.calculate_gr.sofqview import SofQView
 
 from addie.icons import icons_rc
 
@@ -1097,77 +1102,81 @@ class MainWindow(QMainWindow):
         self.check_in_fixed_dir_structure(sub_dir='GSAS')
 
         # load file
-        gss_ws_names = list()
-        for bragg_file_name in bragg_file_names:
-            gss_ws_name = self._myController.load_bragg_file(bragg_file_name)
-            gss_ws_names.append(gss_ws_name)
-            # split
-            # FIXME - _gssGroupName may have an issie with multiple-GSS mode
-            gssGroupName, banks_list, bank_angles = self._myController.split_to_single_bank(gss_ws_name)
+        try:
+            gss_ws_names = list()
+            for bragg_file_name in bragg_file_names:
+                gss_ws_name = self._myController.load_bragg_file(bragg_file_name)
+                gss_ws_names.append(gss_ws_name)
+                # split
+                # FIXME - _gssGroupName may have an issie with multiple-GSS mode
+                gssGroupName, banks_list, bank_angles = self._myController.split_to_single_bank(gss_ws_name)
 
-            # add to tree
-            self.ui.treeWidget_braggWSList.add_bragg_ws_group(gssGroupName, banks_list)
+                # add to tree
+                self.ui.treeWidget_braggWSList.add_bragg_ws_group(gssGroupName, banks_list)
 
-        # get plot mode
-        if len(bragg_file_names) == 1:
-            self.ui.graphicsView_bragg.set_to_single_gss(True)
-            self.ui.radioButton_multiBank.setChecked(True)
-            self.ui.radioButton_multiGSS.setChecked(False)
-        else:
-            self.ui.graphicsView_bragg.set_to_single_gss(False)
-            self.ui.radioButton_multiBank.setChecked(False)
-            self.ui.radioButton_multiGSS.setChecked(True)
+            # get plot mode
+            if len(bragg_file_names) == 1:
+                self.ui.graphicsView_bragg.set_to_single_gss(True)
+                self.ui.radioButton_multiBank.setChecked(True)
+                self.ui.radioButton_multiGSS.setChecked(False)
+            else:
+                self.ui.graphicsView_bragg.set_to_single_gss(False)
+                self.ui.radioButton_multiBank.setChecked(False)
+                self.ui.radioButton_multiGSS.setChecked(True)
 
-        multi_bank_mode = self.ui.radioButton_multiBank.isChecked()
+            multi_bank_mode = self.ui.radioButton_multiBank.isChecked()
 
-        if multi_bank_mode:
-            # single-GSS/multi-bank mode
-            # rename bank
-            for bank_id in self._braggBankWidgets:
-                bank_check_box = self._braggBankWidgets[bank_id]
+            if multi_bank_mode:
+                # single-GSS/multi-bank mode
+                # rename bank
+                for bank_id in self._braggBankWidgets:
+                    bank_check_box = self._braggBankWidgets[bank_id]
 
-                if bank_id > len(bank_angles) or bank_angles[bank_id - 1] is None:
-                    bank_check_box.setText('Bank %d' % bank_id)
-                else:
-                    bank_check_box.setText('Bank %.1f' % bank_angles[bank_id - 1])
-                    # END-IF
-                # END-IF-ELSE
-            # END-FOR
+                    if bank_id > len(bank_angles) or bank_angles[bank_id - 1] is None:
+                        bank_check_box.setText('Bank %d' % bank_id)
+                    else:
+                        bank_check_box.setText('Bank %.1f' % bank_angles[bank_id - 1])
+                        # END-IF
+                    # END-IF-ELSE
+                # END-FOR
 
-            # clear all previous lines
-            self.ui.graphicsView_bragg.reset()
-        # END-IF
+                # clear all previous lines
+                self.ui.graphicsView_bragg.reset()
+            # END-IF
 
-        # banks
-        self._onCanvasGSSBankList = self.get_bragg_banks_selected()
-        if len(self._onCanvasGSSBankList) == 0:
-            # select bank 1 as default
-            self._noEventBankWidgets = True
-            self.ui.checkBox_bank1.setChecked(True)
-            self._noEventBankWidgets = False
+            # banks
             self._onCanvasGSSBankList = self.get_bragg_banks_selected()
+            if len(self._onCanvasGSSBankList) == 0:
+                # select bank 1 as default
+                self._noEventBankWidgets = True
+                self.ui.checkBox_bank1.setChecked(True)
+                self._noEventBankWidgets = False
+                self._onCanvasGSSBankList = self.get_bragg_banks_selected()
 
-        # while in multiple-gss mode, no change will be made on the canvas at all
+            # while in multiple-gss mode, no change will be made on the canvas at all
 
-        # prepare to plot new Bragg
-        # change unit
-        ws_data_dict = dict()
-        plot_data_dict = dict()
-        for gss_ws_name in gss_ws_names:
-            gss_group_name = gss_ws_name + '_group'
-            for bank_id in self._onCanvasGSSBankList:
-                vec_x, vec_y, vec_e = self._myController.get_bragg_data(gss_group_name, bank_id, self._currBraggXUnit)
-                ws_data_dict[bank_id] = (vec_x, vec_y, vec_e)
-            plot_data_dict[gss_group_name] = ws_data_dict
+            # prepare to plot new Bragg
+            # change unit
+            ws_data_dict = dict()
+            plot_data_dict = dict()
+            for gss_ws_name in gss_ws_names:
+                gss_group_name = gss_ws_name + '_group'
+                for bank_id in self._onCanvasGSSBankList:
+                    vec_x, vec_y, vec_e = self._myController.get_bragg_data(gss_group_name, bank_id, self._currBraggXUnit)
+                    ws_data_dict[bank_id] = (vec_x, vec_y, vec_e)
+                plot_data_dict[gss_group_name] = ws_data_dict
 
-        # plot
-        # FIXME/ISSUE/NOW - get a summary on calling to plot_banks
-        self.ui.graphicsView_bragg.plot_banks(plot_data_dict, self._currBraggXUnit)
+            # plot
+            # FIXME/ISSUE/NOW - get a summary on calling to plot_banks
+            self.ui.graphicsView_bragg.plot_banks(plot_data_dict, self._currBraggXUnit)
 
-        # reset unit
-        self.reset_bragg_data_range(self._currBraggXUnit)
+            # reset unit
+            self.reset_bragg_data_range(self._currBraggXUnit)
 
-        return
+        except:
+
+            self.setStyleSheet("QStatusBar{padding-left:8px;color:red;font-weight:bold;}")
+            self.ui.statusbar.showMessage("Error loading {}".format(bragg_file_names), 10000)
 
     def do_load_gr(self):
         """

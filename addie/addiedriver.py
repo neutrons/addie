@@ -29,8 +29,6 @@ class AddieDriver(object):
         # key: ws_group_name, value: (gss_ws_name, ws_list).  it is in similar architecture with tree
         self._braggDataDict = dict()
 
-        return
-
     def calculate_gr(self, sq_ws_name, pdf_type, min_r, delta_r, max_r, min_q, max_q, pdf_filter, rho0):
         """ Calculate G(R)
         :param sq_ws_name: workspace name of S(q)
@@ -130,8 +128,6 @@ class AddieDriver(object):
         else:
             raise RuntimeError('Workspace with name {0} does not exist in ADS. CloneWorkspace fails!'.format(src_name))
 
-        return
-
     @staticmethod
     def delete_workspace(workspace_name, no_throw=False):
         """
@@ -187,8 +183,6 @@ class AddieDriver(object):
         assert sq_ws is not None, 'S(Q) workspace cannot be None.'
         print('[DB...BAT] S(Q) workspace that is edit is {0}'.format(sq_ws))
 
-        return
-
     # RMCProfile format. The 1st column tells how many X,Y pairs,
     # the second is a comment line with information regarding the data
     # (title, multiplier for data, etc.), and then the X,Y pairs for G(r) or S(Q) data.
@@ -237,8 +231,6 @@ class AddieDriver(object):
         except IOError as io_err:
             raise RuntimeError(
                 'Unable to export data to file {0} in RMCProfile format due to {1}.'.format(output_file_name, io_err))
-
-        return
 
     def get_bragg_data(self, ws_group_name, bank_id, x_unit):
         """ Get Bragg diffraction data of 1 bank
@@ -513,9 +505,6 @@ class AddieDriver(object):
                 assert AnalysisDataService.doesExist(out_ws_name)
                 ws_list.append(out_ws_name)
 
-            # END-FOR
-        # END-IF
-
         # calculate bank angles
         for ws_name in ws_list:
             bank_angle = calculate_bank_angle(ws_name)
@@ -558,8 +547,6 @@ class AddieDriver(object):
             # non-supported type
             raise RuntimeError('G(r) or S(Q) file type {0} is not supported.'.format(gr_file_type))
 
-        return
-
     @staticmethod
     def write_gss_file(ws_name_list, gss_file_name):
         """
@@ -582,10 +569,6 @@ class AddieDriver(object):
             simpleapi.SaveGSS(InputWorkspace=ws_name, Filename=gss_file_name,
                               Format='SLOG', Bank=1, Append=append_mode)
             append_mode = True
-        # END-FOR
-
-        return
-
 
 def calculate_bank_angle(ws_name):
     """ Calculate bank's angle (2theta) focused detector
