@@ -35,4 +35,4 @@ script:
   - python -c "import mantid"
   - python -c "import qtpy"
   - python setup.py install
-  - mantidpython
+  - mantidworkbench
