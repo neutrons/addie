@@ -570,6 +570,7 @@ class AddieDriver(object):
                               Format='SLOG', Bank=1, Append=append_mode)
             append_mode = True
 
+
 def calculate_bank_angle(ws_name):
     """ Calculate bank's angle (2theta) focused detector
     """

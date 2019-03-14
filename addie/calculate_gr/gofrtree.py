@@ -2,7 +2,7 @@ from __future__ import (absolute_import, division, print_function)
 
 from qtpy.QtCore import (QModelIndex)
 from qtpy.QtGui import (QStandardItem, QStandardItemModel)
-from qtpy.QtWidgets import (QAction, QDialog, QFileDialog)
+from qtpy.QtWidgets import (QAction, QFileDialog)
 
 from addie.utilities import customtreeview as base
 
