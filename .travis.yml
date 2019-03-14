@@ -6,8 +6,6 @@ cache:
 matrix:
   include:
   - os: linux
-    env: CONDA=2.7
-  - os: linux
     env: CONDA=3.6
 before_install:
 - |
@@ -34,5 +32,7 @@ script:
   - flake8
   - python -c "import mantid"
   - python -c "import qtpy"
+  - python -c "import mantid"
+  - python -c "import mantidqt"
   - python setup.py install
   - mantidworkbench
