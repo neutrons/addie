@@ -28,7 +28,7 @@ before_install:
   conda install -n test-environment -c mantid nexus poco
   conda install -n test-environment -c mantid mantid-workbench
   conda install -n test-environment flake8
-  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1024x768x24 +extension RANDR"
+  "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1024x768x24 +extension RANDR"
 
 install:
 - |
