@@ -50,5 +50,6 @@ script:
   - xvfb-run mantidworkbench &
   - sleep 120
   - python setup.py install
+  - which addie
   - xvfb-run addie &
   - sleep 120
