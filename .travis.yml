@@ -1,5 +1,7 @@
 language: python
 dist: trusty
+services:
+  - xvfb
 cache:
   directories:
     - $HOME/.cache/pip
