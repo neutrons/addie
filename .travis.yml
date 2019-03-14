@@ -48,5 +48,7 @@ script:
   - python -c "import mantid"
   - python -c "import mantidqt"
   - xvfb-run mantidworkbench &
+  - sleep 120
   - python setup.py install
   - xvfb-run addie &
+  - sleep 120
