@@ -2888,7 +2888,7 @@ def main():
 
 if __name__ == '__main__':
     import argparse  # noqa
-    parser = argparse.ArgumentParser(description='Advanced Diffraction something something')
+    parser = argparse.ArgumentParser(description='ADvanced DIffraction Environment')
     parser.add_argument('--version', action='version', version='%(prog)s version {}'.format(__version__))
 
     try:
