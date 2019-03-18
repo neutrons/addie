@@ -17,6 +17,8 @@ from qtpy.QtGui import (QDesktopServices, QIcon)
 from qtpy import QtGui
 from qtpy.QtWidgets import (QApplication, QFileDialog, QMainWindow, QMessageBox, QTableWidgetItem, QVBoxLayout)
 
+from addie import __version__
+
 #import addie.ui_mainWindow
 #import addie.ui_table_tree
 #import addie.step1
@@ -99,6 +101,7 @@ from addie.calculate_gr.gofrview import GofRView
 from addie.calculate_gr.sofqview import SofQView
 
 from addie.icons import icons_rc
+
 
 DEBUG = False
 
@@ -2872,6 +2875,7 @@ class MainWindow(QMainWindow):
     def closeEvent(self, eventhere=None):
         pass
 
+
 def main():
     app = QApplication(sys.argv)
     app.setOrganizationName("Qtrac Ltd.")
@@ -2883,11 +2887,9 @@ def main():
     app.exec_()
 
 if __name__ == '__main__':
-    import argparse    # noqa
-    # import versioneer  # noqa TODO put this back
+    import argparse  # noqa
     parser = argparse.ArgumentParser(description='Advanced Diffraction something something')
-    # TODO put back version argument
-    # parser.add_argument('--version', action='version', version='%(prog)s version {}'.format(versioneer.get_version()))
+    parser.add_argument('--version', action='version', version='%(prog)s version {}'.format(__version__))
 
     try:
         # set up bash completion as a soft dependency
