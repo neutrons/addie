@@ -2884,9 +2884,10 @@ def main():
 
 if __name__ == '__main__':
     import argparse    # noqa
-    import versioneer  # noqa
+    # import versioneer  # noqa TODO put this back
     parser = argparse.ArgumentParser(description='Advanced Diffraction something something')
-    parser.add_argument('--version', action='version', version='%(prog)s version {}'.format(versioneer.get_version()))
+    # TODO put back version argument
+    # parser.add_argument('--version', action='version', version='%(prog)s version {}'.format(versioneer.get_version()))
 
     try:
         # set up bash completion as a soft dependency

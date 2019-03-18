@@ -28,8 +28,7 @@ before_install:
   conda create  -n test-environment -q python=$CONDA
   conda update  -n test-environment -q conda
   conda install -n test-environment -q conda-build
-  conda install -n test-environment -c mantid nexus poco
-  conda install -n test-environment -c mantid mantid-workbench
+  conda install -n test-environment -c mantid-workbench nexus poco
   conda install -n test-environment flake8
 
 install:
@@ -53,5 +52,5 @@ script:
   - xvfb-run --server-args="-screen 0 640x480x24" mantidworkbench -q -x workbenchshutdown.py
   - python setup.py install
   - which addie
-  # this should be a more interesting test
-  - xvfb-run --server-args="-screen 0 640x480x24" addie --version
+  # this should be a more interesting test TODO should be --version
+  - xvfb-run --server-args="-screen 0 640x480x24" addie --help
