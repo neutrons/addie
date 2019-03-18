@@ -28,7 +28,7 @@ before_install:
   conda create  -n test-environment -q python=$CONDA
   conda update  -n test-environment -q conda
   conda install -n test-environment -q conda-build
-  conda install -n test-environment -c mantid-workbench nexus poco
+  conda install -n test-environment -c mantid mantid-workbench nexus poco
   conda install -n test-environment flake8
 
 install:
