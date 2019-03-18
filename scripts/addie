@@ -2883,4 +2883,20 @@ def main():
     app.exec_()
 
 if __name__ == '__main__':
+    import argparse    # noqa
+    import versioneer  # noqa
+    parser = argparse.ArgumentParser(description='Advanced Diffraction something something')
+    parser.add_argument('--version', action='version', version='%(prog)s version {}'.format(versioneer.get_version()))
+
+    try:
+        # set up bash completion as a soft dependency
+        import argcomplete  # noqa
+        argcomplete.autocomplete(parser)
+    except ImportError:
+        pass  # silently skip this
+
+    # parse the command line options
+    options = parser.parse_args()
+
+    # start the main program
     main()
