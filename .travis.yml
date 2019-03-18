@@ -1,16 +1,22 @@
 language: python
 dist: trusty
+services:
+  - xvfb
+
 cache:
   directories:
     - $HOME/.cache/pip
+
 matrix:
   include:
   - os: linux
     env: CONDA=2.7
   - os: linux
     env: CONDA=3.6
+
 before_install:
 - |
+  "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
   if [ "$TRAVIS_OS_NAME" = "linux" ]; then export CXX=g++-4.8 CC=gcc-4.8; fi
   if [ "$TRAVIS_OS_NAME" = "linux" ]; then OS=Linux-x86_64; else OS=MacOSX-x86_64; fi
   wget -O miniconda.sh https://repo.continuum.io/miniconda/Miniconda${CONDA:0:1}-latest-$OS.sh
@@ -22,18 +28,30 @@ before_install:
   conda create  -n test-environment -q python=$CONDA
   conda update  -n test-environment -q conda
   conda install -n test-environment -q conda-build
-  conda install -n test-environment -c mantid nexus poco
-  conda install -n test-environment -c mantid/label/nightly mantid-framework
-  conda install -n test-environment qt pyqt qtpy pygments ipython qtconsole
+  conda install -n test-environment -c mantid mantid-workbench nexus poco
   conda install -n test-environment flake8
+
 install:
 - |
   source activate test-environment
   conda list
+
+before_script:
+  - export DISPLAY=:99.0
+  - sleep 3
+
 script:
   # lint the code and generate an error if a warning is introduced
   - flake8
   - python -c "import mantid"
   - python -c "import qtpy"
+  - python -c "import mantidqt"
+  # workbench tests
+  - xvfb-run --server-args="-screen 0 640x480x24" mantidworkbench --help
+  - echo "import time;time.sleep(5)" > workbenchshutdown.py
+  - xvfb-run --server-args="-screen 0 640x480x24" mantidworkbench -q -x workbenchshutdown.py
+  - python setup.py test
+  # install addie
   - python setup.py install
-  #- addie
+  - which addie
+  - xvfb-run --server-args="-screen 0 640x480x24" addie --version
