@@ -47,8 +47,10 @@ script:
   - python -c "import mantid"
   - python -c "import qtpy"
   - python -c "import mantidqt"
-  - echo "import time;time.sleep(5)" > simplebreak.py
-  - xvfb-run -a mantidworkbench -q -x simplebreak.py
+  # simplest test ever
+  - xvfb-run -a mantidworkbench --help
+  - echo "import time;time.sleep(5)" > workbenchshutdown.py
+  - xvfb-run -a mantidworkbench -q -x workbenchshutdown.py
   - python setup.py install
   - which addie
   - xvfb-run -a addie &
