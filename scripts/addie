@@ -6,9 +6,7 @@ import sys
 import numpy as np
 import os
 import itertools
-import pickle
 import psutil
-import pprint
 from collections import OrderedDict
 
 # must be imported through qtpy before any other gui imports
@@ -65,7 +63,8 @@ from addie.mantid_handler.mantid_reduction import GlobalMantidReduction
 from addie.mantid_handler.mantid_thread import MantidThread
 
 from addie.processing.mantid.master_table.master_table_loader import FromDictionaryToTableUi, AsciiLoader
-from addie.processing.mantid.master_table.table_tree_handler import TableTreeHandler, TableInitialization, TableConfig, H3TableHandler
+from addie.processing.mantid.master_table.table_tree_handler import TableTreeHandler, TableInitialization, \
+    TableConfig, H3TableHandler
 from addie.processing.mantid.master_table.table_tree_handler import SaveConfigInterface, TableTree
 from addie.processing.mantid.master_table import *
 from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
@@ -102,12 +101,12 @@ from addie.calculate_gr.sofqview import SofQView
 
 from addie.icons import icons_rc
 
-
 DEBUG = False
 
 IPYTHON_STARTUP_CODE = '''import numpy as np
 from mantid.simpleapi import *
 '''
+
 
 class MainWindow(QMainWindow):
     """ Main addie window
@@ -160,7 +159,6 @@ class MainWindow(QMainWindow):
                      'enabled': False}
     intermediate_grouping = copy.deepcopy(grouping_dict)
     output_grouping = copy.deepcopy(grouping_dict)
-
 
     statusbar_display_time = 5000  # 5s
 
@@ -1492,7 +1490,8 @@ class MainWindow(QMainWindow):
         for sq_name in sq_name_list:
             # get the output file name first
             out_file_name = QFileDialog.getSaveFileName(self,
-                                                        'Input File Name to Save S(Q) {0}'.format(sq_name), self._currWorkDir, file_filter)
+                                                        'Input File Name to Save S(Q) {0}'.format(sq_name),
+                                                        self._currWorkDir, file_filter)
             if isinstance(out_file_name, tuple):
                 out_file_name = out_file_name[0]
             if out_file_name is None or len(out_file_name) == 0:
@@ -2262,7 +2261,6 @@ class MainWindow(QMainWindow):
         # also hide the file>configration buttons when working with Mantid
         self.ui.menuLoad_Configuration.menuAction().setVisible(visible_menu_configuration)
 
-
     def menu_ipts_file_transfer_clicked(self):
         _o_ipts = IptsFileTransferDialog(parent=self)
         _o_ipts.show()
@@ -2311,7 +2309,7 @@ class MainWindow(QMainWindow):
         _run_thread.start()
 
     def update_logbook(self, text):
-        if self.job_monitor_interface == None:
+        if self.job_monitor_interface is None:
             self.logbook_thread.stop()
         else:
             _logbook_handler = LogbookHandler(parent=self)
@@ -2562,7 +2560,6 @@ class MainWindow(QMainWindow):
 
     def help_button_clicked_mantid(self):
         self.help_button_clicked(button_name='mantid')
-
 
     # Mantid
 
@@ -2844,9 +2841,9 @@ class MainWindow(QMainWindow):
     def browse_calibration_clicked(self):
         _calibration_folder = self.calibration_folder
         [_calibration_file, ext] = QFileDialog.getOpenFileName(parent = self,
-                                                              caption = "Select Calibration File",
-                                                              directory = _calibration_folder,
-                                                              filter = self.calibration_extension)
+                                                               caption = "Select Calibration File",
+                                                               directory = _calibration_folder,
+                                                               filter = self.calibration_extension)
         if _calibration_file:
             self.ui.calibration_file.setText(_calibration_file)
 
@@ -2871,9 +2868,6 @@ class MainWindow(QMainWindow):
 
     def reduction_configuration_button_clicked(self):
         ReductionConfigurationHandler(parent=self)
-
-    def closeEvent(self, eventhere=None):
-        pass
 
 
 def main():
