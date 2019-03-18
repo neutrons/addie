@@ -2140,7 +2140,7 @@ class MainWindow(QMainWindow):
             return
         else:
             # write to the console
-            self.ui.dockWidget_ipython.iPythonWidget.write_command(script)
+            self.ui.dockWidget_ipython.execute(script)
 
         return
 
