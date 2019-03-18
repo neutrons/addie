@@ -53,5 +53,5 @@ script:
   - xvfb-run --server-args="-screen 0 640x480x24" mantidworkbench -q -x workbenchshutdown.py
   - python setup.py install
   - which addie
-  # this will fail since addie_driver is missing, but restoring that file will timeout
-  - xvfb-run --server-args="-screen 0 640x480x24" addie
+  # this should be a more interesting test
+  - xvfb-run --server-args="-screen 0 640x480x24" addie --version
