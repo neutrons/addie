@@ -3,7 +3,11 @@ from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import QMainWindow, QLineEdit, QApplication
 from addie.utilities import load_ui
 
-import pyoncat
+try:
+    import pyoncat
+except ImportError:
+    print('failed to import pyoncat')
+    pyoncat = None
 
 
 # Create token store
@@ -75,6 +79,10 @@ class OncatAuthenticationWindow(QMainWindow):
         #     token_setter=token_store.set_token,
         #     flow=pyoncat.RESOURCE_OWNER_CREDENTIALS_FLOW
         # )
+
+        # pyoncat is not available
+        if pyoncat is None:
+            return False
 
         # Setup ONcat object
         oncat = pyoncat.ONCat(
