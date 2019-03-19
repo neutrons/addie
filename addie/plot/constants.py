@@ -1,6 +1,6 @@
-MplLineStyles = ['-', '--', '-.', ':', 'None', ' ', '']
+LINE_STYLES = ['-', '--', '-.', ':', 'None', ' ', '']
 
-MplLineMarkers = [
+LINE_MARKERS = [
     ". (point         )",
     "* (star          )",
     "x (x             )",
@@ -27,7 +27,7 @@ MplLineMarkers = [
     "None (nothing    )"]
 
 # Note: in colors, "white" is removed
-MplBasicColors = [
+BASIC_COLORS = [
     "black",
     "red",
     "blue",

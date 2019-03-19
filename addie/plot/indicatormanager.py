@@ -1,6 +1,6 @@
 from __future__ import (absolute_import, division, print_function)
 import numpy as np
-from addie.plot.constants import MplBasicColors
+from addie.plot.constants import BASIC_COLORS
 
 
 class IndicatorManager(object):
@@ -164,11 +164,11 @@ class IndicatorManager(object):
         Get next color by auto color index
         :return: string as color
         """
-        next_color = MplBasicColors[self._colorIndex]
+        next_color = BASIC_COLORS[self._colorIndex]
 
         # Advance and possibly reset color scheme
         self._colorIndex += 1
-        if self._colorIndex == len(MplBasicColors):
+        if self._colorIndex == len(BASIC_COLORS):
             self._colorIndex = 0
 
         return next_color

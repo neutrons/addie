@@ -7,7 +7,7 @@ from qtpy.QtWidgets import QVBoxLayout, QWidget
 
 from addie.plot import IndicatorManager, NavigationToolbar
 from addie.plot import FigureCanvas
-from addie.plot.constants import MplBasicColors, MplLineMarkers, MplLineStyles
+from addie.plot.constants import BASIC_COLORS, LINE_MARKERS, LINE_STYLES
 
 
 class MplGraphicsView(QWidget):
@@ -522,13 +522,13 @@ class MplGraphicsView(QWidget):
             raise RuntimeError('Implement 2-way as soon as possible!')
 
     def getLineStyleList(self):
-        return MplLineStyles
+        return LINE_STYLES
 
     def getLineMarkerList(self):
-        return MplLineMarkers
+        return LINE_MARKERS
 
     def getLineBasicColorList(self):
-        return MplBasicColors
+        return BASIC_COLORS
 
     def getDefaultColorMarkerComboList(self):
         """ Get a list of line/marker color and marker style combination
@@ -576,8 +576,8 @@ class MplGraphicsView(QWidget):
         """ Set the default/auto line marker/color combination list
         """
         self._myLineMarkerColorList = list()
-        for marker in MplLineMarkers:
-            for color in MplBasicColors:
+        for marker in LINE_MARKERS:
+            for color in BASIC_COLORS:
                 self._myLineMarkerColorList.append((marker, color))
 
     def setLineMarkerColorIndex(self, newindex):

@@ -4,7 +4,7 @@ import numpy as np
 
 from qtpy import PYQT4, PYQT5
 from qtpy.QtWidgets import QSizePolicy
-from addie.plot.constants import MplBasicColors, MplLineMarkers, MplLineStyles
+from addie.plot.constants import BASIC_COLORS, LINE_MARKERS, LINE_STYLES
 
 if PYQT5:
     from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
@@ -538,26 +538,26 @@ class FigureCanvas(FigureCanvasQTAgg):
         return line.get_xdata(), line.get_ydata()
 
     def getLineStyleList(self):
-        return MplLineStyles
+        return LINE_STYLES
 
     def getLineMarkerList(self):
-        return MplLineMarkers
+        return LINE_MARKERS
 
     def getLineBasicColorList(self):
-        return MplBasicColors
+        return BASIC_COLORS
 
     def getDefaultColorMarkerComboList(self):
         """ Get a list of line/marker color and marker style combination
         as default to add more and more line to plot
         """
         combo_list = list()
-        num_markers = len(MplLineMarkers)
-        num_colors = len(MplBasicColors)
+        num_markers = len(LINE_MARKERS)
+        num_colors = len(BASIC_COLORS)
 
         for i in range(num_markers):
-            marker = MplLineMarkers[i]
+            marker = LINE_MARKERS[i]
             for j in range(num_colors):
-                color = MplBasicColors[j]
+                color = BASIC_COLORS[j]
                 combo_list.append((marker, color))
             # ENDFOR (j)
         # ENDFOR(i)
