@@ -42,7 +42,7 @@ before_script:
 
 script:
   # lint the code and generate an error if a warning is introduced
-  - flake8
+  - flake8 .
   - python -c "import mantid"
   - python -c "import qtpy"
   - python -c "import mantidqt"
