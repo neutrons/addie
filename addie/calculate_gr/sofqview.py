@@ -5,10 +5,10 @@ from qtpy.QtCore import (Signal)
 from qtpy.QtGui import (QCursor)
 from qtpy.QtWidgets import (QAction, QMenu)
 
-from addie.utilities import mplgraphicsview as base
+from addie.plot import MplGraphicsView
 
 
-class SofQView(base.MplGraphicsView):
+class SofQView(MplGraphicsView):
     """
     Graphics view for S(Q)
     """
@@ -25,7 +25,7 @@ class SofQView(base.MplGraphicsView):
         """
         self._myParent = parent
 
-        base.MplGraphicsView.__init__(self, parent)
+        MplGraphicsView.__init__(self, parent)
 
         # declare event handling to indicators
         self._myCanvas.mpl_connect('button_press_event', self.on_mouse_press_event)

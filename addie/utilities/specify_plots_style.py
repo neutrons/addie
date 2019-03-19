@@ -1,6 +1,7 @@
 from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QDialog)  # noqa
-from addie.utilities import load_ui, mplgraphicsview as mplview
+from addie.plot.constants import BASIC_COLORS, LINE_MARKERS
+from addie.utilities import load_ui
 
 
 class PlotStyleDialog(QDialog):
@@ -40,9 +41,9 @@ class PlotStyleDialog(QDialog):
         Returns:
 
         """
-        color_list = mplview.MplBasicColors[:]
+        color_list = BASIC_COLORS[:]
         color_list.insert(0, 'No Change')
-        marker_list = mplview.MplLineMarkers[:]
+        marker_list = LINE_MARKERS[:]
         marker_list.insert(9, 'No Change')
 
         for color in color_list:

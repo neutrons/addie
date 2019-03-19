@@ -4,10 +4,10 @@ import time
 from qtpy.QtGui import (QCursor)
 from qtpy.QtWidgets import (QAction, QMenu)
 
-from addie.utilities import mplgraphicsview as base
+from addie.plot import MplGraphicsView
 
 
-class BraggView(base.MplGraphicsView):
+class BraggView(MplGraphicsView):
     """ Graphics view for Bragg diffraction
     """
 
@@ -18,7 +18,7 @@ class BraggView(base.MplGraphicsView):
         ----------
         parent
         """
-        base.MplGraphicsView.__init__(self, parent)
+        MplGraphicsView.__init__(self, parent)
 
         # control class
         # key: bank ID, value: list of workspace names
