@@ -5,7 +5,8 @@ from numpy.version import version as numpy_version_str
 from matplotlib import __version__ as matplotlib_version_str
 import sys
 import mantid
-import addie._version as addie_version
+from addie import __version__ as addie_version
+
 # qtpy does not provide an abstraction for this
 if PYQT5:
     from PyQt5.QtCore import QT_VERSION_STR  # noqa
@@ -57,8 +58,10 @@ class AboutDialog(object):
         QMessageBox.about(self.parent, "About Addie", message)
 
     def get_appli_version(self):
-        _version = addie_version.get_versions()
-        return str(_version['version'][0:5])
+        if '+' in addie_version:
+            return addie_version.split('+')[0] + ' dev'
+        else:
+            return addie_version
 
     def get_python_version(self):
         str_version = sys.version_info
