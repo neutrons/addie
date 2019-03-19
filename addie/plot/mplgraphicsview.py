@@ -5,7 +5,8 @@ import numpy as np
 
 from qtpy.QtWidgets import QVBoxLayout, QWidget
 
-from addie.plot import IndicatorManager, NavigationToolbar, Qt4MplCanvas
+from addie.plot import IndicatorManager, NavigationToolbar
+from addie.plot import FigureCanvas
 from addie.plot.constants import MplBasicColors, MplLineMarkers, MplLineStyles
 
 
@@ -13,7 +14,7 @@ class MplGraphicsView(QWidget):
     """ A combined graphics view including matplotlib canvas and
     a navigation tool bar
 
-    Note: Merged with HFIR_Powder_Reduction.MplFigureCAnvas
+    Note: Merged with HFIR_Powder_Reduction.MplFigureCanvas
     """
 
     def __init__(self, parent):
@@ -21,7 +22,7 @@ class MplGraphicsView(QWidget):
         QWidget.__init__(self, parent)
 
         # set up canvas
-        self._myCanvas = Qt4MplCanvas(self)
+        self._myCanvas = FigureCanvas(self)
         self._myToolBar = NavigationToolbar(self, self._myCanvas)
 
         # state of operation

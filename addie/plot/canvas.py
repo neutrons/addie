@@ -7,9 +7,9 @@ from qtpy.QtWidgets import QSizePolicy
 from addie.plot.constants import MplBasicColors, MplLineMarkers, MplLineStyles
 
 if PYQT5:
-    from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+    from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 elif PYQT4:
-    from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
+    from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg
 else:
     raise ImportError('do not know which matplotlib backend to use')
 
@@ -17,7 +17,7 @@ import matplotlib.image  # noqa
 from matplotlib.figure import Figure  # noqa
 
 
-class Qt4MplCanvas(FigureCanvas):
+class FigureCanvas(FigureCanvasQTAgg):
     """  A customized Qt widget for matplotlib figure.
     It can be used to replace GraphicsView of QtGui
     """
@@ -39,12 +39,12 @@ class Qt4MplCanvas(FigureCanvas):
             self.axes = self.fig.add_host_subplot(111, projection='mantid')
 
         # Initialize parent class and set parent
-        FigureCanvas.__init__(self, self.fig)
+        FigureCanvasQTAgg.__init__(self, self.fig)
         self.setParent(parent)
 
         # Set size policy to be able to expanding and resizable with frame
-        FigureCanvas.setSizePolicy(self, QSizePolicy.Expanding, QSizePolicy.Expanding)
-        FigureCanvas.updateGeometry(self)
+        FigureCanvasQTAgg.setSizePolicy(self, QSizePolicy.Expanding, QSizePolicy.Expanding)
+        FigureCanvasQTAgg.updateGeometry(self)
 
         # Variables to manage all lines/subplot
         self._lineDict = {}
