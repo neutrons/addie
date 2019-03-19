@@ -1,6 +1,6 @@
 from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QDialog)  # noqa
-from addie.plot.constants import BASIC_COLORS, LINE_MARKERS, LINE_STYLES
+from addie.plot.constants import BASIC_COLORS, LINE_MARKERS
 from addie.utilities import load_ui
 
 
