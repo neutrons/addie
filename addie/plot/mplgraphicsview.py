@@ -5,7 +5,7 @@ import numpy as np
 
 from qtpy.QtWidgets import QVBoxLayout, QWidget
 
-from addie.plot import IndicatorManager, MyNavigationToolbar, Qt4MplCanvas
+from addie.plot import IndicatorManager, NavigationToolbar, Qt4MplCanvas
 from addie.plot.constants import MplBasicColors, MplLineMarkers, MplLineStyles
 
 
@@ -22,7 +22,7 @@ class MplGraphicsView(QWidget):
 
         # set up canvas
         self._myCanvas = Qt4MplCanvas(self)
-        self._myToolBar = MyNavigationToolbar(self, self._myCanvas)
+        self._myToolBar = NavigationToolbar(self, self._myCanvas)
 
         # state of operation
         self._isZoomed = False

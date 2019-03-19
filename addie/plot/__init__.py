@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-from .canvas import Qt4MplCanvas  # noqa
-from .navigationtoolbar import MyNavigationToolbar  # noqa
-from .indicatormanager import IndicatorManager  # noqa
-from .mplgraphicsview import MplGraphicsView  # noqa
+from addie.plot.canvas import Qt4MplCanvas  # noqa
+from addie.plot.navigationtoolbar import NavigationToolbar  # noqa
+from addie.plot.indicatormanager import IndicatorManager  # noqa
+from addie.plot.mplgraphicsview import MplGraphicsView  # noqa

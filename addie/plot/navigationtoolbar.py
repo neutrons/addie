@@ -5,17 +5,22 @@ from qtpy import PYQT4, PYQT5
 from qtpy.QtCore import (Signal)
 
 if PYQT5:
-    from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar2
+    from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
 elif PYQT4:
-    from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar2
+    from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT
 else:
     raise ImportError('do not know which matplotlib backend to use')
 
 import matplotlib.image  # noqa
 from matplotlib.figure import Figure  # noqa
 
+# constants for modes
+NAVIGATION_MODE_NONE = 0
+NAVIGATION_MODE_PAN = 1
+NAVIGATION_MODE_ZOOM = 2
 
-class MyNavigationToolbar(NavigationToolbar2):
+
+class NavigationToolbar(NavigationToolbar2QT):
     """ A customized navigation tool bar attached to canvas
     Note:
     * home, left, right: will not disable zoom/pan mode
@@ -24,10 +29,6 @@ class MyNavigationToolbar(NavigationToolbar2):
     Other methods
     * drag_pan(self, event): event handling method for dragging canvas in pan-mode
     """
-    NAVIGATION_MODE_NONE = 0
-    NAVIGATION_MODE_PAN = 1
-    NAVIGATION_MODE_ZOOM = 2
-
     # This defines a signal called 'home_button_pressed' that takes 1 boolean
     # argument for being in zoomed state or not
     home_button_pressed = Signal()
@@ -40,12 +41,12 @@ class MyNavigationToolbar(NavigationToolbar2):
         built-in methods
         - drag_zoom(self, event): triggered during holding the mouse and moving
         """
-        NavigationToolbar2.__init__(self, canvas, canvas)
+        NavigationToolbar2QT.__init__(self, canvas, canvas)
 
         # parent
         self._myParent = parent
         # tool bar mode
-        self._myMode = MyNavigationToolbar.NAVIGATION_MODE_NONE
+        self._myMode = NAVIGATION_MODE_NONE
 
         # connect the events to parent
         self.home_button_pressed.connect(self._myParent.evt_toolbar_home)
@@ -56,7 +57,7 @@ class MyNavigationToolbar(NavigationToolbar2):
         """
         check whether the tool bar is in zoom mode
         """
-        return self._myMode == MyNavigationToolbar.NAVIGATION_MODE_ZOOM
+        return self._myMode == NAVIGATION_MODE_ZOOM
 
     def get_mode(self):
         """
@@ -70,13 +71,13 @@ class MyNavigationToolbar(NavigationToolbar2):
         Canvas is drawn called by pan(), zoom()
         :return:
         """
-        NavigationToolbar2.draw(self)
+        NavigationToolbar2QT.draw(self)
 
         self._myParent.evt_view_updated()
 
     def home(self, *args):
         # call super's home() method
-        NavigationToolbar2.home(self, args)
+        NavigationToolbar2QT.home(self, args)
 
         # send a signal to parent class for further operation
         self.home_button_pressed.emit()
@@ -87,14 +88,14 @@ class MyNavigationToolbar(NavigationToolbar2):
         :param args:
         :return:
         """
-        NavigationToolbar2.pan(self, args)
+        NavigationToolbar2QT.pan(self, args)
 
-        if self._myMode == MyNavigationToolbar.NAVIGATION_MODE_PAN:
+        if self._myMode == NAVIGATION_MODE_PAN:
             # out of pan mode
-            self._myMode = MyNavigationToolbar.NAVIGATION_MODE_NONE
+            self._myMode = NAVIGATION_MODE_NONE
         else:
             # into pan mode
-            self._myMode = MyNavigationToolbar.NAVIGATION_MODE_PAN
+            self._myMode = NAVIGATION_MODE_PAN
 
         print('PANNED')
 
@@ -104,14 +105,14 @@ class MyNavigationToolbar(NavigationToolbar2):
         :param args:
         :return:
         """
-        NavigationToolbar2.zoom(self, args)
+        NavigationToolbar2QT.zoom(self, args)
 
-        if self._myMode == MyNavigationToolbar.NAVIGATION_MODE_ZOOM:
+        if self._myMode == NAVIGATION_MODE_ZOOM:
             # out of zoom mode
-            self._myMode = MyNavigationToolbar.NAVIGATION_MODE_NONE
+            self._myMode = NAVIGATION_MODE_NONE
         else:
             # into zoom mode
-            self._myMode = MyNavigationToolbar.NAVIGATION_MODE_ZOOM
+            self._myMode = NAVIGATION_MODE_ZOOM
 
     def release_zoom(self, event):
         """
@@ -119,13 +120,13 @@ class MyNavigationToolbar(NavigationToolbar2):
         """
         self.canvas_zoom_released.emit()
 
-        NavigationToolbar2.release_zoom(self, event)
+        NavigationToolbar2QT.release_zoom(self, event)
 
     def _update_view(self):
         """
         view update called by home(), back() and forward()
         :return:
         """
-        NavigationToolbar2._update_view(self)
+        NavigationToolbar2QT._update_view(self)
 
         self._myParent.evt_view_updated()
