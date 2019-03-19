@@ -4,10 +4,10 @@ import numpy as np
 from qtpy.QtGui import QCursor
 from qtpy.QtWidgets import (QAction, QMenu)
 
-from addie.utilities import mplgraphicsview as base
+from addie.plot import MplGraphicsView
 
 
-class GofRView(base.MplGraphicsView):
+class GofRView(MplGraphicsView):
     """
     Graphics view for G(R)
     """
@@ -16,7 +16,7 @@ class GofRView(base.MplGraphicsView):
         """
         Initialization
         """
-        base.MplGraphicsView.__init__(self, parent)
+        MplGraphicsView.__init__(self, parent)
 
         # class variable containers
         self._grDict = dict()
