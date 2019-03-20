@@ -29,9 +29,9 @@ Similarly, there is a script for windows (experimental)
 addiedevel.bat
 ```
 
-The test suite can be run using unittests `discover` mode on the `tests` module
+The test suite can be run using [unittests](https://docs.python.org/3/library/unittest.html) `discover` mode on the `tests` module
 ```bash
-$ python -m unittest discover tests
+$ python -m unittest discover
 ```
 or through the `setup.py` script
 ```bash
