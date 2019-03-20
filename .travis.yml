@@ -47,11 +47,11 @@ script:
   - python -c "import qtpy"
   - python -c "import mantidqt"
   # workbench tests
-  - xvfb-run --server-args="-screen 0 640x480x24" mantidworkbench --help
+  - xvfb-run --server-args="-screen 0 640x480x24" --auto-servernum mantidworkbench --help
   - echo "import time;time.sleep(5)" > workbenchshutdown.py
-  - xvfb-run --server-args="-screen 0 640x480x24" mantidworkbench -q -x workbenchshutdown.py
+  - xvfb-run --server-args="-screen 0 640x480x24" --auto-servernum mantidworkbench -q -x workbenchshutdown.py
   #- python setup.py test
   # install addie
   - python setup.py install
   - which addie
-  - xvfb-run --server-args="-screen 0 640x480x24" addie --version
+  - xvfb-run --server-args="-screen 0 640x480x24" --auto-servernum addie --version
