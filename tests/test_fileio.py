@@ -4,9 +4,22 @@ import os
 
 from addie.addiedriver import AddieDriver
 
-DATA_DIR = os.path.dirname(__file__)
-print('looking for data in "{}"'.format(DATA_DIR))
+from tests import DATA_DIR
 
+def expectedWkspName(filename):
+    return os.path.basename(filename).split('.')[0]
+
+class readGofr(unittest.TestCase):
+    def setUp(self):
+        self.files = ['NOM_127827.gr']
+        self.files = [os.path.join(DATA_DIR, filename) for filename in self.files]
+
+    def test(self):
+        driver = AddieDriver()
+        for filename in self.files:
+            worked, wkspname = driver.load_gr(filename)
+            self.assertEquals(wkspname, expectedWkspName(filename))
+            # TODO actual checks on the workspace
 
 class readSofQ(unittest.TestCase):
     def setUp(self):
@@ -14,13 +27,14 @@ class readSofQ(unittest.TestCase):
                          'SofQ_NaNO3_275C.dat']
         self.datFiles = [os.path.join(DATA_DIR, filename) for filename in self.datFiles]
 
-        self.nxsFiles = []
+        self.nxsFiles = ['NOM_127827_SQ.nxs']
         self.nxsFiles = [os.path.join(DATA_DIR, filename) for filename in self.nxsFiles]
 
     def runLoad(self, driver, filename):
         print('loading "{}"'.format(filename))
         wksp, qmin, qmax = driver.load_sq(filename)
         self.assertLess(qmin, qmax, 'qmin[{}] >= qmax[{}]'.format(qmin, qmax))
+        self.assertEquals(str(wksp), expectedWkspName(filename))
         # TODO actual checks on the workspace
 
     def test_dat(self):
@@ -33,6 +47,18 @@ class readSofQ(unittest.TestCase):
         for filename in self.nxsFiles:
             self.runLoad(driver, filename)
 
+
+class readGSAS(unittest.TestCase):
+    def setUp(self):
+        self.files = ['NOM_127827.gsa']
+        self.files = [os.path.join(DATA_DIR, filename) for filename in self.files]
+
+    def test(self):
+        driver = AddieDriver()
+        for filename in self.files:
+            wkspname = driver.load_bragg_file(filename)
+            self.assertEquals(wkspname, expectedWkspName(filename))
+            # TODO actual checks on the workspace
 
 if __name__ == '__main__':
     unittest.main()  # pragma: no cover
