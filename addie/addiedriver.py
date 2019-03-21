@@ -1,6 +1,7 @@
 from __future__ import (absolute_import, division, print_function)
 from mantid.api import AnalysisDataService
 import mantid.simpleapi as simpleapi
+import mantid.plots.helperfunctions
 import os
 import math
 
@@ -330,57 +331,32 @@ class AddieDriver(object):
         return out_ws.readX(0), out_ws.readY(0), out_ws.readE(0)
 
     @staticmethod
+    def get_ws(name):
+        name = str(name)
+        assert AnalysisDataService.doesExist(name), 'Workspace "{}" does not exist.'.format(name)
+        return AnalysisDataService.retrieve(name)
+
+    @staticmethod
     def get_ws_data(ws_name):
-        """
+        print('get_ws_data({})'.format(ws_name))
+        wksp = AddieDriver.get_ws(ws_name)
+        x, y, dy, _ = mantid.plots.helperfunctions.get_spectrum(wksp, 0, distribution=True, withDy=True)
 
-        Parameters
-        ----------
-        ws_name
-
-        Returns
-        -------
-
-        """
-        # convert to point data for plotting
-        simpleapi.ConvertToPointData(InputWorkspace=ws_name, OutputWorkspace=ws_name)
-
-        out_ws = AnalysisDataService.retrieve(ws_name)
-
-        return out_ws.readX(0), out_ws.readY(0), out_ws.readE(0)
+        return x, y, dy
 
     @staticmethod
     def get_ws_unit(ws_name):
         """
         Find out the unit of the workspace
-        Parameters
-        ----------
-        ws_name
-
-        Returns
-        -------
-
         """
-        # check
-        assert isinstance(ws_name, str), 'Workspace name must be a string but not a %s.' % ws_name.__class__.__name__
-        assert AnalysisDataService.doesExist(ws_name), 'Workspace %s does not exist.' % ws_name
+        wksp = AddieDriver.get_ws(ws_name)
 
-        ws = AnalysisDataService.retrieve(ws_name)
-
-        unit = ws.getAxis(0).getUnit().unitID()
-
-        return unit
+        return wksp.getAxis(0).getUnit().unitID()
 
     @staticmethod
     def load_bragg_file(file_name):
         """
         Load Bragg diffraction file (including 3-column data file, GSAS file) for Rietveld
-        Parameters
-        ----------
-        file_name
-
-        Returns
-        -------
-
         """
         # load with different file type
         base_file_name = os.path.basename(file_name).lower()
@@ -406,11 +382,6 @@ class AddieDriver(object):
     def load_gr(self, gr_file_name):
         """
         Load an ASCII file containing G(r)
-        Args:
-            gr_file_name:
-
-        Returns:
-
         """
         # check
         assert len(gr_file_name) > 0
@@ -450,12 +421,11 @@ class AddieDriver(object):
             simpleapi.ConvertToPointData(InputWorkspace=sq_ws_name, OutputWorkspace=sq_ws_name)  # TODO REMOVE THIS LINE
         elif ext == 'DAT' or ext == 'txt':
             simpleapi.LoadAscii(Filename=file_name, OutputWorkspace=sq_ws_name, Unit='MomentumTransfer')
+            # The S(Q) file is in fact S(Q)-1 in sq file.  So need to add 1 to the workspace
+            out_ws = AnalysisDataService.retrieve(sq_ws_name)
+            out_ws += 1
 
         assert AnalysisDataService.doesExist(sq_ws_name), 'Unable to load S(Q) file %s.' % file_name
-
-        # The S(Q) file is in fact S(Q)-1 in sq file.  So need to add 1 to the workspace
-        out_ws = AnalysisDataService.retrieve(sq_ws_name)
-        out_ws += 1
 
         # set to the current S(Q) workspace name
         self._currSqWsName = sq_ws_name
@@ -479,8 +449,8 @@ class AddieDriver(object):
         -------
         Name of grouped workspace and list
         """
+        gss_ws_name = str(gss_ws_name)
         # check
-        assert isinstance(gss_ws_name, str)
         assert AnalysisDataService.doesExist(gss_ws_name)
 
         # get workspace
