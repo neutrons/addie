@@ -266,13 +266,7 @@ class AddieDriver(object):
             simpleapi.ConvertUnits(InputWorkspace=ws_name, OutputWorkspace=ws_name,
                                    Target=x_unit, EMode='Elastic')
 
-        # convert to point data for plotting
-        simpleapi.ConvertToPointData(InputWorkspace=ws_name, OutputWorkspace=ws_name)
-
-        # get workspace
-        bank_ws = AnalysisDataService.retrieve(ws_name)
-
-        return bank_ws.readX(0), bank_ws.readY(0), bank_ws.readE(0)
+        return AddieDriver.get_ws_data(ws_name, 0)
 
     def get_current_sq_name(self):
         """
@@ -305,9 +299,8 @@ class AddieDriver(object):
 
         # get the workspace
         gr_ws_name = self._grWsNameDict[(min_q, max_q)]
-        gr_ws = AnalysisDataService.retrieve(gr_ws_name)
 
-        return gr_ws.readX(0), gr_ws.readY(0), gr_ws.readE(0)
+        return AddieDriver.get_ws_data(gr_ws_name)
 
     def get_sq(self, sq_name=None):
         """Get S(Q)
@@ -325,10 +318,7 @@ class AddieDriver(object):
         if not AnalysisDataService.doesExist(sq_name):
             raise RuntimeError('S(Q) matrix workspace {0} does not exist.'.format(sq_name))
 
-        # access output workspace and return vector X, Y, E
-        out_ws = AnalysisDataService.retrieve(sq_name)
-
-        return out_ws.readX(0), out_ws.readY(0), out_ws.readE(0)
+        return AddieDriver.get_ws_data(sq_name)
 
     @staticmethod
     def get_ws(name):
@@ -337,10 +327,9 @@ class AddieDriver(object):
         return AnalysisDataService.retrieve(name)
 
     @staticmethod
-    def get_ws_data(ws_name):
-        print('get_ws_data({})'.format(ws_name))
+    def get_ws_data(ws_name, wkspIndex=0):
         wksp = AddieDriver.get_ws(ws_name)
-        x, y, dy, _ = mantid.plots.helperfunctions.get_spectrum(wksp, 0, distribution=True, withDy=True)
+        x, y, dy, _ = mantid.plots.helperfunctions.get_spectrum(wksp, wkspIndex, distribution=True, withDy=True, withDx=False)
 
         return x, y, dy
 
