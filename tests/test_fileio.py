@@ -65,5 +65,6 @@ class readGSAS(unittest.TestCase):
             self.assertEquals(wkspname, expectedWkspName(filename))
             # TODO actual checks on the workspace
 
+
 if __name__ == '__main__':
     unittest.main()  # pragma: no cover
