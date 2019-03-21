@@ -29,6 +29,20 @@ Similarly, there is a script for windows (experimental)
 addiedevel.bat
 ```
 
+The test suite can be run using unittests `discover` mode on the `tests` module
+```bash
+$ python -m unittest discover tests
+```
+or through the `setup.py` script
+```bash
+$ python setup.py test
+```
+Individual test files can be run directly as
+```bash
+$ python tests/test_fileio.py
+```
+
+
 Developing using virtual environments
 -------------------------------------
 
