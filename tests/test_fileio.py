@@ -1,13 +1,16 @@
 from __future__ import absolute_import, print_function
-import unittest
+import numpy as np
 import os
-
+import unittest
+from mantid.simpleapi import mtd
 from addie.addiedriver import AddieDriver
 
 from tests import DATA_DIR
 
+
 def expectedWkspName(filename):
     return os.path.basename(filename).split('.')[0]
+
 
 class readGofr(unittest.TestCase):
     def setUp(self):
@@ -20,6 +23,7 @@ class readGofr(unittest.TestCase):
             worked, wkspname = driver.load_gr(filename)
             self.assertEquals(wkspname, expectedWkspName(filename))
             # TODO actual checks on the workspace
+
 
 class readSofQ(unittest.TestCase):
     def setUp(self):
@@ -36,6 +40,7 @@ class readSofQ(unittest.TestCase):
         self.assertLess(qmin, qmax, 'qmin[{}] >= qmax[{}]'.format(qmin, qmax))
         self.assertEquals(str(wksp), expectedWkspName(filename))
         # TODO actual checks on the workspace
+        self.assertAlmostEqual(np.average(mtd[wksp].readY(0)[-100:]), 1., places=1)
 
     def test_dat(self):
         driver = AddieDriver()
