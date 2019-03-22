@@ -6,7 +6,7 @@ from addie.processing.idl.step2_gui_handler import Step2GuiHandler
 
 class RunSumScans(object):
 
-    script = 'python  /SNS/users/zjn/pytest/sumscans.py '
+    script = 'python  /SNS/NOM/shared/autoNOM/stable/sumscans.py '
     output_file = ''
 
     def __init__(self, parent=None):
