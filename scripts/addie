@@ -275,7 +275,6 @@ class MainWindow(QMainWindow):
     undo_index = max_undo_list
     undo_button_enabled = False
     redo_button_enabled = False
-    post_processing = 'mantid'  # or 'idl'
 
     debugging = False
     load_intermediate_step_ok = False
@@ -310,7 +309,7 @@ class MainWindow(QMainWindow):
     o_help_scans = None
     o_help_mantid = None
 
-    def __init__(self, parent=None):
+    def __init__(self, options, parent=None):
         """ Initialization
         Parameters
         ----------
@@ -326,6 +325,9 @@ class MainWindow(QMainWindow):
         self._promote_widgets()
 
         self.ui.graphicsView_sq.set_main(self)
+
+	# Set the post-processing mode
+    	self.post_processing = options.mode  # mantid or 'idl'
 
         # set widgets
         self.init_parameters()
@@ -2871,13 +2873,13 @@ class MainWindow(QMainWindow):
         ReductionConfigurationHandler(parent=self)
 
 
-def main():
+def main(options):
     app = QApplication(sys.argv)
     app.setOrganizationName("Qtrac Ltd.")
     app.setOrganizationDomain("qtrac.eu")
     app.setApplicationName("Image Changer")
     app.setWindowIcon(QIcon(":/icon.png"))
-    form = MainWindow()
+    form = MainWindow(options)
     form.show()
     app.exec_()
 
@@ -2885,6 +2887,7 @@ if __name__ == '__main__':
     import argparse  # noqa
     parser = argparse.ArgumentParser(description='ADvanced DIffraction Environment')
     parser.add_argument('--version', action='version', version='%(prog)s version {}'.format(__version__))
+    parser.add_argument('--mode', type=str, default='mantid')
 
     try:
         # set up bash completion as a soft dependency
@@ -2897,4 +2900,4 @@ if __name__ == '__main__':
     options = parser.parse_args()
 
     # start the main program
-    main()
+    main(options)
