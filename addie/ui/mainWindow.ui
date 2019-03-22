@@ -5661,8 +5661,8 @@ p, li { white-space: pre-wrap; }
    <slot>vanadium_background_edited()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>610</x>
-     <y>263</y>
+     <x>130</x>
+     <y>109</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -5677,8 +5677,8 @@ p, li { white-space: pre-wrap; }
    <slot>diamond_background_edited()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>406</x>
-     <y>180</y>
+     <x>130</x>
+     <y>109</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -5693,8 +5693,8 @@ p, li { white-space: pre-wrap; }
    <slot>manual_output_folder_field_edited()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>834</x>
-     <y>776</y>
+     <x>130</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -5709,8 +5709,8 @@ p, li { white-space: pre-wrap; }
    <slot>sample_background_edited()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>610</x>
-     <y>294</y>
+     <x>130</x>
+     <y>109</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -5725,8 +5725,8 @@ p, li { white-space: pre-wrap; }
    <slot>run_autonom()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>838</x>
-     <y>905</y>
+     <x>130</x>
+     <y>129</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -5741,8 +5741,8 @@ p, li { white-space: pre-wrap; }
    <slot>vanadium_edited()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>610</x>
-     <y>232</y>
+     <x>130</x>
+     <y>109</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -5757,8 +5757,8 @@ p, li { white-space: pre-wrap; }
    <slot>select_current_folder_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>161</x>
-     <y>113</y>
+     <x>173</x>
+     <y>109</y>
     </hint>
     <hint type="destinationlabel">
      <x>594</x>
@@ -5773,8 +5773,8 @@ p, li { white-space: pre-wrap; }
    <slot>output_folder_radio_buttons()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>228</x>
-     <y>744</y>
+     <x>130</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -5789,8 +5789,8 @@ p, li { white-space: pre-wrap; }
    <slot>output_folder_radio_buttons()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>120</x>
-     <y>775</y>
+     <x>130</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -5838,7 +5838,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>163</x>
-     <y>435</y>
+     <y>434</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -5853,8 +5853,8 @@ p, li { white-space: pre-wrap; }
    <slot>diamond_edited()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>406</x>
-     <y>153</y>
+     <x>130</x>
+     <y>109</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -5869,8 +5869,8 @@ p, li { white-space: pre-wrap; }
    <slot>background_combobox_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>465</x>
-     <y>436</y>
+     <x>607</x>
+     <y>435</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -5885,8 +5885,8 @@ p, li { white-space: pre-wrap; }
    <slot>create_new_autonom_folder_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>108</x>
-     <y>663</y>
+     <x>120</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>83</x>
@@ -5901,8 +5901,8 @@ p, li { white-space: pre-wrap; }
    <slot>manual_output_folder_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1665</x>
-     <y>776</y>
+     <x>130</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>1220</x>
@@ -5934,7 +5934,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>792</x>
-     <y>594</y>
+     <y>593</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -5949,8 +5949,8 @@ p, li { white-space: pre-wrap; }
    <slot>no_hidrogen_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1019</x>
-     <y>560</y>
+     <x>1107</x>
+     <y>559</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -5965,8 +5965,8 @@ p, li { white-space: pre-wrap; }
    <slot>reset_q_range()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>362</x>
-     <y>579</y>
+     <x>571</x>
+     <y>578</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -5982,7 +5982,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>316</x>
-     <y>579</y>
+     <y>578</y>
     </hint>
     <hint type="destinationlabel">
      <x>6</x>
@@ -5998,7 +5998,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>725</x>
-     <y>594</y>
+     <y>593</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -6013,8 +6013,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_fourier_filter_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>114</x>
-     <y>709</y>
+     <x>154</x>
+     <y>708</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -6029,8 +6029,8 @@ p, li { white-space: pre-wrap; }
    <slot>hidrogen_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>843</x>
-     <y>560</y>
+     <x>937</x>
+     <y>559</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -6062,7 +6062,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>184</x>
-     <y>579</y>
+     <y>578</y>
     </hint>
     <hint type="destinationlabel">
      <x>3</x>
@@ -6077,8 +6077,8 @@ p, li { white-space: pre-wrap; }
    <slot>check_fourier_filter_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>540</x>
-     <y>709</y>
+     <x>912</x>
+     <y>708</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -6126,7 +6126,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>1621</x>
-     <y>675</y>
+     <y>674</y>
     </hint>
     <hint type="destinationlabel">
      <x>1158</x>
@@ -6173,8 +6173,8 @@ p, li { white-space: pre-wrap; }
    <slot>help_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1678</x>
-     <y>905</y>
+     <x>50</x>
+     <y>129</y>
     </hint>
     <hint type="destinationlabel">
      <x>956</x>
@@ -6253,8 +6253,8 @@ p, li { white-space: pre-wrap; }
    <slot>create_exp_ini_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>105</x>
-     <y>905</y>
+     <x>117</x>
+     <y>129</y>
     </hint>
     <hint type="destinationlabel">
      <x>2</x>
@@ -6317,8 +6317,8 @@ p, li { white-space: pre-wrap; }
    <slot>personalization_table_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1678</x>
-     <y>86</y>
+     <x>60</x>
+     <y>109</y>
     </hint>
     <hint type="destinationlabel">
      <x>1550</x>
@@ -6333,8 +6333,8 @@ p, li { white-space: pre-wrap; }
    <slot>h3_table_right_click()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>887</x>
-     <y>456</y>
+     <x>130</x>
+     <y>118</y>
     </hint>
     <hint type="destinationlabel">
      <x>1710</x>
@@ -6349,8 +6349,8 @@ p, li { white-space: pre-wrap; }
    <slot>table_search()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>696</x>
-     <y>91</y>
+     <x>230</x>
+     <y>109</y>
     </hint>
     <hint type="destinationlabel">
      <x>785</x>
@@ -6365,8 +6365,8 @@ p, li { white-space: pre-wrap; }
    <slot>table_search_clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1092</x>
-     <y>94</y>
+     <x>60</x>
+     <y>109</y>
     </hint>
     <hint type="destinationlabel">
      <x>1146</x>
@@ -6381,8 +6381,8 @@ p, li { white-space: pre-wrap; }
    <slot>reduction_configuration_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>233</x>
-     <y>887</y>
+     <x>130</x>
+     <y>116</y>
     </hint>
     <hint type="destinationlabel">
      <x>270</x>
@@ -6397,8 +6397,8 @@ p, li { white-space: pre-wrap; }
    <slot>browse_calibration_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>519</x>
-     <y>871</y>
+     <x>130</x>
+     <y>116</y>
     </hint>
     <hint type="destinationlabel">
      <x>619</x>
@@ -6413,8 +6413,8 @@ p, li { white-space: pre-wrap; }
    <slot>make_calibration_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>709</x>
-     <y>883</y>
+     <x>130</x>
+     <y>116</y>
     </hint>
     <hint type="destinationlabel">
      <x>847</x>
@@ -6435,22 +6435,6 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>855</x>
      <y>503</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pytest</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>set_pytest()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1407</x>
-     <y>757</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1703</x>
-     <y>761</y>
     </hint>
    </hints>
   </connection>
