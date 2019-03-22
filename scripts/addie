@@ -325,9 +325,9 @@ class MainWindow(QMainWindow):
         self._promote_widgets()
 
         self.ui.graphicsView_sq.set_main(self)
-
-	# Set the post-processing mode
-	self.post_processing = processing_mode  # mantid or 'idl'
+        
+        # Set the post-processing mode
+        self.post_processing = processing_mode  # mantid or 'idl'
 
         # set widgets
         self.init_parameters()
