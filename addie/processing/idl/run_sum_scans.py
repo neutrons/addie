@@ -6,7 +6,7 @@ from addie.processing.idl.step2_gui_handler import Step2GuiHandler
 
 class RunSumScans(object):
 
-    script = 'python  /SNS/NOM/shared/autoNOM/stable/sumscans.py '
+    script = 'python  /SNS/users/zjn/pytest/sumscans.py '
     output_file = ''
 
     def __init__(self, parent=None):
@@ -40,6 +40,8 @@ class RunSumScans(object):
 
         if not self.parent.interactive_mode_checkbox.isChecked():
             _script += "-n True"
+        if self.parent.pytest.isChecked():
+            _script += "-u True"
 
         qmax_list = str(self.parent.pdf_qmax_line_edit.text()).strip()
         if not (qmax_list == ""):
