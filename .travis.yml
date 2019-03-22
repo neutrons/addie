@@ -37,6 +37,11 @@ install:
   conda list
 
 before_script:
+  # create a properties file that turns off network access
+  - mkdir ~/.mantid
+  - echo "CheckMantidVersion.OnStartup=0" > ~/.mantid/Mantid.user.properties
+  - echo "UpdateInstrumentDefinitions.OnStartup=0" >> ~/.mantid/Mantid.user.properties
+  - echo "usagereports.enabled=0" >> ~/.mantid/Mantid.user.properties
   - export DISPLAY=:99.0
   - sleep 3
 
