@@ -20,4 +20,4 @@ PYTHON_VERSION=`$CMD -c 'import sys; version=sys.version_info[:3]; print("{0}.{1
 $CMD setup.py build
 
 # launch addie
-QT_API=$LOCAL_QT_API PYTHONPATH=build/lib:$PYTHONPATH $CMD build/scripts-${PYTHON_VERSION}/addie --mode 'idl'
+QT_API=$LOCAL_QT_API PYTHONPATH=build/lib:$PYTHONPATH $CMD build/scripts-${PYTHON_VERSION}/addie
