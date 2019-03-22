@@ -2888,7 +2888,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='ADvanced DIffraction Environment')
     parser.add_argument('--version', action='version', version='%(prog)s version {}'.format(__version__))
     parser.add_argument('--mode', type=str, default='mantid',
-			help='Set processing mode ((default=%default)s)', choices=['mantid', 'idl'])
+			help='Set processing mode (default=%(default)s)', choices=['mantid', 'idl'])
 
     try:
         # set up bash completion as a soft dependency
