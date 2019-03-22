@@ -275,7 +275,6 @@ class MainWindow(QMainWindow):
     undo_index = max_undo_list
     undo_button_enabled = False
     redo_button_enabled = False
-    post_processing = 'mantid'  # or 'idl'
 
     debugging = False
     load_intermediate_step_ok = False
@@ -287,6 +286,7 @@ class MainWindow(QMainWindow):
     file_path = os.getcwd()
     table_selection_buffer = {}
     _run_thread_sum_scans = RunThread()
+    advanced_window_idl_groupbox_visible = False
 
     logbook_thread = LogbookThread()
     number_of_last_log_files_to_display = 10
@@ -309,7 +309,7 @@ class MainWindow(QMainWindow):
     o_help_scans = None
     o_help_mantid = None
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, processing_mode=None):
         """ Initialization
         Parameters
         ----------
@@ -325,6 +325,9 @@ class MainWindow(QMainWindow):
         self._promote_widgets()
 
         self.ui.graphicsView_sq.set_main(self)
+        
+        # Set the post-processing mode
+        self.post_processing = processing_mode  # mantid or 'idl'
 
         # set widgets
         self.init_parameters()
@@ -2870,13 +2873,13 @@ class MainWindow(QMainWindow):
         ReductionConfigurationHandler(parent=self)
 
 
-def main():
+def main(mode):
     app = QApplication(sys.argv)
     app.setOrganizationName("Qtrac Ltd.")
     app.setOrganizationDomain("qtrac.eu")
     app.setApplicationName("Image Changer")
     app.setWindowIcon(QIcon(":/icon.png"))
-    form = MainWindow()
+    form = MainWindow(processing_mode=mode)
     form.show()
     app.exec_()
 
@@ -2884,6 +2887,8 @@ if __name__ == '__main__':
     import argparse  # noqa
     parser = argparse.ArgumentParser(description='ADvanced DIffraction Environment')
     parser.add_argument('--version', action='version', version='%(prog)s version {}'.format(__version__))
+    parser.add_argument('--mode', type=str, default='mantid',
+			help='Set processing mode (default=%(default)s)', choices=['mantid', 'idl'])
 
     try:
         # set up bash completion as a soft dependency
@@ -2896,4 +2901,4 @@ if __name__ == '__main__':
     options = parser.parse_args()
 
     # start the main program
-    main()
+    main(options.mode)
