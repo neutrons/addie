@@ -90,7 +90,7 @@ class GofRView(MplGraphicsView):
 
         return
 
-    def plot_gr(self, plot_key, vec_r, vec_g, vec_e=None, plot_error=False, color='black', style='.', marker=None,
+    def plot_gr(self, plot_key, ws_name, plotError=False, color='black', style='.', marker=None,
                 alpha=1., label=None):
         """
         Plot G(r)
@@ -106,23 +106,16 @@ class GofRView(MplGraphicsView):
         :param label: label for the line to plot
         :return:
         """
-        # plot
-        if plot_error:
-            self.add_plot_1d(vec_r, vec_g, vec_e)
-            raise NotImplementedError('ASAP')
-        else:
-            # add a plot without error
-            # q_min = 10., q_max = 50.
-            # alpha = 1. - (q_now - q_min)/(q_max - q_min)
-            if not label:
-                label = str(plot_key)
+        # q_min = 10., q_max = 50.
+        # alpha = 1. - (q_now - q_min)/(q_max - q_min)
+        if not label:
+            label = str(plot_key)
 
-            line_id = self.add_plot_1d(vec_r, vec_g, marker=marker,
-                                       color=color, line_style=style, alpha=alpha,
-                                       label=label, x_label=r'r ($\AA$)')
-            self._colorIndex += 1
-            self._grDict[str(plot_key)] = line_id
-        # END-IF-ELSE
+        line_id = self.add_plot_1d(ws_name, wkspindex=0, marker=marker,
+                                   color=color, line_style=style, alpha=alpha,
+                                   label=label, x_label=r'r ($\AA$)', plotError=plotError)
+        self._colorIndex += 1
+        self._grDict[str(plot_key)] = line_id
 
         # check the low/max
         self.auto_scale_y()
@@ -221,7 +214,7 @@ class GofRView(MplGraphicsView):
 
         return
 
-    def update_gr(self, plot_key, vec_r, vec_g, vec_ge):
+    def update_gr(self, plot_key, ws_name, plotError=False):
         """update the value of an existing G(r)
         :param plot_key:
         :param vec_r:
@@ -236,7 +229,7 @@ class GofRView(MplGraphicsView):
 
         # update
         line_key = self._grDict[plot_key]
-        self.updateLine(ikey=line_key, vecx=vec_r, vecy=vec_g)
+        self.updateLine(ikey=line_key, wkspname=ws_name)
 
         # update range
         self.auto_scale_y()
