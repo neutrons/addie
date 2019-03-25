@@ -30,6 +30,22 @@ class AddieDriver(object):
         # key: ws_group_name, value: (gss_ws_name, ws_list).  it is in similar architecture with tree
         self._braggDataDict = dict()
 
+    def calculate_sqAlt(self, ws_name, outputType):
+        if outputType == 'S(Q)':  # don't do anything
+            return ws_name
+        elif outputType == 'Q[S(Q)-1]':
+            outputType = 'F(Q)'
+        else:
+            # PDConvertReciprocalSpace doesn't currently know how to convert to S(Q)-1
+            raise ValueError('Do not know how to convert to {}'.format(outputType))
+
+        outputName = '__{}Alt'.format(ws_name)  # should be hidden
+        simpleapi.PDConvertReciprocalSpace(InputWorkspace=ws_name, OutputWorkspace=outputName,
+                                           From='S(Q)', To=outputType)
+        return outputName
+
+
+
     def calculate_gr(self, sq_ws_name, pdf_type, min_r, delta_r, max_r, min_q, max_q, pdf_filter, rho0):
         """ Calculate G(R)
         :param sq_ws_name: workspace name of S(q)
