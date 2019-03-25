@@ -10,6 +10,7 @@ from addie.plot import FigureCanvas
 from addie.plot.constants import BASIC_COLORS, LINE_MARKERS, LINE_STYLES
 from addie.addiedriver import AddieDriver  # TODO remove this import
 
+
 class MplGraphicsView(QWidget):
     """ A combined graphics view including matplotlib canvas and
     a navigation tool bar

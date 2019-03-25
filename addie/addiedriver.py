@@ -44,8 +44,6 @@ class AddieDriver(object):
                                            From='S(Q)', To=outputType)
         return outputName
 
-
-
     def calculate_gr(self, sq_ws_name, pdf_type, min_r, delta_r, max_r, min_q, max_q, pdf_filter, rho0):
         """ Calculate G(R)
         :param sq_ws_name: workspace name of S(q)

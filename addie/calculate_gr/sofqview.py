@@ -1,5 +1,4 @@
 from __future__ import (absolute_import, division, print_function)
-import numpy as np
 
 from qtpy.QtCore import (Signal)
 from qtpy.QtGui import (QCursor)
@@ -315,7 +314,7 @@ class SofQView(MplGraphicsView):
         # check whether it is a new plot or an update
         if ws_name in self._sqLineDict:
             # exiting S(q) workspace, do update
-            sq_key = self._sqLineDict[wk_name]
+            sq_key = self._sqLineDict[ws_name]
             self.updateLine(ikey=sq_key, wskname=ws_name, wkspindex=0)
         else:
             # new S(Q) plot on the canvas
