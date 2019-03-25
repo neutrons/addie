@@ -1029,31 +1029,15 @@ class MainWindow(QMainWindow):
         # get data
         vec_q, vec_sq, vec_se = self._myController.get_sq(ws_name)
 
-        # get the unit & do conversion if necessary
-        sq_type = str(self.ui.comboBox_SofQType.currentText())
-        if sq_type == 'S(Q)':
-            # use the original S(Q)
-            sq_unit = 'S(Q)'
-            vec_y = vec_sq
-        elif sq_type == 'S(Q)-1':
-            # use S(Q)-1
-            sq_unit = 'S(Q)-1'
-            vec_y = vec_sq - 1
-        elif sq_type == 'Q[S(Q)-1]':
-            # use Q(S(Q)-1)
-            sq_unit = 'Q[S(Q)-1]'
-            vec_y = vec_q * (vec_sq - 1)
-        else:
-            raise RuntimeError('None of S(Q), S(Q)-1 or Q(S(Q)-1) is chosen.')
-
         # get color
-        if not color is None:
+        if not color:
             color = self._pdfColorManager.add_sofq(ws_name)
 
-        self.ui.graphicsView_sq.plot_sq(ws_name, vec_q, vec_y, vec_se, sq_unit, clear_prev,
-                                        color=color)
+        # convert to the function to plot
+        sq_type = str(self.ui.comboBox_SofQType.currentText())
+        plottable_name = self._myController.calculate_sqAlt(ws_name, sq_type)
 
-        return
+        self.ui.graphicsView_sq.plot_sq(plottable_name, sq_y_label=sq_type, reset_color_mark=clear_prev, color=color)
 
     def do_load_bragg_file(self):
         """
@@ -1853,7 +1837,7 @@ class MainWindow(QMainWindow):
         # re-plot
         for sq_name in curr_sq_list:
             # plot S(Q)
-            self.plot_sq(sq_name, sq_color=None, clear_prev=False)
+            self.plot_sq(sq_name, color=None, clear_prev=False)
 
         return
 

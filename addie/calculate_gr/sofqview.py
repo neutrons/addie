@@ -300,7 +300,7 @@ class SofQView(MplGraphicsView):
 
         return
 
-    def plot_sq(self, sq_name, vec_q, vec_s, vec_e, sq_y_label, reset_color_mark, color=None, marker=None):
+    def plot_sq(self, ws_name, sq_y_label, reset_color_mark, color=None, marker=None, plotError=False):
         """Plot S(Q)
         :param sq_name:
         :param vec_q:
@@ -312,15 +312,11 @@ class SofQView(MplGraphicsView):
         :param color_marker:
         :return:
         """
-        # check
-        assert isinstance(vec_q, np.ndarray) and isinstance(vec_s, np.ndarray),\
-            'Q-vector ({0}) and S-vector ({1}) must be numpy arrays.'.format(type(vec_q), type(vec_s))
-
         # check whether it is a new plot or an update
-        if sq_name in self._sqLineDict:
+        if ws_name in self._sqLineDict:
             # exiting S(q) workspace, do update
-            sq_key = self._sqLineDict[sq_name]
-            self.updateLine(ikey=sq_key, vecx=vec_q, vecy=vec_s)
+            sq_key = self._sqLineDict[wk_name]
+            self.updateLine(ikey=sq_key, wskname=ws_name, wkspindex=0)
         else:
             # new S(Q) plot on the canvas
             assert isinstance(sq_y_label, str), 'S(Q) label {0} must be a string but not a {1}.' \
@@ -335,12 +331,12 @@ class SofQView(MplGraphicsView):
                 marker = None
 
             # plot
-            plot_id = self.add_plot_1d(vec_q, vec_s, color=color, x_label='Q', y_label=sq_y_label,
-                                       marker=marker, label=sq_name)
-            self._sqLineDict[sq_name] = plot_id
-            self._sqPlotInfoDict[sq_name] = color, marker
-            if sq_name not in self._shownSQNameList:
-                self._shownSQNameList.append(sq_name)
+            plot_id = self.add_plot_1d(ws_name, wkspindex=0, color=color, x_label='Q', y_label=sq_y_label,
+                                       marker=marker, label=ws_name, plotError=plotError)
+            self._sqLineDict[ws_name] = plot_id
+            self._sqPlotInfoDict[ws_name] = color, marker
+            if ws_name not in self._shownSQNameList:
+                self._shownSQNameList.append(ws_name)
         # END-IF-ELSE
 
         # auto scale
