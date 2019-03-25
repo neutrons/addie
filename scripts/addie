@@ -1013,10 +1013,10 @@ class MainWindow(QMainWindow):
 
         return
 
-    def plot_sq(self, sq_ws_name, sq_color, clear_prev):
+    def plot_sq(self, ws_name, color, clear_prev):
         """
         Plot S(Q)
-        :param sq_ws_name:
+        :param ws_name:
         :param sq_color: color of S(Q).  If None, then try to find it from PDF color manager
         :param clear_prev:
         :return:
@@ -1026,7 +1026,7 @@ class MainWindow(QMainWindow):
             self.ui.graphicsView_sq.reset()
 
         # get data
-        vec_q, vec_sq, vec_se = self._myController.get_sq(sq_ws_name)
+        vec_q, vec_sq, vec_se = self._myController.get_sq(ws_name)
 
         # get the unit & do conversion if necessary
         sq_type = str(self.ui.comboBox_SofQType.currentText())
@@ -1045,18 +1045,12 @@ class MainWindow(QMainWindow):
         else:
             raise RuntimeError('None of S(Q), S(Q)-1 or Q(S(Q)-1) is chosen.')
 
-        # plot
-        if clear_prev:
-            reset = True
-        else:
-            reset = False
-
         # get color
-        if sq_color is None:
-            sq_color = self._pdfColorManager.add_sofq(sq_ws_name)
+        if not color is None:
+            color = self._pdfColorManager.add_sofq(ws_name)
 
-        self.ui.graphicsView_sq.plot_sq(sq_ws_name, vec_q, vec_y, vec_se, sq_unit, reset,
-                                        color=sq_color)
+        self.ui.graphicsView_sq.plot_sq(ws_name, vec_q, vec_y, vec_se, sq_unit, clear_prev,
+                                        color=color)
 
         return
 
@@ -1319,7 +1313,7 @@ class MainWindow(QMainWindow):
             sq_file_name = str(sq_file_name)
             sq_ws_name, q_min, q_max = self._myController.load_sq(sq_file_name)
             # add to color management
-            sq_color = self._pdfColorManager.add_sofq(sq_ws_name)
+            color = self._pdfColorManager.add_sofq(sq_ws_name)
 
             # set to the tree and combo box
             self.ui.treeWidget_grWsList.add_sq(sq_ws_name)
@@ -1330,10 +1324,10 @@ class MainWindow(QMainWindow):
             self.ui.doubleSpinBoxQmin.setValue(q_min)
             self.ui.doubleSpinBoxQmax.setValue(q_max)
 
-            # plot S(Q)
-            sq_name = self._myController.get_current_sq_name()
+            # plot S(Q) - TODO why is it getting the name again?
+            ws_name = self._myController.get_current_sq_name()
 
-            self.plot_sq(sq_name, sq_color=sq_color, clear_prev=False)
+            self.plot_sq(ws_name, color=color, clear_prev=False)
 
             # calculate and calculate G(R)
             self.do_generate_gr()
