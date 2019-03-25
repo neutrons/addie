@@ -53,7 +53,6 @@ class MplGraphicsView(QWidget):
 
         # some statistic recorder for convenient operation
         self._statDict = dict()
-        self._statRightPlotDict = dict()
 
     def add_arrow(self, start_x, start_y, stop_x, stop_y):
         self._myCanvas.add_arrow(start_x, start_y, stop_x, stop_y)
@@ -85,18 +84,6 @@ class MplGraphicsView(QWidget):
 
         self._my1DPlotMinYDict[line_key] = np.min(vec_y)
         self._my1DPlotMaxYDict[line_key] = np.max(vec_y)
-
-        return line_key
-
-    def add_plot_1d_right(self, vec_x, vec_y, color=None, label='', marker=None, line_style=None, line_width=1):
-        """
-        Add 1 line (1-d plot) to right axis
-        """
-        line_key = self._myCanvas.add_1d_plot_right(vec_x, vec_y, label=label,
-                                                    color=color, marker=marker,
-                                                    linestyle=line_style, linewidth=line_width)
-
-        self._statRightPlotDict[line_key] = (min(vec_x), max(vec_x), min(vec_y), max(vec_y))
 
         return line_key
 
@@ -268,7 +255,6 @@ class MplGraphicsView(QWidget):
     def clear_all_lines(self):
         self._myCanvas.clear_all_1d_plots()
 
-        self._statRightPlotDict.clear()
         self._statDict.clear()
         self._my1DPlotDict.clear()
 
@@ -417,8 +403,6 @@ class MplGraphicsView(QWidget):
             del self._my1DPlotDict[line_id]
             del self._my1DPlotMinYDict[line_id]
             del self._my1DPlotMaxYDict[line_id]
-        else:
-            del self._statRightPlotDict[line_id]
 
     def set_indicator_position(self, line_id, pos_x, pos_y):
         """ Set the indicator to new position
