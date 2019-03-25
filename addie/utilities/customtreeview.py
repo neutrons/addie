@@ -199,11 +199,8 @@ class CustomizedTreeView(QTreeView):
         """ Add a child under a main item with given name
         :return: boolean. True: add the child item successfully. False: unable to add child due to being duplicate.
         """
-        # check requirements on inputs
-        assert isinstance(main_item_value, str), 'Main item value (%s) must be a string but not of type %s.' \
-                                                 '' % (str(main_item_value), str(type(main_item_value)))
-        assert isinstance(child_value, str), 'Child item value (%s) must be a string but not of type %s.' \
-                                             '' % (str(child_value), str(type(child_value)))
+        main_item_value = str(main_item_value)
+        child_value = str(child_value)
 
         # find the main item value
         if main_item_value not in self._mainNodeDict:

@@ -107,14 +107,6 @@ class GofRView(MplGraphicsView):
         :param label: label for the line to plot
         :return:
         """
-        # check
-        assert isinstance(plot_key, str), 'Key for the plot must be a string but not %s.' \
-                                          '' % str(type(plot_key))
-        assert isinstance(vec_r, np.ndarray), 'Vector(r) must be a numpy vector but not %s.' \
-                                              '' % str(type(vec_r))
-        assert isinstance(vec_g, np.ndarray), 'Vector(G) must be a numpy vector but not %s.' \
-                                              '' % str(type(vec_g))
-
         # plot
         if plot_error:
             self.add_plot_1d(vec_r, vec_g, vec_e)
@@ -123,20 +115,18 @@ class GofRView(MplGraphicsView):
             # add a plot without error
             # q_min = 10., q_max = 50.
             # alpha = 1. - (q_now - q_min)/(q_max - q_min)
-            if label is None:
-                label = plot_key
+            if not label:
+                label = str(plot_key)
 
             line_id = self.add_plot_1d(vec_r, vec_g, marker=marker,
                                        color=color, line_style=style, alpha=alpha,
                                        label=label, x_label=r'r ($\AA$)')
             self._colorIndex += 1
-            self._grDict[plot_key] = line_id
+            self._grDict[str(plot_key)] = line_id
         # END-IF-ELSE
 
         # check the low/max
         self.auto_scale_y()
-
-        return
 
     def _reset_y_range(self, vec_gr):
         """
