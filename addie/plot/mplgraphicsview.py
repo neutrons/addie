@@ -84,7 +84,7 @@ class MplGraphicsView(QWidget):
                                               line_width, alpha, show_legend)
 
         # record min/max
-        self._statDict[line_key] = min(vec_x), max(vec_x), min(vec_y), max(vec_y)
+        self._statDict[line_key] = np.min(vec_x), np.max(vec_x), np.min(vec_y), np.max(vec_y)
         self._my1DPlotDict[line_key] = label
 
         self._my1DPlotMinYDict[line_key] = np.min(vec_y)
