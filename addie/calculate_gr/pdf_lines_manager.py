@@ -71,7 +71,7 @@ class PDFPlotManager(object):
         """
         if sq_ws_name is None:
             # standalone G(r) which might come from a GofR data file
-            color = self._currStandaloneGofRColorIndex
+            color = LineColorBase[self._currStandaloneGofRColorIndex]
             line_style = ':'
             alpha = 1.
             line_marker = None
