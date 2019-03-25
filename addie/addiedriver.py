@@ -327,9 +327,9 @@ class AddieDriver(object):
         return AnalysisDataService.retrieve(name)
 
     @staticmethod
-    def get_ws_data(ws_name, wkspIndex=0):
+    def get_ws_data(ws_name, wkspIndex=0, withDy=True):
         wksp = AddieDriver.get_ws(ws_name)
-        x, y, dy, _ = mantid.plots.helperfunctions.get_spectrum(wksp, wkspIndex, distribution=True, withDy=True, withDx=False)
+        x, y, dy, _ = mantid.plots.helperfunctions.get_spectrum(wksp, wkspIndex, distribution=True, withDy=withDy, withDx=False)
 
         return x, y, dy
 
