@@ -160,59 +160,6 @@ class FigureCanvas(FigureCanvasQTAgg):
 
         return line_key
 
-    def add_1d_plot_right(self, x, y, color=None, label="", x_label=None, ylabel=None, marker=None, linestyle=None,
-                          linewidth=1):
-        """ Add a line (1-d plot) at right axis
-        """
-        if self.axes2 is None:
-            self.axes2 = self.axes.twinx()
-
-        # Hold previous data
-        self.axes2.hold(True)
-
-        # Default
-        if color is None:
-            color = (0, 1, 0, 1)
-        if marker is None:
-            marker = 'o'
-        if linestyle is None:
-            linestyle = '-'
-
-        # Special default
-        if len(label) == 0:
-            label = 'right'
-            color = 'red'
-
-        # color must be RGBA (4-tuple)
-        r = self.axes2.plot(x, y, color=color, marker=marker, linestyle=linestyle,
-                            label=label, linewidth=linewidth)
-        # return: list of matplotlib.lines.Line2D object
-
-        self.axes2.set_aspect('auto')
-
-        # set x-axis and y-axis label
-        if x_label is not None:
-            self.axes2.set_xlabel(x_label, fontsize=20)
-        if ylabel is not None:
-            self.axes2.set_ylabel(ylabel, fontsize=20)
-
-        # set/update legend
-        self._setup_legend()
-
-        # Register
-        line_key = -1
-        if len(r) == 1:
-            line_key = self._lineIndex
-            self._lineDict[line_key] = r[0]
-            self._lineIndex += 1
-        else:
-            print("Impoooooooooooooooosible!")
-
-        # Flush/commit
-        self.draw()
-
-        return line_key
-
     def addPlot2D(self, array2d, xmin, xmax, ymin, ymax, holdprev, yticklabels=None):
         """ Add a 2D plot
 
