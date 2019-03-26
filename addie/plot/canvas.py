@@ -15,6 +15,7 @@ else:
 
 import matplotlib.image  # noqa
 from matplotlib.figure import Figure  # noqa
+from addie.addiedriver import AddieDriver  # noqa
 
 
 class FigureCanvas(FigureCanvasQTAgg):
@@ -23,6 +24,7 @@ class FigureCanvas(FigureCanvasQTAgg):
     """
 
     def __init__(self, parent):
+        self._driver = AddieDriver()
         # from mpl_toolkits.axes_grid1 import host_subplot
         # import mpl_toolkits.axisartist as AA
         # import matplotlib.pyplot as plt
@@ -31,12 +33,8 @@ class FigureCanvas(FigureCanvasQTAgg):
         self.fig = Figure()
         self.fig.patch.set_facecolor('white')
 
-        if True:
-            self.axes = self.fig.add_subplot(111, projection='mantid')  # return: matplotlib.axes.AxesSubplot
-            self.fig.subplots_adjust(bottom=0.15)
-            self.axes2 = None
-        else:
-            self.axes = self.fig.add_host_subplot(111, projection='mantid')
+        self.axes = self.fig.add_subplot(111, projection='mantid')
+        self.fig.subplots_adjust(bottom=0.15)
 
         # Initialize parent class and set parent
         FigureCanvasQTAgg.__init__(self, self.fig)
@@ -75,36 +73,8 @@ class FigureCanvas(FigureCanvasQTAgg):
         self.axes.arrrow(start_x, start_y, stop_x, stop_y, head_width,
                          head_length, fc, ec)
 
-    def add_plot_1d(self, vec_x, vec_y, y_err=None, color=None, label="", x_label=None, y_label=None,
-                    marker=None, line_style=None, line_width=1, alpha=1., show_legend=True):
-        """
-        :param vec_x: numpy array X
-        :param vec_y: numpy array Y
-        :param y_err:
-        :param color:
-        :param label:
-        :param x_label:
-        :param y_label:
-        :param marker:
-        :param line_style:
-        :param line_width:
-        :param alpha:
-        :param show_legend:
-        :return: new key
-        """
-        # Check input
-        if isinstance(vec_x, np.ndarray) is False or isinstance(vec_y, np.ndarray) is False:
-            raise NotImplementedError('Input vec_x or vec_y for addPlot() must be numpy.array.')
-        plot_error = y_err is not None
-        if plot_error is True:
-            if isinstance(y_err, np.ndarray) is False:
-                raise NotImplementedError('Input y_err must be either None or numpy.array.')
-
-        if len(vec_x) != len(vec_y):
-            raise NotImplementedError('Input vec_x and vec_y must have same size.')
-        if plot_error is True and len(y_err) != len(vec_x):
-            raise NotImplementedError('Input vec_x, vec_y and y_error must have same size.')
-
+    def add_plot_1d(self, wkspname, wkspindex, color=None, label="", x_label=None, y_label=None,
+                    marker=None, line_style=None, line_width=1, alpha=1., show_legend=True, plotError=False):
         # Hold previous data
         self.axes.hold(True)
 
@@ -123,14 +93,15 @@ class FigureCanvas(FigureCanvasQTAgg):
             line_style = '-'
 
         # color must be RGBA (4-tuple)
-        if plot_error is False:
-            # return: list of matplotlib.lines.Line2D object
-            r = self.axes.plot(vec_x, vec_y, color=color, marker=marker, markersize=2, linestyle=line_style,
-                               label=label, linewidth=line_width, alpha=alpha,)
-        else:
-            r = self.axes.errorbar(vec_x, vec_y, yerr=y_err, color=color, marker=marker, linestyle=line_style,
+        wksp = self._driver.get_ws(wkspname)
+        if plotError:
+            r = self.axes.errorbar(wksp, wkspIndex=wkspindex, color=color, marker=marker, linestyle=line_style,
                                    label=label, linewidth=line_width, alpha=alpha,
                                    markersize=40)
+        else:
+            # return: list of matplotlib.lines.Line2D object
+            r = self.axes.plot(wksp, wkspIndex=wkspindex, color=color, marker=marker, markersize=2, linestyle=line_style,
+                               label=label, linewidth=line_width, alpha=alpha,)
 
         self.axes.set_aspect('auto')
 
@@ -434,7 +405,8 @@ class FigureCanvas(FigureCanvasQTAgg):
             # set flag on
             self._isLegendOn = True
 
-    def updateLine(self, ikey, vecx=None, vecy=None, linestyle=None, linecolor=None, marker=None, markercolor=None):
+    def updateLine(self, ikey, wkspname=None, wkspindex=None, vecx=None, vecy=None,
+                   linestyle=None, linecolor=None, marker=None, markercolor=None):
         """
         Update a plot line or a series plot line
         """
@@ -443,9 +415,10 @@ class FigureCanvas(FigureCanvasQTAgg):
             print('[ERROR] Line (key = %d) is None. Unable to update' % ikey)
             return
 
-        if vecx is not None and vecy is not None:
-            line.set_xdata(vecx)
-            line.set_ydata(vecy)
+        if wkspname or (vecx and vecy):
+            if wkspname:
+                vecx, vecy, _ = self._driver.get_ws_data(wkspname, wkspindex)
+            line.set_data(vecx, vecy)
 
         if linecolor is not None:
             line.set_color(linecolor)

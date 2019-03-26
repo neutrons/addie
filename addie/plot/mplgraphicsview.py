@@ -55,6 +55,8 @@ class MplGraphicsView(QWidget):
         # some statistic recorder for convenient operation
         self._statDict = dict()
 
+        self._driver = AddieDriver()
+
     def add_arrow(self, start_x, start_y, stop_x, stop_y):
         self._myCanvas.add_arrow(start_x, start_y, stop_x, stop_y)
 
@@ -77,18 +79,17 @@ class MplGraphicsView(QWidget):
         """
         Add a 1-D plot to canvas
         """
-        driver = AddieDriver()
-        vec_x, vec_y, y_err = driver.get_ws_data(wkspname, wkspindex, withDy=plotError)
-
-        line_key = self._myCanvas.add_plot_1d(vec_x, vec_y, y_err, color, label, x_label, y_label, marker, line_style,
+        line_key = self._myCanvas.add_plot_1d(wkspname, wkspindex, color, label, x_label, y_label, marker, line_style,
                                               line_width, alpha, show_legend)
 
+        xmin, xmax, ymin, ymax = self._driver.get_xy_range(wkspname, wkspindex)
+
         # record min/max
-        self._statDict[line_key] = np.min(vec_x), np.max(vec_x), np.min(vec_y), np.max(vec_y)
+        self._statDict[line_key] = xmin, xmax, ymin, ymax
         self._my1DPlotDict[line_key] = label
 
-        self._my1DPlotMinYDict[line_key] = np.min(vec_y)
-        self._my1DPlotMaxYDict[line_key] = np.max(vec_y)
+        self._my1DPlotMinYDict[line_key] = ymin
+        self._my1DPlotMaxYDict[line_key] = ymax
 
         return line_key
 
@@ -301,8 +302,7 @@ class MplGraphicsView(QWidget):
         for indicator_key in self._myIndicatorsManager.get_live_indicator_ids():
             canvas_line_id = self._myIndicatorsManager.get_canvas_line_index(indicator_key)
             data_x, data_y = self._myIndicatorsManager.get_data(indicator_key)
-            self.updateLine(canvas_line_id, data_x, data_y)
-        # END-FOR
+            self._myCanvas.updateLine(ikey=canvas_line_id, vecx=data_x, vecy=data_x)
 
     def evt_zoom_released(self):
         """
@@ -429,7 +429,6 @@ class MplGraphicsView(QWidget):
             self._myCanvas.updateLine(ikey=canvas_line_index_h, vecx=h_vec_set[0], vecy=h_vec_set[1])
             self._myCanvas.updateLine(ikey=canvas_line_index_v, vecx=v_vec_set[0], vecy=v_vec_set[1])
 
-    # TODO change this to pass down the workspace handle
     def updateLine(self, ikey, wkspname='', wkspindex=0, linestyle=None, linecolor=None, marker=None, markercolor=None):
         """update a line's set up
         """
@@ -437,17 +436,8 @@ class MplGraphicsView(QWidget):
         assert isinstance(ikey, int), 'Line key must be an integer.'
         assert ikey in self._my1DPlotDict, 'Line with ID %d is not on canvas. ' % ikey
 
-        if wkspname:
-            driver = AddieDriver()
-            vecx, vecy, _ = driver.get_ws_data(wkspname, wkspindex)
-            # update record
-            self._my1DPlotMinYDict[ikey] = np.min(vecy)
-            self._my1DPlotMaxYDict[ikey] = np.max(vecy)
-        else:
-            vecx, vecy = None, None
-
         # update line
-        self._myCanvas.updateLine(ikey, vecx, vecy, linestyle, linecolor, marker, markercolor)
+        self._myCanvas.updateLine(ikey, wkspname, wkspindex, linestyle, linecolor, marker, markercolor)
 
     def update_indicator(self, i_key, color):
         """
