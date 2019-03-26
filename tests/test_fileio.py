@@ -61,8 +61,13 @@ class readGSAS(unittest.TestCase):
     def test(self):
         driver = AddieDriver()
         for filename in self.files:
-            wkspname = driver.load_bragg_file(filename)
+            wkspname, angles = driver.load_bragg_file(filename)
             self.assertEquals(wkspname, expectedWkspName(filename))
+
+            angles_exp = [15.1, 31., 65., 120.4, 150.1, 8.6]  # copied from file by hand
+            for obs, exp in zip(angles, angles_exp):
+                self.assertAlmostEqual(obs, exp, places=1)
+
             # TODO actual checks on the workspace
 
 
