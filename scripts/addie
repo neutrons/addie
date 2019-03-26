@@ -103,6 +103,11 @@ from addie.calculate_gr.sofqview import SofQView
 
 from addie.icons import icons_rc
 
+from addie.initialization import splitui_processing_tab as splitui_processing_tab_initialization
+from addie.events_handler import splitui_processing_tab as splitui_processing_tab_events_handler
+
+
+
 DEBUG = False
 
 IPYTHON_STARTUP_CODE = '''import numpy as np
@@ -326,11 +331,17 @@ class MainWindow(QMainWindow):
         self.processing_tab_widget = QWidget()
         self.processing_ui = load_ui('splitui_processing_tab.ui', baseinstance=self.processing_tab_widget)
         self.ui.main_tab.insertTab(2, self.processing_tab_widget, "Processing")
+        splitui_processing_tab_initialization.run(main_window=self)
+        splitui_processing_tab_events_handler.run(main_window=self)
 
         # Rietveld  tab
         self.rietveld_tab_widget = QWidget()
         self.rietveld_ui = load_ui('splitui_rietveld_tab.ui', baseinstance=self.rietveld_tab_widget)
         self.ui.main_tab.insertTab(3, self.rietveld_tab_widget, "Rietveld")
+
+
+
+
 
 
         return
