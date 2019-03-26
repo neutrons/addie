@@ -440,15 +440,14 @@ class MplGraphicsView(QWidget):
         if wkspname:
             driver = AddieDriver()
             vecx, vecy, _ = driver.get_ws_data(wkspname, wkspindex)
+            # update record
+            self._my1DPlotMinYDict[ikey] = np.min(vecy)
+            self._my1DPlotMaxYDict[ikey] = np.max(vecy)
         else:
             vecx, vecy = None, None
 
         # update line
         self._myCanvas.updateLine(ikey, vecx, vecy, linestyle, linecolor, marker, markercolor)
-
-        # update record
-        self._my1DPlotMinYDict[ikey] = np.min(vecy)
-        self._my1DPlotMaxYDict[ikey] = np.max(vecy)
 
     def update_indicator(self, i_key, color):
         """
