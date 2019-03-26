@@ -17,16 +17,12 @@ class BraggData(unittest.TestCase):
     def test_get_data(self):
         driver = AddieDriver()
         # load the data
-        wkspname = driver.load_bragg_file(self.filename)
-
-        # create a bunch of individual spectra
-        # FIXME should just use the original workspace itself
-        groupWkspName, banks_list, bank_angles = driver.split_to_single_bank(wkspname)
-        print(wkspname, groupWkspName)
+        wkspname, bank_angles = driver.load_bragg_file(self.filename)
 
         for units in (TOF, D_SPACING, Q_SPACE):
             for wkspIndex in range(6):
-                x, y, dy = driver.get_bragg_data(groupWkspName, wkspIndex + 1, units)
+                # TODO this method should be removed from AddieDriver
+                x, y, dy = driver.get_bragg_data(wkspname, wkspIndex, units)
                 self.assertEqual(len(x), len(y))
                 self.assertEqual(len(y), len(dy))
                 self.assertLess(x[0], x[-1], 'xmin[{}] >= xmax[{}]'.format(x[0], x[-1]))

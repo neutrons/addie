@@ -937,10 +937,6 @@ class MainWindow(QMainWindow):
         ----------
         bragg_ws_list: list of (single spectrum) Bragg workspace
         clear_canvas
-
-        Returns
-        -------
-
         """
         # check
         assert isinstance(bragg_ws_list, list)
@@ -964,13 +960,10 @@ class MainWindow(QMainWindow):
                 # belonged to a Bragg-workspace-group
                 ws_group = bragg_ws_name.split('_%s' % postfix)[0] + '_group'
                 bank_id = int(bragg_ws_name.split('bank')[1])
-                vec_x, vec_y, vec_e = self._myController.get_bragg_data(ws_group_name=ws_group, bank_id=bank_id,
-                                                                        x_unit=curr_unit)
 
                 # construct dictionary for plotting
                 plot_data_dict = dict()
-                plot_data_dict[ws_group] = dict()
-                plot_data_dict[ws_group][bank_id] = (vec_x, vec_y, vec_e)
+                plot_data_dict[ws_group] = self._myController.get_bank_numbers(ws_group)
 
                 # set the bank to be checked
                 self._braggBankWidgets[bank_id].setChecked(True)
@@ -982,7 +975,7 @@ class MainWindow(QMainWindow):
                 # plot arbitrary data
                 # print '[DB] Switch to multi-GSAS mode.  Re-plot {0}'.format(bragg_ws_name)
                 vec_x, vec_y, vec_e = self._myController.get_ws_data(bragg_ws_name)
-                self.ui.graphicsView_bragg.plot_general_ws(bragg_ws_name, vec_x, vec_y, vec_e)
+                self.ui.graphicsView_bragg.plot_general_ws(bragg_ws_name)
 
         return
 
@@ -1042,8 +1035,6 @@ class MainWindow(QMainWindow):
     def do_load_bragg_file(self):
         """
         Load Bragg files including GSAS, NeXus, 3-column ASCii.
-        Returns
-        -------
         """
         # get file
         ext = 'GSAS (*.gsa *.gda *.gss);;Processed Nexus (*.nxs);;dat (*.dat);;All (*.*)'
@@ -1072,14 +1063,14 @@ class MainWindow(QMainWindow):
         try:
             gss_ws_names = list()
             for bragg_file_name in bragg_file_names:
-                gss_ws_name = self._myController.load_bragg_file(bragg_file_name)
+                gss_ws_name, bank_angles = self._myController.load_bragg_file(bragg_file_name)
                 gss_ws_names.append(gss_ws_name)
-                # split
-                # FIXME - _gssGroupName may have an issie with multiple-GSS mode
-                gssGroupName, banks_list, bank_angles = self._myController.split_to_single_bank(gss_ws_name)
+                banks_list = list()
+                for i, angle in enumerate(bank_angles):
+                    banks_list.append('Bank {} - {}'.format(i+1, angle))
 
                 # add to tree
-                self.ui.treeWidget_braggWSList.add_bragg_ws_group(gssGroupName, banks_list)
+                self.ui.treeWidget_braggWSList.add_bragg_ws_group(gss_ws_name, banks_list)
 
             # get plot mode
             if len(bragg_file_names) == 1:
@@ -1123,15 +1114,9 @@ class MainWindow(QMainWindow):
             # while in multiple-gss mode, no change will be made on the canvas at all
 
             # prepare to plot new Bragg
-            # change unit
-            ws_data_dict = dict()
             plot_data_dict = dict()
             for gss_ws_name in gss_ws_names:
-                gss_group_name = gss_ws_name + '_group'
-                for bank_id in self._onCanvasGSSBankList:
-                    vec_x, vec_y, vec_e = self._myController.get_bragg_data(gss_group_name, bank_id, self._currBraggXUnit)
-                    ws_data_dict[bank_id] = (vec_x, vec_y, vec_e)
-                plot_data_dict[gss_group_name] = ws_data_dict
+                plot_data_dict[gss_ws_name] = self._onCanvasGSSBankList[:]
 
             # plot
             # FIXME/ISSUE/NOW - get a summary on calling to plot_banks
@@ -1140,7 +1125,9 @@ class MainWindow(QMainWindow):
             # reset unit
             self.reset_bragg_data_range(self._currBraggXUnit)
 
-        except:
+        except RuntimeError as e:
+            print('Encountered exception')
+            print(e)
 
             self.setStyleSheet("QStatusBar{padding-left:8px;color:red;font-weight:bold;}")
             self.ui.statusbar.showMessage("Error loading {}".format(bragg_file_names), 10000)
@@ -1148,7 +1135,6 @@ class MainWindow(QMainWindow):
     def do_load_gr(self):
         """
         Load an ASCII file containing G(r)
-        Returns:
         """
         # get default dir
         if self._currDataDir is None:
@@ -1189,8 +1175,6 @@ class MainWindow(QMainWindow):
         # put the loaded G(r) workspace to tree 'workspaces'
         self.ui.treeWidget_grWsList.add_child_main_item('workspaces', gr_ws_name)
 
-        return
-
     def check_in_fixed_dir_structure(self, sub_dir):
         """
         Check whether _currDataDir ends with 'GSAS', 'gofr' or 'SofQ'
@@ -1210,8 +1194,6 @@ class MainWindow(QMainWindow):
         else:
             self._inFixedDirectoryStructure = False
         # END-IF-ELSE
-
-        return
 
     def getDefaultDir(self, sub_dir):
         """ Get the default data directory.
@@ -1709,13 +1691,7 @@ class MainWindow(QMainWindow):
         # get new bank data
         plot_data_dict = dict()
         for ws_group in gss_group_list:
-            ws_data_dict = dict()
-            for bank_id in new_bank_list:
-                vec_x, vec_y, vec_e = self._myController.get_bragg_data(ws_group, bank_id, self._currBraggXUnit)
-                ws_data_dict[bank_id] = (vec_x, vec_y, vec_e)
-            # END-FOR
-            plot_data_dict[ws_group] = ws_data_dict
-        # END-FOR
+            plot_data_dict[ws_group] = new_bank_list[:]
 
         if plot_multi_gss:
             self.ui.graphicsView_bragg.set_to_single_gss(False)
@@ -1780,13 +1756,7 @@ class MainWindow(QMainWindow):
         # get data and plot
         plot_data_dict = dict()
         for ws_group in ws_group_list:
-            ws_data_dict = dict()
-            for bank_id in bank_list:
-                vec_x, vec_y, vec_e = self._myController.get_bragg_data(ws_group, bank_id, self._currBraggXUnit)
-                ws_data_dict[bank_id] = (vec_x, vec_y, vec_e)
-            # END-FOR
-            plot_data_dict[ws_group] = ws_data_dict
-        # END-FOR
+            plot_data_dict[ws_group] = self._myController.get_bank_numbers(ws_group)
 
         # plot
         self.ui.graphicsView_bragg.plot_banks(plot_data_dict, self._currBraggXUnit)

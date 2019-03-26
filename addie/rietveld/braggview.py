@@ -5,6 +5,7 @@ from qtpy.QtGui import (QCursor)
 from qtpy.QtWidgets import (QAction, QMenu)
 
 from addie.plot import MplGraphicsView
+from addie.addiedriver import AddieDriver
 
 
 class BraggView(MplGraphicsView):
@@ -19,6 +20,7 @@ class BraggView(MplGraphicsView):
         parent
         """
         MplGraphicsView.__init__(self, parent)
+        self._driver = AddieDriver()
 
         # control class
         # key: bank ID, value: list of workspace names
@@ -266,26 +268,21 @@ class BraggView(MplGraphicsView):
         Plot a few banks to canvas.  If the bank has been plot on canvas already,
         then remove the previous data
         Args:
-            plot_bank_dict: dictionary: key = ws group name, value = dictionary (key = bank ID, value = (x, y, e)
+            plot_bank_dict: dictionary: key = ws group name, value = banks to show
             unit: string for X-range unit.  can be TOF, dSpacing or Q (momentum transfer)
-
-        Returns:
-
         """
         # check
         assert isinstance(plot_bank_dict, dict)
 
         # plot
-        for ws_group in list(plot_bank_dict.keys()):
+        for ws_name in list(plot_bank_dict.keys()):
+            self._driver.convert_bragg_data(ws_name, unit)
+
             # get workspace name
-            ws_name = ws_group.split('_group')[0]
             self._workspaceSet.add(ws_name)
 
-            for bank_id in plot_bank_dict[ws_group]:
-                # add the new plot
-                vec_x, vec_y, vec_e = plot_bank_dict[ws_group][bank_id]
-
-                # determine the color/marker/style of the line
+            for bank_id in plot_bank_dict[ws_name]:
+                # determine the color/marker/style of the line - shouldn't be special
                 if self._singleGSSMode:
                     # single bank mode
                     bank_color = self._bankColorDict[bank_id]
@@ -296,55 +293,42 @@ class BraggView(MplGraphicsView):
                     bank_color, style, marker = self.get_multi_gss_color()
                 # END-IF-ELSE
 
-                print('[DB...BAT] Plot Mode (singel bank) = {0}, group = {1}, bank = {2}, color = {3}, marker = {4},'
+                print('[DB...BAT] Plot Mode (single bank) = {0}, group = {1}, bank = {2}, color = {3}, marker = {4},'
                       'style = {5}'
-                      ''.format(self._singleGSSMode, ws_group, bank_id, bank_color, marker, style))
+                      ''.format(self._singleGSSMode, ws_name, bank_id, bank_color, marker, style))
 
                 # plot
-                plot_id = self.add_plot_1d(vec_x, vec_y, marker=marker, color=bank_color,
+                plot_id = self.add_plot_1d(ws_name, wkspindex=bank_id-1, marker=marker, color=bank_color,
                                            line_style=style,
                                            x_label=unit,
                                            y_label='I({0})'.format(unit),
-                                           label='%s Bank %d' % (ws_group, bank_id))
+                                           label='%s Bank %d' % (ws_name, bank_id))
 
                 # plot key
-                plot_key = self._generate_plot_key(ws_group, bank_id)
+                plot_key = self._generate_plot_key(ws_name, bank_id)
                 self._bankPlotDict[bank_id].append(plot_key)
                 self._gssDict[plot_key] = plot_id
-                self._plotScaleDict[plot_id] = (min(vec_y), max(vec_y))
+                self._plotScaleDict[plot_id] = self._driver.get_y_range(ws_name, bank_id-1)  # is this needed?
             # END-FOR (bank id)
         # END-FOR (ws_group)
 
-        #  self.scale_auto()
+        # self.scale_auto()
 
-        return
-
-    def plot_general_ws(self, bragg_ws_name, vec_x, vec_y, vec_e):
+    def plot_general_ws(self, ws_name):
         """
         Plot a workspace that does not belong to any workspace group
         Parameters
-        ----------
-        bragg_ws_name
-        vec_x
-        vec_y
-        vec_e
-
-        Returns
-        -------
-
         """
         # register
-        self._workspaceSet.add(bragg_ws_name)
+        self._workspaceSet.add(ws_name)
 
         # plot
-        plot_id = self.add_plot_1d(vec_x, vec_y, marker=None, color='black',
-                                   label=bragg_ws_name)
-        self._plotScaleDict[plot_id] = (min(vec_y), max(vec_y))
+        plot_id = self.add_plot_1d(ws_name, wkspindex=0, marker=None, color='black',
+                                   label=ws_name)
+        self._plotScaleDict[plot_id] = self._driver.get_y_range(ws_name, 0)
 
         # scale the plot automatically
         self.scale_auto()
-
-        return
 
     def remove_gss_banks(self, ws_group_name, bank_id_list):
         """
@@ -419,8 +403,6 @@ class BraggView(MplGraphicsView):
         self.reset_line_color_marker_index()
         self._currColorIndex = 0
 
-        return
-
     def reset_color(self):
         """
         Reset color, line style and marker index
@@ -432,22 +414,19 @@ class BraggView(MplGraphicsView):
 
     def scale_auto(self):
         """Scale automatically for the plots on the canvas
-        :return: None
         """
         # get Y min and Y max
-        y_min = 0
-        y_max = 0
-        for plot_id in list(self._plotScaleDict.keys()):
-            if self._plotScaleDict[plot_id][1] > y_max:
-                y_max = self._plotScaleDict[plot_id][1]
+        y_min = min(0., self._plotScaleDict.values()[0][0])  # always include zero
+        y_max = self._plotScaleDict.values()[0][1]
+        for temp_min, temp_max in self._plotScaleDict.values():
+            y_min = min(y_min, temp_min)
+            y_max = max(y_max, temp_max)
 
         # determine the canvas Y list
         upper_y = y_max * 1.05
 
         # set limit
         self.setXYLimit(ymin=y_min, ymax=upper_y)
-
-        return
 
     def set_to_single_gss(self, mode_on):
         """
@@ -466,5 +445,3 @@ class BraggView(MplGraphicsView):
         if mode_on is False:
             # set to multiple GSAS mode
             self._currColorStyleMarkerIndex = 0
-
-        return
