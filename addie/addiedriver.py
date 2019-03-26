@@ -360,6 +360,11 @@ class AddieDriver(object):
         _, y, _ = AddieDriver.get_ws_data(ws_name, wkspindex, withDy=False)
         return np.min(y), np.max(y)
 
+    @staticmethod
+    def get_xy_range(ws_name, wkspindex=0):
+        x, y, _ = AddieDriver.get_ws_data(ws_name, wkspindex, withDy=False)
+        return x[0], x[-1], np.min(y), np.max(y)
+
     def load_bragg_file(self, file_name):
         """
         Load Bragg diffraction file (including 3-column data file, GSAS file) for Rietveld
