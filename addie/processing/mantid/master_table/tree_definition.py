@@ -205,3 +205,5 @@ LIST_SEARCH_CRITERIA = {'nom': ['Chemical Formula',
                                 ],
                         'pg3': [''],
                         }
+
+TREE_DICT = tree_dict

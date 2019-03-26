@@ -341,6 +341,10 @@ class MainWindow(QMainWindow):
 
 
 
+        self.init_parameters()
+        self.set_default_folders_path()
+        # Set the post-processing mode
+        self.post_processing = processing_mode  # mantid or 'idl'
 
 
 
@@ -348,12 +352,8 @@ class MainWindow(QMainWindow):
 
         #self.ui.graphicsView_sq.set_main(self)
 
-        # Set the post-processing mode
-        self.post_processing = processing_mode  # mantid or 'idl'
 
         # set widgets
-        self.init_parameters()
-        self.set_default_folders_path()
         self._init_widgets()
         InitStep1(parent=self)
         InitStep2(parent=self)
@@ -487,13 +487,13 @@ class MainWindow(QMainWindow):
                                                     instrument_short_name,
                                                     config_characterization_file["post"])
 
-    def init_master_table(self):
-        o_table = TableInitialization(parent=self)
-        #o_table.init_master_table()
-        #o_table.init_signals()
-        # TODO should load existing json configuration into the table
-
-        #self.ui.pushButton_launchReduction.clicked.connect(self.run_mantid)
+    # def init_master_table(self):
+    #     o_table = TableInitialization(parent=self)
+    #     #o_table.init_master_table()
+    #     #o_table.init_signals()
+    #     # TODO should load existing json configuration into the table
+    #
+    #     #self.ui.pushButton_launchReduction.clicked.connect(self.run_mantid)
 
     def _promote_widgets(self):
         # frame_graphicsView_bragg
@@ -2582,7 +2582,7 @@ class MainWindow(QMainWindow):
 
     # master table
     def personalization_table_clicked(self):
-        o_master_table_tree = TableTreeHandler(parent=self)
+        _ = TableTreeHandler(parent=self)
         _table_config = TableConfig(parent=self)
         current_config = _table_config.get_current_config()
         _table_config.update_tree_dict_and_tree(config_to_load=current_config)
@@ -2662,7 +2662,7 @@ class MainWindow(QMainWindow):
 
     def resizing_h1(self, index_column, old_size, new_size):
 
-        o_table = TableConfig(parent=self)
+        o_table = TableConfig(main_window=self)
         o_table.disconnect_table_ui()
 
         h2_children = o_table.get_h2_children_from_h1(h1=index_column)
@@ -2685,8 +2685,7 @@ class MainWindow(QMainWindow):
         o_table.disconnect_table_ui(unblock_all=True)
 
     def resizing_h2(self, index_column, old_size, new_size):
-
-        o_table = TableConfig(parent=self)
+        o_table = TableConfig(main_window=self)
         o_table.disconnect_table_ui()
 
         h1_parent = o_table.get_h1_parent_from_h2(h2=index_column)
@@ -2709,7 +2708,7 @@ class MainWindow(QMainWindow):
 
     def resizing_h3(self, index_column, old_size, new_size):
 
-        o_table = TableConfig(parent=self)
+        o_table = TableConfig(main_window=self)
         o_table.disconnect_table_ui()
 
         [h1_parent, h2_parent] = o_table.get_h1_h2_parent_from_h3(h3=index_column)
