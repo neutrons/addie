@@ -53,7 +53,7 @@ class FigureCanvas(FigureCanvasQTAgg):
         # legend and color bar
         self._colorBar = None
         self._isLegendOn = False
-        self._legendFontSize = 8
+        self._legendFontSize = 10
 
     @property
     def is_legend_on(self):
@@ -321,7 +321,7 @@ class FigureCanvas(FigureCanvasQTAgg):
             return
 
         self._legendFontSize -= 1
-        self._setup_legend(font_size=self._legendFontSize)
+        self._setup_legend()
 
         self.draw()
 
@@ -362,7 +362,7 @@ class FigureCanvas(FigureCanvasQTAgg):
         """
         self._legendFontSize += 1
 
-        self._setup_legend(font_size=self._legendFontSize)
+        self._setup_legend()
 
         self.draw()
 
@@ -414,7 +414,7 @@ class FigureCanvas(FigureCanvasQTAgg):
         else:
             raise RuntimeError('Line with ID %s is not recorded.' % plot_key)
 
-        self._setup_legend(location='best', font_size=self._legendFontSize)
+        self._setup_legend()
 
         # Draw
         self.draw()
@@ -428,7 +428,7 @@ class FigureCanvas(FigureCanvasQTAgg):
         if self.axes.legend() is not None:
             # set visible to be True and re-draw
             # self.axes.legend().set_visible(True)
-            self._setup_legend(font_size=self._legendFontSize)
+            self._setup_legend()
             self.draw()
 
             # set flag on
@@ -518,7 +518,7 @@ class FigureCanvas(FigureCanvasQTAgg):
         self.resize(w+1, h)
         self.resize(w, h)
 
-    def _setup_legend(self, location='best', font_size=10):
+    def _setup_legend(self, location='best'):
         """
         Set up legend
         self.axes.legend(): Handler is a Line2D object. Lable maps to the line object
@@ -541,6 +541,6 @@ class FigureCanvas(FigureCanvasQTAgg):
             location = 'best'
 
         handles, labels = self.axes.get_legend_handles_labels()
-        self.axes.legend(handles, labels, loc=location, fontsize=font_size)
+        self.axes.legend(handles, labels, loc=location, fontsize=self._legendFontSize)
 
         self._isLegendOn = True
