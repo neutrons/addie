@@ -13,7 +13,7 @@ from collections import OrderedDict
 from qtpy.QtCore import (QProcess, Qt, QUrl)
 from qtpy.QtGui import (QDesktopServices, QIcon)
 from qtpy import QtGui
-from qtpy.QtWidgets import (QApplication, QFileDialog, QMainWindow, QMessageBox, QTableWidgetItem, QVBoxLayout)
+from qtpy.QtWidgets import (QApplication, QFileDialog, QMainWindow, QMessageBox, QTableWidgetItem, QVBoxLayout, QWidget)
 
 from addie import __version__
 
@@ -318,15 +318,24 @@ class MainWindow(QMainWindow):
         """
         QMainWindow.__init__(self, parent)
 
-        # if self.debugging:
-        #     self.calibration_folder = '/SNS/NOM/IPTS-17118/shared/'
-        #     self.characterization_folder = '/SNS/NOM/shared/CALIBRATION/'
-
         # Initialize the UI widgets
         self.ui = load_ui('mainWindow.ui', baseinstance=self)
-        self._promote_widgets()
+        #self._promote_widgets()
 
-        self.ui.graphicsView_sq.set_main(self)
+        # Mantid processing tab
+        self.processing_tab_widget = QWidget()
+        self.processing_ui = load_ui('splitui_processing_tab.ui', baseinstance=self.processing_tab_widget)
+        self.ui.main_tab.insertTab(2, self.processing_tab_widget, "Processing")
+
+        # Rietveld  tab
+        self.rietveld_tab_widget = QWidget()
+        self.rietveld_ui = load_ui('splitui_rietveld_tab.ui', baseinstance=self.rietveld_tab_widget)
+        self.ui.main_tab.insertTab(3, self.rietveld_tab_widget, "Rietveld")
+
+
+        return
+
+        #self.ui.graphicsView_sq.set_main(self)
 
         # Set the post-processing mode
         self.post_processing = processing_mode  # mantid or 'idl'
@@ -426,7 +435,7 @@ class MainWindow(QMainWindow):
         # color management
         self._pdfColorManager = PDFPlotManager()
 
-        self.save_raw_config()
+        #self.save_raw_config()
 
         if DEBUG:
             o_row = TableRowHandler(parent=self)
@@ -469,11 +478,11 @@ class MainWindow(QMainWindow):
 
     def init_master_table(self):
         o_table = TableInitialization(parent=self)
-        o_table.init_master_table()
-        o_table.init_signals()
+        #o_table.init_master_table()
+        #o_table.init_signals()
         # TODO should load existing json configuration into the table
 
-        self.ui.pushButton_launchReduction.clicked.connect(self.run_mantid)
+        #self.ui.pushButton_launchReduction.clicked.connect(self.run_mantid)
 
     def _promote_widgets(self):
         # frame_graphicsView_bragg
@@ -555,11 +564,11 @@ class MainWindow(QMainWindow):
                     """)
 
         self.ui.label_25.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
-        self.ui.search_logo_label.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
-        self.ui.clear_name_search_2.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
-        self.ui.clear_search_button.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
+#        self.ui.search_logo_label.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
+#        self.ui.clear_name_search_2.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
+#        self.ui.clear_search_button.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
 
-        self.ui.settings_table_button.setIcon(QtGui.QIcon(":/MPL Toolbar/settings_icon.png"))
+#        self.ui.settings_table_button.setIcon(QtGui.QIcon(":/MPL Toolbar/settings_icon.png"))
 
         self.ui.comboBox_xUnit.clear()
         self.ui.comboBox_xUnit.addItems(['TOF', 'dSpacing', 'Q'])
