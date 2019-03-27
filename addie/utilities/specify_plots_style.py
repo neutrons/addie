@@ -44,7 +44,7 @@ class PlotStyleDialog(QDialog):
         color_list = BASIC_COLORS[:]
         color_list.insert(0, 'No Change')
         marker_list = LINE_MARKERS[:]
-        marker_list.insert(9, 'No Change')
+        marker_list.insert(0, 'No Change')
 
         for color in color_list:
             self.ui.comboBox_color.addItem(color)
@@ -105,6 +105,7 @@ class PlotStyleDialog(QDialog):
         if mark == 'No Change':
             mark = None
         else:
+            print('***** "{}"'.format(mark))
             mark = mark.split('(')[0].strip()
 
         return return_list, color, mark
