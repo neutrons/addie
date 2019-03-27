@@ -75,14 +75,6 @@ class FigureCanvas(FigureCanvasQTAgg):
 
     def add_plot_1d(self, wkspname, wkspindex, color=None, label="", x_label=None, y_label=None,
                     marker=None, line_style=None, line_width=1, alpha=1., show_legend=True, plotError=False):
-        # Hold previous data
-        self.axes.hold(True)
-
-        # set x-axis and y-axis label
-        if x_label is not None:
-            self.axes.set_xlabel(x_label, fontsize=16)
-        if y_label is not None:
-            self.axes.set_ylabel(y_label, fontsize=16)
 
         # process inputs and defaults
         if color is None:
@@ -101,7 +93,7 @@ class FigureCanvas(FigureCanvasQTAgg):
         else:
             # return: list of matplotlib.lines.Line2D object
             r = self.axes.plot(wksp, wkspIndex=wkspindex, color=color, marker=marker, markersize=2, linestyle=line_style,
-                               label=label, linewidth=line_width, alpha=alpha,)
+                               label=label, linewidth=line_width, alpha=alpha,distribution=True)
 
         self.axes.set_aspect('auto')
 
