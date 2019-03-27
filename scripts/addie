@@ -16,11 +16,6 @@ from qtpy import QtGui
 from qtpy.QtWidgets import (QApplication, QFileDialog, QMainWindow, QMessageBox, QTableWidgetItem, QVBoxLayout)
 
 from addie import __version__
-
-#import addie.ui_mainWindow
-#import addie.ui_table_tree
-#import addie.step1
-#import addie.step2
 from addie.initialization.configuration import ConfigurationInitializer
 from addie.utilities.general import get_ucams
 from addie.utilities import load_ui
@@ -622,6 +617,7 @@ class MainWindow(QMainWindow):
 
         # get the line ID, color, and marker
         plot_id_list, color, marker = ps.get_plots_color_marker(self, plot_label_list=plot_id_label_list)
+        print('"{}" "{}" "{}"'.format(plot_id_list, color, marker))
         if plot_id_list is None:
             # operation is cancelled by user
             pass
@@ -931,19 +927,16 @@ class MainWindow(QMainWindow):
 
         return
 
-    def plot_bragg(self, bragg_ws_list,  clear_canvas=False):
+    def plot_bragg(self, ws_list, bankIds, clear_canvas=False):
         """
         Parameters
         ----------
-        bragg_ws_list: list of (single spectrum) Bragg workspace
+        ws_list: list of (single spectrum) Bragg workspace
+        bankIds: list of bank ids to plot
         clear_canvas
-
-        Returns
-        -------
-
         """
         # check
-        assert isinstance(bragg_ws_list, list)
+        assert isinstance(ws_list, list)
 
         # clear canvas if necessary
         if clear_canvas:
@@ -951,40 +944,19 @@ class MainWindow(QMainWindow):
 
         # get unit
         curr_unit = self._currBraggXUnit
-        # curr_unit = str(self.ui.comboBox_xUnit.currentText())
-        # if curr_unit == 'Q':
-        #     curr_unit =
+
+        # set the bank to be checked
+        for bank in bankIds:
+            self._braggBankWidgets[bank].setChecked(True)
 
         # plot all workspsaces
-        for bragg_ws_name in bragg_ws_list:
-            # get the last section of the workspace name: _bank%d
-            postfix = bragg_ws_name.split('_')[-1]
+        plot_data_dict = dict()
+        for bragg_ws_name in ws_list:
+            # construct dictionary for plotting
+            plot_data_dict[bragg_ws_name] = bankIds  # self._myController.get_bank_numbers(ws_group)
 
-            if postfix.startswith('bank') and 0 <= int(postfix.split('bank')[1]) <= 6:
-                # belonged to a Bragg-workspace-group
-                ws_group = bragg_ws_name.split('_%s' % postfix)[0] + '_group'
-                bank_id = int(bragg_ws_name.split('bank')[1])
-                vec_x, vec_y, vec_e = self._myController.get_bragg_data(ws_group_name=ws_group, bank_id=bank_id,
-                                                                        x_unit=curr_unit)
-
-                # construct dictionary for plotting
-                plot_data_dict = dict()
-                plot_data_dict[ws_group] = dict()
-                plot_data_dict[ws_group][bank_id] = (vec_x, vec_y, vec_e)
-
-                # set the bank to be checked
-                self._braggBankWidgets[bank_id].setChecked(True)
-
-                # plot
-                self.ui.graphicsView_bragg.plot_banks(plot_data_dict, curr_unit)
-
-            else:
-                # plot arbitrary data
-                # print '[DB] Switch to multi-GSAS mode.  Re-plot {0}'.format(bragg_ws_name)
-                vec_x, vec_y, vec_e = self._myController.get_ws_data(bragg_ws_name)
-                self.ui.graphicsView_bragg.plot_general_ws(bragg_ws_name, vec_x, vec_y, vec_e)
-
-        return
+        # plot
+        self.ui.graphicsView_bragg.plot_banks(plot_data_dict, curr_unit)
 
     def plot_gr(self, ws_name, line_color, line_style, line_marker, line_alpha, line_label,
                 auto=False):
@@ -1000,15 +972,16 @@ class MainWindow(QMainWindow):
 
         if self.ui.graphicsView_gr.has_gr(ws_name):
             # update G(r) value of an existing plot
-            self.ui.graphicsView_gr.update_gr(ws_name, vec_r, vec_g, vec_ge)
+            self.ui.graphicsView_gr.update_gr(ws_name, ws_name, plotError=False)
         else:
             # a new g(r) plot
             if auto:
                 line_color, line_style, line_alpha = self._pdfColorManager.get_gr_line(ws_name)
- 
+
              # plot G(R)
-            self.ui.graphicsView_gr.plot_gr(ws_name, vec_r, vec_g, vec_ge, False,
-                                            line_color, line_style, line_marker, line_alpha, line_label)
+            self.ui.graphicsView_gr.plot_gr(ws_name, ws_name, plotError=False,
+                                            color=line_color, style=line_style, marker=line_marker,
+                                            alpha=line_alpha, label=line_label)
         # END-FOR
 
         return
@@ -1028,37 +1001,19 @@ class MainWindow(QMainWindow):
         # get data
         vec_q, vec_sq, vec_se = self._myController.get_sq(ws_name)
 
-        # get the unit & do conversion if necessary
-        sq_type = str(self.ui.comboBox_SofQType.currentText())
-        if sq_type == 'S(Q)':
-            # use the original S(Q)
-            sq_unit = 'S(Q)'
-            vec_y = vec_sq
-        elif sq_type == 'S(Q)-1':
-            # use S(Q)-1
-            sq_unit = 'S(Q)-1'
-            vec_y = vec_sq - 1
-        elif sq_type == 'Q[S(Q)-1]':
-            # use Q(S(Q)-1)
-            sq_unit = 'Q[S(Q)-1]'
-            vec_y = vec_q * (vec_sq - 1)
-        else:
-            raise RuntimeError('None of S(Q), S(Q)-1 or Q(S(Q)-1) is chosen.')
-
         # get color
-        if not color is None:
+        if not color:
             color = self._pdfColorManager.add_sofq(ws_name)
 
-        self.ui.graphicsView_sq.plot_sq(ws_name, vec_q, vec_y, vec_se, sq_unit, clear_prev,
-                                        color=color)
+        # convert to the function to plot
+        sq_type = str(self.ui.comboBox_SofQType.currentText())
+        plottable_name = self._myController.calculate_sqAlt(ws_name, sq_type)
 
-        return
+        self.ui.graphicsView_sq.plot_sq(plottable_name, sq_y_label=sq_type, reset_color_mark=clear_prev, color=color)
 
     def do_load_bragg_file(self):
         """
         Load Bragg files including GSAS, NeXus, 3-column ASCii.
-        Returns
-        -------
         """
         # get file
         ext = 'GSAS (*.gsa *.gda *.gss);;Processed Nexus (*.nxs);;dat (*.dat);;All (*.*)'
@@ -1087,14 +1042,14 @@ class MainWindow(QMainWindow):
         try:
             gss_ws_names = list()
             for bragg_file_name in bragg_file_names:
-                gss_ws_name = self._myController.load_bragg_file(bragg_file_name)
+                gss_ws_name, bank_angles = self._myController.load_bragg_file(bragg_file_name)
                 gss_ws_names.append(gss_ws_name)
-                # split
-                # FIXME - _gssGroupName may have an issie with multiple-GSS mode
-                gssGroupName, banks_list, bank_angles = self._myController.split_to_single_bank(gss_ws_name)
+                banks_list = list()
+                for i, angle in enumerate(bank_angles):
+                    banks_list.append('Bank {} - {}'.format(i+1, angle))
 
                 # add to tree
-                self.ui.treeWidget_braggWSList.add_bragg_ws_group(gssGroupName, banks_list)
+                self.ui.treeWidget_braggWSList.add_bragg_ws_group(gss_ws_name, banks_list)
 
             # get plot mode
             if len(bragg_file_names) == 1:
@@ -1138,15 +1093,9 @@ class MainWindow(QMainWindow):
             # while in multiple-gss mode, no change will be made on the canvas at all
 
             # prepare to plot new Bragg
-            # change unit
-            ws_data_dict = dict()
             plot_data_dict = dict()
             for gss_ws_name in gss_ws_names:
-                gss_group_name = gss_ws_name + '_group'
-                for bank_id in self._onCanvasGSSBankList:
-                    vec_x, vec_y, vec_e = self._myController.get_bragg_data(gss_group_name, bank_id, self._currBraggXUnit)
-                    ws_data_dict[bank_id] = (vec_x, vec_y, vec_e)
-                plot_data_dict[gss_group_name] = ws_data_dict
+                plot_data_dict[gss_ws_name] = self._onCanvasGSSBankList[:]
 
             # plot
             # FIXME/ISSUE/NOW - get a summary on calling to plot_banks
@@ -1155,7 +1104,9 @@ class MainWindow(QMainWindow):
             # reset unit
             self.reset_bragg_data_range(self._currBraggXUnit)
 
-        except:
+        except RuntimeError as e:
+            print('Encountered exception')
+            print(e)
 
             self.setStyleSheet("QStatusBar{padding-left:8px;color:red;font-weight:bold;}")
             self.ui.statusbar.showMessage("Error loading {}".format(bragg_file_names), 10000)
@@ -1163,7 +1114,6 @@ class MainWindow(QMainWindow):
     def do_load_gr(self):
         """
         Load an ASCII file containing G(r)
-        Returns:
         """
         # get default dir
         if self._currDataDir is None:
@@ -1204,8 +1154,6 @@ class MainWindow(QMainWindow):
         # put the loaded G(r) workspace to tree 'workspaces'
         self.ui.treeWidget_grWsList.add_child_main_item('workspaces', gr_ws_name)
 
-        return
-
     def check_in_fixed_dir_structure(self, sub_dir):
         """
         Check whether _currDataDir ends with 'GSAS', 'gofr' or 'SofQ'
@@ -1225,8 +1173,6 @@ class MainWindow(QMainWindow):
         else:
             self._inFixedDirectoryStructure = False
         # END-IF-ELSE
-
-        return
 
     def getDefaultDir(self, sub_dir):
         """ Get the default data directory.
@@ -1603,13 +1549,9 @@ class MainWindow(QMainWindow):
                 status, ws_name_list = self.ui.treeWidget_braggWSList.get_current_main_nodes()
                 if not status:
                     raise RuntimeError(str(ws_name_list))
-                else:
-                    plot_ws_name = ws_name_list[0]
 
             # plot
-            plot_ws_name = plot_ws_name.split('_group')[0]
-            bragg_bank_ws = '%s_bank%d' % (plot_ws_name, to_plot_bank_list[0])
-            self.plot_bragg(bragg_ws_list=[bragg_bank_ws], clear_canvas=True)
+            self.plot_bragg(ws_list=[ws_name_list[0]], bankIds=to_plot_bank_list, clear_canvas=True)
 
         else:
             # multiple GSAS mode. as currently there is one GSAS file that is plot, then the first bank
@@ -1623,6 +1565,8 @@ class MainWindow(QMainWindow):
             # else:
             # choose first bank
             bank_on_canvas = to_plot_bank_list[0]
+            wkspaces = self.ui.treeWidget_braggWSList.get_main_nodes()
+            wkspaces.remove('workspaces')  # can't plot that
 
             # disable all the banks except the one to plot. Notice the mutex must be on
             self._noEventBankWidgets = True
@@ -1632,9 +1576,7 @@ class MainWindow(QMainWindow):
             self._noEventBankWidgets = False
 
             # plot
-            plot_ws_name = on_canvas_ws_list[0]
-            bragg_bank_ws = '%s_bank%d' % (plot_ws_name, bank_on_canvas)
-            self.plot_bragg(bragg_ws_list=[bragg_bank_ws], clear_canvas=True)
+            self.plot_bragg(ws_list=wkspaces, bankIds=[bank_on_canvas], clear_canvas=True)
 
             # set
             self._onCanvasGSSBankList = [bank_on_canvas]
@@ -1724,13 +1666,7 @@ class MainWindow(QMainWindow):
         # get new bank data
         plot_data_dict = dict()
         for ws_group in gss_group_list:
-            ws_data_dict = dict()
-            for bank_id in new_bank_list:
-                vec_x, vec_y, vec_e = self._myController.get_bragg_data(ws_group, bank_id, self._currBraggXUnit)
-                ws_data_dict[bank_id] = (vec_x, vec_y, vec_e)
-            # END-FOR
-            plot_data_dict[ws_group] = ws_data_dict
-        # END-FOR
+            plot_data_dict[ws_group] = new_bank_list[:]
 
         if plot_multi_gss:
             self.ui.graphicsView_bragg.set_to_single_gss(False)
@@ -1795,13 +1731,7 @@ class MainWindow(QMainWindow):
         # get data and plot
         plot_data_dict = dict()
         for ws_group in ws_group_list:
-            ws_data_dict = dict()
-            for bank_id in bank_list:
-                vec_x, vec_y, vec_e = self._myController.get_bragg_data(ws_group, bank_id, self._currBraggXUnit)
-                ws_data_dict[bank_id] = (vec_x, vec_y, vec_e)
-            # END-FOR
-            plot_data_dict[ws_group] = ws_data_dict
-        # END-FOR
+            plot_data_dict[ws_group] = self._myController.get_bank_numbers(ws_group)
 
         # plot
         self.ui.graphicsView_bragg.plot_banks(plot_data_dict, self._currBraggXUnit)
@@ -1852,7 +1782,7 @@ class MainWindow(QMainWindow):
         # re-plot
         for sq_name in curr_sq_list:
             # plot S(Q)
-            self.plot_sq(sq_name, sq_color=None, clear_prev=False)
+            self.plot_sq(sq_name, color=None, clear_prev=False)
 
         return
 
@@ -2068,39 +1998,18 @@ class MainWindow(QMainWindow):
         assert isinstance(gss_group_name, str), 'GSS workspace group name is expected to be a string, but not' \
             ' %s.' % str(type(gss_group_name))
 
-        # rule out the unsupported situation
-        assert gss_group_name.endswith('_group'), 'GSAS workspace group\' name must be ends with _group, ' \
-            'but not as %s.' % gss_group_name
-        root_ws_name = gss_group_name.split('_group')[0]
+        # get the banks to plot - change to workspace index
+        selected_banks = self.get_bragg_banks_selected()
 
         # process
-        if self.ui.radioButton_multiBank.isChecked():
-            # single-GSS/multi-bank mode
+        if self.ui.radioButton_multiBank.isChecked():  # single-GSS/multi-bank mode
             # reset canvas
             self.ui.graphicsView_bragg.reset()
-
-            # get the banks to plot
-            selected_banks = self.get_bragg_banks_selected()
-
-            bragg_ws_list = ['%s_bank%d' % (root_ws_name, bank_id) for bank_id in selected_banks]
-            self.plot_bragg(bragg_ws_list=bragg_ws_list, clear_canvas=False)
-
-        else:
-            # multiple-GSS/single-bank mode
-            # canvas is not be reset
-
-            # get the bank to plot
-            selected_banks = self.get_bragg_banks_selected()
+        else:  # multiple-GSS/single-bank mode
+            # canvas is not reset
             assert len(selected_banks) <= 1, 'At most 1 bank can be plot in multiple-GSS mode.'
 
-            # form the workspace
-            bragg_ws = '%s_bank%d' % (root_ws_name, selected_banks[0])
-
-            self.plot_bragg(bragg_ws_list=[bragg_ws], clear_canvas=False)
-
-        # END-IF-ELSE
-
-        return
+        self.plot_bragg(ws_list=[gss_group_name], bankIds=selected_banks, clear_canvas=False)
 
     def set_ipython_script(self, script):
         """
@@ -2883,10 +2792,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='ADvanced DIffraction Environment')
     parser.add_argument('--version', action='version', version='%(prog)s version {}'.format(__version__))
     parser.add_argument('--mode', type=str, default='mantid',
-			help='Set processing mode (default=%(default)s)', choices=['mantid', 'idl'])
+                        help='Set processing mode (default=%(default)s)', choices=['mantid', 'idl'])
 
-    try:
-        # set up bash completion as a soft dependency
+    try:  # set up bash completion as a soft dependency
         import argcomplete  # noqa
         argcomplete.autocomplete(parser)
     except ImportError:
