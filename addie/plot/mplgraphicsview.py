@@ -437,6 +437,10 @@ class MplGraphicsView(QWidget):
         assert ikey in self._my1DPlotDict, 'Line with ID %d is not on canvas. ' % ikey
 
         # update line
+        if wkspname:
+            ymin, ymax = self._driver.get_y_range(wkspname, wkspindex)
+            self._my1DPlotMinYDict[ikey] = ymin
+            self._my1DPlotMaxYDict[ikey] = ymax
         self._myCanvas.updateLine(ikey, wkspname, wkspindex, linestyle, linecolor, marker, markercolor)
 
     def update_indicator(self, i_key, color):
