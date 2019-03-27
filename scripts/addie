@@ -2641,11 +2641,11 @@ class MainWindow(QMainWindow):
         o_table.disconnect_table_ui(unblock_all=True)
 
     def h3_table_right_click(self, position):
-        o_h3_table = H3TableHandler(parent=self)
+        o_h3_table = H3TableHandler(main_window=self)
         o_h3_table.right_click()
 
     def check_status_of_right_click_buttons(self):
-        o_h3_table = H3TableHandler(parent=self)
+        o_h3_table = H3TableHandler(main_window=self)
         o_h3_table.check_status_of_right_click_buttons()
 
     def scroll_h1_table(self, value):

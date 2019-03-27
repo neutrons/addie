@@ -389,9 +389,9 @@ class H3TableHandler:
     o_save_config = None
     config_dict = {}
 
-    def __init__(self, parent=None):
-        self.parent = parent
-        self.table_ui = self.parent.ui.h3_table
+    def __init__(self, main_window=None):
+        self.main_window = main_window
+        self.table_ui = main_window.processing_ui.h3_table
 
     def retrieve_previous_configurations(self):
         if os.path.exists(CONFIG_FILE):
@@ -403,13 +403,13 @@ class H3TableHandler:
                 except KeyError:
                     return
 
-            self.parent.config_dict = config_dict
+            self.main_window.config_dict = config_dict
 
     def create_config_dict(self, name=''):
         if name == '':
             name = 'undefined'
 
-        o_current_table_config = TableConfig(parent=self.parent)
+        o_current_table_config = TableConfig(parent=self.main_window)
         current_config = o_current_table_config.get_current_config()
 
         inside_dict = OrderedDict()
@@ -417,14 +417,14 @@ class H3TableHandler:
         inside_dict['active'] = True
 
         # retrieve previous config file
-        previous_config_dict = self.parent.config_dict
+        previous_config_dict = self.main_window.config_dict
         if previous_config_dict == {}:
             # first time
             new_full_config = OrderedDict()
             new_full_config[name] = inside_dict
         else:
             self.deactivate_all_config()
-            old_full_config = self.parent.config_dict
+            old_full_config = self.main_window.config_dict
             # list_keys = old_full_config.keys()
             old_full_config[name] = inside_dict
             new_full_config = old_full_config
@@ -432,68 +432,68 @@ class H3TableHandler:
         self.config_dict = new_full_config
 
     def deactivate_all_config(self):
-        old_full_config = self.parent.config_dict
+        old_full_config = self.main_window.config_dict
         for _key in old_full_config:
             old_full_config[_key]['active'] = False
-        self.parent.config_dict = old_full_config
+        self.main_window.config_dict = old_full_config
 
     # Right click
     def right_click(self):
         self.retrieve_previous_configurations()
-        previous_config = self.parent.config_dict
+        previous_config = self.main_window.config_dict
 
         if previous_config == {}:
             list_configs = []
         else:
             list_configs = previous_config.keys()
 
-        top_menu = QMenu(self.parent)
+        top_menu = QMenu(self.main_window)
 
         menu = top_menu.addMenu("Menu")
 
         # Selection
         activate = menu.addMenu("Activate")
-        activate.setEnabled(self.parent.master_table_right_click_buttons['activate']['status'])
+        activate.setEnabled(self.main_window.master_table_right_click_buttons['activate']['status'])
         activate_check_all = activate.addAction("Check All")
-        self.parent.master_table_right_click_buttons['activate_check_all']['ui'] = activate_check_all
+        self.main_window.master_table_right_click_buttons['activate_check_all']['ui'] = activate_check_all
         activate_uncheck_all = activate.addAction("Uncheck All")
-        self.parent.master_table_right_click_buttons['activate_uncheck_all']['ui'] = activate_uncheck_all
+        self.main_window.master_table_right_click_buttons['activate_uncheck_all']['ui'] = activate_uncheck_all
         activate.addSeparator()
         activate_inverse = activate.addAction("Inverse")
-        self.parent.master_table_right_click_buttons['activate_inverse']['ui'] = activate_inverse
+        self.main_window.master_table_right_click_buttons['activate_inverse']['ui'] = activate_inverse
 
         menu.addSeparator()
 
         # Cells
         cells = menu.addMenu("Cell(s)")
-        cells.setEnabled(self.parent.master_table_right_click_buttons['cells']['status'])
+        cells.setEnabled(self.main_window.master_table_right_click_buttons['cells']['status'])
         cells_copy = cells.addAction("Copy")
-        self.parent.master_table_right_click_buttons['cells_copy']['ui'] = cells_copy
+        self.main_window.master_table_right_click_buttons['cells_copy']['ui'] = cells_copy
         cells_paste = cells.addAction("Paste")
-        self.parent.master_table_right_click_buttons['cells_paste']['ui'] = cells_paste
-        cells_paste.setEnabled(self.parent.master_table_right_click_buttons['cells_paste']['status'])
+        self.main_window.master_table_right_click_buttons['cells_paste']['ui'] = cells_paste
+        cells_paste.setEnabled(self.main_window.master_table_right_click_buttons['cells_paste']['status'])
         cells_clear = cells.addAction("Clear")
-        self.parent.master_table_right_click_buttons['cells_clear']['ui'] = cells_clear
+        self.main_window.master_table_right_click_buttons['cells_clear']['ui'] = cells_clear
 
         # Rows
         rows = menu.addMenu("Row")
         rows_copy = rows.addAction("Copy")
-        self.parent.master_table_right_click_buttons['rows_copy']['ui'] = rows_copy
-        rows_copy.setEnabled(self.parent.master_table_right_click_buttons['rows_copy']['status'])
+        self.main_window.master_table_right_click_buttons['rows_copy']['ui'] = rows_copy
+        rows_copy.setEnabled(self.main_window.master_table_right_click_buttons['rows_copy']['status'])
         rows_paste = rows.addAction("Paste")
-        rows_paste.setEnabled(self.parent.master_table_right_click_buttons['rows_paste']['status'])
-        self.parent.master_table_right_click_buttons['rows_paste']['ui'] = rows_paste
+        rows_paste.setEnabled(self.main_window.master_table_right_click_buttons['rows_paste']['status'])
+        self.main_window.master_table_right_click_buttons['rows_paste']['ui'] = rows_paste
         rows_duplicate = rows.addAction("Duplicate")
-        self.parent.master_table_right_click_buttons['rows_duplicate']['ui'] = rows_duplicate
-        rows_duplicate.setEnabled(self.parent.master_table_right_click_buttons['rows_duplicate']['status'])
+        self.main_window.master_table_right_click_buttons['rows_duplicate']['ui'] = rows_duplicate
+        rows_duplicate.setEnabled(self.main_window.master_table_right_click_buttons['rows_duplicate']['status'])
         rows.addSeparator()
         rows_insert_blank = rows.addAction("Insert Blank")
         # rows_insert = rows.addMenu("Insert")
         # rows_insert_run_number = rows_insert.addAction("Via Run Number ...")
         #rows_insert_blank = rows_insert.addAction("Blank")
         rows_remove = rows.addAction("Remove")
-        rows_remove.setEnabled(self.parent.master_table_right_click_buttons['rows_remove']['status'])
-        self.parent.master_table_right_click_buttons['rows_remove']['ui'] = rows_remove
+        rows_remove.setEnabled(self.main_window.master_table_right_click_buttons['rows_remove']['status'])
+        self.main_window.master_table_right_click_buttons['rows_remove']['ui'] = rows_remove
 
         # Table
         table = menu.addMenu("Table")
@@ -503,7 +503,7 @@ class H3TableHandler:
             table_import_from_database_replace = table_import_from_database.addAction("Replace ...")
             table_import_from_database_append = table_import_from_database.addAction("Append ...")
             table_import_from_database_append.setEnabled(
-                self.parent.master_table_right_click_buttons['import_from_database_append']['status'])
+                self.main_window.master_table_right_click_buttons['import_from_database_append']['status'])
         else:
             table_import_from_database = None
             table_import_from_database_replace = None
@@ -513,13 +513,13 @@ class H3TableHandler:
         table_import_from_config_replace = table_import_from_config.addAction("Replace ...")
         table_import_from_config_append = table_import_from_config.addAction("Append ...")
         table_import_from_config_append.setEnabled(
-            self.parent.master_table_right_click_buttons['import_from_config_append']['status'])
+            self.main_window.master_table_right_click_buttons['import_from_config_append']['status'])
 
         table_import_from_file = table.addMenu("Import from File(s)")
         table_import_from_file_replace = table_import_from_file.addAction("Replace ...")
         table_import_from_file_append = table_import_from_file.addAction("Append ...")
         table_import_from_file_append.setEnabled(
-            self.parent.master_table_right_click_buttons['import_from_file_append']['status'])
+            self.main_window.master_table_right_click_buttons['import_from_file_append']['status'])
 
         # table_import = table.addAction("Import & Replace ...")
         # self.parent.master_table_right_click_buttons['import']['ui'] = table_import
@@ -528,15 +528,15 @@ class H3TableHandler:
         # table_append.setEnabled(self.parent.master_table_right_click_buttons['append']['status'])
         #
         table_export = table.addAction("Export ...")
-        self.parent.master_table_right_click_buttons['export']['ui'] = table_export
-        table_export.setEnabled(self.parent.master_table_right_click_buttons['export']['status'])
+        self.main_window.master_table_right_click_buttons['export']['ui'] = table_export
+        table_export.setEnabled(self.main_window.master_table_right_click_buttons['export']['status'])
         table.addSeparator()
         table_clear = table.addAction("Clear")
-        self.parent.master_table_right_click_buttons['clear']['ui'] = table_clear
-        table_clear.setEnabled(self.parent.master_table_right_click_buttons['clear']['status'])
+        self.main_window.master_table_right_click_buttons['clear']['ui'] = table_clear
+        table_clear.setEnabled(self.main_window.master_table_right_click_buttons['clear']['status'])
         table_reset = table.addAction("Reset Format")
-        self.parent.master_table_right_click_buttons['reset']['ui'] = table_reset
-        table_reset.setEnabled(self.parent.master_table_right_click_buttons['reset']['status'])
+        self.main_window.master_table_right_click_buttons['reset']['ui'] = table_reset
+        table_reset.setEnabled(self.main_window.master_table_right_click_buttons['reset']['status'])
 
         # configuration
         config = menu.addMenu("Columns Configuration")
@@ -556,7 +556,7 @@ class H3TableHandler:
                 this_one_is_active = False
 
                 if previous_config[_label]['active']:
-                    self.parent.active_config_name = _label
+                    self.main_window.active_config_name = _label
                     _full_label = u"\u2713 " + _label
                     save_state = True
                     this_one_is_active = True
@@ -577,7 +577,7 @@ class H3TableHandler:
 
         # disable "save" button if we don't have any config activated
         configuration_save.setEnabled(save_state)
-        self.parent.list_config_displayed = list_config_displayed
+        self.main_window.list_config_displayed = list_config_displayed
         config.addSeparator()
         _reset = config.addAction("Show All Columns")
 
@@ -585,8 +585,8 @@ class H3TableHandler:
 
         # Plot
         _plot_menu = menu.addMenu('Plot')
-        self.parent.master_table_right_click_buttons['plot']['ui'] = _plot_menu
-        _plot_menu.setEnabled(self.parent.master_table_right_click_buttons['plot']['status'])
+        self.main_window.master_table_right_click_buttons['plot']['ui'] = _plot_menu
+        _plot_menu.setEnabled(self.main_window.master_table_right_click_buttons['plot']['status'])
         _plot_sofq = _plot_menu.addAction("S(Q) ...")
         _plot_sofq_diff_first_run_row = _plot_menu.addAction("S(Q) Diff (1st run)...")
         _plot_sofq_diff_average_row = _plot_menu.addAction("S(Q) Diff (Avg.)...")
@@ -662,21 +662,21 @@ class H3TableHandler:
 
         # plot
         elif action == _plot_sofq:
-            o_plot = TablePlotHandler(parent=self.parent)
+            o_plot = TablePlotHandler(parent=self.main_window)
             o_plot.plot_sofq()
         elif action == _plot_sofq_diff_first_run_row:
-            o_plot = TablePlotHandler(parent=self.parent)
+            o_plot = TablePlotHandler(parent=self.main_window)
             o_plot.plot_sofq_diff_first_run_row()
         elif action == _plot_sofq_diff_average_row:
-            o_plot = TablePlotHandler(parent=self.parent)
+            o_plot = TablePlotHandler(parent=self.main_window)
             o_plot.plot_sofq_diff_average_row()
 
         # temperature
         elif action == _plot_cryostat:
-            o_plot = TablePlotHandler(parent=self.parent)
+            o_plot = TablePlotHandler(parent=self.main_window)
             o_plot.plot_temperature(samp_env_choice='cryostat')
         elif action == _plot_furnace:
-            o_plot = TablePlotHandler(parent=self.parent)
+            o_plot = TablePlotHandler(parent=self.main_window)
             o_plot.plot_temperature(samp_env_choice='furnace')
 
         if not (list_signal_config_files == []):
@@ -702,14 +702,14 @@ class H3TableHandler:
         self._set_checkbox_status(QtCore.Qt.Unchecked)
 
     def _set_checkbox_status(self, status=QtCore.Qt.Checked):
-        master_table_list_ui = self.parent.master_table_list_ui
+        master_table_list_ui = self.main_window.master_table_list_ui
         for _key in master_table_list_ui.keys():
             _check_box_ui = master_table_list_ui[_key]['active']
             _check_box_ui.setCheckState(status)
 
     def inverse_activated_rows(self):
         '''Deactivate currently activated rows, and activate currently deactivated rows'''
-        master_table_list_ui = self.parent.master_table_list_ui
+        master_table_list_ui = self.main_window.master_table_list_ui
         for _key in master_table_list_ui.keys():
             _check_box_ui = master_table_list_ui[_key]['active']
             if _check_box_ui.checkState() == QtCore.Qt.Checked:
@@ -719,45 +719,45 @@ class H3TableHandler:
 
     def cells_copy(self):
         '''copy selected cells'''
-        o_cells = CellsHandler(parent=self.parent)
+        o_cells = CellsHandler(parent=self.main_window)
         o_cells.copy()
         self.check_status_of_right_click_buttons()
 
     def cells_paste(self):
         '''paste contain of cells in new selection (only if same number of cells per row'''
-        o_cells = CellsHandler(parent=self.parent)
+        o_cells = CellsHandler(parent=self.main_window)
         o_cells.paste()
         self.check_status_of_right_click_buttons()
 
     def cells_clear(self):
         '''clear contain of selected cells'''
-        o_cells = CellsHandler(parent=self.parent)
+        o_cells = CellsHandler(parent=self.main_window)
         o_cells.clear()
         self.check_status_of_right_click_buttons()
 
     def rows_copy(self):
         '''copy entire row'''
-        o_rows = RowsHandler(parent=self.parent)
+        o_rows = RowsHandler(parent=self.main_window)
         o_rows.copy()
         self.check_status_of_right_click_buttons()
 
     def rows_paste(self):
         '''paste entire row'''
-        o_rows = RowsHandler(parent=self.parent)
+        o_rows = RowsHandler(parent=self.main_window)
         o_rows.paste()
         self.check_status_of_right_click_buttons()
 
     def rows_remove(self):
         '''remove selected rows'''
-        o_rows = RowsHandler(parent=self.parent)
+        o_rows = RowsHandler(parent=self.main_window)
         o_rows.remove()
         self.check_status_of_right_click_buttons()
 
     def rows_duplicate(self):
         '''duplicate currently selected rows'''
-        o_table_row = TableRowHandler(parent=self.parent)
+        o_table_row = TableRowHandler(parent=self.main_window)
         o_table_row.insert_blank_row()
-        o_row = RowsHandler(parent=self.parent)
+        o_row = RowsHandler(parent=self.main_window)
         row_selected = o_row.o_selection.top_row
         o_row.copy(row=row_selected)
         o_row.paste(row=row_selected-1)
@@ -769,58 +769,58 @@ class H3TableHandler:
 
     def clear_table(self):
         '''clean up table'''
-        nbr_row = self.parent.ui.h3_table.rowCount()
+        nbr_row = self.main_window.processing_ui.h3_table.rowCount()
         for _ in np.arange(nbr_row):
-            self.parent.ui.h3_table.removeRow(0)
+            self.main_window.processing_ui.h3_table.removeRow(0)
 
-        self.parent.master_table_list_ui = {}
+        self.main_window.master_table_list_ui = {}
         self.check_status_of_right_click_buttons()
 
     def _import_table_from_database(self, clear_table=True):
-        self.parent.clear_master_table_before_loading = clear_table
-        self.parent.launch_import_from_database_handler()
+        self.main_window.clear_master_table_before_loading = clear_table
+        self.main_window.launch_import_from_database_handler()
 
 #        OncatAuthenticationHandler(parent=self.parent, next_ui='from_database_ui')
 
     def _import_table_from_file(self, clear_table=True):
-        _current_folder = self.parent.current_folder
-        [table_file, _] = QFileDialog.getOpenFileName(parent=self.parent,
+        _current_folder = self.main_window.current_folder
+        [table_file, _] = QFileDialog.getOpenFileName(parent=self.main_window,
                                                       caption='Select Table File ...',
                                                       directory=_current_folder,
                                                       filter="NeXus (*.nxsh5);; Raw (*.raw);; NeXus_old (*.nxs)")
         if table_file:
             new_path = os.path.dirname(table_file)
-            self.parent.current_folder = new_path
+            self.main_window.current_folder = new_path
             if clear_table:
                 self.clear_table()
 
             #FIXME
 
     def _import_table_from_config(self, clear_table=True):
-        _current_folder = self.parent.current_folder
-        [table_file, _] = QFileDialog.getOpenFileName(parent=self.parent,
+        _current_folder = self.main_window.current_folder
+        [table_file, _] = QFileDialog.getOpenFileName(parent=self.main_window,
                                                       caption='Select Table File ...',
                                                       directory=_current_folder,
                                                       filter="json (*.json);; Log (*.csv)")
         if table_file:
             new_path = os.path.dirname(table_file)
-            self.parent.current_folder = new_path
+            self.main_window.current_folder = new_path
             if clear_table:
                 self.clear_table()
 
             try:
-                o_dict = TableFileLoader(parent=self.parent, filename=table_file)
+                o_dict = TableFileLoader(parent=self.main_window, filename=table_file)
             except IOError as err:
-                self.parent.ui.statusbar.setStyleSheet("color: red")
-                self.parent.ui.statusbar.showMessage(err.message,
-                                                     self.parent.statusbar_display_time)
+                self.main_window.ui.statusbar.setStyleSheet("color: red")
+                self.main_window.ui.statusbar.showMessage(err.message,
+                                                     self.main_window.statusbar_display_time)
                 return
 
             o_dict.display_dialog()
 
     def _export_table(self):
-        _current_folder = self.parent.current_folder
-        [_table_file, _] = QFileDialog.getSaveFileName(parent=self.parent,
+        _current_folder = self.main_window.current_folder
+        [_table_file, _] = QFileDialog.getSaveFileName(parent=self.main_window,
                                                        caption="Define Output File Name ...",
                                                        directory=_current_folder,
                                                        filter="json (*.json)")
@@ -830,29 +830,29 @@ class H3TableHandler:
             _file_handler.check_file_extension(ext_requested='json')
             _table_file = _file_handler.filename
 
-            o_export = TableFileExporter(parent=self.parent,
+            o_export = TableFileExporter(parent=self.main_window,
                                          filename=_table_file)
             o_export.create_dictionary()
             o_export.export()
 
-            self.parent.ui.statusbar.setStyleSheet("color: blue")
-            self.parent.ui.statusbar.showMessage("Table has been exported in file {}".format(_table_file),
-                                                 self.parent.statusbar_display_time)
+            self.main_window.ui.statusbar.setStyleSheet("color: blue")
+            self.main_window.ui.statusbar.showMessage("Table has been exported in file {}".format(_table_file),
+                                                 self.main_window.statusbar_display_time)
 
     def insert_row_run_number(self):
         '''insert row using run number information and OnCat'''
-        OncatAuthenticationHandler(parent=self.parent, next_ui='from_run_number_ui')
+        OncatAuthenticationHandler(parent=self.main_window, next_ui='from_run_number_ui')
         self.check_status_of_right_click_buttons()
 
     def insert_row_blank(self):
         '''insert a blank row'''
-        o_row = TableRowHandler(parent=self.parent)
+        o_row = TableRowHandler(main_window=self.main_window)
         o_row.insert_blank_row()
         self.check_status_of_right_click_buttons()
 
     def save_as_config(self):
         o_save_config = SaveConfigInterface(parent=self,
-                                            grand_parent=self.parent)
+                                            grand_parent=self.main_window)
         o_save_config.show()
         self.o_save_config = o_save_config
 
@@ -861,18 +861,18 @@ class H3TableHandler:
         self.export_config()
 
     def remove_this_config(self, config):
-        config_dict = ConfigHandler.remove_this_config(config=self.parent.config_dict,
+        config_dict = ConfigHandler.remove_this_config(config=self.main_window.config_dict,
                                                        key=config)
-        self.parent.config_dict = config_dict
+        self.main_window.config_dict = config_dict
         ConfigHandler.lazy_export_config(config_dict=config_dict)
 
     def activate_this_config(self, config):
-        config_dict = ConfigHandler.deactivate_all_config(config=self.parent.config_dict)
+        config_dict = ConfigHandler.deactivate_all_config(config=self.main_window.config_dict)
         config_dict = ConfigHandler.activate_this_config(config=config_dict,
                                                          key=config)
-        self.parent.config_dict = config_dict
+        self.main_window.config_dict = config_dict
         ConfigHandler.lazy_export_config(config_dict=config_dict)
-        self.parent.load_this_config(key=config)
+        self.main_window.load_this_config(key=config)
 
     def export_config(self):
         config_dict = self.config_dict
@@ -884,24 +884,24 @@ class H3TableHandler:
                         protocol=pickle.HIGHEST_PROTOCOL)
 
     def save_config(self):
-        active_config_name = self.parent.active_config_name
+        active_config_name = self.main_window.active_config_name
         self.save_as_config_name_selected(name=active_config_name)
 
     def reset_table(self):
-        config_dict = self.parent.config_dict
+        config_dict = self.main_window.config_dict
         if not ("FULL_RESET" in config_dict):
-            config_dict['FULL_RESET'] = self.parent.reset_config_dict
-            self.parent.config_dict = config_dict
+            config_dict['FULL_RESET'] = self.main_window.reset_config_dict
+            self.main_window.config_dict = config_dict
 
-        ConfigHandler.lazy_export_config(config_dict=self.parent.config_dict)
-        self.parent.load_this_config(key='FULL_RESET', resize=True)
+        ConfigHandler.lazy_export_config(config_dict=self.main_window.config_dict)
+        self.main_window.load_this_config(key='FULL_RESET', resize=True)
 
     def check_status_of_right_click_buttons(self):
         '''check which of the right buttons can be disabled or not'''
 
         def _update_status(**kwargs):
             for _key in kwargs.keys():
-                self.parent.master_table_right_click_buttons[_key]['status'] = kwargs[_key]
+                self.main_window.master_table_right_click_buttons[_key]['status'] = kwargs[_key]
 
         nbr_row = self.table_ui.rowCount()
         if nbr_row == 0:
@@ -935,11 +935,11 @@ class H3TableHandler:
                            import_from_file_append=True
                            )
 
-            if self.parent.master_table_cells_copy['temp']:
+            if self.main_window.master_table_cells_copy['temp']:
                 _update_status(cells_paste=True,
                                cells_clear=True)
 
-            if self.parent.master_table_cells_copy['row'] and (self.parent.master_table_cells_copy['temp'] == []):
+            if self.main_window.master_table_cells_copy['row'] and (self.main_window.master_table_cells_copy['temp'] == []):
                 _update_status(rows_paste=True)
 
             # plot enabled if only user clicked a cell with runs

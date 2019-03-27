@@ -15,16 +15,16 @@ from addie.processing.mantid.master_table.tree_definition import COLUMN_DEFAULT_
 
 class TableRowHandler:
 
-    def __init__(self, parent=None):
-        self.parent = parent
-        self.table_ui = self.parent.ui.h3_table
+    def __init__(self, main_window=None):
+        self.main_window = main_window
+        self.table_ui = main_window.processing_ui.h3_table
 
     def insert_blank_row(self):
         row = self._calculate_insert_row()
         self.insert_row(row=row)
 
     def transfer_widget_states(self, from_key=None, data_type='sample'):
-        o_transfer = TransferH3TableWidgetState(parent=self.parent)
+        o_transfer = TransferH3TableWidgetState(parent=self.main_window)
         o_transfer.transfer_states(from_key=from_key, data_type=data_type)
 
     # global methods
@@ -54,12 +54,12 @@ class TableRowHandler:
             ui.blockSignals(False)
 
         # abs. correction
-        absorption_correction_ui = self.parent.master_table_list_ui[key][data_type]['abs_correction']
+        absorption_correction_ui = self.main_window.master_table_list_ui[key][data_type]['abs_correction']
         list_abs_correction = self.get_absorption_correction_list(shape=shape_index)
         update_ui(ui=absorption_correction_ui, new_list=list_abs_correction)
 
         # mult. scat. correction
-        mult_scat_correction_ui = self.parent.master_table_list_ui[key][data_type]['mult_scat_correction']
+        mult_scat_correction_ui = self.main_window.master_table_list_ui[key][data_type]['mult_scat_correction']
         list_mult_scat_correction = self.get_multi_scat_correction_list(shape=shape_index)
         update_ui(ui=mult_scat_correction_ui, new_list=list_mult_scat_correction)
 
@@ -76,20 +76,20 @@ class TableRowHandler:
         else:
             _label_radius_1 = 'Inner Radius'
 
-        self.parent.master_table_list_ui[key][data_type]['geometry']['radius']['value'].setVisible(_enabled_radius_1)
-        self.parent.master_table_list_ui[key][data_type]['geometry']['radius2']['value'].setVisible(_enabled_radius_2)
-        self.parent.master_table_list_ui[key][data_type]['geometry']['height']['value'].setVisible(_enabled_height)
+        self.main_window.master_table_list_ui[key][data_type]['geometry']['radius']['value'].setVisible(_enabled_radius_1)
+        self.main_window.master_table_list_ui[key][data_type]['geometry']['radius2']['value'].setVisible(_enabled_radius_2)
+        self.main_window.master_table_list_ui[key][data_type]['geometry']['height']['value'].setVisible(_enabled_height)
 
-        self.parent.master_table_list_ui[key][data_type]['geometry']['radius']['label'].setVisible(_enabled_radius_1)
-        self.parent.master_table_list_ui[key][data_type]['geometry']['radius2']['label'].setVisible(_enabled_radius_2)
-        self.parent.master_table_list_ui[key][data_type]['geometry']['height']['label'].setVisible(_enabled_height)
+        self.main_window.master_table_list_ui[key][data_type]['geometry']['radius']['label'].setVisible(_enabled_radius_1)
+        self.main_window.master_table_list_ui[key][data_type]['geometry']['radius2']['label'].setVisible(_enabled_radius_2)
+        self.main_window.master_table_list_ui[key][data_type]['geometry']['height']['label'].setVisible(_enabled_height)
 
-        self.parent.master_table_list_ui[key][data_type]['geometry']['radius']['units'].setVisible(_enabled_radius_1)
-        self.parent.master_table_list_ui[key][data_type]['geometry']['radius2']['units'].setVisible(_enabled_radius_2)
-        self.parent.master_table_list_ui[key][data_type]['geometry']['height']['units'].setVisible(_enabled_height)
+        self.main_window.master_table_list_ui[key][data_type]['geometry']['radius']['units'].setVisible(_enabled_radius_1)
+        self.main_window.master_table_list_ui[key][data_type]['geometry']['radius2']['units'].setVisible(_enabled_radius_2)
+        self.main_window.master_table_list_ui[key][data_type]['geometry']['height']['units'].setVisible(_enabled_height)
 
-        self.parent.master_table_list_ui[key][data_type]['geometry']['radius']['label'].setText(_label_radius_1)
-        self.parent.master_table_list_ui[key][data_type]['geometry']['radius2']['label'].setText(_label_radius_2)
+        self.main_window.master_table_list_ui[key][data_type]['geometry']['radius']['label'].setText(_label_radius_1)
+        self.main_window.master_table_list_ui[key][data_type]['geometry']['radius2']['label'].setText(_label_radius_2)
 
         # change state of other widgets of the same column if they are selected
         self.transfer_widget_states(from_key=key, data_type=data_type)
@@ -103,7 +103,7 @@ class TableRowHandler:
         if value == 0:
             show_button = False
 
-        _ui = self.parent.master_table_list_ui[key][data_type]['placzek_button']
+        _ui = self.main_window.master_table_list_ui[key][data_type]['placzek_button']
         _ui.setVisible(show_button)
 
         # change state of other widgets of the same column if they are selected
@@ -114,7 +114,7 @@ class TableRowHandler:
         self.transfer_widget_states(from_key=key, data_type=data_type)
 
     def placzek_button_pressed(self, key=None, data_type='sample'):
-        PlaczekHandler(parent=self.parent, key=key, data_type=data_type)
+        PlaczekHandler(parent=self.main_window, key=key, data_type=data_type)
 
     def activated_row_changed(self, key=None, state=None):
         data_type = 'sample'
@@ -125,9 +125,9 @@ class TableRowHandler:
     def grouping_button(self, key=None, grouping_type='input'):
         message = "Select {} grouping".format(grouping_type)
         ext = 'Grouping (*.txt);;All (*.*)'
-        file_name = QFileDialog.getOpenFileName(self.parent,
+        file_name = QFileDialog.getOpenFileName(self.main_window,
                                                 message,
-                                                self.parent.calibration_folder,
+                                                self.main_window.calibration_folder,
                                                 ext)
         if file_name is None:
             return
@@ -243,7 +243,7 @@ class TableRowHandler:
         _new_widget = QWidget()
         _new_widget.setLayout(_layout)
         _widget.stateChanged.connect(lambda state=0, key=random_key:
-                                     self.parent.master_table_select_state_changed(state, key))
+                                     self.main_window.master_table_select_state_changed(state, key))
 #        _widget.blockSignals(True)
         column = 0
         self.table_ui.setCellWidget(row, column, _new_widget)
@@ -286,7 +286,7 @@ class TableRowHandler:
         _material_button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
         _material_button.setFixedWidth(CONFIG_BUTTON_WIDTH)
         _material_button.pressed.connect(lambda key=random_key:
-                                         self.parent.master_table_sample_material_button_pressed(key))
+                                         self.main_window.master_table_sample_material_button_pressed(key))
 
         _verti_layout = QVBoxLayout()
         _verti_layout.addWidget(_material_text)
@@ -301,7 +301,7 @@ class TableRowHandler:
         column += 1
         _mass_text = QLineEdit(sample_mass_density)
         _mass_text.returnPressed.connect(lambda key=random_key:
-                                         self.parent.master_table_sample_mass_density_line_edit_entered(key))
+                                         self.main_window.master_table_sample_mass_density_line_edit_entered(key))
 
         _mass_units = QLabel("g/cc")
         _top_widget = QWidget()
@@ -313,7 +313,7 @@ class TableRowHandler:
         _mass_button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
         _mass_button.setFixedWidth(CONFIG_BUTTON_WIDTH)
         _mass_button.pressed.connect(lambda key=random_key:
-                                     self.parent.master_table_sample_mass_density_button_pressed(key))
+                                     self.main_window.master_table_sample_mass_density_button_pressed(key))
         _verti_layout = QVBoxLayout()
         _verti_layout.addWidget(_top_widget)
         _verti_layout.addWidget(_mass_button)
@@ -326,7 +326,7 @@ class TableRowHandler:
         # column 7 - packing fraction
         column += 1
         if packing_fraction == "N/A":
-            packing_fraction = "{}".format(self.parent.packing_fraction)
+            packing_fraction = "{}".format(self.main_window.packing_fraction)
         _item = QTableWidgetItem(packing_fraction)
         _master_table_row_ui['sample']['packing_fraction'] = _item
         self.table_ui.setItem(row, column, _item)
@@ -339,7 +339,7 @@ class TableRowHandler:
         _shape_default_index = 0
         _widget.currentIndexChanged.connect(lambda index=_shape_default_index,
                                             key=random_key:
-                                            self.parent.master_table_sample_shape_changed(index, key))
+                                            self.main_window.master_table_sample_shape_changed(index, key))
         _list_ui_to_unlock.append(_widget)
         _widget.blockSignals(True)
         _widget.addItem("cylindrical")
@@ -406,7 +406,7 @@ class TableRowHandler:
         _verti_widget.setLayout(_verti_layout)
 
         _set_dimensions_button.pressed.connect(lambda key=random_key:
-                                               self.parent.master_table_sample_dimensions_setter_button_pressed(key))
+                                               self.main_window.master_table_sample_dimensions_setter_button_pressed(key))
 
         self.table_ui.setCellWidget(row, column, _verti_widget)
 
@@ -419,7 +419,7 @@ class TableRowHandler:
         list_abs_correction = self.get_absorption_correction_list(shape=_shape_default_value)
         _widget.currentIndexChanged.connect(lambda value=list_abs_correction[0],
                                             key = random_key:
-                                            self.parent.master_table_sample_abs_correction_changed(value, key))
+                                            self.main_window.master_table_sample_abs_correction_changed(value, key))
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
         for _item in list_abs_correction:
@@ -438,7 +438,7 @@ class TableRowHandler:
         list_multi_scat_correction = self.get_multi_scat_correction_list(shape=_shape_default_value)
         _widget.currentIndexChanged.connect(lambda value=list_multi_scat_correction[0],
                                             key=random_key:
-                                            self.parent.master_table_sample_multi_scattering_correction_changed(value, key))
+                                            self.main_window.master_table_sample_multi_scattering_correction_changed(value, key))
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
         for _item in list_multi_scat_correction:
@@ -463,7 +463,7 @@ class TableRowHandler:
         _button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
         _button.setFixedWidth(CONFIG_BUTTON_WIDTH)
         _button.pressed.connect(lambda key=random_key:
-                                self.parent.master_table_sample_placzek_button_pressed(key))
+                                self.main_window.master_table_sample_placzek_button_pressed(key))
         _master_table_row_ui['sample']['placzek_button'] = _button
         _button.setVisible(False)
         _master_table_row_ui['sample']['placzek_button'] = _button
@@ -474,7 +474,7 @@ class TableRowHandler:
         _default_value = 'None'
         _widget1.currentIndexChanged.connect(lambda value=_default_value,
                                              key=random_key:
-                                             self.parent.master_table_sample_inelastic_correction_changed(value, key))
+                                             self.main_window.master_table_sample_inelastic_correction_changed(value, key))
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
         self.table_ui.setCellWidget(row, column, _widget)
@@ -510,7 +510,7 @@ class TableRowHandler:
         _material_button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
         _material_button.setFixedWidth(CONFIG_BUTTON_WIDTH)
         _material_button.pressed.connect(lambda key=random_key:
-                                         self.parent.master_table_normalization_material_button_pressed(key))
+                                         self.main_window.master_table_normalization_material_button_pressed(key))
         _verti_layout = QVBoxLayout()
         _verti_layout.addWidget(_material_text)
         _verti_layout.addWidget(_material_button)
@@ -524,7 +524,7 @@ class TableRowHandler:
         column += 1
         _mass_text = QLineEdit("N/A")
         _mass_text.returnPressed.connect(lambda key=random_key:
-                                         self.parent.master_table_normalization_mass_density_line_edit_entered(key))
+                                         self.main_window.master_table_normalization_mass_density_line_edit_entered(key))
         _mass_units = QLabel("g/cc")
         _top_widget = QWidget()
         _top_layout = QHBoxLayout()
@@ -535,7 +535,7 @@ class TableRowHandler:
         _mass_button.setFixedWidth(CONFIG_BUTTON_WIDTH)
         _mass_button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
         _mass_button.pressed.connect(lambda key=random_key:
-                                     self.parent.master_table_normalization_mass_density_button_pressed(key))
+                                     self.main_window.master_table_normalization_mass_density_button_pressed(key))
         _verti_layout = QVBoxLayout()
         _verti_layout.addWidget(_top_widget)
         _verti_layout.addWidget(_mass_button)
@@ -557,7 +557,7 @@ class TableRowHandler:
         _widget = QComboBox()
         _widget.currentIndexChanged.connect(lambda value=_shape_default_value,
                                             key=random_key:
-                                            self.parent.master_table_normalization_shape_changed(value, key))
+                                            self.main_window.master_table_normalization_shape_changed(value, key))
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
         _widget.addItem("cylindrical")
@@ -624,7 +624,7 @@ class TableRowHandler:
         _verti_widget.setLayout(_verti_layout)
 
         _set_dimensions_button.pressed.connect(lambda key=random_key:
-                                               self.parent.master_table_normalization_dimensions_setter_button_pressed(key))
+                                               self.main_window.master_table_normalization_dimensions_setter_button_pressed(key))
 
         self.table_ui.setCellWidget(row, column, _verti_widget)
 
@@ -635,7 +635,7 @@ class TableRowHandler:
         _widget = QComboBox()
         _widget.currentIndexChanged.connect(lambda value=list_abs_correction[0],
                                             key=random_key:
-                                            self.parent.master_table_normalization_abs_correction_changed(value, key))
+                                            self.main_window.master_table_normalization_abs_correction_changed(value, key))
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
         for _item in list_abs_correction:
@@ -654,7 +654,7 @@ class TableRowHandler:
         _widget = QComboBox()
         _widget.currentIndexChanged.connect(lambda value=list_multi_scat_correction[0],
                                             key=random_key:
-                                            self.parent.master_table_normalization_multi_scattering_correction_changed(value, key))  # noqa
+                                            self.main_window.master_table_normalization_multi_scattering_correction_changed(value, key))  # noqa
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
         for _item in list_multi_scat_correction:
@@ -681,7 +681,7 @@ class TableRowHandler:
         _button.setFixedWidth(CONFIG_BUTTON_WIDTH)
         _button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
         _button.pressed.connect(lambda key=random_key:
-                                self.parent.master_table_normalization_placzek_button_pressed(key))
+                                self.main_window.master_table_normalization_placzek_button_pressed(key))
         _master_table_row_ui['normalization']['placzek_button'] = _button
         _button.setVisible(False)
         _layout.addWidget(_widget1)
@@ -691,7 +691,7 @@ class TableRowHandler:
         _default_value = 'None'
         _widget1.currentIndexChanged.connect( lambda value=_default_value,
                                               key=random_key:
-                                              self.parent.master_table_normalization_inelastic_correction_changed(value, key))
+                                              self.main_window.master_table_normalization_inelastic_correction_changed(value, key))
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
         self.table_ui.setCellWidget(row, column, _widget)
@@ -701,12 +701,12 @@ class TableRowHandler:
 
         ## recap
 
-        self.parent.master_table_list_ui[random_key] = _master_table_row_ui
+        self.main_window.master_table_list_ui[random_key] = _master_table_row_ui
         self.unlock_signals_ui(list_ui=_list_ui_to_unlock)
-        self.parent.check_status_of_right_click_buttons()
+        self.main_window.check_status_of_right_click_buttons()
 
     def formated_placzek_default(self):
-        config_placzek = self.parent.placzek_default
+        config_placzek = self.main_window.placzek_default
 
         new_format = {'order_index': config_placzek['order']['index_selected'],
                       'is_self': config_placzek['self'],
@@ -780,7 +780,7 @@ class TableRowHandler:
         return ['None']
 
     def _calculate_insert_row(self):
-        selection = self.parent.ui.h3_table.selectedRanges()
+        selection = self.main_window.processing_ui.h3_table.selectedRanges()
 
         # no row selected, new row will be the first row
         if selection == []:
