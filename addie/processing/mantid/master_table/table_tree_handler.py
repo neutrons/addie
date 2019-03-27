@@ -993,9 +993,9 @@ class TableConfig:
             block_h2 = False
             block_h3 = False
 
-        self.top.h1_header_table.blockSignals(block_h1)
-        self.top.h2_header_table.blockSignals(block_h2)
-        self.top.h3_header_table.blockSignals(block_h3)
+        self.main_window.h1_header_table.blockSignals(block_h1)
+        self.main_window.h2_header_table.blockSignals(block_h2)
+        self.main_window.h3_header_table.blockSignals(block_h3)
 
     def disconnect_table_ui(self, block_all=True,
                             unblock_all=False,

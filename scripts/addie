@@ -457,7 +457,7 @@ class MainWindow(QMainWindow):
 
     def save_raw_config(self):
         '''this will allow the user to reset the full table and get it back in its initial state'''
-        o_current_table_config = TableConfig(parent=self)
+        o_current_table_config = TableConfig(main_window=self)
         current_config = o_current_table_config.get_current_config()
 
         inside_dict = OrderedDict()
@@ -2583,7 +2583,7 @@ class MainWindow(QMainWindow):
     # master table
     def personalization_table_clicked(self):
         _ = TableTreeHandler(parent=self)
-        _table_config = TableConfig(parent=self)
+        _table_config = TableConfig(main_window=self)
         current_config = _table_config.get_current_config()
         _table_config.update_tree_dict_and_tree(config_to_load=current_config)
 
@@ -2618,7 +2618,7 @@ class MainWindow(QMainWindow):
         h2_dict = config_to_load['h2']
         h3_dict = config_to_load['h3']
 
-        o_table = TableConfig(parent=self)
+        o_table = TableConfig(main_window=self)
         o_table.disconnect_table_ui()
 
         for _col in h1_dict:
@@ -2734,7 +2734,7 @@ class MainWindow(QMainWindow):
     def tree_item_changed(self, item, _):
         """this will change the way the big table will look like by hidding or showing columns"""
 
-        o_table = TableConfig(parent=self)
+        o_table = TableConfig(main_window=self)
         o_table.block_table_header_ui(block_all=False,
                                       block_h1=True,
                                       block_h2=True)
