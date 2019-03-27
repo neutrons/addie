@@ -234,7 +234,7 @@ class RowsHandler(SelectionHandlerMaster):
 
             row = list_row[0]
 
-        _table_ui = self.parent.ui.h3_table
+        _table_ui = self.table_ui
         nbr_col = _table_ui.columnCount()
         _row_selection = QTableWidgetSelectionRange(row, 0, row, nbr_col-1)
         _table_ui.setRangeSelected(_row_selection, True)
@@ -275,7 +275,7 @@ class RowsHandler(SelectionHandlerMaster):
         if row is None:
             list_to_row = self.o_selection.get_list_row()
             _first_row = list_to_row[0]
-            for _row in list_to_row:
+            for _ in list_to_row:
                 self.remove(row=_first_row)
         else:
             #self.table_ui.blockSignals(True)

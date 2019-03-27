@@ -755,7 +755,7 @@ class H3TableHandler:
 
     def rows_duplicate(self):
         '''duplicate currently selected rows'''
-        o_table_row = TableRowHandler(parent=self.main_window)
+        o_table_row = TableRowHandler(main_window=self.main_window)
         o_table_row.insert_blank_row()
         o_row = RowsHandler(parent=self.main_window)
         row_selected = o_row.o_selection.top_row
