@@ -16,11 +16,6 @@ from qtpy import QtGui
 from qtpy.QtWidgets import (QApplication, QFileDialog, QMainWindow, QMessageBox, QTableWidgetItem, QVBoxLayout)
 
 from addie import __version__
-
-#import addie.ui_mainWindow
-#import addie.ui_table_tree
-#import addie.step1
-#import addie.step2
 from addie.initialization.configuration import ConfigurationInitializer
 from addie.utilities.general import get_ucams
 from addie.utilities import load_ui
@@ -622,6 +617,7 @@ class MainWindow(QMainWindow):
 
         # get the line ID, color, and marker
         plot_id_list, color, marker = ps.get_plots_color_marker(self, plot_label_list=plot_id_label_list)
+        print('"{}" "{}" "{}"'.format(plot_id_list, color, marker))
         if plot_id_list is None:
             # operation is cancelled by user
             pass
@@ -931,15 +927,16 @@ class MainWindow(QMainWindow):
 
         return
 
-    def plot_bragg(self, bragg_ws_list,  clear_canvas=False):
+    def plot_bragg(self, ws_list, bankIds, clear_canvas=False):
         """
         Parameters
         ----------
-        bragg_ws_list: list of (single spectrum) Bragg workspace
+        ws_list: list of (single spectrum) Bragg workspace
+        bankIds: list of bank ids to plot
         clear_canvas
         """
         # check
-        assert isinstance(bragg_ws_list, list)
+        assert isinstance(ws_list, list)
 
         # clear canvas if necessary
         if clear_canvas:
@@ -947,37 +944,19 @@ class MainWindow(QMainWindow):
 
         # get unit
         curr_unit = self._currBraggXUnit
-        # curr_unit = str(self.ui.comboBox_xUnit.currentText())
-        # if curr_unit == 'Q':
-        #     curr_unit =
+
+        # set the bank to be checked
+        for bank in bankIds:
+            self._braggBankWidgets[bank].setChecked(True)
 
         # plot all workspsaces
-        for bragg_ws_name in bragg_ws_list:
-            # get the last section of the workspace name: _bank%d
-            postfix = bragg_ws_name.split('_')[-1]
+        plot_data_dict = dict()
+        for bragg_ws_name in ws_list:
+            # construct dictionary for plotting
+            plot_data_dict[bragg_ws_name] = bankIds  # self._myController.get_bank_numbers(ws_group)
 
-            if postfix.startswith('bank') and 0 <= int(postfix.split('bank')[1]) <= 6:
-                # belonged to a Bragg-workspace-group
-                ws_group = bragg_ws_name.split('_%s' % postfix)[0] + '_group'
-                bank_id = int(bragg_ws_name.split('bank')[1])
-
-                # construct dictionary for plotting
-                plot_data_dict = dict()
-                plot_data_dict[ws_group] = self._myController.get_bank_numbers(ws_group)
-
-                # set the bank to be checked
-                self._braggBankWidgets[bank_id].setChecked(True)
-
-                # plot
-                self.ui.graphicsView_bragg.plot_banks(plot_data_dict, curr_unit)
-
-            else:
-                # plot arbitrary data
-                # print '[DB] Switch to multi-GSAS mode.  Re-plot {0}'.format(bragg_ws_name)
-                vec_x, vec_y, vec_e = self._myController.get_ws_data(bragg_ws_name)
-                self.ui.graphicsView_bragg.plot_general_ws(bragg_ws_name)
-
-        return
+        # plot
+        self.ui.graphicsView_bragg.plot_banks(plot_data_dict, curr_unit)
 
     def plot_gr(self, ws_name, line_color, line_style, line_marker, line_alpha, line_label,
                 auto=False):
@@ -998,7 +977,7 @@ class MainWindow(QMainWindow):
             # a new g(r) plot
             if auto:
                 line_color, line_style, line_alpha = self._pdfColorManager.get_gr_line(ws_name)
- 
+
              # plot G(R)
             self.ui.graphicsView_gr.plot_gr(ws_name, ws_name, plotError=False,
                                             color=line_color, style=line_style, marker=line_marker,
@@ -1570,13 +1549,9 @@ class MainWindow(QMainWindow):
                 status, ws_name_list = self.ui.treeWidget_braggWSList.get_current_main_nodes()
                 if not status:
                     raise RuntimeError(str(ws_name_list))
-                else:
-                    plot_ws_name = ws_name_list[0]
 
             # plot
-            plot_ws_name = plot_ws_name.split('_group')[0]
-            bragg_bank_ws = '%s_bank%d' % (plot_ws_name, to_plot_bank_list[0])
-            self.plot_bragg(bragg_ws_list=[bragg_bank_ws], clear_canvas=True)
+            self.plot_bragg(ws_list=[ws_name_list[0]], bankIds=to_plot_bank_list, clear_canvas=True)
 
         else:
             # multiple GSAS mode. as currently there is one GSAS file that is plot, then the first bank
@@ -1590,6 +1565,8 @@ class MainWindow(QMainWindow):
             # else:
             # choose first bank
             bank_on_canvas = to_plot_bank_list[0]
+            wkspaces = self.ui.treeWidget_braggWSList.get_main_nodes()
+            wkspaces.remove('workspaces')  # can't plot that
 
             # disable all the banks except the one to plot. Notice the mutex must be on
             self._noEventBankWidgets = True
@@ -1599,9 +1576,7 @@ class MainWindow(QMainWindow):
             self._noEventBankWidgets = False
 
             # plot
-            plot_ws_name = on_canvas_ws_list[0]
-            bragg_bank_ws = '%s_bank%d' % (plot_ws_name, bank_on_canvas)
-            self.plot_bragg(bragg_ws_list=[bragg_bank_ws], clear_canvas=True)
+            self.plot_bragg(ws_list=wkspaces, bankIds=[bank_on_canvas], clear_canvas=True)
 
             # set
             self._onCanvasGSSBankList = [bank_on_canvas]
@@ -2023,39 +1998,18 @@ class MainWindow(QMainWindow):
         assert isinstance(gss_group_name, str), 'GSS workspace group name is expected to be a string, but not' \
             ' %s.' % str(type(gss_group_name))
 
-        # rule out the unsupported situation
-        assert gss_group_name.endswith('_group'), 'GSAS workspace group\' name must be ends with _group, ' \
-            'but not as %s.' % gss_group_name
-        root_ws_name = gss_group_name.split('_group')[0]
+        # get the banks to plot - change to workspace index
+        selected_banks = self.get_bragg_banks_selected()
 
         # process
-        if self.ui.radioButton_multiBank.isChecked():
-            # single-GSS/multi-bank mode
+        if self.ui.radioButton_multiBank.isChecked():  # single-GSS/multi-bank mode
             # reset canvas
             self.ui.graphicsView_bragg.reset()
-
-            # get the banks to plot
-            selected_banks = self.get_bragg_banks_selected()
-
-            bragg_ws_list = ['%s_bank%d' % (root_ws_name, bank_id) for bank_id in selected_banks]
-            self.plot_bragg(bragg_ws_list=bragg_ws_list, clear_canvas=False)
-
-        else:
-            # multiple-GSS/single-bank mode
-            # canvas is not be reset
-
-            # get the bank to plot
-            selected_banks = self.get_bragg_banks_selected()
+        else:  # multiple-GSS/single-bank mode
+            # canvas is not reset
             assert len(selected_banks) <= 1, 'At most 1 bank can be plot in multiple-GSS mode.'
 
-            # form the workspace
-            bragg_ws = '%s_bank%d' % (root_ws_name, selected_banks[0])
-
-            self.plot_bragg(bragg_ws_list=[bragg_ws], clear_canvas=False)
-
-        # END-IF-ELSE
-
-        return
+        self.plot_bragg(ws_list=[gss_group_name], bankIds=selected_banks, clear_canvas=False)
 
     def set_ipython_script(self, script):
         """
@@ -2838,10 +2792,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='ADvanced DIffraction Environment')
     parser.add_argument('--version', action='version', version='%(prog)s version {}'.format(__version__))
     parser.add_argument('--mode', type=str, default='mantid',
-			help='Set processing mode (default=%(default)s)', choices=['mantid', 'idl'])
+                        help='Set processing mode (default=%(default)s)', choices=['mantid', 'idl'])
 
-    try:
-        # set up bash completion as a soft dependency
+    try:  # set up bash completion as a soft dependency
         import argcomplete  # noqa
         argcomplete.autocomplete(parser)
     except ImportError:
