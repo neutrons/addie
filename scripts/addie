@@ -347,6 +347,7 @@ class MainWindow(QMainWindow):
         self.post_processing = processing_mode  # mantid or 'idl'
 
 
+        self.ucams = get_ucams()
 
         return
 
@@ -453,7 +454,6 @@ class MainWindow(QMainWindow):
             for _row in np.arange(10):
                 o_row.insert_row(row=_row)
 
-        self.ucams = get_ucams()
 
     def save_raw_config(self):
         '''this will allow the user to reset the full table and get it back in its initial state'''
