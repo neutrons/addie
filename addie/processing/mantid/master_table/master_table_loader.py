@@ -256,7 +256,7 @@ class JsonLoader:
                 self.parent.output_folder = output_dir
 
                 calibration_file = str(_source_row_entry["Calibration"])
-                self.parent.ui.calibration_file.setText(calibration_file)
+                self.parent.processing_ui.calibration_file.setText(calibration_file)
 
                 intermediate_grouping_file = str(_source_row_entry["Merging"]["Grouping"]["Initial"])
                 if not (intermediate_grouping_file == ''):
@@ -572,6 +572,7 @@ class TableFileLoader:
 
     def display_dialog(self):
 
+#        try:
         # if extension is csv, use ascii loader
         if FileHandler.is_file_correct_extension(filename=self.filename, ext_requested='csv'): # ascii file
             o_loader = AsciiLoader(parent=self.parent, filename=self.filename)
@@ -582,13 +583,23 @@ class TableFileLoader:
         else:
             raise IOError("File format not supported!".format(self.filename))
 
+        # except ValueError:
+        #     self.parent.ui.statusbar.setStyleSheet("color: red")
+        #     self.parent.ui.statusbar.showMessage("Unable to load configuration file {}!".format(self.filename),
+        #                                          self.parent.statusbar_display_time)
+        # except TypeError:
+        #     self.parent.ui.statusbar.setStyleSheet("color: red")
+        #     self.parent.ui.statusbar.showMessage("Error while trying to load file {}!".format(self.filename),
+        #                                          self.parent.statusbar_display_time)
+
+
 
 class FromDictionaryToTableUi:
     '''This class will take a dictionary especially designed for the master table to fill all the rows and cells'''
 
     def __init__(self, parent=None):
         self.parent = parent
-        self.table_ui = self.parent.ui.h3_table
+        self.table_ui = self.parent.processing_ui.h3_table
 
     def fill(self, input_dictionary={}):
 
@@ -597,7 +608,7 @@ class FromDictionaryToTableUi:
             # input_dictionary = _dictionary_test
             return
 
-        o_table = TableRowHandler(parent=self.parent)
+        o_table = TableRowHandler(main_window=self.parent)
 
         for _row_entry in input_dictionary.keys():
             o_table.insert_row(row=_row_entry)

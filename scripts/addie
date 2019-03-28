@@ -325,7 +325,7 @@ class MainWindow(QMainWindow):
 
         # Initialize the UI widgets
         self.ui = load_ui('mainWindow.ui', baseinstance=self)
-        #self._promote_widgets()
+        self._promote_widgets()
 
         # Mantid processing tab
         self.processing_tab_widget = QWidget()
@@ -334,31 +334,25 @@ class MainWindow(QMainWindow):
         splitui_processing_tab_initialization.run(main_window=self)
         splitui_processing_tab_events_handler.run(main_window=self)
 
-        # Rietveld  tab
-        self.rietveld_tab_widget = QWidget()
-        self.rietveld_ui = load_ui('splitui_rietveld_tab.ui', baseinstance=self.rietveld_tab_widget)
-        self.ui.main_tab.insertTab(3, self.rietveld_tab_widget, "Rietveld")
-
-
+        # # Rietveld  tab
+        # self.rietveld_tab_widget = QWidget()
+        # self.rietveld_ui = load_ui('splitui_rietveld_tab.ui', baseinstance=self.rietveld_tab_widget)
+        # self.ui.main_tab.insertTab(3, self.rietveld_tab_widget, "Rietveld")
 
         self.init_parameters()
         self.set_default_folders_path()
         # Set the post-processing mode
         self.post_processing = processing_mode  # mantid or 'idl'
 
-
         self.ucams = get_ucams()
 
-        return
-
-        #self.ui.graphicsView_sq.set_main(self)
-
+        #elf.ui.graphicsView_sq.set_main(self)
 
         # set widgets
         self._init_widgets()
         InitStep1(parent=self)
         InitStep2(parent=self)
-        self.init_master_table()
+        #self.init_master_table()
 
         # define the event handling methods
         #self.ui.mantid_run_reduction.clicked.connect(self.do_mantid_run_reduction)

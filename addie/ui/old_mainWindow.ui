@@ -59,7 +59,7 @@
          <x>0</x>
          <y>0</y>
          <width>1691</width>
-         <height>941</height>
+         <height>943</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -85,7 +85,7 @@
                </size>
               </property>
               <property name="currentIndex">
-               <number>2</number>
+               <number>3</number>
               </property>
               <widget class="QWidget" name="tab_5">
                <attribute name="title">
@@ -5259,7 +5259,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>1711</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
    <property name="sizePolicy">
