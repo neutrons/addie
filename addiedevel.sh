@@ -16,7 +16,17 @@ else
     CMD="$(command -v mantidpython) --classic"
 fi
 
-PYTHON_VERSION=`$CMD -c 'import sys; version=sys.version_info[:3]; print("{0}.{1}".format(*version))'`
+# get the python version to add to the PYTHONPATH
+# the double-bracket thing isn't pure bash but will work on most os
+if [[ $CMD == *mantidpython* ]]; then
+    RAW_PYTHON=$(grep python $CMD | grep set | tail -n 1 | awk '{print $3}')
+else
+    RAW_PYTHON=$CMD
+fi
+PYTHON_VERSION=$($RAW_PYTHON -c 'import sys; version=sys.version_info[:3]; print("{0}.{1}".format(*version))')
+echo using $RAW_PYTHON version $PYTHON_VERSION
+
+# build the package
 $CMD setup.py build
 
 # launch addie
