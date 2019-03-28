@@ -1,0 +1,3 @@
+[submodule "mantid_total_scattering"]
+	path = mantid_total_scattering
+	url = https://github.com/marshallmcdonnell/mantid_total_scattering.git

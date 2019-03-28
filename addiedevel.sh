@@ -17,6 +17,11 @@ else
 fi
 
 PYTHON_VERSION=`$CMD -c 'import sys; version=sys.version_info[:3]; print("{0}.{1}".format(*version))'`
+# build mantid_total_scattering
+cd mantid_total_scattering
+$CMD setup.py build
+cd -
+# build addie
 $CMD setup.py build
 
 # launch addie

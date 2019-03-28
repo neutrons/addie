@@ -54,7 +54,15 @@ addie that way as well. After creating the virtual environment, run
 ```
 
 which will add a file, `mantid.pth` to your environment with the
-location of mantid. Then the normal
+location of mantid. Then you need to "develop" mantid_total_scattering
+
+```bash
+cd mantid_total_scattering
+python setup.py develop
+cd -
+```
+
+and finally the the normal
 
 ```bash
 python setup.py develop
