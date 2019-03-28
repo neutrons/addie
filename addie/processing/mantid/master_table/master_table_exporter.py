@@ -1,8 +1,9 @@
 from __future__ import (absolute_import, division, print_function)
 from collections import OrderedDict
 import copy
-import numpy as np
 import json
+import numpy as np
+import os
 
 from qtpy.QtCore import Qt
 
@@ -66,17 +67,36 @@ _data = {"Facility": "SNS",
 
 
 class TableFileExporter:
-
     def __init__(self, parent=None):
         self.parent = parent
         self.table_ui = parent.ui.h3_table
 
-    def export(self, filename=''):
+        # generic elements to take from the ui
+        self.facility = self.parent.facility
+        self.instrument = self.parent.instrument["short_name"]
+        self.cachedir = self.parent.cache_folder
+        self.outputdir = self.parent.output_folder
+        self.intermediate_grouping_file = self.parent.intermediate_grouping['filename']
+        self.output_grouping_file = self.parent.output_grouping['filename']
+        self.calibration = str(self.parent.ui.calibration_file.text())
+
+    def export(self, filename='', row=None):
+        '''create dictionary of all rows unless that argument is specified'''
         if not filename:
             raise RuntimeError('Cannot export data to empty filename')
 
-        dictionary = self._retrieve_row_infos()
+        # put together the data to write out
+        if row is not None:
+            dictionary = self._retrieve_row_info(row)
+        else:
+            dictionary = self._retrieve_row_infos()
 
+        # create the directory if it doesn't already exist
+        direc = os.path.dirname(filename)
+        if not os.path.exists(direc):
+            os.mkdir(direc)
+
+        # write out the configuration
         with open(filename, 'w') as outfile:
             json.dump(dictionary, outfile)
 
@@ -190,50 +210,42 @@ class TableFileExporter:
         dict_element["InelasticCorrection"]["LambdaBinningForCalc"] = "{},{},{}".format(placzek_infos["lambda_calc_min"],
                                                                                         placzek_infos["lambda_calc_delta"],
                                                                                         placzek_infos["lambda_calc_max"])
-
         return dict_element
+
+    def _retrieve_row_info(self, row):
+        activate = self._get_checkbox_state(row=row, column=0)
+        title = self._get_item_value(row=row, column=1)
+        _export_dictionary_sample = self._retrieve_element_infos(element='sample',
+                                                                 row=row)
+        _export_dictionary_normalization = self._retrieve_element_infos(element='normalization',
+                                                                        row=row)
+
+        dictionary = {'Sample': _export_dictionary_sample,
+                      'Activate': activate,
+                      'Title': title,
+                      'Calibration': self.calibration,
+                      'Normalization': _export_dictionary_normalization,
+                      'Facility': self.facility,
+                      'Instrument': self.instrument,
+                      'CacheDir': self.cachedir,
+                      'OutputDir': self.outputdir,
+                      "Merging": {"QBinning": [],
+                                  "SumBanks": [],
+                                  "Characterizations": "",
+                                  "Grouping": {"Initial": self.intermediate_grouping_file,
+                                               "Output": self.output_grouping_file,
+                                               },
+                                  },
+                      }
+        return dictionary
 
     def _retrieve_row_infos(self):
         '''this method retrieves the infos from the table using the master_table_list_ui'''
-
-        facility = self.parent.facility
-        instrument = self.parent.instrument["short_name"]
-        cachedir = self.parent.cache_folder
-        outputdir = self.parent.output_folder
-        intermediate_grouping_file = self.parent.intermediate_grouping['filename']
-        output_grouping_file = self.parent.output_grouping['filename']
-
         full_export_dictionary = OrderedDict()
         nbr_row = self.table_ui.rowCount()
 
-        for _row in np.arange(nbr_row):
-
-            activate = self._get_checkbox_state(row=_row, column=0)
-            title = self._get_item_value(row=_row, column=1)
-            _export_dictionary_sample = self._retrieve_element_infos(element='sample',
-                                                                     row=_row)
-            _export_dictionary_normalization = self._retrieve_element_infos(element='normalization',
-                                                                            row=_row)
-            _calibration = str(self.parent.ui.calibration_file.text())
-
+        for row in np.arange(nbr_row):
             # force 3 digits index (to make sure loading back the table will be done in the same order)
-            row = "{:03}".format(_row)
-            full_export_dictionary[row] = {'Sample': _export_dictionary_sample,
-                                           'Activate': activate,
-                                           'Title': title,
-                                           'Calibration': _calibration,
-                                           'Normalization': _export_dictionary_normalization,
-                                           'Facility': facility,
-                                           'Instrument': instrument,
-                                           'CacheDir': cachedir,
-                                           'OutputDir': outputdir,
-                                           "Merging": {"QBinning": [],
-                                                       "SumBanks": [],
-                                                       "Characterizations": "",
-                                                       "Grouping": {"Initial": intermediate_grouping_file,
-                                                                    "Output": output_grouping_file,
-                                                                    },
-                                                       },
-                                           }
+            full_export_dictionary["{:03}".format(row)] = self._retrieve_row_info(row)
 
         return full_export_dictionary
