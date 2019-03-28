@@ -409,7 +409,7 @@ class H3TableHandler:
         if name == '':
             name = 'undefined'
 
-        o_current_table_config = TableConfig(parent=self.main_window)
+        o_current_table_config = TableConfig(main_window=self.main_window)
         current_config = o_current_table_config.get_current_config()
 
         inside_dict = OrderedDict()
@@ -521,12 +521,6 @@ class H3TableHandler:
         table_import_from_file_append.setEnabled(
             self.main_window.master_table_right_click_buttons['import_from_file_append']['status'])
 
-        # table_import = table.addAction("Import & Replace ...")
-        # self.parent.master_table_right_click_buttons['import']['ui'] = table_import
-        # table_append = table.addAction("Import & Append ...")
-        # self.parent.master_table_right_click_buttons['append']['ui'] = table_append
-        # table_append.setEnabled(self.parent.master_table_right_click_buttons['append']['status'])
-        #
         table_export = table.addAction("Export ...")
         self.main_window.master_table_right_click_buttons['export']['ui'] = table_export
         table_export.setEnabled(self.main_window.master_table_right_click_buttons['export']['status'])
@@ -534,9 +528,12 @@ class H3TableHandler:
         table_clear = table.addAction("Clear")
         self.main_window.master_table_right_click_buttons['clear']['ui'] = table_clear
         table_clear.setEnabled(self.main_window.master_table_right_click_buttons['clear']['status'])
-        table_reset = table.addAction("Reset Format")
-        self.main_window.master_table_right_click_buttons['reset']['ui'] = table_reset
-        table_reset.setEnabled(self.main_window.master_table_right_click_buttons['reset']['status'])
+
+        # remove from now, waiting on user feedback to see if this is really necessary
+        table_reset = None
+        #table_reset = table.addAction("Reset Format")
+        #self.main_window.master_table_right_click_buttons['reset']['ui'] = table_reset
+        #table_reset.setEnabled(self.main_window.master_table_right_click_buttons['reset']['status'])
 
         # configuration
         config = menu.addMenu("Columns Configuration")
