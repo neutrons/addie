@@ -67,29 +67,22 @@ _data = {"Facility": "SNS",
 
 class TableFileExporter:
 
-    def __init__(self, parent=None, filename=''):
+    def __init__(self, parent=None):
         self.parent = parent
         self.table_ui = parent.ui.h3_table
-        self.filename = filename
 
-    def create_dictionary(self):
-        '''using the general infos, and the one from each row, this method creates the master
-        dictionary that will be saved into a json file'''
+    def export(self, filename=''):
+        if not filename:
+            raise RuntimeError('Cannot export data to empty filename')
 
-        self.dict = self._retrieve_row_infos()
-
-    def export(self):
-        dict = self.dict
-        filename = self.filename
+        dictionary = self._retrieve_row_infos()
 
         with open(filename, 'w') as outfile:
-            json.dump(dict, outfile)
+            json.dump(dictionary, outfile)
 
     def _get_checkbox_state(self, row=-1, column=-1):
         state = self.table_ui.cellWidget(row, column).children()[1].checkState()
-        if state == Qt.Checked:
-            return True
-        return False
+        return state == Qt.Checked
 
     def _get_item_value(self, row=-1, column=-1):
         item = str(self.table_ui.item(row, column).text())

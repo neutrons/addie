@@ -879,10 +879,8 @@ class H3TableHandler:
             _file_handler.check_file_extension(ext_requested='json')
             _table_file = _file_handler.filename
 
-            o_export = TableFileExporter(parent=self.parent,
-                                         filename=_table_file)
-            o_export.create_dictionary()
-            o_export.export()
+            o_export = TableFileExporter(parent=self.parent)
+            o_export.export(_table_file)
 
             self.parent.ui.statusbar.setStyleSheet("color: blue")
             self.parent.ui.statusbar.showMessage("Table has been exported in file {}".format(_table_file),
