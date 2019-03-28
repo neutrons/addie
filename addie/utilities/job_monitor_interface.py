@@ -58,7 +58,7 @@ class JobMonitorInterface(QMainWindow):
 
             # action
             _pid = _row_job['pid']
-            process = psutil.Process(_pid)
+            process = psutil.Process(_pid)  # TODO check status result
             if not process.is_running():
                 _item = QTableWidgetItem("Done!")
                 self.ui.tableWidget.setItem(_row, 2, _item)
