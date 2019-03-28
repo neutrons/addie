@@ -100,6 +100,19 @@ class TableFileExporter:
         with open(filename, 'w') as outfile:
             json.dump(dictionary, outfile)
 
+    def isActive(self, row):
+        # column 0 is 'Activate'
+        return self._get_checkbox_state(row=row, column=0)
+
+    def getRunNumbers(self, row):
+        runnumbers = self._get_item_value(row=row, column=SAMPLE_FIRST_COLUMN)
+        if not runnumbers:
+            return []
+
+        # TODO will break with hyphens '-'
+        runnumbers = [int(item) for item in runnumbers.split(',')]
+        return runnumbers
+
     def _get_checkbox_state(self, row=-1, column=-1):
         state = self.table_ui.cellWidget(row, column).children()[1].checkState()
         return state == Qt.Checked
@@ -244,7 +257,7 @@ class TableFileExporter:
         full_export_dictionary = OrderedDict()
         nbr_row = self.table_ui.rowCount()
 
-        for row in np.arange(nbr_row):
+        for row in range(nbr_row):
             # force 3 digits index (to make sure loading back the table will be done in the same order)
             full_export_dictionary["{:03}".format(row)] = self._retrieve_row_info(row)
 
