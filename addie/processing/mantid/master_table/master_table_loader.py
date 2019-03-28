@@ -572,25 +572,25 @@ class TableFileLoader:
 
     def display_dialog(self):
 
-#        try:
-        # if extension is csv, use ascii loader
-        if FileHandler.is_file_correct_extension(filename=self.filename, ext_requested='csv'): # ascii file
-            o_loader = AsciiLoader(parent=self.parent, filename=self.filename)
-            o_loader.show_dialog()
-        elif FileHandler.is_file_correct_extension(filename=self.filename, ext_requested='json'): # json file
-            o_loader = JsonLoader(parent=self.parent, filename=self.filename)
-            o_loader.load()
-        else:
-            raise IOError("File format not supported!".format(self.filename))
+        try:
+            # if extension is csv, use ascii loader
+            if FileHandler.is_file_correct_extension(filename=self.filename, ext_requested='csv'): # ascii file
+                o_loader = AsciiLoader(parent=self.parent, filename=self.filename)
+                o_loader.show_dialog()
+            elif FileHandler.is_file_correct_extension(filename=self.filename, ext_requested='json'): # json file
+                o_loader = JsonLoader(parent=self.parent, filename=self.filename)
+                o_loader.load()
+            else:
+                raise IOError("File format not supported!".format(self.filename))
 
-        # except ValueError:
-        #     self.parent.ui.statusbar.setStyleSheet("color: red")
-        #     self.parent.ui.statusbar.showMessage("Unable to load configuration file {}!".format(self.filename),
-        #                                          self.parent.statusbar_display_time)
-        # except TypeError:
-        #     self.parent.ui.statusbar.setStyleSheet("color: red")
-        #     self.parent.ui.statusbar.showMessage("Error while trying to load file {}!".format(self.filename),
-        #                                          self.parent.statusbar_display_time)
+        except ValueError:
+            self.parent.ui.statusbar.setStyleSheet("color: red")
+            self.parent.ui.statusbar.showMessage("Unable to load configuration file {}!".format(self.filename),
+                                                 self.parent.statusbar_display_time)
+        except TypeError:
+            self.parent.ui.statusbar.setStyleSheet("color: red")
+            self.parent.ui.statusbar.showMessage("Error while trying to load file {}!".format(self.filename),
+                                                 self.parent.statusbar_display_time)
 
 
 
