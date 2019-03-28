@@ -18,7 +18,7 @@ fi
 
 # get the python version to add to the PYTHONPATH
 # the double-bracket thing isn't pure bash but will work on most os
-if [[ $CMD == *mantidpython* ]]; then
+if [ "$CMD" == "*mantidpython*" ]; then
     RAW_PYTHON=$(grep python $CMD | grep set | tail -n 1 | awk '{print $3}')
 else
     RAW_PYTHON=$CMD
