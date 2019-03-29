@@ -15,9 +15,6 @@ from addie.utilities.set import Set
 from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
 from addie.processing.mantid.master_table.utilities import LoadGroupingFile
 
-
-#from addie.ui_list_of_scan_loader_dialog import Ui_Dialog as UiDialog
-
 # init test dictionary (to test loader
 _dictionary_test = OrderedDict()
 _mass_density_dict = {"mass_density": {"value": "N/A",
