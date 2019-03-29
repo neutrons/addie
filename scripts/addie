@@ -474,14 +474,6 @@ class MainWindow(QMainWindow):
                                                     instrument_short_name,
                                                     config_characterization_file["post"])
 
-    # def init_master_table(self):
-    #     o_table = TableInitialization(parent=self)
-    #     #o_table.init_master_table()
-    #     #o_table.init_signals()
-    #     # TODO should load existing json configuration into the table
-    #
-    #     #self.ui.pushButton_launchReduction.clicked.connect(self.run_mantid)
-
     def _promote_widgets(self):
         # frame_graphicsView_bragg
         graphicsView_layout = QVBoxLayout()
@@ -524,12 +516,6 @@ class MainWindow(QMainWindow):
         Returns
         -------
         """
-
-        #init_size_splitter = self.ui.splitter.size()
-        #self.init_size_splitter_height = init_size_splitter.height()
-        #init_width = self.size()
-        #self.init_width = init_width.width()
-
         self.ui.splitter.setStyleSheet("""
             QSplitter::handle {
                image: url(':/MPL Toolbar/splitter_icon.png');
@@ -2256,7 +2242,7 @@ class MainWindow(QMainWindow):
         self.check_step1_gui()
 
     def run_mantid(self):
-        num_rows = self.ui.h3_table.rowCount()
+        num_rows = self.processing_ui.h3_table.rowCount()
         if num_rows <= 0:
             raise RuntimeError('Cannot export empty table')
 
@@ -2268,10 +2254,8 @@ class MainWindow(QMainWindow):
         print('writing out full table to "{}"'.format(full_reduction_filename))
         exporter.export(full_reduction_filename)
 
-        outputdir = os.path.abspath(self.output_folder)
-        instrument = self.instrument['short_name']
-
         # write out the individual rows to files
+        outputdir = os.path.abspath(self.output_folder)
         filenames = []
         for row in range(num_rows):
             if not exporter.isActive(row):

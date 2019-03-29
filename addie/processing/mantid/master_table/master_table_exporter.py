@@ -78,7 +78,7 @@ class TableFileExporter:
         self.outputdir = self.parent.output_folder
         self.intermediate_grouping_file = self.parent.intermediate_grouping['filename']
         self.output_grouping_file = self.parent.output_grouping['filename']
-        self.calibration = str(self.parent.ui.calibration_file.text())
+        self.calibration = str(self.parent.processing_ui.calibration_file.text())
 
     def export(self, filename='', row=None):
         '''create dictionary of all rows unless that argument is specified'''
