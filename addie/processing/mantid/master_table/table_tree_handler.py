@@ -810,7 +810,7 @@ class H3TableHandler:
             except IOError as err:
                 self.main_window.ui.statusbar.setStyleSheet("color: red")
                 self.main_window.ui.statusbar.showMessage(err.message,
-                                                     self.main_window.statusbar_display_time)
+                                                          self.main_window.statusbar_display_time)
                 return
 
             o_dict.display_dialog()
@@ -834,7 +834,7 @@ class H3TableHandler:
 
             self.main_window.ui.statusbar.setStyleSheet("color: blue")
             self.main_window.ui.statusbar.showMessage("Table has been exported in file {}".format(_table_file),
-                                                 self.main_window.statusbar_display_time)
+                                                      self.main_window.statusbar_display_time)
 
     def insert_row_run_number(self):
         '''insert row using run number information and OnCat'''

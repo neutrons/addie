@@ -117,9 +117,7 @@ class TransferH3TableWidgetState(SelectionHandlerMaster):
     def __init__(self, parent=None):
         SelectionHandlerMaster.__init__(self, parent=parent)
 
-
     def transfer_states(self, from_key=None, data_type='sample'):
-
         selection = self.table_ui.selectedRanges()
         o_selection = SelectionHandler(selection)
 

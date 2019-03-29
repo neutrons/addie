@@ -624,7 +624,7 @@ class TableRowHandler:
         _verti_widget.setLayout(_verti_layout)
 
         _set_dimensions_button.pressed.connect(lambda key=random_key:
-                                               self.main_window.master_table_normalization_dimensions_setter_button_pressed(key))
+                                               self.main_window.master_table_normalization_dimensions_setter_button_pressed(key))  # noqa
 
         self.table_ui.setCellWidget(row, column, _verti_widget)
 
@@ -635,7 +635,7 @@ class TableRowHandler:
         _widget = QComboBox()
         _widget.currentIndexChanged.connect(lambda value=list_abs_correction[0],
                                             key=random_key:
-                                            self.main_window.master_table_normalization_abs_correction_changed(value, key))
+                                            self.main_window.master_table_normalization_abs_correction_changed(value, key))  # noqa
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
         for _item in list_abs_correction:
@@ -691,7 +691,7 @@ class TableRowHandler:
         _default_value = 'None'
         _widget1.currentIndexChanged.connect( lambda value=_default_value,
                                               key=random_key:
-                                              self.main_window.master_table_normalization_inelastic_correction_changed(value, key))
+                                              self.main_window.master_table_normalization_inelastic_correction_changed(value, key))  # noqa
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
         self.table_ui.setCellWidget(row, column, _widget)
