@@ -103,8 +103,8 @@ from addie.calculate_gr.sofqview import SofQView
 
 from addie.icons import icons_rc
 
-from addie.initialization import splitui_processing_tab as processing_tab_initialization
-from addie.events_handler import processing_tab as splitui_processing_tab_events_handler
+from addie.initialization import processing_tab as processing_tab_initialization
+from addie.events_handler import processing_tab as processing_tab_events_handler
 
 DEBUG = False
 
