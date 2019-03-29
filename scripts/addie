@@ -2244,19 +2244,47 @@ class MainWindow(QMainWindow):
         self.check_step1_gui()
 
     def run_mantid(self):
+        num_rows = self.ui.h3_table.rowCount()
+        if num_rows <= 0:
+            raise RuntimeError('Cannot export empty table')
+
+        exporter = MantidTableExporter(parent=self)
+
+        # write out the full table to disk
         # TODO make a class level name so it can be reused
-        filename = os.path.join(os.path.expanduser('~'), '.mantid', 'addie.json')
+        full_reduction_filename = os.path.join(os.path.expanduser('~'), '.mantid', 'addie.json')
+        print('writing out full table to "{}"'.format(full_reduction_filename))
+        exporter.export(full_reduction_filename)
 
-        # TODO should go to console as well
-        print('writing out table to "{}"'.format(filename))
-        # maybe this way
-        exporter = MantidTableExporter(parent=self, filename=filename)
-        exporter.create_dictionary()
-        exporter.export()
+        outputdir = os.path.abspath(self.output_folder)
+        instrument = self.instrument['short_name']
 
-        # TODO should do the real thing rather than print a message
-        # self.launch_job_manager(job_name='mantid', script_to_run=TODO)
-        print('supposed to run mantid now')
+        # write out the individual rows to files
+        filenames = []
+        for row in range(num_rows):
+            if not exporter.isActive(row):
+                print('skipping row {} - inactive'.format(row + 1))  # REMOVE?
+                continue
+            runnumbers = exporter.getRunNumbers(row)
+            if not runnumbers:
+                print('skipping row {} - no run number'.format(row + 1))  # REMOVE?
+            filename = os.path.join(outputdir, '{}_{}.json'.format(instrument, runnumbers[0]))
+
+            print('writing row {} to "{}"'.format(0 + 1, filename))  # TODO should be debug logging
+            exporter.export(filename, row)
+            filenames.append(filename)
+        if len(filenames) == 0:
+            raise RuntimeError('None of the rows were activated')
+
+        # TODO should allow for prefixing with mantidpython
+        # TODO figure out how to launch the jobs in serial
+        # TODO mantid_total_scattering.py should not be assumed to be in the PATH
+        for filename in filenames:
+            cmd = 'mantid_total_scattering.py {}'.format(filename)
+            name = os.path.basename(filename).replace('.json', '')
+            print('>>>>>>>>>> Starting reduction <<<<<<<<<<')
+            print(cmd)
+            self.launch_job_manager(job_name=name, script_to_run=cmd)
 
     def check_step1_gui(self):
         '''check the status of the step1 GUI in order to enable or not the GO BUTTON at the bottom'''
