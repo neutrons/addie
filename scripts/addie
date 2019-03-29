@@ -2265,10 +2265,10 @@ class MainWindow(QMainWindow):
             if not exporter.isActive(row):
                 print('skipping row {} - inactive'.format(row + 1))  # REMOVE?
                 continue
-            runnumbers = exporter.getRunNumbers(row)
-            if not runnumbers:
-                print('skipping row {} - no run number'.format(row + 1))  # REMOVE?
-            filename = os.path.join(outputdir, '{}_{}.json'.format(instrument, runnumbers[0]))
+            filename = '{}.json'.format(exporter.getRunDescr(row))
+            if not filename:
+                print('skipping row {} - no run number(s)'.format(row + 1))  # REMOVE?
+            filename = os.path.join(outputdir, filename)
 
             print('writing row {} to "{}"'.format(0 + 1, filename))  # TODO should be debug logging
             exporter.export(filename, row)
@@ -2276,11 +2276,21 @@ class MainWindow(QMainWindow):
         if len(filenames) == 0:
             raise RuntimeError('None of the rows were activated')
 
+        # locate total scattering script
+        here = os.path.abspath(os.path.dirname(__file__))
+        mantid_ts_script = None
+        for direc in [here, os.path.join(here, '..', 'mantid_total_scattering', 'bin')]:
+            candidate = os.path.abspath(os.path.join(direc, 'mantid_total_scattering.py'))
+            if os.path.exists(candidate):
+                mantid_ts_script = candidate
+                break
+        if not mantid_ts_script:
+            raise RuntimeError('Failed to find mantid_total_scattering.py')
+
         # TODO should allow for prefixing with mantidpython
         # TODO figure out how to launch the jobs in serial
-        # TODO mantid_total_scattering.py should not be assumed to be in the PATH
         for filename in filenames:
-            cmd = 'mantid_total_scattering.py {}'.format(filename)
+            cmd = '{} {}'.format(mantid_ts_script, filename)
             name = os.path.basename(filename).replace('.json', '')
             print('>>>>>>>>>> Starting reduction <<<<<<<<<<')
             print(cmd)
