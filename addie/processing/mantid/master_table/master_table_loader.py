@@ -590,7 +590,6 @@ class TableFileLoader:
                                                  self.parent.statusbar_display_time)
 
 
-
 class FromDictionaryToTableUi:
     '''This class will take a dictionary especially designed for the master table to fill all the rows and cells'''
 

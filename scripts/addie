@@ -103,10 +103,8 @@ from addie.calculate_gr.sofqview import SofQView
 
 from addie.icons import icons_rc
 
-from addie.initialization import splitui_processing_tab as splitui_processing_tab_initialization
-from addie.events_handler import splitui_processing_tab as splitui_processing_tab_events_handler
-
-
+from addie.initialization import splitui_processing_tab as processing_tab_initialization
+from addie.events_handler import processing_tab as splitui_processing_tab_events_handler
 
 DEBUG = False
 
@@ -331,8 +329,8 @@ class MainWindow(QMainWindow):
         self.processing_tab_widget = QWidget()
         self.processing_ui = load_ui('splitui_processing_tab.ui', baseinstance=self.processing_tab_widget)
         self.ui.main_tab.insertTab(2, self.processing_tab_widget, "Processing")
-        splitui_processing_tab_initialization.run(main_window=self)
-        splitui_processing_tab_events_handler.run(main_window=self)
+        processing_tab_initialization.run(main_window=self)
+        processing_tab_events_handler.run(main_window=self)
 
         # # Rietveld  tab
         # self.rietveld_tab_widget = QWidget()
@@ -1019,7 +1017,7 @@ class MainWindow(QMainWindow):
             # a new g(r) plot
             if auto:
                 line_color, line_style, line_alpha = self._pdfColorManager.get_gr_line(ws_name)
- 
+
              # plot G(R)
             self.ui.graphicsView_gr.plot_gr(ws_name, vec_r, vec_g, vec_ge, False,
                                             line_color, line_style, line_marker, line_alpha, line_label)

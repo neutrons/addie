@@ -14,8 +14,3 @@ def run(main_window=None):
     o_table = TableInitialization(main_window=main_window)
     o_table.init_master_table()
     o_table.init_signals()
-
-
-
-
-
