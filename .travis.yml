@@ -55,6 +55,12 @@ script:
   - xvfb-run --server-args="-screen 0 640x480x24" --auto-servernum mantidworkbench --help
   - echo "import time;time.sleep(5)" > workbenchshutdown.py
   - xvfb-run --server-args="-screen 0 640x480x24" --auto-servernum mantidworkbench -q -x workbenchshutdown.py
+  # install mantid_total_scattering
+  - cd mantid_total_scattering
+  - python setup.py install
+  - which mantid_total_scattering.py
+  - cd -
+  # run the unit tests
   - python setup.py test
   # install addie
   - python setup.py install
