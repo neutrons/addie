@@ -104,14 +104,11 @@ class TableFileExporter:
         # column 0 is 'Activate'
         return self._get_checkbox_state(row=row, column=0)
 
-    def getRunNumbers(self, row):
+    def getRunDescr(self, row):
         runnumbers = self._get_item_value(row=row, column=SAMPLE_FIRST_COLUMN)
         if not runnumbers:
-            return []
-
-        # TODO will break with hyphens '-'
-        runnumbers = [int(item) for item in runnumbers.split(',')]
-        return runnumbers
+            return ''
+        return '{}_{}'.format(self.instrument, runnumbers)
 
     def _get_checkbox_state(self, row=-1, column=-1):
         state = self.table_ui.cellWidget(row, column).children()[1].checkState()

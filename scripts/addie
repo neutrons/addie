@@ -2287,10 +2287,12 @@ class MainWindow(QMainWindow):
         if not mantid_ts_script:
             raise RuntimeError('Failed to find mantid_total_scattering.py')
 
+        pythonpath = os.getenv('PYTHONPATH', '')
+
         # TODO should allow for prefixing with mantidpython
         # TODO figure out how to launch the jobs in serial
         for filename in filenames:
-            cmd = '{} {}'.format(mantid_ts_script, filename)
+            cmd = ' '.join([pythonpath, mantid_ts_script, filename]).strip()
             name = os.path.basename(filename).replace('.json', '')
             print('>>>>>>>>>> Starting reduction <<<<<<<<<<')
             print(cmd)
