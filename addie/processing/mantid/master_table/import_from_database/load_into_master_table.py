@@ -13,12 +13,14 @@ class LoadIntoMasterTable:
         self.parent = parent
         self.json = json
         self.with_conflict = with_conflict
+        self.table_ui = parent.processing_ui.h3_table
 
         if ignore_conflicts:
             self.load()
         else:
             if with_conflict:
-                ConflictsSolverHandler(parent=self.parent, json_conflicts=self.json)
+                ConflictsSolverHandler(parent=self.parent,
+                                       json_conflicts=self.json)
             else:
                 self.load()
 
@@ -26,10 +28,10 @@ class LoadIntoMasterTable:
 
         QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
 
-        o_table = TableRowHandler(parent=self.parent)
+        o_table = TableRowHandler(main_window=self.parent)
 
         if self.parent.clear_master_table_before_loading:
-            TableHandler.clear_table(self.parent.ui.h3_table)
+            TableHandler.clear_table(self.table_ui)
 
         for _row, _key in enumerate(self.json.keys()):
 

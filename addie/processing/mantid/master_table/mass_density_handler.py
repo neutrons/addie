@@ -266,7 +266,7 @@ class MassDensityWindow(QMainWindow):
 
     def accept(self):
         self.save()
-        o_table = TableRowHandler(parent=self.parent)
+        o_table = TableRowHandler(main_window=self.parent)
         o_table.transfer_widget_states(from_key=self.key, data_type=self.data_type)
         self.close()
 

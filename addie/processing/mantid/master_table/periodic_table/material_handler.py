@@ -586,7 +586,7 @@ class PeriodicTable(QMainWindow):
                 text_ui = self.parent.master_table_list_ui[self.key][self.data_type]['material']['text']
                 text_ui.setText(chemical_formula)
                 # self.calculate_full_molecular_mass()
-                o_table = TableRowHandler(parent=self.parent)
+                o_table = TableRowHandler(main_window=self.parent)
                 o_table.transfer_widget_states(from_key=self.key, data_type=self.data_type)
                 self.parent.master_table_list_ui[self.key][self.data_type]['mass_density_infos']['molecular_mass'] \
                     = self.molecular_mass

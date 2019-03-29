@@ -60,7 +60,7 @@ class SelectionHandlerMaster:
 
     def __init__(self, parent=None):
         self.parent = parent
-        self.table_ui = self.parent.ui.h3_table
+        self.table_ui = self.parent.processing_ui.h3_table
 
     def get_ui_key_for_this_row(self, row=-1):
         _check_box_ui_of_this_row = self.table_ui.cellWidget(row, 0).children()[1]
@@ -118,8 +118,7 @@ class TransferH3TableWidgetState(SelectionHandlerMaster):
         SelectionHandlerMaster.__init__(self, parent=parent)
 
     def transfer_states(self, from_key=None, data_type='sample'):
-
-        selection = self.parent.ui.h3_table.selectedRanges()
+        selection = self.table_ui.selectedRanges()
         o_selection = SelectionHandler(selection)
 
         master_table_row_ui = self.parent.master_table_list_ui
@@ -233,7 +232,7 @@ class RowsHandler(SelectionHandlerMaster):
 
             row = list_row[0]
 
-        _table_ui = self.parent.ui.h3_table
+        _table_ui = self.table_ui
         nbr_col = _table_ui.columnCount()
         _row_selection = QTableWidgetSelectionRange(row, 0, row, nbr_col-1)
         _table_ui.setRangeSelected(_row_selection, True)
@@ -274,7 +273,7 @@ class RowsHandler(SelectionHandlerMaster):
         if row is None:
             list_to_row = self.o_selection.get_list_row()
             _first_row = list_to_row[0]
-            for _row in list_to_row:
+            for _ in list_to_row:
                 self.remove(row=_first_row)
         else:
             #self.table_ui.blockSignals(True)
@@ -448,7 +447,7 @@ class CopyCells:
 
     def __init__(self, parent=None):
         self.parent = parent
-        self.table_ui = self.parent.ui.h3_table
+        self.table_ui = self.parent.processing_ui.h3_table
 
     def copy_from_to(self, from_row=-1, from_col=-1, to_row=-1):
 
@@ -567,5 +566,5 @@ class TableHandler(SelectionHandlerMaster):
                 self.table_ui.setRowHidden(_row, hide_it)
 
     def clear_search(self):
-        self.parent.ui.name_search_3.setText("")
+        self.parent.processing_ui.name_search_3.setText("")
         self.search("")

@@ -13,7 +13,7 @@ from collections import OrderedDict
 from qtpy.QtCore import (QProcess, Qt, QUrl)
 from qtpy.QtGui import (QDesktopServices, QIcon)
 from qtpy import QtGui
-from qtpy.QtWidgets import (QApplication, QFileDialog, QMainWindow, QMessageBox, QTableWidgetItem, QVBoxLayout)
+from qtpy.QtWidgets import (QApplication, QFileDialog, QMainWindow, QMessageBox, QTableWidgetItem, QVBoxLayout, QWidget)
 
 from addie import __version__
 from addie.initialization.configuration import ConfigurationInitializer
@@ -97,6 +97,9 @@ from addie.calculate_gr.gofrview import GofRView
 from addie.calculate_gr.sofqview import SofQView
 
 from addie.icons import icons_rc
+
+from addie.initialization import processing_tab as processing_tab_initialization
+from addie.events_handler import processing_tab as processing_tab_events_handler
 
 DEBUG = False
 
@@ -313,26 +316,36 @@ class MainWindow(QMainWindow):
         """
         QMainWindow.__init__(self, parent)
 
-        # if self.debugging:
-        #     self.calibration_folder = '/SNS/NOM/IPTS-17118/shared/'
-        #     self.characterization_folder = '/SNS/NOM/shared/CALIBRATION/'
-
         # Initialize the UI widgets
         self.ui = load_ui('mainWindow.ui', baseinstance=self)
         self._promote_widgets()
 
-        self.ui.graphicsView_sq.set_main(self)
+        # Mantid processing tab
+        self.processing_tab_widget = QWidget()
+        self.processing_ui = load_ui('splitui_processing_tab.ui', baseinstance=self.processing_tab_widget)
+        self.ui.main_tab.insertTab(2, self.processing_tab_widget, "Processing")
+        processing_tab_initialization.run(main_window=self)
+        processing_tab_events_handler.run(main_window=self)
 
+        # # Rietveld  tab
+        # self.rietveld_tab_widget = QWidget()
+        # self.rietveld_ui = load_ui('splitui_rietveld_tab.ui', baseinstance=self.rietveld_tab_widget)
+        # self.ui.main_tab.insertTab(3, self.rietveld_tab_widget, "Rietveld")
+
+        self.init_parameters()
+        self.set_default_folders_path()
         # Set the post-processing mode
         self.post_processing = processing_mode  # mantid or 'idl'
 
+        self.ucams = get_ucams()
+
+        #elf.ui.graphicsView_sq.set_main(self)
+
         # set widgets
-        self.init_parameters()
-        self.set_default_folders_path()
         self._init_widgets()
         InitStep1(parent=self)
         InitStep2(parent=self)
-        self.init_master_table()
+        #self.init_master_table()
 
         # define the event handling methods
         #self.ui.mantid_run_reduction.clicked.connect(self.do_mantid_run_reduction)
@@ -421,18 +434,17 @@ class MainWindow(QMainWindow):
         # color management
         self._pdfColorManager = PDFPlotManager()
 
-        self.save_raw_config()
+        #self.save_raw_config()
 
         if DEBUG:
             o_row = TableRowHandler(parent=self)
             for _row in np.arange(10):
                 o_row.insert_row(row=_row)
 
-        self.ucams = get_ucams()
 
     def save_raw_config(self):
         '''this will allow the user to reset the full table and get it back in its initial state'''
-        o_current_table_config = TableConfig(parent=self)
+        o_current_table_config = TableConfig(main_window=self)
         current_config = o_current_table_config.get_current_config()
 
         inside_dict = OrderedDict()
@@ -462,13 +474,13 @@ class MainWindow(QMainWindow):
                                                     instrument_short_name,
                                                     config_characterization_file["post"])
 
-    def init_master_table(self):
-        o_table = TableInitialization(parent=self)
-        o_table.init_master_table()
-        o_table.init_signals()
-        # TODO should load existing json configuration into the table
-
-        self.ui.pushButton_launchReduction.clicked.connect(self.run_mantid)
+    # def init_master_table(self):
+    #     o_table = TableInitialization(parent=self)
+    #     #o_table.init_master_table()
+    #     #o_table.init_signals()
+    #     # TODO should load existing json configuration into the table
+    #
+    #     #self.ui.pushButton_launchReduction.clicked.connect(self.run_mantid)
 
     def _promote_widgets(self):
         # frame_graphicsView_bragg
@@ -550,11 +562,11 @@ class MainWindow(QMainWindow):
                     """)
 
         self.ui.label_25.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
-        self.ui.search_logo_label.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
-        self.ui.clear_name_search_2.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
-        self.ui.clear_search_button.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
+#        self.ui.search_logo_label.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
+#        self.ui.clear_name_search_2.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
+#        self.ui.clear_search_button.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
 
-        self.ui.settings_table_button.setIcon(QtGui.QIcon(":/MPL Toolbar/settings_icon.png"))
+#        self.ui.settings_table_button.setIcon(QtGui.QIcon(":/MPL Toolbar/settings_icon.png"))
 
         self.ui.comboBox_xUnit.clear()
         self.ui.comboBox_xUnit.addItems(['TOF', 'dSpacing', 'Q'])
@@ -2471,8 +2483,8 @@ class MainWindow(QMainWindow):
 
     # master table
     def personalization_table_clicked(self):
-        o_master_table_tree = TableTreeHandler(parent=self)
-        _table_config = TableConfig(parent=self)
+        _ = TableTreeHandler(parent=self)
+        _table_config = TableConfig(main_window=self)
         current_config = _table_config.get_current_config()
         _table_config.update_tree_dict_and_tree(config_to_load=current_config)
 
@@ -2507,7 +2519,7 @@ class MainWindow(QMainWindow):
         h2_dict = config_to_load['h2']
         h3_dict = config_to_load['h3']
 
-        o_table = TableConfig(parent=self)
+        o_table = TableConfig(main_window=self)
         o_table.disconnect_table_ui()
 
         for _col in h1_dict:
@@ -2530,28 +2542,28 @@ class MainWindow(QMainWindow):
         o_table.disconnect_table_ui(unblock_all=True)
 
     def h3_table_right_click(self, position):
-        o_h3_table = H3TableHandler(parent=self)
+        o_h3_table = H3TableHandler(main_window=self)
         o_h3_table.right_click()
 
     def check_status_of_right_click_buttons(self):
-        o_h3_table = H3TableHandler(parent=self)
+        o_h3_table = H3TableHandler(main_window=self)
         o_h3_table.check_status_of_right_click_buttons()
 
     def scroll_h1_table(self, value):
-        self.ui.h2_table.horizontalScrollBar().setValue(value)
-        self.ui.h3_table.horizontalScrollBar().setValue(value)
+        self.processing_ui.h2_table.horizontalScrollBar().setValue(value)
+        self.processing_ui.h3_table.horizontalScrollBar().setValue(value)
 
     def scroll_h2_table(self, value):
-        self.ui.h1_table.horizontalScrollBar().setValue(value)
-        self.ui.h3_table.horizontalScrollBar().setValue(value)
+        self.processing_ui.h1_table.horizontalScrollBar().setValue(value)
+        self.processing_ui.h3_table.horizontalScrollBar().setValue(value)
 
     def scroll_h3_table(self, value):
-        self.ui.h1_table.horizontalScrollBar().setValue(value)
-        self.ui.h2_table.horizontalScrollBar().setValue(value)
+        self.processing_ui.h1_table.horizontalScrollBar().setValue(value)
+        self.processing_ui.h2_table.horizontalScrollBar().setValue(value)
 
     def resizing_h1(self, index_column, old_size, new_size):
 
-        o_table = TableConfig(parent=self)
+        o_table = TableConfig(main_window=self)
         o_table.disconnect_table_ui()
 
         h2_children = o_table.get_h2_children_from_h1(h1=index_column)
@@ -2574,8 +2586,7 @@ class MainWindow(QMainWindow):
         o_table.disconnect_table_ui(unblock_all=True)
 
     def resizing_h2(self, index_column, old_size, new_size):
-
-        o_table = TableConfig(parent=self)
+        o_table = TableConfig(main_window=self)
         o_table.disconnect_table_ui()
 
         h1_parent = o_table.get_h1_parent_from_h2(h2=index_column)
@@ -2598,7 +2609,7 @@ class MainWindow(QMainWindow):
 
     def resizing_h3(self, index_column, old_size, new_size):
 
-        o_table = TableConfig(parent=self)
+        o_table = TableConfig(main_window=self)
         o_table.disconnect_table_ui()
 
         [h1_parent, h2_parent] = o_table.get_h1_h2_parent_from_h3(h3=index_column)
@@ -2624,7 +2635,7 @@ class MainWindow(QMainWindow):
     def tree_item_changed(self, item, _):
         """this will change the way the big table will look like by hidding or showing columns"""
 
-        o_table = TableConfig(parent=self)
+        o_table = TableConfig(main_window=self)
         o_table.block_table_header_ui(block_all=False,
                                       block_h1=True,
                                       block_h2=True)
@@ -2642,7 +2653,7 @@ class MainWindow(QMainWindow):
 
     # widgets from master table
     def master_table_select_state_changed(self, state, key):
-        o_table = TableRowHandler(parent=self)
+        o_table = TableRowHandler(main_window=self)
         o_table.activated_row_changed(key=key, state=state)
 
     ## sample columns
@@ -2650,34 +2661,34 @@ class MainWindow(QMainWindow):
         MaterialHandler(parent=self, key=key, data_type='sample')
 
     def master_table_sample_material_line_edit_entered(self, key):
-        o_table = TableRowHandler(parent=self)
+        o_table = TableRowHandler(main_window=self)
         o_table.transfer_widget_states(from_key=key, data_type='sample')
 
     def master_table_sample_mass_density_button_pressed(self, key):
         MassDensityHandler(parent=self, data_type='sample', key=key)
 
     def master_table_sample_mass_density_line_edit_entered(self, key):
-        o_table = TableRowHandler(parent=self)
+        o_table = TableRowHandler(main_window=self)
         o_table.transfer_widget_states(from_key=key, data_type='sample')
 
     def master_table_sample_shape_changed(self, index, key):
-        o_table = TableRowHandler(parent=self)
+        o_table = TableRowHandler(main_window=self)
         o_table.shape_changed(shape_index=index, key=key, data_type='sample')
 
     def master_table_sample_abs_correction_changed(self, text, key):
-        o_table = TableRowHandler(parent=self)
+        o_table = TableRowHandler(main_window=self)
         o_table.abs_correction_changed(value=text, key=key, data_type='sample')
 
     def master_table_sample_multi_scattering_correction_changed(self, text, key):
-        o_table = TableRowHandler(parent=self)
+        o_table = TableRowHandler(main_window=self)
         o_table.multi_scattering_correction(value=text, key=key, data_type='sample')
 
     def master_table_sample_inelastic_correction_changed(self, text, key):
-        o_table = TableRowHandler(parent=self)
+        o_table = TableRowHandler(main_window=self)
         o_table.inelastic_correction_changed(value=text, key=key, data_type='sample')
 
     def master_table_sample_placzek_button_pressed(self, key):
-        o_table = TableRowHandler(parent=self)
+        o_table = TableRowHandler(main_window=self)
         o_table.placzek_button_pressed(key=key, data_type='sample')
 
     def master_table_sample_dimensions_setter_button_pressed(self, key):
@@ -2689,34 +2700,34 @@ class MainWindow(QMainWindow):
         MaterialHandler(parent=self, key=key, data_type='normalization')
 
     def master_table_normalization_material_line_edit_entered(self, key):
-        o_table = TableRowHandler(parent=self)
+        o_table = TableRowHandler(main_window=self)
         o_table.transfer_widget_states(from_key=key, data_type='normalization')
 
     def master_table_normalization_mass_density_button_pressed(self, key):
         MassDensityHandler(parent=self, data_type='normalization', key=key)
 
     def master_table_normalization_mass_density_line_edit_entered(self, key):
-        o_table = TableRowHandler(parent=self)
+        o_table = TableRowHandler(main_window=self)
         o_table.transfer_widget_states(from_key=key, data_type='normalization')
 
     def master_table_normalization_shape_changed(self, text, key):
-        o_table = TableRowHandler(parent=self)
+        o_table = TableRowHandler(main_window=self)
         o_table.shape_changed(shape_index=text, key=key, data_type='normalization')
 
     def master_table_normalization_abs_correction_changed(self, text, key):
-        o_table = TableRowHandler(parent=self)
+        o_table = TableRowHandler(main_window=self)
         o_table.abs_correction_changed(value=text, key=key, data_type='normalization')
 
     def master_table_normalization_multi_scattering_correction_changed(self, text, key):
-        o_table = TableRowHandler(parent=self)
+        o_table = TableRowHandler(main_window=self)
         o_table.multi_scattering_correction(value=text, key=key, data_type='normalization')
 
     def master_table_normalization_inelastic_correction_changed(self, text, key):
-        o_table = TableRowHandler(parent=self)
+        o_table = TableRowHandler(main_window=self)
         o_table.inelastic_correction_changed(value=text, key=key, data_type='normalization')
 
     def master_table_normalization_placzek_button_pressed(self, key):
-        o_table = TableRowHandler(parent=self)
+        o_table = TableRowHandler(main_window=self)
         o_table.placzek_button_pressed(key=key, data_type='normalization')
 
     def master_table_normalization_dimensions_setter_button_pressed(self, key):
@@ -2746,12 +2757,12 @@ class MainWindow(QMainWindow):
 
     def browse_calibration_clicked(self):
         _calibration_folder = self.calibration_folder
-        [_calibration_file, ext] = QFileDialog.getOpenFileName(parent = self,
-                                                               caption = "Select Calibration File",
-                                                               directory = _calibration_folder,
-                                                               filter = self.calibration_extension)
+        [_calibration_file, _] = QFileDialog.getOpenFileName(parent = self,
+                                                             caption = "Select Calibration File",
+                                                             directory = _calibration_folder,
+                                                             filter = self.calibration_extension)
         if _calibration_file:
-            self.ui.calibration_file.setText(_calibration_file)
+            self.processing_ui.calibration_file.setText(_calibration_file)
 
     def from_oncat_to_master_table(self, json=None, with_conflict=False, ignore_conflicts=False):
         if self.import_from_database_ui:

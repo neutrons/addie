@@ -69,7 +69,7 @@ class TableFileExporter:
 
     def __init__(self, parent=None, filename=''):
         self.parent = parent
-        self.table_ui = parent.ui.h3_table
+        self.table_ui = parent.processing_ui.h3_table
         self.filename = filename
 
     def create_dictionary(self):
