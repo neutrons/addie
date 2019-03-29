@@ -69,7 +69,7 @@ _data = {"Facility": "SNS",
 class TableFileExporter:
     def __init__(self, parent=None):
         self.parent = parent
-        self.table_ui = parent.ui.h3_table
+        self.table_ui = parent.processing_ui.h3_table
 
         # generic elements to take from the ui
         self.facility = self.parent.facility
