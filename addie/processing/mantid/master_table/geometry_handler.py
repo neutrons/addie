@@ -159,7 +159,7 @@ class DimensionsSetter(QDialog):
         self.__set_label_value('radius2', radius2)
         self.__set_label_value('height', height)
 
-        o_table = TableRowHandler(parent=self.parent)
+        o_table = TableRowHandler(main_window=self.parent)
         o_table.transfer_widget_states(from_key=self.key, data_type=self.data_type)
 
         self.close()
