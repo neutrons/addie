@@ -642,6 +642,8 @@ class MainWindow(QMainWindow):
         return
 
     # Rietveld tab
+    def do_load_bragg_file(self):
+        rietveld_event_handler.do_load_bragg_file(main_window=self)
 
     def do_set_bragg_color_marker(self):
         rietveld_event_handler.do_set_bragg_color_marker(self)
@@ -912,8 +914,6 @@ class MainWindow(QMainWindow):
 
         self.ui.graphicsView_sq.plot_sq(plottable_name, sq_y_label=sq_type, reset_color_mark=clear_prev, color=color)
 
-    def do_load_bragg_file(self):
-        rietveld_event_handler.do_load_bragg_file(main_window=self)
 
 
 
