@@ -27,7 +27,7 @@ PYTHON_VERSION=$($RAW_PYTHON -c 'import sys; version=sys.version_info[:3]; print
 echo using $RAW_PYTHON version $PYTHON_VERSION
 
 # build mantid_total_scattering
-cd mantid_total_scattering
+cd addie/processing/mantid/mantid_total_scattering
 $CMD setup.py build
 cd -
 # build addie
