@@ -648,9 +648,6 @@ class MainWindow(QMainWindow):
     def do_set_bragg_color_marker(self):
         rietveld_event_handler.do_set_bragg_color_marker(self)
 
-    def do_clear_bragg_canvas(self):
-        rietveld_event_handler.do_clear_bragg_canvas(self)
-
     def do_rescale_bragg(self):
         rietveld_event_handler.do_rescale_bragg(self)
 
@@ -668,6 +665,15 @@ class MainWindow(QMainWindow):
 
     def evt_switch_bragg_unit(self):
         rietveld_event_handler.switch_bragg_unit(main_window=self)
+
+    def do_clear_bragg_canvas(self):
+        rietveld_event_handler.do_clear_bragg_canvas(self)
+
+    def plot_bragg(self, ws_list, bankIds, clear_canvas=False):
+        rietveld_event_handler.plot_bragg_bank(self, ws_list, bankIds, clear_canvas)
+
+    def set_bragg_ws_to_plot(self, gss_group_name):
+        rietveld_event_handler.set_bragg_ws_to_plot(self, gss_group_name)
 
     # G(R) tab
 
@@ -1519,35 +1525,6 @@ class MainWindow(QMainWindow):
 
         return
 
-    def set_bragg_ws_to_plot(self, gss_group_name):
-        """
-        Set a Bragg workspace group to plot.  If the Bragg-tab is in
-        (1) single-GSS mode, then switch to plot this gss_group
-        (2) multiple-GSS mode, then add this group to current canvas
-        Parameters
-        ----------
-        gss_group_name
-
-        Returns
-        -------
-
-        """
-        # check
-        assert isinstance(gss_group_name, str), 'GSS workspace group name is expected to be a string, but not' \
-            ' %s.' % str(type(gss_group_name))
-
-        # get the banks to plot - change to workspace index
-        selected_banks = self.get_bragg_banks_selected()
-
-        # process
-        if self.ui.radioButton_multiBank.isChecked():  # single-GSS/multi-bank mode
-            # reset canvas
-            self.ui.graphicsView_bragg.reset()
-        else:  # multiple-GSS/single-bank mode
-            # canvas is not reset
-            assert len(selected_banks) <= 1, 'At most 1 bank can be plot in multiple-GSS mode.'
-
-        self.plot_bragg(ws_list=[gss_group_name], bankIds=selected_banks, clear_canvas=False)
 
     def set_ipython_script(self, script):
         """

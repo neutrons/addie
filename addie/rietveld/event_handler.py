@@ -102,6 +102,27 @@ def do_load_bragg_file(main_window):
         main_window.setStyleSheet("QStatusBar{padding-left:8px;color:red;font-weight:bold;}")
         main_window.ui.statusbar.showMessage("Error loading {}".format(bragg_file_names), 10000)
 
+    check_rietveld_widgets(main_window)
+
+def check_rietveld_widgets(main_window):
+    """enable or not the widgets according to status of plots"""
+    if not main_window._onCanvasGSSBankList:
+        enable_widgets = False
+    else:
+        enable_widgets = True
+
+    main_window.rietveld_ui.checkBox_bank1.setEnabled(enable_widgets)
+    main_window.rietveld_ui.checkBox_bank2.setEnabled(enable_widgets)
+    main_window.rietveld_ui.checkBox_bank3.setEnabled(enable_widgets)
+    main_window.rietveld_ui.checkBox_bank4.setEnabled(enable_widgets)
+    main_window.rietveld_ui.checkBox_bank5.setEnabled(enable_widgets)
+    main_window.rietveld_ui.checkBox_bank6.setEnabled(enable_widgets)
+    main_window.rietveld_ui.radioButton_multiBank.setEnabled(enable_widgets)
+    main_window.rietveld_ui.radioButton_multiGSS.setEnabled(enable_widgets)
+    main_window.rietveld_ui.pushButton_rescaleGSAS.setEnabled(enable_widgets)
+    main_window.rietveld_ui.pushButton_gsasColorStyle.setEnabled(enable_widgets)
+    main_window.rietveld_ui.pushButton_clearBraggCanvas.setEnabled(enable_widgets)
+    main_window.rietveld_ui.comboBox_xUnit.setEnabled(enable_widgets)
 
 def plot_bragg_bank(main_window):
     """
@@ -430,3 +451,29 @@ def do_set_bragg_color_marker(main_window):
                                                                   linecolor=color,
                                                                   marker=marker,
                                                                   markercolor=color)
+
+def set_bragg_ws_to_plot(main_window, gss_group_name):
+    """
+    Set a Bragg workspace group to plot.  If the Bragg-tab is in
+    (1) single-GSS mode, then switch to plot this gss_group
+    (2) multiple-GSS mode, then add this group to current canvas
+    Parameters
+    ----------
+    gss_group_name
+    """
+    # check
+    assert isinstance(gss_group_name, str), 'GSS workspace group name is expected to be a string, but not' \
+        ' %s.' % str(type(gss_group_name))
+
+    # get the banks to plot - change to workspace index
+    selected_banks = get_bragg_banks_selected(main_window)
+
+    # process
+    if main_window.rietveld_ui.radioButton_multiBank.isChecked():  # single-GSS/multi-bank mode
+        # reset canvas
+        main_window.rietveld_ui.graphicsView_bragg.reset()
+    else:  # multiple-GSS/single-bank mode
+        # canvas is not reset
+        assert len(selected_banks) <= 1, 'At most 1 bank can be plot in multiple-GSS mode.'
+
+    plot_bragg(main_window, ws_list=[gss_group_name], bankIds=selected_banks, clear_canvas=False)
