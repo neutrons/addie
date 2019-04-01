@@ -1,5 +1,2 @@
-#!/bin/sh
-if [[ ! -d mantid_total_scattering ]]; then
-    git submodule init
-fi
-git submodule update
+#!/usr/bin/env bash
+git submodule update --init --recursive
