@@ -27,7 +27,9 @@ def do_load_bragg_file(main_window):
     try:
         main_window._currDataDir = os.path.split(os.path.abspath(bragg_file_names[0]))[0]
     except IndexError as index_err:
-        err_msg = 'Unable to get absolute path of {0} due to {1}'.format(bragg_file_names, index_err)
+        pass
+        #err_message = 'Unable to get absolute path of {0} due to {1}'.format(bragg_file_names, index_err)
+
     main_window.check_in_fixed_dir_structure(sub_dir='GSAS')
 
     # load file

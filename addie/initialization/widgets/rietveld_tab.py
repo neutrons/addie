@@ -4,6 +4,7 @@ from qtpy.QtWidgets import QVBoxLayout
 from addie.rietveld.braggview import BraggView
 from addie.rietveld.braggtree import BraggTree
 
+
 def run(main_window=None):
     # frame_graphicsView_bragg
     graphicsView_layout = QVBoxLayout()
@@ -23,7 +24,6 @@ def run(main_window=None):
         }
         """)
     main_window.rietveld_ui.splitter_2.setSizes([1000, 1])
-
 
     main_window.rietveld_ui.comboBox_xUnit.clear()
     main_window.rietveld_ui.comboBox_xUnit.addItems(['TOF', 'dSpacing', 'Q'])
