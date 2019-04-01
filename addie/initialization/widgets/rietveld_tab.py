@@ -1,4 +1,3 @@
-from qtpy import QtGui
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QVBoxLayout
 
@@ -55,4 +54,3 @@ def run(main_window=None):
     if main_window._currBraggXUnit == 'Q':
         main_window._currBraggXUnit = 'MomentumTransfer'
     main_window._onCanvasGSSBankList = list()
-

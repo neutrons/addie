@@ -11,4 +11,3 @@ def run(main_window=None):
     main_window.rietveld_ui.pushButton_rescaleGSAS.clicked.connect(main_window.do_rescale_bragg)
     main_window.rietveld_ui.pushButton_gsasColorStyle.clicked.connect(main_window.do_set_bragg_color_marker)
     main_window.rietveld_ui.pushButton_clearBraggCanvas.clicked.connect(main_window.do_clear_bragg_canvas)
-

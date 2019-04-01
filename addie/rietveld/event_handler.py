@@ -2,6 +2,7 @@ from qtpy.QtWidgets import QFileDialog
 import os
 import addie.utilities.specify_plots_style as ps
 
+
 def do_load_bragg_file(main_window):
     """
     Load Bragg files including GSAS, NeXus, 3-column ASCii.
@@ -104,6 +105,7 @@ def do_load_bragg_file(main_window):
 
     check_rietveld_widgets(main_window)
 
+
 def check_rietveld_widgets(main_window):
     """enable or not the widgets according to status of plots"""
     if not main_window._onCanvasGSSBankList:
@@ -123,6 +125,7 @@ def check_rietveld_widgets(main_window):
     main_window.rietveld_ui.pushButton_gsasColorStyle.setEnabled(enable_widgets)
     main_window.rietveld_ui.pushButton_clearBraggCanvas.setEnabled(enable_widgets)
     main_window.rietveld_ui.comboBox_xUnit.setEnabled(enable_widgets)
+
 
 def plot_bragg_bank(main_window):
     """
@@ -223,6 +226,7 @@ def plot_bragg_bank(main_window):
     # rescale
     do_rescale_bragg(main_window)
 
+
 def do_rescale_bragg(main_window):
     """ Rescale the figure of Bragg diffraction data
     """
@@ -234,6 +238,7 @@ def do_rescale_bragg(main_window):
     y_upper_limit = max_y_value + delta_y * 0.05
 
     main_window.rietveld_ui.graphicsView_bragg.setXYLimit(ymin=y_lower_limit, ymax=y_upper_limit)
+
 
 def switch_bragg_unit(main_window=None):
     """
@@ -285,6 +290,7 @@ def switch_bragg_unit(main_window=None):
     # reset unit
     reset_bragg_data_range(main_window, x_unit)
 
+
 def get_bragg_banks_selected(main_window=None):
     """
     Find out the banks of bragg-tab that are selected.
@@ -296,6 +302,7 @@ def get_bragg_banks_selected(main_window=None):
             bank_id_list.append(bank_id)
 
     return bank_id_list
+
 
 def reset_bragg_data_range(main_window, x_unit):
     main_window.rietveld_ui.graphicsView_bragg.set_unit(x_unit)
@@ -318,6 +325,7 @@ def reset_bragg_data_range(main_window, x_unit):
     else:
         raise RuntimeError('Unit %s unknown' % x_unit)
 
+
 def do_clear_bragg_canvas(main_window):
     """
     Clear all the plots on Bragg-canvas
@@ -326,11 +334,13 @@ def do_clear_bragg_canvas(main_window):
     clear_bank_checkboxes(main_window)
     main_window._onCanvasGSSBankList = list()
 
+
 def clear_bank_checkboxes(main_window):
     main_window._noEventBankWidgets = True
     for check_box in list(main_window._braggBankWidgets.values()):
         check_box.setChecked(False)
     main_window._noEventBankWidgets = False
+
 
 def evt_change_gss_mode(main_window):
     """ switch between multi-gss/single-bank mode and singl-gss/multiple-bank mode
@@ -399,6 +409,7 @@ def evt_change_gss_mode(main_window):
         # set
         main_window._onCanvasGSSBankList = [bank_on_canvas]
 
+
 def plot_bragg(main_window, ws_list, bankIds, clear_canvas=False):
     """
     Parameters
@@ -430,6 +441,7 @@ def plot_bragg(main_window, ws_list, bankIds, clear_canvas=False):
     # plot
     main_window.rietveld_ui.graphicsView_bragg.plot_banks(plot_data_dict, curr_unit)
 
+
 def do_set_bragg_color_marker(main_window):
     """
     set the color/marker to plots on bragg canvas
@@ -451,6 +463,7 @@ def do_set_bragg_color_marker(main_window):
                                                                   linecolor=color,
                                                                   marker=marker,
                                                                   markercolor=color)
+
 
 def set_bragg_ws_to_plot(main_window, gss_group_name):
     """
