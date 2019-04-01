@@ -221,9 +221,6 @@ def switch_bragg_unit(main_window=None):
     1. clear the canvas
     2. plot all the banks in the new units
     3. reset the limit
-    Returns
-    -------
-
     """
     # get current unit and check whether re-plot all banks is not a choice
     x_unit = str(main_window.rietveld_ui.comboBox_xUnit.currentText())
