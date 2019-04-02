@@ -94,17 +94,19 @@ from addie.processing.mantid.master_table.master_table_exporter import TableFile
 from addie.rietveld.braggview import BraggView
 from addie.rietveld.braggtree import BraggTree
 
-from addie.calculate_gr.gofrtree import GofRTree
-from addie.calculate_gr.gofrview import GofRView
-from addie.calculate_gr.sofqview import SofQView
+# from addie.calculate_gr.gofrtree import GofRTree
+# from addie.calculate_gr.gofrview import GofRView
+# from addie.calculate_gr.sofqview import SofQView
 
 from addie.icons import icons_rc
 
-from addie.initialization.widgets import rietveld_tab as rietveld_tab_initialization, \
-    processing_tab as processing_tab_initialization
+from addie.initialization.widgets import rietveld_tab as rietveld_tab_initialization
+from addie.initialization.widgets import processing_tab as processing_tab_initialization
+from addie.initialization.widgets import calculategr_tab as calculategr_tab_initialization
 
-from addie.initialization.events import processing_tab as processing_tab_events_handler, \
-    rietveld_tab as rietveld_tab_events_handler
+from addie.initialization.events import processing_tab as processing_tab_events_handler
+from addie.initialization.events import rietveld_tab as rietveld_tab_events_handler
+from addie.initialization.events import calculategr_tab as calculategr_tab_events_handler
 
 DEBUG = False
 
@@ -336,8 +338,11 @@ class MainWindow(QMainWindow):
         self.ui.main_tab.insertTab(3, self.rietveld_tab_widget, "Rietveld")
         rietveld_tab_initialization.run(main_window=self)
 
-
-
+        # Calculate G(R) tab
+        self.calculategr_tab_widget = QWidget()
+        self.calculategr_ui = load_ui('splitui_calculategr_tab.ui', baseinstance=self.calculategr_tab_widget)
+        self.ui.main_tab.insertTab(4, self.calculategr_tab_widget, 'Calculate G(R)')
+        calculategr_tab_initialization.run(main_window=self)
 
         self.init_parameters()
         self.set_default_folders_path()
@@ -468,23 +473,23 @@ class MainWindow(QMainWindow):
         # self.ui.graphicsView_bragg = BraggView(self)
         # graphicsView_layout.addWidget(self.ui.graphicsView_bragg)
 
-        # frame_graphicsView_sq
-        graphicsView_layout = QVBoxLayout()
-        self.ui.frame_graphicsView_sq.setLayout(graphicsView_layout)
-        self.ui.graphicsView_sq= SofQView(self)
-        graphicsView_layout.addWidget(self.ui.graphicsView_sq)
-
-        # frame_graphicsView_gr
-        graphicsView_layout = QVBoxLayout()
-        self.ui.frame_graphicsView_gr.setLayout(graphicsView_layout)
-        self.ui.graphicsView_gr = GofRView(self)
-        graphicsView_layout.addWidget(self.ui.graphicsView_gr)
-
-        # frame_treeWidget_grWsList
-        temp_layout = QVBoxLayout()
-        self.ui.frame_treeWidget_grWsList.setLayout(temp_layout)
-        self.ui.treeWidget_grWsList = GofRTree(self)
-        temp_layout.addWidget(self.ui.treeWidget_grWsList)
+        # # frame_graphicsView_sq
+        # graphicsView_layout = QVBoxLayout()
+        # self.ui.frame_graphicsView_sq.setLayout(graphicsView_layout)
+        # self.ui.graphicsView_sq= SofQView(self)
+        # graphicsView_layout.addWidget(self.ui.graphicsView_sq)
+        #
+        # # frame_graphicsView_gr
+        # graphicsView_layout = QVBoxLayout()
+        # self.ui.frame_graphicsView_gr.setLayout(graphicsView_layout)
+        # self.ui.graphicsView_gr = GofRView(self)
+        # graphicsView_layout.addWidget(self.ui.graphicsView_gr)
+        #
+        # # frame_treeWidget_grWsList
+        # temp_layout = QVBoxLayout()
+        # self.ui.frame_treeWidget_grWsList.setLayout(temp_layout)
+        # self.ui.treeWidget_grWsList = GofRTree(self)
+        # temp_layout.addWidget(self.ui.treeWidget_grWsList)
 
         # # frame_treeWidget_braggWSList
         # temp_layout = QVBoxLayout()
