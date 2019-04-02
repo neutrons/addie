@@ -81,7 +81,7 @@ from addie.processing.mantid.master_table.import_from_run_number_handler import 
 from addie.processing.mantid.master_table.import_from_database.load_into_master_table import LoadIntoMasterTable
 
 import addie.addiedriver as driver
-import addie.utilities.specify_plots_style as ps
+# import addie.utilities.specify_plots_style as ps
 import addie.calculate_gr.edit_sq_dialog
 
 from addie.calculate_gr.pdf_lines_manager import PDFPlotManager
@@ -382,10 +382,11 @@ class MainWindow(QMainWindow):
         #
         # self.ui.pushButton_grColorStyle.clicked.connect(self.do_set_gofr_color_marker)
         # self.ui.pushButton_sqColorStyle.clicked.connect(self.do_set_sq_color_marker)
-        #
-        # #  menu operations
-        self.ui.actionReset_GofR_tab.triggered.connect(self.do_reset_gr_tab)
-        self.ui.actionReset_GSAS_tab.triggered.connect(self.do_reset_gsas_tab)
+
+        # # #  menu operations
+        # self.ui.actionReset_GofR_tab.triggered.connect(self.do_reset_gr_tab)
+        # self.ui.actionReset_GSAS_tab.triggered.connect(self.do_reset_gsas_tab)
+
         self.ui.actionQuit.triggered.connect(self.evt_quit)
         self.ui.actionCheat_sheet.triggered.connect(self.do_show_help)
 
@@ -516,49 +517,6 @@ class MainWindow(QMainWindow):
         return self._myController
 
 
-    def do_set_gofr_color_marker(self):
-        """
-        set the color/marker to plots on G(r) canvas
-        :return:
-        """
-        # get the line ID, color, and marker
-        plot_id_label_list = self.ui.graphicsView_gr.get_current_plots()
-
-        # get the line ID, color, and marker
-        plot_id_list, color, marker = ps.get_plots_color_marker(self, plot_label_list=plot_id_label_list)
-        if plot_id_list is None:
-            # operation is cancelled by user
-            pass
-        else:
-            # set the color and mark
-            for plot_id in plot_id_list:
-                self.ui.graphicsView_gr.updateLine(ikey=plot_id, linecolor=color, marker=marker,
-                                                   markercolor=color)
-
-        return
-
-    def do_set_sq_color_marker(self):
-        """
-        set the color/marker on S(q) canvas
-        Returns:
-
-        """
-        # get the line ID, color, and marker
-        plot_id_label_list = self.ui.graphicsView_sq.get_current_plots()
-
-        # get the line ID, color, and marker
-        plot_id_list, color, marker = ps.get_plots_color_marker(self, plot_label_list=plot_id_label_list)
-        if plot_id_list is None:
-            # operation is cancelled by user
-            pass
-        else:
-            # set the color and mark
-            for plot_id in plot_id_list:
-                self.ui.graphicsView_sq.updateLine(ikey=plot_id, linecolor=color, marker=marker,
-                                                   markercolor=color)
-
-        return
-
     def do_show_help(self):
         """ Show help
         Copied from DGSPlanner
@@ -622,108 +580,47 @@ class MainWindow(QMainWindow):
     def do_load_sq(self):
         calculategr_event_handler.load_sq(self)
 
-
-
-
-
-
-
+    def evt_change_sq_type(self):
+        calculategr_event_handler.evt_change_sq_type(self)
 
     def do_rescale_sofq(self):
-        """ Rescale the figure of S(Q)
-        :return:
-        """
-        min_y_value = self.ui.graphicsView_sq.get_y_min()
-        max_y_value = self.ui.graphicsView_sq.get_y_max()
-        delta_y = max(1, max_y_value - min_y_value)
-
-        y_lower_limit = min_y_value - delta_y * 0.05
-        y_upper_limit = max_y_value + delta_y * 0.05
-
-        self.ui.graphicsView_sq.setXYLimit(ymin=y_lower_limit, ymax=y_upper_limit)
-
-        return
+        calculategr_event_handler.do_rescale_sofq(self)
 
     def do_rescale_gofr(self):
-        """ Rescale the figure of G(r)
-        :return:
-        """
-        min_y_value = self.ui.graphicsView_gr.get_y_min()
-        max_y_value = self.ui.graphicsView_gr.get_y_max()
-        delta_y = max(1, max_y_value - min_y_value)
+        calculategr_event_handler.do_rescale_gofr(self)
 
-        y_lower_limit = min_y_value - delta_y * 0.05
-        y_upper_limit = max_y_value + delta_y * 0.05
+    def do_show_sq_bound(self):
+        calculategr_event_handler.do_show_sq_bound(self)
 
-        self.ui.graphicsView_gr.setXYLimit(ymin=y_lower_limit, ymax=y_upper_limit)
+    def do_load_gr(self):
+        calculategr_event_handler.do_load_gr(self)
 
-        return
+    def do_save_gr(self):
+        calculategr_event_handler.do_save_gr(self)
+
+    def do_save_sq(self):
+        calculategr_event_handler.do_save_sq(self)
+
+    def do_edit_sq(self):
+        calculategr_event_handler.do_edit_sq(self)
+
+    def do_generate_sq(self):
+        calculategr_event_handler.do_generate_sq(self)
+
+    def do_set_gofr_color_marker(self):
+        calculategr_event_handler.do_set_gofr_color_marker(self)
+
+    def do_set_sq_color_marker(self):
+        calculategr_event_handler.do_set_sq_color_marker(self)
 
     def do_reset_gr_tab(self):
-        """
-        Reset G(r)-tab, including deleting all the G(r) and S(Q) workspaces,
-        clearing the G(r) and S(Q) trees, and clearing both G(r) and S(Q) canvas
-        Returns:
-        None
-        """
-        # get workspace from trees
-        workspace_list = self.ui.treeWidget_grWsList.get_workspaces()
-
-        # reset the tree to initial status
-        self.ui.treeWidget_grWsList.reset_gr_tree()
-
-        # delete all the workspaces
-        for workspace in workspace_list:
-            self._myController.delete_workspace(workspace)
-
-        # clear all the canvas
-        self.ui.graphicsView_gr.clear_all_lines()
-        self.ui.graphicsView_sq.clear_all_lines()
-
-        # clear the S(Q) combo box
-        self.ui.comboBox_SofQ.clear()
-        self.ui.comboBox_SofQ.addItem('All')
-
-        return
+        calculategr_event_handler.do_reset_gr_tab(self)
 
     def do_reset_gsas_tab(self):
-        """
-        Reset the GSAS-tab including
-        1. deleting all the GSAS workspaces
-        2. clearing the GSAS tree
-        3. clearing GSAS canvas
-        Returns:
-        None
-        """
-        # delete all workspaces: get GSAS workspaces from tree
-        gsas_group_node_list = self.ui.treeWidget_braggWSList.get_main_nodes(output_str=False)
-        for gsas_group_node in gsas_group_node_list:
-            # skip if the workspace is 'workspaces'
-            gss_node_name = str(gsas_group_node.text())
-            if gss_node_name == 'workspaces':
-                continue
-            # get the split workspaces' names and delete
-            gsas_ws_name_list = self.ui.treeWidget_braggWSList.get_child_nodes(gsas_group_node, output_str=True)
-            for workspace in gsas_ws_name_list:
-                self._myController.delete_workspace(workspace)
-            # END-FOR
+        calculategr_event_handler.do_reset_gsas_tab(self)
 
-            # guess for the main workspace and delete
-            gss_main_ws = gss_node_name.split('_group')[0]
-            self._myController.delete_workspace(gss_main_ws, no_throw=True)
 
-        # END-FOR (gsas_group_node)
 
-        # reset the GSAS tree
-        self.ui.treeWidget_braggWSList.reset_bragg_tree()
-
-        # clear checkboxes for banks
-        self.clear_bank_checkboxes()
-
-        # clear the canvas
-        self.ui.graphicsView_bragg.reset()
-
-        return
 
     def clear_bank_checkboxes(self):
         self._noEventBankWidgets = True
@@ -733,228 +630,13 @@ class MainWindow(QMainWindow):
 
         return
 
-    # def plot_gr(self, ws_name, line_color, line_style, line_marker, line_alpha, line_label,
-    #             auto=False):
-    #     """Plot G(r) by their names (workspace as protocol)
-    #     """
-    #     # get the value
-    #     vec_r, vec_g, vec_ge = self._myController.get_ws_data(ws_name)
-    #
-    #     # check whether the workspace is on the figure
-    #     print('[DB...BAT] G(r) graphic has plot {0} is {1}. Keys are {2}'
-    #           ''.format(ws_name, self.ui.graphicsView_gr.has_gr(ws_name),
-    #                     self.ui.graphicsView_gr.get_current_grs()))
-    #
-    #     if self.ui.graphicsView_gr.has_gr(ws_name):
-    #         # update G(r) value of an existing plot
-    #         self.ui.graphicsView_gr.update_gr(ws_name, ws_name, plotError=False)
-    #     else:
-    #         # a new g(r) plot
-    #         if auto:
-    #             line_color, line_style, line_alpha = self._pdfColorManager.get_gr_line(ws_name)
-    #
-    #          # plot G(R)
-    #         self.ui.graphicsView_gr.plot_gr(ws_name, ws_name, plotError=False,
-    #                                         color=line_color, style=line_style, marker=line_marker,
-    #                                         alpha=line_alpha, label=line_label)
-    #     # END-FOR
-    #
-    #     return
-
-    # def plot_sq(self, ws_name, color, clear_prev):
-    #     """
-    #     Plot S(Q)
-    #     :param ws_name:
-    #     :param sq_color: color of S(Q).  If None, then try to find it from PDF color manager
-    #     :param clear_prev:
-    #     :return:
-    #     """
-    #     # clear previous lines
-    #     if clear_prev:
-    #         self.ui.graphicsView_sq.reset()
-    #
-    #     # get data
-    #     vec_q, vec_sq, vec_se = self._myController.get_sq(ws_name)
-    #
-    #     # get color
-    #     if not color:
-    #         color = self._pdfColorManager.add_sofq(ws_name)
-    #
-    #     # convert to the function to plot
-    #     sq_type = str(self.ui.comboBox_SofQType.currentText())
-    #     plottable_name = self._myController.calculate_sqAlt(ws_name, sq_type)
-    #
-    #     self.ui.graphicsView_sq.plot_sq(plottable_name, sq_y_label=sq_type, reset_color_mark=clear_prev, color=color)
 
 
 
 
-    def do_load_gr(self):
-        """
-        Load an ASCII file containing G(r)
-        """
-        # get default dir
-        if self._currDataDir is None:
-            default_dir = os.getcwd()
-        else:
-            default_dir = self.getDefaultDir('gofr')
-
-        # pop out file
-        file_filter = 'Data Files (*.dat);; PDFgui (*.gr);;All Files (*.*)'
-        g_file_name = QFileDialog.getOpenFileName(self, 'Open a G(r) file', default_dir, file_filter)
-        if isinstance(g_file_name, tuple):
-            g_file_name = g_file_name[0]
-        # return if operation is cancelled
-        if g_file_name is None or g_file_name == '':
-            return
-
-        # update current data directory
-        self._currDataDir = os.path.split(os.path.abspath(g_file_name))[0]
-        # set default data directory if in fixed file structure
-        self.check_in_fixed_dir_structure('gofr')
-
-        # read file
-        status, ret_obj = self._myController.load_gr(g_file_name)
-        if not status:
-            err_msg = ret_obj
-            print('[Error]: %s' % err_msg)
-            return
-        else:
-            gr_ws_name = ret_obj
-
-        # plot
-        gr_color, gr_style, gr_marker, gr_alpha = self._pdfColorManager.add_gofr(None, gr_ws_name, None)
-        gr_label = gr_ws_name
-
-        self.plot_gr(gr_ws_name, line_color=gr_color, line_style=gr_style, line_marker=gr_marker,
-                     line_alpha=gr_alpha, line_label=gr_label)
-
-        # put the loaded G(r) workspace to tree 'workspaces'
-        self.ui.treeWidget_grWsList.add_child_main_item('workspaces', gr_ws_name)
-
-    # def check_in_fixed_dir_structure(self, sub_dir):
-    #     """
-    #     Check whether _currDataDir ends with 'GSAS', 'gofr' or 'SofQ'
-    #     If it is, then reset the _currDataDir to its upper directory and set the in-format flag;
-    #     Otherwise, keep as is
-    #     """
-    #     # make sure that the last character of currDataDir is not /
-    #     if self._currDataDir.endswith('/') or self._currDataDir.endswith('\\'):
-    #         # consider Linux and Windows case
-    #         self._currDataDir = self._currDataDir[:-1]
-    #
-    #     # split
-    #     main_path, last_dir = os.path.split(self._currDataDir)
-    #     if last_dir == sub_dir:
-    #         self._inFixedDirectoryStructure = True
-    #         self._currDataDir = main_path
-    #     else:
-    #         self._inFixedDirectoryStructure = False
-        # END-IF-ELSE
-
-    # def getDefaultDir(self, sub_dir):
-    #     """ Get the default data directory.
-    #     If is in Fixed-Directory-Structure, then _currDataDir is the parent directory for all GSAS, gofr and SofQ
-    #     and thus return the data directory with _currDataDir joined with sub_dir
-    #     Otherwise, no operation
-    #
-    #     :param sub_dir:
-    #     :return: directory
-    #     """
-    #     # check
-    #     assert isinstance(sub_dir, str), 'sub directory must be a string but not %s.' % type(sub_dir)
-    #
-    #     if self._inFixedDirectoryStructure:
-    #         default_dir = os.path.join(self._currDataDir, sub_dir)
-    #     else:
-    #         default_dir = self._currDataDir
-    #
-    #     return default_dir
-
-    @staticmethod
-    def get_file_names_from_dialog(default_dir, file_filter, caption):
-        """
-        get the file name from a dialog
-        :param default_dir:
-        :param file_filter:
-        :param caption
-        :return:
-        """
-        # TODO/TEST/NOW - Find out what this method can get!!!
-        # check input
-        assert isinstance(default_dir, str), 'Default directory {0} must be a string but not a {1}.' \
-                                             ''.format(default_dir, type(default_dir))
-        assert isinstance(file_filter, str), 'File filter {0} must be a string but not a {1}.' \
-            ''.format(file_filter, type(file_filter))
-
-        # generate a dialog to get the file name to save G(r)
-        export_dialog = QFileDialog()
-        export_dialog.setWindowTitle(caption)
-        export_dialog.setDirectory(default_dir)
-        export_dialog.setAcceptMode(QFileDialog.AcceptSave)
-        export_dialog.setNameFilter(file_filter)
-
-        # quit if it is not accepted
-        if export_dialog.exec_() != QFileDialog.Accepted:
-            return None
-        elif len(export_dialog.selectedFiles()) == 0:
-            return None
-
-        # get the file name from dialog
-        file_name_list = list()
-        for file_name in export_dialog.selectedFiles():
-            file_name_list.append(str(file_name))
-
-        return file_name_list
 
 
-    def do_edit_sq(self):
-        """
-        Launch a dialog box to edit S(Q) by shift and scaling.
-        :return:
-        """
-        # create dialog instance if it does not exist
-        if self._editSqDialog is None:
-            self._editSqDialog = addie.calculate_gr.edit_sq_dialog.EditSofQDialog(self)
 
-        # get current S(Q) list and add to dialog
-        sq_name_list = list()
-        num_sq = self.ui.comboBox_SofQ.count()
-        for isq in range(num_sq):
-            sq_name = str(self.ui.comboBox_SofQ.itemText(isq))
-            sq_name_list.append(sq_name)
-        # END-FOR
-
-        self._editSqDialog.add_sq_by_name(sq_name_list)
-
-        # show
-        self._editSqDialog.show()
-
-        return
-
-    def do_generate_sq(self):
-        """
-        generate S(Q) from G(r) by PDFFourierTransform
-        :return:
-        """
-        # TODO/ISSUE/NOW - Need to implement!
-        raise NotImplementedError('Dialog box for generating S(Q) has not been implemented yet.')
-        # get setup
-        min_r = float(self.ui.doubleSpinBoxRmin.value())
-        max_r = float(self.ui.doubleSpinBoxRmax.value())
-        min_q = self.ui.doubleSpinBoxQmin.value()
-        max_q = self.ui.doubleSpinBoxQmax.value()
-
-        # launch the dialog box
-        if self._generateSofQDialog is None:
-            self._generateSofQDialog = blabla
-
-        self._generateSofQDialog.set_r_range(min_r, max_r)
-        self._generateSofQDialog.set_q_range(min_q, max_q)
-
-        self._generateSofQDialog.show()
-
-        return
 
     def signal_generate_sq(self, arg_dict):
         """
@@ -983,110 +665,9 @@ class MainWindow(QMainWindow):
 
         return
 
-    def do_save_gr(self):
-        """
-        Save the selected the G(r) from menu to ASCII file
-        :return:
-        """
-        # TEST/ISSUE/NOW - Look at https://github.com/neutrons/FastGR/issues/28
 
-        # read the selected item from the tree
-        gr_name_list = self.ui.treeWidget_grWsList.get_selected_items_of_level(2, excluded_parent='SofQ',
-                                                                               return_item_text=True)
-        if len(gr_name_list) != 1:
-            err_msg = 'Error! Only 1 workspace of G(r) that can be selected.  So far %d is selected.' \
-                'They are %s.' % (len(gr_name_list), str(gr_name_list))
-            QMessageBox.warning(self, 'Error', err_msg)
-            return
-        else:
-            gr_ws_name = gr_name_list[0]
 
-        # pop-up a dialog for the file to save
-        default_dir = os.getcwd()
-        caption = 'Save G(r)'
 
-        # TEST/ISSUE/NOW - Refactor the following part out to be a standard widget
-        file_filter_str = 'XYE (*.xye);;CSV XYE (*.csv);;PDFgui (*.gr);;RMCProfile (*.dat)'
-        gr_file_name = self.get_file_names_from_dialog(default_dir, file_filter_str, caption)[0]
-
-        # check the file extension and use the file extension to determine G(r) file type
-        file_name, file_ext = os.path.splitext(gr_file_name)
-        if file_ext.lower().startswith('.xye'):
-            gr_file_type = 'xye'
-        elif file_ext.lower().startswith('.csv'):
-            gr_file_type = 'csv'
-        elif file_ext.lower().startswith('.gr'):
-            gr_file_type = 'gr'
-        elif file_ext.lower().startswith('.dat'):
-            gr_file_type = 'rmcprofile'
-        else:
-            # unsupported
-            raise RuntimeError('G(r) file with extension {0} is not supported.'.format(file_ext))
-
-        # save!
-        self._myController.save_ascii(gr_ws_name, gr_file_name, gr_file_type)
-
-        return
-
-    def do_save_sq(self):
-        """Save the selected the G(r) from menu to ASCII file
-        :return:
-        """
-        # TEST/ISSUE/NOW - Test!
-
-        # read the selected item from the tree... return if nothing is selected
-        sq_name_list = self.ui.treeWidget_grWsList.get_selected_items_of_level(2, excluded_parent='GofR',
-                                                                               return_item_text=True)
-        if len(sq_name_list) == 0:
-            return
-
-        # loop the SofQ name to save
-        file_filter = 'XYE (*.xye);;CSV XYE (*.csv);;SofQ (*.sq)'
-
-        for sq_name in sq_name_list:
-            # get the output file name first
-            out_file_name = QFileDialog.getSaveFileName(self,
-                                                        'Input File Name to Save S(Q) {0}'.format(sq_name),
-                                                        self._currWorkDir, file_filter)
-            if isinstance(out_file_name, tuple):
-                out_file_name = out_file_name[0]
-            if out_file_name is None or len(out_file_name) == 0:
-                # skip if the user cancel the operation on this S(Q)
-                continue
-
-            # get the directory, file name and extension
-            self._currWorkDir = os.path.dirname(out_file_name)
-            file_name, file_ext = os.path.splitext(out_file_name)
-            if file_ext.lower().startswith('.xye'):
-                sq_file_type = 'xye'
-            elif file_ext.lower().startswith('.csv'):
-                sq_file_type = 'csv'
-            elif file_ext.lower().startswith('.sq'):
-                sq_file_type = 'dat'
-            elif file_ext.lower().startswith('.dat'):
-                sq_file_type = 'dat'
-            elif len(file_ext.strip()) == 0:
-                raise RuntimeError('There is no extension of file {0}. Unable to determine file type.'
-                                   ''.format(out_file_name))
-            else:
-                raise RuntimeError('File type {0} cannot be recognized.'.format(file_ext))
-
-            # save file
-            self._myController.save_ascii(sq_name, out_file_name, sq_file_type)
-        # END-FOR
-
-        return
-
-    def do_show_sq_bound(self):
-        """
-        Show or hide the left and right boundary of the S(Q)
-        :return:
-        """
-        q_left = self.ui.doubleSpinBoxQmin.value()
-        q_right = self.ui.doubleSpinBoxQmax.value()
-        self.ui.graphicsView_sq.toggle_boundary(q_left, q_right)
-
-        return
 
     def edit_sq(self, sq_name, scale_factor, shift):
         """Edit S(Q) in workspace with scale_factor * Y[i] + shift
@@ -1125,26 +706,28 @@ class MainWindow(QMainWindow):
 
         return
 
-    def evt_change_sq_type(self):
-        """ Event handling to plot S(Q)
-        Returns
-        -------
-
-        """
-        # get the current S(Q) names
-        curr_sq_list = self.ui.graphicsView_sq.get_shown_sq_names()
-        if len(curr_sq_list) == 0:
-            return
-
-        # reset the canvas
-        self.ui.graphicsView_sq.reset()
-
-        # re-plot
-        for sq_name in curr_sq_list:
-            # plot S(Q)
-            self.plot_sq(sq_name, color=None, clear_prev=False)
-
-        return
+    # def evt_change_sq_type(self):
+    #     calculategr_event_handler.evt_change_sq_type(self)
+        #
+        # """ Event handling to plot S(Q)
+        # Returns
+        # -------
+        #
+        # """
+        # # get the current S(Q) names
+        # curr_sq_list = self.ui.graphicsView_sq.get_shown_sq_names()
+        # if len(curr_sq_list) == 0:
+        #     return
+        #
+        # # reset the canvas
+        # self.ui.graphicsView_sq.reset()
+        #
+        # # re-plot
+        # for sq_name in curr_sq_list:
+        #     # plot S(Q)
+        #     self.plot_sq(sq_name, color=None, clear_prev=False)
+        #
+        # return
 
     def evt_quit(self):
         """
