@@ -627,7 +627,6 @@ def edit_sq(main_window, sq_name, scale_factor, shift):
     # calculate G(r) too
     generate_gr_step2(main_window, [edit_sq_name])
 
-@staticmethod
 def get_file_names_from_dialog(default_dir, file_filter, caption):
     """
     get the file name from a dialog
