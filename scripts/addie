@@ -51,8 +51,6 @@ from addie.processing.idl.run_ndabs import RunNDabs
 from addie.processing.idl.run_sum_scans import RunSumScans
 from addie.processing.idl.run_thread import RunThread
 
-from addie.rietveld import event_handler as rietveld_event_handler
-
 from addie.menu.preview_ascii.step3_gui_handler import Step3GuiHandler
 
 from addie.mantid_handler.browse_file_folder_handler import BrowseFileFolderHandler
@@ -103,6 +101,9 @@ from addie.initialization.widgets import calculategr_tab as calculategr_tab_init
 from addie.initialization.events import processing_tab as processing_tab_events_handler
 from addie.initialization.events import rietveld_tab as rietveld_tab_events_handler
 from addie.initialization.events import calculategr_tab as calculategr_tab_events_handler
+
+from addie.rietveld import event_handler as rietveld_event_handler
+from addie.calculate_gr import event_handler as calculategr_event_handler
 
 DEBUG = False
 
@@ -383,10 +384,10 @@ class MainWindow(QMainWindow):
         # self.ui.pushButton_sqColorStyle.clicked.connect(self.do_set_sq_color_marker)
         #
         # #  menu operations
-        # self.ui.actionReset_GofR_tab.triggered.connect(self.do_reset_gr_tab)
-        # self.ui.actionReset_GSAS_tab.triggered.connect(self.do_reset_gsas_tab)
-        # self.ui.actionQuit.triggered.connect(self.evt_quit)
-        # self.ui.actionCheat_sheet.triggered.connect(self.do_show_help)
+        self.ui.actionReset_GofR_tab.triggered.connect(self.do_reset_gr_tab)
+        self.ui.actionReset_GSAS_tab.triggered.connect(self.do_reset_gsas_tab)
+        self.ui.actionQuit.triggered.connect(self.evt_quit)
+        self.ui.actionCheat_sheet.triggered.connect(self.do_show_help)
 
         # define the driver
         self._myController = driver.AddieDriver()
@@ -420,6 +421,7 @@ class MainWindow(QMainWindow):
         # Connecting all the widgets
         processing_tab_events_handler.run(main_window=self)
         rietveld_tab_events_handler.run(main_window=self)
+        calculategr_tab_events_handler.run(main_window=self)
 
         # # set the tab to 0
         # main_window.calculategr_ui.main_tab.setCurrentIndex(0)
@@ -609,90 +611,92 @@ class MainWindow(QMainWindow):
     # G(R) tab
 
     def do_generate_gr(self):
-        """ Handling event from push button 'Generate G(r)' by generating G(r) of selected workspaces
-        :return:
-        """
-        # get S(Q) workspace
-        selected_sq = str(self.ui.comboBox_SofQ.currentText())
-        if selected_sq == 'All':
-            sq_ws_name_list = list()
-            for index in range(self.ui.comboBox_SofQ.count()):
-                item = str(self.ui.comboBox_SofQ.itemText(index))
-                if item != 'All':
-                    # add S(Q) name unless it is 'All'
-                    sq_ws_name_list.append(item)
-                # END-IF
-            # END-FOR
-        else:
-            # selected S(Q) is a single S(Q) name
-            sq_ws_name_list = [selected_sq]
+        calculategr_event_handler.generate_gr_step1(self)
 
-        # generate G(r)
-        self.generate_gr(sq_ws_name_list=sq_ws_name_list)
+    #     """ Handling event from push button 'Generate G(r)' by generating G(r) of selected workspaces
+    #     :return:
+    #     """
+    #     # get S(Q) workspace
+    #     selected_sq = str(self.ui.comboBox_SofQ.currentText())
+    #     if selected_sq == 'All':
+    #         sq_ws_name_list = list()
+    #         for index in range(self.ui.comboBox_SofQ.count()):
+    #             item = str(self.ui.comboBox_SofQ.itemText(index))
+    #             if item != 'All':
+    #                 # add S(Q) name unless it is 'All'
+    #                 sq_ws_name_list.append(item)
+    #             # END-IF
+    #         # END-FOR
+    #     else:
+    #         # selected S(Q) is a single S(Q) name
+    #         sq_ws_name_list = [selected_sq]
+    #
+    #     # generate G(r)
+    #     self.generate_gr(sq_ws_name_list=sq_ws_name_list)
+    #
+    #     return
 
-        return
-
-    def generate_gr(self, sq_ws_name_list):
-        """Generate G(r) from specified S(Q) workspaces
-        :param sq_ws_name_list:
-        :return:
-        """
-        # check inputs
-        assert isinstance(sq_ws_name_list, list), 'S(Q) workspaces {0} must be given by list but not {1}.' \
-                                                  ''.format(sq_ws_name_list, type(sq_ws_name_list))
-        if len(sq_ws_name_list) == 0:
-            raise RuntimeError('User specified an empty list of S(Q)')
-
-        # get r-range and q-range
-        min_r = float(self.ui.doubleSpinBoxRmin.value())
-        max_r = float(self.ui.doubleSpinBoxRmax.value())
-        delta_r = float(self.ui.doubleSpinBoxDelR.value())
-
-        min_q = float(self.ui.doubleSpinBoxQmin.value())
-        max_q = float(self.ui.doubleSpinBoxQmax.value())
-
-        use_filter_str = str(self.ui.comboBox_pdfCorrection.currentText())
-        if use_filter_str == 'No Modification':
-            pdf_filter = None
-        elif use_filter_str == 'Lorch':
-            pdf_filter = 'lorch'
-        else:
-            raise RuntimeError('PDF filter {0} is not recognized.'.format(use_filter_str))
-        rho0_str = str(self.ui.lineEdit_rho.text())
-        try:
-            rho0=float(rho0_str)
-        except ValueError:
-            rho0 = None
-
-        # PDF type
-        pdf_type = str(self.ui.comboBox_pdfType.currentText())
-
-        # loop for all selected S(Q)
-        for sq_ws_name in sq_ws_name_list:
-            # calculate G(r)
-            gr_ws_name = self._myController.calculate_gr(sq_ws_name, pdf_type, min_r, delta_r, max_r,
-                                                         min_q, max_q, pdf_filter, rho0)
-
-            # check whether G(r) is on GofR plot or not in order to determine this is an update or new plot
-            update = self.ui.graphicsView_gr.has_gr(gr_ws_name)
-
-            # plot G(R)
-            if not update:
-                # a new line
-                gr_color, gr_style, gr_marker, gr_alpha = self._pdfColorManager.add_gofr(sq_ws_name, gr_ws_name, max_q)
-                gr_label = '{0} Q: ({1}, {2})'.format(sq_ws_name, min_q, max_q)
-                self.plot_gr(gr_ws_name, gr_color, gr_style, gr_marker, gr_alpha, gr_label)
-            else:
-                self.plot_gr(gr_ws_name, line_color=None, line_style=None, line_marker=None,
-                             line_alpha=None, line_label=None)
-
-            # add to tree
-            # TODO/ISSUE/NOW - Need to find out the name of the
-            gr_param_str = 'G(r) for Q(%.3f, %.3f)' % (min_q, max_q)
-            self.ui.treeWidget_grWsList.add_gr(gr_param_str, gr_ws_name)
-        # END-FOR
-
-        return
+    # def generate_gr(self, sq_ws_name_list):
+    #     """Generate G(r) from specified S(Q) workspaces
+    #     :param sq_ws_name_list:
+    #     :return:
+    #     """
+    #     # check inputs
+    #     assert isinstance(sq_ws_name_list, list), 'S(Q) workspaces {0} must be given by list but not {1}.' \
+    #                                               ''.format(sq_ws_name_list, type(sq_ws_name_list))
+    #     if len(sq_ws_name_list) == 0:
+    #         raise RuntimeError('User specified an empty list of S(Q)')
+    #
+    #     # get r-range and q-range
+    #     min_r = float(self.ui.doubleSpinBoxRmin.value())
+    #     max_r = float(self.ui.doubleSpinBoxRmax.value())
+    #     delta_r = float(self.ui.doubleSpinBoxDelR.value())
+    #
+    #     min_q = float(self.ui.doubleSpinBoxQmin.value())
+    #     max_q = float(self.ui.doubleSpinBoxQmax.value())
+    #
+    #     use_filter_str = str(self.ui.comboBox_pdfCorrection.currentText())
+    #     if use_filter_str == 'No Modification':
+    #         pdf_filter = None
+    #     elif use_filter_str == 'Lorch':
+    #         pdf_filter = 'lorch'
+    #     else:
+    #         raise RuntimeError('PDF filter {0} is not recognized.'.format(use_filter_str))
+    #     rho0_str = str(self.ui.lineEdit_rho.text())
+    #     try:
+    #         rho0=float(rho0_str)
+    #     except ValueError:
+    #         rho0 = None
+    #
+    #     # PDF type
+    #     pdf_type = str(self.ui.comboBox_pdfType.currentText())
+    #
+    #     # loop for all selected S(Q)
+    #     for sq_ws_name in sq_ws_name_list:
+    #         # calculate G(r)
+    #         gr_ws_name = self._myController.calculate_gr(sq_ws_name, pdf_type, min_r, delta_r, max_r,
+    #                                                      min_q, max_q, pdf_filter, rho0)
+    #
+    #         # check whether G(r) is on GofR plot or not in order to determine this is an update or new plot
+    #         update = self.ui.graphicsView_gr.has_gr(gr_ws_name)
+    #
+    #         # plot G(R)
+    #         if not update:
+    #             # a new line
+    #             gr_color, gr_style, gr_marker, gr_alpha = self._pdfColorManager.add_gofr(sq_ws_name, gr_ws_name, max_q)
+    #             gr_label = '{0} Q: ({1}, {2})'.format(sq_ws_name, min_q, max_q)
+    #             self.plot_gr(gr_ws_name, gr_color, gr_style, gr_marker, gr_alpha, gr_label)
+    #         else:
+    #             self.plot_gr(gr_ws_name, line_color=None, line_style=None, line_marker=None,
+    #                          line_alpha=None, line_label=None)
+    #
+    #         # add to tree
+    #         # TODO/ISSUE/NOW - Need to find out the name of the
+    #         gr_param_str = 'G(r) for Q(%.3f, %.3f)' % (min_q, max_q)
+    #         self.ui.treeWidget_grWsList.add_gr(gr_param_str, gr_ws_name)
+    #     # END-FOR
+    #
+    #     return
 
     def do_rescale_sofq(self):
         """ Rescale the figure of S(Q)
@@ -826,30 +830,30 @@ class MainWindow(QMainWindow):
 
         return
 
-    def plot_sq(self, ws_name, color, clear_prev):
-        """
-        Plot S(Q)
-        :param ws_name:
-        :param sq_color: color of S(Q).  If None, then try to find it from PDF color manager
-        :param clear_prev:
-        :return:
-        """
-        # clear previous lines
-        if clear_prev:
-            self.ui.graphicsView_sq.reset()
-
-        # get data
-        vec_q, vec_sq, vec_se = self._myController.get_sq(ws_name)
-
-        # get color
-        if not color:
-            color = self._pdfColorManager.add_sofq(ws_name)
-
-        # convert to the function to plot
-        sq_type = str(self.ui.comboBox_SofQType.currentText())
-        plottable_name = self._myController.calculate_sqAlt(ws_name, sq_type)
-
-        self.ui.graphicsView_sq.plot_sq(plottable_name, sq_y_label=sq_type, reset_color_mark=clear_prev, color=color)
+    # def plot_sq(self, ws_name, color, clear_prev):
+    #     """
+    #     Plot S(Q)
+    #     :param ws_name:
+    #     :param sq_color: color of S(Q).  If None, then try to find it from PDF color manager
+    #     :param clear_prev:
+    #     :return:
+    #     """
+    #     # clear previous lines
+    #     if clear_prev:
+    #         self.ui.graphicsView_sq.reset()
+    #
+    #     # get data
+    #     vec_q, vec_sq, vec_se = self._myController.get_sq(ws_name)
+    #
+    #     # get color
+    #     if not color:
+    #         color = self._pdfColorManager.add_sofq(ws_name)
+    #
+    #     # convert to the function to plot
+    #     sq_type = str(self.ui.comboBox_SofQType.currentText())
+    #     plottable_name = self._myController.calculate_sqAlt(ws_name, sq_type)
+    #
+    #     self.ui.graphicsView_sq.plot_sq(plottable_name, sq_y_label=sq_type, reset_color_mark=clear_prev, color=color)
 
 
 
@@ -897,44 +901,44 @@ class MainWindow(QMainWindow):
         # put the loaded G(r) workspace to tree 'workspaces'
         self.ui.treeWidget_grWsList.add_child_main_item('workspaces', gr_ws_name)
 
-    def check_in_fixed_dir_structure(self, sub_dir):
-        """
-        Check whether _currDataDir ends with 'GSAS', 'gofr' or 'SofQ'
-        If it is, then reset the _currDataDir to its upper directory and set the in-format flag;
-        Otherwise, keep as is
-        """
-        # make sure that the last character of currDataDir is not /
-        if self._currDataDir.endswith('/') or self._currDataDir.endswith('\\'):
-            # consider Linux and Windows case
-            self._currDataDir = self._currDataDir[:-1]
-
-        # split
-        main_path, last_dir = os.path.split(self._currDataDir)
-        if last_dir == sub_dir:
-            self._inFixedDirectoryStructure = True
-            self._currDataDir = main_path
-        else:
-            self._inFixedDirectoryStructure = False
+    # def check_in_fixed_dir_structure(self, sub_dir):
+    #     """
+    #     Check whether _currDataDir ends with 'GSAS', 'gofr' or 'SofQ'
+    #     If it is, then reset the _currDataDir to its upper directory and set the in-format flag;
+    #     Otherwise, keep as is
+    #     """
+    #     # make sure that the last character of currDataDir is not /
+    #     if self._currDataDir.endswith('/') or self._currDataDir.endswith('\\'):
+    #         # consider Linux and Windows case
+    #         self._currDataDir = self._currDataDir[:-1]
+    #
+    #     # split
+    #     main_path, last_dir = os.path.split(self._currDataDir)
+    #     if last_dir == sub_dir:
+    #         self._inFixedDirectoryStructure = True
+    #         self._currDataDir = main_path
+    #     else:
+    #         self._inFixedDirectoryStructure = False
         # END-IF-ELSE
 
-    def getDefaultDir(self, sub_dir):
-        """ Get the default data directory.
-        If is in Fixed-Directory-Structure, then _currDataDir is the parent directory for all GSAS, gofr and SofQ
-        and thus return the data directory with _currDataDir joined with sub_dir
-        Otherwise, no operation
-
-        :param sub_dir:
-        :return: directory
-        """
-        # check
-        assert isinstance(sub_dir, str), 'sub directory must be a string but not %s.' % type(sub_dir)
-
-        if self._inFixedDirectoryStructure:
-            default_dir = os.path.join(self._currDataDir, sub_dir)
-        else:
-            default_dir = self._currDataDir
-
-        return default_dir
+    # def getDefaultDir(self, sub_dir):
+    #     """ Get the default data directory.
+    #     If is in Fixed-Directory-Structure, then _currDataDir is the parent directory for all GSAS, gofr and SofQ
+    #     and thus return the data directory with _currDataDir joined with sub_dir
+    #     Otherwise, no operation
+    #
+    #     :param sub_dir:
+    #     :return: directory
+    #     """
+    #     # check
+    #     assert isinstance(sub_dir, str), 'sub directory must be a string but not %s.' % type(sub_dir)
+    #
+    #     if self._inFixedDirectoryStructure:
+    #         default_dir = os.path.join(self._currDataDir, sub_dir)
+    #     else:
+    #         default_dir = self._currDataDir
+    #
+    #     return default_dir
 
     @staticmethod
     def get_file_names_from_dialog(default_dir, file_filter, caption):
@@ -973,55 +977,56 @@ class MainWindow(QMainWindow):
         return file_name_list
 
     def do_load_sq(self):
-        """
-        Load S(Q) from file
-        Returns
-        -------
-
-        """
-        # get default dir
-        if self._currDataDir is None:
-            default_dir = os.getcwd()
-        else:
-            default_dir = self.getDefaultDir(sub_dir='SofQ')
-
-        # get the file
-        ext = 'nxs (*.nxs);;dat (*.dat);;All (*.*)'
-        sq_file_names = QFileDialog.getOpenFileNames(self, 'Choose S(Q) File', default_dir, ext)
-        if isinstance(sq_file_names, tuple):
-            sq_file_names = sq_file_names[0]
-        if sq_file_names is None or sq_file_names == '' or len(sq_file_names) == 0:
-            return
-
-        # update current data directory
-        self._currDataDir = os.path.split(os.path.abspath(sq_file_names[0]))[0]
-        self.check_in_fixed_dir_structure('SofQ')
-
-        # load S(q)
-        for sq_file_name in sq_file_names:
-            sq_file_name = str(sq_file_name)
-            sq_ws_name, q_min, q_max = self._myController.load_sq(sq_file_name)
-            # add to color management
-            color = self._pdfColorManager.add_sofq(sq_ws_name)
-
-            # set to the tree and combo box
-            self.ui.treeWidget_grWsList.add_sq(sq_ws_name)
-            self.ui.comboBox_SofQ.addItem(sq_ws_name)
-            self.ui.comboBox_SofQ.setCurrentIndex(self.ui.comboBox_SofQ.count()-1)
-
-            # set the UI widgets
-            self.ui.doubleSpinBoxQmin.setValue(q_min)
-            self.ui.doubleSpinBoxQmax.setValue(q_max)
-
-            # plot S(Q) - TODO why is it getting the name again?
-            ws_name = self._myController.get_current_sq_name()
-
-            self.plot_sq(ws_name, color=color, clear_prev=False)
-
-            # calculate and calculate G(R)
-            self.do_generate_gr()
-
-        return
+        calculategr_event_handler.load_sq(self)
+        # """
+        # Load S(Q) from file
+        # Returns
+        # -------
+        #
+        # """
+        # # get default dir
+        # if self._currDataDir is None:
+        #     default_dir = os.getcwd()
+        # else:
+        #     default_dir = self.getDefaultDir(sub_dir='SofQ')
+        #
+        # # get the file
+        # ext = 'nxs (*.nxs);;dat (*.dat);;All (*.*)'
+        # sq_file_names = QFileDialog.getOpenFileNames(self, 'Choose S(Q) File', default_dir, ext)
+        # if isinstance(sq_file_names, tuple):
+        #     sq_file_names = sq_file_names[0]
+        # if sq_file_names is None or sq_file_names == '' or len(sq_file_names) == 0:
+        #     return
+        #
+        # # update current data directory
+        # self._currDataDir = os.path.split(os.path.abspath(sq_file_names[0]))[0]
+        # self.check_in_fixed_dir_structure('SofQ')
+        #
+        # # load S(q)
+        # for sq_file_name in sq_file_names:
+        #     sq_file_name = str(sq_file_name)
+        #     sq_ws_name, q_min, q_max = self._myController.load_sq(sq_file_name)
+        #     # add to color management
+        #     color = self._pdfColorManager.add_sofq(sq_ws_name)
+        #
+        #     # set to the tree and combo box
+        #     self.ui.treeWidget_grWsList.add_sq(sq_ws_name)
+        #     self.ui.comboBox_SofQ.addItem(sq_ws_name)
+        #     self.ui.comboBox_SofQ.setCurrentIndex(self.ui.comboBox_SofQ.count()-1)
+        #
+        #     # set the UI widgets
+        #     self.ui.doubleSpinBoxQmin.setValue(q_min)
+        #     self.ui.doubleSpinBoxQmax.setValue(q_max)
+        #
+        #     # plot S(Q) - TODO why is it getting the name again?
+        #     ws_name = self._myController.get_current_sq_name()
+        #
+        #     self.plot_sq(ws_name, color=color, clear_prev=False)
+        #
+        #     # calculate and calculate G(R)
+        #     self.do_generate_gr()
+        #
+        # return
 
     def do_edit_sq(self):
         """

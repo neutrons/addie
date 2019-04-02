@@ -20,9 +20,4 @@ def run(main_window=None):
     main_window.calculategr_ui.pushButton_grColorStyle.clicked.connect(main_window.do_set_gofr_color_marker)
     main_window.calculategr_ui.pushButton_sqColorStyle.clicked.connect(main_window.do_set_sq_color_marker)
 
-    #  menu operations
-    main_window.calculategr_ui.actionReset_GofR_tab.triggered.connect(main_window.do_reset_gr_tab)
-    main_window.calculategr_ui.actionReset_GSAS_tab.triggered.connect(main_window.do_reset_gsas_tab)
-    main_window.calculategr_ui.actionQuit.triggered.connect(main_window.evt_quit)
-    main_window.calculategr_ui.actionCheat_sheet.triggered.connect(main_window.do_show_help)
 
