@@ -94,11 +94,13 @@ from addie.rietveld.braggtree import BraggTree
 
 from addie.icons import icons_rc
 
+from addie.initialization.widgets import main_tab as main_tab_initialization
 from addie.initialization.widgets import rietveld_tab as rietveld_tab_initialization
 from addie.initialization.widgets import processing_tab as processing_tab_initialization
 from addie.initialization.widgets import calculategr_tab as calculategr_tab_initialization
 from addie.initialization.widgets import autonom_tab as autonom_tab_initialization
 
+from addie.initialization.events import main_tab as main_tab_events_handler
 from addie.initialization.events import processing_tab as processing_tab_events_handler
 from addie.initialization.events import rietveld_tab as rietveld_tab_events_handler
 from addie.initialization.events import calculategr_tab as calculategr_tab_events_handler
@@ -108,10 +110,6 @@ from addie.rietveld import event_handler as rietveld_event_handler
 from addie.calculate_gr import event_handler as calculategr_event_handler
 
 DEBUG = False
-
-IPYTHON_STARTUP_CODE = '''import numpy as np
-from mantid.simpleapi import *
-'''
 
 
 class MainWindow(QMainWindow):
@@ -330,7 +328,6 @@ class MainWindow(QMainWindow):
         o_gui = Step1GuiHandler(main_window=self)
         o_gui.set_main_window_title()
 
-
         # autoNOM tab
         self.autonom_tab_widget = QWidget()
         self.autonom_ui = load_ui('splitui_autonom_tab.ui', baseinstance=self.autonom_tab_widget)
@@ -357,8 +354,10 @@ class MainWindow(QMainWindow):
         self.ui.main_tab.insertTab(4, self.calculategr_tab_widget, 'Calculate G(R)')
         calculategr_tab_initialization.run(main_window=self)
 
+
         self.init_parameters()
         self.set_default_folders_path()
+
         # Set the post-processing mode
         self.post_processing = processing_mode  # mantid or 'idl'
 
@@ -484,36 +483,17 @@ class MainWindow(QMainWindow):
     #
     #     #self.ui.pushButton_launchReduction.clicked.connect(self.run_mantid)
 
-    def _promote_widgets(self):
-        # frame_dockWidget_ipython
-        temp_layout = QVBoxLayout()
-        self.ui.frame_dockWidget_ipython.setLayout(temp_layout)
-        self.ui.dockWidget_ipython = InProcessJupyterConsole(self, startup_code=IPYTHON_STARTUP_CODE)
-        temp_layout.addWidget(self.ui.dockWidget_ipython)
-
     def _init_widgets(self):
         """ Initialize widgets
         Returns
         -------
         """
 
-        #init_size_splitter = self.ui.splitter.size()
-        #self.init_size_splitter_height = init_size_splitter.height()
-        #init_width = self.size()
-        #self.init_width = init_width.width()
-
         self.ui.splitter.setStyleSheet("""
             QSplitter::handle {
                image: url(':/MPL Toolbar/splitter_icon.png');
             }
             """)
-
-
-        self.ui.splitter_3.setStyleSheet("""
-                    QSplitter::handle {
-                       image: url(':/MPL Toolbar/splitter_icon.png');
-                    }
-                    """)
 
         self.ui.label_25.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
 #        self.ui.search_logo_label.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
