@@ -35,7 +35,8 @@ class EditSofQDialog(QDialog):
         self._scaleSlideMutex = False
 
         # set up UI
-        self.ui = load_ui('colorStyleSetup.ui', baseinstance=self)
+        #self.ui = load_ui('colorStyleSetup.ui', baseinstance=self)
+        self.ui = load_ui('editSq.ui', baseinstance=self)
 
         # set up default value
         self._init_widgets()

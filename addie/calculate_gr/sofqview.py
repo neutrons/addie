@@ -299,12 +299,11 @@ class SofQView(MplGraphicsView):
 
         return
 
-    def plot_sq(self, ws_name, sq_y_label, reset_color_mark, color=None, marker=None, plotError=False):
+    def plot_sq(self, ws_name,
+                sq_y_label=None, reset_color_mark=None,
+                color=None, marker=None, plotError=False):
         """Plot S(Q)
         :param sq_name:
-        :param vec_q:
-        :param vec_s:
-        :param vec_e:
         :param sq_y_label: label for Y-axis
         :param reset_color_mark:  boolean to reset color marker
         :param color:
@@ -315,7 +314,7 @@ class SofQView(MplGraphicsView):
         if ws_name in self._sqLineDict:
             # exiting S(q) workspace, do update
             sq_key = self._sqLineDict[ws_name]
-            self.updateLine(ikey=sq_key, wskname=ws_name, wkspindex=0)
+            self.updateLine(ikey=sq_key, wkspname=ws_name, wkspindex=0)
         else:
             # new S(Q) plot on the canvas
             assert isinstance(sq_y_label, str), 'S(Q) label {0} must be a string but not a {1}.' \
@@ -336,7 +335,6 @@ class SofQView(MplGraphicsView):
             self._sqPlotInfoDict[ws_name] = color, marker
             if ws_name not in self._shownSQNameList:
                 self._shownSQNameList.append(ws_name)
-        # END-IF-ELSE
 
         # auto scale
         self.auto_scale_y(room_percent=0.05, lower_boundary=0.)

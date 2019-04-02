@@ -1,6 +1,8 @@
 import os
 from qtpy.QtWidgets import QFileDialog, QMessageBox
+
 import addie.utilities.specify_plots_style as ps
+import addie.calculate_gr.edit_sq_dialog
 
 
 def load_sq(main_window):
@@ -589,7 +591,41 @@ def do_reset_gsas_tab(main_window):
     # clear the canvas
     main_window.calculategr_ui.graphicsView_bragg.reset()
 
+def edit_sq(main_window, sq_name, scale_factor, shift):
+    """Edit S(Q) in workspace with scale_factor * Y[i] + shift
+    :param sq_name:
+    :param scale_factor:
+    :param shift:
+    """
+    # convert
+    sq_name = str(sq_name)
 
+    # check inputs
+    assert isinstance(sq_name, str), 'S(Q) workspace name {0} must be a string but not a {1}.' \
+                                     ''.format(sq_name, type(sq_name))
+    assert isinstance(scale_factor, float), 'Scale factor {0} must be a float but not a {1}.' \
+                                            ''.format(scale_factor, type(scale_factor))
+    assert isinstance(shift, float), 'Shift {0} must be a float but not a {1}.'.format(shift, type(shift))
+
+    # call the controller
+    edit_sq_name = sq_name + '_Edit'
+    main_window._myController.edit_matrix_workspace(sq_name, scale_factor, shift, edit_sq_name)
+    # add new S(Q)
+    main_window._pdfColorManager.add_sofq(edit_sq_name)
+
+    color, marker = main_window.calculategr_ui.graphicsView_sq.get_plot_info(sq_name)
+    print('[DB...BAT] Original SofQ {0} has color {0} marker {1}'.format(color, marker))
+
+    # re-plot
+    #vec_q, vec_s, vec_e = main_window._myController.get_sq(edit_sq_name)
+    #main_window.calculategr_ui.graphicsView_sq.plot_sq(edit_sq_name, vec_q, vec_s, vec_e,
+    main_window.calculategr_ui.graphicsView_sq.plot_sq(edit_sq_name,
+                                                       sq_y_label=sq_name + ' In Edit',
+                                                       reset_color_mark=False,
+                                                       color=color, marker=marker)
+
+    # calculate G(r) too
+    generate_gr_step2(main_window, [edit_sq_name])
 
 @staticmethod
 def get_file_names_from_dialog(default_dir, file_filter, caption):

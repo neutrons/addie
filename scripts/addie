@@ -619,6 +619,8 @@ class MainWindow(QMainWindow):
     def do_reset_gsas_tab(self):
         calculategr_event_handler.do_reset_gsas_tab(self)
 
+    def edit_sq(self, sq_name, scale_factor, shift):
+        calculategr_event_handler.edit_sq(self, sq_name, scale_factor, shift)
 
 
 
@@ -669,42 +671,42 @@ class MainWindow(QMainWindow):
 
 
 
-    def edit_sq(self, sq_name, scale_factor, shift):
-        """Edit S(Q) in workspace with scale_factor * Y[i] + shift
-        :param sq_name:
-        :param scale_factor:
-        :param shift:
-        :return:
-        """
-        # convert
-        sq_name = str(sq_name)
-
-        # check inputs
-        assert isinstance(sq_name, str), 'S(Q) workspace name {0} must be a string but not a {1}.' \
-                                         ''.format(sq_name, type(sq_name))
-        assert isinstance(scale_factor, float), 'Scale factor {0} must be a float but not a {1}.' \
-                                                ''.format(scale_factor, type(scale_factor))
-        assert isinstance(shift, float), 'Shift {0} must be a float but not a {1}.'.format(shift, type(shift))
-
-        # call the controller
-        edit_sq_name = sq_name + '_Edit'
-        self._myController.edit_matrix_workspace(sq_name, scale_factor, shift, edit_sq_name)
-        # add new S(Q)
-        self._pdfColorManager.add_sofq(edit_sq_name)
-
-        color, marker = self.ui.graphicsView_sq.get_plot_info(sq_name)
-        print('[DB...BAT] Original SofQ {0} has color {0} marker {1}'.format(color, marker))
-
-        # re-plot
-        vec_q, vec_s, vec_e = self._myController.get_sq(edit_sq_name)
-        self.ui.graphicsView_sq.plot_sq(edit_sq_name, vec_q, vec_s, vec_e, sq_y_label=sq_name + ' In Edit',
-                                        reset_color_mark=False,
-                                        color=color, marker=marker)
-
-        # calculate G(r) too
-        self.generate_gr([edit_sq_name])
-
-        return
+    # def edit_sq(self, sq_name, scale_factor, shift):
+    #     """Edit S(Q) in workspace with scale_factor * Y[i] + shift
+    #     :param sq_name:
+    #     :param scale_factor:
+    #     :param shift:
+    #     :return:
+    #     """
+    #     # convert
+    #     sq_name = str(sq_name)
+    #
+    #     # check inputs
+    #     assert isinstance(sq_name, str), 'S(Q) workspace name {0} must be a string but not a {1}.' \
+    #                                      ''.format(sq_name, type(sq_name))
+    #     assert isinstance(scale_factor, float), 'Scale factor {0} must be a float but not a {1}.' \
+    #                                             ''.format(scale_factor, type(scale_factor))
+    #     assert isinstance(shift, float), 'Shift {0} must be a float but not a {1}.'.format(shift, type(shift))
+    #
+    #     # call the controller
+    #     edit_sq_name = sq_name + '_Edit'
+    #     self._myController.edit_matrix_workspace(sq_name, scale_factor, shift, edit_sq_name)
+    #     # add new S(Q)
+    #     self._pdfColorManager.add_sofq(edit_sq_name)
+    #
+    #     color, marker = self.ui.graphicsView_sq.get_plot_info(sq_name)
+    #     print('[DB...BAT] Original SofQ {0} has color {0} marker {1}'.format(color, marker))
+    #
+    #     # re-plot
+    #     vec_q, vec_s, vec_e = self._myController.get_sq(edit_sq_name)
+    #     self.ui.graphicsView_sq.plot_sq(edit_sq_name, vec_q, vec_s, vec_e, sq_y_label=sq_name + ' In Edit',
+    #                                     reset_color_mark=False,
+    #                                     color=color, marker=marker)
+    #
+    #     # calculate G(r) too
+    #     self.generate_gr([edit_sq_name])
+    #
+    #     return
 
     # def evt_change_sq_type(self):
     #     calculategr_event_handler.evt_change_sq_type(self)
