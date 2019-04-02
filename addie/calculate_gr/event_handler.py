@@ -50,10 +50,10 @@ def load_sq(main_window):
         # plot S(Q) - TODO why is it getting the name again?
         ws_name = main_window._myController.get_current_sq_name()
 
-        main_window.plot_sq(ws_name, color=color, clear_prev=False)
+        plot_sq(main_window, ws_name, color=color, clear_prev=False)
 
         # calculate and calculate G(R)
-        generate_gr_step1()
+        generate_gr_step1(main_window)
 
 def getDefaultDir(main_window, sub_dir):
     """ Get the default data directory.
@@ -123,11 +123,11 @@ def generate_gr_step1(main_window):
     :return:
     """
     # get S(Q) workspace
-    selected_sq = str(main_window.ui.comboBox_SofQ.currentText())
+    selected_sq = str(main_window.calculategr_ui.comboBox_SofQ.currentText())
     if selected_sq == 'All':
         sq_ws_name_list = list()
-        for index in range(main_window.ui.comboBox_SofQ.count()):
-            item = str(main_window.ui.comboBox_SofQ.itemText(index))
+        for index in range(main_window.calculategr_ui.comboBox_SofQ.count()):
+            item = str(main_window.calculategr_ui.comboBox_SofQ.itemText(index))
             if item != 'All':
                 # add S(Q) name unless it is 'All'
                 sq_ws_name_list.append(item)
@@ -140,7 +140,6 @@ def generate_gr_step1(main_window):
     # generate G(r)
     generate_gr_step2(main_window,
                       sq_ws_name_list=sq_ws_name_list)
-
 
 def generate_gr_step2(main_window, sq_ws_name_list):
     """Generate G(r) from specified S(Q) workspaces
@@ -166,38 +165,97 @@ def generate_gr_step2(main_window, sq_ws_name_list):
         pdf_filter = 'lorch'
     else:
         raise RuntimeError('PDF filter {0} is not recognized.'.format(use_filter_str))
-    rho0_str = str(main_window.ui.lineEdit_rho.text())
+    rho0_str = str(main_window.calculategr_ui.lineEdit_rho.text())
     try:
         rho0=float(rho0_str)
     except ValueError:
         rho0 = None
 
     # PDF type
-    pdf_type = str(main_window.ui.comboBox_pdfType.currentText())
+    pdf_type = str(main_window.calculategr_ui.comboBox_pdfType.currentText())
 
     # loop for all selected S(Q)
     for sq_ws_name in sq_ws_name_list:
         # calculate G(r)
-        gr_ws_name = main_window._myController.calculate_gr(sq_ws_name, pdf_type, min_r, delta_r, max_r,
-                                                     min_q, max_q, pdf_filter, rho0)
+        gr_ws_name = main_window._myController.calculate_gr(sq_ws_name,
+                                                            pdf_type,
+                                                            min_r,
+                                                            delta_r,
+                                                            max_r,
+                                                            min_q,
+                                                            max_q,
+                                                            pdf_filter,
+                                                            rho0)
 
         # check whether G(r) is on GofR plot or not in order to determine this is an update or new plot
-        update = main_window.ui.graphicsView_gr.has_gr(gr_ws_name)
+        update = main_window.calculategr_ui.graphicsView_gr.has_gr(gr_ws_name)
 
         # plot G(R)
         if not update:
             # a new line
-            gr_color, gr_style, gr_marker, gr_alpha = main_window._pdfColorManager.add_gofr(sq_ws_name, gr_ws_name, max_q)
+            gr_color, gr_style, gr_marker, gr_alpha = main_window._pdfColorManager.add_gofr(sq_ws_name,
+                                                                                            gr_ws_name,
+                                                                                            max_q)
             gr_label = '{0} Q: ({1}, {2})'.format(sq_ws_name, min_q, max_q)
-            main_window.plot_gr(gr_ws_name, gr_color, gr_style, gr_marker, gr_alpha, gr_label)
+            plot_gr(main_window, gr_ws_name, gr_color,
+                    gr_style, gr_marker,
+                    gr_alpha, gr_label)
         else:
-            main_window.plot_gr(gr_ws_name, line_color=None, line_style=None, line_marker=None,
-                         line_alpha=None, line_label=None)
+            plot_gr(main_window, gr_ws_name, line_color=None,
+                    line_style=None, line_marker=None,
+                    line_alpha=None, line_label=None)
 
         # add to tree
         # TODO/ISSUE/NOW - Need to find out the name of the
         gr_param_str = 'G(r) for Q(%.3f, %.3f)' % (min_q, max_q)
-        main_window.ui.treeWidget_grWsList.add_gr(gr_param_str, gr_ws_name)
-    # END-FOR
+        main_window.calculategr_ui.treeWidget_grWsList.add_gr(gr_param_str, gr_ws_name)
+
+def evt_qmin_changed(main_window):
+    q_min = main_window.calculategr_ui.doubleSpinBoxQmin.value()
+    q_max = main_window.calculategr_ui.doubleSpinBoxQmax.value()
+
+    if q_min < q_max and main_window.calculategr_ui.graphicsView_sq.is_boundary_shown():
+        main_window.calculategr_ui.graphicsView_sq.move_left_indicator(q_min,
+                                                                       relative=False)
+
+def evt_qmax_changed(main_window):
+    """
+    Handle if the user change the value of Qmax of S(Q) including
+    1. moving the right boundary in S(q) figure
+    Returns:
+
+    """
+    q_min = main_window.calculategr_ui.doubleSpinBoxQmin.value()
+    q_max = main_window.calculategr_ui.doubleSpinBoxQmax.value()
+
+    if q_min < q_max and main_window.calculategr_ui.graphicsView_sq.is_boundary_shown():
+        main_window.calculategr_ui.graphicsView_sq.move_right_indicator(q_max, relative=False)
 
     return
+
+def plot_gr(main_window, ws_name, line_color, line_style,
+            line_marker, line_alpha, line_label,
+            auto=False):
+    """Plot G(r) by their names (workspace as protocol)
+    """
+    # get the value
+    vec_r, vec_g, vec_ge = main_window._myController.get_ws_data(ws_name)
+
+    # check whether the workspace is on the figure
+    print('[DB...BAT] G(r) graphic has plot {0} is {1}. Keys are {2}'
+          ''.format(ws_name, main_window.calculategr_ui.graphicsView_gr.has_gr(ws_name),
+                    main_window.calculategr_ui.graphicsView_gr.get_current_grs()))
+
+    if main_window.calculategr_ui.graphicsView_gr.has_gr(ws_name):
+        # update G(r) value of an existing plot
+        main_window.calculategr_ui.graphicsView_gr.update_gr(ws_name, ws_name, plotError=False)
+    else:
+        # a new g(r) plot
+        if auto:
+            line_color, line_style, line_alpha = main_window._pdfColorManager.get_gr_line(ws_name)
+
+         # plot G(R)
+        main_window.calculategr_ui.graphicsView_gr.plot_gr(ws_name, ws_name, plotError=False,
+                                        color=line_color, style=line_style, marker=line_marker,
+                                        alpha=line_alpha, label=line_label)
+

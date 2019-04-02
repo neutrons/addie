@@ -613,90 +613,21 @@ class MainWindow(QMainWindow):
     def do_generate_gr(self):
         calculategr_event_handler.generate_gr_step1(self)
 
-    #     """ Handling event from push button 'Generate G(r)' by generating G(r) of selected workspaces
-    #     :return:
-    #     """
-    #     # get S(Q) workspace
-    #     selected_sq = str(self.ui.comboBox_SofQ.currentText())
-    #     if selected_sq == 'All':
-    #         sq_ws_name_list = list()
-    #         for index in range(self.ui.comboBox_SofQ.count()):
-    #             item = str(self.ui.comboBox_SofQ.itemText(index))
-    #             if item != 'All':
-    #                 # add S(Q) name unless it is 'All'
-    #                 sq_ws_name_list.append(item)
-    #             # END-IF
-    #         # END-FOR
-    #     else:
-    #         # selected S(Q) is a single S(Q) name
-    #         sq_ws_name_list = [selected_sq]
-    #
-    #     # generate G(r)
-    #     self.generate_gr(sq_ws_name_list=sq_ws_name_list)
-    #
-    #     return
+    def evt_qmax_changed(self):
+        calculategr_event_handler.evt_qmax_changed(self)
 
-    # def generate_gr(self, sq_ws_name_list):
-    #     """Generate G(r) from specified S(Q) workspaces
-    #     :param sq_ws_name_list:
-    #     :return:
-    #     """
-    #     # check inputs
-    #     assert isinstance(sq_ws_name_list, list), 'S(Q) workspaces {0} must be given by list but not {1}.' \
-    #                                               ''.format(sq_ws_name_list, type(sq_ws_name_list))
-    #     if len(sq_ws_name_list) == 0:
-    #         raise RuntimeError('User specified an empty list of S(Q)')
-    #
-    #     # get r-range and q-range
-    #     min_r = float(self.ui.doubleSpinBoxRmin.value())
-    #     max_r = float(self.ui.doubleSpinBoxRmax.value())
-    #     delta_r = float(self.ui.doubleSpinBoxDelR.value())
-    #
-    #     min_q = float(self.ui.doubleSpinBoxQmin.value())
-    #     max_q = float(self.ui.doubleSpinBoxQmax.value())
-    #
-    #     use_filter_str = str(self.ui.comboBox_pdfCorrection.currentText())
-    #     if use_filter_str == 'No Modification':
-    #         pdf_filter = None
-    #     elif use_filter_str == 'Lorch':
-    #         pdf_filter = 'lorch'
-    #     else:
-    #         raise RuntimeError('PDF filter {0} is not recognized.'.format(use_filter_str))
-    #     rho0_str = str(self.ui.lineEdit_rho.text())
-    #     try:
-    #         rho0=float(rho0_str)
-    #     except ValueError:
-    #         rho0 = None
-    #
-    #     # PDF type
-    #     pdf_type = str(self.ui.comboBox_pdfType.currentText())
-    #
-    #     # loop for all selected S(Q)
-    #     for sq_ws_name in sq_ws_name_list:
-    #         # calculate G(r)
-    #         gr_ws_name = self._myController.calculate_gr(sq_ws_name, pdf_type, min_r, delta_r, max_r,
-    #                                                      min_q, max_q, pdf_filter, rho0)
-    #
-    #         # check whether G(r) is on GofR plot or not in order to determine this is an update or new plot
-    #         update = self.ui.graphicsView_gr.has_gr(gr_ws_name)
-    #
-    #         # plot G(R)
-    #         if not update:
-    #             # a new line
-    #             gr_color, gr_style, gr_marker, gr_alpha = self._pdfColorManager.add_gofr(sq_ws_name, gr_ws_name, max_q)
-    #             gr_label = '{0} Q: ({1}, {2})'.format(sq_ws_name, min_q, max_q)
-    #             self.plot_gr(gr_ws_name, gr_color, gr_style, gr_marker, gr_alpha, gr_label)
-    #         else:
-    #             self.plot_gr(gr_ws_name, line_color=None, line_style=None, line_marker=None,
-    #                          line_alpha=None, line_label=None)
-    #
-    #         # add to tree
-    #         # TODO/ISSUE/NOW - Need to find out the name of the
-    #         gr_param_str = 'G(r) for Q(%.3f, %.3f)' % (min_q, max_q)
-    #         self.ui.treeWidget_grWsList.add_gr(gr_param_str, gr_ws_name)
-    #     # END-FOR
-    #
-    #     return
+    def evt_qmin_changed(self):
+        calculategr_event_handler.evt_qmin_changed(self)
+
+    def do_load_sq(self):
+        calculategr_event_handler.load_sq(self)
+
+
+
+
+
+
+
 
     def do_rescale_sofq(self):
         """ Rescale the figure of S(Q)
@@ -802,33 +733,33 @@ class MainWindow(QMainWindow):
 
         return
 
-    def plot_gr(self, ws_name, line_color, line_style, line_marker, line_alpha, line_label,
-                auto=False):
-        """Plot G(r) by their names (workspace as protocol)
-        """
-        # get the value
-        vec_r, vec_g, vec_ge = self._myController.get_ws_data(ws_name)
-
-        # check whether the workspace is on the figure
-        print('[DB...BAT] G(r) graphic has plot {0} is {1}. Keys are {2}'
-              ''.format(ws_name, self.ui.graphicsView_gr.has_gr(ws_name),
-                        self.ui.graphicsView_gr.get_current_grs()))
-
-        if self.ui.graphicsView_gr.has_gr(ws_name):
-            # update G(r) value of an existing plot
-            self.ui.graphicsView_gr.update_gr(ws_name, ws_name, plotError=False)
-        else:
-            # a new g(r) plot
-            if auto:
-                line_color, line_style, line_alpha = self._pdfColorManager.get_gr_line(ws_name)
-
-             # plot G(R)
-            self.ui.graphicsView_gr.plot_gr(ws_name, ws_name, plotError=False,
-                                            color=line_color, style=line_style, marker=line_marker,
-                                            alpha=line_alpha, label=line_label)
-        # END-FOR
-
-        return
+    # def plot_gr(self, ws_name, line_color, line_style, line_marker, line_alpha, line_label,
+    #             auto=False):
+    #     """Plot G(r) by their names (workspace as protocol)
+    #     """
+    #     # get the value
+    #     vec_r, vec_g, vec_ge = self._myController.get_ws_data(ws_name)
+    #
+    #     # check whether the workspace is on the figure
+    #     print('[DB...BAT] G(r) graphic has plot {0} is {1}. Keys are {2}'
+    #           ''.format(ws_name, self.ui.graphicsView_gr.has_gr(ws_name),
+    #                     self.ui.graphicsView_gr.get_current_grs()))
+    #
+    #     if self.ui.graphicsView_gr.has_gr(ws_name):
+    #         # update G(r) value of an existing plot
+    #         self.ui.graphicsView_gr.update_gr(ws_name, ws_name, plotError=False)
+    #     else:
+    #         # a new g(r) plot
+    #         if auto:
+    #             line_color, line_style, line_alpha = self._pdfColorManager.get_gr_line(ws_name)
+    #
+    #          # plot G(R)
+    #         self.ui.graphicsView_gr.plot_gr(ws_name, ws_name, plotError=False,
+    #                                         color=line_color, style=line_style, marker=line_marker,
+    #                                         alpha=line_alpha, label=line_label)
+    #     # END-FOR
+    #
+    #     return
 
     # def plot_sq(self, ws_name, color, clear_prev):
     #     """
@@ -976,57 +907,6 @@ class MainWindow(QMainWindow):
 
         return file_name_list
 
-    def do_load_sq(self):
-        calculategr_event_handler.load_sq(self)
-        # """
-        # Load S(Q) from file
-        # Returns
-        # -------
-        #
-        # """
-        # # get default dir
-        # if self._currDataDir is None:
-        #     default_dir = os.getcwd()
-        # else:
-        #     default_dir = self.getDefaultDir(sub_dir='SofQ')
-        #
-        # # get the file
-        # ext = 'nxs (*.nxs);;dat (*.dat);;All (*.*)'
-        # sq_file_names = QFileDialog.getOpenFileNames(self, 'Choose S(Q) File', default_dir, ext)
-        # if isinstance(sq_file_names, tuple):
-        #     sq_file_names = sq_file_names[0]
-        # if sq_file_names is None or sq_file_names == '' or len(sq_file_names) == 0:
-        #     return
-        #
-        # # update current data directory
-        # self._currDataDir = os.path.split(os.path.abspath(sq_file_names[0]))[0]
-        # self.check_in_fixed_dir_structure('SofQ')
-        #
-        # # load S(q)
-        # for sq_file_name in sq_file_names:
-        #     sq_file_name = str(sq_file_name)
-        #     sq_ws_name, q_min, q_max = self._myController.load_sq(sq_file_name)
-        #     # add to color management
-        #     color = self._pdfColorManager.add_sofq(sq_ws_name)
-        #
-        #     # set to the tree and combo box
-        #     self.ui.treeWidget_grWsList.add_sq(sq_ws_name)
-        #     self.ui.comboBox_SofQ.addItem(sq_ws_name)
-        #     self.ui.comboBox_SofQ.setCurrentIndex(self.ui.comboBox_SofQ.count()-1)
-        #
-        #     # set the UI widgets
-        #     self.ui.doubleSpinBoxQmin.setValue(q_min)
-        #     self.ui.doubleSpinBoxQmax.setValue(q_max)
-        #
-        #     # plot S(Q) - TODO why is it getting the name again?
-        #     ws_name = self._myController.get_current_sq_name()
-        #
-        #     self.plot_sq(ws_name, color=color, clear_prev=False)
-        #
-        #     # calculate and calculate G(R)
-        #     self.do_generate_gr()
-        #
-        # return
 
     def do_edit_sq(self):
         """
@@ -1263,35 +1143,6 @@ class MainWindow(QMainWindow):
         for sq_name in curr_sq_list:
             # plot S(Q)
             self.plot_sq(sq_name, color=None, clear_prev=False)
-
-        return
-
-    def evt_qmax_changed(self):
-        """
-        Handle if the user change the value of Qmax of S(Q) including
-        1. moving the right boundary in S(q) figure
-        Returns:
-
-        """
-        q_min = self.ui.doubleSpinBoxQmin.value()
-        q_max = self.ui.doubleSpinBoxQmax.value()
-
-        if q_min < q_max and self.ui.graphicsView_sq.is_boundary_shown():
-            self.ui.graphicsView_sq.move_right_indicator(q_max, relative=False)
-
-        return
-
-    def evt_qmin_changed(self):
-        """
-
-        Returns:
-
-        """
-        q_min = self.ui.doubleSpinBoxQmin.value()
-        q_max = self.ui.doubleSpinBoxQmax.value()
-
-        if q_min < q_max and self.ui.graphicsView_sq.is_boundary_shown():
-            self.ui.graphicsView_sq.move_left_indicator(q_min, relative=False)
 
         return
 
