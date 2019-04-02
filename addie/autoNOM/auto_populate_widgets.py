@@ -10,29 +10,29 @@ class AutoPopulateWidgets(object):
     file_found_message = "Config file %s has been found!" % input_file_name
     file_not_found_message = "Config file %s has  not been found! " % input_file_name
 
-    def __init__(self, parent=None):
-        self.parent_no_ui = parent
-        self.parent = parent.ui
+    def __init__(self, main_window=None):
+        self.main_window = main_window
+#        self.main_window.autonom_ui = parent.ui
 
     def run(self):
-        full_file_name = os.path.join(self.parent_no_ui.current_folder, self.input_file_name)
+        full_file_name = os.path.join(self.main_window.current_folder, self.input_file_name)
         if os.path.exists(full_file_name):
-            self.parent.exp_ini_file_status.setText(self.file_found_message)
+            self.main_window.autonom_ui.exp_ini_file_status.setText(self.file_found_message)
             o_retriever = RetrieveExpIniConfiguration(exp_ini_file_name=full_file_name)
             o_retriever.run()
             self.populate_widgets(o_retriever.exp_ini_dico)
             return
 
-        self.parent.exp_ini_file_status.setText(self.file_not_found_message)
+        self.main_window.autonom_ui.exp_ini_file_status.setText(self.file_not_found_message)
 
     def populate_widgets(self, widgets_dico):
-        self.parent.diamond.setText(widgets_dico['Dia'])
-        self.parent.diamond_background.setText(widgets_dico['DiaBg'])
-        self.parent.vanadium.setText(widgets_dico['Vana'])
-        self.parent.vanadium_background.setText(widgets_dico['VanaBg'])
-        self.parent.sample_background.setText(widgets_dico['MTc'])
+        self.main_window.autonom_ui.diamond.setText(widgets_dico['Dia'])
+        self.main_window.autonom_ui.diamond_background.setText(widgets_dico['DiaBg'])
+        self.main_window.autonom_ui.vanadium.setText(widgets_dico['Vana'])
+        self.main_window.autonom_ui.vanadium_background.setText(widgets_dico['VanaBg'])
+        self.main_window.autonom_ui.sample_background.setText(widgets_dico['MTc'])
 
-        o_gui = Step1WidgetsHandler(parent=self.parent_no_ui)
+        o_gui = Step1WidgetsHandler(parent=self.main_window)
 
         try:
             _recali = True if (widgets_dico['recali'].strip() == 'yes') else False
@@ -55,20 +55,20 @@ class AutoPopulateWidgets(object):
         finally:
             o_gui.set_autotemplate(_auto)
 
-        self.parent.first_scan.setText(widgets_dico['scan1'])
-        self.parent.last_scan.setText(widgets_dico['scanl'])
+        self.main_window.autonom_ui.first_scan.setText(widgets_dico['scan1'])
+        self.main_window.autonom_ui.last_scan.setText(widgets_dico['scanl'])
 
-        if str(self.parent.frequency.currentText()) == '60':
-            self.parent.frequency.setCurrentIndex(0)
+        if str(self.main_window.autonom_ui.frequency.currentText()) == '60':
+            self.main_window.autonom_ui.frequency.setCurrentIndex(0)
         else:
-            self.parent.frequency.setCurrentIndex(1)
+            self.main_window.autonom_ui.frequency.setCurrentIndex(1)
 
         try:
             _comments = widgets_dico['#']
         except:
             _comments = ''
         finally:
-            self.parent.comments.setText(_comments)
+            self.main_window.autonom_ui.comments.setText(_comments)
 
 
 class RetrieveExpIniConfiguration(object):

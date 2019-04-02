@@ -58,8 +58,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1691</width>
-         <height>939</height>
+         <width>1689</width>
+         <height>941</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -85,742 +85,8 @@
                </size>
               </property>
               <property name="currentIndex">
-               <number>1</number>
+               <number>0</number>
               </property>
-              <widget class="QWidget" name="tab_5">
-               <attribute name="title">
-                <string>autoNOM</string>
-               </attribute>
-               <layout class="QVBoxLayout" name="verticalLayout_7">
-                <item>
-                 <widget class="QGroupBox" name="groupBox_27">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="title">
-                   <string>Scan Numbers  (ex: 1234, 1300-1305, 1310)</string>
-                  </property>
-                  <layout class="QVBoxLayout" name="verticalLayout_31">
-                   <item>
-                    <layout class="QHBoxLayout" name="horizontalLayout_4">
-                     <item>
-                      <widget class="QPushButton" name="select_current_folder_button">
-                       <property name="minimumSize">
-                        <size>
-                         <width>189</width>
-                         <height>0</height>
-                        </size>
-                       </property>
-                       <property name="maximumSize">
-                        <size>
-                         <width>160</width>
-                         <height>16777215</height>
-                        </size>
-                       </property>
-                       <property name="text">
-                        <string>Select Working Folder ...</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QLabel" name="exp_ini_file_status">
-                       <property name="minimumSize">
-                        <size>
-                         <width>500</width>
-                         <height>0</height>
-                        </size>
-                       </property>
-                       <property name="maximumSize">
-                        <size>
-                         <width>500</width>
-                         <height>16777215</height>
-                        </size>
-                       </property>
-                       <property name="text">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <spacer name="horizontalSpacer_3">
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>40</width>
-                         <height>20</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
-                    </layout>
-                   </item>
-                   <item>
-                    <layout class="QGridLayout" name="gridLayout_15">
-                     <item row="1" column="1">
-                      <widget class="QLineEdit" name="diamond_background">
-                       <property name="toolTip">
-                        <string extracomment="dfdfdfdff"/>
-                       </property>
-                       <property name="statusTip">
-                        <string/>
-                       </property>
-                       <property name="accessibleDescription">
-                        <string/>
-                       </property>
-                       <property name="inputMask">
-                        <string/>
-                       </property>
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="placeholderText">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="1">
-                      <widget class="QLineEdit" name="diamond">
-                       <property name="toolTip">
-                        <string/>
-                       </property>
-                       <property name="statusTip">
-                        <string/>
-                       </property>
-                       <property name="accessibleDescription">
-                        <string/>
-                       </property>
-                       <property name="inputMask">
-                        <string/>
-                       </property>
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="placeholderText">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="0">
-                      <widget class="QLabel" name="label_65">
-                       <property name="text">
-                        <string>Calibration</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="4" column="0">
-                      <widget class="QLabel" name="label_72">
-                       <property name="text">
-                        <string>Container</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="2" column="1">
-                      <widget class="QLineEdit" name="vanadium">
-                       <property name="toolTip">
-                        <string/>
-                       </property>
-                       <property name="statusTip">
-                        <string/>
-                       </property>
-                       <property name="accessibleDescription">
-                        <string/>
-                       </property>
-                       <property name="inputMask">
-                        <string/>
-                       </property>
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="placeholderText">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="3" column="1">
-                      <widget class="QLineEdit" name="vanadium_background">
-                       <property name="toolTip">
-                        <string extracomment="dfdfdfdff"/>
-                       </property>
-                       <property name="statusTip">
-                        <string/>
-                       </property>
-                       <property name="accessibleDescription">
-                        <string/>
-                       </property>
-                       <property name="inputMask">
-                        <string/>
-                       </property>
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="placeholderText">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="2" column="0">
-                      <widget class="QLabel" name="label_66">
-                       <property name="text">
-                        <string>Normalization</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="3" column="0">
-                      <widget class="QLabel" name="label_64">
-                       <property name="text">
-                        <string>Normalization Background</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="4" column="1">
-                      <widget class="QLineEdit" name="sample_background">
-                       <property name="toolTip">
-                        <string extracomment="dfdfdfdff"/>
-                       </property>
-                       <property name="statusTip">
-                        <string/>
-                       </property>
-                       <property name="accessibleDescription">
-                        <string/>
-                       </property>
-                       <property name="inputMask">
-                        <string/>
-                       </property>
-                       <property name="text">
-                        <string/>
-                       </property>
-                       <property name="placeholderText">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="0">
-                      <widget class="QLabel" name="label_71">
-                       <property name="text">
-                        <string>Calibration Background</string>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="Line" name="line_3">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_52">
-                  <item>
-                   <layout class="QVBoxLayout" name="verticalLayout_32">
-                    <item>
-                     <layout class="QGridLayout" name="gridLayout_16">
-                      <item row="0" column="0">
-                       <widget class="QLabel" name="label_75">
-                        <property name="text">
-                         <string>First scan to be analyzed</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="2" column="0">
-                       <widget class="QLabel" name="label_76">
-                        <property name="text">
-                         <string>Frequency (Hz)</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="0">
-                       <widget class="QLabel" name="label_77">
-                        <property name="text">
-                         <string>Last scan to be analyzed</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="1">
-                       <widget class="QLineEdit" name="last_scan">
-                        <property name="text">
-                         <string/>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="0" column="1">
-                       <widget class="QLineEdit" name="first_scan">
-                        <property name="text">
-                         <string/>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="2" column="1">
-                       <widget class="QComboBox" name="frequency">
-                        <item>
-                         <property name="text">
-                          <string>60</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>30</string>
-                         </property>
-                        </item>
-                       </widget>
-                      </item>
-                     </layout>
-                    </item>
-                   </layout>
-                  </item>
-                  <item>
-                   <spacer name="horizontalSpacer_19">
-                    <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>40</width>
-                      <height>20</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_53">
-                  <item>
-                   <widget class="QGroupBox" name="groupBox_28">
-                    <property name="minimumSize">
-                     <size>
-                      <width>120</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="title">
-                     <string>Recalibration</string>
-                    </property>
-                    <layout class="QHBoxLayout" name="horizontalLayout_54">
-                     <item>
-                      <widget class="QRadioButton" name="recalibration_yes">
-                       <property name="text">
-                        <string>yes</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QRadioButton" name="recalibration_no">
-                       <property name="text">
-                        <string>No</string>
-                       </property>
-                       <property name="checked">
-                        <bool>true</bool>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QGroupBox" name="groupBox_29">
-                    <property name="minimumSize">
-                     <size>
-                      <width>120</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="title">
-                     <string>Renormalization</string>
-                    </property>
-                    <layout class="QHBoxLayout" name="horizontalLayout_55">
-                     <item>
-                      <widget class="QRadioButton" name="renormalization_yes">
-                       <property name="text">
-                        <string>Yes</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QRadioButton" name="renormalization_no">
-                       <property name="text">
-                        <string>No</string>
-                       </property>
-                       <property name="checked">
-                        <bool>true</bool>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QGroupBox" name="groupBox_30">
-                    <property name="minimumSize">
-                     <size>
-                      <width>120</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="title">
-                     <string>Autotemplate</string>
-                    </property>
-                    <layout class="QHBoxLayout" name="horizontalLayout_56">
-                     <item>
-                      <widget class="QRadioButton" name="autotemplate_yes">
-                       <property name="text">
-                        <string>Yes</string>
-                       </property>
-                       <property name="checked">
-                        <bool>true</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QRadioButton" name="autotemplate_no">
-                       <property name="text">
-                        <string>No</string>
-                       </property>
-                       <property name="checked">
-                        <bool>false</bool>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QGroupBox" name="groupBox">
-                    <property name="title">
-                     <string>Live</string>
-                    </property>
-                    <layout class="QHBoxLayout" name="horizontalLayout_5">
-                     <item>
-                      <widget class="QRadioButton" name="postprocessing_no">
-                       <property name="toolTip">
-                        <string>Will overwrite the data reduction config file</string>
-                       </property>
-                       <property name="text">
-                        <string>Yes</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QRadioButton" name="postprocessing_yes">
-                       <property name="toolTip">
-                        <string>Will not overwrite the data reduction config file</string>
-                       </property>
-                       <property name="text">
-                        <string>No</string>
-                       </property>
-                       <property name="checked">
-                        <bool>true</bool>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item>
-                   <spacer name="horizontalSpacer_20">
-                    <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>40</width>
-                      <height>20</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_57">
-                  <item>
-                   <widget class="QLabel" name="label_78">
-                    <property name="text">
-                     <string>Comments</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="comments"/>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_23">
-                  <item>
-                   <widget class="QLabel" name="label_24">
-                    <property name="enabled">
-                     <bool>false</bool>
-                    </property>
-                    <property name="text">
-                     <string>Sample Environment</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QComboBox" name="sample_environment_comboBox">
-                    <property name="enabled">
-                     <bool>false</bool>
-                    </property>
-                    <item>
-                     <property name="text">
-                      <string>shifter</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>orange_cryostat</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>ILL_furnace</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>stick_furnace</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>aerodynamic_levitator</string>
-                     </property>
-                    </item>
-                   </widget>
-                  </item>
-                  <item>
-                   <spacer name="horizontalSpacer_2">
-                    <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>40</width>
-                      <height>20</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <spacer name="verticalSpacer_25">
-                  <property name="orientation">
-                   <enum>Qt::Vertical</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>20</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_33">
-                  <item>
-                   <widget class="QCheckBox" name="create_folder_button">
-                    <property name="text">
-                     <string>Create New autoNOM Folder?</string>
-                    </property>
-                    <property name="checked">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QGroupBox" name="name_of_output_folder">
-                    <property name="title">
-                     <string>Name of Output Folder</string>
-                    </property>
-                    <layout class="QVBoxLayout" name="verticalLayout_34">
-                     <item>
-                      <widget class="QRadioButton" name="auto_manual_folder">
-                       <property name="text">
-                        <string>Automatic (autoNOM_##)</string>
-                       </property>
-                       <property name="checked">
-                        <bool>true</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <layout class="QHBoxLayout" name="horizontalLayout_59">
-                       <item>
-                        <widget class="QRadioButton" name="manual_output_folder">
-                         <property name="text">
-                          <string>Manual</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QLineEdit" name="manual_output_folder_field">
-                         <property name="enabled">
-                          <bool>false</bool>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QPushButton" name="manual_output_folder_button">
-                         <property name="enabled">
-                          <bool>false</bool>
-                         </property>
-                         <property name="text">
-                          <string>Select ...</string>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <spacer name="verticalSpacer_26">
-                  <property name="orientation">
-                   <enum>Qt::Vertical</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>20</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_19">
-                  <item>
-                   <widget class="QPushButton" name="create_exp_ini_button">
-                    <property name="enabled">
-                     <bool>false</bool>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>200</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>200</width>
-                      <height>16777215</height>
-                     </size>
-                    </property>
-                    <property name="text">
-                     <string>Create exp.ini File Only</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="run_autonom_script">
-                    <property name="enabled">
-                     <bool>false</bool>
-                    </property>
-                    <property name="text">
-                     <string>Run autoNOM script</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="pushButton_2">
-                    <property name="minimumSize">
-                     <size>
-                      <width>20</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>20</width>
-                      <height>16777215</height>
-                     </size>
-                    </property>
-                    <property name="palette">
-                     <palette>
-                      <active>
-                       <colorrole role="WindowText">
-                        <brush brushstyle="SolidPattern">
-                         <color alpha="255">
-                          <red>255</red>
-                          <green>0</green>
-                          <blue>0</blue>
-                         </color>
-                        </brush>
-                       </colorrole>
-                       <colorrole role="ButtonText">
-                        <brush brushstyle="SolidPattern">
-                         <color alpha="255">
-                          <red>255</red>
-                          <green>0</green>
-                          <blue>0</blue>
-                         </color>
-                        </brush>
-                       </colorrole>
-                      </active>
-                      <inactive>
-                       <colorrole role="WindowText">
-                        <brush brushstyle="SolidPattern">
-                         <color alpha="255">
-                          <red>255</red>
-                          <green>0</green>
-                          <blue>0</blue>
-                         </color>
-                        </brush>
-                       </colorrole>
-                       <colorrole role="ButtonText">
-                        <brush brushstyle="SolidPattern">
-                         <color alpha="255">
-                          <red>255</red>
-                          <green>0</green>
-                          <blue>0</blue>
-                         </color>
-                        </brush>
-                       </colorrole>
-                      </inactive>
-                      <disabled>
-                       <colorrole role="WindowText">
-                        <brush brushstyle="SolidPattern">
-                         <color alpha="255">
-                          <red>128</red>
-                          <green>128</green>
-                          <blue>128</blue>
-                         </color>
-                        </brush>
-                       </colorrole>
-                       <colorrole role="ButtonText">
-                        <brush brushstyle="SolidPattern">
-                         <color alpha="255">
-                          <red>128</red>
-                          <green>128</green>
-                          <blue>128</blue>
-                         </color>
-                        </brush>
-                       </colorrole>
-                      </disabled>
-                     </palette>
-                    </property>
-                    <property name="text">
-                     <string>?</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
-              </widget>
               <widget class="QWidget" name="idl_tab">
                <attribute name="title">
                 <string>Post Processing</string>
@@ -3781,7 +3047,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>1711</width>
-     <height>24</height>
+     <height>22</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -3921,30 +3187,6 @@ p, li { white-space: pre-wrap; }
   </action>
  </widget>
  <tabstops>
-  <tabstop>select_current_folder_button</tabstop>
-  <tabstop>diamond</tabstop>
-  <tabstop>diamond_background</tabstop>
-  <tabstop>vanadium</tabstop>
-  <tabstop>vanadium_background</tabstop>
-  <tabstop>sample_background</tabstop>
-  <tabstop>first_scan</tabstop>
-  <tabstop>last_scan</tabstop>
-  <tabstop>frequency</tabstop>
-  <tabstop>recalibration_yes</tabstop>
-  <tabstop>recalibration_no</tabstop>
-  <tabstop>renormalization_yes</tabstop>
-  <tabstop>renormalization_no</tabstop>
-  <tabstop>autotemplate_yes</tabstop>
-  <tabstop>autotemplate_no</tabstop>
-  <tabstop>postprocessing_no</tabstop>
-  <tabstop>comments</tabstop>
-  <tabstop>create_folder_button</tabstop>
-  <tabstop>auto_manual_folder</tabstop>
-  <tabstop>manual_output_folder</tabstop>
-  <tabstop>manual_output_folder_field</tabstop>
-  <tabstop>manual_output_folder_button</tabstop>
-  <tabstop>run_autonom_script</tabstop>
-  <tabstop>pushButton_2</tabstop>
   <tabstop>scrollArea</tabstop>
   <tabstop>move_to_button</tabstop>
   <tabstop>import_button</tabstop>
@@ -4129,158 +3371,30 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>move_to_button</sender>
+   <sender>actionSettings</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>advanced_option_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>855</x>
+     <y>503</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hydrogen_no</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>move_to_folder_clicked()</slot>
+   <slot>no_hidrogen_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>69</x>
-     <y>115</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>580</x>
-     <y>419</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>vanadium_background</sender>
-   <signal>editingFinished()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>vanadium_background_edited()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>130</x>
-     <y>109</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>580</x>
-     <y>419</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>diamond_background</sender>
-   <signal>editingFinished()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>diamond_background_edited()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>130</x>
-     <y>109</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>580</x>
-     <y>419</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>manual_output_folder_field</sender>
-   <signal>editingFinished()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>manual_output_folder_field_edited()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>130</x>
-     <y>125</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>580</x>
-     <y>419</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>sample_background</sender>
-   <signal>editingFinished()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>sample_background_edited()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>130</x>
-     <y>109</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>580</x>
-     <y>419</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>run_autonom_script</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>run_autonom()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>130</x>
-     <y>129</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>580</x>
-     <y>419</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>vanadium</sender>
-   <signal>editingFinished()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>vanadium_edited()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>130</x>
-     <y>109</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>580</x>
-     <y>419</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>select_current_folder_button</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>select_current_folder_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>173</x>
-     <y>109</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>594</x>
-     <y>0</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>auto_manual_folder</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>output_folder_radio_buttons()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>130</x>
-     <y>125</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>580</x>
-     <y>419</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>manual_output_folder</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>output_folder_radio_buttons()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>130</x>
-     <y>125</y>
+     <x>1107</x>
+     <y>559</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -4290,17 +3404,49 @@ p, li { white-space: pre-wrap; }
   </connection>
   <connection>
    <sender>table</sender>
-   <signal>cellChanged(int,int)</signal>
+   <signal>customContextMenuRequested(QPoint)</signal>
    <receiver>MainWindow</receiver>
-   <slot>check_step2_gui()</slot>
+   <slot>table_right_click()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>712</x>
+     <x>644</x>
      <y>222</y>
     </hint>
     <hint type="destinationlabel">
-     <x>656</x>
-     <y>370</y>
+     <x>580</x>
+     <y>419</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clear_name_search</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>clear_name_search_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1668</x>
+     <y>115</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1353</x>
+     <y>79</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fourier_filter_to</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>check_fourier_filter_widgets()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>912</x>
+     <y>708</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>580</x>
+     <y>419</y>
     </hint>
    </hints>
   </connection>
@@ -4337,14 +3483,14 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>diamond</sender>
+   <sender>plazcek_fit_range_max</sender>
    <signal>editingFinished()</signal>
    <receiver>MainWindow</receiver>
-   <slot>diamond_edited()</slot>
+   <slot>check_plazcek_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>130</x>
-     <y>109</y>
+     <x>792</x>
+     <y>593</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -4369,82 +3515,50 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>create_folder_button</sender>
-   <signal>clicked(bool)</signal>
+   <sender>pushButton_4</sender>
+   <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>create_new_autonom_folder_button_clicked()</slot>
+   <slot>help_button_clicked_scans()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>120</x>
-     <y>125</y>
+     <x>1645</x>
+     <y>886</y>
     </hint>
     <hint type="destinationlabel">
-     <x>83</x>
-     <y>860</y>
+     <x>915</x>
+     <y>807</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>manual_output_folder_button</sender>
+   <sender>move_to_button</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>manual_output_folder_button_clicked()</slot>
+   <slot>move_to_folder_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>130</x>
-     <y>125</y>
+     <x>69</x>
+     <y>115</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1220</x>
-     <y>825</y>
+     <x>580</x>
+     <y>419</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>table</sender>
-   <signal>customContextMenuRequested(QPoint)</signal>
+   <signal>cellChanged(int,int)</signal>
    <receiver>MainWindow</receiver>
-   <slot>table_right_click()</slot>
+   <slot>check_step2_gui()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>644</x>
+     <x>712</x>
      <y>222</y>
     </hint>
     <hint type="destinationlabel">
-     <x>580</x>
-     <y>419</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>plazcek_fit_range_max</sender>
-   <signal>editingFinished()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>check_plazcek_widgets()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>792</x>
-     <y>593</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>580</x>
-     <y>419</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>hydrogen_no</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>no_hidrogen_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1107</x>
-     <y>559</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>580</x>
-     <y>419</y>
+     <x>656</x>
+     <y>370</y>
     </hint>
    </hints>
   </connection>
@@ -4465,22 +3579,6 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>q_range_max</sender>
-   <signal>editingFinished()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>check_q_range()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>578</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>6</x>
-     <y>690</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>plazcek_fit_range_min</sender>
    <signal>editingFinished()</signal>
    <receiver>MainWindow</receiver>
@@ -4489,22 +3587,6 @@ p, li { white-space: pre-wrap; }
     <hint type="sourcelabel">
      <x>725</x>
      <y>593</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>580</x>
-     <y>419</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>fourier_filter_from</sender>
-   <signal>editingFinished()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>check_fourier_filter_widgets()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>154</x>
-     <y>708</y>
     </hint>
     <hint type="destinationlabel">
      <x>580</x>
@@ -4561,13 +3643,13 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>fourier_filter_to</sender>
+   <sender>fourier_filter_from</sender>
    <signal>editingFinished()</signal>
    <receiver>MainWindow</receiver>
    <slot>check_fourier_filter_widgets()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>912</x>
+     <x>154</x>
      <y>708</y>
     </hint>
     <hint type="destinationlabel">
@@ -4577,18 +3659,18 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>run_ndabs_button</sender>
-   <signal>clicked()</signal>
+   <sender>q_range_max</sender>
+   <signal>editingFinished()</signal>
    <receiver>MainWindow</receiver>
-   <slot>run_ndabs_clicked()</slot>
+   <slot>check_q_range()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1313</x>
-     <y>862</y>
+     <x>316</x>
+     <y>578</y>
     </hint>
     <hint type="destinationlabel">
-     <x>580</x>
-     <y>419</y>
+     <x>6</x>
+     <y>690</y>
     </hint>
    </hints>
   </connection>
@@ -4609,22 +3691,6 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>pdf_qmax_line_edit</sender>
-   <signal>editingFinished()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>pdf_qmax_line_edit_changed()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1621</x>
-     <y>674</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1158</x>
-     <y>21</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>export_button</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
@@ -4641,130 +3707,18 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>sum_scans_output_file_name</sender>
-   <signal>editingFinished()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>sum_scans_output_file_name_changed()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1612</x>
-     <y>824</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1103</x>
-     <y>809</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton_2</sender>
+   <sender>run_ndabs_button</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>help_button_clicked()</slot>
+   <slot>run_ndabs_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>50</x>
-     <y>129</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>956</x>
-     <y>803</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>import_button</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>import_table_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>77</x>
-     <y>148</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>243</x>
-     <y>22</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>main_tab</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>main_tab_widget_changed()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>141</x>
-     <y>50</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>201</x>
-     <y>27</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton_4</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>help_button_clicked_scans()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1645</x>
-     <y>886</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>915</x>
-     <y>807</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton_3</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>help_button_clicked_ndabs()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1339</x>
+     <x>1313</x>
      <y>862</y>
     </hint>
     <hint type="destinationlabel">
-     <x>966</x>
-     <y>808</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>create_exp_ini_button</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>create_exp_ini_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>117</x>
-     <y>129</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>2</x>
-     <y>978</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>splitter</sender>
-   <signal>splitterMoved(int,int)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>resize_table_post_processing_tab()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>121</x>
-     <y>96</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>678</x>
-     <y>528</y>
+     <x>580</x>
+     <y>419</y>
     </hint>
    </hints>
   </connection>
@@ -4785,34 +3739,98 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>clear_name_search</sender>
-   <signal>clicked()</signal>
+   <sender>sum_scans_output_file_name</sender>
+   <signal>editingFinished()</signal>
    <receiver>MainWindow</receiver>
-   <slot>clear_name_search_clicked()</slot>
+   <slot>sum_scans_output_file_name_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1668</x>
-     <y>115</y>
+     <x>1612</x>
+     <y>824</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1353</x>
-     <y>79</y>
+     <x>1103</x>
+     <y>809</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>actionSettings</sender>
-   <signal>triggered()</signal>
+   <sender>main_tab</sender>
+   <signal>currentChanged(int)</signal>
    <receiver>MainWindow</receiver>
-   <slot>advanced_option_clicked()</slot>
+   <slot>main_tab_widget_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
+     <x>141</x>
+     <y>50</y>
     </hint>
     <hint type="destinationlabel">
-     <x>855</x>
-     <y>503</y>
+     <x>201</x>
+     <y>27</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pdf_qmax_line_edit</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>pdf_qmax_line_edit_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1621</x>
+     <y>674</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1158</x>
+     <y>21</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>import_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>import_table_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>77</x>
+     <y>148</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>243</x>
+     <y>22</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>splitter</sender>
+   <signal>splitterMoved(int,int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>resize_table_post_processing_tab()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>121</x>
+     <y>96</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>678</x>
+     <y>528</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>help_button_clicked_ndabs()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1339</x>
+     <y>862</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>966</x>
+     <y>808</y>
     </hint>
    </hints>
   </connection>

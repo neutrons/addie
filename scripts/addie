@@ -13,7 +13,7 @@ from collections import OrderedDict
 from qtpy.QtCore import (QProcess, Qt, QUrl)
 from qtpy.QtGui import (QDesktopServices, QIcon)
 from qtpy import QtGui
-from qtpy.QtWidgets import (QApplication, QFileDialog, QMainWindow, QMessageBox, QTableWidgetItem, QVBoxLayout, QWidget)
+from qtpy.QtWidgets import (QApplication, QFileDialog, QLabel, QMainWindow, QMessageBox, QTableWidgetItem, QVBoxLayout, QWidget)
 
 from addie import __version__
 from addie.initialization.widgets.configuration import ConfigurationInitializer
@@ -97,10 +97,12 @@ from addie.icons import icons_rc
 from addie.initialization.widgets import rietveld_tab as rietveld_tab_initialization
 from addie.initialization.widgets import processing_tab as processing_tab_initialization
 from addie.initialization.widgets import calculategr_tab as calculategr_tab_initialization
+from addie.initialization.widgets import autonom_tab as autonom_tab_initialization
 
 from addie.initialization.events import processing_tab as processing_tab_events_handler
 from addie.initialization.events import rietveld_tab as rietveld_tab_events_handler
 from addie.initialization.events import calculategr_tab as calculategr_tab_events_handler
+from addie.initialization.events import autonom_tab as autonom_tab_events_handler
 
 from addie.rietveld import event_handler as rietveld_event_handler
 from addie.calculate_gr import event_handler as calculategr_event_handler
@@ -323,6 +325,20 @@ class MainWindow(QMainWindow):
         # Initialize the UI widgets
         self.ui = load_ui('mainWindow.ui', baseinstance=self)
 
+        status_bar_label = QLabel()
+        self.ui.statusbar.addPermanentWidget(status_bar_label)
+        o_gui = Step1GuiHandler(main_window=self)
+        o_gui.set_main_window_title()
+
+
+        # autoNOM tab
+        self.autonom_tab_widget = QWidget()
+        self.autonom_ui = load_ui('splitui_autonom_tab.ui', baseinstance=self.autonom_tab_widget)
+        self.ui.main_tab.insertTab(0, self.autonom_tab_widget, "autoNOM")
+        autonom_tab_initialization.run(main_window=self)
+
+        # post processing
+
         # Mantid processing tab
         self.processing_tab_widget = QWidget()
         self.processing_ui = load_ui('splitui_processing_tab.ui', baseinstance=self.processing_tab_widget)
@@ -354,7 +370,7 @@ class MainWindow(QMainWindow):
 
         # set widgets
         self._init_widgets()
-        InitStep1(parent=self)
+        #InitStep1(parent=self)
         InitStep2(parent=self)
         #self.init_master_table()
 
@@ -423,6 +439,7 @@ class MainWindow(QMainWindow):
         processing_tab_events_handler.run(main_window=self)
         rietveld_tab_events_handler.run(main_window=self)
         calculategr_tab_events_handler.run(main_window=self)
+        autonom_tab_events_handler.run(main_window=self)
 
         # # set the tab to 0
         # main_window.calculategr_ui.main_tab.setCurrentIndex(0)
@@ -531,6 +548,10 @@ class MainWindow(QMainWindow):
         QDesktopServices.openUrl(helper_url)
 
         return
+
+    # autoNOM
+
+
 
     # Rietveld tab
     def do_load_bragg_file(self):
@@ -1045,7 +1066,7 @@ class MainWindow(QMainWindow):
 
     def main_tab_widget_changed(self, tab_selected):
         if tab_selected == 0:
-            o_gui = Step1GuiHandler(parent=self)
+            o_gui = Step1GuiHandler(main_window=self)
             self.check_step1_gui()
         if tab_selected == 1:
             _o_gui = Step2GuiHandler(parent=self)
@@ -1094,7 +1115,7 @@ class MainWindow(QMainWindow):
 
     # tab1
     def select_current_folder_clicked(self):
-        o_gui = Step1GuiHandler(parent=self)
+        o_gui = Step1GuiHandler(main_window=self)
         o_gui.select_working_folder()
         self.check_step1_gui()
 
@@ -1114,11 +1135,11 @@ class MainWindow(QMainWindow):
         self.check_step1_gui()
 
     def create_new_autonom_folder_button_clicked(self, status):
-        o_gui_handler = Step1GuiHandler(parent=self)
+        o_gui_handler = Step1GuiHandler(main_window=self)
         o_gui_handler.new_autonom_group_box(status=status)
 
     def output_folder_radio_buttons(self):
-        o_gui_handler = Step1GuiHandler(parent=self)
+        o_gui_handler = Step1GuiHandler(main_window=self)
         o_gui_handler.manual_output_folder_button_handler()
         o_gui_handler.check_go_button()
 
@@ -1126,7 +1147,7 @@ class MainWindow(QMainWindow):
         self.check_step1_gui()
 
     def manual_output_folder_button_clicked(self):
-        o_gui = Step1GuiHandler(parent=self)
+        o_gui = Step1GuiHandler(main_window=self)
         o_gui.select_manual_output_folder()
         self.check_step1_gui()
 
@@ -1147,7 +1168,7 @@ class MainWindow(QMainWindow):
 
     def check_step1_gui(self):
         '''check the status of the step1 GUI in order to enable or not the GO BUTTON at the bottom'''
-        o_gui_handler = Step1GuiHandler(parent=self)
+        o_gui_handler = Step1GuiHandler(main_window=self)
         o_gui_handler.check_go_button()
 
     def run_autonom(self):
