@@ -94,10 +94,6 @@ from addie.processing.mantid.master_table.master_table_exporter import TableFile
 from addie.rietveld.braggview import BraggView
 from addie.rietveld.braggtree import BraggTree
 
-# from addie.calculate_gr.gofrtree import GofRTree
-# from addie.calculate_gr.gofrview import GofRView
-# from addie.calculate_gr.sofqview import SofQView
-
 from addie.icons import icons_rc
 
 from addie.initialization.widgets import rietveld_tab as rietveld_tab_initialization
@@ -355,7 +351,6 @@ class MainWindow(QMainWindow):
 
         self._promote_widgets()
 
-
         # set widgets
         self._init_widgets()
         InitStep1(parent=self)
@@ -366,32 +361,32 @@ class MainWindow(QMainWindow):
         #self.ui.mantid_run_reduction.clicked.connect(self.do_mantid_run_reduction)
 
         # for tab G(R)
-        self.ui.pushButton_loadSQ.clicked.connect(self.do_load_sq)
-        self.ui.comboBox_SofQType.currentIndexChanged.connect(self.evt_change_sq_type)
-        self.ui.pushButton_clearSofQ.clicked.connect(self.do_clear_sq)
-        self.ui.pushButton_showQMinMax.clicked.connect(self.do_show_sq_bound)
-        self.ui.pushButton_generateGR.clicked.connect(self.do_generate_gr)
-        self.ui.pushButton_loadGofR.clicked.connect(self.do_load_gr)
-        self.ui.pushButton_saveGR.clicked.connect(self.do_save_gr)
-        self.ui.pushButton_clearGrCanvas.clicked.connect(self.do_clear_gr)
-        self.ui.pushButton_saveSQ.clicked.connect(self.do_save_sq)
-        self.ui.pushButton_editSofQ.clicked.connect(self.do_edit_sq)
-        self.ui.pushButton_generateSQ.clicked.connect(self.do_generate_sq)
-
-        self.ui.doubleSpinBoxQmin.valueChanged.connect(self.evt_qmin_changed)
-        self.ui.doubleSpinBoxQmax.valueChanged.connect(self.evt_qmax_changed)
-
-        self.ui.pushButton_rescaleSq.clicked.connect(self.do_rescale_sofq)
-        self.ui.pushButton_rescaleGr.clicked.connect(self.do_rescale_gofr)
-
-        self.ui.pushButton_grColorStyle.clicked.connect(self.do_set_gofr_color_marker)
-        self.ui.pushButton_sqColorStyle.clicked.connect(self.do_set_sq_color_marker)
-
-        #  menu operations
-        self.ui.actionReset_GofR_tab.triggered.connect(self.do_reset_gr_tab)
-        self.ui.actionReset_GSAS_tab.triggered.connect(self.do_reset_gsas_tab)
-        self.ui.actionQuit.triggered.connect(self.evt_quit)
-        self.ui.actionCheat_sheet.triggered.connect(self.do_show_help)
+        # self.ui.pushButton_loadSQ.clicked.connect(self.do_load_sq)
+        # self.ui.comboBox_SofQType.currentIndexChanged.connect(self.evt_change_sq_type)
+        # self.ui.pushButton_clearSofQ.clicked.connect(self.do_clear_sq)
+        # self.ui.pushButton_showQMinMax.clicked.connect(self.do_show_sq_bound)
+        # self.ui.pushButton_generateGR.clicked.connect(self.do_generate_gr)
+        # self.ui.pushButton_loadGofR.clicked.connect(self.do_load_gr)
+        # self.ui.pushButton_saveGR.clicked.connect(self.do_save_gr)
+        # self.ui.pushButton_clearGrCanvas.clicked.connect(self.do_clear_gr)
+        # self.ui.pushButton_saveSQ.clicked.connect(self.do_save_sq)
+        # self.ui.pushButton_editSofQ.clicked.connect(self.do_edit_sq)
+        # self.ui.pushButton_generateSQ.clicked.connect(self.do_generate_sq)
+        #
+        # self.ui.doubleSpinBoxQmin.valueChanged.connect(self.evt_qmin_changed)
+        # self.ui.doubleSpinBoxQmax.valueChanged.connect(self.evt_qmax_changed)
+        #
+        # self.ui.pushButton_rescaleSq.clicked.connect(self.do_rescale_sofq)
+        # self.ui.pushButton_rescaleGr.clicked.connect(self.do_rescale_gofr)
+        #
+        # self.ui.pushButton_grColorStyle.clicked.connect(self.do_set_gofr_color_marker)
+        # self.ui.pushButton_sqColorStyle.clicked.connect(self.do_set_sq_color_marker)
+        #
+        # #  menu operations
+        # self.ui.actionReset_GofR_tab.triggered.connect(self.do_reset_gr_tab)
+        # self.ui.actionReset_GSAS_tab.triggered.connect(self.do_reset_gsas_tab)
+        # self.ui.actionQuit.triggered.connect(self.evt_quit)
+        # self.ui.actionCheat_sheet.triggered.connect(self.do_show_help)
 
         # define the driver
         self._myController = driver.AddieDriver()
@@ -425,6 +420,9 @@ class MainWindow(QMainWindow):
         # Connecting all the widgets
         processing_tab_events_handler.run(main_window=self)
         rietveld_tab_events_handler.run(main_window=self)
+
+        # # set the tab to 0
+        # main_window.calculategr_ui.main_tab.setCurrentIndex(0)
 
     def save_raw_config(self):
         '''this will allow the user to reset the full table and get it back in its initial state'''
@@ -467,36 +465,6 @@ class MainWindow(QMainWindow):
     #     #self.ui.pushButton_launchReduction.clicked.connect(self.run_mantid)
 
     def _promote_widgets(self):
-        # # frame_graphicsView_bragg
-        # graphicsView_layout = QVBoxLayout()
-        # self.ui.frame_graphicsView_bragg.setLayout(graphicsView_layout)
-        # self.ui.graphicsView_bragg = BraggView(self)
-        # graphicsView_layout.addWidget(self.ui.graphicsView_bragg)
-
-        # # frame_graphicsView_sq
-        # graphicsView_layout = QVBoxLayout()
-        # self.ui.frame_graphicsView_sq.setLayout(graphicsView_layout)
-        # self.ui.graphicsView_sq= SofQView(self)
-        # graphicsView_layout.addWidget(self.ui.graphicsView_sq)
-        #
-        # # frame_graphicsView_gr
-        # graphicsView_layout = QVBoxLayout()
-        # self.ui.frame_graphicsView_gr.setLayout(graphicsView_layout)
-        # self.ui.graphicsView_gr = GofRView(self)
-        # graphicsView_layout.addWidget(self.ui.graphicsView_gr)
-        #
-        # # frame_treeWidget_grWsList
-        # temp_layout = QVBoxLayout()
-        # self.ui.frame_treeWidget_grWsList.setLayout(temp_layout)
-        # self.ui.treeWidget_grWsList = GofRTree(self)
-        # temp_layout.addWidget(self.ui.treeWidget_grWsList)
-
-        # # frame_treeWidget_braggWSList
-        # temp_layout = QVBoxLayout()
-        # self.ui.frame_treeWidget_braggWSList.setLayout(temp_layout)
-        # self.ui.treeWidget_braggWSList = BraggTree(self)
-        # temp_layout.addWidget(self.ui.treeWidget_braggWSList)
-
         # frame_dockWidget_ipython
         temp_layout = QVBoxLayout()
         self.ui.frame_dockWidget_ipython.setLayout(temp_layout)
@@ -527,18 +495,6 @@ class MainWindow(QMainWindow):
                     }
                     """)
 
-        self.ui.splitter_4.setStyleSheet("""
-                    QSplitter::handle {
-                       image: url(':/MPL Toolbar/splitter_icon.png');
-                    }
-                    """)
-
-        self.ui.splitter_5.setStyleSheet("""
-                    QSplitter::handle {
-                       image: url(':/MPL Toolbar/vertical_splitter_icon.png');
-                    }
-                    """)
-
         self.ui.label_25.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
 #        self.ui.search_logo_label.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
 #        self.ui.clear_name_search_2.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
@@ -546,37 +502,7 @@ class MainWindow(QMainWindow):
 
 #        self.ui.settings_table_button.setIcon(QtGui.QIcon(":/MPL Toolbar/settings_icon.png"))
 
-        self.ui.treeWidget_grWsList.set_main_window(self)
-        self.ui.treeWidget_grWsList.add_main_item('workspaces', append=True, as_current_index=False)
-        self.ui.treeWidget_grWsList.add_main_item('SofQ', append=True, as_current_index=False)
-
-        self.ui.comboBox_SofQType.clear()
-        self.ui.comboBox_SofQType.addItem('S(Q)')
-        self.ui.comboBox_SofQType.addItem('S(Q)-1')
-        self.ui.comboBox_SofQType.addItem('Q[S(Q)-1]')
-        self.ui.comboBox_SofQType.setCurrentIndex(0)
-
         # add the combo box for PDF type
-        self.ui.comboBox_pdfType.addItems(['G(r)', 'g(r)', 'RDF(r)'])
-
-        # some starting value
-        self.ui.doubleSpinBoxDelR.setValue(0.01)
-
-        # set a constant item to combobox Sq
-        self.ui.comboBox_SofQ.addItem('All')
-
-        # PDF filter
-        self.ui.comboBox_pdfCorrection.clear()
-        self.ui.comboBox_pdfCorrection.addItem('No Modification')
-        self.ui.comboBox_pdfCorrection.addItem('Lorch')
-
-        # set the tab to 0
-        self.ui.main_tab.setCurrentIndex(0)
-
-        # set the lower limit on Qmin
-        self.ui.doubleSpinBoxQmin.setDecimals(6)
-        self.ui.doubleSpinBoxQmin.setMinimum(1.E-10)
-
         self.activate_reduction_tabs()
 
     @property
