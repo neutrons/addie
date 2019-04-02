@@ -36,36 +36,36 @@ class HelpGuiTableInitialization(object):
 
     def jump_to_step1_diamond(self):
         self.parent.parent.ui.tabWidget_2.setCurrentIndex(0)
-        self.parent.parent.ui.diamond.setFocus()
+        self.parent.parent.autonom_ui.diamond.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step1_diamond_background(self):
         self.parent.parent.ui.tabWidget_2.setCurrentIndex(0)
-        self.parent.parent.ui.diamond_background.setFocus()
+        self.parent.parent.autonom_ui.diamond_background.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step1_vanadium(self):
         self.parent.parent.ui.tabWidget_2.setCurrentIndex(0)
-        self.parent.parent.ui.vanadium.setFocus()
+        self.parent.parent.autonom_ui.vanadium.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step1_vanadium_background(self):
         self.parent.parent.ui.tabWidget_2.setCurrentIndex(0)
-        self.parent.parent.ui.vanadium_background.setFocus()
+        self.parent.parent.autonom_ui.vanadium_background.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step1_sample_background(self):
         self.parent.parent.ui.tabWidget_2.setCurrentIndex(0)
-        self.parent.parent.ui.sample_background.setFocus()
+        self.parent.parent.autonom_ui.sample_background.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step1_create_folder(self):
         self.parent.parent.ui.tabWidget_2.setCurrentIndex(0)
-        self.parent.parent.ui.manual_output_folder_field.setFocus()
+        self.parent.parent.autonom_ui.manual_output_folder_field.setFocus()
         self.parent.parent.activateWindow()
 
     def fill_autonom(self):
-        o_step1_handler = Step1Utilities(parent=self.parent.parent)
+        o_step1_handler = Step1Utilities(main_window=self.parent.parent)
 
         # diamond
         self.parent.ui.table_status.insertRow(0)
@@ -497,7 +497,7 @@ class HelpGuiTableInitialization(object):
     def fill_mantid(self):
         self.row_height = 62
 
-        o_step1_handler = Step1Utilities(parent=self.parent.parent)
+        o_step1_handler = Step1Utilities(main_window=self.parent.parent)
         o_step2_handler = Step2Utilities(parent=self.parent.parent)
 
         # vanadium

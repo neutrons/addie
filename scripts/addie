@@ -1075,8 +1075,8 @@ class MainWindow(QMainWindow):
     def window_job_monitor_clicked(self):
         job_handler = JobStatusHandler(parent=self)
 
-    def help_button_clicked(self, button_name='autonom'):
-        help_button_activator(parent=self, button_name=button_name)
+    def help_button_clicked_autonom(self):
+        help_button_activator(parent=self, button_name="autonom")
 
     # job utility
     def launch_job_manager(self, job_name='', script_to_run=None, thread_index=-1):
@@ -1178,9 +1178,11 @@ class MainWindow(QMainWindow):
         print(os.getcwd())
         _run_autonom.create_exp_ini_file()
 
-    def help_button_clicked_autonom(self):
-        self.help_button_clicked(button_name='autonom')
-
+    # def help_button_clicked_autonom(self):
+    #     help_button_activator(parent=self, button_name="autonom")
+    #
+    #     self.help_button_clicked(button_name='autonom')
+    #
     def create_exp_ini_clicked(self):
         _run_autonom = RunStep1(parent=self, run_autonom=False)
         _run_autonom.create_folder()
@@ -1345,10 +1347,10 @@ class MainWindow(QMainWindow):
         o_gui.check_gui()
 
     def help_button_clicked_ndabs(self):
-        self.help_button_clicked(button_name='ndabs')
+        help_button_activator(parent=self, button_name="ndabs")
 
     def help_button_clicked_scans(self):
-        self.help_button_clicked(button_name='scans')
+        help_button_activator(parent=self, button_name="scans")
 
     # Rietveld
 
@@ -1373,7 +1375,7 @@ class MainWindow(QMainWindow):
         o_gui.check_gui()
 
     def help_button_clicked_mantid(self):
-        self.help_button_clicked(button_name='mantid')
+        help_button_activator(parent=self, button_name="mantid")
 
     # Mantid
 
