@@ -5,6 +5,7 @@ from qtpy.QtGui import (QStandardItem, QStandardItemModel)
 from qtpy.QtWidgets import (QAction, QFileDialog)
 
 from addie.utilities import customtreeview as base
+from addie.calculate_gr.event_handler import remove_gr_from_plot, remove_gss_from_plot, remove_sq_from_plot
 
 
 class BraggTree(base.CustomizedTreeView):
@@ -233,7 +234,7 @@ class BraggTree(base.CustomizedTreeView):
         for gss_node in selected_nodes:
             gss_ws_name = str(gss_node.text())
             gss_bank_names = self.get_child_nodes(gss_node, output_str=True)
-            self._mainWindow.remove_gss_from_plot(gss_ws_name, gss_bank_names)
+            remove_gss_from_plot(self._mainWindow, gss_ws_name, gss_bank_names)
 
         return
 
@@ -257,7 +258,9 @@ class BraggTree(base.CustomizedTreeView):
             for ws_name in sub_leaves:
                 self._mainWindow.get_workflow().delete_workspace(ws_name)
                 try:
-                    self._mainWindow.remove_gss_from_plot(gss_group_name=gsas_name, gss_bank_ws_name_list=[ws_name])
+                    remove_gss_from_plot(self._mainWindow,
+                                         gss_group_name=gsas_name,
+                                         gss_bank_ws_name_list=[ws_name])
                 except AssertionError:
                     print('Workspace %s is not on canvas.' % ws_name)
 
@@ -727,7 +730,7 @@ class GofRTree(base.CustomizedTreeView):
         # remove from canvas
         try:
             if is_gr:
-                self._mainWindow.remove_gr_from_plot(leaf_node_name)
+                remove_gr_from_plot(leaf_node_name)
             else:
                 self._mainWindow.remove_sq_from_plot(leaf_node_name)
         except AssertionError as ass_err:
@@ -792,9 +795,9 @@ class GofRTree(base.CustomizedTreeView):
 
             # remove from canvas by calling parents
             if node_name == 'SofQ':
-                self._mainWindow.remove_sq_from_plot(leaf_name)
+                remove_sq_from_plot(self._mainWindow, leaf_name)
             else:
-                self._mainWindow.remove_gr_from_plot(leaf_name)
+                remove_gr_from_plot(leaf_name)
             # END-IF
         # END-FOR
 

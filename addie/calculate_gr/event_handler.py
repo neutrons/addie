@@ -657,3 +657,75 @@ def get_file_names_from_dialog(default_dir, file_filter, caption):
         file_name_list.append(str(file_name))
 
     return file_name_list
+
+def clear_bank_checkboxes(main_window):
+    main_window._noEventBankWidgets = True
+    for check_box in list(main_window._braggBankWidgets.values()):
+        check_box.setChecked(False)
+    main_window._noEventBankWidgets = False
+
+def remove_gr_from_plot(main_window, gr_name):
+    """Remove a GofR line from GofR canvas
+    :param gr_name: supposed to the G(r) name that is same as workspace name and plot key on canvas as well
+    :return:
+    """
+    # check
+    assert isinstance(gr_name, str), 'G(r) plot key {0} must be a string but not a {1}' \
+                                     ''.format(gr_name, type(gr_name))
+
+    # remove
+    main_window.calculategr_ui.graphicsView_gr.remove_gr(plot_key=gr_name)
+
+def remove_gss_from_plot(main_window, gss_group_name, gss_bank_ws_name_list):
+    """Remove a GSAS group from canvas if they exits
+    :param gss_group_name: name of the GSS node, i.e., GSS workspace group's name
+    :param gss_bank_ws_name_list: list of names of GSS single banks' workspace name
+    :return:
+    """
+    # check
+    assert isinstance(gss_group_name, str), 'GSS group workspace name must be a string but not %s.' \
+        '' % str(type(gss_group_name))
+    assert isinstance(gss_bank_ws_name_list, list), 'GSAS-single-bank workspace names {0} must be given by ' \
+                                                    'list but not {1}.'.format(gss_bank_ws_name_list,
+                                                                               type(gss_bank_ws_name_list))
+    if len(gss_bank_ws_name_list) == 0:
+        raise RuntimeError('GSAS-single-bank workspace name list is empty!')
+
+    # get bank IDs
+    bank_ids = list()
+    for gss_bank_ws in gss_bank_ws_name_list:
+        bank_id = int(gss_bank_ws.split('_bank')[-1])
+        bank_ids.append(bank_id)
+
+    # remove
+    main_window.calculategr_ui.graphicsView_bragg.remove_gss_banks(gss_group_name, bank_ids)
+
+    # check if there is no such bank's plot on figure, make sure the checkbox is unselected
+    # turn on the mutex lock
+    main_window._noEventBankWidgets = True
+
+    for bank_id in range(1, 7):
+        has_plot_on_canvas = len(main_window.calculategr_ui.graphicsView_bragg.get_ws_name_on_canvas(bank_id)) > 0
+        main_window._braggBankWidgets[bank_id].setChecked(has_plot_on_canvas)
+
+    # turn off the mutex lock
+    main_window._noEventBankWidgets = False
+
+def remove_sq_from_plot(main_window, sq_name):
+    """
+    Remove an SofQ line from SofQ canvas
+    Args:
+        sq_name: supposed to be the S(Q) name which is same as workspace name and plot key of canvas
+
+    Returns:
+
+    """
+    # check
+    assert isinstance(sq_name, str)
+
+    # remove
+    if main_window.calculation_gr_ui.graphicsView_sq.is_on_canvas(sq_name):
+        main_window.calculation_gr_ui.graphicsView_sq.remove_sq(sq_ws_name=sq_name)
+
+    return
+

@@ -10,29 +10,23 @@ import psutil
 from collections import OrderedDict
 
 # must be imported through qtpy before any other gui imports
-from qtpy.QtCore import (QProcess, Qt, QUrl)
-from qtpy.QtGui import (QDesktopServices, QIcon)
+from qtpy.QtCore import QProcess, Qt
+from qtpy.QtGui import QIcon
 from qtpy import QtGui
 from qtpy.QtWidgets import (QApplication, QFileDialog, QLabel, QMainWindow, QMessageBox, QTableWidgetItem, QVBoxLayout, QWidget)
 
 from addie import __version__
 from addie.initialization.widgets.configuration import ConfigurationInitializer
-from addie.utilities.general import get_ucams
 from addie.utilities import load_ui
 
-from addie.about import AboutDialog
 import addie.menu.event_handler as menu_event_handler
-from addie.menu.file.settings.advanced_file_window import AdvancedWindowLauncher
-from addie.menu.file.configuration.export_configuration import ExportConfiguration
-from addie.menu.file.configuration.import_configuration import ImportConfiguration
 
 from addie.help_handler.help_gui import HelpGui, help_button_activator
 
-from addie.utilities.job_status_handler import JobStatusHandler
 from addie.utilities.job_monitor_thread import JobMonitorThread
+from addie.utilities.job_status_handler import JobStatusHandler
 from addie.utilities.logbook_thread import LogbookThread
 from addie.utilities.logbook_handler import LogbookHandler
-from addie.utilities.ipts_file_transfer_dialog import IptsFileTransferDialog
 
 #from addie.initialization.widgets.init_step1 import InitStep1
 
@@ -51,9 +45,6 @@ from addie.processing.idl.run_sum_scans import RunSumScans
 from addie.processing.idl.run_thread import RunThread
 
 import addie.processing.idl.event_handler as postprocessing_event_handler
-from addie.processing.idl.undo_handler import UndoHandler
-
-from addie.menu.preview_ascii.step3_gui_handler import Step3GuiHandler
 
 from addie.mantid_handler.browse_file_folder_handler import BrowseFileFolderHandler
 from addie.mantid_handler.mantid_reduction import GlobalMantidReduction
@@ -87,7 +78,6 @@ import addie.addiedriver as driver
 import addie.calculate_gr.edit_sq_dialog
 
 from addie.calculate_gr.pdf_lines_manager import PDFPlotManager
-from mantidqt.widgets.jupyterconsole import InProcessJupyterConsole
 
 from addie.rietveld.braggview import BraggView
 from addie.rietveld.braggtree import BraggTree
@@ -324,6 +314,7 @@ class MainWindow(QMainWindow):
 
         # Initialize the UI widgets
         self.ui = load_ui('mainWindow.ui', baseinstance=self)
+        main_tab_initialization.run(main_window=self)
 
         status_bar_label = QLabel()
         self.ui.statusbar.addPermanentWidget(status_bar_label)
@@ -361,50 +352,9 @@ class MainWindow(QMainWindow):
         calculategr_tab_initialization.run(main_window=self)
 
         self.init_parameters()
-        self.set_default_folders_path()
 
         # Set the post-processing mode
         self.post_processing = processing_mode  # mantid or 'idl'
-        self.ucams = get_ucams()
-
-        #elf.ui.graphicsView_sq.set_main(self)
-
-        #self._promote_widgets()
-
-        # set widgets
-#        self._init_widgets()
-        #InitStep1(parent=self)
-        #InitStep2(parent=self)
-        #self.init_master_table()
-
-        # define the event handling methods
-        #self.ui.mantid_run_reduction.clicked.connect(self.do_mantid_run_reduction)
-
-        # for tab G(R)
-        # self.ui.pushButton_loadSQ.clicked.connect(self.do_load_sq)
-        # self.ui.comboBox_SofQType.currentIndexChanged.connect(self.evt_change_sq_type)
-        # self.ui.pushButton_clearSofQ.clicked.connect(self.do_clear_sq)
-        # self.ui.pushButton_showQMinMax.clicked.connect(self.do_show_sq_bound)
-        # self.ui.pushButton_generateGR.clicked.connect(self.do_generate_gr)
-        # self.ui.pushButton_loadGofR.clicked.connect(self.do_load_gr)
-        # self.ui.pushButton_saveGR.clicked.connect(self.do_save_gr)
-        # self.ui.pushButton_clearGrCanvas.clicked.connect(self.do_clear_gr)
-        # self.ui.pushButton_saveSQ.clicked.connect(self.do_save_sq)
-        # self.ui.pushButton_editSofQ.clicked.connect(self.do_edit_sq)
-        # self.ui.pushButton_generateSQ.clicked.connect(self.do_generate_sq)
-        #
-        # self.ui.doubleSpinBoxQmin.valueChanged.connect(self.evt_qmin_changed)
-        # self.ui.doubleSpinBoxQmax.valueChanged.connect(self.evt_qmax_changed)
-        #
-        # self.ui.pushButton_rescaleSq.clicked.connect(self.do_rescale_sofq)
-        # self.ui.pushButton_rescaleGr.clicked.connect(self.do_rescale_gofr)
-        #
-        # self.ui.pushButton_grColorStyle.clicked.connect(self.do_set_gofr_color_marker)
-        # self.ui.pushButton_sqColorStyle.clicked.connect(self.do_set_sq_color_marker)
-
-        # # #  menu operations
-        # self.ui.actionReset_GofR_tab.triggered.connect(self.do_reset_gr_tab)
-        # self.ui.actionReset_GSAS_tab.triggered.connect(self.do_reset_gsas_tab)
 
         # define the driver
         self._myController = driver.AddieDriver()
@@ -447,115 +397,62 @@ class MainWindow(QMainWindow):
     # menu
 
     def do_show_help(self):
-        """ Show help
-        """
-        # close previous service
-        self._assistantProcess.close()
-        self._assistantProcess.waitForFinished()
-
-        # launch
-        # helper_url = QUrl('addie_helper.html')
-        helper_url = QUrl('https://neutrons.github.io/addie/index.html')
-        QDesktopServices.openUrl(helper_url)
+        menu_event_handler.do_show_help(self)
 
     def action_preview_ascii_clicked(self):
-        o_gui = Step3GuiHandler(parent=self)
-        o_gui.browse_file()
+        menu_event_handler.action_preview_ascii_clicked(self)
 
     def action_load_configuration_clicked(self):
-        o_import_config = ImportConfiguration(parent=self)
-        o_import_config.run()
+        menu_event_handler.action_load_configuration_clicked(self)
 
     def action_save_configuration_clicked(self):
-        o_export_config = ExportConfiguration(parent=self)
-        o_export_config.run()
+        menu_event_handler.action_save_configuration_clicked(self)
 
     def action_undo_clicked(self):
-        o_undo = UndoHandler(parent=self)
-        o_undo.undo_table()
+        menu_event_handler.action_undo_clicked(self)
 
     def action_redo_clicked(self):
-        o_undo = UndoHandler(parent=self)
-        o_undo.redo_table()
+        menu_event_handler.action_redo_clicked(self)
 
     def help_about_clicked(self):
-        _about = AboutDialog(parent=self)
-        _about.display()
+        menu_event_handler.help_about_clicked(self)
 
     def advanced_option_clicked(self):
-        AdvancedWindowLauncher(parent=self)
+        menu_event_handler.advanced_option_clicked(self)
 
     def activate_reduction_tabs(self):
-        if self.post_processing == 'idl':
-            tab_0 = True
-            tab_1 = True
-            tab_2 = False
-            current_index = 0
-            visible_menu_configuration = True
-        else:
-            tab_0 = False
-            tab_1 = False
-            tab_2 = True
-            current_index = 2
-            visible_menu_configuration = False
-        self.ui.main_tab.setTabEnabled(0, tab_0)
-        self.ui.main_tab.setTabEnabled(1, tab_1)
-        self.ui.main_tab.setTabEnabled(2, tab_2)
-        self.setStyleSheet("QTabBar::tab::disabled {width: 0; height: 0; margin: 0; padding: 0; border: none;} ")
-        self.ui.main_tab.setCurrentIndex(current_index)
-
-        # also hide the file>configration buttons when working with Mantid
-        self.ui.menuLoad_Configuration.menuAction().setVisible(visible_menu_configuration)
+        menu_event_handler.activate_reduction_tabs(self)
 
     def menu_ipts_file_transfer_clicked(self):
-        _o_ipts = IptsFileTransferDialog(parent=self)
-        _o_ipts.show()
-
-    def main_tab_widget_changed(self, tab_selected):
-        if tab_selected == 0:
-            o_gui = Step1GuiHandler(main_window=self)
-            self.check_step1_gui()
-        if tab_selected == 1:
-            _o_gui = Step2GuiHandler(main_window=self)
-            _o_gui.check_gui()
+        menu_event_handler.menu_ipts_file_transfer_clicked(self)
 
     def window_job_monitor_clicked(self):
-        job_handler = JobStatusHandler(parent=self)
+        menu_event_handler.window_job_monitor_clicked(self)
 
     def help_button_clicked_autonom(self):
         help_button_activator(parent=self, button_name="autonom")
 
-    def save_raw_config(self):
-        '''this will allow the user to reset the full table and get it back in its initial state'''
-        o_current_table_config = TableConfig(main_window=self)
-        current_config = o_current_table_config.get_current_config()
+    # def save_raw_config(self):
+    #     '''this will allow the user to reset the full table and get it back in its initial state'''
+    #     o_current_table_config = TableConfig(main_window=self)
+    #     current_config = o_current_table_config.get_current_config()
+    #
+    #     inside_dict = OrderedDict()
+    #     inside_dict['table'] = current_config
+    #     inside_dict['active'] = False
+    #
+    #     self.reset_config_dict = inside_dict
 
-        inside_dict = OrderedDict()
-        inside_dict['table'] = current_config
-        inside_dict['active'] = False
-
-        self.reset_config_dict = inside_dict
+    def main_tab_widget_changed(self, tab_selected):
+        if tab_selected == 0:
+            o_gui = Step1GuiHandler(main_window=self)
+            autonom_event_handler.check_step1_gui(self)
+        if tab_selected == 1:
+            _o_gui = Step2GuiHandler(main_window=self)
+            _o_gui.check_gui()
 
     def init_parameters(self):
         ConfigurationInitializer(parent=self)
-
-    def set_default_folders_path(self):
-        '''Where the calibration_folder and characterization folder will be initialized
-        using instrument name...
-
-        this is very important when the instrument changed
-        '''
-        instrument_short_name = self.instrument["short_name"]
-        config_calibration_folder = self.config_calibration_folder
-
-        self.calibration_folder = os.path.join(config_calibration_folder["pre"],
-                                               instrument_short_name,
-                                               config_calibration_folder["post"])
-
-        config_characterization_file = self.config_characterization_folder
-        self.characterization_folder = os.path.join(config_characterization_file["pre"],
-                                                    instrument_short_name,
-                                                    config_characterization_file["post"])
 
     # def init_master_table(self):
     #     o_table = TableInitialization(parent=self)
@@ -567,10 +464,6 @@ class MainWindow(QMainWindow):
 
     @property
     def controller(self):
-        """
-        get handler of controller
-        :return:
-        """
         return self._myController
 
     # autoNOM
@@ -579,19 +472,19 @@ class MainWindow(QMainWindow):
         autonom_event_handler.select_current_folder_clicked(self)
 
     def diamond_edited(self):
-        self.check_step1_gui()
+        autonom_event_handler.check_step1_gui(self)
 
     def diamond_background_edited(self):
-        self.check_step1_gui()
+        autonom_event_handler.check_step1_gui(self)
 
     def vanadium_edited(self):
-        self.check_step1_gui()
+        autonom_event_handler.check_step1_gui(self)
 
     def vanadium_background_edited(self):
-        self.check_step1_gui()
+        autonom_event_handler.check_step1_gui(self)
 
     def sample_background_edited(self):
-        self.check_step1_gui()
+        autonom_event_handler.check_step1_gui(self)
 
     def create_new_autonom_folder_button_clicked(self, status):
         autonom_event_handler.create_new_autonom_folder_button_clicked(self, status)
@@ -600,7 +493,7 @@ class MainWindow(QMainWindow):
         autonom_event_handler.output_folder_radio_buttons(self)
 
     def manual_output_folder_field_edited(self):
-        self.check_step1_gui()
+        autonom_event_handler.check_step1_gui(self)
 
     def manual_output_folder_button_clicked(self):
         autonom_event_handler.manual_output_folder_button_clicked(self)
@@ -609,9 +502,7 @@ class MainWindow(QMainWindow):
         autonom_event_handler.run_mantid(self)
 
     def check_step1_gui(self):
-        '''check the status of the step1 GUI in order to enable or not the GO BUTTON at the bottom'''
-        o_gui_handler = Step1GuiHandler(main_window=self)
-        o_gui_handler.check_go_button()
+        autonom_event_handler.check_step1_gui(self)
 
     def run_autonom(self):
         autonom_event_handler.run_autonom(self)
@@ -817,169 +708,17 @@ class MainWindow(QMainWindow):
         calculategr_event_handler.edit_sq(self, sq_name, scale_factor, shift)
 
     def clear_bank_checkboxes(self):
-        self._noEventBankWidgets = True
-        for check_box in list(self._braggBankWidgets.values()):
-            check_box.setChecked(False)
-        self._noEventBankWidgets = False
-
-    def signal_generate_sq(self, arg_dict):
-        """
-        signal handling method to generate S(q)
-        Note:  https://github.com/neutrons/FastGR/issues/91
-        :return:
-        """
-        # check input
-        assert isinstance(arg_dict, dict), 'Input arguments {0} must be given in a dictionary but not a {1}.' \
-                                           ''.format(arg_dict, type(arg_dict))
-
-        # determine the selected G(r)
-        gr_ws_name_list = self.ui.treeWidget_grWsList.get_workspaces()
-        # print '[DB] Selected G(r) workspaces have {0} items.'.format(len(gr_ws_name_list))
-        # for gr in gr_ws_name_list:
-        #     print '[DB] G(r) {0} of type {1}.'.format(gr, type(gr))
-
-        # check the arguments
-        for required_param in ['Qmin', 'Qmax', 'Rmin', 'Rmax', 'DeltaR']:
-            if required_param not in list(arg_dict.keys()):
-                raise RuntimeError('Not sufficient parameter (missing {0}) to generate S(Q) from G(r).'
-                                   ''.format(required_param))
-
-        # TODO/FIXME/FUTURE - Call Mantid algorithm to calculate S(Q)
-        raise NotImplementedError('Implement this in future.')
-
+        calculategr_event_handler.clear_bank_checkboxes(self)
 
     def get_default_data_dir(self):
-        """
-        Get default data directory
-        Returns:
-        """
         return self._currDataDir
 
     def get_workflow(self):
         """
         Return the reference to the main workflow controller
         Returns: workflow controller
-
         """
         return self._myController
-
-    def process_workspace_change(self, new_ws_list):
-        """
-        Process (including
-        1. add workspace name to tree list and etc) when detecting that
-        there is some change to any workspace
-
-        Parameters
-        ----------
-        new_ws_list :: list of new workspaces' names
-
-        Returns
-        -------
-
-        """
-        # check input
-        assert isinstance(new_ws_list, list), 'Input workspace list must be a list of string' \
-            'but not %s.' % str(type(new_ws_list))
-
-        # print 'current tab = ', self.ui.tabWidget_2.currentIndex(), self.ui.tabWidget_2.currentWidget(),
-        # print self.ui.tabWidget_2.currentWidget().objectName()
-        # print 'current workspaces: ', self._myController.get_current_workspaces()
-
-        # add to tree
-        if len(new_ws_list) > 0:
-            if self.ui.tabWidget_2.currentWidget().objectName() == 'tab_gR':
-                # a new G(r) or S(q)
-                for new_ws in new_ws_list:
-                    ws_unit = self._myController.get_ws_unit(new_ws)
-                    if ws_unit != 'MomentumTransfer':
-                        is_gr = True
-                    else:
-                        # case for SofQ
-                        is_gr = False
-                        # add to combo box
-                        self.ui.comboBox_SofQ.addItem(new_ws)
-                        self.ui.treeWidget_grWsList.add_sq(new_ws)
-                        # plot generated S(Q)
-                        self.plot_sq(sq_ws_name=new_ws, sq_color=None, clear_prev=False)
-                    # END-IF
-                    self.ui.treeWidget_grWsList.add_arb_gr(new_ws, is_gr)
-
-            elif self.ui.tabWidget_2.currentWidget().objectName() == 'tab_bragg':
-                # new Bragg pattern
-                for new_ws in new_ws_list:
-                    self.ui.treeWidget_braggWSList.add_arb_gr(new_ws)
-            # END-IF-ELSE
-
-        return
-
-    def remove_gr_from_plot(self, gr_name):
-        """Remove a GofR line from GofR canvas
-        :param gr_name: supposed to the G(r) name that is same as workspace name and plot key on canvas as well
-        :return:
-        """
-        # check
-        assert isinstance(gr_name, str), 'G(r) plot key {0} must be a string but not a {1}' \
-                                         ''.format(gr_name, type(gr_name))
-
-        # remove
-        self.ui.graphicsView_gr.remove_gr(plot_key=gr_name)
-
-        return
-
-    def remove_gss_from_plot(self, gss_group_name, gss_bank_ws_name_list):
-        """Remove a GSAS group from canvas if they exits
-        :param gss_group_name: name of the GSS node, i.e., GSS workspace group's name
-        :param gss_bank_ws_name_list: list of names of GSS single banks' workspace name
-        :return:
-        """
-        # check
-        assert isinstance(gss_group_name, str), 'GSS group workspace name must be a string but not %s.' \
-            '' % str(type(gss_group_name))
-        assert isinstance(gss_bank_ws_name_list, list), 'GSAS-single-bank workspace names {0} must be given by ' \
-                                                        'list but not {1}.'.format(gss_bank_ws_name_list,
-                                                                                   type(gss_bank_ws_name_list))
-        if len(gss_bank_ws_name_list) == 0:
-            raise RuntimeError('GSAS-single-bank workspace name list is empty!')
-
-        # get bank IDs
-        bank_ids = list()
-        for gss_bank_ws in gss_bank_ws_name_list:
-            bank_id = int(gss_bank_ws.split('_bank')[-1])
-            bank_ids.append(bank_id)
-
-        # remove
-        self.ui.graphicsView_bragg.remove_gss_banks(gss_group_name, bank_ids)
-
-        # check if there is no such bank's plot on figure, make sure the checkbox is unselected
-        # turn on the mutex lock
-        self._noEventBankWidgets = True
-
-        for bank_id in range(1, 7):
-            has_plot_on_canvas = len(self.ui.graphicsView_bragg.get_ws_name_on_canvas(bank_id)) > 0
-            self._braggBankWidgets[bank_id].setChecked(has_plot_on_canvas)
-
-        # turn off the mutex lock
-        self._noEventBankWidgets = False
-
-        return
-
-    def remove_sq_from_plot(self, sq_name):
-        """
-        Remove an SofQ line from SofQ canvas
-        Args:
-            sq_name: supposed to be the S(Q) name which is same as workspace name and plot key of canvas
-
-        Returns:
-
-        """
-        # check
-        assert isinstance(sq_name, str)
-
-        # remove
-        if self.ui.graphicsView_sq.is_on_canvas(sq_name):
-            self.ui.graphicsView_sq.remove_sq(sq_ws_name=sq_name)
-
-        return
 
     def set_bragg_banks_selected(self, bank_id_list, status):
         """

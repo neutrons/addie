@@ -49,3 +49,7 @@ def create_exp_ini_clicked(main_window):
     _run_autonom.create_folder()
     _run_autonom.create_exp_ini_file()
 
+def check_step1_gui(main_window):
+    '''check the status of the step1 GUI in order to enable or not the GO BUTTON at the bottom'''
+    o_gui_handler = Step1GuiHandler(main_window=main_window)
+    o_gui_handler.check_go_button()
