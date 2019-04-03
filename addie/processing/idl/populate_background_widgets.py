@@ -10,8 +10,8 @@ class PopulateBackgroundWidgets(object):
     current_folder = None
     we_are_done_here = False
 
-    def __init__(self, parent=None):
-        self.parent = parent.ui
+    def __init__(self, main_window=None):
+        self.main_window_postprocessing_ui = main_window.postprocessing_ui
         self.current_folder = parent.current_folder
 
     def run(self):
@@ -23,21 +23,21 @@ class PopulateBackgroundWidgets(object):
         self.populate_widgets()
 
     def refresh_contain(self):
-        _index_selected = self.parent.background_comboBox.currentIndex()
+        _index_selected = self.main_window_postprocessing_ui.background_comboBox.currentIndex()
         self.retrieve_list_names_from_table()
-        self.parent.background_comboBox.clear()
+        self.main_window_postprocessing_ui.background_comboBox.clear()
         for _item in self.list_names:
-            self.parent.background_comboBox.addItem(_item)
-        self.parent.background_comboBox.setCurrentIndex(_index_selected)
+            self.main_window_postprocessing_ui.background_comboBox.addItem(_item)
+        self.main_window_postprocessing_ui.background_comboBox.setCurrentIndex(_index_selected)
 
     def retrieve_list_names_from_table(self):
         _list_names = []
-        _nbr_row = self.parent.table.rowCount()
+        _nbr_row = self.main_window_postprocessing_ui.table.rowCount()
         if _nbr_row == 0:
             self.we_are_done_here = True
             return
         for _index_row in range(_nbr_row):
-            _label = self.parent.table.item(_index_row, 1).text()
+            _label = self.main_window_postprocessing_ui.table.item(_index_row, 1).text()
             _list_names.append(_label)
 
         self.list_names = _list_names
@@ -49,12 +49,12 @@ class PopulateBackgroundWidgets(object):
         self.exp_ini_back_file = _metadata['MTc']
 
     def reset_background_combobox_index(self):
-        self.parent.background_comboBox.setCurrentIndex(0)
+        self.main_window_postprocessing_ui.background_comboBox.setCurrentIndex(0)
 
     def populate_widgets(self):
-        self.parent.background_comboBox.clear()
+        self.main_window_postprocessing_ui.background_comboBox.clear()
         for _item in self.list_names:
-            self.parent.background_comboBox.addItem(_item)
+            self.main_window_postprocessing_ui.background_comboBox.addItem(_item)
 
-        self.parent.background_line_edit.setText(self.parent.table.item(0, 2).text())
-        self.parent.background_no_field.setText(self.exp_ini_back_file)
+        self.main_window_postprocessing_ui.background_line_edit.setText(self.main_window_postprocessing_ui.table.item(0, 2).text())
+        self.main_window_postprocessing_ui.background_no_field.setText(self.exp_ini_back_file)
