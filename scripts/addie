@@ -354,18 +354,16 @@ class MainWindow(QMainWindow):
         self.ui.main_tab.insertTab(4, self.calculategr_tab_widget, 'Calculate G(R)')
         calculategr_tab_initialization.run(main_window=self)
 
-
         self.init_parameters()
         self.set_default_folders_path()
 
         # Set the post-processing mode
         self.post_processing = processing_mode  # mantid or 'idl'
-
         self.ucams = get_ucams()
 
         #elf.ui.graphicsView_sq.set_main(self)
 
-        self._promote_widgets()
+        #self._promote_widgets()
 
         # set widgets
         self._init_widgets()
@@ -402,9 +400,6 @@ class MainWindow(QMainWindow):
         # self.ui.actionReset_GofR_tab.triggered.connect(self.do_reset_gr_tab)
         # self.ui.actionReset_GSAS_tab.triggered.connect(self.do_reset_gsas_tab)
 
-        self.ui.actionQuit.triggered.connect(self.evt_quit)
-        self.ui.actionCheat_sheet.triggered.connect(self.do_show_help)
-
         # define the driver
         self._myController = driver.AddieDriver()
 
@@ -435,6 +430,7 @@ class MainWindow(QMainWindow):
                 o_row.insert_row(row=_row)
 
         # Connecting all the widgets
+        main_tab_events_handler.run(main_window=self)
         processing_tab_events_handler.run(main_window=self)
         rietveld_tab_events_handler.run(main_window=self)
         calculategr_tab_events_handler.run(main_window=self)
