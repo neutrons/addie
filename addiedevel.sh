@@ -11,9 +11,9 @@ fi
 if [ -n "$1" ]; then
     CMD="$@"
 elif [ "$(command -v mantidpythonnightly --classic)" ]; then
-    CMD="$(command -v mantidpythonnightly) --classic"
+    CMD="$(command -v mantidpythonnightly)"
 else
-    CMD="$(command -v mantidpython) --classic"
+    CMD="$(command -v mantidpython)"
 fi
 
 # get the python version to add to the PYTHONPATH
