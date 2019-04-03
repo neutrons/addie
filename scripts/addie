@@ -21,6 +21,7 @@ from addie.utilities.general import get_ucams
 from addie.utilities import load_ui
 
 from addie.about import AboutDialog
+import addie.menu.event_handler as menu_event_handler
 from addie.menu.file.settings.advanced_file_window import AdvancedWindowLauncher
 from addie.menu.file.configuration.export_configuration import ExportConfiguration
 from addie.menu.file.configuration.import_configuration import ImportConfiguration
@@ -36,7 +37,6 @@ from addie.utilities.ipts_file_transfer_dialog import IptsFileTransferDialog
 #from addie.initialization.widgets.init_step1 import InitStep1
 
 from addie.autoNOM.step1_gui_handler import Step1GuiHandler
-from addie.autoNOM.run_step1 import RunStep1
 import addie.autoNOM.event_handler as autonom_event_handler
 
 from addie.initialization.widgets.init_step2 import InitStep2
@@ -428,13 +428,6 @@ class MainWindow(QMainWindow):
         # color management
         self._pdfColorManager = PDFPlotManager()
 
-        #self.save_raw_config()
-
-        if DEBUG:
-            o_row = TableRowHandler(parent=self)
-            for _row in np.arange(10):
-                o_row.insert_row(row=_row)
-
         # Connecting all the widgets
         main_tab_events_handler.run(main_window=self)
         autonom_tab_events_handler.run(main_window=self)
@@ -445,8 +438,92 @@ class MainWindow(QMainWindow):
 
         self.activate_reduction_tabs()
 
-        # # set the tab to 0
-        # main_window.calculategr_ui.main_tab.setCurrentIndex(0)
+    # main window
+
+    def evt_quit(self):
+        """Quit the application"""
+        self.close()
+
+    # menu
+
+    def do_show_help(self):
+        """ Show help
+        """
+        # close previous service
+        self._assistantProcess.close()
+        self._assistantProcess.waitForFinished()
+
+        # launch
+        # helper_url = QUrl('addie_helper.html')
+        helper_url = QUrl('https://neutrons.github.io/addie/index.html')
+        QDesktopServices.openUrl(helper_url)
+
+    def action_preview_ascii_clicked(self):
+        o_gui = Step3GuiHandler(parent=self)
+        o_gui.browse_file()
+
+    def action_load_configuration_clicked(self):
+        o_import_config = ImportConfiguration(parent=self)
+        o_import_config.run()
+
+    def action_save_configuration_clicked(self):
+        o_export_config = ExportConfiguration(parent=self)
+        o_export_config.run()
+
+    def action_undo_clicked(self):
+        o_undo = UndoHandler(parent=self)
+        o_undo.undo_table()
+
+    def action_redo_clicked(self):
+        o_undo = UndoHandler(parent=self)
+        o_undo.redo_table()
+
+    def help_about_clicked(self):
+        _about = AboutDialog(parent=self)
+        _about.display()
+
+    def advanced_option_clicked(self):
+        AdvancedWindowLauncher(parent=self)
+
+    def activate_reduction_tabs(self):
+        if self.post_processing == 'idl':
+            tab_0 = True
+            tab_1 = True
+            tab_2 = False
+            current_index = 0
+            visible_menu_configuration = True
+        else:
+            tab_0 = False
+            tab_1 = False
+            tab_2 = True
+            current_index = 2
+            visible_menu_configuration = False
+        self.ui.main_tab.setTabEnabled(0, tab_0)
+        self.ui.main_tab.setTabEnabled(1, tab_1)
+        self.ui.main_tab.setTabEnabled(2, tab_2)
+        self.setStyleSheet("QTabBar::tab::disabled {width: 0; height: 0; margin: 0; padding: 0; border: none;} ")
+        self.ui.main_tab.setCurrentIndex(current_index)
+
+        # also hide the file>configration buttons when working with Mantid
+        self.ui.menuLoad_Configuration.menuAction().setVisible(visible_menu_configuration)
+
+    def menu_ipts_file_transfer_clicked(self):
+        _o_ipts = IptsFileTransferDialog(parent=self)
+        _o_ipts.show()
+
+    def main_tab_widget_changed(self, tab_selected):
+        if tab_selected == 0:
+            o_gui = Step1GuiHandler(main_window=self)
+            self.check_step1_gui()
+        if tab_selected == 1:
+            _o_gui = Step2GuiHandler(main_window=self)
+            _o_gui.check_gui()
+
+    def window_job_monitor_clicked(self):
+        job_handler = JobStatusHandler(parent=self)
+
+    def help_button_clicked_autonom(self):
+        help_button_activator(parent=self, button_name="autonom")
 
     def save_raw_config(self):
         '''this will allow the user to reset the full table and get it back in its initial state'''
@@ -488,21 +565,6 @@ class MainWindow(QMainWindow):
     #
     #     #self.ui.pushButton_launchReduction.clicked.connect(self.run_mantid)
 
-    def _init_widgets(self):
-        """ Initialize widgets
-        Returns
-        -------
-        """
-
-        # self.ui.label_25.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
-#        self.ui.search_logo_label.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
-#        self.ui.clear_name_search_2.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
-#        self.ui.clear_search_button.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
-
-#        self.ui.settings_table_button.setIcon(QtGui.QIcon(":/MPL Toolbar/settings_icon.png"))
-
-        # add the combo box for PDF type
-
     @property
     def controller(self):
         """
@@ -511,23 +573,8 @@ class MainWindow(QMainWindow):
         """
         return self._myController
 
-
-    def do_show_help(self):
-        """ Show help
-        Copied from DGSPlanner
-        """
-        # close previous service
-        self._assistantProcess.close()
-        self._assistantProcess.waitForFinished()
-
-        # launch
-        # helper_url = QUrl('addie_helper.html')
-        helper_url = QUrl('https://neutrons.github.io/addie/index.html')
-        QDesktopServices.openUrl(helper_url)
-
-        return
-
     # autoNOM
+
     def select_current_folder_clicked(self):
         autonom_event_handler.select_current_folder_clicked(self)
 
@@ -567,21 +614,10 @@ class MainWindow(QMainWindow):
         o_gui_handler.check_go_button()
 
     def run_autonom(self):
-        """Will first create the output folder, then create the exp.ini file"""
-        _run_autonom = RunStep1(parent=self)
-        _run_autonom.create_folder()
-        print(os.getcwd())
-        _run_autonom.create_exp_ini_file()
+        autonom_event_handler.run_autonom(self)
 
-    # def help_button_clicked_autonom(self):
-    #     help_button_activator(parent=self, button_name="autonom")
-    #
-    #     self.help_button_clicked(button_name='autonom')
-    #
     def create_exp_ini_clicked(self):
-        _run_autonom = RunStep1(parent=self, run_autonom=False)
-        _run_autonom.create_folder()
-        _run_autonom.create_exp_ini_file()
+        autonom_event_handler.create_exp_ini_clicked(self)
 
     # post processing
     def resize_table_post_processing_tab(self, height, width):
@@ -690,8 +726,6 @@ class MainWindow(QMainWindow):
     def help_button_clicked_scans(self):
         help_button_activator(parent=self, button_name="scans")
 
-
-
     # Rietveld tab
     def do_load_bragg_file(self):
         rietveld_event_handler.do_load_bragg_file(main_window=self)
@@ -782,23 +816,11 @@ class MainWindow(QMainWindow):
     def edit_sq(self, sq_name, scale_factor, shift):
         calculategr_event_handler.edit_sq(self, sq_name, scale_factor, shift)
 
-
-
     def clear_bank_checkboxes(self):
         self._noEventBankWidgets = True
         for check_box in list(self._braggBankWidgets.values()):
             check_box.setChecked(False)
         self._noEventBankWidgets = False
-
-        return
-
-
-
-
-
-
-
-
 
     def signal_generate_sq(self, arg_dict):
         """
@@ -825,79 +847,6 @@ class MainWindow(QMainWindow):
         # TODO/FIXME/FUTURE - Call Mantid algorithm to calculate S(Q)
         raise NotImplementedError('Implement this in future.')
 
-        return
-
-
-
-
-
-    # def edit_sq(self, sq_name, scale_factor, shift):
-    #     """Edit S(Q) in workspace with scale_factor * Y[i] + shift
-    #     :param sq_name:
-    #     :param scale_factor:
-    #     :param shift:
-    #     :return:
-    #     """
-    #     # convert
-    #     sq_name = str(sq_name)
-    #
-    #     # check inputs
-    #     assert isinstance(sq_name, str), 'S(Q) workspace name {0} must be a string but not a {1}.' \
-    #                                      ''.format(sq_name, type(sq_name))
-    #     assert isinstance(scale_factor, float), 'Scale factor {0} must be a float but not a {1}.' \
-    #                                             ''.format(scale_factor, type(scale_factor))
-    #     assert isinstance(shift, float), 'Shift {0} must be a float but not a {1}.'.format(shift, type(shift))
-    #
-    #     # call the controller
-    #     edit_sq_name = sq_name + '_Edit'
-    #     self._myController.edit_matrix_workspace(sq_name, scale_factor, shift, edit_sq_name)
-    #     # add new S(Q)
-    #     self._pdfColorManager.add_sofq(edit_sq_name)
-    #
-    #     color, marker = self.ui.graphicsView_sq.get_plot_info(sq_name)
-    #     print('[DB...BAT] Original SofQ {0} has color {0} marker {1}'.format(color, marker))
-    #
-    #     # re-plot
-    #     vec_q, vec_s, vec_e = self._myController.get_sq(edit_sq_name)
-    #     self.ui.graphicsView_sq.plot_sq(edit_sq_name, vec_q, vec_s, vec_e, sq_y_label=sq_name + ' In Edit',
-    #                                     reset_color_mark=False,
-    #                                     color=color, marker=marker)
-    #
-    #     # calculate G(r) too
-    #     self.generate_gr([edit_sq_name])
-    #
-    #     return
-
-    # def evt_change_sq_type(self):
-    #     calculategr_event_handler.evt_change_sq_type(self)
-        #
-        # """ Event handling to plot S(Q)
-        # Returns
-        # -------
-        #
-        # """
-        # # get the current S(Q) names
-        # curr_sq_list = self.ui.graphicsView_sq.get_shown_sq_names()
-        # if len(curr_sq_list) == 0:
-        #     return
-        #
-        # # reset the canvas
-        # self.ui.graphicsView_sq.reset()
-        #
-        # # re-plot
-        # for sq_name in curr_sq_list:
-        #     # plot S(Q)
-        #     self.plot_sq(sq_name, color=None, clear_prev=False)
-        #
-        # return
-
-    def evt_quit(self):
-        """
-        Quit the application
-        Returns:
-
-        """
-        self.close()
 
     def get_default_data_dir(self):
         """
@@ -1150,72 +1099,7 @@ class MainWindow(QMainWindow):
         return (shift_value, scale_factor_value) in self._editedSofQDict[raw_sofq_name]
 
     # menu
-    def action_preview_ascii_clicked(self):
-        o_gui = Step3GuiHandler(parent=self)
-        o_gui.browse_file()
 
-    def action_load_configuration_clicked(self):
-        o_import_config = ImportConfiguration(parent=self)
-        o_import_config.run()
-
-    def action_save_configuration_clicked(self):
-        o_export_config = ExportConfiguration(parent=self)
-        o_export_config.run()
-
-    def action_undo_clicked(self):
-        o_undo = UndoHandler(parent=self)
-        o_undo.undo_table()
-
-    def action_redo_clicked(self):
-        o_undo = UndoHandler(parent=self)
-        o_undo.redo_table()
-
-    def help_about_clicked(self):
-        _about = AboutDialog(parent=self)
-        _about.display()
-
-    def advanced_option_clicked(self):
-        AdvancedWindowLauncher(parent = self)
-
-    def activate_reduction_tabs(self):
-        if self.post_processing == 'idl':
-            tab_0 = True
-            tab_1 = True
-            tab_2 = False
-            current_index=0
-            visible_menu_configuration = True
-        else:
-            tab_0 = False
-            tab_1 = False
-            tab_2 = True
-            current_index=2
-            visible_menu_configuration = False
-        self.ui.main_tab.setTabEnabled(0, tab_0)
-        self.ui.main_tab.setTabEnabled(1, tab_1)
-        self.ui.main_tab.setTabEnabled(2, tab_2)
-        self.setStyleSheet("QTabBar::tab::disabled {width: 0; height: 0; margin: 0; padding: 0; border: none;} ")
-        self.ui.main_tab.setCurrentIndex(current_index)
-
-        # also hide the file>configration buttons when working with Mantid
-        self.ui.menuLoad_Configuration.menuAction().setVisible(visible_menu_configuration)
-
-    def menu_ipts_file_transfer_clicked(self):
-        _o_ipts = IptsFileTransferDialog(parent=self)
-        _o_ipts.show()
-
-    def main_tab_widget_changed(self, tab_selected):
-        if tab_selected == 0:
-            o_gui = Step1GuiHandler(main_window=self)
-            self.check_step1_gui()
-        if tab_selected == 1:
-            _o_gui = Step2GuiHandler(main_window=self)
-            _o_gui.check_gui()
-
-    def window_job_monitor_clicked(self):
-        job_handler = JobStatusHandler(parent=self)
-
-    def help_button_clicked_autonom(self):
-        help_button_activator(parent=self, button_name="autonom")
 
     # job utility
     def launch_job_manager(self, job_name='', script_to_run=None, thread_index=-1):

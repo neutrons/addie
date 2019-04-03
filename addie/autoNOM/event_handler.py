@@ -1,5 +1,6 @@
 from addie.autoNOM.step1_gui_handler import Step1GuiHandler
 from addie.processing.mantid.master_table.master_table_exporter import TableFileExporter as MantidTableExporter
+from addie.autoNOM.run_step1 import RunStep1
 
 
 def select_current_folder_clicked(main_window):
@@ -35,3 +36,16 @@ def run_mantid(main_window):
     # TODO should do the real thing rather than print a message
     # main_window.launch_job_manager(job_name='mantid', script_to_run=TODO)
     print('supposed to run mantid now')
+
+def run_autonom(main_window):
+    """Will first create the output folder, then create the exp.ini file"""
+    _run_autonom = RunStep1(parent=main_window)
+    _run_autonom.create_folder()
+    print(os.getcwd())
+    _run_autonom.create_exp_ini_file()
+
+def create_exp_ini_clicked(main_window):
+    _run_autonom = RunStep1(parent=main_window, run_autonom=False)
+    _run_autonom.create_folder()
+    _run_autonom.create_exp_ini_file()
+
