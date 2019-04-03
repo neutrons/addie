@@ -3,7 +3,9 @@ from __future__ import (absolute_import, division, print_function)
 from qtpy.QtCore import (Signal)
 from qtpy.QtWidgets import (QDialog)
 import random
+
 from addie.utilities import load_ui
+from addie.calculate_gr.event_handler import generate_gr_step2
 
 
 class EditSofQDialog(QDialog):
@@ -128,7 +130,7 @@ class EditSofQDialog(QDialog):
         self._myParentWindow.add_edited_sofq(curr_ws_name, new_sq_ws_name, key_shift, key_scale)
 
         # clone G(r) to new name and add to tree
-        self._myParentWindow.generate_gr([new_sq_ws_name])
+        generate_gr_step2(self._myParentWindow, [new_sq_ws_name])
 
     def do_edit_sq(self):
         """handling for push button 'edit S(Q)' by reading the scale factor and shift
