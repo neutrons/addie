@@ -737,10 +737,10 @@ class MainWindow(QMainWindow):
         rietveld_event_handler.do_rescale_bragg(self)
 
     def do_clear_gr(self):
-        self.ui.graphicsView_gr.reset()
+        self.calculategr_ui.graphicsView_gr.reset()
 
     def do_clear_sq(self):
-        self.ui.graphicsView_sq.reset()
+        self.calculategr_ui.graphicsView_sq.reset()
 
     def evt_change_gss_mode(self):
         rietveld_event_handler.evt_change_gss_mode(main_window=self)
