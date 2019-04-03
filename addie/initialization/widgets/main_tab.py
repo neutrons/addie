@@ -24,6 +24,11 @@ def run(main_window=None):
                                             }
                                             """)
 
+    main_window.ucams = get_ucams()
+    set_default_folder_path(main_window)
+
+def set_default_folder_path(main_window):
+
     # set default folder path
     # Where the calibration_folder and characterization folder will be initialized
     # using instrument name...
@@ -37,7 +42,5 @@ def run(main_window=None):
 
     config_characterization_file = main_window.config_characterization_folder
     main_window.characterization_folder = os.path.join(config_characterization_file["pre"],
-                                                      instrument_short_name,
-                                                      config_characterization_file["post"])
-
-    main_window.ucams = get_ucams()
+                                                       instrument_short_name,
+                                                       config_characterization_file["post"])

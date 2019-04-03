@@ -1,6 +1,8 @@
 from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import QMainWindow, QFileDialog
+
 from addie.utilities import load_ui
+from addie.initialization.widgets import main_tab as main_tab_initialization
 
 
 class AdvancedWindowLauncher(object):
@@ -77,7 +79,7 @@ class AdvancedWindow(QMainWindow):
     def instrument_changed(self, index):
         self.parent.instrument["short_name"] = self.list_instrument_short_name[index]
         self.parent.instrument["full_name"] = self.list_instrument_full_name[index]
-        self.parent.set_default_folders_path()
+        main_tab_initialization.set_default_folder_path(self.parent)
 
     def cache_dir_button_clicked(self):
         _cache_folder = QFileDialog.getExistingDirectory(caption="Select Cache Folder ...",

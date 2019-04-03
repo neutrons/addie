@@ -727,5 +727,64 @@ def remove_sq_from_plot(main_window, sq_name):
     if main_window.calculation_gr_ui.graphicsView_sq.is_on_canvas(sq_name):
         main_window.calculation_gr_ui.graphicsView_sq.remove_sq(sq_ws_name=sq_name)
 
-    return
+def update_sq_boundary(main_window, boundary_index, new_position):
+    """Update the S(Q) range at the main app inputs
+    :param boundary_index:
+    :param new_position:
+    :return:
+    """
+    # check
+    assert isinstance(boundary_index, int), 'Boundary index {0} must be an integer but not {1}.' \
+                                            ''.format(boundary_index, type(boundary_index))
+    assert isinstance(new_position, float), 'New position {0} must be a float but not {1}.' \
+                                            ''.format(new_position, type(new_position))
 
+    # set value
+    if boundary_index == 1:
+        # left boundary
+        main_window.calculation_gr_ui.doubleSpinBoxQmin.setValue(new_position)
+    elif boundary_index == 2:
+        # right boundary
+        main_window.calculation_gr_ui.doubleSpinBoxQmax.setValue(new_position)
+    else:
+        # exception
+        raise RuntimeError('Boundary index %f in method update_sq_boundary() is not '
+                           'supported.' % new_position)
+
+def add_edited_sofq(main_window, sofq_name, edited_sq_name, shift_value, scale_factor_value):
+    """add an edited S(Q) to cached dictionary
+    :param sofq_name:
+    :param edited_sq_name:
+    :param shift_value:
+    :param scale_factor_value:
+    """
+    # check
+    assert isinstance(sofq_name, str), 'SofQ workspace name {0} must be a string but not a {1}.' \
+                                       ''.format(sofq_name, type(sofq_name))
+    assert isinstance(edited_sq_name, str), 'Edited S(Q) workspace name {0} must be a string but not a {1}.' \
+                                            ''.format(edited_sq_name, type(edited_sq_name))
+
+    # add the entry for the original S(Q) if not done yet
+    if sofq_name not in main_window._editedSofQDict:
+        main_window._editedSofQDict[sofq_name] = dict()
+
+    # add entry
+    main_window._editedSofQDict[sofq_name][shift_value, scale_factor_value] = edited_sq_name
+
+    # add the line and color manager
+    main_window._pdfColorManager.add_sofq(edited_sq_name)
+
+def has_edit_sofq(main_window, raw_sofq_name, shift_value, scale_factor_value):
+    """ check whether an edited S(Q) has been cached already
+    :param raw_sofq_name:
+    :param shift_value:
+    :param scale_factor_value:
+    :return:
+    """
+    # check
+    assert isinstance(raw_sofq_name, str)
+
+    if raw_sofq_name not in main_window._editedSofQDict:
+        return False
+
+    return (shift_value, scale_factor_value) in main_window._editedSofQDict[raw_sofq_name]

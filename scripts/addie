@@ -466,6 +466,41 @@ class MainWindow(QMainWindow):
     def controller(self):
         return self._myController
 
+    # job utility
+    def launch_job_manager(self, job_name='', script_to_run=None, thread_index=-1):
+        job_handler = JobStatusHandler(parent=self, job_name=job_name,
+                                       script_to_run=script_to_run,
+                                       thread_index=thread_index)
+        job_handler.start()
+
+    def kill_job(self, row=-1):
+        job_row = self.job_list[row]
+        parent = psutil.Process(job_row['pid'])
+        for child in parent.children(recursive=True):
+            child.kill()
+        #	    child.wait()
+        parent.kill()
+
+        table_widget = self.job_monitor_interface.ui.tableWidget
+        table_widget.removeCellWidget(row, 2)
+        _item = QTableWidgetItem('Killed')
+        table_widget.setItem(row, 2, _item)
+        job_row['status'] = "killed"
+        job_row['pid'] = None
+        self.job_list[row] = job_row
+
+    def start_refresh_text_thread(self):
+        _run_thread = self.logbook_thread
+        _run_thread.setup(parent=self)
+        _run_thread.update_text.connect(self.update_logbook)
+        _run_thread.start()
+
+    def update_logbook(self, text):
+        if self.job_monitor_interface is None:
+            self.logbook_thread.stop()
+        else:
+            _logbook_handler = LogbookHandler(parent=self)
+
     # autoNOM
 
     def select_current_folder_clicked(self):
@@ -571,17 +606,17 @@ class MainWindow(QMainWindow):
         o_gui = Step2GuiHandler(main_window=self)
         o_gui.reset_q_range()
 
-    def run_ndabs_clicked(self):
-        o_create_sample_files = CreateSampleFiles(parent=self)
-        o_create_sample_files.run()
-
-        list_sample_files = o_create_sample_files.list_sample_files
-
-        o_create_ndsum_file = CreateNdsumFile(parent=self)
-        o_create_ndsum_file.run()
-
-        o_run_ndsum = RunNDabs(parent=self, list_sample_files=list_sample_files)
-        o_run_ndsum.run()
+    # def run_ndabs_clicked(self):
+    #     o_create_sample_files = CreateSampleFiles(parent=self)
+    #     o_create_sample_files.run()
+    #
+    #     list_sample_files = o_create_sample_files.list_sample_files
+    #
+    #     o_create_ndsum_file = CreateNdsumFile(parent=self)
+    #     o_create_ndsum_file.run()
+    #
+    #     o_run_ndsum = RunNDabs(parent=self, list_sample_files=list_sample_files)
+    #     o_run_ndsum.run()
 
     def check_fourier_filter_widgets(self):
         o_gui = Step2GuiHandler(main_window=self)
@@ -720,32 +755,6 @@ class MainWindow(QMainWindow):
         """
         return self._myController
 
-    def set_bragg_banks_selected(self, bank_id_list, status):
-        """
-        set the status of selected bank IDs
-        Note: mutex on Bragg Bank selection widgets is not turned on!!!
-        Parameters
-        ----------
-        bank_id_list
-        status
-
-        Returns
-        -------
-
-        """
-        # check inputs
-        assert isinstance(bank_id_list, list), 'Bank IDs {0} must be given in a list but not a {1}.' \
-                                               ''.format(bank_id_list, type(bank_id_list))
-        assert isinstance(status, bool), 'Selection status {0} must be a boolean but not a {1}.' \
-                                         ''.format(status, type(status))
-
-        # set
-        for bank_id in bank_id_list:
-            self._braggBankWidgets[bank_id].setChecked(status)
-
-        return
-
-
     def set_ipython_script(self, script):
         """
         Write a command (python script) to ipython console
@@ -771,110 +780,13 @@ class MainWindow(QMainWindow):
         return
 
     def update_sq_boundary(self, boundary_index, new_position):
-        """Update the S(Q) range at the main app inputs
-        :param boundary_index:
-        :param new_position:
-        :return:
-        """
-        # check
-        assert isinstance(boundary_index, int), 'Boundary index {0} must be an integer but not {1}.' \
-                                                ''.format(boundary_index, type(boundary_index))
-        assert isinstance(new_position, float), 'New position {0} must be a float but not {1}.' \
-                                                ''.format(new_position, type(new_position))
-
-        # set value
-        if boundary_index == 1:
-            # left boundary
-            self.ui.doubleSpinBoxQmin.setValue(new_position)
-        elif boundary_index == 2:
-            # right boundary
-            self.ui.doubleSpinBoxQmax.setValue(new_position)
-        else:
-            # exception
-            raise RuntimeError('Boundary index %f in method update_sq_boundary() is not '
-                               'supported.' % new_position)
-
-        return
+        calculategr_event_handler.update_sq_boundary(self, boundary_index, new_position)
 
     def add_edited_sofq(self, sofq_name, edited_sq_name, shift_value, scale_factor_value):
-        """add an edited S(Q) to cached dictionary
-        :param sofq_name:
-        :param edited_sq_name:
-        :param shift_value:
-        :param scale_factor_value:
-        :return:
-        """
-        # check
-        assert isinstance(sofq_name, str), 'SofQ workspace name {0} must be a string but not a {1}.' \
-                                           ''.format(sofq_name, type(sofq_name))
-        assert isinstance(edited_sq_name, str), 'Edited S(Q) workspace name {0} must be a string but not a {1}.' \
-                                                ''.format(edited_sq_name, type(edited_sq_name))
-
-        # add the entry for the original S(Q) if not done yet
-        if sofq_name not in self._editedSofQDict:
-            self._editedSofQDict[sofq_name] = dict()
-
-        # add entry
-        self._editedSofQDict[sofq_name][shift_value, scale_factor_value] = edited_sq_name
-
-        # add the line and color manager
-        self._pdfColorManager.add_sofq(edited_sq_name)
-
-        return
+        calculategr_event_handler.add_edited_sofq(self, sofq_name, edited_sq_name, shfit_value, scale_factor_value)
 
     def has_edit_sofq(self, raw_sofq_name, shift_value, scale_factor_value):
-        """ check whether an edited S(Q) has been cached already
-        :param raw_sofq_name:
-        :param shift_value:
-        :param scale_factor_value:
-        :return:
-        """
-        # check
-        assert isinstance(raw_sofq_name, str)
-
-        if raw_sofq_name not in self._editedSofQDict:
-            return False
-
-        return (shift_value, scale_factor_value) in self._editedSofQDict[raw_sofq_name]
-
-    # menu
-
-
-    # job utility
-    def launch_job_manager(self, job_name='', script_to_run=None, thread_index=-1):
-        job_handler = JobStatusHandler(parent=self, job_name=job_name,
-                                       script_to_run=script_to_run,
-                                       thread_index=thread_index)
-        job_handler.start()
-
-    def kill_job(self, row=-1):
-        job_row = self.job_list[row]
-        parent = psutil.Process(job_row['pid'])
-        for child in parent.children(recursive=True):
-            child.kill()
-#	    child.wait()
-        parent.kill()
-
-        table_widget = self.job_monitor_interface.ui.tableWidget
-        table_widget.removeCellWidget(row, 2)
-        _item = QTableWidgetItem('Killed')
-        table_widget.setItem(row, 2, _item)
-        job_row['status'] = "killed"
-        job_row['pid'] = None
-        self.job_list[row] = job_row
-
-    def start_refresh_text_thread(self):
-        _run_thread = self.logbook_thread
-        _run_thread.setup(parent=self)
-        _run_thread.update_text.connect(self.update_logbook)
-        _run_thread.start()
-
-    def update_logbook(self, text):
-        if self.job_monitor_interface is None:
-            self.logbook_thread.stop()
-        else:
-            _logbook_handler = LogbookHandler(parent=self)
-
+        calculategr_event_handler.has_edit_sofq(self, raw_sofq_name, shift_value, scale_factor_value)
 
     # Rietveld
 
