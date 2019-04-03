@@ -495,7 +495,7 @@ def do_set_gofr_color_marker(main_window):
     set the color/marker to plots on G(r) canvas
     """
     # get the line ID, color, and marker
-    plot_id_label_list = main_window.ui.graphicsView_gr.get_current_plots()
+    plot_id_label_list = main_window.calculategr_ui.graphicsView_gr.get_current_plots()
 
     # get the line ID, color, and marker
     plot_id_list, color, marker = ps.get_plots_color_marker(main_window,
