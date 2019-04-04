@@ -72,4 +72,3 @@ def run(main_window=None):
     # set the lower limit on Qmin
     main_window.calculategr_ui.doubleSpinBoxQmin.setDecimals(6)
     main_window.calculategr_ui.doubleSpinBoxQmin.setMinimum(1.E-10)
-

@@ -143,8 +143,14 @@
              <pointsize>10</pointsize>
             </font>
            </property>
+           <property name="toolTip">
+            <string/>
+           </property>
+           <property name="whatsThis">
+            <string/>
+           </property>
            <property name="text">
-            <string>Rescale</string>
+            <string>Resize Y-axis to See Full Range</string>
            </property>
           </widget>
          </item>
@@ -498,7 +504,7 @@
             </font>
            </property>
            <property name="text">
-            <string>Rescale</string>
+            <string>Resize Y-axis to See full Range</string>
            </property>
           </widget>
          </item>
