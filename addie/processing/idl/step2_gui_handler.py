@@ -79,7 +79,8 @@ class Step2GuiHandler(object):
             return
         if self.main_window.postprocessing_ui.table.item(row_index, 2) is None:
             return
-        self.main_window.postprocessing_ui.background_line_edit.setText(self.main_window.postprocessing_ui.table.item(row_index, 2).text())
+        _item = self.main_window.postprocessing_ui.table.item(row_index, 2)
+        self.main_window.postprocessing_ui.background_line_edit.setText(_item.text())
 
     def step2_update_background_dropdown(self):
         row_index = self.main_window.postprocessing_ui.background_comboBox.currentIndex()

@@ -8,8 +8,6 @@ import os
 import itertools
 import psutil
 from collections import OrderedDict
-
-# must be imported through qtpy before any other gui imports
 from qtpy.QtCore import QProcess, Qt
 from qtpy.QtGui import QIcon
 from qtpy import QtGui
@@ -34,7 +32,6 @@ from addie.autoNOM.step1_gui_handler import Step1GuiHandler
 import addie.autoNOM.event_handler as autonom_event_handler
 
 from addie.initialization.widgets.init_step2 import InitStep2
-from addie.processing.idl.populate_master_table import PopulateMasterTable
 from addie.processing.idl.populate_background_widgets import PopulateBackgroundWidgets
 from addie.processing.idl.step2_gui_handler import Step2GuiHandler
 from addie.processing.idl.table_handler import TableHandler as IdlTableHandler
@@ -56,8 +53,6 @@ from addie.processing.mantid.master_table.table_tree_handler import SaveConfigIn
 from addie.processing.mantid.master_table import *
 from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
 from addie.processing.mantid.master_table.geometry_handler import DimensionsSetter
-from addie.processing.mantid.master_table.reduction_configuration_handler import ReductionConfigurationHandler
-from addie.processing.mantid.make_calibration_handler.make_calibration import MakeCalibrationLauncher
 from addie.processing.mantid.master_table.periodic_table.material_handler import MaterialHandler
 from addie.processing.mantid.master_table.mass_density_handler import MassDensityHandler
 import addie.processing.mantid.event_handler as processing_event_handler
@@ -942,7 +937,7 @@ class MainWindow(QMainWindow):
 
     # calibrations
     def make_calibration_clicked(self):
-        MakeCalibrationLauncher(parent=self)
+        processing_event_handler.make_calibration_clicked(self)
 
     def browse_calibration_clicked(self):
         processing_event_handler.browse_calibration_clicked(self)

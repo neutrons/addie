@@ -27,6 +27,7 @@ def run(main_window=None):
     main_window.ucams = get_ucams()
     set_default_folder_path(main_window)
 
+
 def set_default_folder_path(main_window):
 
     # set default folder path

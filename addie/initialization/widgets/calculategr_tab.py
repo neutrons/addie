@@ -1,4 +1,3 @@
-from qtpy import QtGui
 from qtpy.QtWidgets import QVBoxLayout
 
 from addie.calculate_gr.gofrtree import GofRTree
@@ -26,7 +25,6 @@ def run(main_window=None):
     main_window.calculategr_ui.treeWidget_grWsList = GofRTree(main_window)
     temp_layout.addWidget(main_window.calculategr_ui.treeWidget_grWsList)
 
-
     main_window.calculategr_ui.splitter_4.setStyleSheet("""
                                                         QSplitter::handle {
                                                            image: url(':/MPL Toolbar/splitter_icon.png');
@@ -39,7 +37,6 @@ def run(main_window=None):
     #                                                     }
     #                                                     """)
     #main_window.calculategr_ui.splitter.setSizes([1000, 1])
-
 
     main_window.calculategr_ui.treeWidget_grWsList.set_main_window(main_window)
     main_window.calculategr_ui.treeWidget_grWsList.add_main_item('workspaces',
@@ -54,7 +51,6 @@ def run(main_window=None):
     main_window.calculategr_ui.comboBox_SofQType.addItem('S(Q)-1')
     main_window.calculategr_ui.comboBox_SofQType.addItem('Q[S(Q)-1]')
     main_window.calculategr_ui.comboBox_SofQType.setCurrentIndex(0)
-
 
     main_window.calculategr_ui.comboBox_pdfType.addItems(['G(r)', 'g(r)', 'RDF(r)'])
 

@@ -12,7 +12,7 @@ class PopulateBackgroundWidgets(object):
 
     def __init__(self, main_window=None):
         self.main_window_postprocessing_ui = main_window.postprocessing_ui
-        self.current_folder = parent.current_folder
+        self.current_folder = main_window.current_folder
 
     def run(self):
         self.retrieve_list_names_from_table()
@@ -56,5 +56,6 @@ class PopulateBackgroundWidgets(object):
         for _item in self.list_names:
             self.main_window_postprocessing_ui.background_comboBox.addItem(_item)
 
-        self.main_window_postprocessing_ui.background_line_edit.setText(self.main_window_postprocessing_ui.table.item(0, 2).text())
+        background_text = self.main_window_postprocessing_ui.table.item(0, 2).text()
+        self.main_window_postprocessing_ui.background_line_edit.setText(background_text)
         self.main_window_postprocessing_ui.background_no_field.setText(self.exp_ini_back_file)

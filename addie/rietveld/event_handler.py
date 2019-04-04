@@ -493,6 +493,7 @@ def set_bragg_ws_to_plot(main_window, gss_group_name):
 
     plot_bragg(main_window, ws_list=[gss_group_name], bankIds=selected_banks, clear_canvas=False)
 
+
 def set_bragg_banks_selected(main_window, bank_id_list, status):
     """
     set the status of selected bank IDs

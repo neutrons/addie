@@ -237,9 +237,9 @@ class TableHandler(object):
         bottom_row = _selection.bottomRow()
 
         self.main_window.table_selection_buffer = {'left_column': left_column,
-                                                    'right_column': right_column,
-                                                    'top_row': top_row,
-                                                    'bottom_row': bottom_row}
+                                                   'right_column': right_column,
+                                                   'top_row': top_row,
+                                                   'bottom_row': bottom_row}
         self._paste_menu.setEnabled(True)
 
     def _paste(self, _cut=False):

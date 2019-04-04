@@ -58,6 +58,7 @@ def load_sq(main_window):
         # calculate and calculate G(R)
         generate_gr_step1(main_window)
 
+
 def getDefaultDir(main_window, sub_dir):
     """ Get the default data directory.
     If is in Fixed-Directory-Structure, then _currDataDir is the parent directory for all GSAS, gofr and SofQ
@@ -73,6 +74,7 @@ def getDefaultDir(main_window, sub_dir):
         default_dir = main_window._currDataDir
 
     return default_dir
+
 
 def check_in_fixed_dir_structure(main_window, sub_dir):
     """
@@ -92,6 +94,7 @@ def check_in_fixed_dir_structure(main_window, sub_dir):
         main_window._currDataDir = main_path
     else:
         main_window._inFixedDirectoryStructure = False
+
 
 def plot_sq(main_window, ws_name, color, clear_prev):
     """
@@ -121,6 +124,7 @@ def plot_sq(main_window, ws_name, color, clear_prev):
                                                        reset_color_mark=clear_prev,
                                                        color=color)
 
+
 def generate_gr_step1(main_window):
     """ Handling event from push button 'Generate G(r)' by generating G(r) of selected workspaces
     :return:
@@ -143,6 +147,7 @@ def generate_gr_step1(main_window):
     # generate G(r)
     generate_gr_step2(main_window,
                       sq_ws_name_list=sq_ws_name_list)
+
 
 def generate_gr_step2(main_window, sq_ws_name_list):
     """Generate G(r) from specified S(Q) workspaces
@@ -213,6 +218,7 @@ def generate_gr_step2(main_window, sq_ws_name_list):
         gr_param_str = 'G(r) for Q(%.3f, %.3f)' % (min_q, max_q)
         main_window.calculategr_ui.treeWidget_grWsList.add_gr(gr_param_str, gr_ws_name)
 
+
 def evt_qmin_changed(main_window):
     q_min = main_window.calculategr_ui.doubleSpinBoxQmin.value()
     q_max = main_window.calculategr_ui.doubleSpinBoxQmax.value()
@@ -220,6 +226,7 @@ def evt_qmin_changed(main_window):
     if q_min < q_max and main_window.calculategr_ui.graphicsView_sq.is_boundary_shown():
         main_window.calculategr_ui.graphicsView_sq.move_left_indicator(q_min,
                                                                        relative=False)
+
 
 def evt_qmax_changed(main_window):
     """
@@ -234,7 +241,6 @@ def evt_qmax_changed(main_window):
     if q_min < q_max and main_window.calculategr_ui.graphicsView_sq.is_boundary_shown():
         main_window.calculategr_ui.graphicsView_sq.move_right_indicator(q_max, relative=False)
 
-    return
 
 def plot_gr(main_window, ws_name, line_color, line_style,
             line_marker, line_alpha, line_label,
@@ -262,6 +268,7 @@ def plot_gr(main_window, ws_name, line_color, line_style,
                                         color=line_color, style=line_style, marker=line_marker,
                                         alpha=line_alpha, label=line_label)
 
+
 def evt_change_sq_type(main_window):
     """ Event handling to plot S(Q)
     """
@@ -278,6 +285,7 @@ def evt_change_sq_type(main_window):
         # plot S(Q)
         plot_sq(main_window, sq_name, color=None, clear_prev=False)
 
+
 def do_rescale_sofq(main_window):
     """ Rescale the figure of S(Q)
     """
@@ -289,6 +297,7 @@ def do_rescale_sofq(main_window):
     y_upper_limit = max_y_value + delta_y * 0.05
 
     main_window.calculategr_ui.graphicsView_sq.setXYLimit(ymin=y_lower_limit, ymax=y_upper_limit)
+
 
 def do_rescale_gofr(main_window):
     """ Rescale the figure of G(r)
@@ -302,6 +311,7 @@ def do_rescale_gofr(main_window):
 
     main_window.calculategr_ui.graphicsView_gr.setXYLimit(ymin=y_lower_limit, ymax=y_upper_limit)
 
+
 def do_show_sq_bound(main_window):
     """
     Show or hide the left and right boundary of the S(Q)
@@ -309,6 +319,7 @@ def do_show_sq_bound(main_window):
     q_left = main_window.calculategr_ui.doubleSpinBoxQmin.value()
     q_right = main_window.calculategr_ui.doubleSpinBoxQmax.value()
     main_window.calculategr_ui.graphicsView_sq.toggle_boundary(q_left, q_right)
+
 
 def do_load_gr(main_window):
     """
@@ -359,6 +370,7 @@ def do_load_gr(main_window):
     # put the loaded G(r) workspace to tree 'workspaces'
     main_window.calculategr_ui.treeWidget_grWsList.add_child_main_item('workspaces', gr_ws_name)
 
+
 def do_save_gr(main_window):
     """
     Save the selected the G(r) from menu to ASCII file
@@ -400,6 +412,7 @@ def do_save_gr(main_window):
 
     # save!
     main_window._myController.save_ascii(gr_ws_name, gr_file_name, gr_file_type)
+
 
 def do_save_sq(main_window):
     """Save the selected the G(r) from menu to ASCII file
@@ -447,6 +460,7 @@ def do_save_sq(main_window):
         # save file
         main_window._myController.save_ascii(sq_name, out_file_name, sq_file_type)
 
+
 def do_edit_sq(main_window):
     """
     Launch a dialog box to edit S(Q) by shift and scaling.
@@ -469,6 +483,7 @@ def do_edit_sq(main_window):
     # show
     main_window._editSqDialog.show()
 
+
 def do_generate_sq(main_window):
     """
     generate S(Q) from G(r) by PDFFourierTransform
@@ -489,6 +504,7 @@ def do_generate_sq(main_window):
     main_window._generateSofQDialog.set_q_range(min_q, max_q)
 
     main_window._generateSofQDialog.show()
+
 
 def do_set_gofr_color_marker(main_window):
     """
@@ -511,6 +527,7 @@ def do_set_gofr_color_marker(main_window):
                                                                   marker=marker,
                                                                   markercolor=color)
 
+
 def do_set_sq_color_marker(main_window):
     """
     set the color/marker on S(q) canvas
@@ -531,6 +548,7 @@ def do_set_sq_color_marker(main_window):
                                                                   linecolor=color,
                                                                   marker=marker,
                                                                   markercolor=color)
+
 
 # events from menu
 def do_reset_gr_tab(main_window):
@@ -556,6 +574,7 @@ def do_reset_gr_tab(main_window):
     main_window.calculategr_ui.comboBox_SofQ.clear()
     main_window.calculategr_ui.comboBox_SofQ.addItem('All')
 
+
 def do_reset_gsas_tab(main_window):
     """
     Reset the GSAS-tab including
@@ -571,7 +590,9 @@ def do_reset_gsas_tab(main_window):
         if gss_node_name == 'workspaces':
             continue
         # get the split workspaces' names and delete
-        gsas_ws_name_list = main_window.calculategr_ui.treeWidget_braggWSList.get_child_nodes(gsas_group_node, output_str=True)
+        gsas_ws_name_list = main_window.calculategr_ui.treeWidget_braggWSList.get_child_nodes(
+            gsas_group_node,
+            output_str=True)
         for workspace in gsas_ws_name_list:
             main_window._myController.delete_workspace(workspace)
         # END-FOR
@@ -590,6 +611,7 @@ def do_reset_gsas_tab(main_window):
 
     # clear the canvas
     main_window.calculategr_ui.graphicsView_bragg.reset()
+
 
 def edit_sq(main_window, sq_name, scale_factor, shift):
     """Edit S(Q) in workspace with scale_factor * Y[i] + shift
@@ -627,6 +649,7 @@ def edit_sq(main_window, sq_name, scale_factor, shift):
     # calculate G(r) too
     generate_gr_step2(main_window, [edit_sq_name])
 
+
 def get_file_names_from_dialog(default_dir, file_filter, caption):
     """
     get the file name from a dialog
@@ -658,11 +681,13 @@ def get_file_names_from_dialog(default_dir, file_filter, caption):
 
     return file_name_list
 
+
 def clear_bank_checkboxes(main_window):
     main_window._noEventBankWidgets = True
     for check_box in list(main_window._braggBankWidgets.values()):
         check_box.setChecked(False)
     main_window._noEventBankWidgets = False
+
 
 def remove_gr_from_plot(main_window, gr_name):
     """Remove a GofR line from GofR canvas
@@ -675,6 +700,7 @@ def remove_gr_from_plot(main_window, gr_name):
 
     # remove
     main_window.calculategr_ui.graphicsView_gr.remove_gr(plot_key=gr_name)
+
 
 def remove_gss_from_plot(main_window, gss_group_name, gss_bank_ws_name_list):
     """Remove a GSAS group from canvas if they exits
@@ -711,6 +737,7 @@ def remove_gss_from_plot(main_window, gss_group_name, gss_bank_ws_name_list):
     # turn off the mutex lock
     main_window._noEventBankWidgets = False
 
+
 def remove_sq_from_plot(main_window, sq_name):
     """
     Remove an SofQ line from SofQ canvas
@@ -726,6 +753,7 @@ def remove_sq_from_plot(main_window, sq_name):
     # remove
     if main_window.calculation_gr_ui.graphicsView_sq.is_on_canvas(sq_name):
         main_window.calculation_gr_ui.graphicsView_sq.remove_sq(sq_ws_name=sq_name)
+
 
 def update_sq_boundary(main_window, boundary_index, new_position):
     """Update the S(Q) range at the main app inputs
@@ -751,6 +779,7 @@ def update_sq_boundary(main_window, boundary_index, new_position):
         raise RuntimeError('Boundary index %f in method update_sq_boundary() is not '
                            'supported.' % new_position)
 
+
 def add_edited_sofq(main_window, sofq_name, edited_sq_name, shift_value, scale_factor_value):
     """add an edited S(Q) to cached dictionary
     :param sofq_name:
@@ -773,6 +802,7 @@ def add_edited_sofq(main_window, sofq_name, edited_sq_name, shift_value, scale_f
 
     # add the line and color manager
     main_window._pdfColorManager.add_sofq(edited_sq_name)
+
 
 def has_edit_sofq(main_window, raw_sofq_name, shift_value, scale_factor_value):
     """ check whether an edited S(Q) has been cached already

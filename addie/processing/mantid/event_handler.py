@@ -8,7 +8,8 @@ from addie.processing.mantid.master_table.mass_density_handler import MassDensit
 from addie.processing.mantid.master_table.geometry_handler import DimensionsSetter
 from addie.processing.mantid.master_table.import_from_run_number_handler import ImportFromRunNumberHandler
 from addie.processing.mantid.master_table.import_from_database.load_into_master_table import LoadIntoMasterTable
-from addie.processing.mantid.master_table.master_table_loader import AsciiLoader
+from addie.processing.mantid.make_calibration_handler.make_calibration import MakeCalibrationLauncher
+from addie.processing.mantid.master_table.reduction_configuration_handler import ReductionConfigurationHandler
 
 try:
     from addie.processing.mantid.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
@@ -24,13 +25,16 @@ def personalization_table_clicked(main_window):
     current_config = _table_config.get_current_config()
     _table_config.update_tree_dict_and_tree(config_to_load=current_config)
 
+
 def table_search(main_window, text):
     o_table = MtdTableHandler(parent=main_window)
     o_table.search(text)
 
+
 def table_search_clear(main_window):
     o_table = MtdTableHandler(parent=main_window)
     o_table.clear_search()
+
 
 def load_this_config(main_window, key='', resize=False):
     if key == '':
@@ -67,25 +71,31 @@ def load_this_config(main_window, key='', resize=False):
 
     o_table.disconnect_table_ui(unblock_all=True)
 
+
 def h3_table_right_click(main_window):
     o_h3_table = H3TableHandler(main_window=main_window)
     o_h3_table.right_click()
+
 
 def check_status_of_right_click_buttons(main_window):
     o_h3_table = H3TableHandler(main_window=main_window)
     o_h3_table.check_status_of_right_click_buttons()
 
+
 def scroll_h1_table(main_window, value):
     main_window.processing_ui.h2_table.horizontalScrollBar().setValue(value)
     main_window.processing_ui.h3_table.horizontalScrollBar().setValue(value)
+
 
 def scroll_h2_table(main_window, value):
     main_window.processing_ui.h1_table.horizontalScrollBar().setValue(value)
     main_window.processing_ui.h3_table.horizontalScrollBar().setValue(value)
 
+
 def scroll_h3_table(main_window, value):
     main_window.processing_ui.h1_table.horizontalScrollBar().setValue(value)
     main_window.processing_ui.h2_table.horizontalScrollBar().setValue(value)
+
 
 def resizing_h1(main_window, index_column, old_size, new_size):
 
@@ -111,6 +121,7 @@ def resizing_h1(main_window, index_column, old_size, new_size):
 
     o_table.disconnect_table_ui(unblock_all=True)
 
+
 def resizing_h2(main_window, index_column, old_size, new_size):
     o_table = TableConfig(main_window=main_window)
     o_table.disconnect_table_ui()
@@ -133,6 +144,7 @@ def resizing_h2(main_window, index_column, old_size, new_size):
 
     o_table.disconnect_table_ui(unblock_all=True)
 
+
 def resizing_h3(main_window, index_column, old_size, new_size):
 
     o_table = TableConfig(main_window=main_window)
@@ -149,9 +161,11 @@ def resizing_h3(main_window, index_column, old_size, new_size):
 
     o_table.disconnect_table_ui(unblock_all=True)
 
+
 def init_tree(main_window):
     main_window.addItems(main_window.ui.treeWidget.invisibleRootItem())
     main_window.ui.treeWidget.itemChanged.connect(main_window.tree_item_changed)
+
 
 def tree_item_changed(main_window, item):
     """this will change the way the big table will look like by hidding or showing columns"""
@@ -172,87 +186,109 @@ def tree_item_changed(main_window, item):
 
     o_table.block_table_header_ui(unblock_all=True)
 
+
 def master_table_select_state_changed(main_window, state, key):
     o_table = TableRowHandler(main_window=main_window)
     o_table.activated_row_changed(key=key, state=state)
 
 ## sample columns
+
 def sample_material_button_pressed(main_window, key):
     MaterialHandler(parent=main_window, key=key, data_type='sample')
+
 
 def sample_material_line_edit_entered(main_window, key):
     o_table = TableRowHandler(main_window=main_window)
     o_table.transfer_widget_states(from_key=key, data_type='sample')
 
+
 def sample_mass_density_button_pressed(main_window, key):
     MassDensityHandler(parent=main_window, data_type='sample', key=key)
+
 
 def sample_mass_density_line_edit_entered(main_window, key):
     o_table = TableRowHandler(main_window=main_window)
     o_table.transfer_widget_states(from_key=key, data_type='sample')
 
+
 def sample_shape_changed(main_window, index, key):
     o_table = TableRowHandler(main_window=main_window)
     o_table.shape_changed(shape_index=index, key=key, data_type='sample')
+
 
 def sample_abs_correction_changed(main_window, text, key):
     o_table = TableRowHandler(main_window=main_window)
     o_table.abs_correction_changed(value=text, key=key, data_type='sample')
 
+
 def sample_multi_scattering_correction_changed(main_window, text, key):
     o_table = TableRowHandler(main_window=main_window)
     o_table.multi_scattering_correction(value=text, key=key, data_type='sample')
+
 
 def sample_inelastic_correction_changed(main_window, text, key):
     o_table = TableRowHandler(main_window=main_window)
     o_table.inelastic_correction_changed(value=text, key=key, data_type='sample')
 
+
 def sample_placzek_button_pressed(main_window, key):
     o_table = TableRowHandler(main_window=main_window)
     o_table.placzek_button_pressed(key=key, data_type='sample')
+
 
 def sample_dimensions_setter_button_pressed(main_window, key):
     o_dimensions_ui = DimensionsSetter(parent=main_window, key=key, data_type='sample')
     o_dimensions_ui.show()
 
 # normalization columns
+
 def normalization_material_button_pressed(main_window, key):
     MaterialHandler(parent=main_window, key=key, data_type='normalization')
+
 
 def normalization_material_line_edit_entered(main_window, key):
     o_table = TableRowHandler(main_window=main_window)
     o_table.transfer_widget_states(from_key=key, data_type='normalization')
 
+
 def normalization_mass_density_button_pressed(main_window, key):
     MassDensityHandler(parent=main_window, data_type='normalization', key=key)
+
 
 def normalization_mass_density_line_edit_entered(main_window, key):
     o_table = TableRowHandler(main_window=main_window)
     o_table.transfer_widget_states(from_key=key, data_type='normalization')
 
+
 def normalization_shape_changed(main_window, text, key):
     o_table = TableRowHandler(main_window=main_window)
     o_table.shape_changed(shape_index=text, key=key, data_type='normalization')
+
 
 def normalization_abs_correction_changed(main_window, text, key):
     o_table = TableRowHandler(main_window=main_window)
     o_table.abs_correction_changed(value=text, key=key, data_type='normalization')
 
+
 def normalization_multi_scattering_correction_changed(main_window, text, key):
     o_table = TableRowHandler(main_window=main_window)
     o_table.multi_scattering_correction(value=text, key=key, data_type='normalization')
+
 
 def normalization_inelastic_correction_changed(main_window, text, key):
     o_table = TableRowHandler(main_window=main_window)
     o_table.inelastic_correction_changed(value=text, key=key, data_type='normalization')
 
+
 def normalization_placzek_button_pressed(main_window, key):
     o_table = TableRowHandler(main_window=main_window)
     o_table.placzek_button_pressed(key=key, data_type='normalization')
 
+
 def normalization_dimensions_setter_button_pressed(main_window, key):
     o_dimensions_ui = DimensionsSetter(parent=main_window, key=key, data_type='normalization')
     o_dimensions_ui.show()
+
 
 def launch_import_from_database_handler(main_window):
     if ONCAT_ENABLED:
@@ -260,11 +296,14 @@ def launch_import_from_database_handler(main_window):
     else:
         print('oncat functionality disabled')
 
+
 def launch_import_from_run_number_handler(main_window):
     ImportFromRunNumberHandler(parent=main_window)
 
+
 def make_calibration_clicked(main_window):
     MakeCalibrationLauncher(parent=main_window)
+
 
 def browse_calibration_clicked(main_window):
     _calibration_folder = main_window.calibration_folder
@@ -275,6 +314,7 @@ def browse_calibration_clicked(main_window):
     if _calibration_file:
         main_window.processing_ui.calibration_file.setText(_calibration_file)
 
+
 def from_oncat_to_master_table(main_window, json=None, with_conflict=False, ignore_conflicts=False):
     if main_window.import_from_database_ui:
         main_window.import_from_database_ui.close()
@@ -283,6 +323,6 @@ def from_oncat_to_master_table(main_window, json=None, with_conflict=False, igno
                         with_conflict=with_conflict,
                         ignore_conflicts=ignore_conflicts)
 
+
 def reduction_configuration_button_clicked(main_window):
     ReductionConfigurationHandler(parent=main_window)
-

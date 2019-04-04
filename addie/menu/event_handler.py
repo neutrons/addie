@@ -22,29 +22,36 @@ def do_show_help(main_window):
     helper_url = QUrl('https://neutrons.github.io/addie/index.html')
     QDesktopServices.openUrl(helper_url)
 
+
 def action_preview_ascii_clicked(main_window):
     o_gui = Step3GuiHandler(parent=main_window)
     o_gui.browse_file()
+
 
 def action_load_configuration_clicked(main_window):
     o_import_config = ImportConfiguration(parent=main_window)
     o_import_config.run()
 
+
 def action_save_configuration_clicked(main_window):
     o_export_config = ExportConfiguration(parent=main_window)
     o_export_config.run()
+
 
 def action_undo_clicked(main_window):
     o_undo = UndoHandler(parent=main_window)
     o_undo.undo_table()
 
+
 def action_redo_clicked(main_window):
     o_undo = UndoHandler(parent=main_window)
     o_undo.redo_table()
 
+
 def help_about_clicked(main_window):
     _about = AboutDialog(parent=main_window)
     _about.display()
+
 
 def activate_reduction_tabs(main_window):
     if main_window.post_processing == 'idl':
@@ -68,12 +75,15 @@ def activate_reduction_tabs(main_window):
     # also hide the file>configration buttons when working with Mantid
     main_window.ui.menuLoad_Configuration.menuAction().setVisible(visible_menu_configuration)
 
+
 def advanced_option_clicked(main_window):
     AdvancedWindowLauncher(parent=main_window)
+
 
 def menu_ipts_file_transfer_clicked(main_window):
     _o_ipts = IptsFileTransferDialog(parent=main_window)
     _o_ipts.show()
+
 
 def window_job_monitor_clicked(main_window):
     _ = JobStatusHandler(parent=main_window)
