@@ -50,28 +50,17 @@ from addie.mantid_handler.browse_file_folder_handler import BrowseFileFolderHand
 from addie.mantid_handler.mantid_reduction import GlobalMantidReduction
 from addie.mantid_handler.mantid_thread import MantidThread
 
-from addie.processing.mantid.master_table.master_table_loader import FromDictionaryToTableUi, AsciiLoader
-from addie.processing.mantid.master_table.table_tree_handler import TableTreeHandler, TableInitialization, \
-    TableConfig, H3TableHandler
+from addie.processing.mantid.master_table.master_table_loader import FromDictionaryToTableUi
+from addie.processing.mantid.master_table.table_tree_handler import TableInitialization, TableConfig, H3TableHandler
 from addie.processing.mantid.master_table.table_tree_handler import SaveConfigInterface, TableTree
 from addie.processing.mantid.master_table import *
 from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
 from addie.processing.mantid.master_table.geometry_handler import DimensionsSetter
-from addie.processing.mantid.master_table.selection_handler import TableHandler as MtdTableHandler
 from addie.processing.mantid.master_table.reduction_configuration_handler import ReductionConfigurationHandler
 from addie.processing.mantid.make_calibration_handler.make_calibration import MakeCalibrationLauncher
 from addie.processing.mantid.master_table.periodic_table.material_handler import MaterialHandler
 from addie.processing.mantid.master_table.mass_density_handler import MassDensityHandler
-
-try:
-    from addie.processing.mantid.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
-    ONCAT_ENABLED = True
-except ImportError:
-    print('pyoncat module not found. Functionality disabled')
-    ONCAT_ENABLED = False
-
-from addie.processing.mantid.master_table.import_from_run_number_handler import ImportFromRunNumberHandler
-from addie.processing.mantid.master_table.import_from_database.load_into_master_table import LoadIntoMasterTable
+import addie.processing.mantid.event_handler as processing_event_handler
 
 import addie.addiedriver as driver
 # import addie.utilities.specify_plots_style as ps
@@ -392,6 +381,17 @@ class MainWindow(QMainWindow):
 
     def evt_quit(self):
         """Quit the application"""
+        self.close()
+
+    def closeEvent(self, c):
+        if self.advanced_window_ui:
+            self.advanced_window_ui.closeEvent(c)
+        if self.make_calibration_ui:
+            self.make_calibration_ui.closeEvent(c)
+        if self.table_tree_ui:
+            self.table_tree_ui.closeEvent(c)
+
+    def cancel_clicked(self):
         self.close()
 
     # menu
@@ -817,265 +817,120 @@ class MainWindow(QMainWindow):
 
     # master table
     def personalization_table_clicked(self):
-        _ = TableTreeHandler(parent=self)
-        _table_config = TableConfig(main_window=self)
-        current_config = _table_config.get_current_config()
-        _table_config.update_tree_dict_and_tree(config_to_load=current_config)
-
-    def closeEvent(self, c):
-        if self.advanced_window_ui:
-            self.advanced_window_ui.closeEvent(c)
-        if self.make_calibration_ui:
-            self.make_calibration_ui.closeEvent(c)
-        if self.table_tree_ui:
-            self.table_tree_ui.closeEvent(c)
-
-    # events of the table and the tree
+        processing_event_handler.personalization_table_clicked(self)
 
     def table_search(self, text):
-        o_table = MtdTableHandler(parent=self)
-        o_table.search(text)
+        processing_event_handler.table_search(self)
 
     def table_search_clear(self):
-        o_table = MtdTableHandler(parent=self)
-        o_table.clear_search()
+        processing_event_handler.table_search_clear(self)
 
     def load_this_config(self, key='', resize=False):
-        if key == '':
-            return
-
-        if key == 'FULL_RESET':
-            config_to_load = self.reset_config_dict['table']
-        else:
-            config_to_load = self.config_dict[key]['table']
-
-        h1_dict = config_to_load['h1']
-        h2_dict = config_to_load['h2']
-        h3_dict = config_to_load['h3']
-
-        o_table = TableConfig(main_window=self)
-        o_table.disconnect_table_ui()
-
-        for _col in h1_dict:
-            _visible = h1_dict[_col]['visible']
-            _width = h1_dict[_col]['width']
-            o_table.set_size_and_visibility_column(h1=_col, width=_width, visibility=_visible, resize=resize)
-
-        for _col in h2_dict:
-            _visible = h2_dict[_col]['visible']
-            _width = h2_dict[_col]['width']
-            o_table.set_size_and_visibility_column(h2=_col, width=_width, visibility=_visible, resize=resize)
-
-        for _col in h3_dict:
-            _visible = h3_dict[_col]['visible']
-            _width = h3_dict[_col]['width']
-            o_table.set_size_and_visibility_column(h3=_col, width=_width, visibility=_visible, resize=resize)
-
-        o_table.update_tree_dict_and_tree(config_to_load)
-
-        o_table.disconnect_table_ui(unblock_all=True)
+        processing_event_handler.load_this_config(self, key=key, resize=resize)
 
     def h3_table_right_click(self, position):
-        o_h3_table = H3TableHandler(main_window=self)
-        o_h3_table.right_click()
+        processing_event_handler.h3_table_right_click(self)
 
     def check_status_of_right_click_buttons(self):
-        o_h3_table = H3TableHandler(main_window=self)
-        o_h3_table.check_status_of_right_click_buttons()
+        processing_event_handler.check_status_of_right_click_buttons(self)
 
     def scroll_h1_table(self, value):
-        self.processing_ui.h2_table.horizontalScrollBar().setValue(value)
-        self.processing_ui.h3_table.horizontalScrollBar().setValue(value)
+        processing_event_handler.scroll_h1_table(self, value)
 
     def scroll_h2_table(self, value):
-        self.processing_ui.h1_table.horizontalScrollBar().setValue(value)
-        self.processing_ui.h3_table.horizontalScrollBar().setValue(value)
+        processing_event_handler.scroll_h2_table(self, value)
 
     def scroll_h3_table(self, value):
-        self.processing_ui.h1_table.horizontalScrollBar().setValue(value)
-        self.processing_ui.h2_table.horizontalScrollBar().setValue(value)
+        processing_event_handler.scroll_h3_table(self, value)
 
     def resizing_h1(self, index_column, old_size, new_size):
-
-        o_table = TableConfig(main_window=self)
-        o_table.disconnect_table_ui()
-
-        h2_children = o_table.get_h2_children_from_h1(h1=index_column)
-        last_h2_visible = o_table.get_last_h2_visible(list_h2=h2_children)
-        list_h3 = o_table.get_h3_children_from_h2(h2=last_h2_visible)
-        last_h3_visible = o_table.get_last_h3_visible(list_h3=list_h3)
-
-        size_diff = new_size - old_size
-
-        # add this size_diff to last_h2 and last_h3
-        last_h3_visible_size = o_table.get_size_column(h3=last_h3_visible)
-        if (last_h3_visible_size < self.minimum_col_width) and \
-                (new_size < old_size):
-            o_table.set_size_column(h1=index_column, width=old_size)
-        else:
-            last_h2_visible_size = o_table.get_size_column(h2=last_h2_visible)
-            o_table.set_size_column(h2=last_h2_visible, width=last_h2_visible_size + size_diff)
-            o_table.set_size_column(h3=last_h3_visible, width=last_h3_visible_size + size_diff)
-
-        o_table.disconnect_table_ui(unblock_all=True)
+        processing_event_handler.resizing_h1(self, index_column, old_size, new_size)
 
     def resizing_h2(self, index_column, old_size, new_size):
-        o_table = TableConfig(main_window=self)
-        o_table.disconnect_table_ui()
-
-        h1_parent = o_table.get_h1_parent_from_h2(h2=index_column)
-        h3_children = o_table.get_h3_children_from_h2(h2=index_column)
-        last_h3_visible = o_table.get_last_h3_visible(list_h3=h3_children)
-
-        size_diff = new_size - old_size
-
-        last_h3_visible_size = o_table.get_size_column(h3=last_h3_visible)
-        if (last_h3_visible_size < self.minimum_col_width) and \
-                (new_size < old_size):
-            o_table.set_size_column(h2=index_column, width=old_size)
-        else:
-            # add this size_diff to parent and last h3
-            parent_size = o_table.get_size_column(h1=h1_parent)
-            o_table.set_size_column(h1=h1_parent, width=parent_size + size_diff)
-            o_table.set_size_column(h3=last_h3_visible, width=last_h3_visible_size + size_diff)
-
-        o_table.disconnect_table_ui(unblock_all=True)
+        processing_event_handler.resizing_h2(self, index_column, old_size, new_size)
 
     def resizing_h3(self, index_column, old_size, new_size):
+        processing_event_handler.resizing_h3(self, index_column, old_size, new_size)
 
-        o_table = TableConfig(main_window=self)
-        o_table.disconnect_table_ui()
-
-        [h1_parent, h2_parent] = o_table.get_h1_h2_parent_from_h3(h3=index_column)
-
-        size_diff = new_size - old_size
-
-        h1_parent_size = o_table.get_size_column(h1=h1_parent)
-        o_table.set_size_column(h1=h1_parent, width=h1_parent_size + size_diff)
-        h2_parent_size = o_table.get_size_column(h2=h2_parent)
-        o_table.set_size_column(h2=h2_parent, width=h2_parent_size + size_diff)
-
-        o_table.disconnect_table_ui(unblock_all=True)
-
-    def init_widgets(self):
-        pass
-
+    # def init_widgets(self):
+    #     pass
+    #
     def init_tree(self):
-        # fill the self.ui.treeWidget
-        # self.addItems(self.ui.treeWidget.invisibleRootItem())
-        self.addItems(self.ui.treeWidget.invisibleRootItem())
-        self.ui.treeWidget.itemChanged.connect(self.tree_item_changed)
+        processing_event_handler.init_tree(self)
 
     def tree_item_changed(self, item, _):
-        """this will change the way the big table will look like by hidding or showing columns"""
+        processing_event_handler.tree_item_changed(self, item)
 
-        o_table = TableConfig(main_window=self)
-        o_table.block_table_header_ui(block_all=False,
-                                      block_h1=True,
-                                      block_h2=True)
-
-        h_columns_affected = o_table.get_h_columns_from_item_name(item_name=o_table.get_item_name(item))
-
-        o_table.change_state_tree(list_ui=h_columns_affected['list_tree_ui'],
-                                  list_parent_ui=h_columns_affected['list_parent_ui'],
-                                  state=item.checkState(0))
-
-        o_table.update_table_columns_visibility()
-        o_table.resizing_table(tree_dict=h_columns_affected, block_ui=False)
-
-        o_table.block_table_header_ui(unblock_all=True)
-
-    # widgets from master table
     def master_table_select_state_changed(self, state, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.activated_row_changed(key=key, state=state)
+        processing_event_handler.master_table_select_state_changed(self, state, key)
 
     ## sample columns
     def master_table_sample_material_button_pressed(self, key):
-        MaterialHandler(parent=self, key=key, data_type='sample')
+        processing_event_handler.sample_material_button_pressed(self, key)
 
     def master_table_sample_material_line_edit_entered(self, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.transfer_widget_states(from_key=key, data_type='sample')
+        processing_event_handler.sample_material_line_edit_entered(self, key)
 
     def master_table_sample_mass_density_button_pressed(self, key):
-        MassDensityHandler(parent=self, data_type='sample', key=key)
+        processing_event_handler.sample_mass_density_button_pressed(self, key)
 
     def master_table_sample_mass_density_line_edit_entered(self, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.transfer_widget_states(from_key=key, data_type='sample')
+        processing_event_handler.sample_mass_density_line_edit_entered(self, key)
 
     def master_table_sample_shape_changed(self, index, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.shape_changed(shape_index=index, key=key, data_type='sample')
+        processing_event_handler.sample_shape_changed(self, index, key)
 
     def master_table_sample_abs_correction_changed(self, text, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.abs_correction_changed(value=text, key=key, data_type='sample')
+        processing_event_handler.sample_abs_correction_changed(self, text, key)
 
     def master_table_sample_multi_scattering_correction_changed(self, text, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.multi_scattering_correction(value=text, key=key, data_type='sample')
+        processing_event_handler.sample_multi_scattering_correction_changed(self, text, key)
 
     def master_table_sample_inelastic_correction_changed(self, text, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.inelastic_correction_changed(value=text, key=key, data_type='sample')
+        processing_event_handler.sample_inelastic_correction_changed(self, text, key)
 
     def master_table_sample_placzek_button_pressed(self, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.placzek_button_pressed(key=key, data_type='sample')
+        processing_event_handler.sample_placzek_button_pressed(self, key)
 
     def master_table_sample_dimensions_setter_button_pressed(self, key):
-        o_dimensions_ui = DimensionsSetter(parent=self, key=key, data_type='sample')
-        o_dimensions_ui.show()
+        processing_event_handler.sample_dimensions_setter_button_pressed(self, key)
 
     # normalization columns
     def master_table_normalization_material_button_pressed(self, key):
-        MaterialHandler(parent=self, key=key, data_type='normalization')
+        processing_event_handler.normalization_material_button_pressed(self, key)
 
     def master_table_normalization_material_line_edit_entered(self, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.transfer_widget_states(from_key=key, data_type='normalization')
+        processing_event_handler.normalization_material_line_edit_entered(self, key)
 
     def master_table_normalization_mass_density_button_pressed(self, key):
-        MassDensityHandler(parent=self, data_type='normalization', key=key)
+        processing_event_handler.normalization_mass_density_button_pressed(self, key)
 
     def master_table_normalization_mass_density_line_edit_entered(self, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.transfer_widget_states(from_key=key, data_type='normalization')
+        processing_event_handler.normalization_mass_density_line_edit_entered(self, key)
 
     def master_table_normalization_shape_changed(self, text, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.shape_changed(shape_index=text, key=key, data_type='normalization')
+        processing_event_handler.normalization_shape_changed(self, text, key)
 
     def master_table_normalization_abs_correction_changed(self, text, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.abs_correction_changed(value=text, key=key, data_type='normalization')
+        processing_event_handler.normalization_abs_correction_changed(self, text, key)
 
     def master_table_normalization_multi_scattering_correction_changed(self, text, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.multi_scattering_correction(value=text, key=key, data_type='normalization')
+        processing_event_handler.normalization_multi_scattering_correction_changed(self, text, key)
 
     def master_table_normalization_inelastic_correction_changed(self, text, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.inelastic_correction_changed(value=text, key=key, data_type='normalization')
+        processing_event_handler.normalization_inelastic_correction_changed(self, text, key)
 
     def master_table_normalization_placzek_button_pressed(self, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.placzek_button_pressed(key=key, data_type='normalization')
+        processing_event_handler.normalization_placzek_button_pressed(self, key)
 
     def master_table_normalization_dimensions_setter_button_pressed(self, key):
-        o_dimensions_ui = DimensionsSetter(parent=self, key=key, data_type='normalization')
-        o_dimensions_ui.show()
+        processing_event_handler.normalization_dimensions_setter_button_pressed(self, key)
 
     def launch_import_from_database_handler(self):
-        if ONCAT_ENABLED:
-            ImportFromDatabaseHandler(parent=self)
-        else:
-            print('oncat functionality disabled')
+        processing_event_handler.launch_import_from_database_handler(self)
 
     def launch_import_from_run_number_handler(self):
-        ImportFromRunNumberHandler(parent=self)
+        processing_event_handler.launch_import_from_run_number_handler(self)
 
     # def master_table_input_grouping_button_pressed(self, key):
     #     o_table = TableRowHandler(parent=self)
@@ -1090,35 +945,23 @@ class MainWindow(QMainWindow):
         MakeCalibrationLauncher(parent=self)
 
     def browse_calibration_clicked(self):
-        _calibration_folder = self.calibration_folder
-        [_calibration_file, _] = QFileDialog.getOpenFileName(parent = self,
-                                                             caption = "Select Calibration File",
-                                                             directory = _calibration_folder,
-                                                             filter = self.calibration_extension)
-        if _calibration_file:
-            self.processing_ui.calibration_file.setText(_calibration_file)
+        processing_event_handler.browse_calibration_clicked(self)
 
     def from_oncat_to_master_table(self, json=None, with_conflict=False, ignore_conflicts=False):
-        if self.import_from_database_ui:
-            self.import_from_database_ui.close()
+        processing_event_handler.from_oncat_to_master_table(self, json=json,
+                                                            with_conflict=with_conflict,
+                                                            ignore_conflicts=ignore_conflicts)
 
-        LoadIntoMasterTable(parent=self, json=json,
-                            with_conflict=with_conflict,
-                            ignore_conflicts=ignore_conflicts)
+    def reduction_configuration_button_clicked(self):
+        processing_event_handler.reduction_configuration_button_clicked(self)
+
+    def load_ascii(self, filename=''):
+        o_ascii_loader = AsciiLoader(parent=self, filename=filename)
+        o_ascii_loader.load()
 
     def apply_clicked(self):
         # do stuff
         self.close()
-
-    def cancel_clicked(self):
-        self.close()
-
-    def _load_ascii(self, filename=''):
-        o_ascii_loader = AsciiLoader(parent=self, filename=filename)
-        o_ascii_loader.load()
-
-    def reduction_configuration_button_clicked(self):
-        ReductionConfigurationHandler(parent=self)
 
 
 def main(mode):

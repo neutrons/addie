@@ -14,6 +14,7 @@ from addie.utilities.list_runs_parser import ListRunsParser
 from addie.utilities.set import Set
 from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
 from addie.processing.mantid.master_table.utilities import LoadGroupingFile
+#import addie.processing.mantid.event_handler as processing_event_handler
 
 # init test dictionary (to test loader
 _dictionary_test = OrderedDict()
@@ -149,7 +150,7 @@ class AsciiLoaderOptions(AsciiLoaderOptionsInterface):
 
     def accept(self):
         self.parent.ascii_loader_option = self.get_option_selected()
-        self.parent._load_ascii(filename=self.filename)
+        self.parent.load_ascii(filename=self.filename)
         self.close()
 
 
