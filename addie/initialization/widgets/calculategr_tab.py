@@ -33,11 +33,13 @@ def run(main_window=None):
                                                         }
                                                         """)
 
-    main_window.calculategr_ui.splitter_5.setStyleSheet("""
-                                                        QSplitter::handle {
-                                                           image: url(':/MPL Toolbar/vertical_splitter_icon.png');
-                                                        }
-                                                        """)
+    # main_window.calculategr_ui.splitter.setStyleSheet("""
+    #                                                     QSplitter::handle {
+    #                                                        image: url(':/MPL Toolbar/vertical_splitter_icon.png');
+    #                                                     }
+    #                                                     """)
+    #main_window.calculategr_ui.splitter.setSizes([1000, 1])
+
 
     main_window.calculategr_ui.treeWidget_grWsList.set_main_window(main_window)
     main_window.calculategr_ui.treeWidget_grWsList.add_main_item('workspaces',
