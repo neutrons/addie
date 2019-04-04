@@ -498,7 +498,7 @@ def do_generate_sq(main_window):
 
     # launch the dialog box
     if main_window._generateSofQDialog is None:
-        main_window._generateSofQDialog = blabla
+        main_window._generateSofQDialog = None
 
     main_window._generateSofQDialog.set_r_range(min_r, max_r)
     main_window._generateSofQDialog.set_q_range(min_q, max_q)

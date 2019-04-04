@@ -191,8 +191,8 @@ def master_table_select_state_changed(main_window, state, key):
     o_table = TableRowHandler(main_window=main_window)
     o_table.activated_row_changed(key=key, state=state)
 
-## sample columns
 
+## sample columns
 def sample_material_button_pressed(main_window, key):
     MaterialHandler(parent=main_window, key=key, data_type='sample')
 
@@ -240,8 +240,8 @@ def sample_dimensions_setter_button_pressed(main_window, key):
     o_dimensions_ui = DimensionsSetter(parent=main_window, key=key, data_type='sample')
     o_dimensions_ui.show()
 
-# normalization columns
 
+# normalization columns
 def normalization_material_button_pressed(main_window, key):
     MaterialHandler(parent=main_window, key=key, data_type='normalization')
 

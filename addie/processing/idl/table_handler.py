@@ -187,9 +187,9 @@ class TableHandler(object):
     def _import(self):
         _current_folder = self.main_window.current_folder
         [_table_file, _] = QFileDialog.getOpenFileName(parent=self.main_window,
-                                                  caption="Select File",
-                                                  directory=_current_folder,
-                                                  filter=("text (*.txt);; All Files (*.*)"))
+                                                       caption="Select File",
+                                                       directory=_current_folder,
+                                                       filter=("text (*.txt);; All Files (*.*)"))
 
         if not _table_file:
             return
