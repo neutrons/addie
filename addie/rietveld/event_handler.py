@@ -4,6 +4,7 @@ import os
 import addie.utilities.specify_plots_style as ps
 from addie.calculate_gr.event_handler import  check_in_fixed_dir_structure, getDefaultDir
 
+
 def do_load_bragg_file(main_window):
     """
     Load Bragg files including GSAS, NeXus, 3-column ASCii.
