@@ -6,6 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
+mantid-total-scattering = "*"
 matplotlib = "==2.2.3"
 mock = "==2.0.0"
 numpy = "==1.15.4"
