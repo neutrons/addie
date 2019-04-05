@@ -1,7 +1,8 @@
 from qtpy.QtWidgets import QFileDialog
 import os
-import addie.utilities.specify_plots_style as ps
 
+import addie.utilities.specify_plots_style as ps
+from addie.calculate_gr.event_handler import  check_in_fixed_dir_structure
 
 def do_load_bragg_file(main_window):
     """
@@ -30,7 +31,7 @@ def do_load_bragg_file(main_window):
         err_message = 'Unable to get absolute path of {0} due to {1}'.format(bragg_file_names, index_err)
         print(err_message)
 
-    main_window.check_in_fixed_dir_structure(sub_dir='GSAS')
+    check_in_fixed_dir_structure(main_window, sub_dir='GSAS')
 
     # load file
     try:
