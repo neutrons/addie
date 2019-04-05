@@ -2,7 +2,7 @@ from qtpy.QtWidgets import QFileDialog
 import os
 
 import addie.utilities.specify_plots_style as ps
-from addie.calculate_gr.event_handler import  check_in_fixed_dir_structure
+from addie.calculate_gr.event_handler import  check_in_fixed_dir_structure, getDefaultDir
 
 def do_load_bragg_file(main_window):
     """
@@ -15,7 +15,7 @@ def do_load_bragg_file(main_window):
     if main_window._currDataDir is None:
         default_dir = os.getcwd()
     else:
-        default_dir = main_window.getDefaultDir(sub_dir='GSAS')
+        default_dir = getDefaultDir(main_window, sub_dir='GSAS')
 
     bragg_file_names = QFileDialog.getOpenFileNames(main_window, 'Choose Bragg File', default_dir, ext)
     if isinstance(bragg_file_names, tuple):
