@@ -265,8 +265,8 @@ def plot_gr(main_window, ws_name, line_color, line_style,
 
          # plot G(R)
         main_window.calculategr_ui.graphicsView_gr.plot_gr(ws_name, ws_name, plotError=False,
-                                        color=line_color, style=line_style, marker=line_marker,
-                                        alpha=line_alpha, label=line_label)
+                                                           color=line_color, style=line_style, marker=line_marker,
+                                                           alpha=line_alpha, label=line_label)
 
 
 def evt_change_sq_type(main_window):
@@ -378,8 +378,9 @@ def do_save_gr(main_window):
     # TEST/ISSUE/NOW - Look at https://github.com/neutrons/FastGR/issues/28
 
     # read the selected item from the tree
-    gr_name_list = main_window.calculategr_ui.treeWidget_grWsList.get_selected_items_of_level(2, excluded_parent='SofQ',
-                                                                           return_item_text=True)
+    gr_name_list = main_window.calculategr_ui.treeWidget_grWsList.get_selected_items_of_level(2,
+                                                                                              excluded_parent='SofQ',
+                                                                                              return_item_text=True)
     if len(gr_name_list) != 1:
         err_msg = 'Error! Only 1 workspace of G(r) that can be selected.  So far %d is selected.' \
             'They are %s.' % (len(gr_name_list), str(gr_name_list))
@@ -421,8 +422,9 @@ def do_save_sq(main_window):
     # TEST/ISSUE/NOW - Test!
 
     # read the selected item from the tree... return if nothing is selected
-    sq_name_list = main_window.calculategr_ui.treeWidget_grWsList.get_selected_items_of_level(2, excluded_parent='GofR',
-                                                                           return_item_text=True)
+    sq_name_list = main_window.calculategr_ui.treeWidget_grWsList.get_selected_items_of_level(2,
+                                                                                              excluded_parent='GofR',
+                                                                                              return_item_text=True)
     if len(sq_name_list) == 0:
         return
 
@@ -496,7 +498,7 @@ def do_generate_sq(main_window):
     min_q = main_window.calculategr_ui.doubleSpinBoxQmin.value()
     max_q = main_window.calculategr_ui.doubleSpinBoxQmax.value()
 
-    # launch the dialog box
+    # launch the dialog bo
     if main_window._generateSofQDialog is None:
         main_window._generateSofQDialog = None
 
