@@ -4,6 +4,7 @@ from qtpy.QtCore import (QModelIndex)
 from qtpy.QtGui import (QStandardItem, QStandardItemModel)
 from qtpy.QtWidgets import (QAction, QFileDialog)
 from addie.utilities import customtreeview as base
+from addie.calculate_gr.event_handler import remove_gss_from_plot
 
 
 class BraggTree(base.CustomizedTreeView):
@@ -49,8 +50,6 @@ class BraggTree(base.CustomizedTreeView):
         # reset
         self.reset_bragg_tree()
 
-        return
-
     def reset_bragg_tree(self):
         """
         Clear the leaves of the tree only leaving the main node 'workspaces'
@@ -76,8 +75,6 @@ class BraggTree(base.CustomizedTreeView):
         self.init_setup(['Bragg Workspaces'])
         self.add_main_item('workspaces', append=True, as_current_index=False)
 
-        return
-
     # override
     def mousePressEvent(self, e):
         """
@@ -97,8 +94,6 @@ class BraggTree(base.CustomizedTreeView):
         else:
             # keep base method for other buttons
             base.CustomizedTreeView.mousePressEvent(self, e)
-
-        return
 
     def pop_up_menu(self):
         """
@@ -140,8 +135,6 @@ class BraggTree(base.CustomizedTreeView):
             self.removeAction(self._action_deselect_node)
             self.removeAction(self._action_delete)
 
-        return
-
     def add_bragg_ws_group(self, ws_group_name, bank_name_list):
         """
         Add a workspace group containing a list of bank names as a main node in the tree
@@ -168,30 +161,16 @@ class BraggTree(base.CustomizedTreeView):
             # register
             self._workspaceNameList.append(bank_name)
 
-        return
-
     def add_temp_ws(self, ws_name):
         """
 
         Parameters
         ----------
         ws_name
-
-        Returns
-        -------
-
         """
         self.add_child_main_item('workspaces', ws_name)
 
-        return
-
     def do_copy_to_ipython(self):
-        """
-
-        Returns
-        -------
-
-        """
         # TO/NOW - Doc and check
 
         # Get current index and item
@@ -213,8 +192,6 @@ class BraggTree(base.CustomizedTreeView):
         if self._mainWindow is not None:
             self._mainWindow.set_ipython_script(python_cmd)
 
-        return
-
     def do_remove_from_plot(self):
         """
         Remove a node's plot if it is plot on canvas
@@ -231,9 +208,9 @@ class BraggTree(base.CustomizedTreeView):
         for gss_node in selected_nodes:
             gss_ws_name = str(gss_node.text())
             gss_bank_names = self.get_child_nodes(gss_node, output_str=True)
-            self._mainWindow.remove_gss_from_plot(gss_ws_name, gss_bank_names)
-
-        return
+            remove_gss_from_plot(self._mainWindow,
+                                 gss_ws_name,
+                                 gss_bank_names)
 
     def do_delete_gsas(self):
         """
@@ -255,15 +232,14 @@ class BraggTree(base.CustomizedTreeView):
             for ws_name in sub_leaves:
                 self._mainWindow.get_workflow().delete_workspace(ws_name)
                 try:
-                    self._mainWindow.remove_gss_from_plot(gss_group_name=gsas_name, gss_bank_ws_name_list=[ws_name])
+                    remove_gss_from_plot(self._mainWindow,
+                                         gss_group_name=gsas_name,
+                                         gss_bank_ws_name_list=[ws_name])
                 except AssertionError:
                     print('Workspace %s is not on canvas.' % ws_name)
 
             # delete the node from the tree
             self.delete_node(gsas_node)
-        # END-FOR
-
-        return
 
     def do_merge_to_gss(self):
         """
@@ -303,8 +279,6 @@ class BraggTree(base.CustomizedTreeView):
         # write all the banks to a GSAS file
         self._mainWindow.get_workflow().write_gss_file(ws_name_list=bank_ws_list, gss_file_name=new_gss_file_name)
 
-        return
-
     def do_plot_ws(self):
         """
         Add selected runs
@@ -326,8 +300,6 @@ class BraggTree(base.CustomizedTreeView):
             self._mainWindow.plot_bragg(leaf_list)
         else:
             raise NotImplementedError('Main window has not been set up!')
-
-        return
 
     def do_select_gss_node(self):
         """
@@ -374,7 +346,6 @@ class BraggTree(base.CustomizedTreeView):
             else:
                 node_name = str(this_item.text())
             main_node_list.append(node_name)
-        # END-FOR
 
         return True, main_node_list
 
@@ -393,5 +364,3 @@ class BraggTree(base.CustomizedTreeView):
         assert parent_window is not None, 'Parent window cannot be None'
 
         self._mainWindow = parent_window
-
-        return

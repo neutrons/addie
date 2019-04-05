@@ -1,6 +1,8 @@
 from qtpy.QtWidgets import QFileDialog
 import os
+
 import addie.utilities.specify_plots_style as ps
+from addie.calculate_gr.event_handler import  check_in_fixed_dir_structure, getDefaultDir
 
 
 def do_load_bragg_file(main_window):
@@ -14,7 +16,7 @@ def do_load_bragg_file(main_window):
     if main_window._currDataDir is None:
         default_dir = os.getcwd()
     else:
-        default_dir = main_window.getDefaultDir(sub_dir='GSAS')
+        default_dir = getDefaultDir(main_window, sub_dir='GSAS')
 
     bragg_file_names = QFileDialog.getOpenFileNames(main_window, 'Choose Bragg File', default_dir, ext)
     if isinstance(bragg_file_names, tuple):
@@ -30,7 +32,7 @@ def do_load_bragg_file(main_window):
         err_message = 'Unable to get absolute path of {0} due to {1}'.format(bragg_file_names, index_err)
         print(err_message)
 
-    main_window.check_in_fixed_dir_structure(sub_dir='GSAS')
+    check_in_fixed_dir_structure(main_window, sub_dir='GSAS')
 
     # load file
     try:
@@ -162,7 +164,7 @@ def plot_bragg_bank(main_window):
         # deselect all the old banks and thus turn on the mutex
         main_window._noEventBankWidgets = True
         # turn off the
-        main_window.set_bragg_banks_selected(main_window._onCanvasGSSBankList, False)
+        set_bragg_banks_selected(main_window, main_window._onCanvasGSSBankList, False)
         # turn off mutex
         main_window._noEventBankWidgets = False
 
@@ -492,3 +494,27 @@ def set_bragg_ws_to_plot(main_window, gss_group_name):
         assert len(selected_banks) <= 1, 'At most 1 bank can be plot in multiple-GSS mode.'
 
     plot_bragg(main_window, ws_list=[gss_group_name], bankIds=selected_banks, clear_canvas=False)
+
+
+def set_bragg_banks_selected(main_window, bank_id_list, status):
+    """
+    set the status of selected bank IDs
+    Note: mutex on Bragg Bank selection widgets is not turned on!!!
+    Parameters
+    ----------
+    bank_id_list
+    status
+
+    Returns
+    -------
+
+    """
+    # check inputs
+    assert isinstance(bank_id_list, list), 'Bank IDs {0} must be given in a list but not a {1}.' \
+                                           ''.format(bank_id_list, type(bank_id_list))
+    assert isinstance(status, bool), 'Selection status {0} must be a boolean but not a {1}.' \
+                                     ''.format(status, type(status))
+
+    # set
+    for bank_id in bank_id_list:
+        main_window._braggBankWidgets[bank_id].setChecked(status)

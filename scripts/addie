@@ -8,40 +8,30 @@ import os
 import itertools
 import psutil
 from collections import OrderedDict
-
-# must be imported through qtpy before any other gui imports
-from qtpy.QtCore import (QProcess, Qt, QUrl)
-from qtpy.QtGui import (QDesktopServices, QIcon)
+from qtpy.QtCore import QProcess, Qt
+from qtpy.QtGui import QIcon
 from qtpy import QtGui
-from qtpy.QtWidgets import (QApplication, QFileDialog, QMainWindow, QMessageBox, QTableWidgetItem, QVBoxLayout, QWidget)
+from qtpy.QtWidgets import (QApplication, QFileDialog, QLabel, QMainWindow, QMessageBox, QTableWidgetItem, QVBoxLayout, QWidget)
 
 from addie import __version__
 from addie.initialization.widgets.configuration import ConfigurationInitializer
-from addie.utilities.general import get_ucams
 from addie.utilities import load_ui
 
-from addie.about import AboutDialog
-from addie.menu.file.settings.advanced_file_window import AdvancedWindowLauncher
-from addie.menu.file.configuration.export_configuration import ExportConfiguration
-from addie.menu.file.configuration.import_configuration import ImportConfiguration
+import addie.menu.event_handler as menu_event_handler
 
 from addie.help_handler.help_gui import HelpGui, help_button_activator
 
-from addie.utilities.job_status_handler import JobStatusHandler
 from addie.utilities.job_monitor_thread import JobMonitorThread
+from addie.utilities.job_status_handler import JobStatusHandler
 from addie.utilities.logbook_thread import LogbookThread
 from addie.utilities.logbook_handler import LogbookHandler
-from addie.utilities.ipts_file_transfer_dialog import IptsFileTransferDialog
 
-from addie.initialization.widgets.init_step1 import InitStep1
+#from addie.initialization.widgets.init_step1 import InitStep1
 
 from addie.autoNOM.step1_gui_handler import Step1GuiHandler
-from addie.autoNOM.run_step1 import RunStep1
-from addie.processing.idl.load_table_intermediate_step_interface import loadTableIntermediateStepInterface
-from addie.processing.idl.undo_handler import UndoHandler
+import addie.autoNOM.event_handler as autonom_event_handler
 
 from addie.initialization.widgets.init_step2 import InitStep2
-from addie.processing.idl.populate_master_table import PopulateMasterTable
 from addie.processing.idl.populate_background_widgets import PopulateBackgroundWidgets
 from addie.processing.idl.step2_gui_handler import Step2GuiHandler
 from addie.processing.idl.table_handler import TableHandler as IdlTableHandler
@@ -51,66 +41,51 @@ from addie.processing.idl.run_ndabs import RunNDabs
 from addie.processing.idl.run_sum_scans import RunSumScans
 from addie.processing.idl.run_thread import RunThread
 
-from addie.rietveld import event_handler as rietveld_event_handler
-
-from addie.menu.preview_ascii.step3_gui_handler import Step3GuiHandler
+import addie.processing.idl.event_handler as postprocessing_event_handler
 
 from addie.mantid_handler.browse_file_folder_handler import BrowseFileFolderHandler
 from addie.mantid_handler.mantid_reduction import GlobalMantidReduction
 from addie.mantid_handler.mantid_thread import MantidThread
 
-from addie.processing.mantid.master_table.master_table_loader import FromDictionaryToTableUi, AsciiLoader
-from addie.processing.mantid.master_table.table_tree_handler import TableTreeHandler, TableInitialization, \
-    TableConfig, H3TableHandler
+from addie.processing.mantid.master_table.master_table_loader import FromDictionaryToTableUi
+from addie.processing.mantid.master_table.table_tree_handler import TableInitialization, TableConfig, H3TableHandler
 from addie.processing.mantid.master_table.table_tree_handler import SaveConfigInterface, TableTree
 from addie.processing.mantid.master_table import *
 from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
 from addie.processing.mantid.master_table.geometry_handler import DimensionsSetter
-from addie.processing.mantid.master_table.selection_handler import TableHandler as MtdTableHandler
-from addie.processing.mantid.master_table.reduction_configuration_handler import ReductionConfigurationHandler
-from addie.processing.mantid.make_calibration_handler.make_calibration import MakeCalibrationLauncher
 from addie.processing.mantid.master_table.periodic_table.material_handler import MaterialHandler
 from addie.processing.mantid.master_table.mass_density_handler import MassDensityHandler
-
-try:
-    from addie.processing.mantid.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
-    ONCAT_ENABLED = True
-except ImportError:
-    print('pyoncat module not found. Functionality disabled')
-    ONCAT_ENABLED = False
-
-from addie.processing.mantid.master_table.import_from_run_number_handler import ImportFromRunNumberHandler
-from addie.processing.mantid.master_table.import_from_database.load_into_master_table import LoadIntoMasterTable
+import addie.processing.mantid.event_handler as processing_event_handler
 
 import addie.addiedriver as driver
-import addie.utilities.specify_plots_style as ps
+# import addie.utilities.specify_plots_style as ps
 import addie.calculate_gr.edit_sq_dialog
 
 from addie.calculate_gr.pdf_lines_manager import PDFPlotManager
-from mantidqt.widgets.jupyterconsole import InProcessJupyterConsole
-
-from addie.processing.mantid.master_table.master_table_exporter import TableFileExporter as MantidTableExporter
 
 from addie.rietveld.braggview import BraggView
 from addie.rietveld.braggtree import BraggTree
 
-from addie.calculate_gr.gofrtree import GofRTree
-from addie.calculate_gr.gofrview import GofRView
-from addie.calculate_gr.sofqview import SofQView
-
 from addie.icons import icons_rc
 
-from addie.initialization.widgets import rietveld_tab as rietveld_tab_initialization, \
-    processing_tab as processing_tab_initialization
+from addie.initialization.widgets import main_tab as main_tab_initialization
+from addie.initialization.widgets import autonom_tab as autonom_tab_initialization
+from addie.initialization.widgets import postprocessing_tab as postprocessing_tab_initialization
+from addie.initialization.widgets import processing_tab as processing_tab_initialization
+from addie.initialization.widgets import rietveld_tab as rietveld_tab_initialization
+from addie.initialization.widgets import calculategr_tab as calculategr_tab_initialization
 
-from addie.initialization.events import processing_tab as processing_tab_events_handler, \
-    rietveld_tab as rietveld_tab_events_handler
+from addie.initialization.events import main_tab as main_tab_events_handler
+from addie.initialization.events import autonom_tab as autonom_tab_events_handler
+from addie.initialization.events import postprocessing_tab as postprocessing_tab_events_handler
+from addie.initialization.events import processing_tab as processing_tab_events_handler
+from addie.initialization.events import rietveld_tab as rietveld_tab_events_handler
+from addie.initialization.events import calculategr_tab as calculategr_tab_events_handler
+
+from addie.rietveld import event_handler as rietveld_event_handler
+from addie.calculate_gr import event_handler as calculategr_event_handler
 
 DEBUG = False
-
-IPYTHON_STARTUP_CODE = '''import numpy as np
-from mantid.simpleapi import *
-'''
 
 
 class MainWindow(QMainWindow):
@@ -323,6 +298,24 @@ class MainWindow(QMainWindow):
 
         # Initialize the UI widgets
         self.ui = load_ui('mainWindow.ui', baseinstance=self)
+        main_tab_initialization.run(main_window=self)
+
+        status_bar_label = QLabel()
+        self.ui.statusbar.addPermanentWidget(status_bar_label)
+        o_gui = Step1GuiHandler(main_window=self)
+        o_gui.set_main_window_title()
+
+        # autoNOM tab
+        self.autonom_tab_widget = QWidget()
+        self.autonom_ui = load_ui('splitui_autonom_tab.ui', baseinstance=self.autonom_tab_widget)
+        self.ui.main_tab.insertTab(0, self.autonom_tab_widget, "autoNOM")
+        autonom_tab_initialization.run(main_window=self)
+
+        # post processing
+        self.postprocessing_tab_widget = QWidget()
+        self.postprocessing_ui = load_ui('splitui_postprocessing_tab.ui', baseinstance=self.postprocessing_tab_widget)
+        self.ui.main_tab.insertTab(1, self.postprocessing_tab_widget, "Post Processing")
+        postprocessing_tab_initialization.run(main_window=self)
 
         # Mantid processing tab
         self.processing_tab_widget = QWidget()
@@ -336,57 +329,16 @@ class MainWindow(QMainWindow):
         self.ui.main_tab.insertTab(3, self.rietveld_tab_widget, "Rietveld")
         rietveld_tab_initialization.run(main_window=self)
 
-
-
+        # Calculate G(R) tab
+        self.calculategr_tab_widget = QWidget()
+        self.calculategr_ui = load_ui('splitui_calculategr_tab.ui', baseinstance=self.calculategr_tab_widget)
+        self.ui.main_tab.insertTab(4, self.calculategr_tab_widget, 'Calculate G(R)')
+        calculategr_tab_initialization.run(main_window=self)
 
         self.init_parameters()
-        self.set_default_folders_path()
+
         # Set the post-processing mode
         self.post_processing = processing_mode  # mantid or 'idl'
-
-        self.ucams = get_ucams()
-
-        #elf.ui.graphicsView_sq.set_main(self)
-
-        self._promote_widgets()
-
-
-        # set widgets
-        self._init_widgets()
-        InitStep1(parent=self)
-        InitStep2(parent=self)
-        #self.init_master_table()
-
-        # define the event handling methods
-        #self.ui.mantid_run_reduction.clicked.connect(self.do_mantid_run_reduction)
-
-        # for tab G(R)
-        self.ui.pushButton_loadSQ.clicked.connect(self.do_load_sq)
-        self.ui.comboBox_SofQType.currentIndexChanged.connect(self.evt_change_sq_type)
-        self.ui.pushButton_clearSofQ.clicked.connect(self.do_clear_sq)
-        self.ui.pushButton_showQMinMax.clicked.connect(self.do_show_sq_bound)
-        self.ui.pushButton_generateGR.clicked.connect(self.do_generate_gr)
-        self.ui.pushButton_loadGofR.clicked.connect(self.do_load_gr)
-        self.ui.pushButton_saveGR.clicked.connect(self.do_save_gr)
-        self.ui.pushButton_clearGrCanvas.clicked.connect(self.do_clear_gr)
-        self.ui.pushButton_saveSQ.clicked.connect(self.do_save_sq)
-        self.ui.pushButton_editSofQ.clicked.connect(self.do_edit_sq)
-        self.ui.pushButton_generateSQ.clicked.connect(self.do_generate_sq)
-
-        self.ui.doubleSpinBoxQmin.valueChanged.connect(self.evt_qmin_changed)
-        self.ui.doubleSpinBoxQmax.valueChanged.connect(self.evt_qmax_changed)
-
-        self.ui.pushButton_rescaleSq.clicked.connect(self.do_rescale_sofq)
-        self.ui.pushButton_rescaleGr.clicked.connect(self.do_rescale_gofr)
-
-        self.ui.pushButton_grColorStyle.clicked.connect(self.do_set_gofr_color_marker)
-        self.ui.pushButton_sqColorStyle.clicked.connect(self.do_set_sq_color_marker)
-
-        #  menu operations
-        self.ui.actionReset_GofR_tab.triggered.connect(self.do_reset_gr_tab)
-        self.ui.actionReset_GSAS_tab.triggered.connect(self.do_reset_gsas_tab)
-        self.ui.actionQuit.triggered.connect(self.evt_quit)
-        self.ui.actionCheat_sheet.triggered.connect(self.do_show_help)
 
         # define the driver
         self._myController = driver.AddieDriver()
@@ -410,48 +362,92 @@ class MainWindow(QMainWindow):
         # color management
         self._pdfColorManager = PDFPlotManager()
 
-        #self.save_raw_config()
-
-        if DEBUG:
-            o_row = TableRowHandler(parent=self)
-            for _row in np.arange(10):
-                o_row.insert_row(row=_row)
-
         # Connecting all the widgets
+        main_tab_events_handler.run(main_window=self)
+        autonom_tab_events_handler.run(main_window=self)
+        postprocessing_tab_events_handler.run(main_window=self)
         processing_tab_events_handler.run(main_window=self)
         rietveld_tab_events_handler.run(main_window=self)
+        calculategr_tab_events_handler.run(main_window=self)
 
-    def save_raw_config(self):
-        '''this will allow the user to reset the full table and get it back in its initial state'''
-        o_current_table_config = TableConfig(main_window=self)
-        current_config = o_current_table_config.get_current_config()
+        self.activate_reduction_tabs()
 
-        inside_dict = OrderedDict()
-        inside_dict['table'] = current_config
-        inside_dict['active'] = False
+    # main window
 
-        self.reset_config_dict = inside_dict
+    def evt_quit(self):
+        """Quit the application"""
+        self.close()
+
+    def closeEvent(self, c):
+        if self.advanced_window_ui:
+            self.advanced_window_ui.closeEvent(c)
+        if self.make_calibration_ui:
+            self.make_calibration_ui.closeEvent(c)
+        if self.table_tree_ui:
+            self.table_tree_ui.closeEvent(c)
+
+    def cancel_clicked(self):
+        self.close()
+
+    # menu
+
+    def do_show_help(self):
+        menu_event_handler.do_show_help(self)
+
+    def action_preview_ascii_clicked(self):
+        menu_event_handler.action_preview_ascii_clicked(self)
+
+    def action_load_configuration_clicked(self):
+        menu_event_handler.action_load_configuration_clicked(self)
+
+    def action_save_configuration_clicked(self):
+        menu_event_handler.action_save_configuration_clicked(self)
+
+    def action_undo_clicked(self):
+        menu_event_handler.action_undo_clicked(self)
+
+    def action_redo_clicked(self):
+        menu_event_handler.action_redo_clicked(self)
+
+    def help_about_clicked(self):
+        menu_event_handler.help_about_clicked(self)
+
+    def advanced_option_clicked(self):
+        menu_event_handler.advanced_option_clicked(self)
+
+    def activate_reduction_tabs(self):
+        menu_event_handler.activate_reduction_tabs(self)
+
+    def menu_ipts_file_transfer_clicked(self):
+        menu_event_handler.menu_ipts_file_transfer_clicked(self)
+
+    def window_job_monitor_clicked(self):
+        menu_event_handler.window_job_monitor_clicked(self)
+
+    def help_button_clicked_autonom(self):
+        help_button_activator(parent=self, button_name="autonom")
+
+    # def save_raw_config(self):
+    #     '''this will allow the user to reset the full table and get it back in its initial state'''
+    #     o_current_table_config = TableConfig(main_window=self)
+    #     current_config = o_current_table_config.get_current_config()
+    #
+    #     inside_dict = OrderedDict()
+    #     inside_dict['table'] = current_config
+    #     inside_dict['active'] = False
+    #
+    #     self.reset_config_dict = inside_dict
+
+    def main_tab_widget_changed(self, tab_selected):
+        if tab_selected == 0:
+            o_gui = Step1GuiHandler(main_window=self)
+            autonom_event_handler.check_step1_gui(self)
+        if tab_selected == 1:
+            _o_gui = Step2GuiHandler(main_window=self)
+            _o_gui.check_gui()
 
     def init_parameters(self):
         ConfigurationInitializer(parent=self)
-
-    def set_default_folders_path(self):
-        '''Where the calibration_folder and characterization folder will be initialized
-        using instrument name...
-
-        this is very important when the instrument changed
-        '''
-        instrument_short_name = self.instrument["short_name"]
-        config_calibration_folder = self.config_calibration_folder
-
-        self.calibration_folder = os.path.join(config_calibration_folder["pre"],
-                                               instrument_short_name,
-                                               config_calibration_folder["post"])
-
-        config_characterization_file = self.config_characterization_folder
-        self.characterization_folder = os.path.join(config_characterization_file["pre"],
-                                                    instrument_short_name,
-                                                    config_characterization_file["post"])
 
     # def init_master_table(self):
     #     o_table = TableInitialization(parent=self)
@@ -461,185 +457,195 @@ class MainWindow(QMainWindow):
     #
     #     #self.ui.pushButton_launchReduction.clicked.connect(self.run_mantid)
 
-    def _promote_widgets(self):
-        # # frame_graphicsView_bragg
-        # graphicsView_layout = QVBoxLayout()
-        # self.ui.frame_graphicsView_bragg.setLayout(graphicsView_layout)
-        # self.ui.graphicsView_bragg = BraggView(self)
-        # graphicsView_layout.addWidget(self.ui.graphicsView_bragg)
-
-        # frame_graphicsView_sq
-        graphicsView_layout = QVBoxLayout()
-        self.ui.frame_graphicsView_sq.setLayout(graphicsView_layout)
-        self.ui.graphicsView_sq= SofQView(self)
-        graphicsView_layout.addWidget(self.ui.graphicsView_sq)
-
-        # frame_graphicsView_gr
-        graphicsView_layout = QVBoxLayout()
-        self.ui.frame_graphicsView_gr.setLayout(graphicsView_layout)
-        self.ui.graphicsView_gr = GofRView(self)
-        graphicsView_layout.addWidget(self.ui.graphicsView_gr)
-
-        # frame_treeWidget_grWsList
-        temp_layout = QVBoxLayout()
-        self.ui.frame_treeWidget_grWsList.setLayout(temp_layout)
-        self.ui.treeWidget_grWsList = GofRTree(self)
-        temp_layout.addWidget(self.ui.treeWidget_grWsList)
-
-        # # frame_treeWidget_braggWSList
-        # temp_layout = QVBoxLayout()
-        # self.ui.frame_treeWidget_braggWSList.setLayout(temp_layout)
-        # self.ui.treeWidget_braggWSList = BraggTree(self)
-        # temp_layout.addWidget(self.ui.treeWidget_braggWSList)
-
-        # frame_dockWidget_ipython
-        temp_layout = QVBoxLayout()
-        self.ui.frame_dockWidget_ipython.setLayout(temp_layout)
-        self.ui.dockWidget_ipython = InProcessJupyterConsole(self, startup_code=IPYTHON_STARTUP_CODE)
-        temp_layout.addWidget(self.ui.dockWidget_ipython)
-
-    def _init_widgets(self):
-        """ Initialize widgets
-        Returns
-        -------
-        """
-
-        #init_size_splitter = self.ui.splitter.size()
-        #self.init_size_splitter_height = init_size_splitter.height()
-        #init_width = self.size()
-        #self.init_width = init_width.width()
-
-        self.ui.splitter.setStyleSheet("""
-            QSplitter::handle {
-               image: url(':/MPL Toolbar/splitter_icon.png');
-            }
-            """)
-
-
-        self.ui.splitter_3.setStyleSheet("""
-                    QSplitter::handle {
-                       image: url(':/MPL Toolbar/splitter_icon.png');
-                    }
-                    """)
-
-        self.ui.splitter_4.setStyleSheet("""
-                    QSplitter::handle {
-                       image: url(':/MPL Toolbar/splitter_icon.png');
-                    }
-                    """)
-
-        self.ui.splitter_5.setStyleSheet("""
-                    QSplitter::handle {
-                       image: url(':/MPL Toolbar/vertical_splitter_icon.png');
-                    }
-                    """)
-
-        self.ui.label_25.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
-#        self.ui.search_logo_label.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
-#        self.ui.clear_name_search_2.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
-#        self.ui.clear_search_button.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
-
-#        self.ui.settings_table_button.setIcon(QtGui.QIcon(":/MPL Toolbar/settings_icon.png"))
-
-        self.ui.treeWidget_grWsList.set_main_window(self)
-        self.ui.treeWidget_grWsList.add_main_item('workspaces', append=True, as_current_index=False)
-        self.ui.treeWidget_grWsList.add_main_item('SofQ', append=True, as_current_index=False)
-
-        self.ui.comboBox_SofQType.clear()
-        self.ui.comboBox_SofQType.addItem('S(Q)')
-        self.ui.comboBox_SofQType.addItem('S(Q)-1')
-        self.ui.comboBox_SofQType.addItem('Q[S(Q)-1]')
-        self.ui.comboBox_SofQType.setCurrentIndex(0)
-
-        # add the combo box for PDF type
-        self.ui.comboBox_pdfType.addItems(['G(r)', 'g(r)', 'RDF(r)'])
-
-        # some starting value
-        self.ui.doubleSpinBoxDelR.setValue(0.01)
-
-        # set a constant item to combobox Sq
-        self.ui.comboBox_SofQ.addItem('All')
-
-        # PDF filter
-        self.ui.comboBox_pdfCorrection.clear()
-        self.ui.comboBox_pdfCorrection.addItem('No Modification')
-        self.ui.comboBox_pdfCorrection.addItem('Lorch')
-
-        # set the tab to 0
-        self.ui.main_tab.setCurrentIndex(0)
-
-        # set the lower limit on Qmin
-        self.ui.doubleSpinBoxQmin.setDecimals(6)
-        self.ui.doubleSpinBoxQmin.setMinimum(1.E-10)
-
-        self.activate_reduction_tabs()
-
     @property
     def controller(self):
-        """
-        get handler of controller
-        :return:
-        """
         return self._myController
 
+    # job utility
+    def launch_job_manager(self, job_name='', script_to_run=None, thread_index=-1):
+        job_handler = JobStatusHandler(parent=self, job_name=job_name,
+                                       script_to_run=script_to_run,
+                                       thread_index=thread_index)
+        job_handler.start()
 
-    def do_set_gofr_color_marker(self):
-        """
-        set the color/marker to plots on G(r) canvas
-        :return:
-        """
-        # get the line ID, color, and marker
-        plot_id_label_list = self.ui.graphicsView_gr.get_current_plots()
+    def kill_job(self, row=-1):
+        job_row = self.job_list[row]
+        parent = psutil.Process(job_row['pid'])
+        for child in parent.children(recursive=True):
+            child.kill()
+        #	    child.wait()
+        parent.kill()
 
-        # get the line ID, color, and marker
-        plot_id_list, color, marker = ps.get_plots_color_marker(self, plot_label_list=plot_id_label_list)
-        if plot_id_list is None:
-            # operation is cancelled by user
-            pass
+        table_widget = self.job_monitor_interface.ui.tableWidget
+        table_widget.removeCellWidget(row, 2)
+        _item = QTableWidgetItem('Killed')
+        table_widget.setItem(row, 2, _item)
+        job_row['status'] = "killed"
+        job_row['pid'] = None
+        self.job_list[row] = job_row
+
+    def start_refresh_text_thread(self):
+        _run_thread = self.logbook_thread
+        _run_thread.setup(parent=self)
+        _run_thread.update_text.connect(self.update_logbook)
+        _run_thread.start()
+
+    def update_logbook(self, text):
+        if self.job_monitor_interface is None:
+            self.logbook_thread.stop()
         else:
-            # set the color and mark
-            for plot_id in plot_id_list:
-                self.ui.graphicsView_gr.updateLine(ikey=plot_id, linecolor=color, marker=marker,
-                                                   markercolor=color)
+            _logbook_handler = LogbookHandler(parent=self)
 
-        return
+    # autoNOM
 
-    def do_set_sq_color_marker(self):
-        """
-        set the color/marker on S(q) canvas
-        Returns:
+    def select_current_folder_clicked(self):
+        autonom_event_handler.select_current_folder_clicked(self)
 
-        """
-        # get the line ID, color, and marker
-        plot_id_label_list = self.ui.graphicsView_sq.get_current_plots()
+    def diamond_edited(self):
+        autonom_event_handler.check_step1_gui(self)
 
-        # get the line ID, color, and marker
-        plot_id_list, color, marker = ps.get_plots_color_marker(self, plot_label_list=plot_id_label_list)
-        if plot_id_list is None:
-            # operation is cancelled by user
-            pass
-        else:
-            # set the color and mark
-            for plot_id in plot_id_list:
-                self.ui.graphicsView_sq.updateLine(ikey=plot_id, linecolor=color, marker=marker,
-                                                   markercolor=color)
+    def diamond_background_edited(self):
+        autonom_event_handler.check_step1_gui(self)
 
-        return
+    def vanadium_edited(self):
+        autonom_event_handler.check_step1_gui(self)
 
-    def do_show_help(self):
-        """ Show help
-        Copied from DGSPlanner
-        """
-        # close previous service
-        self._assistantProcess.close()
-        self._assistantProcess.waitForFinished()
+    def vanadium_background_edited(self):
+        autonom_event_handler.check_step1_gui(self)
 
-        # launch
-        # helper_url = QUrl('addie_helper.html')
-        helper_url = QUrl('https://neutrons.github.io/addie/index.html')
-        QDesktopServices.openUrl(helper_url)
+    def sample_background_edited(self):
+        autonom_event_handler.check_step1_gui(self)
 
-        return
+    def create_new_autonom_folder_button_clicked(self, status):
+        autonom_event_handler.create_new_autonom_folder_button_clicked(self, status)
+
+    def output_folder_radio_buttons(self):
+        autonom_event_handler.output_folder_radio_buttons(self)
+
+    def manual_output_folder_field_edited(self):
+        autonom_event_handler.check_step1_gui(self)
+
+    def manual_output_folder_button_clicked(self):
+        autonom_event_handler.manual_output_folder_button_clicked(self)
+
+    def run_mantid(self):
+        autonom_event_handler.run_mantid(self)
+
+    def check_step1_gui(self):
+        autonom_event_handler.check_step1_gui(self)
+
+    def run_autonom(self):
+        autonom_event_handler.run_autonom(self)
+
+    def create_exp_ini_clicked(self):
+        autonom_event_handler.create_exp_ini_clicked(self)
+
+    # post processing
+    def resize_table_post_processing_tab(self, height, width):
+        pass
+
+    def move_to_folder_clicked(self):
+        postprocessing_event_handler.move_to_folder_clicked(self)
+
+    def move_to_folder_step2(self):
+        postprocessing_event_handler.move_to_folder_step2(self)
+
+    def populate_table_clicked(self):
+        postprocessing_event_handler.populate_table_clicked(self)
+
+    def import_table_clicked(self):
+        postprocessing_event_handler.import_table_clicked(main_window=self)
+
+    def export_table_clicked(self):
+        postprocessing_event_handler.export_table_clicked(main_window=self)
+
+    def table_select_state_changed(self, state, row):
+        postprocessing_event_handler.table_select_state_changed(self, state, row)
+
+    def name_search_clicked(self):
+        postprocessing_event_handler.name_search_clicked(self)
+
+    def clear_name_search_clicked(self):
+        postprocessing_event_handler.clear_name_search_clicked(self)
+
+    def check_step2_gui(self, row, column):
+        postprocessing_event_handler.check_step2_gui(self)
+
+    # PDF
+
+    def check_q_range(self):
+        _o_gui = Step2GuiHandler(main_window=self)
+        _o_gui.check_gui()
+
+    def hidrogen_clicked(self):
+        o_gui = Step2GuiHandler(main_window=self)
+        o_gui.hidrogen_clicked()
+
+    def no_hidrogen_clicked(self):
+        o_gui = Step2GuiHandler(main_window=self)
+        o_gui.no_hidrogen_clicked()
+
+    def yes_background_clicked(self):
+        o_gui = Step2GuiHandler(main_window=self)
+        o_gui.yes_background_clicked()
+
+    def no_background_clicked(self):
+        o_gui = Step2GuiHandler(main_window=self)
+        o_gui.no_background_clicked()
+
+    def background_combobox_changed(self, index):
+        o_gui = Step2GuiHandler(main_window=self)
+        o_gui.background_index_changed(row_index=index)
+
+    def reset_q_range(self):
+        o_gui = Step2GuiHandler(main_window=self)
+        o_gui.reset_q_range()
+
+    # def run_ndabs_clicked(self):
+    #     o_create_sample_files = CreateSampleFiles(parent=self)
+    #     o_create_sample_files.run()
+    #
+    #     list_sample_files = o_create_sample_files.list_sample_files
+    #
+    #     o_create_ndsum_file = CreateNdsumFile(parent=self)
+    #     o_create_ndsum_file.run()
+    #
+    #     o_run_ndsum = RunNDabs(parent=self, list_sample_files=list_sample_files)
+    #     o_run_ndsum.run()
+
+    def check_fourier_filter_widgets(self):
+        o_gui = Step2GuiHandler(main_window=self)
+        o_gui.check_gui()
+
+    def check_plazcek_widgets(self):
+        o_gui = Step2GuiHandler(main_window=self)
+        o_gui.check_gui()
+
+    def table_right_click(self, position):
+        _o_table = IdlTableHandler(main_window=self)
+        _o_table.right_click(position=position)
+
+    def run_sum_scans_clicked(self):
+        o_run_sum_scans = RunSumScans(parent=self)
+        o_run_sum_scans.run()
+
+    def output_file_name_changed(self):
+        o_gui = Step2GuiHandler(main_window=self)
+        o_gui.check_gui()
+
+    def pdf_qmax_line_edit_changed(self):
+        o_gui = Step2GuiHandler(main_window=self)
+        o_gui.check_gui()
+
+    def sum_scans_output_file_name_changed(self):
+        o_gui = Step2GuiHandler(main_window=self)
+        o_gui.check_gui()
+
+    def help_button_clicked_ndabs(self):
+        help_button_activator(parent=self, button_name="ndabs")
+
+    def help_button_clicked_scans(self):
+        help_button_activator(parent=self, button_name="scans")
 
     # Rietveld tab
     def do_load_bragg_file(self):
@@ -652,10 +658,10 @@ class MainWindow(QMainWindow):
         rietveld_event_handler.do_rescale_bragg(self)
 
     def do_clear_gr(self):
-        self.ui.graphicsView_gr.reset()
+        self.calculategr_ui.graphicsView_gr.reset()
 
     def do_clear_sq(self):
-        self.ui.graphicsView_sq.reset()
+        self.calculategr_ui.graphicsView_sq.reset()
 
     def evt_change_gss_mode(self):
         rietveld_event_handler.evt_change_gss_mode(main_window=self)
@@ -678,853 +684,71 @@ class MainWindow(QMainWindow):
     # G(R) tab
 
     def do_generate_gr(self):
-        """ Handling event from push button 'Generate G(r)' by generating G(r) of selected workspaces
-        :return:
-        """
-        # get S(Q) workspace
-        selected_sq = str(self.ui.comboBox_SofQ.currentText())
-        if selected_sq == 'All':
-            sq_ws_name_list = list()
-            for index in range(self.ui.comboBox_SofQ.count()):
-                item = str(self.ui.comboBox_SofQ.itemText(index))
-                if item != 'All':
-                    # add S(Q) name unless it is 'All'
-                    sq_ws_name_list.append(item)
-                # END-IF
-            # END-FOR
-        else:
-            # selected S(Q) is a single S(Q) name
-            sq_ws_name_list = [selected_sq]
-
-        # generate G(r)
-        self.generate_gr(sq_ws_name_list=sq_ws_name_list)
-
-        return
-
-    def generate_gr(self, sq_ws_name_list):
-        """Generate G(r) from specified S(Q) workspaces
-        :param sq_ws_name_list:
-        :return:
-        """
-        # check inputs
-        assert isinstance(sq_ws_name_list, list), 'S(Q) workspaces {0} must be given by list but not {1}.' \
-                                                  ''.format(sq_ws_name_list, type(sq_ws_name_list))
-        if len(sq_ws_name_list) == 0:
-            raise RuntimeError('User specified an empty list of S(Q)')
-
-        # get r-range and q-range
-        min_r = float(self.ui.doubleSpinBoxRmin.value())
-        max_r = float(self.ui.doubleSpinBoxRmax.value())
-        delta_r = float(self.ui.doubleSpinBoxDelR.value())
-
-        min_q = float(self.ui.doubleSpinBoxQmin.value())
-        max_q = float(self.ui.doubleSpinBoxQmax.value())
-
-        use_filter_str = str(self.ui.comboBox_pdfCorrection.currentText())
-        if use_filter_str == 'No Modification':
-            pdf_filter = None
-        elif use_filter_str == 'Lorch':
-            pdf_filter = 'lorch'
-        else:
-            raise RuntimeError('PDF filter {0} is not recognized.'.format(use_filter_str))
-        rho0_str = str(self.ui.lineEdit_rho.text())
-        try:
-            rho0=float(rho0_str)
-        except ValueError:
-            rho0 = None
-
-        # PDF type
-        pdf_type = str(self.ui.comboBox_pdfType.currentText())
-
-        # loop for all selected S(Q)
-        for sq_ws_name in sq_ws_name_list:
-            # calculate G(r)
-            gr_ws_name = self._myController.calculate_gr(sq_ws_name, pdf_type, min_r, delta_r, max_r,
-                                                         min_q, max_q, pdf_filter, rho0)
-
-            # check whether G(r) is on GofR plot or not in order to determine this is an update or new plot
-            update = self.ui.graphicsView_gr.has_gr(gr_ws_name)
-
-            # plot G(R)
-            if not update:
-                # a new line
-                gr_color, gr_style, gr_marker, gr_alpha = self._pdfColorManager.add_gofr(sq_ws_name, gr_ws_name, max_q)
-                gr_label = '{0} Q: ({1}, {2})'.format(sq_ws_name, min_q, max_q)
-                self.plot_gr(gr_ws_name, gr_color, gr_style, gr_marker, gr_alpha, gr_label)
-            else:
-                self.plot_gr(gr_ws_name, line_color=None, line_style=None, line_marker=None,
-                             line_alpha=None, line_label=None)
-
-            # add to tree
-            # TODO/ISSUE/NOW - Need to find out the name of the
-            gr_param_str = 'G(r) for Q(%.3f, %.3f)' % (min_q, max_q)
-            self.ui.treeWidget_grWsList.add_gr(gr_param_str, gr_ws_name)
-        # END-FOR
-
-        return
-
-    def do_rescale_sofq(self):
-        """ Rescale the figure of S(Q)
-        :return:
-        """
-        min_y_value = self.ui.graphicsView_sq.get_y_min()
-        max_y_value = self.ui.graphicsView_sq.get_y_max()
-        delta_y = max(1, max_y_value - min_y_value)
-
-        y_lower_limit = min_y_value - delta_y * 0.05
-        y_upper_limit = max_y_value + delta_y * 0.05
-
-        self.ui.graphicsView_sq.setXYLimit(ymin=y_lower_limit, ymax=y_upper_limit)
-
-        return
-
-    def do_rescale_gofr(self):
-        """ Rescale the figure of G(r)
-        :return:
-        """
-        min_y_value = self.ui.graphicsView_gr.get_y_min()
-        max_y_value = self.ui.graphicsView_gr.get_y_max()
-        delta_y = max(1, max_y_value - min_y_value)
-
-        y_lower_limit = min_y_value - delta_y * 0.05
-        y_upper_limit = max_y_value + delta_y * 0.05
-
-        self.ui.graphicsView_gr.setXYLimit(ymin=y_lower_limit, ymax=y_upper_limit)
-
-        return
-
-    def do_reset_gr_tab(self):
-        """
-        Reset G(r)-tab, including deleting all the G(r) and S(Q) workspaces,
-        clearing the G(r) and S(Q) trees, and clearing both G(r) and S(Q) canvas
-        Returns:
-        None
-        """
-        # get workspace from trees
-        workspace_list = self.ui.treeWidget_grWsList.get_workspaces()
-
-        # reset the tree to initial status
-        self.ui.treeWidget_grWsList.reset_gr_tree()
-
-        # delete all the workspaces
-        for workspace in workspace_list:
-            self._myController.delete_workspace(workspace)
-
-        # clear all the canvas
-        self.ui.graphicsView_gr.clear_all_lines()
-        self.ui.graphicsView_sq.clear_all_lines()
-
-        # clear the S(Q) combo box
-        self.ui.comboBox_SofQ.clear()
-        self.ui.comboBox_SofQ.addItem('All')
-
-        return
-
-    def do_reset_gsas_tab(self):
-        """
-        Reset the GSAS-tab including
-        1. deleting all the GSAS workspaces
-        2. clearing the GSAS tree
-        3. clearing GSAS canvas
-        Returns:
-        None
-        """
-        # delete all workspaces: get GSAS workspaces from tree
-        gsas_group_node_list = self.ui.treeWidget_braggWSList.get_main_nodes(output_str=False)
-        for gsas_group_node in gsas_group_node_list:
-            # skip if the workspace is 'workspaces'
-            gss_node_name = str(gsas_group_node.text())
-            if gss_node_name == 'workspaces':
-                continue
-            # get the split workspaces' names and delete
-            gsas_ws_name_list = self.ui.treeWidget_braggWSList.get_child_nodes(gsas_group_node, output_str=True)
-            for workspace in gsas_ws_name_list:
-                self._myController.delete_workspace(workspace)
-            # END-FOR
-
-            # guess for the main workspace and delete
-            gss_main_ws = gss_node_name.split('_group')[0]
-            self._myController.delete_workspace(gss_main_ws, no_throw=True)
-
-        # END-FOR (gsas_group_node)
-
-        # reset the GSAS tree
-        self.ui.treeWidget_braggWSList.reset_bragg_tree()
-
-        # clear checkboxes for banks
-        self.clear_bank_checkboxes()
-
-        # clear the canvas
-        self.ui.graphicsView_bragg.reset()
-
-        return
-
-    def clear_bank_checkboxes(self):
-        self._noEventBankWidgets = True
-        for check_box in list(self._braggBankWidgets.values()):
-            check_box.setChecked(False)
-        self._noEventBankWidgets = False
-
-        return
-
-    def plot_gr(self, ws_name, line_color, line_style, line_marker, line_alpha, line_label,
-                auto=False):
-        """Plot G(r) by their names (workspace as protocol)
-        """
-        # get the value
-        vec_r, vec_g, vec_ge = self._myController.get_ws_data(ws_name)
-
-        # check whether the workspace is on the figure
-        print('[DB...BAT] G(r) graphic has plot {0} is {1}. Keys are {2}'
-              ''.format(ws_name, self.ui.graphicsView_gr.has_gr(ws_name),
-                        self.ui.graphicsView_gr.get_current_grs()))
-
-        if self.ui.graphicsView_gr.has_gr(ws_name):
-            # update G(r) value of an existing plot
-            self.ui.graphicsView_gr.update_gr(ws_name, ws_name, plotError=False)
-        else:
-            # a new g(r) plot
-            if auto:
-                line_color, line_style, line_alpha = self._pdfColorManager.get_gr_line(ws_name)
-
-             # plot G(R)
-            self.ui.graphicsView_gr.plot_gr(ws_name, ws_name, plotError=False,
-                                            color=line_color, style=line_style, marker=line_marker,
-                                            alpha=line_alpha, label=line_label)
-        # END-FOR
-
-        return
-
-    def plot_sq(self, ws_name, color, clear_prev):
-        """
-        Plot S(Q)
-        :param ws_name:
-        :param sq_color: color of S(Q).  If None, then try to find it from PDF color manager
-        :param clear_prev:
-        :return:
-        """
-        # clear previous lines
-        if clear_prev:
-            self.ui.graphicsView_sq.reset()
-
-        # get data
-        vec_q, vec_sq, vec_se = self._myController.get_sq(ws_name)
-
-        # get color
-        if not color:
-            color = self._pdfColorManager.add_sofq(ws_name)
-
-        # convert to the function to plot
-        sq_type = str(self.ui.comboBox_SofQType.currentText())
-        plottable_name = self._myController.calculate_sqAlt(ws_name, sq_type)
-
-        self.ui.graphicsView_sq.plot_sq(plottable_name, sq_y_label=sq_type, reset_color_mark=clear_prev, color=color)
-
-
-
-
-    def do_load_gr(self):
-        """
-        Load an ASCII file containing G(r)
-        """
-        # get default dir
-        if self._currDataDir is None:
-            default_dir = os.getcwd()
-        else:
-            default_dir = self.getDefaultDir('gofr')
-
-        # pop out file
-        file_filter = 'Data Files (*.dat);; PDFgui (*.gr);;All Files (*.*)'
-        g_file_name = QFileDialog.getOpenFileName(self, 'Open a G(r) file', default_dir, file_filter)
-        if isinstance(g_file_name, tuple):
-            g_file_name = g_file_name[0]
-        # return if operation is cancelled
-        if g_file_name is None or g_file_name == '':
-            return
-
-        # update current data directory
-        self._currDataDir = os.path.split(os.path.abspath(g_file_name))[0]
-        # set default data directory if in fixed file structure
-        self.check_in_fixed_dir_structure('gofr')
-
-        # read file
-        status, ret_obj = self._myController.load_gr(g_file_name)
-        if not status:
-            err_msg = ret_obj
-            print('[Error]: %s' % err_msg)
-            return
-        else:
-            gr_ws_name = ret_obj
-
-        # plot
-        gr_color, gr_style, gr_marker, gr_alpha = self._pdfColorManager.add_gofr(None, gr_ws_name, None)
-        gr_label = gr_ws_name
-
-        self.plot_gr(gr_ws_name, line_color=gr_color, line_style=gr_style, line_marker=gr_marker,
-                     line_alpha=gr_alpha, line_label=gr_label)
-
-        # put the loaded G(r) workspace to tree 'workspaces'
-        self.ui.treeWidget_grWsList.add_child_main_item('workspaces', gr_ws_name)
-
-    def check_in_fixed_dir_structure(self, sub_dir):
-        """
-        Check whether _currDataDir ends with 'GSAS', 'gofr' or 'SofQ'
-        If it is, then reset the _currDataDir to its upper directory and set the in-format flag;
-        Otherwise, keep as is
-        """
-        # make sure that the last character of currDataDir is not /
-        if self._currDataDir.endswith('/') or self._currDataDir.endswith('\\'):
-            # consider Linux and Windows case
-            self._currDataDir = self._currDataDir[:-1]
-
-        # split
-        main_path, last_dir = os.path.split(self._currDataDir)
-        if last_dir == sub_dir:
-            self._inFixedDirectoryStructure = True
-            self._currDataDir = main_path
-        else:
-            self._inFixedDirectoryStructure = False
-        # END-IF-ELSE
-
-    def getDefaultDir(self, sub_dir):
-        """ Get the default data directory.
-        If is in Fixed-Directory-Structure, then _currDataDir is the parent directory for all GSAS, gofr and SofQ
-        and thus return the data directory with _currDataDir joined with sub_dir
-        Otherwise, no operation
-
-        :param sub_dir:
-        :return: directory
-        """
-        # check
-        assert isinstance(sub_dir, str), 'sub directory must be a string but not %s.' % type(sub_dir)
-
-        if self._inFixedDirectoryStructure:
-            default_dir = os.path.join(self._currDataDir, sub_dir)
-        else:
-            default_dir = self._currDataDir
-
-        return default_dir
-
-    @staticmethod
-    def get_file_names_from_dialog(default_dir, file_filter, caption):
-        """
-        get the file name from a dialog
-        :param default_dir:
-        :param file_filter:
-        :param caption
-        :return:
-        """
-        # TODO/TEST/NOW - Find out what this method can get!!!
-        # check input
-        assert isinstance(default_dir, str), 'Default directory {0} must be a string but not a {1}.' \
-                                             ''.format(default_dir, type(default_dir))
-        assert isinstance(file_filter, str), 'File filter {0} must be a string but not a {1}.' \
-            ''.format(file_filter, type(file_filter))
-
-        # generate a dialog to get the file name to save G(r)
-        export_dialog = QFileDialog()
-        export_dialog.setWindowTitle(caption)
-        export_dialog.setDirectory(default_dir)
-        export_dialog.setAcceptMode(QFileDialog.AcceptSave)
-        export_dialog.setNameFilter(file_filter)
-
-        # quit if it is not accepted
-        if export_dialog.exec_() != QFileDialog.Accepted:
-            return None
-        elif len(export_dialog.selectedFiles()) == 0:
-            return None
-
-        # get the file name from dialog
-        file_name_list = list()
-        for file_name in export_dialog.selectedFiles():
-            file_name_list.append(str(file_name))
-
-        return file_name_list
-
-    def do_load_sq(self):
-        """
-        Load S(Q) from file
-        Returns
-        -------
-
-        """
-        # get default dir
-        if self._currDataDir is None:
-            default_dir = os.getcwd()
-        else:
-            default_dir = self.getDefaultDir(sub_dir='SofQ')
-
-        # get the file
-        ext = 'nxs (*.nxs);;dat (*.dat);;All (*.*)'
-        sq_file_names = QFileDialog.getOpenFileNames(self, 'Choose S(Q) File', default_dir, ext)
-        if isinstance(sq_file_names, tuple):
-            sq_file_names = sq_file_names[0]
-        if sq_file_names is None or sq_file_names == '' or len(sq_file_names) == 0:
-            return
-
-        # update current data directory
-        self._currDataDir = os.path.split(os.path.abspath(sq_file_names[0]))[0]
-        self.check_in_fixed_dir_structure('SofQ')
-
-        # load S(q)
-        for sq_file_name in sq_file_names:
-            sq_file_name = str(sq_file_name)
-            sq_ws_name, q_min, q_max = self._myController.load_sq(sq_file_name)
-            # add to color management
-            color = self._pdfColorManager.add_sofq(sq_ws_name)
-
-            # set to the tree and combo box
-            self.ui.treeWidget_grWsList.add_sq(sq_ws_name)
-            self.ui.comboBox_SofQ.addItem(sq_ws_name)
-            self.ui.comboBox_SofQ.setCurrentIndex(self.ui.comboBox_SofQ.count()-1)
-
-            # set the UI widgets
-            self.ui.doubleSpinBoxQmin.setValue(q_min)
-            self.ui.doubleSpinBoxQmax.setValue(q_max)
-
-            # plot S(Q) - TODO why is it getting the name again?
-            ws_name = self._myController.get_current_sq_name()
-
-            self.plot_sq(ws_name, color=color, clear_prev=False)
-
-            # calculate and calculate G(R)
-            self.do_generate_gr()
-
-        return
-
-    def do_edit_sq(self):
-        """
-        Launch a dialog box to edit S(Q) by shift and scaling.
-        :return:
-        """
-        # create dialog instance if it does not exist
-        if self._editSqDialog is None:
-            self._editSqDialog = addie.calculate_gr.edit_sq_dialog.EditSofQDialog(self)
-
-        # get current S(Q) list and add to dialog
-        sq_name_list = list()
-        num_sq = self.ui.comboBox_SofQ.count()
-        for isq in range(num_sq):
-            sq_name = str(self.ui.comboBox_SofQ.itemText(isq))
-            sq_name_list.append(sq_name)
-        # END-FOR
-
-        self._editSqDialog.add_sq_by_name(sq_name_list)
-
-        # show
-        self._editSqDialog.show()
-
-        return
-
-    def do_generate_sq(self):
-        """
-        generate S(Q) from G(r) by PDFFourierTransform
-        :return:
-        """
-        # TODO/ISSUE/NOW - Need to implement!
-        raise NotImplementedError('Dialog box for generating S(Q) has not been implemented yet.')
-        # get setup
-        min_r = float(self.ui.doubleSpinBoxRmin.value())
-        max_r = float(self.ui.doubleSpinBoxRmax.value())
-        min_q = self.ui.doubleSpinBoxQmin.value()
-        max_q = self.ui.doubleSpinBoxQmax.value()
-
-        # launch the dialog box
-        if self._generateSofQDialog is None:
-            self._generateSofQDialog = blabla
-
-        self._generateSofQDialog.set_r_range(min_r, max_r)
-        self._generateSofQDialog.set_q_range(min_q, max_q)
-
-        self._generateSofQDialog.show()
-
-        return
-
-    def signal_generate_sq(self, arg_dict):
-        """
-        signal handling method to generate S(q)
-        Note:  https://github.com/neutrons/FastGR/issues/91
-        :return:
-        """
-        # check input
-        assert isinstance(arg_dict, dict), 'Input arguments {0} must be given in a dictionary but not a {1}.' \
-                                           ''.format(arg_dict, type(arg_dict))
-
-        # determine the selected G(r)
-        gr_ws_name_list = self.ui.treeWidget_grWsList.get_workspaces()
-        # print '[DB] Selected G(r) workspaces have {0} items.'.format(len(gr_ws_name_list))
-        # for gr in gr_ws_name_list:
-        #     print '[DB] G(r) {0} of type {1}.'.format(gr, type(gr))
-
-        # check the arguments
-        for required_param in ['Qmin', 'Qmax', 'Rmin', 'Rmax', 'DeltaR']:
-            if required_param not in list(arg_dict.keys()):
-                raise RuntimeError('Not sufficient parameter (missing {0}) to generate S(Q) from G(r).'
-                                   ''.format(required_param))
-
-        # TODO/FIXME/FUTURE - Call Mantid algorithm to calculate S(Q)
-        raise NotImplementedError('Implement this in future.')
-
-        return
-
-    def do_save_gr(self):
-        """
-        Save the selected the G(r) from menu to ASCII file
-        :return:
-        """
-        # TEST/ISSUE/NOW - Look at https://github.com/neutrons/FastGR/issues/28
-
-        # read the selected item from the tree
-        gr_name_list = self.ui.treeWidget_grWsList.get_selected_items_of_level(2, excluded_parent='SofQ',
-                                                                               return_item_text=True)
-        if len(gr_name_list) != 1:
-            err_msg = 'Error! Only 1 workspace of G(r) that can be selected.  So far %d is selected.' \
-                'They are %s.' % (len(gr_name_list), str(gr_name_list))
-            QMessageBox.warning(self, 'Error', err_msg)
-            return
-        else:
-            gr_ws_name = gr_name_list[0]
-
-        # pop-up a dialog for the file to save
-        default_dir = os.getcwd()
-        caption = 'Save G(r)'
-
-        # TEST/ISSUE/NOW - Refactor the following part out to be a standard widget
-        file_filter_str = 'XYE (*.xye);;CSV XYE (*.csv);;PDFgui (*.gr);;RMCProfile (*.dat)'
-        gr_file_name = self.get_file_names_from_dialog(default_dir, file_filter_str, caption)[0]
-
-        # check the file extension and use the file extension to determine G(r) file type
-        file_name, file_ext = os.path.splitext(gr_file_name)
-        if file_ext.lower().startswith('.xye'):
-            gr_file_type = 'xye'
-        elif file_ext.lower().startswith('.csv'):
-            gr_file_type = 'csv'
-        elif file_ext.lower().startswith('.gr'):
-            gr_file_type = 'gr'
-        elif file_ext.lower().startswith('.dat'):
-            gr_file_type = 'rmcprofile'
-        else:
-            # unsupported
-            raise RuntimeError('G(r) file with extension {0} is not supported.'.format(file_ext))
-
-        # save!
-        self._myController.save_ascii(gr_ws_name, gr_file_name, gr_file_type)
-
-        return
-
-    def do_save_sq(self):
-        """Save the selected the G(r) from menu to ASCII file
-        :return:
-        """
-        # TEST/ISSUE/NOW - Test!
-
-        # read the selected item from the tree... return if nothing is selected
-        sq_name_list = self.ui.treeWidget_grWsList.get_selected_items_of_level(2, excluded_parent='GofR',
-                                                                               return_item_text=True)
-        if len(sq_name_list) == 0:
-            return
-
-        # loop the SofQ name to save
-        file_filter = 'XYE (*.xye);;CSV XYE (*.csv);;SofQ (*.sq)'
-
-        for sq_name in sq_name_list:
-            # get the output file name first
-            out_file_name = QFileDialog.getSaveFileName(self,
-                                                        'Input File Name to Save S(Q) {0}'.format(sq_name),
-                                                        self._currWorkDir, file_filter)
-            if isinstance(out_file_name, tuple):
-                out_file_name = out_file_name[0]
-            if out_file_name is None or len(out_file_name) == 0:
-                # skip if the user cancel the operation on this S(Q)
-                continue
-
-            # get the directory, file name and extension
-            self._currWorkDir = os.path.dirname(out_file_name)
-            file_name, file_ext = os.path.splitext(out_file_name)
-            if file_ext.lower().startswith('.xye'):
-                sq_file_type = 'xye'
-            elif file_ext.lower().startswith('.csv'):
-                sq_file_type = 'csv'
-            elif file_ext.lower().startswith('.sq'):
-                sq_file_type = 'dat'
-            elif file_ext.lower().startswith('.dat'):
-                sq_file_type = 'dat'
-            elif len(file_ext.strip()) == 0:
-                raise RuntimeError('There is no extension of file {0}. Unable to determine file type.'
-                                   ''.format(out_file_name))
-            else:
-                raise RuntimeError('File type {0} cannot be recognized.'.format(file_ext))
-
-            # save file
-            self._myController.save_ascii(sq_name, out_file_name, sq_file_type)
-        # END-FOR
-
-        return
-
-    def do_show_sq_bound(self):
-        """
-        Show or hide the left and right boundary of the S(Q)
-        :return:
-        """
-        q_left = self.ui.doubleSpinBoxQmin.value()
-        q_right = self.ui.doubleSpinBoxQmax.value()
-        self.ui.graphicsView_sq.toggle_boundary(q_left, q_right)
-
-        return
-
-    def edit_sq(self, sq_name, scale_factor, shift):
-        """Edit S(Q) in workspace with scale_factor * Y[i] + shift
-        :param sq_name:
-        :param scale_factor:
-        :param shift:
-        :return:
-        """
-        # convert
-        sq_name = str(sq_name)
-
-        # check inputs
-        assert isinstance(sq_name, str), 'S(Q) workspace name {0} must be a string but not a {1}.' \
-                                         ''.format(sq_name, type(sq_name))
-        assert isinstance(scale_factor, float), 'Scale factor {0} must be a float but not a {1}.' \
-                                                ''.format(scale_factor, type(scale_factor))
-        assert isinstance(shift, float), 'Shift {0} must be a float but not a {1}.'.format(shift, type(shift))
-
-        # call the controller
-        edit_sq_name = sq_name + '_Edit'
-        self._myController.edit_matrix_workspace(sq_name, scale_factor, shift, edit_sq_name)
-        # add new S(Q)
-        self._pdfColorManager.add_sofq(edit_sq_name)
-
-        color, marker = self.ui.graphicsView_sq.get_plot_info(sq_name)
-        print('[DB...BAT] Original SofQ {0} has color {0} marker {1}'.format(color, marker))
-
-        # re-plot
-        vec_q, vec_s, vec_e = self._myController.get_sq(edit_sq_name)
-        self.ui.graphicsView_sq.plot_sq(edit_sq_name, vec_q, vec_s, vec_e, sq_y_label=sq_name + ' In Edit',
-                                        reset_color_mark=False,
-                                        color=color, marker=marker)
-
-        # calculate G(r) too
-        self.generate_gr([edit_sq_name])
-
-        return
-
-    def evt_change_sq_type(self):
-        """ Event handling to plot S(Q)
-        Returns
-        -------
-
-        """
-        # get the current S(Q) names
-        curr_sq_list = self.ui.graphicsView_sq.get_shown_sq_names()
-        if len(curr_sq_list) == 0:
-            return
-
-        # reset the canvas
-        self.ui.graphicsView_sq.reset()
-
-        # re-plot
-        for sq_name in curr_sq_list:
-            # plot S(Q)
-            self.plot_sq(sq_name, color=None, clear_prev=False)
-
-        return
+        calculategr_event_handler.generate_gr_step1(self)
 
     def evt_qmax_changed(self):
-        """
-        Handle if the user change the value of Qmax of S(Q) including
-        1. moving the right boundary in S(q) figure
-        Returns:
-
-        """
-        q_min = self.ui.doubleSpinBoxQmin.value()
-        q_max = self.ui.doubleSpinBoxQmax.value()
-
-        if q_min < q_max and self.ui.graphicsView_sq.is_boundary_shown():
-            self.ui.graphicsView_sq.move_right_indicator(q_max, relative=False)
-
-        return
+        calculategr_event_handler.evt_qmax_changed(self)
 
     def evt_qmin_changed(self):
-        """
+        calculategr_event_handler.evt_qmin_changed(self)
 
-        Returns:
+    def do_load_sq(self):
+        calculategr_event_handler.load_sq(self)
 
-        """
-        q_min = self.ui.doubleSpinBoxQmin.value()
-        q_max = self.ui.doubleSpinBoxQmax.value()
+    def evt_change_sq_type(self):
+        calculategr_event_handler.evt_change_sq_type(self)
 
-        if q_min < q_max and self.ui.graphicsView_sq.is_boundary_shown():
-            self.ui.graphicsView_sq.move_left_indicator(q_min, relative=False)
+    def do_rescale_sofq(self):
+        calculategr_event_handler.do_rescale_sofq(self)
 
-        return
+    def do_rescale_gofr(self):
+        calculategr_event_handler.do_rescale_gofr(self)
 
-    def evt_quit(self):
-        """
-        Quit the application
-        Returns:
+    def do_show_sq_bound(self):
+        calculategr_event_handler.do_show_sq_bound(self)
 
-        """
-        self.close()
+    def do_load_gr(self):
+        calculategr_event_handler.do_load_gr(self)
+
+    def do_save_gr(self):
+        calculategr_event_handler.do_save_gr(self)
+
+    def do_save_sq(self):
+        calculategr_event_handler.do_save_sq(self)
+
+    def do_edit_sq(self):
+        calculategr_event_handler.do_edit_sq(self)
+
+    def do_generate_sq(self):
+        calculategr_event_handler.do_generate_sq(self)
+
+    def do_set_gofr_color_marker(self):
+        calculategr_event_handler.do_set_gofr_color_marker(self)
+
+    def do_set_sq_color_marker(self):
+        calculategr_event_handler.do_set_sq_color_marker(self)
+
+    def do_reset_gr_tab(self):
+        calculategr_event_handler.do_reset_gr_tab(self)
+
+    def do_reset_gsas_tab(self):
+        calculategr_event_handler.do_reset_gsas_tab(self)
+
+    def edit_sq(self, sq_name, scale_factor, shift):
+        calculategr_event_handler.edit_sq(self, sq_name, scale_factor, shift)
+
+    def clear_bank_checkboxes(self):
+        calculategr_event_handler.clear_bank_checkboxes(self)
 
     def get_default_data_dir(self):
-        """
-        Get default data directory
-        Returns:
-        """
         return self._currDataDir
 
     def get_workflow(self):
         """
         Return the reference to the main workflow controller
         Returns: workflow controller
-
         """
         return self._myController
-
-    def process_workspace_change(self, new_ws_list):
-        """
-        Process (including
-        1. add workspace name to tree list and etc) when detecting that
-        there is some change to any workspace
-
-        Parameters
-        ----------
-        new_ws_list :: list of new workspaces' names
-
-        Returns
-        -------
-
-        """
-        # check input
-        assert isinstance(new_ws_list, list), 'Input workspace list must be a list of string' \
-            'but not %s.' % str(type(new_ws_list))
-
-        # print 'current tab = ', self.ui.tabWidget_2.currentIndex(), self.ui.tabWidget_2.currentWidget(),
-        # print self.ui.tabWidget_2.currentWidget().objectName()
-        # print 'current workspaces: ', self._myController.get_current_workspaces()
-
-        # add to tree
-        if len(new_ws_list) > 0:
-            if self.ui.tabWidget_2.currentWidget().objectName() == 'tab_gR':
-                # a new G(r) or S(q)
-                for new_ws in new_ws_list:
-                    ws_unit = self._myController.get_ws_unit(new_ws)
-                    if ws_unit != 'MomentumTransfer':
-                        is_gr = True
-                    else:
-                        # case for SofQ
-                        is_gr = False
-                        # add to combo box
-                        self.ui.comboBox_SofQ.addItem(new_ws)
-                        self.ui.treeWidget_grWsList.add_sq(new_ws)
-                        # plot generated S(Q)
-                        self.plot_sq(sq_ws_name=new_ws, sq_color=None, clear_prev=False)
-                    # END-IF
-                    self.ui.treeWidget_grWsList.add_arb_gr(new_ws, is_gr)
-
-            elif self.ui.tabWidget_2.currentWidget().objectName() == 'tab_bragg':
-                # new Bragg pattern
-                for new_ws in new_ws_list:
-                    self.ui.treeWidget_braggWSList.add_arb_gr(new_ws)
-            # END-IF-ELSE
-
-        return
-
-    def remove_gr_from_plot(self, gr_name):
-        """Remove a GofR line from GofR canvas
-        :param gr_name: supposed to the G(r) name that is same as workspace name and plot key on canvas as well
-        :return:
-        """
-        # check
-        assert isinstance(gr_name, str), 'G(r) plot key {0} must be a string but not a {1}' \
-                                         ''.format(gr_name, type(gr_name))
-
-        # remove
-        self.ui.graphicsView_gr.remove_gr(plot_key=gr_name)
-
-        return
-
-    def remove_gss_from_plot(self, gss_group_name, gss_bank_ws_name_list):
-        """Remove a GSAS group from canvas if they exits
-        :param gss_group_name: name of the GSS node, i.e., GSS workspace group's name
-        :param gss_bank_ws_name_list: list of names of GSS single banks' workspace name
-        :return:
-        """
-        # check
-        assert isinstance(gss_group_name, str), 'GSS group workspace name must be a string but not %s.' \
-            '' % str(type(gss_group_name))
-        assert isinstance(gss_bank_ws_name_list, list), 'GSAS-single-bank workspace names {0} must be given by ' \
-                                                        'list but not {1}.'.format(gss_bank_ws_name_list,
-                                                                                   type(gss_bank_ws_name_list))
-        if len(gss_bank_ws_name_list) == 0:
-            raise RuntimeError('GSAS-single-bank workspace name list is empty!')
-
-        # get bank IDs
-        bank_ids = list()
-        for gss_bank_ws in gss_bank_ws_name_list:
-            bank_id = int(gss_bank_ws.split('_bank')[-1])
-            bank_ids.append(bank_id)
-
-        # remove
-        self.ui.graphicsView_bragg.remove_gss_banks(gss_group_name, bank_ids)
-
-        # check if there is no such bank's plot on figure, make sure the checkbox is unselected
-        # turn on the mutex lock
-        self._noEventBankWidgets = True
-
-        for bank_id in range(1, 7):
-            has_plot_on_canvas = len(self.ui.graphicsView_bragg.get_ws_name_on_canvas(bank_id)) > 0
-            self._braggBankWidgets[bank_id].setChecked(has_plot_on_canvas)
-
-        # turn off the mutex lock
-        self._noEventBankWidgets = False
-
-        return
-
-    def remove_sq_from_plot(self, sq_name):
-        """
-        Remove an SofQ line from SofQ canvas
-        Args:
-            sq_name: supposed to be the S(Q) name which is same as workspace name and plot key of canvas
-
-        Returns:
-
-        """
-        # check
-        assert isinstance(sq_name, str)
-
-        # remove
-        if self.ui.graphicsView_sq.is_on_canvas(sq_name):
-            self.ui.graphicsView_sq.remove_sq(sq_ws_name=sq_name)
-
-        return
-
-    def set_bragg_banks_selected(self, bank_id_list, status):
-        """
-        set the status of selected bank IDs
-        Note: mutex on Bragg Bank selection widgets is not turned on!!!
-        Parameters
-        ----------
-        bank_id_list
-        status
-
-        Returns
-        -------
-
-        """
-        # check inputs
-        assert isinstance(bank_id_list, list), 'Bank IDs {0} must be given in a list but not a {1}.' \
-                                               ''.format(bank_id_list, type(bank_id_list))
-        assert isinstance(status, bool), 'Selection status {0} must be a boolean but not a {1}.' \
-                                         ''.format(status, type(status))
-
-        # set
-        for bank_id in bank_id_list:
-            self._braggBankWidgets[bank_id].setChecked(status)
-
-        return
-
 
     def set_ipython_script(self, script):
         """
@@ -1551,411 +775,13 @@ class MainWindow(QMainWindow):
         return
 
     def update_sq_boundary(self, boundary_index, new_position):
-        """Update the S(Q) range at the main app inputs
-        :param boundary_index:
-        :param new_position:
-        :return:
-        """
-        # check
-        assert isinstance(boundary_index, int), 'Boundary index {0} must be an integer but not {1}.' \
-                                                ''.format(boundary_index, type(boundary_index))
-        assert isinstance(new_position, float), 'New position {0} must be a float but not {1}.' \
-                                                ''.format(new_position, type(new_position))
-
-        # set value
-        if boundary_index == 1:
-            # left boundary
-            self.ui.doubleSpinBoxQmin.setValue(new_position)
-        elif boundary_index == 2:
-            # right boundary
-            self.ui.doubleSpinBoxQmax.setValue(new_position)
-        else:
-            # exception
-            raise RuntimeError('Boundary index %f in method update_sq_boundary() is not '
-                               'supported.' % new_position)
-
-        return
+        calculategr_event_handler.update_sq_boundary(self, boundary_index, new_position)
 
     def add_edited_sofq(self, sofq_name, edited_sq_name, shift_value, scale_factor_value):
-        """add an edited S(Q) to cached dictionary
-        :param sofq_name:
-        :param edited_sq_name:
-        :param shift_value:
-        :param scale_factor_value:
-        :return:
-        """
-        # check
-        assert isinstance(sofq_name, str), 'SofQ workspace name {0} must be a string but not a {1}.' \
-                                           ''.format(sofq_name, type(sofq_name))
-        assert isinstance(edited_sq_name, str), 'Edited S(Q) workspace name {0} must be a string but not a {1}.' \
-                                                ''.format(edited_sq_name, type(edited_sq_name))
-
-        # add the entry for the original S(Q) if not done yet
-        if sofq_name not in self._editedSofQDict:
-            self._editedSofQDict[sofq_name] = dict()
-
-        # add entry
-        self._editedSofQDict[sofq_name][shift_value, scale_factor_value] = edited_sq_name
-
-        # add the line and color manager
-        self._pdfColorManager.add_sofq(edited_sq_name)
-
-        return
+        calculategr_event_handler.add_edited_sofq(self, sofq_name, edited_sq_name, shfit_value, scale_factor_value)
 
     def has_edit_sofq(self, raw_sofq_name, shift_value, scale_factor_value):
-        """ check whether an edited S(Q) has been cached already
-        :param raw_sofq_name:
-        :param shift_value:
-        :param scale_factor_value:
-        :return:
-        """
-        # check
-        assert isinstance(raw_sofq_name, str)
-
-        if raw_sofq_name not in self._editedSofQDict:
-            return False
-
-        return (shift_value, scale_factor_value) in self._editedSofQDict[raw_sofq_name]
-
-    # menu
-    def action_preview_ascii_clicked(self):
-        o_gui = Step3GuiHandler(parent=self)
-        o_gui.browse_file()
-
-    def action_load_configuration_clicked(self):
-        o_import_config = ImportConfiguration(parent=self)
-        o_import_config.run()
-
-    def action_save_configuration_clicked(self):
-        o_export_config = ExportConfiguration(parent=self)
-        o_export_config.run()
-
-    def action_undo_clicked(self):
-        o_undo = UndoHandler(parent=self)
-        o_undo.undo_table()
-
-    def action_redo_clicked(self):
-        o_undo = UndoHandler(parent=self)
-        o_undo.redo_table()
-
-    def help_about_clicked(self):
-        _about = AboutDialog(parent=self)
-        _about.display()
-
-    def advanced_option_clicked(self):
-        AdvancedWindowLauncher(parent = self)
-
-    def activate_reduction_tabs(self):
-        if self.post_processing == 'idl':
-            tab_0 = True
-            tab_1 = True
-            tab_2 = False
-            current_index=0
-            visible_menu_configuration = True
-        else:
-            tab_0 = False
-            tab_1 = False
-            tab_2 = True
-            current_index=2
-            visible_menu_configuration = False
-        self.ui.main_tab.setTabEnabled(0, tab_0)
-        self.ui.main_tab.setTabEnabled(1, tab_1)
-        self.ui.main_tab.setTabEnabled(2, tab_2)
-        self.setStyleSheet("QTabBar::tab::disabled {width: 0; height: 0; margin: 0; padding: 0; border: none;} ")
-        self.ui.main_tab.setCurrentIndex(current_index)
-
-        # also hide the file>configration buttons when working with Mantid
-        self.ui.menuLoad_Configuration.menuAction().setVisible(visible_menu_configuration)
-
-    def menu_ipts_file_transfer_clicked(self):
-        _o_ipts = IptsFileTransferDialog(parent=self)
-        _o_ipts.show()
-
-    def main_tab_widget_changed(self, tab_selected):
-        if tab_selected == 0:
-            o_gui = Step1GuiHandler(parent=self)
-            self.check_step1_gui()
-        if tab_selected == 1:
-            _o_gui = Step2GuiHandler(parent=self)
-            _o_gui.check_gui()
-
-    def window_job_monitor_clicked(self):
-        job_handler = JobStatusHandler(parent=self)
-
-    def help_button_clicked(self, button_name='autonom'):
-        help_button_activator(parent=self, button_name=button_name)
-
-    # job utility
-    def launch_job_manager(self, job_name='', script_to_run=None, thread_index=-1):
-        job_handler = JobStatusHandler(parent=self, job_name=job_name,
-                                       script_to_run=script_to_run,
-                                       thread_index=thread_index)
-        job_handler.start()
-
-    def kill_job(self, row=-1):
-        job_row = self.job_list[row]
-        parent = psutil.Process(job_row['pid'])
-        for child in parent.children(recursive=True):
-            child.kill()
-#	    child.wait()
-        parent.kill()
-
-        table_widget = self.job_monitor_interface.ui.tableWidget
-        table_widget.removeCellWidget(row, 2)
-        _item = QTableWidgetItem('Killed')
-        table_widget.setItem(row, 2, _item)
-        job_row['status'] = "killed"
-        job_row['pid'] = None
-        self.job_list[row] = job_row
-
-    def start_refresh_text_thread(self):
-        _run_thread = self.logbook_thread
-        _run_thread.setup(parent=self)
-        _run_thread.update_text.connect(self.update_logbook)
-        _run_thread.start()
-
-    def update_logbook(self, text):
-        if self.job_monitor_interface is None:
-            self.logbook_thread.stop()
-        else:
-            _logbook_handler = LogbookHandler(parent=self)
-
-    # tab1
-    def select_current_folder_clicked(self):
-        o_gui = Step1GuiHandler(parent=self)
-        o_gui.select_working_folder()
-        self.check_step1_gui()
-
-    def diamond_edited(self):
-        self.check_step1_gui()
-
-    def diamond_background_edited(self):
-        self.check_step1_gui()
-
-    def vanadium_edited(self):
-        self.check_step1_gui()
-
-    def vanadium_background_edited(self):
-        self.check_step1_gui()
-
-    def sample_background_edited(self):
-        self.check_step1_gui()
-
-    def create_new_autonom_folder_button_clicked(self, status):
-        o_gui_handler = Step1GuiHandler(parent=self)
-        o_gui_handler.new_autonom_group_box(status=status)
-
-    def output_folder_radio_buttons(self):
-        o_gui_handler = Step1GuiHandler(parent=self)
-        o_gui_handler.manual_output_folder_button_handler()
-        o_gui_handler.check_go_button()
-
-    def manual_output_folder_field_edited(self):
-        self.check_step1_gui()
-
-    def manual_output_folder_button_clicked(self):
-        o_gui = Step1GuiHandler(parent=self)
-        o_gui.select_manual_output_folder()
-        self.check_step1_gui()
-
-    def run_mantid(self):
-        # TODO make a class level name so it can be reused
-        filename = os.path.join(os.path.expanduser('~'), '.mantid', 'addie.json')
-
-        # TODO should go to console as well
-        print('writing out table to "{}"'.format(filename))
-        # maybe this way
-        exporter = MantidTableExporter(parent=self, filename=filename)
-        exporter.create_dictionary()
-        exporter.export()
-
-        # TODO should do the real thing rather than print a message
-        # self.launch_job_manager(job_name='mantid', script_to_run=TODO)
-        print('supposed to run mantid now')
-
-    def check_step1_gui(self):
-        '''check the status of the step1 GUI in order to enable or not the GO BUTTON at the bottom'''
-        o_gui_handler = Step1GuiHandler(parent=self)
-        o_gui_handler.check_go_button()
-
-    def run_autonom(self):
-        """Will first create the output folder, then create the exp.ini file"""
-        _run_autonom = RunStep1(parent=self)
-        _run_autonom.create_folder()
-        print(os.getcwd())
-        _run_autonom.create_exp_ini_file()
-
-    def help_button_clicked_autonom(self):
-        self.help_button_clicked(button_name='autonom')
-
-    def create_exp_ini_clicked(self):
-        _run_autonom = RunStep1(parent=self, run_autonom=False)
-        _run_autonom.create_folder()
-        _run_autonom.create_exp_ini_file()
-
-    # tab2
-    def resize_table_post_processing_tab(self, height, width):
-        pass
-
-    def move_to_folder_clicked(self):
-        o_load_table = loadTableIntermediateStepInterface(parent=self)
-        o_load_table.show()
-
-    def move_to_folder_step2(self):
-        if not self.load_intermediate_step_ok:
-            return
-
-        o_gui = Step2GuiHandler(parent=self)
-        o_gui.move_to_folder()
-        self.populate_table_clicked()
-
-    def populate_table_clicked(self):
-
-        self.ui.table.blockSignals(True)
-
-        _pop_table = PopulateMasterTable(parent=self)
-        _pop_table.run()
-        _error_reported = _pop_table.error_reported
-
-        if _error_reported:
-            self.ui.table.blockSignals(False)
-            return
-
-        _pop_back_wdg = PopulateBackgroundWidgets(parent=self)
-        _pop_back_wdg.run()
-        self.name_search_clicked()
-
-        _o_gui = Step2GuiHandler(parent=self)
-        _o_gui.check_gui()
-
-        o_undo = UndoHandler(parent=self)
-        o_undo.save_table(first_save=True)
-
-        self.ui.table.blockSignals(False)
-
-    def import_table_clicked(self):
-        self.ui.table.blockSignals(True)
-
-        _o_table = IdlTableHandler(parent=self)
-        _o_table._import()
-        self.name_search_clicked()
-
-        o_undo = UndoHandler(parent=self)
-        o_undo.save_table(first_save=True)
-
-        self.ui.table.blockSignals(False)
-
-    def export_table_clicked(self):
-        _o_table = IdlTableHandler(parent=self)
-        _o_table._export()
-
-    def table_select_state_changed(self, state, row):
-        _o_table_handler = TableHandler(parent=self)
-        _o_table_handler.check_selection_status(state, row)
-
-        _o_gui = Step2GuiHandler(parent=self)
-        _o_gui.check_gui()
-        _o_gui.define_new_ndabs_output_file_name()
-        _o_gui.define_new_sum_scans_output_file_name()
-
-    def name_search_clicked(self):
-        o_table = IdlTableHandler(parent=self)
-        o_table.name_search()
-
-    def clear_name_search_clicked(self):
-        o_table = IdlTableHandler(parent=self)
-        self.ui.name_search.setText('')
-        o_table.name_search()
-
-    def check_step2_gui(self, row, column):
-        _o_gui = Step2GuiHandler(parent=self)
-        _o_gui.check_gui()
-
-        _o_gui.step2_background_flag()
-        _o_gui.step2_update_background_dropdown()
-
-        if column == 1:
-            o_pop = PopulateBackgroundWidgets(parent=self)
-            o_pop.refresh_contain()
-
-        o_undo = UndoHandler(parent=self)
-        o_undo.save_table()
-
-    # PDF
-
-    def check_q_range(self):
-        _o_gui = Step2GuiHandler(parent=self)
-        _o_gui.check_gui()
-
-    def hidrogen_clicked(self):
-        o_gui = Step2GuiHandler(parent=self)
-        o_gui.hidrogen_clicked()
-
-    def no_hidrogen_clicked(self):
-        o_gui = Step2GuiHandler(parent=self)
-        o_gui.no_hidrogen_clicked()
-
-    def yes_background_clicked(self):
-        o_gui = Step2GuiHandler(parent=self)
-        o_gui.yes_background_clicked()
-
-    def no_background_clicked(self):
-        o_gui = Step2GuiHandler(parent=self)
-        o_gui.no_background_clicked()
-
-    def background_combobox_changed(self, index):
-        o_gui = Step2GuiHandler(parent=self)
-        o_gui.background_index_changed(row_index=index)
-
-    def reset_q_range(self):
-        o_gui = Step2GuiHandler(parent=self)
-        o_gui.reset_q_range()
-
-    def run_ndabs_clicked(self):
-        o_create_sample_files = CreateSampleFiles(parent=self)
-        o_create_sample_files.run()
-
-        list_sample_files = o_create_sample_files.list_sample_files
-
-        o_create_ndsum_file = CreateNdsumFile(parent=self)
-        o_create_ndsum_file.run()
-
-        o_run_ndsum = RunNDabs(parent=self, list_sample_files=list_sample_files)
-        o_run_ndsum.run()
-
-    def check_fourier_filter_widgets(self):
-        o_gui = Step2GuiHandler(parent=self)
-        o_gui.check_gui()
-
-    def check_plazcek_widgets(self):
-        o_gui = Step2GuiHandler(parent=self)
-        o_gui.check_gui()
-
-    def table_right_click(self, position):
-        _o_table = IdlTableHandler(parent=self)
-        _o_table.right_click(position=position)
-
-    def run_sum_scans_clicked(self):
-        o_run_sum_scans = RunSumScans(parent=self)
-        o_run_sum_scans.run()
-
-    def output_file_name_changed(self):
-        o_gui = Step2GuiHandler(parent=self)
-        o_gui.check_gui()
-
-    def pdf_qmax_line_edit_changed(self):
-        o_gui = Step2GuiHandler(parent=self)
-        o_gui.check_gui()
-
-    def sum_scans_output_file_name_changed(self):
-        o_gui = Step2GuiHandler(parent=self)
-        o_gui.check_gui()
-
-    def help_button_clicked_ndabs(self):
-        self.help_button_clicked(button_name='ndabs')
-
-    def help_button_clicked_scans(self):
-        self.help_button_clicked(button_name='scans')
+        calculategr_event_handler.has_edit_sofq(self, raw_sofq_name, shift_value, scale_factor_value)
 
     # Rietveld
 
@@ -1976,275 +802,130 @@ class MainWindow(QMainWindow):
         o_mantid_run.run()
 
     def check_mantid_gui(self):
-        o_gui = Step2GuiHandler(parent=self)
+        o_gui = Step2GuiHandler(main_window=self)
         o_gui.check_gui()
 
     def help_button_clicked_mantid(self):
-        self.help_button_clicked(button_name='mantid')
+        help_button_activator(parent=self, button_name="mantid")
 
     # Mantid
 
     # master table
     def personalization_table_clicked(self):
-        _ = TableTreeHandler(parent=self)
-        _table_config = TableConfig(main_window=self)
-        current_config = _table_config.get_current_config()
-        _table_config.update_tree_dict_and_tree(config_to_load=current_config)
-
-    def closeEvent(self, c):
-        if self.advanced_window_ui:
-            self.advanced_window_ui.closeEvent(c)
-        if self.make_calibration_ui:
-            self.make_calibration_ui.closeEvent(c)
-        if self.table_tree_ui:
-            self.table_tree_ui.closeEvent(c)
-
-    # events of the table and the tree
+        processing_event_handler.personalization_table_clicked(self)
 
     def table_search(self, text):
-        o_table = MtdTableHandler(parent=self)
-        o_table.search(text)
+        processing_event_handler.table_search(self)
 
     def table_search_clear(self):
-        o_table = MtdTableHandler(parent=self)
-        o_table.clear_search()
+        processing_event_handler.table_search_clear(self)
 
     def load_this_config(self, key='', resize=False):
-        if key == '':
-            return
-
-        if key == 'FULL_RESET':
-            config_to_load = self.reset_config_dict['table']
-        else:
-            config_to_load = self.config_dict[key]['table']
-
-        h1_dict = config_to_load['h1']
-        h2_dict = config_to_load['h2']
-        h3_dict = config_to_load['h3']
-
-        o_table = TableConfig(main_window=self)
-        o_table.disconnect_table_ui()
-
-        for _col in h1_dict:
-            _visible = h1_dict[_col]['visible']
-            _width = h1_dict[_col]['width']
-            o_table.set_size_and_visibility_column(h1=_col, width=_width, visibility=_visible, resize=resize)
-
-        for _col in h2_dict:
-            _visible = h2_dict[_col]['visible']
-            _width = h2_dict[_col]['width']
-            o_table.set_size_and_visibility_column(h2=_col, width=_width, visibility=_visible, resize=resize)
-
-        for _col in h3_dict:
-            _visible = h3_dict[_col]['visible']
-            _width = h3_dict[_col]['width']
-            o_table.set_size_and_visibility_column(h3=_col, width=_width, visibility=_visible, resize=resize)
-
-        o_table.update_tree_dict_and_tree(config_to_load)
-
-        o_table.disconnect_table_ui(unblock_all=True)
+        processing_event_handler.load_this_config(self, key=key, resize=resize)
 
     def h3_table_right_click(self, position):
-        o_h3_table = H3TableHandler(main_window=self)
-        o_h3_table.right_click()
+        processing_event_handler.h3_table_right_click(self)
 
     def check_status_of_right_click_buttons(self):
-        o_h3_table = H3TableHandler(main_window=self)
-        o_h3_table.check_status_of_right_click_buttons()
+        processing_event_handler.check_status_of_right_click_buttons(self)
 
     def scroll_h1_table(self, value):
-        self.processing_ui.h2_table.horizontalScrollBar().setValue(value)
-        self.processing_ui.h3_table.horizontalScrollBar().setValue(value)
+        processing_event_handler.scroll_h1_table(self, value)
 
     def scroll_h2_table(self, value):
-        self.processing_ui.h1_table.horizontalScrollBar().setValue(value)
-        self.processing_ui.h3_table.horizontalScrollBar().setValue(value)
+        processing_event_handler.scroll_h2_table(self, value)
 
     def scroll_h3_table(self, value):
-        self.processing_ui.h1_table.horizontalScrollBar().setValue(value)
-        self.processing_ui.h2_table.horizontalScrollBar().setValue(value)
+        processing_event_handler.scroll_h3_table(self, value)
 
     def resizing_h1(self, index_column, old_size, new_size):
-
-        o_table = TableConfig(main_window=self)
-        o_table.disconnect_table_ui()
-
-        h2_children = o_table.get_h2_children_from_h1(h1=index_column)
-        last_h2_visible = o_table.get_last_h2_visible(list_h2=h2_children)
-        list_h3 = o_table.get_h3_children_from_h2(h2=last_h2_visible)
-        last_h3_visible = o_table.get_last_h3_visible(list_h3=list_h3)
-
-        size_diff = new_size - old_size
-
-        # add this size_diff to last_h2 and last_h3
-        last_h3_visible_size = o_table.get_size_column(h3=last_h3_visible)
-        if (last_h3_visible_size < self.minimum_col_width) and \
-                (new_size < old_size):
-            o_table.set_size_column(h1=index_column, width=old_size)
-        else:
-            last_h2_visible_size = o_table.get_size_column(h2=last_h2_visible)
-            o_table.set_size_column(h2=last_h2_visible, width=last_h2_visible_size + size_diff)
-            o_table.set_size_column(h3=last_h3_visible, width=last_h3_visible_size + size_diff)
-
-        o_table.disconnect_table_ui(unblock_all=True)
+        processing_event_handler.resizing_h1(self, index_column, old_size, new_size)
 
     def resizing_h2(self, index_column, old_size, new_size):
-        o_table = TableConfig(main_window=self)
-        o_table.disconnect_table_ui()
-
-        h1_parent = o_table.get_h1_parent_from_h2(h2=index_column)
-        h3_children = o_table.get_h3_children_from_h2(h2=index_column)
-        last_h3_visible = o_table.get_last_h3_visible(list_h3=h3_children)
-
-        size_diff = new_size - old_size
-
-        last_h3_visible_size = o_table.get_size_column(h3=last_h3_visible)
-        if (last_h3_visible_size < self.minimum_col_width) and \
-                (new_size < old_size):
-            o_table.set_size_column(h2=index_column, width=old_size)
-        else:
-            # add this size_diff to parent and last h3
-            parent_size = o_table.get_size_column(h1=h1_parent)
-            o_table.set_size_column(h1=h1_parent, width=parent_size + size_diff)
-            o_table.set_size_column(h3=last_h3_visible, width=last_h3_visible_size + size_diff)
-
-        o_table.disconnect_table_ui(unblock_all=True)
+        processing_event_handler.resizing_h2(self, index_column, old_size, new_size)
 
     def resizing_h3(self, index_column, old_size, new_size):
+        processing_event_handler.resizing_h3(self, index_column, old_size, new_size)
 
-        o_table = TableConfig(main_window=self)
-        o_table.disconnect_table_ui()
-
-        [h1_parent, h2_parent] = o_table.get_h1_h2_parent_from_h3(h3=index_column)
-
-        size_diff = new_size - old_size
-
-        h1_parent_size = o_table.get_size_column(h1=h1_parent)
-        o_table.set_size_column(h1=h1_parent, width=h1_parent_size + size_diff)
-        h2_parent_size = o_table.get_size_column(h2=h2_parent)
-        o_table.set_size_column(h2=h2_parent, width=h2_parent_size + size_diff)
-
-        o_table.disconnect_table_ui(unblock_all=True)
-
-    def init_widgets(self):
-        pass
-
+    # def init_widgets(self):
+    #     pass
+    #
     def init_tree(self):
-        # fill the self.ui.treeWidget
-        # self.addItems(self.ui.treeWidget.invisibleRootItem())
-        self.addItems(self.ui.treeWidget.invisibleRootItem())
-        self.ui.treeWidget.itemChanged.connect(self.tree_item_changed)
+        processing_event_handler.init_tree(self)
 
     def tree_item_changed(self, item, _):
-        """this will change the way the big table will look like by hidding or showing columns"""
+        processing_event_handler.tree_item_changed(self, item)
 
-        o_table = TableConfig(main_window=self)
-        o_table.block_table_header_ui(block_all=False,
-                                      block_h1=True,
-                                      block_h2=True)
-
-        h_columns_affected = o_table.get_h_columns_from_item_name(item_name=o_table.get_item_name(item))
-
-        o_table.change_state_tree(list_ui=h_columns_affected['list_tree_ui'],
-                                  list_parent_ui=h_columns_affected['list_parent_ui'],
-                                  state=item.checkState(0))
-
-        o_table.update_table_columns_visibility()
-        o_table.resizing_table(tree_dict=h_columns_affected, block_ui=False)
-
-        o_table.block_table_header_ui(unblock_all=True)
-
-    # widgets from master table
     def master_table_select_state_changed(self, state, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.activated_row_changed(key=key, state=state)
+        processing_event_handler.master_table_select_state_changed(self, state, key)
 
     ## sample columns
     def master_table_sample_material_button_pressed(self, key):
-        MaterialHandler(parent=self, key=key, data_type='sample')
+        processing_event_handler.sample_material_button_pressed(self, key)
 
     def master_table_sample_material_line_edit_entered(self, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.transfer_widget_states(from_key=key, data_type='sample')
+        processing_event_handler.sample_material_line_edit_entered(self, key)
 
     def master_table_sample_mass_density_button_pressed(self, key):
-        MassDensityHandler(parent=self, data_type='sample', key=key)
+        processing_event_handler.sample_mass_density_button_pressed(self, key)
 
     def master_table_sample_mass_density_line_edit_entered(self, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.transfer_widget_states(from_key=key, data_type='sample')
+        processing_event_handler.sample_mass_density_line_edit_entered(self, key)
 
     def master_table_sample_shape_changed(self, index, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.shape_changed(shape_index=index, key=key, data_type='sample')
+        processing_event_handler.sample_shape_changed(self, index, key)
 
     def master_table_sample_abs_correction_changed(self, text, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.abs_correction_changed(value=text, key=key, data_type='sample')
+        processing_event_handler.sample_abs_correction_changed(self, text, key)
 
     def master_table_sample_multi_scattering_correction_changed(self, text, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.multi_scattering_correction(value=text, key=key, data_type='sample')
+        processing_event_handler.sample_multi_scattering_correction_changed(self, text, key)
 
     def master_table_sample_inelastic_correction_changed(self, text, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.inelastic_correction_changed(value=text, key=key, data_type='sample')
+        processing_event_handler.sample_inelastic_correction_changed(self, text, key)
 
     def master_table_sample_placzek_button_pressed(self, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.placzek_button_pressed(key=key, data_type='sample')
+        processing_event_handler.sample_placzek_button_pressed(self, key)
 
     def master_table_sample_dimensions_setter_button_pressed(self, key):
-        o_dimensions_ui = DimensionsSetter(parent=self, key=key, data_type='sample')
-        o_dimensions_ui.show()
+        processing_event_handler.sample_dimensions_setter_button_pressed(self, key)
 
     # normalization columns
     def master_table_normalization_material_button_pressed(self, key):
-        MaterialHandler(parent=self, key=key, data_type='normalization')
+        processing_event_handler.normalization_material_button_pressed(self, key)
 
     def master_table_normalization_material_line_edit_entered(self, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.transfer_widget_states(from_key=key, data_type='normalization')
+        processing_event_handler.normalization_material_line_edit_entered(self, key)
 
     def master_table_normalization_mass_density_button_pressed(self, key):
-        MassDensityHandler(parent=self, data_type='normalization', key=key)
+        processing_event_handler.normalization_mass_density_button_pressed(self, key)
 
     def master_table_normalization_mass_density_line_edit_entered(self, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.transfer_widget_states(from_key=key, data_type='normalization')
+        processing_event_handler.normalization_mass_density_line_edit_entered(self, key)
 
     def master_table_normalization_shape_changed(self, text, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.shape_changed(shape_index=text, key=key, data_type='normalization')
+        processing_event_handler.normalization_shape_changed(self, text, key)
 
     def master_table_normalization_abs_correction_changed(self, text, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.abs_correction_changed(value=text, key=key, data_type='normalization')
+        processing_event_handler.normalization_abs_correction_changed(self, text, key)
 
     def master_table_normalization_multi_scattering_correction_changed(self, text, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.multi_scattering_correction(value=text, key=key, data_type='normalization')
+        processing_event_handler.normalization_multi_scattering_correction_changed(self, text, key)
 
     def master_table_normalization_inelastic_correction_changed(self, text, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.inelastic_correction_changed(value=text, key=key, data_type='normalization')
+        processing_event_handler.normalization_inelastic_correction_changed(self, text, key)
 
     def master_table_normalization_placzek_button_pressed(self, key):
-        o_table = TableRowHandler(main_window=self)
-        o_table.placzek_button_pressed(key=key, data_type='normalization')
+        processing_event_handler.normalization_placzek_button_pressed(self, key)
 
     def master_table_normalization_dimensions_setter_button_pressed(self, key):
-        o_dimensions_ui = DimensionsSetter(parent=self, key=key, data_type='normalization')
-        o_dimensions_ui.show()
+        processing_event_handler.normalization_dimensions_setter_button_pressed(self, key)
 
     def launch_import_from_database_handler(self):
-        if ONCAT_ENABLED:
-            ImportFromDatabaseHandler(parent=self)
-        else:
-            print('oncat functionality disabled')
+        processing_event_handler.launch_import_from_database_handler(self)
 
     def launch_import_from_run_number_handler(self):
-        ImportFromRunNumberHandler(parent=self)
+        processing_event_handler.launch_import_from_run_number_handler(self)
 
     # def master_table_input_grouping_button_pressed(self, key):
     #     o_table = TableRowHandler(parent=self)
@@ -2256,38 +937,26 @@ class MainWindow(QMainWindow):
 
     # calibrations
     def make_calibration_clicked(self):
-        MakeCalibrationLauncher(parent=self)
+        processing_event_handler.make_calibration_clicked(self)
 
     def browse_calibration_clicked(self):
-        _calibration_folder = self.calibration_folder
-        [_calibration_file, _] = QFileDialog.getOpenFileName(parent = self,
-                                                             caption = "Select Calibration File",
-                                                             directory = _calibration_folder,
-                                                             filter = self.calibration_extension)
-        if _calibration_file:
-            self.processing_ui.calibration_file.setText(_calibration_file)
+        processing_event_handler.browse_calibration_clicked(self)
 
     def from_oncat_to_master_table(self, json=None, with_conflict=False, ignore_conflicts=False):
-        if self.import_from_database_ui:
-            self.import_from_database_ui.close()
+        processing_event_handler.from_oncat_to_master_table(self, json=json,
+                                                            with_conflict=with_conflict,
+                                                            ignore_conflicts=ignore_conflicts)
 
-        LoadIntoMasterTable(parent=self, json=json,
-                            with_conflict=with_conflict,
-                            ignore_conflicts=ignore_conflicts)
+    def reduction_configuration_button_clicked(self):
+        processing_event_handler.reduction_configuration_button_clicked(self)
+
+    def load_ascii(self, filename=''):
+        o_ascii_loader = AsciiLoader(parent=self, filename=filename)
+        o_ascii_loader.load()
 
     def apply_clicked(self):
         # do stuff
         self.close()
-
-    def cancel_clicked(self):
-        self.close()
-
-    def _load_ascii(self, filename=''):
-        o_ascii_loader = AsciiLoader(parent=self, filename=filename)
-        o_ascii_loader.load()
-
-    def reduction_configuration_button_clicked(self):
-        ReductionConfigurationHandler(parent=self)
 
 
 def main(mode):

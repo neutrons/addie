@@ -1317,7 +1317,7 @@ class TableConfig:
         :return:
         """
 
-        self.main_window.ui.treeWidget.blockSignals(True)
+        #self.main_window.ui.treeWidget.blockSignals(True)
 
         for _ui in list_ui:
             _ui.setCheckState(0, state)
@@ -1328,7 +1328,7 @@ class TableConfig:
                 _ui.setCheckState(0, state)
 
         self.update_full_tree_status()
-        self.main_window.ui.treeWidget.blockSignals(False)
+        #self.main_window.ui.treeWidget.blockSignals(False)
 
     def update_full_tree_status(self):
         """this will update the tree_dict dictionary with the status of all the leaves"""
@@ -1604,7 +1604,7 @@ class TableConfig:
                     _state = from_boolean_to_ui_status(_visibility)
                     _ui.setCheckState(0, _state)
 
-        self.main_window.ui.treeWidget.blockSignals(True)
+        #self.main_window.ui.treeWidget.blockSignals(True)
 
         # print("config_to_load")
         # pprint.pprint(config_to_load)
@@ -1626,7 +1626,7 @@ class TableConfig:
         list_h3_tree_ui = tree_ui['h3']
         change_state_tree_widgets(list_h3_tree_ui, list_h3_columns)
 
-        self.main_window.ui.treeWidget.blockSignals(False)
+        #self.main_window.ui.treeWidget.blockSignals(False)
 
     def set_visibility_column(self, h1=None, h2=None, h3=None, visibility=True):
         table_ui = self.get_table_ui(h1=h1, h2=h2, h3=h3)
