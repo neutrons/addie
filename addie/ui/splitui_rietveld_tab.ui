@@ -380,7 +380,7 @@
               </font>
              </property>
              <property name="text">
-              <string>Rescale</string>
+              <string>Y-Axis Auto Scalling</string>
              </property>
             </widget>
            </item>
