@@ -89,3 +89,4 @@ target/
 # Test data and local backup
 LocalBackup/
 test_data/
+output/

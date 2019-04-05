@@ -87,9 +87,9 @@ class TableFileExporter:
 
         # put together the data to write out
         if row is not None:
-            dictionary = self._retrieve_row_info(row)
+            dictionary = self.retrieve_row_info(row)
         else:
-            dictionary = self._retrieve_row_infos()
+            dictionary = self.retrieve_row_infos()
 
         # create the directory if it doesn't already exist
         direc = os.path.dirname(filename)
@@ -222,7 +222,7 @@ class TableFileExporter:
                                                                                         placzek_infos["lambda_calc_max"])
         return dict_element
 
-    def _retrieve_row_info(self, row):
+    def retrieve_row_info(self, row):
         activate = self._get_checkbox_state(row=row, column=0)
         title = self._get_item_value(row=row, column=1)
         _export_dictionary_sample = self._retrieve_element_infos(element='sample',
@@ -249,13 +249,13 @@ class TableFileExporter:
                       }
         return dictionary
 
-    def _retrieve_row_infos(self):
+    def retrieve_row_infos(self):
         '''this method retrieves the infos from the table using the master_table_list_ui'''
         full_export_dictionary = OrderedDict()
         nbr_row = self.table_ui.rowCount()
 
         for row in range(nbr_row):
             # force 3 digits index (to make sure loading back the table will be done in the same order)
-            full_export_dictionary["{:03}".format(row)] = self._retrieve_row_info(row)
+            full_export_dictionary["{:03}".format(row)] = self.retrieve_row_info(row)
 
         return full_export_dictionary

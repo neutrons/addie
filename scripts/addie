@@ -72,12 +72,21 @@ from addie.processing.mantid.make_calibration_handler.make_calibration import Ma
 from addie.processing.mantid.master_table.periodic_table.material_handler import MaterialHandler
 from addie.processing.mantid.master_table.mass_density_handler import MassDensityHandler
 
+# PyONcat
 try:
     from addie.processing.mantid.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
     ONCAT_ENABLED = True
 except ImportError:
     print('pyoncat module not found. Functionality disabled')
     ONCAT_ENABLED = False
+
+# Mantid Total Scattering (https://github.com/marshallmcdonnell/mantid_total_scattering)
+try:
+    from total_scattering.reduction import TotalScatteringReduction
+    MANTID_TS_ENABLED = True
+except ImportError:
+    print('total_scattering module not found. Functionality disabled')
+    MANTID_TS_ENABLED = False
 
 from addie.processing.mantid.master_table.import_from_run_number_handler import ImportFromRunNumberHandler
 from addie.processing.mantid.master_table.import_from_database.load_into_master_table import LoadIntoMasterTable
@@ -1757,45 +1766,29 @@ class MainWindow(QMainWindow):
         print('writing out full table to "{}"'.format(full_reduction_filename))
         exporter.export(full_reduction_filename)
 
-        # write out the individual rows to files
-        outputdir = os.path.abspath(self.output_folder)
-        filenames = []
+        # append the individual rows to input list (reduction_inputs)
+        reduction_inputs = []
         for row in range(num_rows):
             if not exporter.isActive(row):
                 print('skipping row {} - inactive'.format(row + 1))  # REMOVE?
                 continue
-            filename = '{}.json'.format(exporter.getRunDescr(row))
-            if not filename:
-                print('skipping row {} - no run number(s)'.format(row + 1))  # REMOVE?
-            filename = os.path.join(outputdir, filename)
-
-            print('writing row {} to "{}"'.format(0 + 1, filename))  # TODO should be debug logging
-            exporter.export(filename, row)
-            filenames.append(filename)
-        if len(filenames) == 0:
+            print('Will be running row {} for reduction'.format(row + 1))  # TODO should be debug logging
+            json_input = exporter.retrieve_row_info(row)
+            reduction_inputs.append(json_input)
+        if len(reduction_inputs) == 0:
             raise RuntimeError('None of the rows were activated')
 
         # locate total scattering script
-        here = os.path.abspath(os.path.dirname(__file__))
-        mantid_ts_script = None
-        for direc in [here, os.path.join(here, '..', 'mantid_total_scattering', 'bin')]:
-            candidate = os.path.abspath(os.path.join(direc, 'mantid_total_scattering.py'))
-            if os.path.exists(candidate):
-                mantid_ts_script = candidate
-                break
-        if not mantid_ts_script:
-            raise RuntimeError('Failed to find mantid_total_scattering.py')
-
-        pythonpath = os.getenv('PYTHONPATH', '')
-
-        # TODO should allow for prefixing with mantidpython
-        # TODO figure out how to launch the jobs in serial
-        for filename in filenames:
-            cmd = ' '.join([pythonpath, mantid_ts_script, filename]).strip()
-            name = os.path.basename(filename).replace('.json', '')
-            print('>>>>>>>>>> Starting reduction <<<<<<<<<<')
-            print(cmd)
-            self.launch_job_manager(job_name=name, script_to_run=cmd)
+        if MANTID_TS_ENABLED:
+            # TODO should allow for prefixing with mantidpython
+            # TODO figure out how to launch the jobs in serial
+            for json_input in reduction_inputs:
+                TotalScatteringReduction(json_input)
+                # TODO get this to work with launch_job_manager (example below for running from file):
+                #cmd = ' '.join([pythonpath, mantid_ts_script, filename]).strip()
+                #name = os.path.basename(filename).replace('.json', '')
+                #print(cmd)
+                #self.launch_job_manager(job_name=name, script_to_run=cmd)
 
     def check_step1_gui(self):
         '''check the status of the step1 GUI in order to enable or not the GO BUTTON at the bottom'''
