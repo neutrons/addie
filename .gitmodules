@@ -1,3 +1,0 @@
-[submodule "mantid_total_scattering"]
-	path = addie/reduction/mantid_total_scattering
-	url = https://github.com/marshallmcdonnell/mantid_total_scattering.git

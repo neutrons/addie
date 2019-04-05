@@ -54,15 +54,7 @@ addie that way as well. After creating the virtual environment, run
 ```
 
 which will add a file, `mantid.pth` to your environment with the
-location of mantid. Then you need to "develop" mantid_total_scattering
-
-```bash
-cd mantid_total_scattering
-python setup.py develop
-cd -
-```
-
-and finally the the normal
+location of mantid. Then you need to setup for development: 
 
 ```bash
 python setup.py develop
@@ -78,6 +70,14 @@ environment the `.envrc` file should contain
 layout python2 -- --system-site-packages
 ```
 so the system wide packages installed for mantid are found.
+
+or with `pipenv` (which will use Pipfile), first setup the directory and then add the `.envrc` file:
+```
+cd addie
+pipenv --two
+echo layout_pipenv > .envrc
+direnv allow
+```
 
 Creating RPMs
 -------------
