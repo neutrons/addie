@@ -1,6 +1,8 @@
 from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import QMainWindow, QFileDialog
+
 from addie.utilities import load_ui
+from addie.initialization.widgets import main_tab as main_tab_initialization
 
 
 class AdvancedWindowLauncher(object):
@@ -60,16 +62,16 @@ class AdvancedWindow(QMainWindow):
 
     def post_processing_clicked(self):
         if self.ui.idl_post_processing_button.isChecked():
-            _index = 0
+            # _index = 0
             _post = 'idl'
             _idl_groupbox_visible = True
         else:
-            _index = 1
+            # _index = 1
             _post = 'mantid'
             _idl_groupbox_visible = False
 
         self.ui.idl_groupbox.setVisible(_idl_groupbox_visible)
-        self.parent.ui.stackedWidget.setCurrentIndex(_index)
+#        self.parent.ui.stackedWidget.setCurrentIndex(_index)
         self.parent.post_processing = _post
         self.parent.activate_reduction_tabs() # hide or show right tabs
         self.parent.advanced_window_idl_groupbox_visible = _idl_groupbox_visible
@@ -77,7 +79,7 @@ class AdvancedWindow(QMainWindow):
     def instrument_changed(self, index):
         self.parent.instrument["short_name"] = self.list_instrument_short_name[index]
         self.parent.instrument["full_name"] = self.list_instrument_full_name[index]
-        self.parent.set_default_folders_path()
+        main_tab_initialization.set_default_folder_path(self.parent)
 
     def cache_dir_button_clicked(self):
         _cache_folder = QFileDialog.getExistingDirectory(caption="Select Cache Folder ...",

@@ -24,17 +24,16 @@ class TableHandler(object):
 
     list_selected_row = None
 
-    def __init__(self, parent=None):
-        self.parent = parent.ui
-        self.parent_no_ui = parent
+    def __init__(self, main_window=None):
+        self.main_window = main_window
 
     def retrieve_list_of_selected_rows(self):
         self.list_selected_row = []
-        for _row_index in range(self.parent.table.rowCount()):
-            _widgets = self.parent.table.cellWidget(_row_index, 0).children()
+        for _row_index in range(self.main_window.postprocessing_ui.table.rowCount()):
+            _widgets = self.main_window.postprocessing_ui.table.cellWidget(_row_index, 0).children()
             if len(_widgets) > 0:
-                _selected_widget = self.parent.table.cellWidget(_row_index, 0).children()[1]
-                if (_selected_widget.checkState() == Qt.Checked):
+                _selected_widget = self.main_window.postprocessing_ui.table.cellWidget(_row_index, 0).children()[1]
+                if _selected_widget.checkState() == Qt.Checked:
                     _entry = self._collect_metadata(row_index=_row_index)
                     self.list_selected_row.append(_entry)
 
@@ -63,20 +62,20 @@ class TableHandler(object):
         return _metadata
 
     def _retrieve_sample_shape(self, row_index):
-        _widget = self.parent.table.cellWidget(row_index, 7)
+        _widget = self.main_window.postprocessing_ui.table.cellWidget(row_index, 7)
         _selected_index = _widget.currentIndex()
         _sample_shape = _widget.itemText(_selected_index)
         return _sample_shape
 
     def _retrieve_do_abs_correction(self, row_index):
-        _widget = self.parent.table.cellWidget(row_index, 8).children()[1]
+        _widget = self.main_window.postprocessing_ui.table.cellWidget(row_index, 8).children()[1]
         if (_widget.checkState() == Qt.Checked):
             return 'go'
         else:
             return 'nogo'
 
     def current_row(self):
-        _row = self.parent.table.currentRow()
+        _row = self.main_window.postprocessing_ui.table.currentRow()
         return _row
 
     def right_click(self, position=None):
@@ -100,18 +99,18 @@ class TableHandler(object):
         _plot_furnace = -1
         _invert_selection = -1
 
-        menu = QMenu(self.parent_no_ui)
+        menu = QMenu(self.main_window)
 
-        if self.parent_no_ui.table_selection_buffer == {}:
+        if self.main_window.table_selection_buffer == {}:
             paste_status = False
         else:
             paste_status = True
 
-        if (self.parent.table.rowCount() > 0):
+        if (self.main_window.postprocessing_ui.table.rowCount() > 0):
             _undo = menu.addAction("Undo")
-            _undo.setEnabled(self.parent_no_ui.undo_button_enabled)
+            _undo.setEnabled(self.main_window.undo_button_enabled)
             _redo = menu.addAction("Redo")
-            _redo.setEnabled(self.parent_no_ui.redo_button_enabled)
+            _redo.setEnabled(self.main_window.redo_button_enabled)
             menu.addSeparator()
             _copy = menu.addAction("Copy")
             _paste = menu.addAction("Paste")
@@ -127,7 +126,7 @@ class TableHandler(object):
 
         _new_row = menu.addAction("Insert Blank Row")
 
-        if (self.parent.table.rowCount() > 0):
+        if (self.main_window.postprocessing_ui.table.rowCount() > 0):
             _duplicate_row = menu.addAction("Duplicate Row")
             _remove_row = menu.addAction("Remove Row(s)")
 
@@ -149,9 +148,9 @@ class TableHandler(object):
         self.current_row = self.current_row()
 
         if action == _undo:
-            self.parent_no_ui.action_undo_clicked()
+            self.main_window.action_undo_clicked()
         elif action == _redo:
-            self.parent_no_ui.action_redo_clicked()
+            self.main_window.action_redo_clicked()
         elif action == _copy:
             self._copy()
         elif action == _paste:
@@ -186,32 +185,33 @@ class TableHandler(object):
             self.uncheck_all()
 
     def _import(self):
-        _current_folder = self.parent_no_ui.current_folder
-        _table_file = QFileDialog.getOpenFileName(parent=self.parent_no_ui,
-                                                  caption="Select File",
-                                                  directory=_current_folder,
-                                                  filter=("text (*.txt);; All Files (*.*)"))
+        _current_folder = self.main_window.current_folder
+        [_table_file, _] = QFileDialog.getOpenFileName(parent=self.main_window,
+                                                       caption="Select File",
+                                                       directory=_current_folder,
+                                                       filter=("text (*.txt);; All Files (*.*)"))
+
         if not _table_file:
             return
         if isinstance(_table_file, tuple):
             _table_file = _table_file[0]
         new_path = os.path.dirname(_table_file)
-        self.parent_no_ui.current_folder = new_path
+        self.main_window.current_folder = new_path
 
         self._clear_table()
 
-        _import_handler = ImportTable(filename=_table_file, parent=self.parent_no_ui)
+        _import_handler = ImportTable(filename=_table_file, parent=self.main_window)
         _import_handler.run()
 
-        _pop_back_wdg = PopulateBackgroundWidgets(parent=self.parent_no_ui)
+        _pop_back_wdg = PopulateBackgroundWidgets(main_window=self.main_window)
         _pop_back_wdg.run()
 
-        _o_gui = addie.processing.idl.step2_gui_handler.Step2GuiHandler(parent=self.parent_no_ui)
+        _o_gui = addie.processing.idl.step2_gui_handler.Step2GuiHandler(main_window=self.main_window)
         _o_gui.check_gui()
 
     def _export(self):
-        _current_folder = self.parent_no_ui.current_folder
-        _table_file = QFileDialog.getSaveFileName(parent=self.parent_no_ui,
+        _current_folder = self.main_window.current_folder
+        _table_file = QFileDialog.getSaveFileName(parent=self.main_window,
                                                   caption="Select File",
                                                   directory=_current_folder,
                                                   filter=("text (*.txt);; All Files (*.*)"))
@@ -224,34 +224,34 @@ class TableHandler(object):
         _file_handler.check_file_extension(ext_requested='txt')
         _table_file = _file_handler.filename
 
-        _export_handler = ExportTable(parent=self.parent_no_ui,
+        _export_handler = ExportTable(parent=self.main_window,
                                       filename=_table_file)
         _export_handler.run()
 
     def _copy(self):
-        _selection = self.parent.table.selectedRanges()
+        _selection = self.main_window.postprocessing_ui.table.selectedRanges()
         _selection = _selection[0]
         left_column = _selection.leftColumn()
         right_column = _selection.rightColumn()
         top_row = _selection.topRow()
         bottom_row = _selection.bottomRow()
 
-        self.parent_no_ui.table_selection_buffer = {'left_column': left_column,
-                                                    'right_column': right_column,
-                                                    'top_row': top_row,
-                                                    'bottom_row': bottom_row}
+        self.main_window.table_selection_buffer = {'left_column': left_column,
+                                                   'right_column': right_column,
+                                                   'top_row': top_row,
+                                                   'bottom_row': bottom_row}
         self._paste_menu.setEnabled(True)
 
     def _paste(self, _cut=False):
-        _copy_selection = self.parent_no_ui.table_selection_buffer
+        _copy_selection = self.main_window.table_selection_buffer
         _copy_left_column = _copy_selection['left_column']
 
         # make sure selection start at the same column
-        _paste_selection = self.parent.table.selectedRanges()
+        _paste_selection = self.main_window.postprocessing_ui.table.selectedRanges()
         _paste_left_column = _paste_selection[0].leftColumn()
 
         if not (_copy_left_column == _paste_left_column):
-            QMessageBox.warning(self.parent_no_ui,
+            QMessageBox.warning(self.main_window,
                                 "Check copy/paste selection!",
                                 "Check your selection!                   ")
             return
@@ -291,8 +291,8 @@ class TableHandler(object):
             index += 1
 
     def _inverse_selection(self):
-        selected_range = self.parent_no_ui.ui.table.selectedRanges()
-        nbr_column = self.parent.table.columnCount()
+        selected_range = self.main_window.ui.table.selectedRanges()
+        nbr_column = self.main_window.postprocessing_ui.table.columnCount()
 
         self.select_all(status=True)
 
@@ -300,14 +300,14 @@ class TableHandler(object):
         for _range in selected_range:
             _range.leftColumn = 0
             _range.rightColun = nbr_column-1
-            self.parent_no_ui.ui.table.setRangeSelected(_range, False)
+            self.main_window.ui.table.setRangeSelected(_range, False)
 
     def select_all(self, status=True):
-        nbr_row = self.parent.table.rowCount()
-        nbr_column = self.parent.table.columnCount()
-        # selected_range = self.parent_no_ui.ui.table.selectedRanges()
+        nbr_row = self.main_window.postprocessing_ui.table.rowCount()
+        nbr_column = self.main_window.postprocessing_ui.table.columnCount()
+        # selected_range = self.main_window.ui.table.selectedRanges()
         _full_range = QTableWidgetSelectionRange(0, 0, nbr_row-1, nbr_column-1)
-        self.parent.table.setRangeSelected(_full_range, status)
+        self.main_window.postprocessing_ui.table.setRangeSelected(_full_range, status)
 
     def check_all(self):
         self.select_first_column(status=True)
@@ -316,40 +316,40 @@ class TableHandler(object):
         self.select_first_column(status=False)
 
     def select_row(self, row=-1, status=True):
-        nbr_column = self.parent.table.columnCount()
+        nbr_column = self.main_window.postprocessing_ui.table.columnCount()
         _range = QTableWidgetSelectionRange(row, 0, row, nbr_column-1)
-        self.parent.table.setRangeSelected(_range, status)
+        self.main_window.postprocessing_ui.table.setRangeSelected(_range, status)
 
     def check_row(self, row=-1, status=True):
-        _widgets = self.parent.table.cellWidget(row, 0).children()
+        _widgets = self.main_window.postprocessing_ui.table.cellWidget(row, 0).children()
         if len(_widgets) > 0:
-            _selected_widget = self.parent.table.cellWidget(row, 0).children()[1]
+            _selected_widget = self.main_window.postprocessing_ui.table.cellWidget(row, 0).children()[1]
             _selected_widget.setChecked(status)
 
     def select_first_column(self, status=True):
-        for _row in range(self.parent.table.rowCount()):
-            _widgets = self.parent.table.cellWidget(_row, 0).children()
+        for _row in range(self.main_window.postprocessing_ui.table.rowCount()):
+            _widgets = self.main_window.postprocessing_ui.table.cellWidget(_row, 0).children()
             if len(_widgets) > 0:
-                _selected_widget = self.parent.table.cellWidget(_row, 0).children()[1]
+                _selected_widget = self.main_window.postprocessing_ui.table.cellWidget(_row, 0).children()[1]
                 _selected_widget.setChecked(status)
 
-        _o_gui = addie.processing.idl.step2_gui_handler.Step2GuiHandler(parent=self.parent_no_ui)
+        _o_gui = addie.processing.idl.step2_gui_handler.Step2GuiHandler(main_window=self.main_window)
         _o_gui.check_gui()
 
     def check_selection_status(self, state, row):
-        list_ranges = self.parent.table.selectedRanges()
+        list_ranges = self.main_window.postprocessing_ui.table.selectedRanges()
         for _range in list_ranges:
             bottom_row = _range.bottomRow()
             top_row = _range.topRow()
             range_row = list(range(top_row, bottom_row + 1))
 
             for _row in range_row:
-                _widgets = self.parent.table.cellWidget(_row, 0).children()
+                _widgets = self.main_window.postprocessing_ui.table.cellWidget(_row, 0).children()
                 if len(_widgets) > 0:
-                    _selected_widget = self.parent.table.cellWidget(_row, 0).children()[1]
+                    _selected_widget = self.main_window.postprocessing_ui.table.cellWidget(_row, 0).children()[1]
                     _selected_widget.setChecked(state)
 
-        _o_gui = addie.processing.idl.step2_gui_handler.Step2GuiHandler(parent=self.parent_no_ui)
+        _o_gui = addie.processing.idl.step2_gui_handler.Step2GuiHandler(main_window=self.main_window)
         _o_gui.check_gui()
 
     def _cut(self):
@@ -359,7 +359,7 @@ class TableHandler(object):
     def _duplicate_row(self):
         _row = self.current_row
         metadata_to_copy = self._collect_metadata(row_index=_row)
-        o_populate = addie.processing.idl.populate_master_table.PopulateMasterTable(parent=self.parent_no_ui)
+        o_populate = addie.processing.idl.populate_master_table.PopulateMasterTable(main_window=self.main_window)
         o_populate.add_new_row(metadata_to_copy, row=_row)
 
     def _plot_fetch_files(self, file_type='SofQ'):
@@ -470,12 +470,12 @@ class TableHandler(object):
         _row = self.current_row
         if _row == -1:
             _row = 0
-        o_populate = addie.processing.idl.populate_master_table.PopulateMasterTable(parent=self.parent_no_ui)
+        o_populate = addie.processing.idl.populate_master_table.PopulateMasterTable(main_window=self.main_window)
         _metadata = o_populate.empty_metadata()
         o_populate.add_new_row(_metadata, row=_row)
 
     def _remove_selected_rows(self):
-        selected_range = self.parent_no_ui.ui.table.selectedRanges()
+        selected_range = self.main_window.ui.table.selectedRanges()
         _nbr_row_removed = 0
         _local_nbr_row_removed = 0
         for _range in selected_range:
@@ -487,72 +487,72 @@ class TableHandler(object):
                 _local_nbr_row_removed += 1
             _nbr_row_removed = _local_nbr_row_removed
 
-        _pop_back_wdg = PopulateBackgroundWidgets(parent=self.parent_no_ui)
+        _pop_back_wdg = PopulateBackgroundWidgets(main_window=self.main_window)
         _pop_back_wdg.run()
 
     def _remove_row(self, row=-1):
         if row == -1:
             row = self.current_row
-        self.parent.table.removeRow(row)
+        self.main_window.postprocessing_ui.table.removeRow(row)
 
-        _o_gui = addie.processing.idl.step2_gui_handler.Step2GuiHandler(parent=self.parent_no_ui)
+        _o_gui = addie.processing.idl.step2_gui_handler.Step2GuiHandler(main_window=self.main_window)
         _o_gui.check_gui()
 
     def _refresh_table(self):
-        self.parent_no_ui.populate_table_clicked()
+        self.main_window.populate_table_clicked()
 
-        _o_gui = addie.processing.idl.step2_gui_handler.Step2GuiHandler(parent=self.parent_no_ui)
+        _o_gui = addie.processing.idl.step2_gui_handler.Step2GuiHandler(main_window=self.main_window)
         _o_gui.check_gui()
 
     def _clear_table(self):
-        _number_of_row = self.parent.table.rowCount()
-        self.parent.table.setSortingEnabled(False)
+        _number_of_row = self.main_window.postprocessing_ui.table.rowCount()
+        self.main_window.postprocessing_ui.table.setSortingEnabled(False)
         for _row in np.arange(_number_of_row):
-            self.parent.table.removeRow(0)
-        self.parent.background_line_edit.setText("")
-        self.parent.background_comboBox.clear()
+            self.main_window.postprocessing_ui.table.removeRow(0)
+        self.main_window.postprocessing_ui.background_line_edit.setText("")
+        self.main_window.postprocessing_ui.background_comboBox.clear()
 
-        _o_gui = addie.processing.idl.step2_gui_handler.Step2GuiHandler(parent=self.parent_no_ui)
+        _o_gui = addie.processing.idl.step2_gui_handler.Step2GuiHandler(main_window=self.main_window)
         _o_gui.check_gui()
 
     def set_widget_state(self, _widget_state, _row):
-        _widget = self.parent.table.cellWidget(_row, 8).children()[1]
+        _widget = self.main_window.postprocessing_ui.table.cellWidget(_row, 8).children()[1]
         _widget.setCheckState(_widget_state)
 
     def retrieve_do_abs_correction_state(self, _row):
-        _widget = self.parent.table.cellWidget(_row, 8).children()[1]
+        _widget = self.main_window.postprocessing_ui.table.cellWidget(_row, 8).children()[1]
         return _widget.checkState()
 
     def set_widget_index(self, _widget_index, _row):
-        _widget = self.parent.table.cellWidget(_row, 7)
+        _widget = self.main_window.postprocessing_ui.table.cellWidget(_row, 7)
         _widget.setCurrentIndex(_widget_index)
 
     def paste_item_text(self, _row, _column, _item_text):
-        _item = self.parent.table.item(_row, _column)
+        _item = self.main_window.postprocessing_ui.table.item(_row, _column)
         _item.setText(_item_text)
 
     def retrieve_sample_shape_index(self, row_index):
-        _widget = self.parent.table.cellWidget(row_index, 7)
+        _widget = self.main_window.postprocessing_ui.table.cellWidget(row_index, 7)
         _selected_index = _widget.currentIndex()
         return _selected_index
 
     def retrieve_item_text(self, row, column):
-        _item = self.parent.table.item(row, column)
+        _item = self.main_window.postprocessing_ui.table.item(row, column)
         if _item is None:
             return ''
         else:
             return str(_item.text())
 
     def name_search(self):
-        nbr_row = self.parent.table.rowCount()
+        nbr_row = self.main_window.postprocessing_ui.table.rowCount()
         if nbr_row == 0:
             return
 
-        _string = str(self.parent.name_search.text()).lower()
+        _string = str(self.main_window.postprocessing_ui.name_search.text()).lower()
         if _string == '':
             self.select_all(status=False)
         else:
             for _row in range(nbr_row):
-                _text_row = str(self.parent.table.item(_row, 1).text()).lower()
+                _text_row = str(self.main_window.postprocessing_ui.table.item(_row, 1).text()).lower()
                 if _string in _text_row:
                     self.select_row(row=_row, status=True)

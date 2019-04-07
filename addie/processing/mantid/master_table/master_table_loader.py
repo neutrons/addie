@@ -149,7 +149,7 @@ class AsciiLoaderOptions(AsciiLoaderOptionsInterface):
 
     def accept(self):
         self.parent.ascii_loader_option = self.get_option_selected()
-        self.parent._load_ascii(filename=self.filename)
+        self.parent.load_ascii(filename=self.filename)
         self.close()
 
 
