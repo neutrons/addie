@@ -5,3 +5,4 @@ def run(main_window=None):
     main_window.processing_ui.browse_calibration_button.clicked.connect(main_window.browse_calibration_clicked)
     main_window.processing_ui.make_calibration_button.clicked.connect(main_window.make_calibration_clicked)
     main_window.processing_ui.h3_table.customContextMenuRequested.connect(main_window.h3_table_right_click)
+    main_window.processing_ui.pushButton_launchReduction.clicked.connect(main_window.run_mantid)

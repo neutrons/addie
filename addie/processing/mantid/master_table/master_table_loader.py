@@ -252,7 +252,7 @@ class JsonLoader:
                 output_dir = str(_source_row_entry["OutputDir"])
                 self.parent.output_folder = output_dir
 
-                calibration_file = str(_source_row_entry["Calibration"])
+                calibration_file = str(_source_row_entry["Calibration"]["Filename"])
                 self.parent.processing_ui.calibration_file.setText(calibration_file)
 
                 intermediate_grouping_file = str(_source_row_entry["Merging"]["Grouping"]["Initial"])

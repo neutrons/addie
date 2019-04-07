@@ -55,6 +55,25 @@ from addie.processing.mantid.master_table.table_row_handler import TableRowHandl
 from addie.processing.mantid.master_table.geometry_handler import DimensionsSetter
 from addie.processing.mantid.master_table.periodic_table.material_handler import MaterialHandler
 from addie.processing.mantid.master_table.mass_density_handler import MassDensityHandler
+
+# PyONcat
+try:
+    from addie.processing.mantid.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
+    ONCAT_ENABLED = True
+except ImportError:
+    print('pyoncat module not found. Functionality disabled')
+    ONCAT_ENABLED = False
+
+# Mantid Total Scattering (https://github.com/marshallmcdonnell/mantid_total_scattering)
+try:
+    from total_scattering.reduction import TotalScatteringReduction
+    MANTID_TS_ENABLED = True
+except ImportError:
+    print('total_scattering module not found. Functionality disabled')
+    MANTID_TS_ENABLED = False
+
+from addie.processing.mantid.master_table.import_from_run_number_handler import ImportFromRunNumberHandler
+from addie.processing.mantid.master_table.import_from_database.load_into_master_table import LoadIntoMasterTable
 import addie.processing.mantid.event_handler as processing_event_handler
 
 import addie.addiedriver as driver
@@ -448,14 +467,6 @@ class MainWindow(QMainWindow):
 
     def init_parameters(self):
         ConfigurationInitializer(parent=self)
-
-    # def init_master_table(self):
-    #     o_table = TableInitialization(parent=self)
-    #     #o_table.init_master_table()
-    #     #o_table.init_signals()
-    #     # TODO should load existing json configuration into the table
-    #
-    #     #self.ui.pushButton_launchReduction.clicked.connect(self.run_mantid)
 
     @property
     def controller(self):
