@@ -36,6 +36,32 @@ class KeyValuePairWindow(QMainWindow):
         # do something here
         self.close()
 
+    def add_clicked(self):
+        self._add_empty_row_at_bottom()
+        self._check_remove_button()
+
+    def _add_empty_row_at_bottom(self):
+        nbr_row = self.get_nbr_row()
+        self.ui.key_value_table.insertRow(nbr_row)
+
+    def remove_clicked(self):
+        self._check_remove_button()
+
+    def get_nbr_row(self):
+        return self.ui.key_value_table.rowCount()
+
+    def _check_remove_button(self):
+        enable = self._what_state_remove_button_should_be()
+        self.ui.remove_selection_button.setEnabled(enable)
+
+    def _what_state_remove_button_should_be(self):
+        nbr_row = self.get_nbr_row()
+        if nbr_row > 0:
+            enable = True
+        else:
+            enable = False
+        return enable
+
     def cancel_clicked(self):
         self.close()
 
