@@ -215,10 +215,7 @@ class TableRowHandler:
                                                   'placzek_button': None,
                                                   'placzek_infos': None,
                                                   },
-                                'input_grouping_button': None,
-                                'input_grouping_label': None,
-                                'output_grouping_button': None,
-                                'output_grouping_label': None,
+                                'key_value_button': None,
                                 }
 
         random_key = self.generate_random_key()
@@ -698,6 +695,29 @@ class TableRowHandler:
 
         # automatically populate placzek infos with default values
         _master_table_row_ui['normalization']['placzek_infos'] = self.formated_placzek_default()
+
+        # column 23 - key/value pair
+        column += 1
+        _layout = QHBoxLayout()
+        _spacer_kv1 = QSpacerItem(40, 20,
+                              QSizePolicy.Expanding,
+                              QSizePolicy.Minimum)
+        _layout.addItem(_spacer_kv1)
+        _button = QPushButton("...")
+        _layout.addWidget(_button)
+        _button.setFixedWidth(CONFIG_BUTTON_WIDTH)
+        _button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
+        _button.pressed.connect(lambda key=random_key:
+                                self.main_window.master_table_keyvalue_button_pressed(key))
+        _new_widget = QWidget()
+        _new_widget.setLayout(_layout)
+        self.table_ui.setCellWidget(row, column, _new_widget)
+        _master_table_row_ui['key_value_button'] = _button
+        _spacer_kv2 = QSpacerItem(40, 20,
+                              QSizePolicy.Expanding,
+                              QSizePolicy.Minimum)
+        _layout.addItem(_spacer_kv2)
+        _layout.addStretch()
 
         ## recap
 

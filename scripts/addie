@@ -936,13 +936,9 @@ class MainWindow(QMainWindow):
     def launch_import_from_run_number_handler(self):
         processing_event_handler.launch_import_from_run_number_handler(self)
 
-    # def master_table_input_grouping_button_pressed(self, key):
-    #     o_table = TableRowHandler(parent=self)
-    #     o_table.grouping_button(key=key, grouping_type='input')
-    #
-    # def master_table_output_grouping_button_pressed(self, key):
-    #     o_table = TableRowHandler(parent=self)
-    #     o_table.grouping_button(key=key, grouping_type='output')
+    # key/value
+    def master_table_keyvalue_button_pressed(self, key):
+        print("key is: {}".format(key))
 
     # calibrations
     def make_calibration_clicked(self):
