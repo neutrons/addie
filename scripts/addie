@@ -55,6 +55,7 @@ from addie.processing.mantid.master_table.table_row_handler import TableRowHandl
 from addie.processing.mantid.master_table.geometry_handler import DimensionsSetter
 from addie.processing.mantid.master_table.periodic_table.material_handler import MaterialHandler
 from addie.processing.mantid.master_table.mass_density_handler import MassDensityHandler
+from addie.processing.mantid.master_table.key_value_pair_handling import KeyValuePairHandling
 
 # PyONcat
 try:
@@ -178,6 +179,8 @@ class MainWindow(QMainWindow):
     placzek_ui = None
     reduction_configuration_ui = None
     reduction_configuration_ui_position = None
+    key_value_pair_ui = None
+    key_value_pair_ui_position = None
 
     material_ui = None
     material_ui_position = None
@@ -938,7 +941,7 @@ class MainWindow(QMainWindow):
 
     # key/value
     def master_table_keyvalue_button_pressed(self, key):
-        print("key is: {}".format(key))
+        KeyValuePairHandling(main_window=self, key=key)
 
     # calibrations
     def make_calibration_clicked(self):
