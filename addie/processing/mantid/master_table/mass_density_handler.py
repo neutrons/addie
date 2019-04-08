@@ -14,10 +14,10 @@ class MassDensityHandler:
     def __init__(self, parent=None, key=None, data_type='sample'):
         if parent.mass_density_ui is None:
             o_mass = MassDensityWindow(parent=parent, key=key, data_type=data_type)
-            o_mass.show()
             parent.mass_density_ui = o_mass
             if parent.mass_density_ui_position:
                 parent.mass_density_ui.move(parent.mass_density_ui_position)
+            o_mass.show()
         else:
             parent.mass_density_ui.setFocus()
             parent.mass_density_ui.activateWindow()
