@@ -60,15 +60,19 @@ class KeyValuePairWindow(QMainWindow):
         return key_value_dict
 
     def add_clicked(self):
-        self._add_empty_row_at_bottom()
+        self._add_new_row_at_bottom()
         self._check_remove_button()
 
-    def _add_empty_row_at_bottom(self):
+    def _add_new_row_at_bottom(self):
         nbr_row = self.get_nbr_row()
-        self._add_row(row=nbr_row)
+        key = str(self.ui.new_key_widget.text())
+        value = str(self.ui.new_value_widget.text())
+        self._add_row(row=nbr_row, key=key, value=value)
+        self.ui.new_key_widget.setText("")
+        self.ui.new_value_widget.setText("")
 
     def _add_row(self, row=-1, key='', value=""):
-        self.ui.key_value_table.insertTow(row)
+        self.ui.key_value_table.insertRow(row)
         self._set_item(key, row, 0)
         self._set_item(value, row, 1)
 
