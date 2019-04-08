@@ -405,6 +405,8 @@ class MainWindow(QMainWindow):
             self.make_calibration_ui.closeEvent(c)
         if self.table_tree_ui:
             self.table_tree_ui.closeEvent(c)
+        if self.key_value_pair_ui:
+            self.key_value_pair_ui.closeEvent(c)
 
     def cancel_clicked(self):
         self.close()
