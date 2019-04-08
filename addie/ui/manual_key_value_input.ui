@@ -158,5 +158,42 @@
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>ok_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ok_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>317</x>
+     <y>396</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>318</x>
+     <y>416</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cancel_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>cancel_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>63</x>
+     <y>397</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>111</x>
+     <y>410</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>ok_clicked()</slot>
+  <slot>cancel_clicked()</slot>
+ </slots>
 </ui>
