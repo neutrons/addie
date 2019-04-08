@@ -1,5 +1,7 @@
 from __future__ import (absolute_import, division, print_function)
+import numpy as np
 from qtpy.QtWidgets import QMainWindow
+
 from addie.utilities import load_ui
 
 
@@ -45,7 +47,20 @@ class KeyValuePairWindow(QMainWindow):
         self.ui.key_value_table.insertRow(nbr_row)
 
     def remove_clicked(self):
+        selected_row_range = self._get_selected_row_range()
+        self._remove_rows(selected_row_range)
         self._check_remove_button()
+
+    def _remove_rows(self, row_range):
+        first_row_selected = row_range[0]
+        for _ in row_range:
+            self.ui.key_value_table.removeRow(first_row_selected)
+
+    def _get_selected_row_range(self):
+        selection = self.ui.key_value_table.selectedRanges()
+        from_row = selection[0].topRow()
+        to_row = selection[0].bottomRow()
+        return np.arange(from_row, to_row+1)
 
     def get_nbr_row(self):
         return self.ui.key_value_table.rowCount()
