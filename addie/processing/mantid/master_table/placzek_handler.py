@@ -2,18 +2,6 @@ from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import QMainWindow
 from addie.utilities import load_ui
 
-# try:
-#     from PyQt4.QtGui import QMainWindow
-#     from PyQt4 import QtCore, QtGui
-# except ImportError:
-#     try:
-#         from PyQt5.QtWidgets import QMainWindow
-#         from PyQt5 import QtCore, QtGui
-#     except ImportError:
-#         raise ImportError("Requires PyQt4 or PyQt5")
-
-#from addie.ui_placzek import Ui_MainWindow as UiMainWindow
-
 
 class PlaczekHandler:
 
