@@ -195,9 +195,9 @@ class TableTreeHandler:
 
         if parent.table_tree_ui is None:
             parent.table_tree_ui = TableTree(parent=parent)
-            parent.table_tree_ui.show()
             if parent.table_tree_ui_position:
                 parent.table_tree_ui.move(parent.table_tree_ui_position)
+            parent.table_tree_ui.show()
         else:
             parent.table_tree_ui.activateWindow()
             parent.table_tree_ui.setFocus()
@@ -211,14 +211,11 @@ class TableTree(QDialog):
         self.parent = parent
         QDialog.__init__(self, parent=parent)
         self.ui = load_ui('table_tree.ui', baseinstance=self)
-        # self.ui = UiDialog()
-        # self.ui.setupUi(self)
 
         self.init_tree()
 
     def init_tree(self):
         # fill the self.ui.treeWidget
-        # self.addItems(self.ui.treeWidget.invisibleRootItem())
         self.addItems(self.ui.treeWidget.invisibleRootItem())
         self.ui.treeWidget.itemChanged.connect(self.parent.tree_item_changed)
 
