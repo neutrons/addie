@@ -216,6 +216,7 @@ class TableRowHandler:
                                                   'placzek_infos': None,
                                                   },
                                 'key_value_button': None,
+                                'key_value_infos': {},
                                 }
 
         random_key = self.generate_random_key()
@@ -718,6 +719,7 @@ class TableRowHandler:
                               QSizePolicy.Minimum)
         _layout.addItem(_spacer_kv2)
         _layout.addStretch()
+        _master_table_row_ui['key_value_infos'] = {}
 
         ## recap
 
