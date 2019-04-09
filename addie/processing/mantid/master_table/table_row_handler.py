@@ -156,7 +156,10 @@ class TableRowHandler:
                    sample_runs='',
                    sample_mass_density='N/A',
                    sample_chemical_formula='N/A',
-                   packing_fraction='N/A'):
+                   packing_fraction='N/A',
+                   align_and_focus_args={},
+                   sample_placzek_arguments={},
+                   normalization_placzek_arguments={}):
         self.table_ui.insertRow(row)
         self.set_row_height(row, COLUMN_DEFAULT_HEIGHT)
 
@@ -277,9 +280,6 @@ class TableRowHandler:
         clean_sample_chemical_formula = format_chemical_formula_equation(sample_chemical_formula)
         _material_text = QLineEdit(clean_sample_chemical_formula)
         _material_text = QLabel(clean_sample_chemical_formula)
-#        _material_text.setEnabled(True)
-#         _material_text.returnPressed.connect(lambda key=random_key:
-#                                self.parent.master_table_sample_material_line_edit_entered(key))
         _material_button = QPushButton("...")
         _material_button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
         _material_button.setFixedWidth(CONFIG_BUTTON_WIDTH)
@@ -478,7 +478,8 @@ class TableRowHandler:
         self.table_ui.setCellWidget(row, column, _widget)
 
         # save default placzek settings
-        _master_table_row_ui['sample']['placzek_infos'] = self.formated_placzek_default()
+        _sample_formated_placzek_default = self.formated_placzek_default(sample_placzek_arguments)
+        _master_table_row_ui['sample']['placzek_infos'] = _sample_formated_placzek_default
 
         ## normalization
 
@@ -501,9 +502,6 @@ class TableRowHandler:
         column += 1
         #_material_text = QLineEdit("")
         _material_text = QLabel("N/A")
-        #_material_text.setEnabled(False)
-        # _material_text.returnPressed.connect(lambda key=random_key:
-        #                                      self.parent.master_table_normalization_material_line_edit_entered(key))
         _material_button = QPushButton("...")
         _material_button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
         _material_button.setFixedWidth(CONFIG_BUTTON_WIDTH)
@@ -626,7 +624,7 @@ class TableRowHandler:
 
         self.table_ui.setCellWidget(row, column, _verti_widget)
 
-        # column 21 - abs. correctiona
+        # column 21 - abs. correction
         column += 1
         _layout = QHBoxLayout()
         _layout.setContentsMargins(0, 0, 0, 0)
@@ -695,7 +693,9 @@ class TableRowHandler:
         self.table_ui.setCellWidget(row, column, _widget)
 
         # automatically populate placzek infos with default values
-        _master_table_row_ui['normalization']['placzek_infos'] = self.formated_placzek_default()
+        pprint.pprint(normalization_placzek_arguments)
+        _norm_formated_placzek_default = self.formated_placzek_default(normalization_placzek_arguments)
+        _master_table_row_ui['normalization']['placzek_infos'] = _norm_formated_placzek_default
 
         # column 23 - key/value pair
         column += 1
@@ -719,7 +719,7 @@ class TableRowHandler:
                               QSizePolicy.Minimum)
         _layout.addItem(_spacer_kv2)
         _layout.addStretch()
-        _master_table_row_ui['align_and_focus_args_infos'] = {}
+        _master_table_row_ui['align_and_focus_args_infos'] = align_and_focus_args
 
         ## recap
 
@@ -727,19 +727,35 @@ class TableRowHandler:
         self.unlock_signals_ui(list_ui=_list_ui_to_unlock)
         self.main_window.check_status_of_right_click_buttons()
 
-    def formated_placzek_default(self):
+    def formated_placzek_default(self, placzek={}):
         config_placzek = self.main_window.placzek_default
 
-        new_format = {'order_index': config_placzek['order']['index_selected'],
-                      'is_self': config_placzek['self'],
-                      'is_interference': config_placzek['interference'],
-                      'fit_spectrum_index': config_placzek['fit_spectrum_with']['index_selected'],
-                      'lambda_fit_min': config_placzek['lambda_binning_for_fit']['min'],
-                      'lambda_fit_max': config_placzek['lambda_binning_for_fit']['max'],
-                      'lambda_fit_delta': config_placzek['lambda_binning_for_fit']['delta'],
-                      'lambda_calc_min': config_placzek['lambda_binning_for_calc']['min'],
-                      'lambda_calc_max': config_placzek['lambda_binning_for_calc']['max'],
-                      'lambda_calc_delta': config_placzek['lambda_binning_for_calc']['delta'],
+        if placzek == {}:
+            _dict = config_placzek
+        else:
+            _dict = placzek
+
+        order_index = _dict['order']['index_selected']
+        is_self = _dict['is_self']
+        is_interference = _dict['is_interference']
+        fit_spectrum_index =  _dict['fit_spectrum_with']['index_selected']
+        lambda_fit_min = _dict['lambda_binning_for_fit']['min']
+        lambda_fit_max = _dict['lambda_binning_for_fit']['max']
+        lambda_fit_delta = _dict['lambda_binning_for_fit']['delta']
+        lambda_calc_min = _dict['lambda_binning_for_calc']['min']
+        lambda_calc_max = _dict['lambda_binning_for_calc']['max']
+        lambda_calc_delta = _dict['lambda_binning_for_calc']['delta']
+
+        new_format = {'order_index': order_index,
+                      'is_self': is_self,
+                      'is_interference': is_interference,
+                      'fit_spectrum_index': fit_spectrum_index,
+                      'lambda_fit_min': lambda_fit_min,
+                      'lambda_fit_max': lambda_fit_max,
+                      'lambda_fit_delta': lambda_fit_delta,
+                      'lambda_calc_min': lambda_calc_min,
+                      'lambda_calc_max': lambda_calc_max,
+                      'lambda_calc_delta': lambda_calc_delta,
                       }
 
         return new_format
