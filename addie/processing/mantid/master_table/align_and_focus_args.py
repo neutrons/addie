@@ -122,4 +122,3 @@ class AlignAndFocusArgsWindow(QMainWindow):
     def closeEvent(self, c):
         self.main_window.key_value_pair_ui_position = self.pos()
         self.main_window.key_value_pair_ui = None
-

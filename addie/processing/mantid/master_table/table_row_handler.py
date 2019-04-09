@@ -700,8 +700,8 @@ class TableRowHandler:
         column += 1
         _layout = QHBoxLayout()
         _spacer_kv1 = QSpacerItem(40, 20,
-                              QSizePolicy.Expanding,
-                              QSizePolicy.Minimum)
+                                  QSizePolicy.Expanding,
+                                  QSizePolicy.Minimum)
         _layout.addItem(_spacer_kv1)
         _button = QPushButton("...")
         _layout.addWidget(_button)
@@ -714,8 +714,8 @@ class TableRowHandler:
         self.table_ui.setCellWidget(row, column, _new_widget)
         _master_table_row_ui['align_and_focus_args_button'] = _button
         _spacer_kv2 = QSpacerItem(40, 20,
-                              QSizePolicy.Expanding,
-                              QSizePolicy.Minimum)
+                                  QSizePolicy.Expanding,
+                                  QSizePolicy.Minimum)
         _layout.addItem(_spacer_kv2)
         _layout.addStretch()
         _master_table_row_ui['align_and_focus_args_infos'] = align_and_focus_args
