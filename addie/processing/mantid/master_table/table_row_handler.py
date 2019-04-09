@@ -693,7 +693,6 @@ class TableRowHandler:
         self.table_ui.setCellWidget(row, column, _widget)
 
         # automatically populate placzek infos with default values
-        pprint.pprint(normalization_placzek_arguments)
         _norm_formated_placzek_default = self.formated_placzek_default(normalization_placzek_arguments)
         _master_table_row_ui['normalization']['placzek_infos'] = _norm_formated_placzek_default
 
