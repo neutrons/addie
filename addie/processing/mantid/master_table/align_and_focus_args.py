@@ -61,6 +61,7 @@ class AlignAndFocusArgsWindow(QMainWindow):
     def add_clicked(self):
         self._add_new_row_at_bottom()
         self._check_remove_button()
+        self.ui.new_key_widget.setFocus()
 
     def _add_new_row_at_bottom(self):
         nbr_row = self.get_nbr_row()
