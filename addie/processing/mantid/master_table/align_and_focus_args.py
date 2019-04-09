@@ -4,6 +4,8 @@ from qtpy.QtWidgets import QMainWindow, QTableWidgetItem
 
 from addie.utilities import load_ui
 
+COLUMNS_WIDTH = [150, 150]
+
 
 class AlignAndFocusArgsHandling:
 
@@ -35,6 +37,9 @@ class AlignAndFocusArgsWindow(QMainWindow):
         for _row,_key in enumerate(previous_key_value_dict.keys()):
             _value = previous_key_value_dict[_key]
             self._add_row(row=_row, key=_key, value=_value)
+
+        for _col,_width in enumerate(COLUMNS_WIDTH):
+            self.ui.key_value_table.setColumnWidth(_col, _width)
 
     def _get_previous_key_value_dict(self):
         master_table_list_ui = self.main_window.master_table_list_ui[self.key]
