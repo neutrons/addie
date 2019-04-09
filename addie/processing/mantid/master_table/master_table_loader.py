@@ -232,7 +232,7 @@ class JsonLoader:
             _target_row_entry["normalization"] = self._retrieve_element_dict(element='Normalization',
                                                                              source_row_entry=_source_row_entry)
 
-            _target_row_entry["align_and_focus_args"] = _source_row_entry["AlignAndFocusArgs"]
+            _target_row_entry["align_and_focus_args"] = _source_row_entry.get("AlignAndFocusArgs", {})
 
             table_dictionary[_row] = _target_row_entry
 
