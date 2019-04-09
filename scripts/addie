@@ -55,7 +55,7 @@ from addie.processing.mantid.master_table.table_row_handler import TableRowHandl
 from addie.processing.mantid.master_table.geometry_handler import DimensionsSetter
 from addie.processing.mantid.master_table.periodic_table.material_handler import MaterialHandler
 from addie.processing.mantid.master_table.mass_density_handler import MassDensityHandler
-from addie.processing.mantid.master_table.key_value_pair_handling import KeyValuePairHandling
+from addie.processing.mantid.master_table.align_and_focus_args import AlignAndFocusArgsHandling
 
 # PyONcat
 try:
@@ -943,7 +943,7 @@ class MainWindow(QMainWindow):
 
     # key/value
     def master_table_keyvalue_button_pressed(self, key):
-        KeyValuePairHandling(main_window=self, key=key)
+        AlignAndFocusArgsHandling(main_window=self, key=key)
 
     # calibrations
     def make_calibration_clicked(self):

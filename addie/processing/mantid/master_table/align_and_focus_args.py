@@ -5,12 +5,11 @@ from qtpy.QtWidgets import QMainWindow, QTableWidgetItem
 from addie.utilities import load_ui
 
 
-
-class KeyValuePairHandling:
+class AlignAndFocusArgsHandling:
 
     def __init__(self, main_window=None, key=None):
         if main_window.key_value_pair_ui is None:
-            o_key_value = KeyValuePairWindow(main_window=main_window, key=key)
+            o_key_value = AlignAndFocusArgsWindow(main_window=main_window, key=key)
             main_window.key_value_pair_ui = o_key_value
             if main_window.key_value_pair_ui_position:
                 main_window.key_value_pair_ui.move(main_window.key_value_pair_ui_position)
@@ -20,7 +19,7 @@ class KeyValuePairHandling:
             main_window.key_value_pair_ui.activateWindow()
 
 
-class KeyValuePairWindow(QMainWindow):
+class AlignAndFocusArgsWindow(QMainWindow):
 
     def __init__(self, main_window=None, key=None):
         self.main_window = main_window
@@ -39,7 +38,7 @@ class KeyValuePairWindow(QMainWindow):
 
     def _get_previous_key_value_dict(self):
         master_table_list_ui = self.main_window.master_table_list_ui[self.key]
-        return master_table_list_ui['key_value_infos']
+        return master_table_list_ui['align_and_focus_args_infos']
 
     def ok_clicked(self):
         self._save_key_value_infos()
@@ -48,7 +47,7 @@ class KeyValuePairWindow(QMainWindow):
     def _save_key_value_infos(self):
         master_table_list_ui = self.main_window.master_table_list_ui[self.key]
         key_value_dict = self._get_key_value_dict()
-        master_table_list_ui['key_value_infos'] = key_value_dict
+        master_table_list_ui['align_and_focus_args_infos'] = key_value_dict
         self.main_window.master_table_list_ui[self.key] = master_table_list_ui
 
     def _get_key_value_dict(self):

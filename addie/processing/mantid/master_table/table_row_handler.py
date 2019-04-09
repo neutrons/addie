@@ -215,8 +215,8 @@ class TableRowHandler:
                                                   'placzek_button': None,
                                                   'placzek_infos': None,
                                                   },
-                                'key_value_button': None,
-                                'key_value_infos': {},
+                                'align_and_focus_args_button': None,
+                                'align_and_focus_args_infos': {},
                                 }
 
         random_key = self.generate_random_key()
@@ -713,13 +713,13 @@ class TableRowHandler:
         _new_widget = QWidget()
         _new_widget.setLayout(_layout)
         self.table_ui.setCellWidget(row, column, _new_widget)
-        _master_table_row_ui['key_value_button'] = _button
+        _master_table_row_ui['align_and_focus_args_button'] = _button
         _spacer_kv2 = QSpacerItem(40, 20,
                               QSizePolicy.Expanding,
                               QSizePolicy.Minimum)
         _layout.addItem(_spacer_kv2)
         _layout.addStretch()
-        _master_table_row_ui['key_value_infos'] = {}
+        _master_table_row_ui['align_and_focus_args_infos'] = {}
 
         ## recap
 

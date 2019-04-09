@@ -32,7 +32,7 @@ h3_COLUMNS_WIDTH = [90,  #activate #0
                     150,  # shape #19
                     200, # geometry dimensions #20
                     150, 200, 150,  # correction #21, 22, 23
-                    100, # key/value pairs #24
+                    150, # key/value pairs #24
                     ]
 
 h2_COLUMNS_WIDTH = [h3_COLUMNS_WIDTH[0], #0
@@ -193,8 +193,8 @@ tree_dict['vanadium'] = copy.deepcopy(base_dict)
 tree_dict['vanadium']['name'] = 'Normalization'
 tree_dict['vanadium']['children'] = vanadium_children_1
 
-tree_dict['key_value'] = copy.deepcopy(base_dict)
-tree_dict['key_value']['name'] = 'Key/Value'
+tree_dict['align_and_focus_args'] = copy.deepcopy(base_dict)
+tree_dict['align_and_focus_args']['name'] = 'AlignAndFocusArgs'
 
 LIST_SEARCH_CRITERIA = {'nom': ['Chemical Formula',
                                 'Title',
