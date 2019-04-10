@@ -37,43 +37,43 @@ def manual_output_folder_button_clicked(main_window):
 
 
 def run_mantid(self):
-        num_rows = self.processing_ui.h3_table.rowCount()
-        if num_rows <= 0:
-            raise RuntimeError('Cannot export empty table')
+    num_rows = self.processing_ui.h3_table.rowCount()
+    if num_rows <= 0:
+        raise RuntimeError('Cannot export empty table')
 
-        exporter = MantidTableExporter(parent=self)
+    exporter = MantidTableExporter(parent=self)
 
-        # write out the full table to disk
-        # TODO make a class level name so it can be reused
-        full_reduction_filename = os.path.join(os.path.expanduser('~'), '.mantid', 'addie.json')
-        print('writing out full table to "{}"'.format(full_reduction_filename))
-        exporter.export(full_reduction_filename)
+    # write out the full table to disk
+    # TODO make a class level name so it can be reused
+    full_reduction_filename = os.path.join(os.path.expanduser('~'), '.mantid', 'addie.json')
+    print('writing out full table to "{}"'.format(full_reduction_filename))
+    exporter.export(full_reduction_filename)
 
-        # append the individual rows to input list (reduction_inputs)
-        reduction_inputs = []
-        for row in range(num_rows):
-            if not exporter.isActive(row):
-                print('skipping row {} - inactive'.format(row + 1))  # REMOVE?
-                continue
-            print('Will be running row {} for reduction'.format(row + 1))  # TODO should be debug logging
-            json_input = exporter.retrieve_row_info(row)
-            reduction_inputs.append(json_input)
-        if len(reduction_inputs) == 0:
-            raise RuntimeError('None of the rows were activated')
+    # append the individual rows to input list (reduction_inputs)
+    reduction_inputs = []
+    for row in range(num_rows):
+        if not exporter.isActive(row):
+            print('skipping row {} - inactive'.format(row + 1))  # REMOVE?
+            continue
+        print('Will be running row {} for reduction'.format(row + 1))  # TODO should be debug logging
+        json_input = exporter.retrieve_row_info(row)
+        reduction_inputs.append(json_input)
+    if len(reduction_inputs) == 0:
+        raise RuntimeError('None of the rows were activated')
 
-        # locate total scattering script
-        if MANTID_TS_ENABLED:
-            # TODO should allow for prefixing with mantidpython
-            # TODO figure out how to launch the jobs in serial
-            for json_input in reduction_inputs:
-                TotalScatteringReduction(json_input)
-                # TODO get this to work with launch_job_manager (example below for running from file):
-                #cmd = ' '.join([pythonpath, mantid_ts_script, filename]).strip()
-                #name = os.path.basename(filename).replace('.json', '')
-                #print(cmd)
-                #self.launch_job_manager(job_name=name, script_to_run=cmd)
-        if MANTID_TS_ENABLED:
-            print('total_scattering module not found. Functionality disabled')
+    # locate total scattering script
+    if MANTID_TS_ENABLED:
+        # TODO should allow for prefixing with mantidpython
+        # TODO figure out how to launch the jobs in serial
+        for json_input in reduction_inputs:
+            TotalScatteringReduction(json_input)
+            # TODO get this to work with launch_job_manager (example below for running from file):
+            #cmd = ' '.join([pythonpath, mantid_ts_script, filename]).strip()
+            #name = os.path.basename(filename).replace('.json', '')
+            #print(cmd)
+            #self.launch_job_manager(job_name=name, script_to_run=cmd)
+    if MANTID_TS_ENABLED:
+        print('total_scattering module not found. Functionality disabled')
 
 
 def run_autonom(main_window):
