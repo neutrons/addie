@@ -70,8 +70,8 @@
       ],
       "index_selected": 0
     },
-    "self": true,
-    "interference": false,
+    "is_self": true,
+    "is_interference": false,
     "fit_spectrum_with": {
       "short_name_list": [
         "GaussConvCubicSpline"

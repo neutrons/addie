@@ -55,6 +55,7 @@ from addie.processing.mantid.master_table.table_row_handler import TableRowHandl
 from addie.processing.mantid.master_table.geometry_handler import DimensionsSetter
 from addie.processing.mantid.master_table.periodic_table.material_handler import MaterialHandler
 from addie.processing.mantid.master_table.mass_density_handler import MassDensityHandler
+from addie.processing.mantid.master_table.align_and_focus_args import AlignAndFocusArgsHandling
 
 # PyONcat
 try:
@@ -63,14 +64,6 @@ try:
 except ImportError:
     print('pyoncat module not found. Functionality disabled')
     ONCAT_ENABLED = False
-
-# Mantid Total Scattering (https://github.com/marshallmcdonnell/mantid_total_scattering)
-try:
-    from total_scattering.reduction import TotalScatteringReduction
-    MANTID_TS_ENABLED = True
-except ImportError:
-    print('total_scattering module not found. Functionality disabled')
-    MANTID_TS_ENABLED = False
 
 from addie.processing.mantid.master_table.import_from_run_number_handler import ImportFromRunNumberHandler
 from addie.processing.mantid.master_table.import_from_database.load_into_master_table import LoadIntoMasterTable
@@ -103,8 +96,6 @@ from addie.initialization.events import calculategr_tab as calculategr_tab_event
 
 from addie.rietveld import event_handler as rietveld_event_handler
 from addie.calculate_gr import event_handler as calculategr_event_handler
-
-DEBUG = False
 
 
 class MainWindow(QMainWindow):
@@ -180,6 +171,8 @@ class MainWindow(QMainWindow):
     placzek_ui = None
     reduction_configuration_ui = None
     reduction_configuration_ui_position = None
+    key_value_pair_ui = None
+    key_value_pair_ui_position = None
 
     material_ui = None
     material_ui_position = None
@@ -226,19 +219,7 @@ class MainWindow(QMainWindow):
                                         'plot': copy.deepcopy(dict_widget),
                                         }
 
-    placzek_info_dict = {'order_text': None,
-                         'order_index': None,
-                         'is_self': None,
-                         'is_interference': None,
-                         'fit_spectrum_text': None,
-                         'fit_spectrum_index': None,
-                         'lambda_fit_min': None,
-                         'lambda_fit_max': None,
-                         'lambda_fit_delta': None,
-                         'lambda_calc_min': None,
-                         'lambda_calc_max': None,
-                         'lambda_calc_delta': None,
-                         }
+    placzek_default = {}
 
     master_table_list_ui = OrderedDict()
     master_table_cells_copy = {'temp': [],
@@ -404,6 +385,8 @@ class MainWindow(QMainWindow):
             self.make_calibration_ui.closeEvent(c)
         if self.table_tree_ui:
             self.table_tree_ui.closeEvent(c)
+        if self.key_value_pair_ui:
+            self.key_value_pair_ui.closeEvent(c)
 
     def cancel_clicked(self):
         self.close()
@@ -938,13 +921,9 @@ class MainWindow(QMainWindow):
     def launch_import_from_run_number_handler(self):
         processing_event_handler.launch_import_from_run_number_handler(self)
 
-    # def master_table_input_grouping_button_pressed(self, key):
-    #     o_table = TableRowHandler(parent=self)
-    #     o_table.grouping_button(key=key, grouping_type='input')
-    #
-    # def master_table_output_grouping_button_pressed(self, key):
-    #     o_table = TableRowHandler(parent=self)
-    #     o_table.grouping_button(key=key, grouping_type='output')
+    # key/value
+    def master_table_keyvalue_button_pressed(self, key):
+        AlignAndFocusArgsHandling(main_window=self, key=key)
 
     # calibrations
     def make_calibration_clicked(self):

@@ -9,10 +9,10 @@ class ImportFromRunNumberHandler:
     def __init__(self, parent=None):
         if parent.import_from_run_number_ui is None:
             o_import = ImportFromRunNumberWindow(parent=parent)
-            o_import.show()
             parent.import_from_run_number_ui = o_import
             if parent.import_from_run_number_ui_position:
                 parent.import_from_run_number_ui.move(parent.import_from_run_number_ui_position)
+            o_import.show()
         else:
             parent.import_from_run_number_ui.setFocus()
             parent.import_from_run_number_ui.activateWindow()

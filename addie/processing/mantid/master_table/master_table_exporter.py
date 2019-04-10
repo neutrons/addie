@@ -60,6 +60,7 @@ _data = {"Facility": "SNS",
                      },
          "CacheDir": "./tmp",
          "OutputDir": "./output",
+         "AlignAndFocusArgs": {},
          }
 
 # _empty_row = {'Activate': True,
@@ -67,6 +68,7 @@ _data = {"Facility": "SNS",
 
 
 class TableFileExporter:
+
     def __init__(self, parent=None):
         self.parent = parent
         self.table_ui = parent.processing_ui.h3_table
@@ -81,7 +83,7 @@ class TableFileExporter:
         self.calibration = str(self.parent.processing_ui.calibration_file.text())
 
     def export(self, filename='', row=None):
-        '''create dictionary of all rows unless that argument is specified'''
+        """create dictionary of all rows unless that argument is specified"""
         if not filename:
             raise RuntimeError('Cannot export data to empty filename')
 
@@ -131,10 +133,7 @@ class TableFileExporter:
         retrieve the widgets values'''
 
         dict_element = copy.deepcopy(_element)
-
-        # retrieve the key according to row
-        o_util = Utilities(parent=self.parent)
-        key = o_util.get_row_key_from_row_index(row=row)
+        key = self.get_key_from_row(row)
 
         if element == 'sample':
             column = SAMPLE_FIRST_COLUMN
@@ -222,6 +221,17 @@ class TableFileExporter:
                                                                                         placzek_infos["lambda_calc_max"])
         return dict_element
 
+    def _get_key_value_dict(self, row=-1):
+        key = self.get_key_from_row(row)
+        key_value_dict = self.parent.master_table_list_ui[key]['align_and_focus_args_infos']
+        return key_value_dict
+
+    def get_key_from_row(self, row):
+        # retrieve the key according to row
+        o_util = Utilities(parent=self.parent)
+        key = o_util.get_row_key_from_row_index(row=row)
+        return key
+
     def retrieve_row_info(self, row):
         activate = self._get_checkbox_state(row=row, column=0)
         title = self._get_item_value(row=row, column=1)
@@ -229,12 +239,13 @@ class TableFileExporter:
                                                                  row=row)
         _export_dictionary_normalization = self._retrieve_element_infos(element='normalization',
                                                                         row=row)
+        _key_value_dict = self._get_key_value_dict(row=row)
 
-        dictionary = {'Sample': _export_dictionary_sample,
-                      'Activate': activate,
+        dictionary = {'Activate': activate,
                       'Title': title,
-                      'Calibration': {"Filename": self.calibration },
+                      'Sample': _export_dictionary_sample,
                       'Normalization': _export_dictionary_normalization,
+                      'Calibration': {"Filename": self.calibration },
                       'Facility': self.facility,
                       'Instrument': self.instrument,
                       'CacheDir': self.cachedir,
@@ -246,6 +257,7 @@ class TableFileExporter:
                                                "Output": self.output_grouping_file,
                                                },
                                   },
+                      'AlignAndFocusArgs': _key_value_dict,
                       }
         return dictionary
 
