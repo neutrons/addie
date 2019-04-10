@@ -12,49 +12,50 @@ COLUMN_DEFAULT_HEIGHT = 120
 CONFIG_BUTTON_HEIGHT = 20
 CONFIG_BUTTON_WIDTH = 30
 
-h3_COLUMNS_WIDTH = [90,  #activate
-                    250,  #title
-                    150,  #runs  #sample
-                    90,  #background runs
-                    90,  #background background
-                    150,  #chemical formula
-                    150,  #mass density
-                    120,  #packing fraction
-                    150,  #shape
-                    200, # geometry dimensions
-                    150, 200, 150,  #correction
-                    90,  # runs  #normalization
-                    90,  # background runs
-                    90,  # background background
-                    150,  #chemical formula
-                    150,  # mass density
-                    120,  # packing fraction
-                    150,  # shape
-                    200, # geometry dimensions
-                    150, 200, 150,  # correction
-                    #50, 50, # grouping
+h3_COLUMNS_WIDTH = [90,  #activate #0
+                    250,  #title #1
+                    150,  #runs  #sample #2
+                    90,  #background runs #3
+                    90,  #background background #4
+                    150,  #chemical formula #5
+                    150,  #mass density #6
+                    120,  #packing fraction #7
+                    150,  #shape #8
+                    200, # geometry dimensions #9
+                    150, 200, 150,  #correction #10, 11, 12
+                    90,  # runs  #normalization #13
+                    90,  # background runs #14
+                    90,  # background background #15
+                    150,  #chemical formula #16
+                    150,  # mass density #17
+                    120,  # packing fraction #18
+                    150,  # shape #19
+                    200, # geometry dimensions #20
+                    150, 200, 150,  # correction #21, 22, 23
+                    150, # key/value pairs #24
                     ]
 
-h2_COLUMNS_WIDTH = [h3_COLUMNS_WIDTH[0],
-                    h3_COLUMNS_WIDTH[1],
-                    h3_COLUMNS_WIDTH[2],
-                    h3_COLUMNS_WIDTH[3] + h3_COLUMNS_WIDTH[4],
-                    h3_COLUMNS_WIDTH[5],
-                    h3_COLUMNS_WIDTH[6],
-                    h3_COLUMNS_WIDTH[7],
-                    h3_COLUMNS_WIDTH[8]+h3_COLUMNS_WIDTH[9],
-                    h3_COLUMNS_WIDTH[10],
-                    h3_COLUMNS_WIDTH[11],
-                    h3_COLUMNS_WIDTH[12],
-                    h3_COLUMNS_WIDTH[13],
-                    h3_COLUMNS_WIDTH[14]+h3_COLUMNS_WIDTH[15],
-                    h3_COLUMNS_WIDTH[16],
-                    h3_COLUMNS_WIDTH[17],
-                    h3_COLUMNS_WIDTH[18],
-                    h3_COLUMNS_WIDTH[19]+h3_COLUMNS_WIDTH[20],
-                    h3_COLUMNS_WIDTH[21],
-                    h3_COLUMNS_WIDTH[22],
-                    h3_COLUMNS_WIDTH[23],
+h2_COLUMNS_WIDTH = [h3_COLUMNS_WIDTH[0], #0
+                    h3_COLUMNS_WIDTH[1], #1
+                    h3_COLUMNS_WIDTH[2], #2
+                    h3_COLUMNS_WIDTH[3] + h3_COLUMNS_WIDTH[4], #3
+                    h3_COLUMNS_WIDTH[5], #4
+                    h3_COLUMNS_WIDTH[6], #5
+                    h3_COLUMNS_WIDTH[7], #6
+                    h3_COLUMNS_WIDTH[8]+h3_COLUMNS_WIDTH[9], #7
+                    h3_COLUMNS_WIDTH[10], #8
+                    h3_COLUMNS_WIDTH[11], #9
+                    h3_COLUMNS_WIDTH[12], #10
+                    h3_COLUMNS_WIDTH[13], #11
+                    h3_COLUMNS_WIDTH[14]+h3_COLUMNS_WIDTH[15], #12
+                    h3_COLUMNS_WIDTH[16], #13
+                    h3_COLUMNS_WIDTH[17], #14
+                    h3_COLUMNS_WIDTH[18], #15
+                    h3_COLUMNS_WIDTH[19]+h3_COLUMNS_WIDTH[20], #16
+                    h3_COLUMNS_WIDTH[21], #17
+                    h3_COLUMNS_WIDTH[22], #18
+                    h3_COLUMNS_WIDTH[23], #19
+                    h3_COLUMNS_WIDTH[24], #20
                     ]
 
 
@@ -62,8 +63,7 @@ h1_COLUMNS_WIDTH = [h3_COLUMNS_WIDTH[0],
                     h3_COLUMNS_WIDTH[1],
                     np.sum(h3_COLUMNS_WIDTH[2:13]),
                     np.sum(h3_COLUMNS_WIDTH[13:24]),
-                    #h3_COLUMNS_WIDTH[28],
-                    #h3_COLUMNS_WIDTH[29]
+                    h3_COLUMNS_WIDTH[24],
                     ]
 
 INDEX_OF_COLUMNS_SEARCHABLE = [1, 2, 3, 4, 7, 13, 14, 15, 18]
@@ -193,11 +193,8 @@ tree_dict['vanadium'] = copy.deepcopy(base_dict)
 tree_dict['vanadium']['name'] = 'Normalization'
 tree_dict['vanadium']['children'] = vanadium_children_1
 
-# tree_dict['input_grouping'] = copy.deepcopy(base_dict)
-# tree_dict['input_grouping']['name'] = "Input Grouping"
-#
-# tree_dict['output_grouping'] = copy.deepcopy(base_dict)
-# tree_dict['output_grouping']['name'] = "Output Grouping"
+tree_dict['align_and_focus_args'] = copy.deepcopy(base_dict)
+tree_dict['align_and_focus_args']['name'] = 'AlignAndFocusArgs'
 
 LIST_SEARCH_CRITERIA = {'nom': ['Chemical Formula',
                                 'Title',

@@ -15,7 +15,7 @@ from addie.utilities.set import Set
 from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
 from addie.processing.mantid.master_table.utilities import LoadGroupingFile
 
-# init test dictionary (to test loader
+# init test dictionary (to test loader)
 _dictionary_test = OrderedDict()
 _mass_density_dict = {"mass_density": {"value": "N/A",
                                        "selected": True},
@@ -63,6 +63,7 @@ _default_empty_row = {"activate": True,
 
                       "input_grouping": "",
                       "output_grouping": "",
+                      "AlignAndFocusArgs": {},
                       }
 # for debugging, faking a 2 row dictionary
 # _dictionary_test[0] = copy.deepcopy(_default_empty_row)
@@ -186,10 +187,10 @@ class JsonLoader:
         _target_row_entry["multi_scattering_correction"] = _source_entry["MultipleScatteringCorrection"]["Type"]
         _target_row_entry["inelastic_correction"] = _source_entry["InelasticCorrection"]["Type"]
         _target_row_entry["placzek"] = copy.deepcopy(self.parent.placzek_default)
-        _target_row_entry["placzek"]["order"]["name_list"] = _source_entry["InelasticCorrection"]["Order"]
-        _target_row_entry["placzek"]["self"] = _source_entry["InelasticCorrection"]["Self"]
-        _target_row_entry["placzek"]["interference"] = _source_entry["InelasticCorrection"]["Interference"]
-        _target_row_entry["placzek"]["fit_spectrum_with"]["short_name_list"] = \
+        _target_row_entry["placzek"]["order"]["index_selected"] = _source_entry["InelasticCorrection"]["Order"]
+        _target_row_entry["placzek"]["is_self"] = _source_entry["InelasticCorrection"]["Self"]
+        _target_row_entry["placzek"]["is_interference"] = _source_entry["InelasticCorrection"]["Interference"]
+        _target_row_entry["placzek"]["fit_spectrum_with"]["text"] = \
             _source_entry["InelasticCorrection"]["FitSpectrumWith"]
 
         lambda_binning_for_fit = _source_entry["InelasticCorrection"]["LambdaBinningForFit"].split(",")
@@ -230,6 +231,8 @@ class JsonLoader:
             _target_row_entry["runs"] = _source_row_entry['Sample']['Runs']
             _target_row_entry["normalization"] = self._retrieve_element_dict(element='Normalization',
                                                                              source_row_entry=_source_row_entry)
+
+            _target_row_entry["align_and_focus_args"] = _source_row_entry.get("AlignAndFocusArgs", {})
 
             table_dictionary[_row] = _target_row_entry
 
@@ -607,7 +610,13 @@ class FromDictionaryToTableUi:
         o_table = TableRowHandler(main_window=self.parent)
 
         for _row_entry in input_dictionary.keys():
-            o_table.insert_row(row=_row_entry)
+
+            # insert row but also initialize the hidden arguments such as placzek settings
+            o_table.insert_row(row=_row_entry,
+                               align_and_focus_args=input_dictionary[_row_entry]['align_and_focus_args'],
+                               normalization_placzek_arguments=input_dictionary[_row_entry]['normalization']['placzek'],
+                               sample_placzek_arguments=input_dictionary[_row_entry]['sample']['placzek'])
+
             self.populate_row(row=_row_entry,
                               entry=input_dictionary[_row_entry],
                               key=o_table.key)

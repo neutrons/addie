@@ -38,10 +38,10 @@ class ImportFromDatabaseHandler:
     def __init__(self, parent=None):
         if parent.import_from_database_ui is None:
             o_import = ImportFromDatabaseWindow(parent=parent)
-            o_import.show()
             parent.import_from_database_ui = o_import
             if parent.import_from_database_ui_position:
                 parent.import_from_database_ui.move(parent.import_from_database_ui_position)
+            o_import.show()
         else:
             parent.import_from_database_ui.setFocus()
             parent.import_from_database_ui.activateWindow()
