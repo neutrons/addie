@@ -12,6 +12,7 @@ except ImportError:
     print('total_scattering module not found. Functionality disabled')
     MANTID_TS_ENABLED = False
 
+
 def select_current_folder_clicked(main_window):
     o_gui = Step1GuiHandler(main_window=main_window)
     o_gui.select_working_folder()
@@ -33,6 +34,7 @@ def manual_output_folder_button_clicked(main_window):
     o_gui = Step1GuiHandler(main_window=main_window)
     o_gui.select_manual_output_folder()
     main_window.check_step1_gui()
+
 
 def run_mantid(self):
         num_rows = self.processing_ui.h3_table.rowCount()
