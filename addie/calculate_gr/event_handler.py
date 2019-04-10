@@ -3,6 +3,7 @@ from qtpy.QtWidgets import QFileDialog, QMessageBox
 
 import addie.utilities.specify_plots_style as ps
 import addie.calculate_gr.edit_sq_dialog
+from addie.calculate_gr.save_sq_dialog_message import SaveSqDialogMessageDialog
 
 
 def load_sq(main_window):
@@ -426,7 +427,9 @@ def do_save_sq(main_window):
                                                                                               excluded_parent='GofR',
                                                                                               return_item_text=True)
     if len(sq_name_list) == 0:
-        return
+        # show dialog message here.
+        o_dialog = SaveSqDialogMessageDialog(main_window = main_window)
+        o_dialog.show()
 
     # loop the SofQ name to save
     file_filter = 'XYE (*.xye);;CSV XYE (*.csv);;SofQ (*.sq)'
