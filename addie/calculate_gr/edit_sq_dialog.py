@@ -56,8 +56,10 @@ class EditSofQDialog(QDialog):
         self.ui.pushButton_setShiftRange.clicked.connect(self.do_set_shift_range)
 
         # connect q-slide
-        self.ui.horizontalSlider_scale.valueChanged.connect(self.event_cal_sq)
-        self.ui.horizontalSlider_shift.valueChanged.connect(self.event_cal_sq)
+        self.ui.horizontalSlider_scale.valueChanged.connect(self.scale_slider_value_changed)
+        self.ui.horizontalSlider_shift.valueChanged.connect(self.shift_slider_value_changed)
+        self.ui.horizontalSlider_scale.sliderReleased.connect(self.event_cal_sq)
+        self.ui.horizontalSlider_shift.sliderReleased.connect(self.event_cal_sq)
 
         # connect signals
         self.MyEditSignal.connect(self._myParentWindow.edit_sq)
@@ -284,6 +286,39 @@ class EditSofQDialog(QDialog):
 
         shift_int = int(curr_shift/delta_shift * delta_slider_shift)
         self.ui.horizontalSlider_shift.setValue(shift_int)
+
+    def shift_slider_value_changed(self, _):
+        # check whether mutex is on or off
+        if self._shiftSlideMutex or self._scaleSlideMutex:
+            # return if either mutex is on: it is not a time to do calculation
+            return
+
+        # read the value of sliders
+        # note: change is [min, max].  and the default is [0, 100]
+        shift_int = self.ui.horizontalSlider_shift.value()
+
+        # convert to double
+        delta_shift = self._shiftMax - self._shiftMin
+        delta_shift_slider = self.ui.horizontalSlider_shift.maximum() - self.ui.horizontalSlider_shift.minimum()
+        shift = self._shiftMin + float(shift_int) / delta_shift_slider * delta_shift
+
+        self.ui.lineEdit_shift.setText('%.7f' % shift)
+
+    def scale_slider_value_changed(self, value):
+        # check whether mutex is on or off
+        if self._shiftSlideMutex or self._scaleSlideMutex:
+            # return if either mutex is on: it is not a time to do calculation
+            return
+
+        # read the value of sliders
+        # note: change is [min, max].  and the default is [0, 100]
+        scale_int = self.ui.horizontalSlider_scale.value()
+
+        delta_scale = self._scaleMax - self._scaleMin
+        delta_scale_slider = self.ui.horizontalSlider_scale.maximum() - self.ui.horizontalSlider_scale.minimum()
+        scale = self._scaleMin + float(scale_int) / delta_scale_slider * delta_scale
+
+        self.ui.lineEdit_scaleFactor.setText('%.7f' % scale)
 
     def event_cal_sq(self):
         """handling the events from a moving sliding bar such that a new S(Q) will be calculated
