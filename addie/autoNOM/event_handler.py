@@ -4,7 +4,8 @@ from addie.autoNOM.step1_gui_handler import Step1GuiHandler
 from addie.processing.mantid.master_table.master_table_exporter import TableFileExporter as MantidTableExporter
 from addie.autoNOM.run_step1 import RunStep1
 
-# Mantid Total Scattering (https://github.com/marshallmcdonnell/mantid_total_scattering)
+# Mantid Total Scattering
+# (https://github.com/marshallmcdonnell/mantid_total_scattering)
 try:
     from total_scattering.reduction import TotalScatteringReduction
     MANTID_TS_ENABLED = True
@@ -45,7 +46,8 @@ def run_mantid(self):
 
     # write out the full table to disk
     # TODO make a class level name so it can be reused
-    full_reduction_filename = os.path.join(os.path.expanduser('~'), '.mantid', 'addie.json')
+    full_reduction_filename = os.path.join(
+        os.path.expanduser('~'), '.mantid', 'addie.json')
     print('writing out full table to "{}"'.format(full_reduction_filename))
     exporter.export(full_reduction_filename)
 
@@ -55,7 +57,8 @@ def run_mantid(self):
         if not exporter.isActive(row):
             print('skipping row {} - inactive'.format(row + 1))  # REMOVE?
             continue
-        print('Will be running row {} for reduction'.format(row + 1))  # TODO should be debug logging
+        print('Will be running row {} for reduction'.format(
+            row + 1))  # TODO should be debug logging
         json_input = exporter.retrieve_row_info(row)
         reduction_inputs.append(json_input)
     if len(reduction_inputs) == 0:
@@ -70,7 +73,7 @@ def run_mantid(self):
             # TODO get this to work with launch_job_manager (example below for running from file):
             #cmd = ' '.join([pythonpath, mantid_ts_script, filename]).strip()
             #name = os.path.basename(filename).replace('.json', '')
-            #print(cmd)
+            # print(cmd)
             #self.launch_job_manager(job_name=name, script_to_run=cmd)
     if MANTID_TS_ENABLED:
         print('total_scattering module not found. Functionality disabled')
