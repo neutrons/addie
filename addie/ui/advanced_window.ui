@@ -43,6 +43,19 @@
      </layout>
     </item>
     <item>
+     <spacer name="verticalSpacer_4">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QGroupBox" name="groupBox">
@@ -87,6 +100,19 @@
        </spacer>
       </item>
      </layout>
+    </item>
+    <item>
+     <spacer name="verticalSpacer_3">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -185,6 +211,19 @@
        </widget>
       </item>
      </layout>
+    </item>
+    <item>
+     <spacer name="verticalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_8">
@@ -339,7 +378,7 @@
       <property name="sizeHint" stdset="0">
        <size>
         <width>20</width>
-        <height>346</height>
+        <height>40</height>
        </size>
       </property>
      </spacer>
@@ -397,8 +436,8 @@
    <slot>post_processing_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>136</x>
-     <y>104</y>
+     <x>143</x>
+     <y>149</y>
     </hint>
     <hint type="destinationlabel">
      <x>194</x>
@@ -413,8 +452,8 @@
    <slot>post_processing_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>62</x>
-     <y>94</y>
+     <x>83</x>
+     <y>149</y>
     </hint>
     <hint type="destinationlabel">
      <x>196</x>
@@ -445,8 +484,8 @@
    <slot>cache_dir_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>160</x>
-     <y>137</y>
+     <x>175</x>
+     <y>232</y>
     </hint>
     <hint type="destinationlabel">
      <x>562</x>
@@ -461,12 +500,44 @@
    <slot>output_dir_button_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>122</x>
-     <y>180</y>
+     <x>175</x>
+     <y>267</y>
     </hint>
     <hint type="destinationlabel">
      <x>124</x>
      <y>209</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>add_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>add_key_value()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>437</x>
+     <y>384</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>507</x>
+     <y>385</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>remove_selection_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>remove_key_value_selected()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>57</x>
+     <y>613</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>516</x>
+     <y>591</y>
     </hint>
    </hints>
   </connection>
@@ -476,5 +547,7 @@
   <slot>instrument_changed()</slot>
   <slot>cache_dir_button_clicked()</slot>
   <slot>output_dir_button_clicked()</slot>
+  <slot>add_key_value()</slot>
+  <slot>remove_key_value_selected()</slot>
  </slots>
 </ui>

@@ -5,6 +5,11 @@
     "stick_furnace",
     "aerodynamic_levitator"
   ],
+  "align_and_focus_powder_from_files_blacklist": [
+    "UnwrapRef",
+    "LowResRef",
+    "LowResSpectrumOffset"
+  ],
   "pdf": {
     "q_range": {
       "min": 0,

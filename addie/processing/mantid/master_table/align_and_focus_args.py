@@ -6,7 +6,7 @@ from addie.utilities import load_ui
 from addie.utilities.general import get_list_algo
 
 COLUMNS_WIDTH = [150, 150]
-BLACKLIST_ALGO = ["UnwrapRef", "LowResRef", "LowResSpectrumOffset"]
+
 
 class AlignAndFocusArgsHandling:
 
@@ -45,7 +45,7 @@ class AlignAndFocusArgsWindow(QMainWindow):
 
     def _init_list_algo_combobox(self):
         list_algo = get_list_algo('AlignAndFocusPowderFromFiles')
-        list_algo_without_blacklist = AlignAndFocusArgsWindow.remove_blacklist_algo(list_algo)
+        list_algo_without_blacklist = self.remove_blacklist_algo(list_algo)
         self.list_algo_without_blacklist = list_algo_without_blacklist
         self.populate_list_algo()
 
@@ -54,11 +54,10 @@ class AlignAndFocusArgsWindow(QMainWindow):
         self.create_clean_list_algo()
         self.ui.list_key_comboBox.addItems(self.unused_list_algo)
 
-    @staticmethod
-    def remove_blacklist_algo(list_algo):
+    def remove_blacklist_algo(self, list_algo):
         list_algo_without_blacklist = []
         for _algo in list_algo:
-            if not(_algo in BLACKLIST_ALGO):
+            if not(_algo in self.main_window.align_and_focus_from_files_blacklist):
                 list_algo_without_blacklist.append(_algo)
 
         return list_algo_without_blacklist
@@ -132,8 +131,8 @@ class AlignAndFocusArgsWindow(QMainWindow):
 
     def add_clicked(self):
         self._add_new_row_at_bottom()
-        self._check_remove_button()
         self.populate_list_algo()
+        self._check_remove_button()
         self.ui.list_key_comboBox.setFocus()
 
     def _add_new_row_at_bottom(self):
@@ -143,7 +142,6 @@ class AlignAndFocusArgsWindow(QMainWindow):
         value = str(self.ui.new_value_widget.text())
         self._add_row(row=nbr_row, key=key, value=value)
         self.ui.new_value_widget.setText("")
-        self.populate_list_algo()
 
     def get_current_selected_key(self):
         return str(self.ui.list_key_comboBox.currentText())

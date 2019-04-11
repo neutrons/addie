@@ -289,6 +289,10 @@ class MainWindow(QMainWindow):
     o_help_scans = None
     o_help_mantid = None
 
+    # list of key/value defined in the settings advanced window
+    global_key_value = {}
+    align_and_focus_powder_from_files_blacklist = []
+
     def __init__(self, parent=None, processing_mode=None):
         """ Initialization
         Parameters
