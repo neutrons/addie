@@ -6,6 +6,38 @@ import addie.calculate_gr.edit_sq_dialog
 from addie.calculate_gr.save_sq_dialog_message import SaveSqDialogMessageDialog
 
 
+def check_widgets_status(main_window):
+    number_of_sofq = main_window.calculategr_ui.comboBox_SofQ.count() - 1 # index 0 is "all"
+    if number_of_sofq > 0:
+        sofq_status = True
+        gr_status = True
+    else:
+        sofq_status = False
+        gr_status = False
+
+    list_sofq_ui = [main_window.calculategr_ui.pushButton_rescaleSq,
+                    main_window.calculategr_ui.pushButton_sqColorStyle,
+                    main_window.calculategr_ui.pushButton_editSofQ,
+                    main_window.calculategr_ui.pushButton_clearSofQ,
+                    main_window.calculategr_ui.pushButton_saveSQ,
+                    main_window.calculategr_ui.pushButton_showQMinMax,
+                    main_window.calculategr_ui.pushButton_generateGR]
+
+    for _ui in list_sofq_ui:
+        _ui.setEnabled(sofq_status)
+
+    list_gr_ui = [main_window.calculategr_ui.pushButton_saveGR,
+                  main_window.calculategr_ui.pushButton_rescaleGr,
+                  main_window.calculategr_ui.pushButton_grColorStyle,
+                  main_window.calculategr_ui.pushButton_generateSQ,
+                  main_window.calculategr_ui.pushButton_clearGrCanvas]
+
+    for _ui in list_gr_ui:
+        _ui.setEnabled(gr_status)
+
+    _tree_ui = main_window.calculategr_ui.frame_treeWidget_grWsList.children()[1]
+
+
 def load_sq(main_window):
     """
     Load S(Q) from file
@@ -58,6 +90,8 @@ def load_sq(main_window):
 
         # calculate and calculate G(R)
         generate_gr_step1(main_window)
+
+    check_widgets_status(main_window)
 
 
 def getDefaultDir(main_window, sub_dir):
@@ -370,6 +404,8 @@ def do_load_gr(main_window):
 
     # put the loaded G(r) workspace to tree 'workspaces'
     main_window.calculategr_ui.treeWidget_grWsList.add_child_main_item('workspaces', gr_ws_name)
+
+    check_widgets_status(main_window)
 
 
 def do_save_gr(main_window):
