@@ -6,6 +6,7 @@ from qtpy import QtGui, QtCore
 
 from addie.processing.mantid.master_table.utilities import LoadGroupingFile
 from addie.initialization.widgets import main_tab as main_tab_initialization
+from addie.initialization.widgets.main_tab import set_default_folder_path
 
 
 class ReductionConfigurationHandler:
@@ -34,7 +35,7 @@ class ReductionConfiguration(QDialog):
         QDialog.__init__(self, parent=parent)
         self.ui = load_ui('reduction_configuration_dialog.ui', baseinstance=self)
         self.init_widgets()
-        main_tab_initialization.set_default_folders_path(self.parent)
+        set_default_folder_path(self.parent)
 
     def init_widgets(self):
         '''init all widgets with values in case we already opened that window, or populated with
