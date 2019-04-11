@@ -1,5 +1,6 @@
 from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import QMainWindow, QFileDialog, QTableWidgetItem
+import numpy as np
 
 from addie.utilities import load_ui
 from addie.initialization.widgets import main_tab as main_tab_initialization
@@ -145,7 +146,21 @@ class AdvancedWindow(QMainWindow):
         selected_row_range = self._get_selected_row_range()
         self._remove_rows(selected_row_range)
         self.update_key_value_widgets()
+        self.update_global_key_value()
         self.populate_list_algo()
+
+    def update_global_key_value(self):
+        nbr_row = self.get_nbr_row()
+        global_key_value = {}
+        for _row in np.arange(nbr_row):
+            _key = self._get_cell_value(_row, 0)
+            _value = self._get_cell_value(_row, 1)
+            global_key_value[_key] = _value
+        self.parent.global_key_value = global_key_value
+
+    def _get_cell_value(self, row, column):
+        item = self.ui.key_value_table.item(row, column)
+        return str(item.text())
 
     def _what_state_remove_button_should_be(self):
         nbr_row = self.get_nbr_row()
