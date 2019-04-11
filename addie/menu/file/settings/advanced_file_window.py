@@ -120,7 +120,7 @@ class AdvancedWindow(QMainWindow):
         nbr_row = self.get_nbr_row()
         key = self.get_current_selected_key()
         value = str(self.ui.new_value_widget.text())
-        self.parent.global_key_value['key'] = value
+        self.parent.global_key_value[key] = value
         self._add_row(row=nbr_row, key=key, value=value)
         self.ui.new_value_widget.setText("")
 
