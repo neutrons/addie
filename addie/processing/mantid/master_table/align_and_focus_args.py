@@ -26,6 +26,7 @@ class AlignAndFocusArgsHandling:
 class AlignAndFocusArgsWindow(QMainWindow):
 
     list_algo_without_blacklist = None
+    unused_list_algo = None
 
     def __init__(self, main_window=None, key=None):
         self.main_window = main_window
@@ -43,7 +44,7 @@ class AlignAndFocusArgsWindow(QMainWindow):
 
     def _init_list_algo_combobox(self):
         list_algo = self.get_raw_list_algo()
-        list_algo_without_blacklist = self.remove_blacklist_algo(list_algo)
+        list_algo_without_blacklist = AlignAndFocusArgsWindow.remove_blacklist_algo(list_algo)
         self.list_algo_without_blacklist = list_algo_without_blacklist
         self.populate_list_algo()
 
@@ -58,7 +59,8 @@ class AlignAndFocusArgsWindow(QMainWindow):
         list_algo = [prop.name for prop in _alg.getProperties()]
         return list_algo
 
-    def remove_blacklist_algo(self, list_algo):
+    @staticmethod
+    def remove_blacklist_algo(list_algo):
         list_algo_without_blacklist = []
         for _algo in list_algo:
             if not(_algo in BLACKLIST_ALGO):
@@ -81,7 +83,6 @@ class AlignAndFocusArgsWindow(QMainWindow):
 
         else:
             self.unused_list_algo = list_algo
-
 
     def _set_column_widths(self):
         for _col, _width in enumerate(COLUMNS_WIDTH):
@@ -123,11 +124,13 @@ class AlignAndFocusArgsWindow(QMainWindow):
 
     def _add_new_row_at_bottom(self):
         nbr_row = self.get_nbr_row()
-        key = str(self.ui.new_key_widget.text())
+        key = self.get_current_selected_key()
         value = str(self.ui.new_value_widget.text())
         self._add_row(row=nbr_row, key=key, value=value)
-        self.ui.new_key_widget.setText("")
         self.ui.new_value_widget.setText("")
+
+    def get_current_selected_key(self):
+        return str(self.ui.list_key_comboBox.currentText())
 
     def _add_row(self, row=-1, key='', value=""):
         self.ui.key_value_table.insertRow(row)
