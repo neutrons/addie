@@ -66,9 +66,18 @@ class AdvancedWindow(QMainWindow):
         self.ui.centralwidget.setContentsMargins(10, 10, 10, 10)
 
         self.show_global_key_value_widgets(visible=_mantid_status)
-        if _mantid_status:
-            self.populate_list_algo()
-            self._set_column_widths()
+        self.init_global_key_value_widgets()
+
+    def init_global_key_value_widgets(self):
+        self.populate_list_algo()
+        self._set_column_widths()
+        self.init_table()
+
+    def init_table(self):
+        global_key_value = self.parent.global_key_value
+        for _row, _key in enumerate(global_key_value.keys()):
+            _value = global_key_value[_key]
+            self._add_row(row=_row, key=_key, value=_value)
 
     def show_global_key_value_widgets(self, visible=False):
         self.ui.global_key_value_groupBox.setVisible(visible)
