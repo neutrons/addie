@@ -1,10 +1,9 @@
 from __future__ import (absolute_import, division, print_function)
 import numpy as np
 from qtpy.QtWidgets import QMainWindow, QTableWidgetItem
-import mantid.simpleapi as mantid
-
 
 from addie.utilities import load_ui
+from addie.utilities.general import get_list_algo
 
 COLUMNS_WIDTH = [150, 150]
 BLACKLIST_ALGO = ["UnwrapRef", "LowResRef", "LowResSpectrumOffset"]
@@ -45,7 +44,7 @@ class AlignAndFocusArgsWindow(QMainWindow):
         self._init_list_algo_combobox()
 
     def _init_list_algo_combobox(self):
-        list_algo = self.get_raw_list_algo()
+        list_algo = get_list_algo('AlignAndFocusPowderFromFiles')
         list_algo_without_blacklist = AlignAndFocusArgsWindow.remove_blacklist_algo(list_algo)
         self.list_algo_without_blacklist = list_algo_without_blacklist
         self.populate_list_algo()
@@ -54,12 +53,6 @@ class AlignAndFocusArgsWindow(QMainWindow):
         self.ui.list_key_comboBox.clear()
         self.create_clean_list_algo()
         self.ui.list_key_comboBox.addItems(self.unused_list_algo)
-
-    def get_raw_list_algo(self):
-        _alg = mantid.AlgorithmManager.createUnmanaged('AlignAndFocusPowderFromFiles')
-        _alg.initialize()
-        list_algo = [prop.name for prop in _alg.getProperties()]
-        return list_algo
 
     @staticmethod
     def remove_blacklist_algo(list_algo):
