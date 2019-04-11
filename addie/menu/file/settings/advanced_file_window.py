@@ -179,8 +179,11 @@ class AdvancedWindow(QMainWindow):
         enable = self._what_state_remove_button_should_be()
         self.ui.remove_selection_button.setEnabled(enable)
 
+    def is_idl_selected(self):
+        return self.ui.idl_post_processing_button.isChecked()
+
     def post_processing_clicked(self):
-        if self.ui.idl_post_processing_button.isChecked():
+        if self.is_idl_selected():
             # _index = 0
             _post = 'idl'
             _idl_groupbox_visible = True
@@ -218,9 +221,33 @@ class AdvancedWindow(QMainWindow):
             self.parent.output_folder = str(_output_folder)
 
     def add_global_key_value_to_all_rows(self):
-        pass
+        if self.is_idl_selected():
+            return
 
+        global_list_key_value = self.parent.global_key_value
 
+        list_table_ui = self.parent.master_table_list_ui
+        if not list_table_ui:
+            return
+
+        for _random_key in list_table_ui.keys():
+            _entry = list_table_ui[_random_key]
+            current_local_key_value = _entry['align_and_focus_args_infos']
+            if current_local_key_value == {}:
+                _entry['align_and_focus_args_infos'] = global_list_key_value
+            else:
+                list_local_keys = current_local_key_value.keys()
+                list_global_keys = global_list_key_value.keys()
+                new_local_key_value = {}
+                for _key in list_local_keys:
+                    if _key in list_global_keys:
+                        new_local_key_value[_key] = current_local_key_value[_key]
+                    else:
+                        new_local_key_value[_key] = global_list_key_value[_key]
+                _entry['align_and_focus_args_infos'] = new_local_key_value
+            list_table_ui[_random_key] = _entry
+
+        self.parent.master_table_list_ui = list_table_ui
 
     def closeEvent(self, c):
         self.add_global_key_value_to_all_rows()

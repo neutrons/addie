@@ -57,7 +57,7 @@ class AlignAndFocusArgsWindow(QMainWindow):
     def remove_blacklist_algo(self, list_algo):
         list_algo_without_blacklist = []
         for _algo in list_algo:
-            if not(_algo in self.main_window.align_and_focus_from_files_blacklist):
+            if not(_algo in self.main_window.align_and_focus_powder_from_files_blacklist):
                 list_algo_without_blacklist.append(_algo)
 
         return list_algo_without_blacklist
