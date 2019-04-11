@@ -1,6 +1,7 @@
 from __future__ import (absolute_import, division, print_function)
 import numpy as np
 from qtpy.QtWidgets import QMainWindow, QTableWidgetItem
+from qtpy import QtCore
 
 from addie.utilities import load_ui
 from addie.utilities.general import get_list_algo
@@ -153,6 +154,7 @@ class AlignAndFocusArgsWindow(QMainWindow):
 
     def _set_item(self, text, row, column):
         key_item = QTableWidgetItem(text)
+        key_item.setFlags(QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
         self.ui.key_value_table.setItem(row, column, key_item)
 
     def remove_clicked(self):

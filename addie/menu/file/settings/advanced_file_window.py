@@ -1,6 +1,7 @@
 from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import QMainWindow, QFileDialog, QTableWidgetItem
 import numpy as np
+from qtpy import QtCore
 
 from addie.utilities import load_ui
 from addie.initialization.widgets import main_tab as main_tab_initialization
@@ -120,6 +121,7 @@ class AdvancedWindow(QMainWindow):
 
     def _set_item(self, text, row, column):
         key_item = QTableWidgetItem(text)
+        key_item.setFlags(QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
         self.ui.key_value_table.setItem(row, column, key_item)
 
     def _add_new_row_at_bottom(self):
