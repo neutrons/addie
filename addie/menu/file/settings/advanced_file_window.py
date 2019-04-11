@@ -64,8 +64,13 @@ class AdvancedWindow(QMainWindow):
 
         self.ui.centralwidget.setContentsMargins(10, 10, 10, 10)
 
-        self.populate_list_algo()
-        self._set_column_widths()
+        self.show_global_key_value_widgets(visible=_mantid_status)
+        if _mantid_status:
+            self.populate_list_algo()
+            self._set_column_widths()
+
+    def show_global_key_value_widgets(self, visible=False):
+        self.ui.global_key_value_groupBox.setVisible(visible)
 
     def _set_column_widths(self):
         for _col, _width in enumerate(COLUMNS_WIDTH):
@@ -189,6 +194,7 @@ class AdvancedWindow(QMainWindow):
         self.parent.post_processing = _post
         self.parent.activate_reduction_tabs() # hide or show right tabs
         self.parent.advanced_window_idl_groupbox_visible = _idl_groupbox_visible
+        self.show_global_key_value_widgets(visible= not _idl_groupbox_visible)
 
     def instrument_changed(self, index):
         self.parent.instrument["short_name"] = self.list_instrument_short_name[index]
@@ -211,5 +217,11 @@ class AdvancedWindow(QMainWindow):
             self.ui.output_dir_label.setText(str(_output_folder))
             self.parent.output_folder = str(_output_folder)
 
+    def add_global_key_value_to_all_rows(self):
+        pass
+
+
+
     def closeEvent(self, c):
+        self.add_global_key_value_to_all_rows()
         self.parent.advanced_window_ui = None

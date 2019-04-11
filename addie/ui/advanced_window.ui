@@ -228,7 +228,7 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_8">
       <item>
-       <widget class="QGroupBox" name="groupBox_2">
+       <widget class="QGroupBox" name="global_key_value_groupBox">
         <property name="title">
          <string>global Align and Focus Arguments</string>
         </property>
