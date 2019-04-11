@@ -78,11 +78,19 @@ class AlignAndFocusArgsWindow(QMainWindow):
         global_unused_list_algo = self.remove_from_list(original_list=list_algo,
                                                         to_remove=list_key_already_loaded)
 
-        local_list_key_loaded = self.local_list_key_loaded
+        local_list_key_loaded = self.get_local_list_key_loaded()
         global_and_local_unused_list_algo = self.remove_from_list(original_list=global_unused_list_algo,
                                                                   to_remove=local_list_key_loaded)
 
         self.unused_list_algo = global_and_local_unused_list_algo
+
+    def get_local_list_key_loaded(self):
+        nbr_row = self.ui.key_value_table.rowCount()
+        list_local_key_loaded = []
+        for _row in np.arange(nbr_row):
+            _item = str(self.ui.key_value_table.item(_row, 0).text())
+            list_local_key_loaded.append(_item)
+        return list_local_key_loaded
 
     def remove_from_list(self,
                          original_list=[],
@@ -160,6 +168,7 @@ class AlignAndFocusArgsWindow(QMainWindow):
         selected_row_range = self._get_selected_row_range()
         self._remove_rows(selected_row_range)
         self._check_remove_button()
+        self.populate_list_algo()
 
     def _remove_rows(self, row_range):
         first_row_selected = row_range[0]
