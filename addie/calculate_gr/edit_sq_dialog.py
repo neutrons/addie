@@ -151,49 +151,6 @@ class EditSofQDialog(QDialog):
         # clone G(r) to new name and add to tree
         generate_gr_step2(self._myParentWindow, [new_sq_ws_name])
 
-    # def do_edit_sq(self):
-    #     """handling for push button 'edit S(Q)' by reading the scale factor and shift
-    #     :return:
-    #     """
-    #     # read the scale and shift value
-    #     print('[DB...BAT] Shift = {0} Scale Factor = {1}'.format(self.ui.lineEdit_shift.text(),
-    #                                                              self.ui.lineEdit_scaleFactor.text()))
-    #
-    #     shift_str = str(self.ui.lineEdit_shift.text())
-    #     scale_str = str(self.ui.lineEdit_scaleFactor.text())
-    #     try:
-    #         # parse shift
-    #         if len(shift_str) == 0:
-    #             shift = 0
-    #             self.ui.lineEdit_shift.setText('0.')
-    #         else:
-    #             shift = float(self.ui.lineEdit_shift.text())
-    #
-    #         # parse scaling factor
-    #         if len(scale_str) == 0:
-    #             scale_factor = 1.
-    #             self.ui.lineEdit_scaleFactor.setText('1.')
-    #         else:
-    #             scale_factor = float(scale_str)
-    #     except ValueError as val_error:
-    #         print('[ERROR] Shift {0} or scale factor {1} cannot be converted to float due to {2}.'
-    #               ''.format(shift_str, scale_str, val_error))
-    #
-    #     # call edit_sq()
-    #     self.edit_sq(shift, scale_factor)
-    #
-    #     # enable mutex
-    #     self._scaleSlideMutex = True
-    #     self._shiftSlideMutex = True
-    #
-    #     # set sliders
-    #     self.set_slider_scale_value(scale_factor)
-    #     self.set_slider_shift_value(shift)
-    #
-    #     # disable mutex
-    #     self._scaleSlideMutex = False
-    #     self._shiftSlideMutex = False
-
     def do_quit(self):
         """
         close the window and quit
@@ -369,25 +326,6 @@ class EditSofQDialog(QDialog):
         """handling the events from a moving sliding bar such that a new S(Q) will be calculated
         :return:
         """
-        # # check whether mutex is on or off
-        # if self._shiftSlideMutex or self._scaleSlideMutex:
-        #     # return if either mutex is on: it is not a time to do calculation
-        #     return
-        #
-        # # read the value of sliders
-        # # note: change is [min, max].  and the default is [0, 100]
-        # shift_int = self.ui.horizontalSlider_shift.value()
-        # scale_int = self.ui.horizontalSlider_scale.value()
-        #
-        # # convert to double
-        # delta_shift = self._shiftMax - self._shiftMin
-        # delta_shift_slider = self.ui.horizontalSlider_shift.maximum() - self.ui.horizontalSlider_shift.minimum()
-        # shift = self._shiftMin + float(shift_int) / delta_shift_slider * delta_shift
-        #
-        # delta_scale = self._scaleMax - self._scaleMin
-        # delta_scale_slider = self.ui.horizontalSlider_scale.maximum() - self.ui.horizontalSlider_scale.minimum()
-        # scale = self._scaleMin + float(scale_int) / delta_scale_slider * delta_scale
-
         self.scale_slider_value_pressed()
         self.shift_slider_value_pressed()
 
