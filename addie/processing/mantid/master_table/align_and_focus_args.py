@@ -1,11 +1,13 @@
 from __future__ import (absolute_import, division, print_function)
 import numpy as np
 from qtpy.QtWidgets import QMainWindow, QTableWidgetItem
+import mantid.simpleapi as mantid
+
 
 from addie.utilities import load_ui
 
 COLUMNS_WIDTH = [150, 150]
-
+BLACKLIST_ALGO = ["UnwrapRef", "LowResRef", "LowResSpectrumOffset"]
 
 class AlignAndFocusArgsHandling:
 
@@ -23,6 +25,8 @@ class AlignAndFocusArgsHandling:
 
 class AlignAndFocusArgsWindow(QMainWindow):
 
+    list_algo_without_blacklist = None
+
     def __init__(self, main_window=None, key=None):
         self.main_window = main_window
         self.key = key
@@ -33,13 +37,61 @@ class AlignAndFocusArgsWindow(QMainWindow):
         self.init_widgets()
 
     def init_widgets(self):
+        self._init_previous_key_value()
+        self._set_column_widths()
+        self._init_list_algo_combobox()
+
+    def _init_list_algo_combobox(self):
+        list_algo = self.get_raw_list_algo()
+        list_algo_without_blacklist = self.remove_blacklist_algo(list_algo)
+        self.list_algo_without_blacklist = list_algo_without_blacklist
+        self.populate_list_algo()
+
+    def populate_list_algo(self):
+        self.ui.list_key_comboBox.clear()
+        self.create_clean_list_algo()
+        self.ui.list_key_comboBox.addItems(self.unused_list_algo)
+
+    def get_raw_list_algo(self):
+        _alg = mantid.AlgorithmManager.createUnmanaged('AlignAndFocusPowderFromFiles')
+        _alg.initialize()
+        list_algo = [prop.name for prop in _alg.getProperties()]
+        return list_algo
+
+    def remove_blacklist_algo(self, list_algo):
+        list_algo_without_blacklist = []
+        for _algo in list_algo:
+            if not(_algo in BLACKLIST_ALGO):
+                list_algo_without_blacklist.append(_algo)
+
+        return list_algo_without_blacklist
+
+    def create_clean_list_algo(self):
+        list_algo = self.list_algo_without_blacklist
+
         previous_key_value_dict = self._get_previous_key_value_dict()
-        for _row,_key in enumerate(previous_key_value_dict.keys()):
+        list_key_already_loaded = previous_key_value_dict.keys()
+
+        if list_key_already_loaded:
+            clean_list_algo = []
+            for _algo in list_algo:
+                if not(_algo in list_key_already_loaded):
+                    clean_list_algo.append(_algo)
+            self.unused_list_algo = clean_list_algo
+
+        else:
+            self.unused_list_algo = list_algo
+
+
+    def _set_column_widths(self):
+        for _col, _width in enumerate(COLUMNS_WIDTH):
+            self.ui.key_value_table.setColumnWidth(_col, _width)
+
+    def _init_previous_key_value(self):
+        previous_key_value_dict = self._get_previous_key_value_dict()
+        for _row, _key in enumerate(previous_key_value_dict.keys()):
             _value = previous_key_value_dict[_key]
             self._add_row(row=_row, key=_key, value=_value)
-
-        for _col,_width in enumerate(COLUMNS_WIDTH):
-            self.ui.key_value_table.setColumnWidth(_col, _width)
 
     def _get_previous_key_value_dict(self):
         master_table_list_ui = self.main_window.master_table_list_ui[self.key]
@@ -66,7 +118,8 @@ class AlignAndFocusArgsWindow(QMainWindow):
     def add_clicked(self):
         self._add_new_row_at_bottom()
         self._check_remove_button()
-        self.ui.new_key_widget.setFocus()
+        self.populate_list_algo()
+        self.ui.list_key_comboBox.setFocus()
 
     def _add_new_row_at_bottom(self):
         nbr_row = self.get_nbr_row()

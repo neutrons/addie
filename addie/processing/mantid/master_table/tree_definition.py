@@ -194,7 +194,7 @@ tree_dict['vanadium']['name'] = 'Normalization'
 tree_dict['vanadium']['children'] = vanadium_children_1
 
 tree_dict['align_and_focus_args'] = copy.deepcopy(base_dict)
-tree_dict['align_and_focus_args']['name'] = 'AlignAndFocusArgs'
+tree_dict['align_and_focus_args']['name'] = 'Align and Focus Args.'
 
 LIST_SEARCH_CRITERIA = {'nom': ['Chemical Formula',
                                 'Title',
