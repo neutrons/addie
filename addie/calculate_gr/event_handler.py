@@ -6,7 +6,7 @@ import addie.calculate_gr.edit_sq_dialog
 from addie.calculate_gr.save_sq_dialog_message import SaveSqDialogMessageDialog
 
 
-def check_widgets_status(main_window):
+def check_widgets_status(main_window, enable_gr_widgets=False):
     number_of_sofq = main_window.calculategr_ui.comboBox_SofQ.count() - 1 # index 0 is "all"
     if number_of_sofq > 0:
         sofq_status = True
@@ -14,6 +14,9 @@ def check_widgets_status(main_window):
     else:
         sofq_status = False
         gr_status = False
+
+    if enable_gr_widgets:
+        gr_status=True
 
     list_sofq_ui = [main_window.calculategr_ui.pushButton_rescaleSq,
                     main_window.calculategr_ui.pushButton_sqColorStyle,
@@ -405,7 +408,7 @@ def do_load_gr(main_window):
     # put the loaded G(r) workspace to tree 'workspaces'
     main_window.calculategr_ui.treeWidget_grWsList.add_child_main_item('workspaces', gr_ws_name)
 
-    check_widgets_status(main_window)
+    check_widgets_status(main_window, enable_gr_widgets=True)
 
 
 def do_save_gr(main_window):
