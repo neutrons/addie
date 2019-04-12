@@ -403,12 +403,6 @@ class FigureCanvas(FigureCanvasQTAgg):
         Update a plot line or a series plot line
         """
 
-        print("in updateLine")
-        print("linestyle: {}".format(linestyle))
-        print("linecolor: {}".format(linecolor))
-        print("marker: {}".format(marker))
-        print("markercolor: {}".format(markercolor))
-
         line = self._lineDict[ikey]
         if line is None:
             print('[ERROR] Line (key = %d) is None. Unable to update' % ikey)
