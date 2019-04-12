@@ -6,6 +6,13 @@
     "aerodynamic_levitator"
   ],
   "align_and_focus_powder_from_files_blacklist": [
+    "Filename",
+    "CacheDir",
+    "OutputWorkspace",
+    "CallFileName",
+    "GroupFileName",
+    "ResampleX",
+    "Dspacing",
     "UnwrapRef",
     "LowResRef",
     "LowResSpectrumOffset"
