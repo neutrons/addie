@@ -554,6 +554,7 @@ def do_set_gofr_color_marker(main_window):
     """
     set the color/marker to plots on G(r) canvas
     """
+
     # get the line ID, color, and marker
     plot_id_label_list = main_window.calculategr_ui.graphicsView_gr.get_current_plots()
 
@@ -565,6 +566,7 @@ def do_set_gofr_color_marker(main_window):
         pass
     else:
         # set the color and mark
+
         for plot_id in plot_id_list:
             main_window.calculategr_ui.graphicsView_gr.updateLine(ikey=plot_id,
                                                                   linecolor=color,

@@ -397,11 +397,18 @@ class FigureCanvas(FigureCanvasQTAgg):
             # set flag on
             self._isLegendOn = True
 
-    def updateLine(self, ikey, wkspname=None, wkspindex=None, vecx=None, vecy=None,
+    def updateLine(self, ikey=-1, wkspname=None, wkspindex=None, vecx=None, vecy=None,
                    linestyle=None, linecolor=None, marker=None, markercolor=None):
         """
         Update a plot line or a series plot line
         """
+
+        print("in updateLine")
+        print("linestyle: {}".format(linestyle))
+        print("linecolor: {}".format(linecolor))
+        print("marker: {}".format(marker))
+        print("markercolor: {}".format(markercolor))
+
         line = self._lineDict[ikey]
         if line is None:
             print('[ERROR] Line (key = %d) is None. Unable to update' % ikey)

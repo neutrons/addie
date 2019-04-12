@@ -432,6 +432,7 @@ class MplGraphicsView(QWidget):
     def updateLine(self, ikey, wkspname='', wkspindex=0, linestyle=None, linecolor=None, marker=None, markercolor=None):
         """update a line's set up
         """
+
         # check
         assert isinstance(ikey, int), 'Line key must be an integer.'
         assert ikey in self._my1DPlotDict, 'Line with ID %d is not on canvas. ' % ikey
@@ -441,7 +442,9 @@ class MplGraphicsView(QWidget):
             ymin, ymax = self._driver.get_y_range(wkspname, wkspindex)
             self._my1DPlotMinYDict[ikey] = ymin
             self._my1DPlotMaxYDict[ikey] = ymax
-        self._myCanvas.updateLine(ikey, wkspname, wkspindex, linestyle, linecolor, marker, markercolor)
+        self._myCanvas.updateLine(ikey=ikey, wkspname=wkspname, wkspindex=wkspindex,
+                                  linestyle=linestyle, linecolor=linecolor, marker=marker,
+                                  markercolor=markercolor)
 
     def update_indicator(self, i_key, color):
         """
