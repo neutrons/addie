@@ -8,6 +8,8 @@ from addie.utilities import load_ui
 from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
 from addie.utilities.math_tools import is_number, volume_of_cylinder, volume_of_hollow_cylinder, volume_of_sphere
 
+from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_MASS_DENSITY
+
 
 class MassDensityHandler:
 
@@ -31,6 +33,8 @@ class MassDensityWindow(QMainWindow):
     total_number_of_atoms = np.NaN
     total_molecular_mass = np.NaN
 
+    column = 0
+
     def __init__(self, parent=None, key=None, data_type='sample'):
         self.parent = parent
         self.key = key
@@ -39,6 +43,11 @@ class MassDensityWindow(QMainWindow):
         QMainWindow.__init__(self, parent=parent)
         self.ui = load_ui('mass_density.ui', baseinstance=self)
         self.init_widgets()
+        self.set_column_index()
+
+    def set_column_index(self):
+        self.column = INDEX_OF_COLUMNS_WITH_MASS_DENSITY[0] if self.data_type == 'sample' else \
+            INDEX_OF_COLUMNS_WITH_MASS_DENSITY[1]
 
     def init_widgets(self):
         self.ui.number_density_units.setText(u"Atoms/\u212B\u00B3")
@@ -268,6 +277,7 @@ class MassDensityWindow(QMainWindow):
         self.save()
         o_table = TableRowHandler(main_window=self.parent)
         o_table.transfer_widget_states(from_key=self.key, data_type=self.data_type)
+        self.parent.check_master_table_column_highlighting(column=self.column)
         self.close()
 
     def reject(self):

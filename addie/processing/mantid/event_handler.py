@@ -19,6 +19,8 @@ except ImportError:
     print('pyoncat module not found. Functionality disabled')
     ONCAT_ENABLED = False
 
+from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_MASS_DENSITY
+
 
 def personalization_table_clicked(main_window):
     _ = TableTreeHandler(parent=main_window)
@@ -210,6 +212,7 @@ def sample_mass_density_button_pressed(main_window, key):
 def sample_mass_density_line_edit_entered(main_window, key):
     o_table = TableRowHandler(main_window=main_window)
     o_table.transfer_widget_states(from_key=key, data_type='sample')
+    main_window.check_master_table_column_highlighting(column=INDEX_OF_COLUMNS_WITH_MASS_DENSITY[0])
 
 
 def sample_shape_changed(main_window, index, key):
@@ -259,6 +262,7 @@ def normalization_mass_density_button_pressed(main_window, key):
 def normalization_mass_density_line_edit_entered(main_window, key):
     o_table = TableRowHandler(main_window=main_window)
     o_table.transfer_widget_states(from_key=key, data_type='normalization')
+    main_window.check_master_table_column_highlighting(column=INDEX_OF_COLUMNS_WITH_MASS_DENSITY[1])
 
 
 def normalization_shape_changed(main_window, text, key):
