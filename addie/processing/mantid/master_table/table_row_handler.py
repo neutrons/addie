@@ -135,7 +135,7 @@ class TableRowHandler:
     # utilities
 
     def generate_random_key(self):
-        return random.randint(0, 1e5)
+        return random.randint(0, 1e8)
 
     def set_row_height(self, row, height):
         self.table_ui.setRowHeight(row, height)
