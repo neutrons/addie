@@ -7,7 +7,7 @@ import os
 import itertools
 import psutil
 from collections import OrderedDict
-from qtpy.QtCore import QProcess, Qt
+from qtpy.QtCore import QProcess
 from qtpy.QtGui import QIcon
 from qtpy.QtWidgets import (QApplication, QLabel, QMainWindow, QTableWidgetItem, QWidget)
 
@@ -17,7 +17,7 @@ from addie.utilities import load_ui
 
 import addie.menu.event_handler as menu_event_handler
 
-from addie.help_handler.help_gui import HelpGui, help_button_activator
+from addie.help_handler.help_gui import help_button_activator
 
 from addie.utilities.job_monitor_thread import JobMonitorThread
 from addie.utilities.job_status_handler import JobStatusHandler
@@ -39,6 +39,7 @@ from addie.mantid_handler.mantid_reduction import GlobalMantidReduction
 from addie.mantid_handler.mantid_thread import MantidThread
 
 from addie.processing.mantid.master_table.align_and_focus_args import AlignAndFocusArgsHandling
+from addie.processing.mantid.master_table.column_highlighting import ColumnHighlighting
 
 # PyONcat
 try:
@@ -53,6 +54,8 @@ import addie.processing.mantid.event_handler as processing_event_handler
 
 import addie.addiedriver as driver
 import addie.calculate_gr.edit_sq_dialog
+
+from addie.icons import icons_rc # necessary to see all the icons
 
 from addie.calculate_gr.pdf_lines_manager import PDFPlotManager
 
@@ -901,6 +904,10 @@ class MainWindow(QMainWindow):
 
     def load_ascii(self, filename=''):
         processing_event_handler.load_ascii(main_window=self, filename=filename)
+
+    def check_master_table_column_highlighting(self):
+        o_highlights = ColumnHighlighting(main_window=self)
+        o_highlights.check()
 
     def apply_clicked(self):
         # do stuff
