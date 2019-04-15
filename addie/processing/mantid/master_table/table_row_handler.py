@@ -12,6 +12,8 @@ from addie.processing.mantid.master_table.selection_handler import TransferH3Tab
 from addie.processing.mantid.master_table.periodic_table.chemical_formula_handler import format_chemical_formula_equation
 from addie.processing.mantid.master_table.tree_definition import COLUMN_DEFAULT_HEIGHT, CONFIG_BUTTON_HEIGHT, CONFIG_BUTTON_WIDTH
 
+from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_SHAPE
+
 
 class TableRowHandler:
 
@@ -29,6 +31,8 @@ class TableRowHandler:
 
     # global methods
     def shape_changed(self, shape_index=0, key=None, data_type='sample'):
+
+        column = INDEX_OF_COLUMNS_SHAPE[0] if data_type == 'sample' else INDEX_OF_COLUMNS_SHAPE[1]
 
         def update_ui(ui=None, new_list=[]):
             '''repopulate the ui with the new list and select old item selected
@@ -93,6 +97,8 @@ class TableRowHandler:
 
         # change state of other widgets of the same column if they are selected
         self.transfer_widget_states(from_key=key, data_type=data_type)
+
+        self.main_window.check_master_table_column_highlighting(column=column)
 
     def abs_correction_changed(self, value='', key=None, data_type='sample'):
         # change state of other widgets of the same column if they are selected
