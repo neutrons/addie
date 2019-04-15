@@ -58,7 +58,6 @@ h2_COLUMNS_WIDTH = [h3_COLUMNS_WIDTH[0], #0
                     h3_COLUMNS_WIDTH[24], #20
                     ]
 
-
 h1_COLUMNS_WIDTH = [h3_COLUMNS_WIDTH[0],
                     h3_COLUMNS_WIDTH[1],
                     np.sum(h3_COLUMNS_WIDTH[2:13]),
@@ -83,7 +82,6 @@ INDEX_OF_COLUMNS_WITH_COMBOBOX = [INDEX_OF_COLUMNS_SHAPE[0],
                                   INDEX_OF_MULTI_SCATTERING_CORRECTION[1],
                                   INDEX_OF_INELASTIC_CORRECTION[1],
                                   ]
-
 
 INDEX_OF_COLUMNS_WITH_CHECKBOX = [0]
 INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA = [5, 16]
