@@ -70,9 +70,21 @@ INDEX_OF_COLUMNS_SEARCHABLE = [1, 2, 3, 4, 7, 13, 14, 15, 18]
 INDEX_OF_SPECIAL_COLUMNS_SEARCHABLE = [5, 6, 16, 17]   # where we need to look inside the widget_cell, not only item
 
 INDEX_OF_COLUMNS_SHAPE = [8, 19]
+INDEX_OF_ABS_CORRECTION = [10, 21]
+INDEX_OF_MULTI_SCATTERING_CORRECTION = [11, 22]
+INDEX_OF_INELASTIC_CORRECTION = [12, 23]
 
-INDEX_OF_COLUMNS_WITH_COMBOBOX = [INDEX_OF_COLUMNS_SHAPE[0], 10, 11, 12,
-                                  INDEX_OF_COLUMNS_SHAPE[1], 21, 22, 23]
+INDEX_OF_COLUMNS_WITH_COMBOBOX = [INDEX_OF_COLUMNS_SHAPE[0],
+                                  INDEX_OF_ABS_CORRECTION[0],
+                                  INDEX_OF_MULTI_SCATTERING_CORRECTION[0],
+                                  INDEX_OF_INELASTIC_CORRECTION,
+                                  INDEX_OF_COLUMNS_SHAPE[1],
+                                  INDEX_OF_ABS_CORRECTION[1],
+                                  INDEX_OF_MULTI_SCATTERING_CORRECTION[1],
+                                  INDEX_OF_INELASTIC_CORRECTION[1],
+                                  ]
+
+
 INDEX_OF_COLUMNS_WITH_CHECKBOX = [0]
 INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA = [5, 16]
 INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS = [9, 20]

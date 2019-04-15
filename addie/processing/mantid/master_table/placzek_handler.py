@@ -2,6 +2,8 @@ from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import QMainWindow
 from addie.utilities import load_ui
 
+from addie.processing.mantid.master_table.tree_definition import INDEX_OF_INELASTIC_CORRECTION
+
 
 class PlaczekHandler:
 
@@ -20,6 +22,7 @@ class PlaczekWindow(QMainWindow):
     parent = None
     data_type = None
     key = None
+    column = -1
 
     def __init__(self, parent=None, key=None, data_type='sample'):
         self.parent = parent
@@ -30,6 +33,10 @@ class PlaczekWindow(QMainWindow):
         self.ui = load_ui('placzek.ui', baseinstance=self)
 
         self.init_widgets()
+        self.set_column()
+
+    def set_column(self):
+        self.column = INDEX_OF_INELASTIC_CORRECTION[0] if self.data_type=='sample' else INDEX_OF_INELASTIC_CORRECTION[1]
 
     def init_widgets(self):
         '''initialize the widgets in the state we left them last time (for the same row)'''
@@ -104,6 +111,7 @@ class PlaczekWindow(QMainWindow):
 
     def ok_pressed(self):
         self.save_widgets()
+        self.parent.check_master_table_column_highlighting(column=self.column)
         self.close()
 
     def cancel_pressed(self):

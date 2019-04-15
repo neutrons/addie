@@ -12,7 +12,10 @@ from addie.processing.mantid.master_table.selection_handler import TransferH3Tab
 from addie.processing.mantid.master_table.periodic_table.chemical_formula_handler import format_chemical_formula_equation
 from addie.processing.mantid.master_table.tree_definition import COLUMN_DEFAULT_HEIGHT, CONFIG_BUTTON_HEIGHT, CONFIG_BUTTON_WIDTH
 
-from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_SHAPE
+from addie.processing.mantid.master_table.tree_definition import (INDEX_OF_COLUMNS_SHAPE,
+                                                                  INDEX_OF_ABS_CORRECTION,
+                                                                  INDEX_OF_MULTI_SCATTERING_CORRECTION,
+                                                                  INDEX_OF_INELASTIC_CORRECTION)
 
 
 class TableRowHandler:
@@ -29,10 +32,15 @@ class TableRowHandler:
         o_transfer = TransferH3TableWidgetState(parent=self.main_window)
         o_transfer.transfer_states(from_key=from_key, data_type=data_type)
 
+    def get_column(self, data_type='sample', sample_norm_column=[]):
+        column = sample_norm_column[0] if data_type == 'sample' else sample_norm_column[1]
+        return column
+
     # global methods
     def shape_changed(self, shape_index=0, key=None, data_type='sample'):
 
-        column = INDEX_OF_COLUMNS_SHAPE[0] if data_type == 'sample' else INDEX_OF_COLUMNS_SHAPE[1]
+        column = self.get_column(data_type=data_type,
+                                 sample_norm_column=INDEX_OF_COLUMNS_SHAPE)
 
         def update_ui(ui=None, new_list=[]):
             '''repopulate the ui with the new list and select old item selected
@@ -104,6 +112,10 @@ class TableRowHandler:
         # change state of other widgets of the same column if they are selected
         self.transfer_widget_states(from_key=key, data_type=data_type)
 
+        column = self.get_column(data_type=data_type,
+                                 sample_norm_column=INDEX_OF_ABS_CORRECTION)
+        self.main_window.check_master_table_column_highlighting(column=column)
+
     def inelastic_correction_changed(self, value=None, key=None, data_type='sample'):
         show_button = True
         if value == 0:
@@ -115,9 +127,16 @@ class TableRowHandler:
         # change state of other widgets of the same column if they are selected
         self.transfer_widget_states(from_key=key, data_type=data_type)
 
+        column = self.get_column(data_type=data_type,
+                                 sample_norm_column=INDEX_OF_INELASTIC_CORRECTION)
+        self.main_window.check_master_table_column_highlighting(column=column)
+
     def multi_scattering_correction(self, value='', key=None, data_type='sample'):
         # change state of other widgets of the same column if they are selected
         self.transfer_widget_states(from_key=key, data_type=data_type)
+        column = self.get_column(data_type=data_type,
+                                 sample_norm_column=INDEX_OF_MULTI_SCATTERING_CORRECTION)
+        self.main_window.check_master_table_column_highlighting(column=column)
 
     def placzek_button_pressed(self, key=None, data_type='sample'):
         PlaczekHandler(parent=self.main_window, key=key, data_type=data_type)
