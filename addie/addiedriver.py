@@ -451,33 +451,33 @@ class AddieDriver(object):
 
         return sq_ws_name, q_min, q_max
 
-    def save_ascii(self, ws_name, file_name, gr_file_type, comment=''):
+    def save_ascii(self, ws_name, file_name, filetype, comment=''):
         """
         save ascii for G(r) or S(Q)
         Args:
             ws_name:
             file_name:
-            gr_file_type: xye, csv, rmcprofile, dat
+            filetype: xye, csv, rmcprofile, dat
             comment: user comment to the file
 
         Returns:
 
         """
-        assert isinstance(ws_name, str), 'blabla'
-        assert isinstance(file_name, str), 'blabla'
-        assert isinstance(gr_file_type, str), 'GofR file type {0} must be a supported string.'.format(gr_file_type)
+        assert isinstance(filetype, str), 'GofR file type {0} must be a supported string.'.format(filetype)
 
-        if gr_file_type == 'xye':
+        if filetype == 'xye':
             simpleapi.SaveAscii(InputWorkspace=ws_name, Filename=file_name, Separator='Space')
-        elif gr_file_type == 'csv':
+        elif filetype == 'csv':
             simpleapi.SaveAscii(InputWorkspace=ws_name, Filename=file_name, Separator='CSV')
-        elif gr_file_type == 'rmcprofile' or gr_file_type == 'dat':
+        elif filetype == 'rmcprofile' or filetype == 'dat':
             self.export_to_rmcprofile(ws_name, file_name, comment=comment)
-        elif gr_file_type == 'gr':
+        elif filetype == 'gr':
             simpleapi.SavePDFGui(InputWorkspace=ws_name, Filename=file_name)
+        elif filetype == 'sq':
+            simpleapi.SaveAscii(InputWorkspace=ws_name, Filename=file_name, Separator='Space')
         else:
             # non-supported type
-            raise RuntimeError('G(r) or S(Q) file type {0} is not supported.'.format(gr_file_type))
+            raise RuntimeError('G(r) or S(Q) file type "{0}" is not supported.'.format(filetype))
 
     @staticmethod
     def write_gss_file(ws_name_list, gss_file_name):
