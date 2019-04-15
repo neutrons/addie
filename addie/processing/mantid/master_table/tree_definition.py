@@ -76,8 +76,7 @@ INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS = [9, 20]
 INDEX_OF_COLUMNS_WITH_MASS_DENSITY = [6, 17]
 INDEX_OF_COLUMNS_WITH_ITEMS = INDEX_OF_COLUMNS_SEARCHABLE
 
-LIST_COLUMNS_TO_SEARCH_FOR_FULL_HIGHLIGTHING = [2,  # sample runs
-                                                3,  # sample background runs
+LIST_COLUMNS_TO_SEARCH_FOR_FULL_HIGHLIGTHING = [3,  # sample background runs
                                                 4,  # sample background background
                                                 5,  # sample chemical formula
                                                 6,  # sample mass density
