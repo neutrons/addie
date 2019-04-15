@@ -6,6 +6,8 @@ def get_save_file(parent, directory=None, caption=None, filter=dict()):
     '''
     This is operating under the assumption that the file_filters parameter is a dict of filter:extension
 
+    The filename will have the file extension appended if one isn't already found on it
+
     It returns a pair (<filename with extension>, <extension>). In the case of user cancelling, the filename
     returned is None
     '''
@@ -45,7 +47,6 @@ def get_save_file(parent, directory=None, caption=None, filter=dict()):
 
     # determine the type and add the extension
     extension = os.path.splitext(str(filename))[-1]
-    print('EXTENSION: {}'.format(extension))
     filetype = filter.get(filefilter, None)
     if filetype is None:
         filetype = extension.replace('.', '')
