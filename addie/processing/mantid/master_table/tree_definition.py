@@ -76,6 +76,25 @@ INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS = [9, 20]
 INDEX_OF_COLUMNS_WITH_MASS_DENSITY = [6, 17]
 INDEX_OF_COLUMNS_WITH_ITEMS = INDEX_OF_COLUMNS_SEARCHABLE
 
+LIST_COLUMNS_TO_SEARCH_FOR_FULL_HIGHLIGTHING = [2,  # sample runs
+                                                3,  # sample background runs
+                                                4,  # sample background background
+                                                5,  # sample chemical formula
+                                                6,  # sample mass density
+                                                7,  # sample packing fraction
+                                                8, 9,  # sample geometry shape and dimensions
+                                                10, 11, 12,  # Sample correction
+                                                13,  # normalization  runs
+                                                14,  # normalization background runs
+                                                15,  # normalization background background
+                                                16,  # normalization chemical formula
+                                                17,  # normalization mass density
+                                                18,  # normalization packging fraction
+                                                19, 20,  # normalization geometry shape and dimensions
+                                                21, 22, 23,  # normalization correction
+                                                24,  # Align and Focus Args
+                                                ]
+
 SAMPLE_FIRST_COLUMN = 2
 NORMALIZATION_FIRST_COLUMN = 13
 
