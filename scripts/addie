@@ -3,15 +3,13 @@ from __future__ import (absolute_import, division, print_function)
 
 import copy
 import sys
-import numpy as np
 import os
 import itertools
 import psutil
 from collections import OrderedDict
 from qtpy.QtCore import QProcess, Qt
 from qtpy.QtGui import QIcon
-from qtpy import QtGui
-from qtpy.QtWidgets import (QApplication, QFileDialog, QLabel, QMainWindow, QMessageBox, QTableWidgetItem, QVBoxLayout, QWidget)
+from qtpy.QtWidgets import (QApplication, QLabel, QMainWindow, QTableWidgetItem, QWidget)
 
 from addie import __version__
 from addie.initialization.widgets.configuration import ConfigurationInitializer
@@ -26,18 +24,11 @@ from addie.utilities.job_status_handler import JobStatusHandler
 from addie.utilities.logbook_thread import LogbookThread
 from addie.utilities.logbook_handler import LogbookHandler
 
-#from addie.initialization.widgets.init_step1 import InitStep1
-
 from addie.autoNOM.step1_gui_handler import Step1GuiHandler
 import addie.autoNOM.event_handler as autonom_event_handler
 
-from addie.initialization.widgets.init_step2 import InitStep2
-from addie.processing.idl.populate_background_widgets import PopulateBackgroundWidgets
 from addie.processing.idl.step2_gui_handler import Step2GuiHandler
 from addie.processing.idl.table_handler import TableHandler as IdlTableHandler
-from addie.processing.idl.create_sample_files import CreateSampleFiles
-from addie.processing.idl.create_ndsum_file import CreateNdsumFile
-from addie.processing.idl.run_ndabs import RunNDabs
 from addie.processing.idl.run_sum_scans import RunSumScans
 from addie.processing.idl.run_thread import RunThread
 
@@ -47,38 +38,23 @@ from addie.mantid_handler.browse_file_folder_handler import BrowseFileFolderHand
 from addie.mantid_handler.mantid_reduction import GlobalMantidReduction
 from addie.mantid_handler.mantid_thread import MantidThread
 
-from addie.processing.mantid.master_table.master_table_loader import FromDictionaryToTableUi
-from addie.processing.mantid.master_table.table_tree_handler import TableInitialization, TableConfig, H3TableHandler
-from addie.processing.mantid.master_table.table_tree_handler import SaveConfigInterface, TableTree
-from addie.processing.mantid.master_table import *
-from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
-from addie.processing.mantid.master_table.geometry_handler import DimensionsSetter
-from addie.processing.mantid.master_table.periodic_table.material_handler import MaterialHandler
-from addie.processing.mantid.master_table.mass_density_handler import MassDensityHandler
 from addie.processing.mantid.master_table.align_and_focus_args import AlignAndFocusArgsHandling
 
 # PyONcat
 try:
-    from addie.processing.mantid.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
+    from addie.processing.mantid.master_table.import_from_database.import_from_database_handler import \
+        ImportFromDatabaseHandler
     ONCAT_ENABLED = True
 except ImportError:
     print('pyoncat module not found. Functionality disabled')
     ONCAT_ENABLED = False
 
-from addie.processing.mantid.master_table.import_from_run_number_handler import ImportFromRunNumberHandler
-from addie.processing.mantid.master_table.import_from_database.load_into_master_table import LoadIntoMasterTable
 import addie.processing.mantid.event_handler as processing_event_handler
 
 import addie.addiedriver as driver
-# import addie.utilities.specify_plots_style as ps
 import addie.calculate_gr.edit_sq_dialog
 
 from addie.calculate_gr.pdf_lines_manager import PDFPlotManager
-
-from addie.rietveld.braggview import BraggView
-from addie.rietveld.braggtree import BraggTree
-
-from addie.icons import icons_rc
 
 from addie.initialization.widgets import main_tab as main_tab_initialization
 from addie.initialization.widgets import autonom_tab as autonom_tab_initialization
@@ -675,6 +651,28 @@ class MainWindow(QMainWindow):
     def set_bragg_ws_to_plot(self, gss_group_name):
         rietveld_event_handler.set_bragg_ws_to_plot(self, gss_group_name)
 
+    def mantid_browse_calibration_clicked(self):
+        o_mantid_gui = BrowseFileFolderHandler(parent=self)
+        o_mantid_gui.browse_file(type='calibration')
+
+    def mantid_browse_characterization_clicked(self):
+        o_mantid_gui = BrowseFileFolderHandler(parent=self)
+        o_mantid_gui.browse_file(type='characterization')
+
+    def mantid_output_directory_clicked(self):
+        o_mantid_gui = BrowseFileFolderHandler(parent=self)
+        o_mantid_gui.browse_folder()
+
+    def do_mantid_run_reduction(self):
+        o_mantid_run = GlobalMantidReduction(parent=self)
+        o_mantid_run.run()
+
+    def check_mantid_gui(self):
+        o_gui = Step2GuiHandler(main_window=self)
+        o_gui.check_gui()
+
+    def help_button_clicked_mantid(self):
+        help_button_activator(parent=self, button_name="mantid")
     # G(R) tab
 
     def do_generate_gr(self):
@@ -748,17 +746,10 @@ class MainWindow(QMainWindow):
         """
         Write a command (python script) to ipython console
         Parameters
-        ----------
-        script
-
-        Returns
-        -------
-
         """
         # check
         assert isinstance(script, str)
 
-        #
         if len(script) == 0:
             # ignore
             return
@@ -766,45 +757,16 @@ class MainWindow(QMainWindow):
             # write to the console
             self.ui.dockWidget_ipython.execute(script)
 
-        return
-
     def update_sq_boundary(self, boundary_index, new_position):
         calculategr_event_handler.update_sq_boundary(self, boundary_index, new_position)
 
     def add_edited_sofq(self, sofq_name, edited_sq_name, shift_value, scale_factor_value):
-        calculategr_event_handler.add_edited_sofq(self, sofq_name, edited_sq_name, shfit_value, scale_factor_value)
+        calculategr_event_handler.add_edited_sofq(self, sofq_name, edited_sq_name, shift_value, scale_factor_value)
 
     def has_edit_sofq(self, raw_sofq_name, shift_value, scale_factor_value):
         calculategr_event_handler.has_edit_sofq(self, raw_sofq_name, shift_value, scale_factor_value)
 
-    # Rietveld
-
-    def mantid_browse_calibration_clicked(self):
-        o_mantid_gui = BrowseFileFolderHandler(parent=self)
-        o_mantid_gui.browse_file(type='calibration')
-
-    def mantid_browse_characterization_clicked(self):
-        o_mantid_gui = BrowseFileFolderHandler(parent=self)
-        o_mantid_gui.browse_file(type='characterization')
-
-    def mantid_output_directory_clicked(self):
-        o_mantid_gui = BrowseFileFolderHandler(parent=self)
-        o_mantid_gui.browse_folder()
-
-    def do_mantid_run_reduction(self):
-        o_mantid_run = GlobalMantidReduction(parent=self)
-        o_mantid_run.run()
-
-    def check_mantid_gui(self):
-        o_gui = Step2GuiHandler(main_window=self)
-        o_gui.check_gui()
-
-    def help_button_clicked_mantid(self):
-        help_button_activator(parent=self, button_name="mantid")
-
-    # Mantid
-
-    # master table
+    # Master table
     def personalization_table_clicked(self):
         processing_event_handler.personalization_table_clicked(self)
 
@@ -841,9 +803,6 @@ class MainWindow(QMainWindow):
     def resizing_h3(self, index_column, old_size, new_size):
         processing_event_handler.resizing_h3(self, index_column, old_size, new_size)
 
-    # def init_widgets(self):
-    #     pass
-    #
     def init_tree(self):
         processing_event_handler.init_tree(self)
 
@@ -853,7 +812,7 @@ class MainWindow(QMainWindow):
     def master_table_select_state_changed(self, state, key):
         processing_event_handler.master_table_select_state_changed(self, state, key)
 
-    ## sample columns
+    # sample columns
     def master_table_sample_material_button_pressed(self, key):
         processing_event_handler.sample_material_button_pressed(self, key)
 
@@ -941,8 +900,7 @@ class MainWindow(QMainWindow):
         processing_event_handler.reduction_configuration_button_clicked(self)
 
     def load_ascii(self, filename=''):
-        o_ascii_loader = AsciiLoader(parent=self, filename=filename)
-        o_ascii_loader.load()
+        processing_event_handler.load_ascii(main_window=self, filename=filename)
 
     def apply_clicked(self):
         # do stuff

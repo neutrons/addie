@@ -10,6 +10,7 @@ from addie.processing.mantid.master_table.import_from_run_number_handler import 
 from addie.processing.mantid.master_table.import_from_database.load_into_master_table import LoadIntoMasterTable
 from addie.processing.mantid.make_calibration_handler.make_calibration import MakeCalibrationLauncher
 from addie.processing.mantid.master_table.reduction_configuration_handler import ReductionConfigurationHandler
+from addie.processing.mantid.master_table.master_table_loader import AsciiLoader
 
 try:
     from addie.processing.mantid.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
@@ -326,3 +327,8 @@ def from_oncat_to_master_table(main_window, json=None, with_conflict=False, igno
 
 def reduction_configuration_button_clicked(main_window):
     ReductionConfigurationHandler(parent=main_window)
+
+
+def load_ascii(main_window, filename=""):
+    o_ascii_loader = AsciiLoader(parent=main_window, filename=filename)
+    o_ascii_loader.load()
