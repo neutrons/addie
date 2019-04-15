@@ -31,33 +31,35 @@ class ColumnHighlighting:
         column = self.column
         are_all_the_same = False
 
-        for _ in np.arange(self.nbr_row):
+        if self.nbr_row > 1:
 
-            # item
-            if column in INDEX_OF_COLUMNS_SEARCHABLE:
-                are_all_the_same = self.are_cells_identical()
+            for _ in np.arange(self.nbr_row):
 
-            elif column in INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA:
-                are_all_the_same = self.are_chemical_formula_identical()
+                # item
+                if column in INDEX_OF_COLUMNS_SEARCHABLE:
+                    are_all_the_same = self.are_cells_identical()
 
-            elif column in INDEX_OF_COLUMNS_WITH_MASS_DENSITY:
-                are_all_the_same = self.are_mass_density_identical()
+                elif column in INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA:
+                    are_all_the_same = self.are_chemical_formula_identical()
 
-            elif column in INDEX_OF_COLUMNS_SHAPE:
-                are_all_the_same = self.are_shape_identical()
+                elif column in INDEX_OF_COLUMNS_WITH_MASS_DENSITY:
+                    are_all_the_same = self.are_mass_density_identical()
 
-            elif column in INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS:
-                are_all_the_same = self.are_geometry_identical()
+                elif column in INDEX_OF_COLUMNS_SHAPE:
+                    are_all_the_same = self.are_shape_identical()
 
-            elif (column in INDEX_OF_ABS_CORRECTION) or \
-                    (column in INDEX_OF_MULTI_SCATTERING_CORRECTION):
-                are_all_the_same = self.are_abs_or_multi_correction_identical()
+                elif column in INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS:
+                    are_all_the_same = self.are_geometry_identical()
 
-            elif column in INDEX_OF_INELASTIC_CORRECTION:
-                are_all_the_same = self.are_inelastic_correction_identical()
+                elif (column in INDEX_OF_ABS_CORRECTION) or \
+                        (column in INDEX_OF_MULTI_SCATTERING_CORRECTION):
+                    are_all_the_same = self.are_abs_or_multi_correction_identical()
 
-            elif column == LIST_COLUMNS_TO_SEARCH_FOR_FULL_HIGHLIGTHING[-1]:
-                are_all_the_same = self.are_align_and_focus_args_identical()
+                elif column in INDEX_OF_INELASTIC_CORRECTION:
+                    are_all_the_same = self.are_inelastic_correction_identical()
+
+                elif column == LIST_COLUMNS_TO_SEARCH_FOR_FULL_HIGHLIGTHING[-1]:
+                    are_all_the_same = self.are_align_and_focus_args_identical()
 
         self.apply_cell_background(are_all_the_same=are_all_the_same)
 
@@ -94,6 +96,15 @@ class ColumnHighlighting:
                 self.main_window.processing_ui.h3_table.item(_row, self.column).setBackground(background_color)
 
     def are_cells_identical(self):
+
+        def _get_item_value(row=-1, column=-1):
+            return str(self.main_window.processing_ui.h3_table.item(row, column).text())
+
+        ref_value = _get_item_value(0, self.column)
+        for _row in np.arange(1, self.nbr_row):
+            _value = _get_item_value(row=_row, column=self.column)
+            if _value != ref_value:
+                return False
         return True
 
     def are_chemical_formula_identical(self):
