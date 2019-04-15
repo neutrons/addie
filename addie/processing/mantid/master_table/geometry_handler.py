@@ -7,10 +7,13 @@ from qtpy import QtGui
 from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
 from addie.utilities.math_tools import is_number
 
+from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS
+
 
 class DimensionsSetter(QDialog):
 
     shape_selected = 'cylindrical'
+    column = 0
 
     def __init__(self, parent=None, key=None, data_type='sample'):
         self.parent = parent
@@ -28,6 +31,11 @@ class DimensionsSetter(QDialog):
             self.move(parent.geometry_ui_position)
 
         self.check_save_button()
+        self.set_column_index()
+
+    def set_column_index(self):
+        self.column = INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS[0] if self.data_type == 'sample' else \
+            INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS[1]
 
     def group_widgets(self):
         self.group = {'radius': [self.ui.radius_label,
@@ -161,6 +169,8 @@ class DimensionsSetter(QDialog):
 
         o_table = TableRowHandler(main_window=self.parent)
         o_table.transfer_widget_states(from_key=self.key, data_type=self.data_type)
+
+        self.parent.check_master_table_column_highlighting(column=self.column)
 
         self.close()
 
