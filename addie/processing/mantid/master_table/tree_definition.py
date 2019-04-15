@@ -7,6 +7,9 @@ import numpy as np
 user_home = expanduser("~")
 CONFIG_FILE = os.path.join(user_home, '.addie_config.cfg')
 
+COLUMNS_IDENTICAL_VALUES_COLOR = [0, 255, 255] # cyan
+COLUMNS_SAME_VALUES_COLOR = [255, 25, 25] # white
+
 COLUMN_DEFAULT_WIDTH = 90
 COLUMN_DEFAULT_HEIGHT = 120
 CONFIG_BUTTON_HEIGHT = 20

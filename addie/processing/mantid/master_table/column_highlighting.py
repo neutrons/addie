@@ -11,6 +11,8 @@ from addie.processing.mantid.master_table.tree_definition import (INDEX_OF_COLUM
                                                                   INDEX_OF_MULTI_SCATTERING_CORRECTION,
                                                                   INDEX_OF_INELASTIC_CORRECTION,
                                                                   LIST_COLUMNS_TO_SEARCH_FOR_FULL_HIGHLIGTHING)
+from addie.processing.mantid.master_table.tree_definition import (COLUMNS_IDENTICAL_VALUES_COLOR,
+                                                                  COLUMNS_SAME_VALUES_COLOR)
 
 
 class ColumnHighlighting:
@@ -61,11 +63,19 @@ class ColumnHighlighting:
 
     def apply_cell_background(self, are_all_the_same=False):
         if are_all_the_same:
-            background_color = QtGui.QColor(255, 255, 0)
-            background_color_stylesheet = "rgb(255, 255, 0)"
+            background_color = QtGui.QColor(COLUMNS_IDENTICAL_VALUES_COLOR[0],
+                                            COLUMNS_IDENTICAL_VALUES_COLOR[1],
+                                            COLUMNS_IDENTICAL_VALUES_COLOR[2])
+            background_color_stylesheet = "rgb({}, {}, {})".format(COLUMNS_IDENTICAL_VALUES_COLOR[0],
+                                                                   COLUMNS_IDENTICAL_VALUES_COLOR[1],
+                                                                   COLUMNS_IDENTICAL_VALUES_COLOR[2])
         else:
-            background_color = QtGui.QColor(255, 255, 255)
-            background_color_stylesheet = "rgb(255, 255, 255)"
+            background_color = QtGui.QColor(COLUMNS_SAME_VALUES_COLOR[0],
+                                            COLUMNS_SAME_VALUES_COLOR[1],
+                                            COLUMNS_SAME_VALUES_COLOR[2])
+            background_color_stylesheet = "rgb({}, {}, {})".format(COLUMNS_SAME_VALUES_COLOR[0],
+                                                                   COLUMNS_SAME_VALUES_COLOR[1],
+                                                                   COLUMNS_SAME_VALUES_COLOR[2])
 
         for _row in np.arange(self.nbr_row):
 
