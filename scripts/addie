@@ -905,8 +905,8 @@ class MainWindow(QMainWindow):
     def load_ascii(self, filename=''):
         processing_event_handler.load_ascii(main_window=self, filename=filename)
 
-    def check_master_table_column_highlighting(self):
-        o_highlights = ColumnHighlighting(main_window=self)
+    def check_master_table_column_highlighting(self, _, column):
+        o_highlights = ColumnHighlighting(main_window=self, column=column)
         o_highlights.check()
 
     def apply_clicked(self):

@@ -163,7 +163,7 @@ class TableRowHandler:
         self.table_ui.insertRow(row)
         self.set_row_height(row, COLUMN_DEFAULT_HEIGHT)
 
-        _list_ui_to_unlock = []
+        _list_ui_to_unlock = [self.table_ui]
 
         _dimension_widgets = {'label': None, 'value': 'N/A', 'units': None}
         _full_dimension_widgets = {'radius': copy.deepcopy(_dimension_widgets),
@@ -225,6 +225,9 @@ class TableRowHandler:
         random_key = self.generate_random_key()
         self.key = random_key
 
+        # block main table events
+        self.table_ui.blockSignals(True)
+
         # column 0 (active or not checkBox)
         _layout = QHBoxLayout()
         _widget = QCheckBox()
@@ -245,7 +248,6 @@ class TableRowHandler:
         _new_widget.setLayout(_layout)
         _widget.stateChanged.connect(lambda state=0, key=random_key:
                                      self.main_window.master_table_select_state_changed(state, key))
-#        _widget.blockSignals(True)
         column = 0
         self.table_ui.setCellWidget(row, column, _new_widget)
 
