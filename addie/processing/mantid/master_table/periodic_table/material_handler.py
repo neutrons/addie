@@ -10,6 +10,7 @@ from qtpy import QtGui
 
 from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
 from addie.processing.mantid.master_table.periodic_table.isotopes_handler import IsotopesHandler
+from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA
 
 
 class MaterialHandler:
@@ -43,6 +44,7 @@ class PeriodicTable(QMainWindow):
                   6: copy.deepcopy(list_ui_color),
                   7: copy.deepcopy(list_ui_color),
                   }
+    column = 0
 
     def __init__(self, parent=None, database_window=None, key=None, data_type='sample'):
 
@@ -57,6 +59,13 @@ class PeriodicTable(QMainWindow):
 
         self.init_ui_color_dictionary()
         self.init_widgets()
+        self.set_column_index()
+
+    def set_column_index(self):
+        if self.data_type == 'sample':
+            self.column = INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA[0]
+        else:
+            self.column = INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA[1]
 
     def init_ui_color_dictionary(self):
 
@@ -592,6 +601,8 @@ class PeriodicTable(QMainWindow):
                     = self.molecular_mass
                 self.parent.master_table_list_ui[self.key][self.data_type]['mass_density_infos']['total_number_of_atoms'] \
                     = self.total_number_of_atoms
+
+            self.parent.check_master_table_column_highlighting(column=self.column)
             self.close()
         else:
             self.ui.statusbar.setStyleSheet("color: red")
