@@ -117,21 +117,19 @@ class ColumnHighlighting:
         return True
 
     def are_chemical_formula_identical(self):
-        def _get_widget_value(row=-1):
-            o_utilities = Utilities(parent=self.main_window)
-            key_row = o_utilities.get_row_key_from_row_index(row=row)
-            master_table_list_ui = self.main_window.master_table_list_ui[key_row]
-            widget_ui = master_table_list_ui[self.data_type]['material']['text']
-            return str(widget_ui.text())
-
-        ref_value = _get_widget_value(row=0)
+        ref_value = self._get_chemical_formula_widget_value(row=0)
         for _row in np.arange(1, self.nbr_row):
-            _value = _get_widget_value(row=_row)
+            _value = self._get_chemical_formula_widget_value(row=_row)
             if _value != ref_value:
                 return False
         return True
 
     def are_mass_density_identical(self):
+        ref_value = self._get_mass_density_widget_value(row=0)
+        for _row in np.arange(1, self.nbr_row):
+            _value = self._get_mass_density_widget_value(row=_row)
+            if _value != ref_value:
+                return False
         return True
 
     def are_shape_identical(self):
@@ -149,3 +147,18 @@ class ColumnHighlighting:
     def are_align_and_focus_args_identical(self):
         return True
 
+    def _get_master_table_list_ui_for_row(self, row=-1):
+        o_utilities = Utilities(parent=self.main_window)
+        key_row = o_utilities.get_row_key_from_row_index(row=row)
+        master_table_list_ui = self.main_window.master_table_list_ui[key_row]
+        return master_table_list_ui
+
+    def _get_chemical_formula_widget_value(self, row=-1):
+        master_table_list_ui_for_row = self._get_master_table_list_ui_for_row(row=row)
+        widget_ui = master_table_list_ui_for_row[self.data_type]['material']['text']
+        return str(widget_ui.text())
+
+    def _get_mass_density_widget_value(self, row=-1):
+        master_table_list_ui_for_row = self._get_master_table_list_ui_for_row(row=row)
+        widget_ui = master_table_list_ui_for_row[self.data_type]['mass_density']['text']
+        return str(widget_ui.text())
