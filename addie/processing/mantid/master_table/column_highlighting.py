@@ -97,6 +97,7 @@ class ColumnHighlighting:
 
         for _row in np.arange(self.nbr_row):
 
+            main_widget = self.main_window.processing_ui.h3_table.cellWidget(_row, self.column)
             if (self.column in INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA) or \
                     (self.column in INDEX_OF_COLUMNS_WITH_MASS_DENSITY) or \
                     (self.column in INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS) or \
@@ -105,7 +106,6 @@ class ColumnHighlighting:
                     (self.column in INDEX_OF_MULTI_SCATTERING_CORRECTION) or \
                     (self.column in INDEX_OF_INELASTIC_CORRECTION) or \
                     (self.column == LIST_COLUMNS_TO_SEARCH_FOR_FULL_HIGHLIGTHING):
-                main_widget = self.main_window.processing_ui.h3_table.cellWidget(_row, self.column)
                 main_widget.setAutoFillBackground(True)
                 # main_widget.setStyleSheet("background-color: {};".format(background_color_stylesheet))
             else:
@@ -178,7 +178,6 @@ class ColumnHighlighting:
 
         if not self._are_radius2_identical():
             return False
-
         return True
 
     def are_abs_correction_identical(self):
@@ -211,10 +210,14 @@ class ColumnHighlighting:
                 _dict = self._get_placzek_infos(row=_row)
                 if _dict != ref_dict:
                     return False
-
         return True
 
     def are_align_and_focus_args_identical(self):
+        ref_value = self._get_align_and_focus_args_value(row=0)
+        for _row in np.arange(1, self.nbr_row):
+            _value = self._get_align_and_focus_args_value(row=_row)
+            if _value != ref_value:
+                return False
         return True
 
     def _get_master_table_list_ui_for_row(self, row=-1):
@@ -285,4 +288,9 @@ class ColumnHighlighting:
     def _get_placzek_infos(self, row=-1):
         master_table_list_ui_for_row = self._get_master_table_list_ui_for_row(row=row)
         dict = master_table_list_ui_for_row[self.data_type]['placzek_infos']
+        return dict
+
+    def _get_align_and_focus_args_value(self, row=-1):
+        master_table_list_ui_for_row = self._get_master_table_list_ui_for_row(row=row)
+        dict = master_table_list_ui_for_row['align_and_focus_args_infos']
         return dict
