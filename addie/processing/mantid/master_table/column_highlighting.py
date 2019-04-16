@@ -2,6 +2,8 @@ import numpy as np
 from qtpy import QtGui
 from qtpy.QtWidgets import QTableWidgetItem
 
+from addie.processing.mantid.master_table.utilities import Utilities
+
 from addie.processing.mantid.master_table.tree_definition import (INDEX_OF_COLUMNS_SEARCHABLE,
                                                                   INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA,
                                                                   INDEX_OF_COLUMNS_WITH_MASS_DENSITY,
@@ -13,15 +15,23 @@ from addie.processing.mantid.master_table.tree_definition import (INDEX_OF_COLUM
                                                                   LIST_COLUMNS_TO_SEARCH_FOR_FULL_HIGHLIGTHING)
 from addie.processing.mantid.master_table.tree_definition import (COLUMNS_IDENTICAL_VALUES_COLOR,
                                                                   COLUMNS_SAME_VALUES_COLOR)
+from addie.processing.mantid.master_table.tree_definition import INDEX_NORMALIZATION_START
 
 
 class ColumnHighlighting:
+
+    data_type = 'sample'
 
     def __init__(self, main_window=None, column=-1):
         self.main_window = main_window
         self.column = column
 
         self.nbr_row = self.get_nbr_row()
+        self.set_data_type()
+
+    def set_data_type(self):
+        if self.column >= INDEX_NORMALIZATION_START:
+            self.data_type = 'normalization'
 
     def get_nbr_row(self):
         nbr_row = self.main_window.processing_ui.h3_table.rowCount()
@@ -96,7 +106,6 @@ class ColumnHighlighting:
                 self.main_window.processing_ui.h3_table.item(_row, self.column).setBackground(background_color)
 
     def are_cells_identical(self):
-
         def _get_item_value(row=-1, column=-1):
             return str(self.main_window.processing_ui.h3_table.item(row, column).text())
 
@@ -108,6 +117,18 @@ class ColumnHighlighting:
         return True
 
     def are_chemical_formula_identical(self):
+        def _get_widget_value(row=-1):
+            o_utilities = Utilities(parent=self.main_window)
+            key_row = o_utilities.get_row_key_from_row_index(row=row)
+            master_table_list_ui = self.main_window.master_table_list_ui[key_row]
+            widget_ui = master_table_list_ui[self.data_type]['material']['text']
+            return str(widget_ui.text())
+
+        ref_value = _get_widget_value(row=0)
+        for _row in np.arange(1, self.nbr_row):
+            _value = _get_widget_value(row=_row)
+            if _value != ref_value:
+                return False
         return True
 
     def are_mass_density_identical(self):
