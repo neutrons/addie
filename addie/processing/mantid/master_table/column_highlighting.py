@@ -89,6 +89,10 @@ class ColumnHighlighting:
                                                                    COLUMNS_SAME_VALUES_COLOR[1],
                                                                    COLUMNS_SAME_VALUES_COLOR[2])
 
+        pen_color = "black"
+        selection_color = "white"
+        selection_background_color = "blue"
+
         for _row in np.arange(self.nbr_row):
 
             if (self.column in INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA) or \
@@ -101,9 +105,18 @@ class ColumnHighlighting:
                     (self.column == LIST_COLUMNS_TO_SEARCH_FOR_FULL_HIGHLIGTHING):
                 main_widget = self.main_window.processing_ui.h3_table.cellWidget(_row, self.column)
                 main_widget.setAutoFillBackground(True)
-                main_widget.setStyleSheet("background-color: {};".format(background_color_stylesheet))
+                # main_widget.setStyleSheet("background-color: {};".format(background_color_stylesheet))
             else:
-                self.main_window.processing_ui.h3_table.item(_row, self.column).setBackground(background_color)
+                main_widget.setAutoFillBackground(False)
+                # main_widget.setStyleSheet("background-color: {};".format(background_color_stylesheet))
+                # self.main_window.processing_ui.h3_table.item(_row, self.column).setBackground(background_color)
+            main_widget.setStyleSheet("color: {}; "
+                                      "background-color: {};"
+                                      "selection-color: {};"
+                                      "selection-background-color: {};".format(pen_color,
+                                                                          background_color_stylesheet,
+                                                                          selection_color,
+                                                                          selection_background_color))
 
     def are_cells_identical(self):
         def _get_item_value(row=-1, column=-1):
@@ -133,6 +146,11 @@ class ColumnHighlighting:
         return True
 
     def are_shape_identical(self):
+        ref_value = self._get_shape_value(row=0)
+        for _row in np.arange(1, self.nbr_row):
+            _value = self._get_shape_value(row=_row)
+            if _value != ref_value:
+                return False
         return True
 
     def are_geometry_identical(self):
@@ -149,8 +167,8 @@ class ColumnHighlighting:
 
     def _get_master_table_list_ui_for_row(self, row=-1):
         o_utilities = Utilities(parent=self.main_window)
-        key_row = o_utilities.get_row_key_from_row_index(row=row)
-        master_table_list_ui = self.main_window.master_table_list_ui[key_row]
+        key_from_row = o_utilities.get_row_key_from_row_index(row=row)
+        master_table_list_ui = self.main_window.master_table_list_ui[key_from_row]
         return master_table_list_ui
 
     def _get_chemical_formula_widget_value(self, row=-1):
@@ -162,3 +180,9 @@ class ColumnHighlighting:
         master_table_list_ui_for_row = self._get_master_table_list_ui_for_row(row=row)
         widget_ui = master_table_list_ui_for_row[self.data_type]['mass_density']['text']
         return str(widget_ui.text())
+
+    def _get_shape_value(self, row=-1):
+        master_table_list_ui_for_row = self._get_master_table_list_ui_for_row(row=row)
+        widget_ui = master_table_list_ui_for_row[self.data_type]['shape']
+        return str(widget_ui.currentText())
+
