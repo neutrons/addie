@@ -907,7 +907,10 @@ class MainWindow(QMainWindow):
 
     def check_master_table_column_highlighting(self, row=None, column=-1):
         o_highlights = ColumnHighlighting(main_window=self)
-        o_highlights.check_column(column=column)
+        if column == -1:
+            o_highlights.check_all()
+        else:
+            o_highlights.check_column(column=column)
 
     def apply_clicked(self):
         # do stuff

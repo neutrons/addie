@@ -86,16 +86,16 @@ class ColumnHighlighting:
 
     def apply_cell_background(self, are_all_the_same=False):
         if are_all_the_same:
-            # background_color = QtGui.QColor(COLUMNS_IDENTICAL_VALUES_COLOR[0],
-            #                                 COLUMNS_IDENTICAL_VALUES_COLOR[1],
-            #                                 COLUMNS_IDENTICAL_VALUES_COLOR[2])
+            background_color = QtGui.QColor(COLUMNS_IDENTICAL_VALUES_COLOR[0],
+                                            COLUMNS_IDENTICAL_VALUES_COLOR[1],
+                                            COLUMNS_IDENTICAL_VALUES_COLOR[2])
             background_color_stylesheet = "rgb({}, {}, {})".format(COLUMNS_IDENTICAL_VALUES_COLOR[0],
                                                                    COLUMNS_IDENTICAL_VALUES_COLOR[1],
                                                                    COLUMNS_IDENTICAL_VALUES_COLOR[2])
         else:
-            # background_color = QtGui.QColor(COLUMNS_SAME_VALUES_COLOR[0],
-            #                                 COLUMNS_SAME_VALUES_COLOR[1],
-            #                                 COLUMNS_SAME_VALUES_COLOR[2])
+            background_color = QtGui.QColor(COLUMNS_SAME_VALUES_COLOR[0],
+                                            COLUMNS_SAME_VALUES_COLOR[1],
+                                            COLUMNS_SAME_VALUES_COLOR[2])
             background_color_stylesheet = "rgb({}, {}, {})".format(COLUMNS_SAME_VALUES_COLOR[0],
                                                                    COLUMNS_SAME_VALUES_COLOR[1],
                                                                    COLUMNS_SAME_VALUES_COLOR[2])
@@ -107,27 +107,33 @@ class ColumnHighlighting:
         for _row in np.arange(self.nbr_row):
 
             main_widget = self.main_window.processing_ui.h3_table.cellWidget(_row, self.column)
-            if (self.column in INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA) or \
-                    (self.column in INDEX_OF_COLUMNS_WITH_MASS_DENSITY) or \
-                    (self.column in INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS) or \
-                    (self.column in INDEX_OF_COLUMNS_SHAPE) or \
-                    (self.column in INDEX_OF_ABS_CORRECTION) or \
-                    (self.column in INDEX_OF_MULTI_SCATTERING_CORRECTION) or \
-                    (self.column in INDEX_OF_INELASTIC_CORRECTION) or \
-                    (self.column == LIST_COLUMNS_TO_SEARCH_FOR_FULL_HIGHLIGTHING):
-                main_widget.setAutoFillBackground(True)
-                # main_widget.setStyleSheet("background-color: {};".format(background_color_stylesheet))
+            if main_widget:
+                if (self.column in INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA) or \
+                        (self.column in INDEX_OF_COLUMNS_WITH_MASS_DENSITY) or \
+                        (self.column in INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS) or \
+                        (self.column in INDEX_OF_COLUMNS_SHAPE) or \
+                        (self.column in INDEX_OF_ABS_CORRECTION) or \
+                        (self.column in INDEX_OF_MULTI_SCATTERING_CORRECTION) or \
+                        (self.column in INDEX_OF_INELASTIC_CORRECTION) or \
+                        (self.column == LIST_COLUMNS_TO_SEARCH_FOR_FULL_HIGHLIGTHING[-1]):
+                    main_widget.setAutoFillBackground(True)
+                    # main_widget.setStyleSheet("background-color: {};".format(background_color_stylesheet))
+                else:
+                    main_widget.setAutoFillBackground(False)
+                    # main_widget.setStyleSheet("background-color: {};".format(background_color_stylesheet))
+                    # self.main_window.processing_ui.h3_table.item(_row, self.column).setBackground(background_color)
+                main_widget.setStyleSheet("color: {}; "
+                                          "background-color: {};"
+                                          "selection-color: {};"
+                                          "selection-background-color: {};".format(pen_color,
+                                                                                   background_color_stylesheet,
+                                                                                   selection_color,
+                                                                                   selection_background_color))
+
             else:
-                main_widget.setAutoFillBackground(False)
-                # main_widget.setStyleSheet("background-color: {};".format(background_color_stylesheet))
-                # self.main_window.processing_ui.h3_table.item(_row, self.column).setBackground(background_color)
-            main_widget.setStyleSheet("color: {}; "
-                                      "background-color: {};"
-                                      "selection-color: {};"
-                                      "selection-background-color: {};".format(pen_color,
-                                                                          background_color_stylesheet,
-                                                                          selection_color,
-                                                                          selection_background_color))
+                item = self.main_window.processing_ui.h3_table.item(_row, self.column)
+                if item:
+                    self.main_window.processing_ui.h3_table.item(_row, self.column).setBackground(background_color)
 
     def are_cells_identical(self):
         def _get_item_value(row=-1, column=-1):
