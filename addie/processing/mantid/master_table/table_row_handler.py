@@ -107,6 +107,7 @@ class TableRowHandler:
         self.transfer_widget_states(from_key=key, data_type=data_type)
 
         self.main_window.check_master_table_column_highlighting(column=column)
+        self.main_window.check_master_table_column_highlighting(column=column+1)
 
     def abs_correction_changed(self, value='', key=None, data_type='sample'):
         # change state of other widgets of the same column if they are selected

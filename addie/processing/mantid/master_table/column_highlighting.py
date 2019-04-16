@@ -154,6 +154,29 @@ class ColumnHighlighting:
         return True
 
     def are_geometry_identical(self):
+        if not self.are_shape_identical():
+            return False
+
+        shape_selected = self._get_shape_value(row=0)
+
+        # compare radius
+        if not self._are_radius_identical():
+            return False
+
+        # we are done for spherical geometry
+        if shape_selected.lower() is "spherical":
+            return True
+
+        if not self._are_height_identical():
+            return False
+
+        # we are done for cylindrical geometry
+        if shape_selected.lower() is "cylindrical":
+            return True
+
+        if not self._are_radius2_identical():
+            return False
+
         return True
 
     def are_abs_or_multi_correction_identical(self):
@@ -186,3 +209,31 @@ class ColumnHighlighting:
         widget_ui = master_table_list_ui_for_row[self.data_type]['shape']
         return str(widget_ui.currentText())
 
+    # geometry Dimensions column
+    def get_geometry_dimensions_widgets(self, row=-1):
+        master_table_list_ui_for_row = self._get_master_table_list_ui_for_row(row=row)
+        radius_ui = master_table_list_ui_for_row[self.data_type]['geometry']['radius']['value']
+        radius2_ui = master_table_list_ui_for_row[self.data_type]['geometry']['radius2']['value']
+        height_ui = master_table_list_ui_for_row[self.data_type]['geometry']['height']['value']
+        return {'radius': radius_ui,
+                'radius2': radius2_ui,
+                'height': height_ui}
+
+    def _are_radius_identical(self):
+        return self._are_geometry_value_identical(variable_name='radius')
+
+    def _are_height_identical(self):
+        return self._are_geometry_value_identical(variable_name='height')
+
+    def _are_radius2_identical(self):
+        return self._are_geometry_value_identical(variable_name='radius2')
+
+    def _are_geometry_value_identical(self, variable_name='radius'):
+        ref_widgets = self.get_geometry_dimensions_widgets(row=0)
+        ref_radius = str(ref_widgets[variable_name].text())
+        for _row in np.arange(1, self.nbr_row):
+            val_widgets = self.get_geometry_dimensions_widgets(row=_row)
+            _value = str(val_widgets[variable_name].text())
+            if _value != ref_radius:
+                return False
+        return True
