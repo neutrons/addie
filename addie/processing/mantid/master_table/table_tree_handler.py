@@ -5,7 +5,7 @@ import numpy as np
 import os
 import pickle
 
-from qtpy.QtWidgets import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QFileDialog
+from qtpy.QtWidgets import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QFileDialog, QApplication
 from addie.utilities import load_ui
 from qtpy import QtCore, QtGui
 
@@ -792,6 +792,7 @@ class H3TableHandler:
             self.main_window.current_folder = new_path
             if clear_table:
                 self.clear_table()
+            # fixme
 
     def _import_table_from_config(self, clear_table=True):
         _current_folder = self.main_window.current_folder
@@ -799,6 +800,8 @@ class H3TableHandler:
                                                       caption='Select Table File ...',
                                                       directory=_current_folder,
                                                       filter="json (*.json);; Log (*.csv)")
+        QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+
         if table_file:
             new_path = os.path.dirname(table_file)
             self.main_window.current_folder = new_path
@@ -811,9 +814,11 @@ class H3TableHandler:
                 self.main_window.ui.statusbar.setStyleSheet("color: red")
                 self.main_window.ui.statusbar.showMessage(err.message,
                                                           self.main_window.statusbar_display_time)
+                QApplication.restoreOverrideCursor()
                 return
 
             o_dict.display_dialog()
+            QApplication.restoreOverrideCursor()
 
     def _export_table(self):
         _current_folder = self.main_window.current_folder

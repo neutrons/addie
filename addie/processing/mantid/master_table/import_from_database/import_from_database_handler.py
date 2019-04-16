@@ -540,3 +540,4 @@ class AsciiLoaderOptions(LoaderOptionsInterface):
         self.parent.ascii_loader_option = self.get_option_selected()
         self.real_parent.import_into_master_table()
         self.close()
+        self.parent.check_master_table_column_highlighting()
