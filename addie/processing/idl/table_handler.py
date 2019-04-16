@@ -14,6 +14,7 @@ from addie.utilities.file_handler import FileHandler
 from addie.processing.idl.populate_background_widgets import PopulateBackgroundWidgets
 from addie.processing.idl.sample_environment_handler import SampleEnvironmentHandler
 import addie.processing.idl.step2_gui_handler
+from addie.widgets.filedialog import get_save_file
 
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
@@ -211,10 +212,10 @@ class TableHandler(object):
 
     def _export(self):
         _current_folder = self.main_window.current_folder
-        _table_file = QFileDialog.getSaveFileName(parent=self.main_window,
-                                                  caption="Select File",
-                                                  directory=_current_folder,
-                                                  filter=("text (*.txt);; All Files (*.*)"))
+        _table_file, _ = get_save_file(parent=self.main_window,
+                                       caption="Select File",
+                                       directory=_current_folder,
+                                       filter={'text (*.txt)':'txt', 'All Files (*.*)':''})
         if not _table_file:
             return
         if isinstance(_table_file, tuple):

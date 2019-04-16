@@ -3,6 +3,7 @@ from qtpy.QtWidgets import (QFileDialog)
 import os
 
 from addie.utilities.file_handler import FileHandler
+from addie.widgets.filedialog import get_save_file
 
 
 class ConfigFileNameHandler(object):
@@ -13,21 +14,20 @@ class ConfigFileNameHandler(object):
         self.parent = parent
 
     def request_config_file_name(self, open_flag=True):
-        _filter = 'config (*.cfg)'
         _caption = 'Select or Define a Configuration File Name'
         _current_folder = self.parent.configuration_folder
         if open_flag:
             _file = QFileDialog.getOpenFileName(parent=self.parent,
-                                                filter=_filter,
+                                                filter='config (*.cfg)',
                                                 caption=_caption,
                                                 directory=_current_folder)
+            if isinstance(_file, tuple):
+                _file = _file[0]
         else:
-            _file = QFileDialog.getSaveFileName(parent=self.parent,
-                                                filter=_filter,
-                                                caption=_caption,
-                                                directory=_current_folder)
-        if isinstance(_file, tuple):
-            _file = _file[0]
+            _file, _ = get_save_file(parent=self.parent,
+                                     filter={'config (*.cfg)':'cfg'},
+                                     caption=_caption,
+                                     directory=_current_folder)
 
         if not _file:
             self.filename = ''
