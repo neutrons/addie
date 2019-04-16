@@ -1,5 +1,6 @@
 import numpy as np
 from qtpy import QtGui
+from qtpy.QtWidgets import QTableWidgetItem
 
 from addie.processing.mantid.master_table.utilities import Utilities
 
@@ -180,14 +181,14 @@ class ColumnHighlighting:
             return False
 
         # we are done for spherical geometry
-        if shape_selected.lower() == "spherical":
+        if shape_selected.lower() is "spherical":
             return True
 
         if not self._are_height_identical():
             return False
 
         # we are done for cylindrical geometry
-        if shape_selected.lower() == "cylindrical":
+        if shape_selected.lower() is "cylindrical":
             return True
 
         if not self._are_radius2_identical():
