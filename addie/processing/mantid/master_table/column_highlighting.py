@@ -21,13 +21,11 @@ from addie.processing.mantid.master_table.tree_definition import INDEX_NORMALIZA
 class ColumnHighlighting:
 
     data_type = 'sample'
+    column = -1
 
-    def __init__(self, main_window=None, column=-1):
+    def __init__(self, main_window=None):
         self.main_window = main_window
-        self.column = column
-
         self.nbr_row = self.get_nbr_row()
-        self.set_data_type()
 
     def set_data_type(self):
         if self.column >= INDEX_NORMALIZATION_START:
@@ -37,9 +35,20 @@ class ColumnHighlighting:
         nbr_row = self.main_window.processing_ui.h3_table.rowCount()
         return nbr_row
 
-    def check(self):
-        column = self.column
+    def get_nbr_column(self):
+        nbr_column = self.main_window.processing_ui.h3_table.columnCount()
+        return nbr_column
+
+    def check_all(self):
+        nbr_column = self.get_nbr_column()
+        for _col in np.arange(nbr_column):
+            self.check_column(column=_col)
+
+    def check_column(self, column=-1):
+        self.column = column
         are_all_the_same = False
+
+        self.set_data_type()
 
         if self.nbr_row > 1:
 
