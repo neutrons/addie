@@ -3,6 +3,7 @@ from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QMainWindow, QComboBox, QFileDialog, QHBoxLayout, QLabel, QDateEdit, QLineEdit, QPushButton,
                             QTableWidgetItem, QVBoxLayout, QWidget)
 from addie.utilities import load_ui
+from addie.widgets.filedialog import get_save_file
 from qtpy import QtCore
 
 import datetime
@@ -396,15 +397,11 @@ class MakeCalibrationWindow(QMainWindow):
     def run_calibration_button_clicked(self):
         # make dictionary of all infos
         o_dict = MakeCalibrationDictionary(parent=self)
-        [_file, _] = QFileDialog.getSaveFileName(parent=self,
-                                                 caption="Select where and name of json file to create...",
-                                                 directory = '/SNS/users/ntm/')
+        _file, _ = get_save_file(parent=self,
+                                 caption="Select where and name of json file to create...",
+                                 # directory = '/SNS/users/ntm/',
+                                 filter={'json (*.json)':'json'})
         if _file:
-            # if missing extension, add it
-            [filename, ext] = os.path.splitext(_file)
-            if ext == '':
-                _file = _file + ".json"
-
             with open(_file, 'w') as fp:
                 json.dump(o_dict.dictionary, fp)
 

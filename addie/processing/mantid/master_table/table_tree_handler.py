@@ -17,6 +17,7 @@ from addie.processing.mantid.master_table.table_plot_handler import TablePlotHan
 from addie.processing.mantid.master_table.selection_handler import CellsHandler, RowsHandler
 from addie.processing.mantid.master_table.master_table_loader import TableFileLoader
 from addie.processing.mantid.master_table.master_table_exporter import TableFileExporter
+from addie.widgets.filedialog import get_save_file
 try:
     ONCAT_ENABLED = True
     from addie.processing.mantid.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
@@ -814,10 +815,10 @@ class H3TableHandler:
 
     def _export_table(self):
         _current_folder = self.main_window.current_folder
-        [_table_file, _] = QFileDialog.getSaveFileName(parent=self.main_window,
-                                                       caption="Define Output File Name ...",
-                                                       directory=_current_folder,
-                                                       filter="json (*.json)")
+        _table_file, _ = get_save_file(parent=self.main_window,
+                                       caption="Define Output File Name ...",
+                                       directory=_current_folder,
+                                       filter={'json (*.json)':'json'})
 
         if _table_file:
             _file_handler = FileHandler(filename = _table_file)

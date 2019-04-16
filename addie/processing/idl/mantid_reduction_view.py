@@ -1,8 +1,9 @@
 from __future__ import (absolute_import, division, print_function)
-from qtpy.QtWidgets import (QFileDialog, QMainWindow)
+from qtpy.QtWidgets import QMainWindow
 from addie.utilities import load_ui
 from addie.processing.idl.mantid_script_handler import MantidScriptHandler
 from addie.utilities.file_handler import FileHandler
+from addie.widgets.filedialog import get_save_file
 
 
 class MantidReductionView(QMainWindow):
@@ -32,15 +33,14 @@ class MantidReductionView(QMainWindow):
 
     def save_as_clicked(self):
         _current_folder = self.parent.current_folder
-        _python_file = QFileDialog.getSaveFileName(parent=self.parent,
-                                                   caption="Output File Name",
-                                                   directory=_current_folder,
-                                                   filter=("python (*.py);; All Files (*.*)"))
+        _python_file, _ = get_save_file(parent=self.parent,
+                                        caption='Output File Name',
+                                        directory=_current_folder,
+                                        filter={'python (*.py)':'py',
+                                                'All Files (*.*)':''})
         if not _python_file:
             return
 
-        if isinstance(_python_file, tuple):
-            _python_file = _python_file[0]
         _script = str(self.ui.preview_mantid_script_textedit.toPlainText())
         o_file_handler = FileHandler(filename=_python_file)
         o_file_handler.create_ascii(contain=_script, carriage_return=False)

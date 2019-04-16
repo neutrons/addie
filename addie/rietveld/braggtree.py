@@ -1,10 +1,11 @@
 from __future__ import (absolute_import, division, print_function)
 
-from qtpy.QtCore import (QModelIndex)
-from qtpy.QtGui import (QStandardItem, QStandardItemModel)
-from qtpy.QtWidgets import (QAction, QFileDialog)
+from qtpy.QtCore import QModelIndex
+from qtpy.QtGui import QStandardItem, QStandardItemModel
+from qtpy.QtWidgets import QAction
 from addie.utilities import customtreeview as base
 from addie.calculate_gr.event_handler import remove_gss_from_plot
+from addie.widgets.filedialog import get_save_file
 
 
 class BraggTree(base.CustomizedTreeView):
@@ -264,18 +265,18 @@ class BraggTree(base.CustomizedTreeView):
             return
 
         # pop-out a file dialog for GSAS file's name
-        file_ext = 'GSAS File (*.gsa);;Any File (*.*)'
-        new_gss_file_name = str(QFileDialog.getSaveFileName(self, 'New GSAS file name',
-                                                                  self._mainWindow.get_default_data_dir(), file_ext))
+        file_ext = {'GSAS File (*.gsa)':'gsa', 'Any File (*.*)':''}
+        new_gss_file_name, _ = get_save_file(self, caption='New GSAS file name',
+                                             directory=self._mainWindow.get_default_data_dir(),
+                                             filter=file_ext)
 
-        if new_gss_file_name is None or len(new_gss_file_name) == 0:
+        if not new_gss_file_name:  # user pressed cancel
             return
 
         # emit the signal to the main window
         selected_node = self.get_selected_items()[0]
         bank_ws_list = self.get_child_nodes(selected_node, output_str=True)
 
-        #out_gss_ws = os.path.basename(new_gss_file_name).split('.')[0]
         # write all the banks to a GSAS file
         self._mainWindow.get_workflow().write_gss_file(ws_name_list=bank_ws_list, gss_file_name=new_gss_file_name)
 
