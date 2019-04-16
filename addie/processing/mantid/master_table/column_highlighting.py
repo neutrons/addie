@@ -61,9 +61,11 @@ class ColumnHighlighting:
                 elif column in INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS:
                     are_all_the_same = self.are_geometry_identical()
 
-                elif (column in INDEX_OF_ABS_CORRECTION) or \
-                        (column in INDEX_OF_MULTI_SCATTERING_CORRECTION):
-                    are_all_the_same = self.are_abs_or_multi_correction_identical()
+                elif column in INDEX_OF_ABS_CORRECTION:
+                    are_all_the_same = self.are_abs_correction_identical()
+
+                elif column in INDEX_OF_MULTI_SCATTERING_CORRECTION:
+                    are_all_the_same = self.are_multi_correction_identical()
 
                 elif column in INDEX_OF_INELASTIC_CORRECTION:
                     are_all_the_same = self.are_inelastic_correction_identical()
@@ -75,16 +77,16 @@ class ColumnHighlighting:
 
     def apply_cell_background(self, are_all_the_same=False):
         if are_all_the_same:
-            background_color = QtGui.QColor(COLUMNS_IDENTICAL_VALUES_COLOR[0],
-                                            COLUMNS_IDENTICAL_VALUES_COLOR[1],
-                                            COLUMNS_IDENTICAL_VALUES_COLOR[2])
+            # background_color = QtGui.QColor(COLUMNS_IDENTICAL_VALUES_COLOR[0],
+            #                                 COLUMNS_IDENTICAL_VALUES_COLOR[1],
+            #                                 COLUMNS_IDENTICAL_VALUES_COLOR[2])
             background_color_stylesheet = "rgb({}, {}, {})".format(COLUMNS_IDENTICAL_VALUES_COLOR[0],
                                                                    COLUMNS_IDENTICAL_VALUES_COLOR[1],
                                                                    COLUMNS_IDENTICAL_VALUES_COLOR[2])
         else:
-            background_color = QtGui.QColor(COLUMNS_SAME_VALUES_COLOR[0],
-                                            COLUMNS_SAME_VALUES_COLOR[1],
-                                            COLUMNS_SAME_VALUES_COLOR[2])
+            # background_color = QtGui.QColor(COLUMNS_SAME_VALUES_COLOR[0],
+            #                                 COLUMNS_SAME_VALUES_COLOR[1],
+            #                                 COLUMNS_SAME_VALUES_COLOR[2])
             background_color_stylesheet = "rgb({}, {}, {})".format(COLUMNS_SAME_VALUES_COLOR[0],
                                                                    COLUMNS_SAME_VALUES_COLOR[1],
                                                                    COLUMNS_SAME_VALUES_COLOR[2])
@@ -179,10 +181,37 @@ class ColumnHighlighting:
 
         return True
 
-    def are_abs_or_multi_correction_identical(self):
+    def are_abs_correction_identical(self):
+        ref_value = self._get_abs_correction_widget_value(row=0)
+        for _row in np.arange(1, self.nbr_row):
+            _value = self._get_abs_correction_widget_value(row=_row)
+            if _value != ref_value:
+                return False
+        return True
+
+    def are_multi_correction_identical(self):
+        ref_value = self._get_multi_correction_widget_value(row=0)
+        for _row in np.arange(1, self.nbr_row):
+            _value = self._get_multi_correction_widget_value(row=_row)
+            if _value != ref_value:
+                return False
         return True
 
     def are_inelastic_correction_identical(self):
+        ref_value = self._get_inelastic_correction_widget_value(row=0)
+        for _row in np.arange(1, self.nbr_row):
+            _value = self._get_inelastic_correction_widget_value(row=_row)
+            if _value != ref_value:
+                return False
+
+        # if placzek selected,
+        if ref_value.lower() == 'placzek':
+            ref_dict = self._get_placzek_infos(row=0)
+            for _row in np.arange(1, self.nbr_row):
+                _dict = self._get_placzek_infos(row=_row)
+                if _dict != ref_dict:
+                    return False
+
         return True
 
     def are_align_and_focus_args_identical(self):
@@ -237,3 +266,23 @@ class ColumnHighlighting:
             if _value != ref_radius:
                 return False
         return True
+
+    def _get_abs_correction_widget_value(self, row=-1):
+        master_table_list_ui_for_row = self._get_master_table_list_ui_for_row(row=row)
+        widget_ui = master_table_list_ui_for_row[self.data_type]['abs_correction']
+        return str(widget_ui.currentText())
+
+    def _get_multi_correction_widget_value(self, row=-1):
+        master_table_list_ui_for_row = self._get_master_table_list_ui_for_row(row=row)
+        widget_ui = master_table_list_ui_for_row[self.data_type]['mult_scat_correction']
+        return str(widget_ui.currentText())
+
+    def _get_inelastic_correction_widget_value(self, row=-1):
+        master_table_list_ui_for_row = self._get_master_table_list_ui_for_row(row=row)
+        widget_ui = master_table_list_ui_for_row[self.data_type]['inelastic_correction']
+        return str(widget_ui.currentText())
+
+    def _get_placzek_infos(self, row=-1):
+        master_table_list_ui_for_row = self._get_master_table_list_ui_for_row(row=row)
+        dict = master_table_list_ui_for_row[self.data_type]['placzek_infos']
+        return dict
