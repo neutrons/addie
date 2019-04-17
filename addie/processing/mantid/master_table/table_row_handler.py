@@ -767,9 +767,10 @@ class TableRowHandler:
             new_local_key_value = {}
             for _key in list_local_keys:
                 if _key in list_global_keys:
-                    new_local_key_value[_key] = current_local_key_value[_key]
-                else:
                     new_local_key_value[_key] = global_list_key_value[_key]
+                else:
+                    new_local_key_value[_key] = current_local_key_value[_key]
+
             return new_local_key_value
 
     def formated_placzek_default(self, placzek={}):

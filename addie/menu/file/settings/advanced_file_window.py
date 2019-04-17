@@ -252,9 +252,9 @@ class AdvancedWindow(QMainWindow):
                 new_local_key_value = {}
                 for _key in list_local_keys:
                     if _key in list_global_keys:
-                        new_local_key_value[_key] = current_local_key_value[_key]
-                    else:
                         new_local_key_value[_key] = global_list_key_value[_key]
+                    else:
+                        new_local_key_value[_key] = current_local_key_value[_key]
                 _entry['align_and_focus_args_infos'] = new_local_key_value
             list_table_ui[_random_key] = _entry
 
