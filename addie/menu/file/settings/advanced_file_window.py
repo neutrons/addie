@@ -1,11 +1,11 @@
 from __future__ import (absolute_import, division, print_function)
-from qtpy.QtWidgets import QMainWindow, QFileDialog, QTableWidgetItem
-import numpy as np
-from qtpy import QtCore
+from qtpy.QtWidgets import QMainWindow, QFileDialog
+# import numpy as np
+# from qtpy import QtCore
 
 from addie.utilities import load_ui
 from addie.initialization.widgets import main_tab as main_tab_initialization
-from addie.utilities.general import get_list_algo
+# from addie.utilities.general import get_list_algo
 
 COLUMNS_WIDTH = [150, 150]
 
@@ -65,130 +65,130 @@ class AdvancedWindow(QMainWindow):
 
         self.ui.centralwidget.setContentsMargins(10, 10, 10, 10)
 
-        self.show_global_key_value_widgets(visible=_mantid_status)
-        self.init_global_key_value_widgets()
+#        self.show_global_key_value_widgets(visible=_mantid_status)
+#        self.init_global_key_value_widgets()
 
-    def init_global_key_value_widgets(self):
-        self.populate_list_algo()
-        self._set_column_widths()
-        self.init_table()
-
-    def init_table(self):
-        global_key_value = self.parent.global_key_value
-        for _row, _key in enumerate(global_key_value.keys()):
-            _value = global_key_value[_key]
-            self._add_row(row=_row, key=_key, value=_value)
-
-    def show_global_key_value_widgets(self, visible=False):
-        self.ui.global_key_value_groupBox.setVisible(visible)
-
-    def _set_column_widths(self):
-        for _col, _width in enumerate(COLUMNS_WIDTH):
-            self.ui.key_value_table.setColumnWidth(_col, _width)
-
-    def _remove_blacklist_algo(self, list_algo):
-        list_algo_without_blacklist = []
-        for _algo in list_algo:
-            if not (_algo in self.parent.align_and_focus_powder_from_files_blacklist):
-                list_algo_without_blacklist.append(_algo)
-
-        return list_algo_without_blacklist
-
-    def remove_from_list(self,
-                         original_list=[],
-                         to_remove=[]):
-        if to_remove:
-            clean_list_algo = []
-            for _algo in original_list:
-                if not(_algo in to_remove):
-                    clean_list_algo.append(_algo)
-            return clean_list_algo
-        else:
-            return original_list
-
-    def populate_list_algo(self):
-        self.ui.list_key_comboBox.clear()
-
-        raw_list_algo = get_list_algo('AlignAndFocusPowderFromFiles')
-        list_algo_without_blacklist = self._remove_blacklist_algo(raw_list_algo)
-
-        global_list_keys = self.parent.global_key_value.keys()
-        global_unused_list_algo = self.remove_from_list(original_list=list_algo_without_blacklist,
-                                                        to_remove=global_list_keys)
-        self.ui.list_key_comboBox.addItems(global_unused_list_algo)
-
-    def add_key_value(self):
-        self._add_new_row_at_bottom()
-        self.update_key_value_widgets()
-        self.populate_list_algo()
-        self.ui.list_key_comboBox.setFocus()
-
-    def _add_row(self, row=-1, key='', value=""):
-        self.ui.key_value_table.insertRow(row)
-        self._set_item(key, row, 0)
-        self._set_item(value, row, 1)
-
-    def _set_item(self, text, row, column):
-        key_item = QTableWidgetItem(text)
-        key_item.setFlags(QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
-        self.ui.key_value_table.setItem(row, column, key_item)
-
-    def _add_new_row_at_bottom(self):
-        nbr_row = self.get_nbr_row()
-        key = self.get_current_selected_key()
-        value = str(self.ui.new_value_widget.text())
-        self.parent.global_key_value[key] = value
-        self._add_row(row=nbr_row, key=key, value=value)
-        self.ui.new_value_widget.setText("")
-
-    def get_current_selected_key(self):
-        return str(self.ui.list_key_comboBox.currentText())
-
-    def get_nbr_row(self):
-        return self.ui.key_value_table.rowCount()
-
-    def _get_selected_row_range(self):
-        selection = self.ui.key_value_table.selectedRanges()
-        from_row = selection[0].topRow()
-        to_row = selection[0].bottomRow()
-        return np.arange(from_row, to_row+1)
-
-    def _remove_rows(self, row_range):
-        first_row_selected = row_range[0]
-        for _ in row_range:
-            self.ui.key_value_table.removeRow(first_row_selected)
-
-    def remove_key_value_selected(self):
-        selected_row_range = self._get_selected_row_range()
-        self._remove_rows(selected_row_range)
-        self.update_key_value_widgets()
-        self.update_global_key_value()
-        self.populate_list_algo()
-
-    def update_global_key_value(self):
-        nbr_row = self.get_nbr_row()
-        global_key_value = {}
-        for _row in np.arange(nbr_row):
-            _key = self._get_cell_value(_row, 0)
-            _value = self._get_cell_value(_row, 1)
-            global_key_value[_key] = _value
-        self.parent.global_key_value = global_key_value
-
-    def _get_cell_value(self, row, column):
-        item = self.ui.key_value_table.item(row, column)
-        return str(item.text())
-
-    def _what_state_remove_button_should_be(self):
-        nbr_row = self.get_nbr_row()
-        if nbr_row > 0:
-            enable = True
-        else:
-            enable = False
-        return enable
-
-    def update_key_value_widgets(self):
-        enable = self._what_state_remove_button_should_be()
-        self.ui.remove_selection_button.setEnabled(enable)
+    # def init_global_key_value_widgets(self):
+    #     self.populate_list_algo()
+    #     self._set_column_widths()
+    #     self.init_table()
+    #
+    # def init_table(self):
+    #     global_key_value = self.parent.global_key_value
+    #     for _row, _key in enumerate(global_key_value.keys()):
+    #         _value = global_key_value[_key]
+    #         self._add_row(row=_row, key=_key, value=_value)
+    #
+    # def show_global_key_value_widgets(self, visible=False):
+    #     self.ui.global_key_value_groupBox.setVisible(visible)
+    #
+    # def _set_column_widths(self):
+    #     for _col, _width in enumerate(COLUMNS_WIDTH):
+    #         self.ui.key_value_table.setColumnWidth(_col, _width)
+    #
+    # def _remove_blacklist_algo(self, list_algo):
+    #     list_algo_without_blacklist = []
+    #     for _algo in list_algo:
+    #         if not (_algo in self.parent.align_and_focus_powder_from_files_blacklist):
+    #             list_algo_without_blacklist.append(_algo)
+    #
+    #     return list_algo_without_blacklist
+    #
+    # def remove_from_list(self,
+    #                      original_list=[],
+    #                      to_remove=[]):
+    #     if to_remove:
+    #         clean_list_algo = []
+    #         for _algo in original_list:
+    #             if not(_algo in to_remove):
+    #                 clean_list_algo.append(_algo)
+    #         return clean_list_algo
+    #     else:
+    #         return original_list
+    #
+    # def populate_list_algo(self):
+    #     self.ui.list_key_comboBox.clear()
+    #
+    #     raw_list_algo = get_list_algo('AlignAndFocusPowderFromFiles')
+    #     list_algo_without_blacklist = self._remove_blacklist_algo(raw_list_algo)
+    #
+    #     global_list_keys = self.parent.global_key_value.keys()
+    #     global_unused_list_algo = self.remove_from_list(original_list=list_algo_without_blacklist,
+    #                                                     to_remove=global_list_keys)
+    #     self.ui.list_key_comboBox.addItems(global_unused_list_algo)
+    #
+    # def add_key_value(self):
+    #     self._add_new_row_at_bottom()
+    #     self.update_key_value_widgets()
+    #     self.populate_list_algo()
+    #     self.ui.list_key_comboBox.setFocus()
+    #
+    # def _add_row(self, row=-1, key='', value=""):
+    #     self.ui.key_value_table.insertRow(row)
+    #     self._set_item(key, row, 0)
+    #     self._set_item(value, row, 1)
+    #
+    # def _set_item(self, text, row, column):
+    #     key_item = QTableWidgetItem(text)
+    #     key_item.setFlags(QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
+    #     self.ui.key_value_table.setItem(row, column, key_item)
+    #
+    # def _add_new_row_at_bottom(self):
+    #     nbr_row = self.get_nbr_row()
+    #     key = self.get_current_selected_key()
+    #     value = str(self.ui.new_value_widget.text())
+    #     self.parent.global_key_value[key] = value
+    #     self._add_row(row=nbr_row, key=key, value=value)
+    #     self.ui.new_value_widget.setText("")
+    #
+    # def get_current_selected_key(self):
+    #     return str(self.ui.list_key_comboBox.currentText())
+    #
+    # def get_nbr_row(self):
+    #     return self.ui.key_value_table.rowCount()
+    #
+    # def _get_selected_row_range(self):
+    #     selection = self.ui.key_value_table.selectedRanges()
+    #     from_row = selection[0].topRow()
+    #     to_row = selection[0].bottomRow()
+    #     return np.arange(from_row, to_row+1)
+    #
+    # def _remove_rows(self, row_range):
+    #     first_row_selected = row_range[0]
+    #     for _ in row_range:
+    #         self.ui.key_value_table.removeRow(first_row_selected)
+    #
+    # def remove_key_value_selected(self):
+    #     selected_row_range = self._get_selected_row_range()
+    #     self._remove_rows(selected_row_range)
+    #     self.update_key_value_widgets()
+    #     self.update_global_key_value()
+    #     self.populate_list_algo()
+    #
+    # def update_global_key_value(self):
+    #     nbr_row = self.get_nbr_row()
+    #     global_key_value = {}
+    #     for _row in np.arange(nbr_row):
+    #         _key = self._get_cell_value(_row, 0)
+    #         _value = self._get_cell_value(_row, 1)
+    #         global_key_value[_key] = _value
+    #     self.parent.global_key_value = global_key_value
+    #
+    # def _get_cell_value(self, row, column):
+    #     item = self.ui.key_value_table.item(row, column)
+    #     return str(item.text())
+    #
+    # def _what_state_remove_button_should_be(self):
+    #     nbr_row = self.get_nbr_row()
+    #     if nbr_row > 0:
+    #         enable = True
+    #     else:
+    #         enable = False
+    #     return enable
+    #
+    # def update_key_value_widgets(self):
+    #     enable = self._what_state_remove_button_should_be()
+    #     self.ui.remove_selection_button.setEnabled(enable)
 
     def is_idl_selected(self):
         return self.ui.idl_post_processing_button.isChecked()
@@ -208,7 +208,6 @@ class AdvancedWindow(QMainWindow):
         self.parent.post_processing = _post
         self.parent.activate_reduction_tabs() # hide or show right tabs
         self.parent.advanced_window_idl_groupbox_visible = _idl_groupbox_visible
-        self.show_global_key_value_widgets(visible= not _idl_groupbox_visible)
 
     def instrument_changed(self, index):
         self.parent.instrument["short_name"] = self.list_instrument_short_name[index]
@@ -231,35 +230,35 @@ class AdvancedWindow(QMainWindow):
             self.ui.output_dir_label.setText(str(_output_folder))
             self.parent.output_folder = str(_output_folder)
 
-    def add_global_key_value_to_all_rows(self):
-        if self.is_idl_selected():
-            return
-
-        global_list_key_value = self.parent.global_key_value
-
-        list_table_ui = self.parent.master_table_list_ui
-        if not list_table_ui:
-            return
-
-        for _random_key in list_table_ui.keys():
-            _entry = list_table_ui[_random_key]
-            current_local_key_value = _entry['align_and_focus_args_infos']
-            if current_local_key_value == {}:
-                _entry['align_and_focus_args_infos'] = global_list_key_value
-            else:
-                list_local_keys = current_local_key_value.keys()
-                list_global_keys = global_list_key_value.keys()
-                new_local_key_value = {}
-                for _key in list_local_keys:
-                    if _key in list_global_keys:
-                        new_local_key_value[_key] = global_list_key_value[_key]
-                    else:
-                        new_local_key_value[_key] = current_local_key_value[_key]
-                _entry['align_and_focus_args_infos'] = new_local_key_value
-            list_table_ui[_random_key] = _entry
-
-        self.parent.master_table_list_ui = list_table_ui
+    # def add_global_key_value_to_all_rows(self):
+    #     if self.is_idl_selected():
+    #         return
+    #
+    #     global_list_key_value = self.parent.global_key_value
+    #
+    #     list_table_ui = self.parent.master_table_list_ui
+    #     if not list_table_ui:
+    #         return
+    #
+    #     for _random_key in list_table_ui.keys():
+    #         _entry = list_table_ui[_random_key]
+    #         current_local_key_value = _entry['align_and_focus_args_infos']
+    #         if current_local_key_value == {}:
+    #             _entry['align_and_focus_args_infos'] = global_list_key_value
+    #         else:
+    #             list_local_keys = current_local_key_value.keys()
+    #             list_global_keys = global_list_key_value.keys()
+    #             new_local_key_value = {}
+    #             for _key in list_local_keys:
+    #                 if _key in list_global_keys:
+    #                     new_local_key_value[_key] = global_list_key_value[_key]
+    #                 else:
+    #                     new_local_key_value[_key] = current_local_key_value[_key]
+    #             _entry['align_and_focus_args_infos'] = new_local_key_value
+    #         list_table_ui[_random_key] = _entry
+    #
+    #     self.parent.master_table_list_ui = list_table_ui
 
     def closeEvent(self, c):
-        self.add_global_key_value_to_all_rows()
+        # self.add_global_key_value_to_all_rows()
         self.parent.advanced_window_ui = None
