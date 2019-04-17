@@ -7,6 +7,9 @@ import numpy as np
 user_home = expanduser("~")
 CONFIG_FILE = os.path.join(user_home, '.addie_config.cfg')
 
+COLUMNS_IDENTICAL_VALUES_COLOR = [0, 255, 255] # cyan
+COLUMNS_DIFFERENT_VALUES_COLOR = [255, 255, 255] # white
+
 COLUMN_DEFAULT_WIDTH = 90
 COLUMN_DEFAULT_HEIGHT = 120
 CONFIG_BUTTON_HEIGHT = 20
@@ -58,7 +61,6 @@ h2_COLUMNS_WIDTH = [h3_COLUMNS_WIDTH[0], #0
                     h3_COLUMNS_WIDTH[24], #20
                     ]
 
-
 h1_COLUMNS_WIDTH = [h3_COLUMNS_WIDTH[0],
                     h3_COLUMNS_WIDTH[1],
                     np.sum(h3_COLUMNS_WIDTH[2:13]),
@@ -69,12 +71,46 @@ h1_COLUMNS_WIDTH = [h3_COLUMNS_WIDTH[0],
 INDEX_OF_COLUMNS_SEARCHABLE = [1, 2, 3, 4, 7, 13, 14, 15, 18]
 INDEX_OF_SPECIAL_COLUMNS_SEARCHABLE = [5, 6, 16, 17]   # where we need to look inside the widget_cell, not only item
 
-INDEX_OF_COLUMNS_WITH_COMBOBOX = [8, 10, 11, 12, 19, 21, 22, 23]
+INDEX_OF_COLUMNS_SHAPE = [8, 19]
+INDEX_OF_ABS_CORRECTION = [10, 21]
+INDEX_OF_MULTI_SCATTERING_CORRECTION = [11, 22]
+INDEX_OF_INELASTIC_CORRECTION = [12, 23]
+
+INDEX_OF_COLUMNS_WITH_COMBOBOX = [INDEX_OF_COLUMNS_SHAPE[0],
+                                  INDEX_OF_ABS_CORRECTION[0],
+                                  INDEX_OF_MULTI_SCATTERING_CORRECTION[0],
+                                  INDEX_OF_INELASTIC_CORRECTION,
+                                  INDEX_OF_COLUMNS_SHAPE[1],
+                                  INDEX_OF_ABS_CORRECTION[1],
+                                  INDEX_OF_MULTI_SCATTERING_CORRECTION[1],
+                                  INDEX_OF_INELASTIC_CORRECTION[1],
+                                  ]
+
+INDEX_SAMPLE_START = 1
+INDEX_NORMALIZATION_START = 13
 INDEX_OF_COLUMNS_WITH_CHECKBOX = [0]
 INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA = [5, 16]
 INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS = [9, 20]
 INDEX_OF_COLUMNS_WITH_MASS_DENSITY = [6, 17]
 INDEX_OF_COLUMNS_WITH_ITEMS = INDEX_OF_COLUMNS_SEARCHABLE
+
+LIST_COLUMNS_TO_SEARCH_FOR_FULL_HIGHLIGTHING = [3,  # sample background runs
+                                                4,  # sample background background
+                                                5,  # sample chemical formula
+                                                6,  # sample mass density
+                                                7,  # sample packing fraction
+                                                8, 9,  # sample geometry shape and dimensions
+                                                10, 11, 12,  # Sample correction
+                                                13,  # normalization  runs
+                                                14,  # normalization background runs
+                                                15,  # normalization background background
+                                                16,  # normalization chemical formula
+                                                17,  # normalization mass density
+                                                18,  # normalization packging fraction
+                                                19, 20,  # normalization geometry shape and dimensions
+                                                21, 22, 23,  # normalization correction
+                                                24,  # Align and Focus Args
+                                                ]
 
 SAMPLE_FIRST_COLUMN = 2
 NORMALIZATION_FIRST_COLUMN = 13

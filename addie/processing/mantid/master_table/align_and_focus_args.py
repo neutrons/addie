@@ -5,6 +5,7 @@ from qtpy import QtCore
 
 from addie.utilities import load_ui
 from addie.utilities.general import get_list_algo
+from addie.processing.mantid.master_table.tree_definition import LIST_COLUMNS_TO_SEARCH_FOR_FULL_HIGHLIGTHING
 
 COLUMNS_WIDTH = [150, 150]
 
@@ -114,6 +115,7 @@ class AlignAndFocusArgsWindow(QMainWindow):
 
     def ok_clicked(self):
         self._save_key_value_infos()
+        self.main_window.check_master_table_column_highlighting(column=LIST_COLUMNS_TO_SEARCH_FOR_FULL_HIGHLIGTHING[-1])
         self.close()
 
     def _save_key_value_infos(self):

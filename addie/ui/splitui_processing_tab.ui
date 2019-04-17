@@ -204,31 +204,6 @@
           <property name="horizontalScrollMode">
            <enum>QAbstractItemView::ScrollPerPixel</enum>
           </property>
-          <column>
-           <property name="text">
-            <string/>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Runs</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Background</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Packing Fraction</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Geometry</string>
-           </property>
-          </column>
          </widget>
         </item>
         <item>
@@ -300,46 +275,6 @@
           <attribute name="verticalHeaderCascadingSectionResizes">
            <bool>false</bool>
           </attribute>
-          <column>
-           <property name="text">
-            <string/>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string/>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Runs</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Background Runs</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string/>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Shape</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Radius</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Height</string>
-           </property>
-          </column>
          </widget>
         </item>
        </layout>

@@ -4,6 +4,7 @@ from qtpy.QtWidgets import QFileDialog, QMessageBox
 import addie.utilities.specify_plots_style as ps
 import addie.calculate_gr.edit_sq_dialog
 from addie.calculate_gr.save_sq_dialog_message import SaveSqDialogMessageDialog
+from addie.widgets.filedialog import get_save_file
 
 
 def check_widgets_status(main_window, enable_gr_widgets=False):
@@ -433,26 +434,21 @@ def do_save_gr(main_window):
     default_dir = os.getcwd()
     caption = 'Save G(r)'
 
-    # TEST/ISSUE/NOW - Refactor the following part out to be a standard widget
-    file_filter_str = 'XYE (*.xye);;CSV XYE (*.csv);;PDFgui (*.gr);;RMCProfile (*.dat)'
-    gr_file_name = get_file_names_from_dialog(default_dir, file_filter_str, caption)[0]
+    FILE_FILTERS = {'PDFgui (*.gr)':'gr',
+                    'XYE (*.xye)':'xye',
+                    'CSV XYE (*.csv)':'csv',
+                    'RMCProfile (*.dat)':'dat'}
 
-    # check the file extension and use the file extension to determine G(r) file type
-    file_name, file_ext = os.path.splitext(gr_file_name)
-    if file_ext.lower().startswith('.xye'):
-        gr_file_type = 'xye'
-    elif file_ext.lower().startswith('.csv'):
-        gr_file_type = 'csv'
-    elif file_ext.lower().startswith('.gr'):
-        gr_file_type = 'gr'
-    elif file_ext.lower().startswith('.dat'):
-        gr_file_type = 'rmcprofile'
-    else:
-        # unsupported
-        raise RuntimeError('G(r) file with extension {0} is not supported.'.format(file_ext))
+    filename, filetype = get_save_file(parent=main_window, directory=default_dir, caption=caption,
+                                       filter=FILE_FILTERS)
+    if not filename:  # user pressed cancel
+        return
+
+    if filetype == 'dat':
+        filetype = 'rmcprofile'
 
     # save!
-    main_window._myController.save_ascii(gr_ws_name, gr_file_name, gr_file_type)
+    main_window._myController.save_ascii(gr_ws_name, filename, filetype)
 
 
 def do_save_sq(main_window):
@@ -470,39 +466,24 @@ def do_save_sq(main_window):
         o_dialog = SaveSqDialogMessageDialog(main_window = main_window)
         o_dialog.show()
 
-    # loop the SofQ name to save
-    file_filter = 'XYE (*.xye);;CSV XYE (*.csv);;SofQ (*.sq)'
+    FILE_FILTERS = {'XYE (*.xye)':'xye',
+                    'CSV XYE (*.csv)':'csv',
+                    'SofQ (*.sq)':'sq'}
+    # used to support .dat extension, but save_ascii assumes that is an rmcprofile file
 
+    # loop the SofQ name to save
     for sq_name in sq_name_list:
         # get the output file name first
-        out_file_name = QFileDialog.getSaveFileName(main_window,
-                                                    'Input File Name to Save S(Q) {0}'.format(sq_name),
-                                                    main_window._currWorkDir, file_filter)
-        if isinstance(out_file_name, tuple):
-            out_file_name = out_file_name[0]
-        if out_file_name is None or len(out_file_name) == 0:
+
+        filename, filetype = get_save_file(parent=main_window, directory=main_window._currWorkDir,
+                                           caption='Input File Name to Save S(Q) {0}'.format(sq_name),
+                                           filter=FILE_FILTERS)
+        if not filename:
             # skip if the user cancel the operation on this S(Q)
             continue
 
-        # get the directory, file name and extension
-        main_window._currWorkDir = os.path.dirname(out_file_name)
-        file_name, file_ext = os.path.splitext(out_file_name)
-        if file_ext.lower().startswith('.xye'):
-            sq_file_type = 'xye'
-        elif file_ext.lower().startswith('.csv'):
-            sq_file_type = 'csv'
-        elif file_ext.lower().startswith('.sq'):
-            sq_file_type = 'dat'
-        elif file_ext.lower().startswith('.dat'):
-            sq_file_type = 'dat'
-        elif len(file_ext.strip()) == 0:
-            raise RuntimeError('There is no extension of file {0}. Unable to determine file type.'
-                               ''.format(out_file_name))
-        else:
-            raise RuntimeError('File type {0} cannot be recognized.'.format(file_ext))
-
         # save file
-        main_window._myController.save_ascii(sq_name, out_file_name, sq_file_type)
+        main_window._myController.save_ascii(sq_name, filename, filetype)
 
 
 def do_edit_sq(main_window):
@@ -694,38 +675,6 @@ def edit_sq(main_window, sq_name, scale_factor, shift):
 
     # calculate G(r) too
     generate_gr_step2(main_window, [edit_sq_name])
-
-
-def get_file_names_from_dialog(default_dir, file_filter, caption):
-    """
-    get the file name from a dialog
-    """
-    # TODO/TEST/NOW - Find out what this method can get!!!
-    # check input
-    assert isinstance(default_dir, str), 'Default directory {0} must be a string but not a {1}.' \
-                                         ''.format(default_dir, type(default_dir))
-    assert isinstance(file_filter, str), 'File filter {0} must be a string but not a {1}.' \
-        ''.format(file_filter, type(file_filter))
-
-    # generate a dialog to get the file name to save G(r)
-    export_dialog = QFileDialog()
-    export_dialog.setWindowTitle(caption)
-    export_dialog.setDirectory(default_dir)
-    export_dialog.setAcceptMode(QFileDialog.AcceptSave)
-    export_dialog.setNameFilter(file_filter)
-
-    # quit if it is not accepted
-    if export_dialog.exec_() != QFileDialog.Accepted:
-        return None
-    elif len(export_dialog.selectedFiles()) == 0:
-        return None
-
-    # get the file name from dialog
-    file_name_list = list()
-    for file_name in export_dialog.selectedFiles():
-        file_name_list.append(str(file_name))
-
-    return file_name_list
 
 
 def clear_bank_checkboxes(main_window):
