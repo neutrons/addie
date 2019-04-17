@@ -1,6 +1,6 @@
 import numpy as np
 from qtpy import QtGui
-from qtpy.QtWidgets import QTableWidgetItem
+from qtpy.QtWidgets import QLineEdit
 
 from addie.processing.mantid.master_table.utilities import Utilities
 
@@ -45,6 +45,8 @@ class ColumnHighlighting:
             self.check_column(column=_col)
 
     def check_column(self, column=-1):
+        self.main_window.processing_ui.h3_table.blockSignals(True)
+
         self.column = column
         are_all_the_same = False
 
@@ -83,6 +85,7 @@ class ColumnHighlighting:
                     are_all_the_same = self.are_align_and_focus_args_identical()
 
         self.apply_cell_background(are_all_the_same=are_all_the_same)
+        self.main_window.processing_ui.h3_table.blockSignals(False)
 
     def apply_cell_background(self, are_all_the_same=False):
         if are_all_the_same:
@@ -107,6 +110,11 @@ class ColumnHighlighting:
         for _row in np.arange(self.nbr_row):
 
             main_widget = self.main_window.processing_ui.h3_table.cellWidget(_row, self.column)
+            if self.column == 4:
+                print("cell widget at row {}: {}".format(_row, main_widget))
+                # if type(main_widget) is QLineEdit:
+                #     print(main_widget.text())
+
             if main_widget:
                 if (self.column in INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA) or \
                         (self.column in INDEX_OF_COLUMNS_WITH_MASS_DENSITY) or \
@@ -132,6 +140,11 @@ class ColumnHighlighting:
 
             else:
                 item = self.main_window.processing_ui.h3_table.item(_row, self.column)
+
+                # if self.column == 4:
+                #     print("cell contains is for row {}: {}".format(_row, item.text()))
+
+
                 if item:
                     self.main_window.processing_ui.h3_table.item(_row, self.column).setBackground(background_color)
 
