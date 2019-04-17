@@ -10,6 +10,7 @@ from addie.processing.mantid.master_table.import_from_run_number_handler import 
 from addie.processing.mantid.master_table.import_from_database.load_into_master_table import LoadIntoMasterTable
 from addie.processing.mantid.make_calibration_handler.make_calibration import MakeCalibrationLauncher
 from addie.processing.mantid.master_table.reduction_configuration_handler import ReductionConfigurationHandler
+from addie.processing.mantid.master_table.master_table_loader import AsciiLoader
 
 try:
     from addie.processing.mantid.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
@@ -17,6 +18,8 @@ try:
 except ImportError:
     print('pyoncat module not found. Functionality disabled')
     ONCAT_ENABLED = False
+
+from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_MASS_DENSITY
 
 
 def personalization_table_clicked(main_window):
@@ -209,6 +212,7 @@ def sample_mass_density_button_pressed(main_window, key):
 def sample_mass_density_line_edit_entered(main_window, key):
     o_table = TableRowHandler(main_window=main_window)
     o_table.transfer_widget_states(from_key=key, data_type='sample')
+    main_window.check_master_table_column_highlighting(column=INDEX_OF_COLUMNS_WITH_MASS_DENSITY[0])
 
 
 def sample_shape_changed(main_window, index, key):
@@ -258,6 +262,7 @@ def normalization_mass_density_button_pressed(main_window, key):
 def normalization_mass_density_line_edit_entered(main_window, key):
     o_table = TableRowHandler(main_window=main_window)
     o_table.transfer_widget_states(from_key=key, data_type='normalization')
+    main_window.check_master_table_column_highlighting(column=INDEX_OF_COLUMNS_WITH_MASS_DENSITY[1])
 
 
 def normalization_shape_changed(main_window, text, key):
@@ -326,3 +331,8 @@ def from_oncat_to_master_table(main_window, json=None, with_conflict=False, igno
 
 def reduction_configuration_button_clicked(main_window):
     ReductionConfigurationHandler(parent=main_window)
+
+
+def load_ascii(main_window, filename=""):
+    o_ascii_loader = AsciiLoader(parent=main_window, filename=filename)
+    o_ascii_loader.load()

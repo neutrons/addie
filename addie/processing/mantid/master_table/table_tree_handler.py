@@ -5,7 +5,7 @@ import numpy as np
 import os
 import pickle
 
-from qtpy.QtWidgets import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QFileDialog
+from qtpy.QtWidgets import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QFileDialog, QApplication
 from addie.utilities import load_ui
 from qtpy import QtCore, QtGui
 
@@ -723,12 +723,14 @@ class H3TableHandler:
         o_cells = CellsHandler(parent=self.main_window)
         o_cells.paste()
         self.check_status_of_right_click_buttons()
+        self.main_window.check_master_table_column_highlighting()
 
     def cells_clear(self):
         '''clear contain of selected cells'''
         o_cells = CellsHandler(parent=self.main_window)
         o_cells.clear()
         self.check_status_of_right_click_buttons()
+        self.main_window.check_master_table_column_highlighting()
 
     def rows_copy(self):
         '''copy entire row'''
@@ -741,12 +743,14 @@ class H3TableHandler:
         o_rows = RowsHandler(parent=self.main_window)
         o_rows.paste()
         self.check_status_of_right_click_buttons()
+        self.main_window.check_master_table_column_highlighting()
 
     def rows_remove(self):
         '''remove selected rows'''
         o_rows = RowsHandler(parent=self.main_window)
         o_rows.remove()
         self.check_status_of_right_click_buttons()
+        self.main_window.check_master_table_column_highlighting()
 
     def rows_duplicate(self):
         '''duplicate currently selected rows'''
@@ -757,6 +761,7 @@ class H3TableHandler:
         o_row.copy(row=row_selected)
         o_row.paste(row=row_selected-1)
         self.check_status_of_right_click_buttons()
+        self.main_window.check_master_table_column_highlighting()
 
     def refresh_table(self):
         '''reload the initial file'''
@@ -788,8 +793,7 @@ class H3TableHandler:
             self.main_window.current_folder = new_path
             if clear_table:
                 self.clear_table()
-
-            #FIXME
+            # fixme
 
     def _import_table_from_config(self, clear_table=True):
         _current_folder = self.main_window.current_folder
@@ -797,6 +801,8 @@ class H3TableHandler:
                                                       caption='Select Table File ...',
                                                       directory=_current_folder,
                                                       filter="json (*.json);; Log (*.csv)")
+        QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+
         if table_file:
             new_path = os.path.dirname(table_file)
             self.main_window.current_folder = new_path
@@ -809,9 +815,11 @@ class H3TableHandler:
                 self.main_window.ui.statusbar.setStyleSheet("color: red")
                 self.main_window.ui.statusbar.showMessage(err.message,
                                                           self.main_window.statusbar_display_time)
+                QApplication.restoreOverrideCursor()
                 return
 
             o_dict.display_dialog()
+            QApplication.restoreOverrideCursor()
 
     def _export_table(self):
         _current_folder = self.main_window.current_folder
@@ -842,6 +850,7 @@ class H3TableHandler:
         o_row = TableRowHandler(main_window=self.main_window)
         o_row.insert_blank_row()
         self.check_status_of_right_click_buttons()
+        self.main_window.check_master_table_column_highlighting()
 
     def save_as_config(self):
         o_save_config = SaveConfigInterface(parent=self,

@@ -583,6 +583,8 @@ class TableFileLoader:
             else:
                 raise IOError("File format not supported!".format(self.filename))
 
+            self.parent.check_master_table_column_highlighting()
+
         except ValueError:
             self.parent.ui.statusbar.setStyleSheet("color: red")
             self.parent.ui.statusbar.showMessage("Unable to load configuration file {}!".format(self.filename),
