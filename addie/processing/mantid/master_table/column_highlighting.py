@@ -14,7 +14,7 @@ from addie.processing.mantid.master_table.tree_definition import (INDEX_OF_COLUM
                                                                   INDEX_OF_INELASTIC_CORRECTION,
                                                                   LIST_COLUMNS_TO_SEARCH_FOR_FULL_HIGHLIGTHING)
 from addie.processing.mantid.master_table.tree_definition import (COLUMNS_IDENTICAL_VALUES_COLOR,
-                                                                  COLUMNS_SAME_VALUES_COLOR)
+                                                                  COLUMNS_DIFFERENT_VALUES_COLOR)
 from addie.processing.mantid.master_table.tree_definition import INDEX_NORMALIZATION_START
 
 
@@ -96,12 +96,12 @@ class ColumnHighlighting:
                                                                    COLUMNS_IDENTICAL_VALUES_COLOR[1],
                                                                    COLUMNS_IDENTICAL_VALUES_COLOR[2])
         else:
-            background_color = QtGui.QColor(COLUMNS_SAME_VALUES_COLOR[0],
-                                            COLUMNS_SAME_VALUES_COLOR[1],
-                                            COLUMNS_SAME_VALUES_COLOR[2])
-            background_color_stylesheet = "rgb({}, {}, {})".format(COLUMNS_SAME_VALUES_COLOR[0],
-                                                                   COLUMNS_SAME_VALUES_COLOR[1],
-                                                                   COLUMNS_SAME_VALUES_COLOR[2])
+            background_color = QtGui.QColor(COLUMNS_DIFFERENT_VALUES_COLOR[0],
+                                            COLUMNS_DIFFERENT_VALUES_COLOR[1],
+                                            COLUMNS_DIFFERENT_VALUES_COLOR[2])
+            background_color_stylesheet = "rgb({}, {}, {})".format(COLUMNS_DIFFERENT_VALUES_COLOR[0],
+                                                                   COLUMNS_DIFFERENT_VALUES_COLOR[1],
+                                                                   COLUMNS_DIFFERENT_VALUES_COLOR[2])
 
         pen_color = "black"
         selection_color = "white"
@@ -110,43 +110,23 @@ class ColumnHighlighting:
         for _row in np.arange(self.nbr_row):
 
             main_widget = self.main_window.processing_ui.h3_table.cellWidget(_row, self.column)
-            if self.column == 4:
-                print("cell widget at row {}: {}".format(_row, main_widget))
-                # if type(main_widget) is QLineEdit:
-                #     print(main_widget.text())
 
             if main_widget:
-                if (self.column in INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA) or \
-                        (self.column in INDEX_OF_COLUMNS_WITH_MASS_DENSITY) or \
-                        (self.column in INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS) or \
-                        (self.column in INDEX_OF_COLUMNS_SHAPE) or \
-                        (self.column in INDEX_OF_ABS_CORRECTION) or \
-                        (self.column in INDEX_OF_MULTI_SCATTERING_CORRECTION) or \
-                        (self.column in INDEX_OF_INELASTIC_CORRECTION) or \
-                        (self.column == LIST_COLUMNS_TO_SEARCH_FOR_FULL_HIGHLIGTHING[-1]):
-                    main_widget.setAutoFillBackground(True)
-                    # main_widget.setStyleSheet("background-color: {};".format(background_color_stylesheet))
+
+                if self.column in INDEX_OF_COLUMNS_SEARCHABLE:
+                    self.main_window.processing_ui.h3_table.item(_row, self.column).setBackground(background_color)
                 else:
-                    main_widget.setAutoFillBackground(False)
-                    # main_widget.setStyleSheet("background-color: {};".format(background_color_stylesheet))
-                    # self.main_window.processing_ui.h3_table.item(_row, self.column).setBackground(background_color)
-                main_widget.setStyleSheet("color: {}; "
-                                          "background-color: {};"
-                                          "selection-color: {};"
-                                          "selection-background-color: {};".format(pen_color,
-                                                                                   background_color_stylesheet,
-                                                                                   selection_color,
-                                                                                   selection_background_color))
+                    main_widget.setAutoFillBackground(True)
+                    main_widget.setStyleSheet("color: {}; "
+                                              "background-color: {};"
+                                              "selection-color: {};"
+                                              "selection-background-color: {};".format(pen_color,
+                                                                                       background_color_stylesheet,
+                                                                                       selection_color,
+                                                                                       selection_background_color))
 
             else:
-                item = self.main_window.processing_ui.h3_table.item(_row, self.column)
-
-                # if self.column == 4:
-                #     print("cell contains is for row {}: {}".format(_row, item.text()))
-
-
-                if item:
-                    self.main_window.processing_ui.h3_table.item(_row, self.column).setBackground(background_color)
+                self.main_window.processing_ui.h3_table.item(_row, self.column).setBackground(background_color)
 
     def are_cells_identical(self):
         def _get_item_value(row=-1, column=-1):
