@@ -39,6 +39,7 @@ class AlignAndFocusArgsWindow(QMainWindow):
         self.ui = load_ui('manual_key_value_input.ui', baseinstance=self)
 
         self.init_widgets()
+        self._check_remove_button()
 
     def init_widgets(self):
         self._init_previous_key_value()
@@ -152,15 +153,18 @@ class AlignAndFocusArgsWindow(QMainWindow):
     def _add_row(self, row=-1, key='', value=""):
         self.ui.key_value_table.insertRow(row)
         self._set_item(key, row, 0)
-        self._set_item(value, row, 1)
+        self._set_item(value, row, 1, is_editable=True)
 
-    def _set_item(self, text, row, column):
+    def _set_item(self, text, row, column, is_editable=False):
         key_item = QTableWidgetItem(text)
-        key_item.setFlags(QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
+        if not is_editable:
+            key_item.setFlags(QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
         self.ui.key_value_table.setItem(row, column, key_item)
 
     def remove_clicked(self):
         selected_row_range = self._get_selected_row_range()
+        if selected_row_range is None:
+            return
         self._remove_rows(selected_row_range)
         self._check_remove_button()
         self.populate_list_algo()
@@ -172,6 +176,8 @@ class AlignAndFocusArgsWindow(QMainWindow):
 
     def _get_selected_row_range(self):
         selection = self.ui.key_value_table.selectedRanges()
+        if not selection:
+            return None
         from_row = selection[0].topRow()
         to_row = selection[0].bottomRow()
         return np.arange(from_row, to_row+1)

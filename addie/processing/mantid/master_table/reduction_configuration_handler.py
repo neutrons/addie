@@ -33,6 +33,8 @@ class ReductionConfiguration(QDialog):
     list_grouping_intermediate_widgets = []
     list_grouping_output_widgets = []
 
+    global_key_value = {}
+
     def __init__(self, parent=None):
         self.parent = parent
         QDialog.__init__(self, parent=parent)
@@ -158,18 +160,20 @@ class ReductionConfiguration(QDialog):
     def _add_row(self, row=-1, key='', value=""):
         self.ui.key_value_table.insertRow(row)
         self._set_item(key, row, 0)
-        self._set_item(value, row, 1)
+        self._set_item(value, row, 1, is_editable=True)
 
-    def _set_item(self, text, row, column):
+    def _set_item(self, text, row, column, is_editable=False):
         key_item = QTableWidgetItem(text)
-        key_item.setFlags(QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
+        if not is_editable:
+            key_item.setFlags(QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable)
         self.ui.key_value_table.setItem(row, column, key_item)
 
     def _add_new_row_at_bottom(self):
         nbr_row = self.get_nbr_row()
         key = self.get_current_selected_key()
         value = str(self.ui.new_value_widget.text())
-        self.parent.global_key_value[key] = value
+        # self.parent.global_key_value[key] = value
+        self.global_key_value[key] = value
         self._add_row(row=nbr_row, key=key, value=value)
         self.ui.new_value_widget.setText("")
 
@@ -208,7 +212,8 @@ class ReductionConfiguration(QDialog):
             _key = self._get_cell_value(_row, 0)
             _value = self._get_cell_value(_row, 1)
             global_key_value[_key] = _value
-        self.parent.global_key_value = global_key_value
+        #self.parent.global_key_value = global_key_value
+        self.global_key_value = global_key_value
 
     def _get_cell_value(self, row, column):
         item = self.ui.key_value_table.item(row, column)
@@ -318,8 +323,21 @@ class ReductionConfiguration(QDialog):
         # save state of buttons
         SaveReductionConfiguration(parent=self, grand_parent=self.parent)
 
+        self._retrieve_global_key_value()
+        self.parent.global_key_value = self.global_key_value
+
         # close
         self.close()
+
+    def _retrieve_global_key_value(self):
+        global_key_value = {}
+
+        nbr_row = self.ui.key_value_table.rowCount()
+        for _row in np.arange(nbr_row):
+            _key = self._get_cell_value(_row, 0)
+            _value = self._get_cell_value(_row, 1)
+            global_key_value[_key] = _value
+        self.global_key_value = global_key_value
 
     def add_global_key_value_to_all_rows(self):
         global_list_key_value = self.parent.global_key_value
