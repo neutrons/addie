@@ -114,11 +114,6 @@ class AlignAndFocusArgsWindow(QMainWindow):
         master_table_list_ui = self.main_window.master_table_list_ui[self.key]
         return master_table_list_ui['align_and_focus_args_infos']
 
-    def ok_clicked(self):
-        self._save_key_value_infos()
-        self.main_window.check_master_table_column_highlighting(column=LIST_COLUMNS_TO_SEARCH_FOR_FULL_HIGHLIGTHING[-1])
-        self.close()
-
     def _save_key_value_infos(self):
         master_table_list_ui = self.main_window.master_table_list_ui[self.key]
         key_value_dict = self._get_key_value_dict()
@@ -198,6 +193,11 @@ class AlignAndFocusArgsWindow(QMainWindow):
         return enable
 
     def cancel_clicked(self):
+        self.close()
+
+    def ok_clicked(self):
+        self._save_key_value_infos()
+        self.main_window.check_master_table_column_highlighting(column=LIST_COLUMNS_TO_SEARCH_FOR_FULL_HIGHLIGTHING[-1])
         self.close()
 
     def closeEvent(self, c):
