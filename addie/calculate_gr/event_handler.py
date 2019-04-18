@@ -746,8 +746,8 @@ def remove_sq_from_plot(main_window, sq_name):
     assert isinstance(sq_name, str)
 
     # remove
-    if main_window.calculation_gr_ui.graphicsView_sq.is_on_canvas(sq_name):
-        main_window.calculation_gr_ui.graphicsView_sq.remove_sq(sq_ws_name=sq_name)
+    if main_window.calculategr_ui.graphicsView_sq.is_on_canvas(sq_name):
+        main_window.calculategr_ui.graphicsView_sq.remove_sq(sq_ws_name=sq_name)
 
 
 def update_sq_boundary(main_window, boundary_index, new_position):

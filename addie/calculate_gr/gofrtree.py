@@ -52,8 +52,6 @@ class BraggTree(base.CustomizedTreeView):
         # reset
         self.reset_bragg_tree()
 
-        return
-
     def reset_bragg_tree(self):
         """
         Clear the leaves of the tree only leaving the main node 'workspaces'
@@ -79,8 +77,6 @@ class BraggTree(base.CustomizedTreeView):
         self.init_setup(['Bragg Workspaces'])
         self.add_main_item('workspaces', append=True, as_current_index=False)
 
-        return
-
     # override
     def mousePressEvent(self, e):
         """
@@ -100,8 +96,6 @@ class BraggTree(base.CustomizedTreeView):
         else:
             # keep base method for other buttons
             base.CustomizedTreeView.mousePressEvent(self, e)
-
-        return
 
     def pop_up_menu(self):
         """
@@ -414,6 +408,7 @@ class GofRTree(base.CustomizedTreeView):
         :return:
         """
         base.CustomizedTreeView.__init__(self, parent)
+        self.parent = parent
 
         # define actions
         self._action_plot = QAction('Plot', self)
@@ -713,6 +708,7 @@ class GofRTree(base.CustomizedTreeView):
         Returns:
 
         """
+
         # check
         assert ws_item.parent() is not None
 
@@ -730,9 +726,9 @@ class GofRTree(base.CustomizedTreeView):
         # remove from canvas
         try:
             if is_gr:
-                remove_gr_from_plot(leaf_node_name)
+                remove_gr_from_plot(self.parent, leaf_node_name)
             else:
-                self._mainWindow.remove_sq_from_plot(leaf_node_name)
+                remove_sq_from_plot(self.parent, leaf_node_name)
         except AssertionError as ass_err:
             print('Unable to remove %s from canvas due to %s.' % (leaf_node_name, str(ass_err)))
         # delete node
