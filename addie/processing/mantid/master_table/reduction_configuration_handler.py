@@ -80,6 +80,7 @@ class ReductionConfiguration(QDialog):
         self.ui.output_browse_groups_value.setText(str(output_grouping['nbr_groups']))
 
         self.init_global_key_value_widgets()
+        self.update_key_value_widgets()
 
     def init_global_key_value_widgets(self):
         self.populate_list_algo()
@@ -180,6 +181,8 @@ class ReductionConfiguration(QDialog):
 
     def _get_selected_row_range(self):
         selection = self.ui.key_value_table.selectedRanges()
+        if not selection:
+            return None
         from_row = selection[0].topRow()
         to_row = selection[0].bottomRow()
         return np.arange(from_row, to_row+1)
@@ -191,6 +194,8 @@ class ReductionConfiguration(QDialog):
 
     def remove_key_value_selected(self):
         selected_row_range = self._get_selected_row_range()
+        if selected_row_range is None:
+            return
         self._remove_rows(selected_row_range)
         self.update_key_value_widgets()
         self.update_global_key_value()
