@@ -88,8 +88,8 @@ class EditSofQDialog(QDialog):
         :return:
         """
         self.ui.comboBox_workspaces.clear()
-        self.ui.lineEdit_scaleFactor.setText('1.')
-        self.ui.lineEdit_shift.setText('0.')
+        self.ui.scale_value.setText('1.')
+        self.ui.shift_value.setText('0.')
 
         # slider limit
         self.ui.lineEdit_scaleMin.setText('0.0000')
@@ -126,8 +126,8 @@ class EditSofQDialog(QDialog):
         :return:
         """
         # get the current shift and scale factor
-        shift_value = float(self.ui.lineEdit_shift.text())
-        scale_factor = float(self.ui.lineEdit_scaleFactor.text())
+        shift_value = float(self.ui.shift_value.text())
+        scale_factor = float(self.ui.scale_value.text())
 
         # convert them to string with 16 precision float %.16f % ()
         key_shift = '%.16f' % shift_value
@@ -215,7 +215,7 @@ class EditSofQDialog(QDialog):
             self._scaleMax = max_scale
 
         # otherwise, re-set the slider
-        current_scale_factor = float(self.ui.lineEdit_scaleFactor.text())
+        current_scale_factor = float(self.ui.scale_value.text())
         if current_scale_factor < min_scale:
             current_scale_factor = min_scale
         elif current_scale_factor > max_scale:
@@ -248,7 +248,7 @@ class EditSofQDialog(QDialog):
             self._shiftMax = max_shift
 
         # otherwise, re-set the slider
-        curr_shift = float(self.ui.lineEdit_shift.text())
+        curr_shift = float(self.ui.shift_value.text())
         if curr_shift < min_shift:
             curr_shift = min_shift
         elif curr_shift > max_shift:
@@ -271,7 +271,7 @@ class EditSofQDialog(QDialog):
             return
 
         shift = self.get_shift_value()
-        self.ui.lineEdit_shift.setText('%.7f' % shift)
+        self.ui.shift_value.setText('%.7f' % shift)
 
     def get_shift_value(self):
         self.calculate_shift_value()
@@ -297,7 +297,7 @@ class EditSofQDialog(QDialog):
             return
 
         scale = self.get_scale_value()
-        self.ui.lineEdit_scaleFactor.setText('%.7f' % scale)
+        self.ui.scale_value.setText('%.7f' % scale)
 
     def get_scale_value(self):
         self.calculate_scale_value()
@@ -340,8 +340,8 @@ class EditSofQDialog(QDialog):
         self._scaleSlideMutex = True
 
         # edit line edits for shift and scale
-        self.ui.lineEdit_scaleFactor.setText('%.7f' % self.live_scale)
-        self.ui.lineEdit_shift.setText('%.7f' % self.live_shift)
+        self.ui.scale_value.setText('%.7f' % self.live_scale)
+        self.ui.shift_value.setText('%.7f' % self.live_shift)
 
         # disable mutex
         self._shiftSlideMutex = False
