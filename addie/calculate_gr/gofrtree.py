@@ -138,8 +138,6 @@ class BraggTree(base.CustomizedTreeView):
             self.removeAction(self._action_deselect_node)
             self.removeAction(self._action_delete)
 
-        return
-
     def add_bragg_ws_group(self, ws_group_name, bank_name_list):
         """
         Add a workspace group containing a list of bank names as a main node in the tree
@@ -166,30 +164,16 @@ class BraggTree(base.CustomizedTreeView):
             # register
             self._workspaceNameList.append(bank_name)
 
-        return
-
     def add_temp_ws(self, ws_name):
         """
 
         Parameters
         ----------
         ws_name
-
-        Returns
-        -------
-
         """
         self.add_child_main_item('workspaces', ws_name)
 
-        return
-
     def do_copy_to_ipython(self):
-        """
-
-        Returns
-        -------
-
-        """
         # TO/NOW - Doc and check
 
         # Get current index and item
@@ -211,8 +195,6 @@ class BraggTree(base.CustomizedTreeView):
         if self._mainWindow is not None:
             self._mainWindow.set_ipython_script(python_cmd)
 
-        return
-
     def do_remove_from_plot(self):
         """
         Remove a node's plot if it is plot on canvas
@@ -230,8 +212,6 @@ class BraggTree(base.CustomizedTreeView):
             gss_ws_name = str(gss_node.text())
             gss_bank_names = self.get_child_nodes(gss_node, output_str=True)
             remove_gss_from_plot(self._mainWindow, gss_ws_name, gss_bank_names)
-
-        return
 
     def do_delete_gsas(self):
         """
@@ -261,9 +241,6 @@ class BraggTree(base.CustomizedTreeView):
 
             # delete the node from the tree
             self.delete_node(gsas_node)
-        # END-FOR
-
-        return
 
     def do_merge_to_gss(self):
         """
@@ -303,8 +280,6 @@ class BraggTree(base.CustomizedTreeView):
         # write all the banks to a GSAS file
         self._mainWindow.get_workflow().write_gss_file(ws_name_list=bank_ws_list, gss_file_name=new_gss_file_name)
 
-        return
-
     def do_plot_ws(self):
         """
         Add selected runs
@@ -326,8 +301,6 @@ class BraggTree(base.CustomizedTreeView):
             self._mainWindow.plot_bragg(leaf_list)
         else:
             raise NotImplementedError('Main window has not been set up!')
-
-        return
 
     def do_select_gss_node(self):
         """
@@ -374,7 +347,6 @@ class BraggTree(base.CustomizedTreeView):
             else:
                 node_name = str(this_item.text())
             main_node_list.append(node_name)
-        # END-FOR
 
         return True, main_node_list
 
@@ -384,17 +356,11 @@ class BraggTree(base.CustomizedTreeView):
         Parameters
         ----------
         parent_window
-
-        Returns
-        -------
-
         """
         # check
         assert parent_window is not None, 'Parent window cannot be None'
 
         self._mainWindow = parent_window
-
-        return
 
 
 class GofRTree(base.CustomizedTreeView):
@@ -431,8 +397,6 @@ class GofRTree(base.CustomizedTreeView):
 
         self.reset_gr_tree()
 
-        return
-
     # override
     def mousePressEvent(self, e):
         """
@@ -440,10 +404,6 @@ class GofRTree(base.CustomizedTreeView):
         Parameters
         ----------
         e :: event
-
-        Returns
-        -------
-
         """
         button_pressed = e.button()
         if button_pressed == 2:
@@ -453,17 +413,11 @@ class GofRTree(base.CustomizedTreeView):
             # keep base method for other buttons
             base.CustomizedTreeView.mousePressEvent(self, e)
 
-        return
-
     def pop_up_menu(self):
         """
 
         Parameters
         ----------
-
-        Returns
-        -------
-
         """
         selected_items = self.get_selected_items()
         if len(selected_items) == 0:
@@ -479,7 +433,6 @@ class GofRTree(base.CustomizedTreeView):
                 print('[Error] Nodes of different levels are selected.')
             elif item.parent() is None and leaf_level != 2:
                 print('[Error] Nodes of different levels are selected.')
-        # END-FOR
 
         if leaf_level == 1:
             self.addAction(self._action_plot)
@@ -490,8 +443,6 @@ class GofRTree(base.CustomizedTreeView):
             self.addAction(self._action_ipython)
             self.addAction(self._action_remove_plot)
             self.addAction(self._action_delete)
-
-        return
 
     def add_gr(self, gr_parameter, gr_ws_name):
         """
@@ -518,8 +469,6 @@ class GofRTree(base.CustomizedTreeView):
         # register workspace
         self._workspaceNameList.append(gr_ws_name)
 
-        return
-
     def add_arb_gr(self, ws_name, is_gr=True):
         """
         Add a G(r) workspace that is not belonged to any S(Q) and add it under 'workspaces'
@@ -527,10 +476,6 @@ class GofRTree(base.CustomizedTreeView):
         ----------
         ws_name
         is_gr
-
-        Returns
-        -------
-
         """
         # check
         assert isinstance(ws_name, str)
@@ -544,16 +489,11 @@ class GofRTree(base.CustomizedTreeView):
         # register workspace
         self._workspaceNameList.append(ws_name)
 
-        return
-
     def add_sq(self, sq_ws_name):
         """
         Add an SofQ workspace
         Args:
             sq_ws_name:
-
-        Returns:
-
         """
         # check
         assert isinstance(sq_ws_name, str)
@@ -561,14 +501,9 @@ class GofRTree(base.CustomizedTreeView):
         # add
         self.add_child_main_item('SofQ', sq_ws_name)
 
-        return
-
     def reset_gr_tree(self):
         """
         Clear the leaves of the tree only leaving the main node 'workspaces'
-        Returns
-        -------
-
         """
         # clear all
         if self.model() is not None:
@@ -589,14 +524,9 @@ class GofRTree(base.CustomizedTreeView):
         self.add_main_item('workspaces', append=True, as_current_index=False)
         self.add_main_item('SofQ', append=False, as_current_index=False)
 
-        return
-
     def do_copy_to_ipython(self):
         """
         Copy the selected item to an iPython command
-        Returns
-        -------
-
         """
         # Get current index and item
         current_index = self.currentIndex()
@@ -624,13 +554,9 @@ class GofRTree(base.CustomizedTreeView):
         if self._mainWindow is not None:
             self._mainWindow.set_ipython_script(python_cmd)
 
-        return
-
     def do_delete_selected_items(self):
         """
         Delete the workspaces assigned to the selected items
-        Returns:
-
         """
         # get selected item
         selected_items = self.get_selected_items()
@@ -649,7 +575,6 @@ class GofRTree(base.CustomizedTreeView):
                 curr_level = temp_level
             elif curr_level != temp_level:
                 raise RuntimeError('Nodes of different levels are selected. It is not supported for deletion.')
-        # END-FOR
 
         # get item and delete
         if curr_level == 0:
@@ -660,18 +585,12 @@ class GofRTree(base.CustomizedTreeView):
             # delete leaf
             for item in selected_items:
                 self._delete_ws_node(item, None, check_gr_sq=True)
-        # END-IF-ELSE
-
-        return
 
     def _delete_main_node(self, node_item):
         """
         Delete a main node
         Args:
             node_item:
-
-        Returns:
-
         """
         # Check
         assert node_item.parent() is None
@@ -691,24 +610,17 @@ class GofRTree(base.CustomizedTreeView):
         for leaf_node in sub_leaves:
             # delete a leaf
             self._delete_ws_node(leaf_node, is_gr, check_gr_sq=False)
-        # END-FOR
 
         # delete this node
         if not keep_main_node:
             self.delete_node(node_item)
-
-        return
 
     def _delete_ws_node(self, ws_item, is_gr, check_gr_sq):
         """
         Delete a level-2 item
         Args:
             ws_item:
-
-        Returns:
-
         """
-
         # check
         assert ws_item.parent() is not None
 
@@ -734,8 +646,6 @@ class GofRTree(base.CustomizedTreeView):
         # delete node
         self.delete_node(ws_item)
 
-        return
-
     def do_plot(self):
         """
         Add selected runs
@@ -756,7 +666,6 @@ class GofRTree(base.CustomizedTreeView):
                 sq_list.append(leaf)
             else:
                 gr_list.append(leaf)
-        # END-FOR
 
         # sort
         sq_list.sort()
@@ -771,8 +680,6 @@ class GofRTree(base.CustomizedTreeView):
 
         for sq_name in sq_list:
             self._mainWindow.plot_sq(sq_name, None, False)
-
-        return
 
     def do_remove_from_plot(self):
         """
@@ -794,10 +701,6 @@ class GofRTree(base.CustomizedTreeView):
                 remove_sq_from_plot(self._mainWindow, leaf_name)
             else:
                 remove_gr_from_plot(leaf_name)
-            # END-IF
-        # END-FOR
-
-        return
 
     def get_current_run(self):
         """ Get current run selected by mouse
@@ -828,7 +731,6 @@ class GofRTree(base.CustomizedTreeView):
         except ValueError as value_error:
             return False, 'Unable to convert {0} to run number as integer due to {1}.' \
                           ''.format(current_item.text(), value_error)
-        # END-TRY
 
         return True, run
 
@@ -847,17 +749,10 @@ class GofRTree(base.CustomizedTreeView):
         status, current_run = self.get_current_run()
         print('[INFO] Status = {0}; Current run number = {1}'.format(status, current_run))
 
-        # if self._mainWindow is not None:
-        #     self._mainWindow.set_run(current_run)
-
-        return
-
-    def set_main_window(self, main_window):
+\   def set_main_window(self, main_window):
         """
 
         :param main_window:
         :return:
         """
         self._mainWindow = main_window
-
-        return
