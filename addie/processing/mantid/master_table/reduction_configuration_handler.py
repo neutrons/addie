@@ -6,7 +6,6 @@ from qtpy import QtGui, QtCore
 import numpy as np
 
 from addie.processing.mantid.master_table.utilities import LoadGroupingFile
-#from addie.initialization.widgets import main_tab as main_tab_initialization
 from addie.initialization.widgets.main_tab import set_default_folder_path
 from addie.utilities.general import get_list_algo
 
