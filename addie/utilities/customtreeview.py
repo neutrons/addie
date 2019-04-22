@@ -35,8 +35,6 @@ class CustomizedTreeView(QTreeView):
         self._myHeaderList = list()
         self._childrenInOrder = True
 
-        return
-
     def delete_node(self, node_item):
         """ Delete a node in the tree
         """
@@ -66,10 +64,6 @@ class CustomizedTreeView(QTreeView):
 
             if parent_value in self._leafDict:
                 self._leafDict[parent_value].remove(node_value)
-            # END-IF
-        # END-IF-ELSE
-
-        return
 
     def init_setup(self, header_list):
         """

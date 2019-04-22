@@ -19,6 +19,12 @@ def check_widgets_status(main_window, enable_gr_widgets=False):
     if enable_gr_widgets:
         gr_status=True
 
+    sofq_widgets_status(main_window, sofq_status)
+    gr_widgets_status(main_window, gr_status)
+    _tree_ui = main_window.calculategr_ui.frame_treeWidget_grWsList.children()[1]
+
+
+def sofq_widgets_status(main_window, sofq_status):
     list_sofq_ui = [main_window.calculategr_ui.pushButton_rescaleSq,
                     main_window.calculategr_ui.pushButton_sqColorStyle,
                     main_window.calculategr_ui.pushButton_editSofQ,
@@ -30,6 +36,8 @@ def check_widgets_status(main_window, enable_gr_widgets=False):
     for _ui in list_sofq_ui:
         _ui.setEnabled(sofq_status)
 
+
+def gr_widgets_status(main_window, gr_status):
     list_gr_ui = [main_window.calculategr_ui.pushButton_saveGR,
                   main_window.calculategr_ui.pushButton_rescaleGr,
                   main_window.calculategr_ui.pushButton_grColorStyle,
@@ -38,8 +46,6 @@ def check_widgets_status(main_window, enable_gr_widgets=False):
 
     for _ui in list_gr_ui:
         _ui.setEnabled(gr_status)
-
-    _tree_ui = main_window.calculategr_ui.frame_treeWidget_grWsList.children()[1]
 
 
 def load_sq(main_window):

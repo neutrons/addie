@@ -6,7 +6,11 @@ from qtpy.QtWidgets import QAction
 
 from addie.utilities import customtreeview as base
 from addie.widgets.filedialog import get_save_file
-from addie.calculate_gr.event_handler import remove_gr_from_plot, remove_gss_from_plot, remove_sq_from_plot
+from addie.calculate_gr.event_handler import (remove_gr_from_plot,
+                                              remove_gss_from_plot,
+                                              remove_sq_from_plot,
+                                              sofq_widgets_status,
+                                              gr_widgets_status)
 
 
 class BraggTree(base.CustomizedTreeView):
@@ -554,6 +558,16 @@ class GofRTree(base.CustomizedTreeView):
         if self._mainWindow is not None:
             self._mainWindow.set_ipython_script(python_cmd)
 
+    def is_gr_empty(self):
+        if self._leafDict['workspaces'] == []:
+            return True
+        return False
+
+    def is_sofq_empty(self):
+        if self._leafDict['SofQ'] == []:
+            return True
+        return False
+
     def do_delete_selected_items(self):
         """
         Delete the workspaces assigned to the selected items
@@ -585,6 +599,22 @@ class GofRTree(base.CustomizedTreeView):
             # delete leaf
             for item in selected_items:
                 self._delete_ws_node(item, None, check_gr_sq=True)
+
+        self.check_widgets_status()
+
+    def check_widgets_status(self):
+        is_gr_empty = self.is_gr_empty()
+        gr_widgets_status(self.parent, not is_gr_empty)
+
+        is_sofq_empty = self.is_sofq_empty()
+        sofq_widgets_status(self.parent, not is_sofq_empty)
+
+
+
+
+
+
+
 
     def _delete_main_node(self, node_item):
         """
@@ -684,8 +714,6 @@ class GofRTree(base.CustomizedTreeView):
     def do_remove_from_plot(self):
         """
         Remove the selected item from plot if it is plotted
-        Returns:
-
         """
         # get selected items
         item_list = self.get_selected_items()
@@ -749,7 +777,7 @@ class GofRTree(base.CustomizedTreeView):
         status, current_run = self.get_current_run()
         print('[INFO] Status = {0}; Current run number = {1}'.format(status, current_run))
 
-\   def set_main_window(self, main_window):
+    def set_main_window(self, main_window):
         """
 
         :param main_window:
