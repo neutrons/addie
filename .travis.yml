@@ -1,10 +1,6 @@
 language: python
 dist: trusty
 
-branches:
-  only:
-  - master
-
 services:
   - xvfb
 
