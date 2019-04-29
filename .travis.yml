@@ -70,3 +70,13 @@ script:
   - python setup.py install
   - which addie
   - xvfb-run --server-args="-screen 0 640x480x24" --auto-servernum addie --version
+
+deploy:
+ # Deploy conda package to Anaconda.org https://anaconda.org/addie-diffraction/addie
+ - provider: script
+   script: cd conda.recipe && chmod +x anaconda_upload.sh && ./anaconda_upload.sh
+   skip_cleanup: true
+   #skip_existing: true
+   on:
+     branch: conda_cd
+   #  tags: true
