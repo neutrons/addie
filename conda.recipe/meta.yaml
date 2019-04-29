@@ -34,7 +34,7 @@ about:
   license: GPL (version 3)
   license_family: GPL3
   license_file: 
-  summary: ADvanced DIffraction Environment: Mantid Total Scattering Reduction
+  summary: ADvanced DIffraction Environment
 
 extra:
   recipe-maintainers:
