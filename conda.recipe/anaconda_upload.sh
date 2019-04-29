@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 # Inputs
-USER=marshallmcdonnell
 OS=${TRAVIS_OS_NAME}-64
 
 # Setup anaconda for upload.
