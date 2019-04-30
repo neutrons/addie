@@ -16,9 +16,9 @@ conda install -q conda-build anaconda-client=1.5.5
 # Function for building recipe and then uploading package:
 # Usage example: conda_build_and_upload build_dir meta.yaml main
 function conda_build_and_upload {
-    if [[ $# -ne 2 ]]
+    if [[ $# -ne 1 ]]
     then
-      echo "Usage: conda_build <os type> <package directory>"
+      echo "Usage: conda_build <os type>"
       exit 1
     fi
     export OS=$1
