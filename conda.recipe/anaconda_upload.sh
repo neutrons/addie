@@ -34,4 +34,4 @@ function conda_build_and_upload {
     echo "Successfully deployed ${PKG_FILE} to Anaconda.org."
 }
 
-conda_build_and_upload addie
+conda_build_and_upload ${TRAVIS_OS_NAME}-64 addie
