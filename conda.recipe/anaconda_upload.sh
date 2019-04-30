@@ -22,11 +22,10 @@ function conda_build_and_upload {
       exit 1
     fi
     export OS=$1
-    export PKG_NAME=$2
 
-	conda build . --python=${PYTHON_VERSION}
-    PKG_PATH=$(conda build ${PKG_NAME} --python=${PYTHON_VERSION} --output)
-    PKG_FILE=$(basename ${pkg_path})
+	conda build conda.recipe --python=${PYTHON_VERSION}
+    PKG_PATH=$(conda build conda.recipe --python=${PYTHON_VERSION} --output)
+    PKG_FILE=$(basename ${PKG_PATH})
 
     echo "Uploading ${PKG_FILE} artifact..."
     anaconda -v -t ${CONDA_UPLOAD_TOKEN} upload ${PKG_PATH} --force
@@ -34,4 +33,4 @@ function conda_build_and_upload {
     echo "Successfully deployed ${PKG_FILE} to Anaconda.org."
 }
 
-conda_build_and_upload ${TRAVIS_OS_NAME}-64 addie
+conda_build_and_upload ${TRAVIS_OS_NAME}-64 

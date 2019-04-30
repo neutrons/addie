@@ -73,7 +73,7 @@ script:
 deploy:
  # Deploy conda package to Anaconda.org https://anaconda.org/addie-diffraction/addie
  - provider: script
-   script: cd conda.recipe && chmod +x anaconda_upload.sh && ./anaconda_upload.sh ${CONDA}
+   script: chmod +x conda.recipe/anaconda_upload.sh && ./conda.recipe/anaconda_upload.sh ${CONDA}
    skip_cleanup: true
    #skip_existing: true
    on:
