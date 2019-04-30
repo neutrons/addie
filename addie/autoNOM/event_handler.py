@@ -75,8 +75,8 @@ def run_mantid(self):
             #name = os.path.basename(filename).replace('.json', '')
             # print(cmd)
             #self.launch_job_manager(job_name=name, script_to_run=cmd)
-    if MANTID_TS_ENABLED:
-        print('total_scattering module not found. Functionality disabled')
+    else:
+        print('total_scattering module not found. Functionality disabled') # TODO should be on the status bar
 
 
 def run_autonom(main_window):
