@@ -30,7 +30,7 @@ function conda_build_and_upload {
 
     echo "Uploading ${PKG_FILE} artifact..."
     anaconda -v -t ${CONDA_UPLOAD_TOKEN} upload ${PKG_PATH} --force
-
+    echo "error code: $#"
     echo "Successfully deployed ${PKG_FILE} to Anaconda.org."
 }
 
