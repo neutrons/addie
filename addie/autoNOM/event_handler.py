@@ -3,6 +3,8 @@ import os
 from addie.autoNOM.step1_gui_handler import Step1GuiHandler
 from addie.processing.mantid.master_table.master_table_exporter import TableFileExporter as MantidTableExporter
 from addie.autoNOM.run_step1 import RunStep1
+import traceback
+from mantidqt.utils.asynchronous import AsyncTask
 
 # Mantid Total Scattering
 # (https://github.com/marshallmcdonnell/mantid_total_scattering)
@@ -37,12 +39,55 @@ def manual_output_folder_button_clicked(main_window):
     main_window.check_step1_gui()
 
 
-def run_mantid(self):
-    num_rows = self.processing_ui.h3_table.rowCount()
+class JobPool(object):
+    task_output = None,
+    running = None
+    task_exc_type, task_exc, task_exc_stack = None, None, None
+
+    def __init__(self, configurations):
+        self.jobs = []
+        for config in configurations:
+            self.jobs.append(AsyncTask(TotalScatteringReduction, args=(config,),
+                                       success_cb=self.on_success, error_cb=self.on_error,
+                                       finished_cb=self.on_finished))
+
+    def _start_next(self):
+        if self.jobs:
+            self.running = self.jobs.pop(0)
+            self.running.start()
+        else:
+            self.running = None
+
+    def start(self):
+        if not self.jobs:
+            raise RuntimeError('Cannot start empty job list')
+        self._start_next()
+
+    def on_success(self, task_result):
+        # TODO should emit a signal
+        self.task_output = task_result.output
+        print('SUCCESS!!! {}'.format(self.task_output))
+
+    def on_error(self, task_result):
+        # TODO should emit a signal
+        print('ERROR!!!')
+        self.task_exc_type = task_result.exc_type
+        self.task_exc = task_result.exc_value
+        self.task_exc_stack = traceback.extract_tb(task_result.stack)
+        traceback.print_tb(task_result.stack)
+
+    def on_finished(self):
+        '''Both success and failure call this method afterwards'''
+        # TODO should emit a signal
+        self._start_next()  # kick off the next one in the pool
+
+
+def run_mantid(parent):
+    num_rows = parent.processing_ui.h3_table.rowCount()
     if num_rows <= 0:
         raise RuntimeError('Cannot export empty table')
 
-    exporter = MantidTableExporter(parent=self)
+    exporter = MantidTableExporter(parent=parent)
 
     # write out the full table to disk
     # TODO make a class level name so it can be reused
@@ -66,15 +111,8 @@ def run_mantid(self):
 
     # locate total scattering script
     if MANTID_TS_ENABLED:
-        # TODO should allow for prefixing with mantidpython
-        # TODO figure out how to launch the jobs in serial
-        for json_input in reduction_inputs:
-            TotalScatteringReduction(json_input)
-            # TODO get this to work with launch_job_manager (example below for running from file):
-            #cmd = ' '.join([pythonpath, mantid_ts_script, filename]).strip()
-            #name = os.path.basename(filename).replace('.json', '')
-            # print(cmd)
-            #self.launch_job_manager(job_name=name, script_to_run=cmd)
+        pool = JobPool(reduction_inputs)
+        pool.start()
     else:
         print('total_scattering module not found. Functionality disabled') # TODO should be on the status bar
 
