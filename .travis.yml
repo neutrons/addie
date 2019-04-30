@@ -24,13 +24,16 @@ before_install:
   bash miniconda.sh -b -p $HOME/miniconda
   export PATH="$HOME/miniconda/bin:$PATH"
   conda config --set always_yes yes --set changeps1 no
-  conda config --add channels conda-forge
+  conda config --add channels conda-forge --add channels marshallmcdonnell
   conda update  -q conda
   conda create  -n test-environment -q python=$CONDA
   conda update  -n test-environment -q conda
   conda install -n test-environment -q conda-build
   conda install -n test-environment -c mantid mantid-workbench nexus poco
   conda install -n test-environment flake8
+
+  sudo apt-get update
+  sudo apt-get install -y freeglut3-dev libglu1-mesa
 
 install:
 - |
@@ -70,7 +73,7 @@ script:
 deploy:
  # Deploy conda package to Anaconda.org https://anaconda.org/addie-diffraction/addie
  - provider: script
-   script: cd conda.recipe && chmod +x anaconda_upload.sh && ./anaconda_upload.sh
+   script: cd conda.recipe && chmod +x anaconda_upload.sh && ./anaconda_upload.sh ${CONDA}
    skip_cleanup: true
    #skip_existing: true
    on:
