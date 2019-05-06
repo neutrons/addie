@@ -42,15 +42,24 @@ class AlignAndFocusArgsWindow(QMainWindow):
         self._check_remove_button()
 
     def init_widgets(self):
+        self._init_status_of_use_global_checkbox()
         self._init_previous_key_value()
         self._set_column_widths()
         self._init_list_algo_combobox()
+
+    def _init_status_of_use_global_checkbox(self):
+        master_table_list_ui = self.main_window.master_table_list_ui[self.key]
+        self.ui.use_global_keys_values.setChecked(master_table_list_ui['align_and_focus_args_use_global'])
 
     def _init_list_algo_combobox(self):
         list_algo = get_list_algo('AlignAndFocusPowderFromFiles')
         list_algo_without_blacklist = self.remove_blacklist_algo(list_algo)
         self.list_algo_without_blacklist = list_algo_without_blacklist
         self.populate_list_algo()
+
+    def use_global_keys_values_clicked(self):
+        use_it = self.ui.use_global_keys_values.isChecked()
+        #fixme
 
     def populate_list_algo(self):
         self.ui.list_key_comboBox.clear()
@@ -195,8 +204,15 @@ class AlignAndFocusArgsWindow(QMainWindow):
     def cancel_clicked(self):
         self.close()
 
+    def _save_use_global_button_status(self):
+        _status = self.ui.use_global_keys_values.isChecked()
+        master_table_list_ui = self.main_window.master_table_list_ui[self.key]
+        master_table_list_ui['align_and_focus_args_use_global'] = _status
+        self.main_window.master_table_list_ui[self.key] = master_table_list_ui
+
     def ok_clicked(self):
         self._save_key_value_infos()
+        self._save_use_global_button_status()
         self.main_window.check_master_table_column_highlighting(column=LIST_COLUMNS_TO_SEARCH_FOR_FULL_HIGHLIGTHING[-1])
         self.close()
 

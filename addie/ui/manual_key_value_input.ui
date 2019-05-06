@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>373</width>
-    <height>439</height>
+    <width>459</width>
+    <height>491</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -113,6 +113,13 @@
            </property>
           </spacer>
          </item>
+         <item>
+          <widget class="QCheckBox" name="use_global_keys_values">
+           <property name="text">
+            <string>Use global keys/values</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
       </layout>
@@ -156,8 +163,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>373</width>
-     <height>23</height>
+     <width>459</width>
+     <height>22</height>
     </rect>
    </property>
   </widget>
@@ -172,8 +179,8 @@
    <slot>ok_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>317</x>
-     <y>396</y>
+     <x>448</x>
+     <y>458</y>
     </hint>
     <hint type="destinationlabel">
      <x>318</x>
@@ -188,8 +195,8 @@
    <slot>cancel_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>63</x>
-     <y>397</y>
+     <x>73</x>
+     <y>458</y>
     </hint>
     <hint type="destinationlabel">
      <x>111</x>
@@ -204,8 +211,8 @@
    <slot>remove_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>87</x>
-     <y>340</y>
+     <x>101</x>
+     <y>413</y>
     </hint>
     <hint type="destinationlabel">
      <x>160</x>
@@ -220,12 +227,28 @@
    <slot>add_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>308</x>
-     <y>84</y>
+     <x>436</x>
+     <y>113</y>
     </hint>
     <hint type="destinationlabel">
      <x>369</x>
      <y>215</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>use_global_keys_values</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>use_global_keys_values_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>307</x>
+     <y>395</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>347</x>
+     <y>457</y>
     </hint>
    </hints>
   </connection>
@@ -235,5 +258,6 @@
   <slot>cancel_clicked()</slot>
   <slot>remove_clicked()</slot>
   <slot>add_clicked()</slot>
+  <slot>use_global_keys_values_clicked()</slot>
  </slots>
 </ui>

@@ -246,6 +246,7 @@ class TableRowHandler:
                                                   },
                                 'align_and_focus_args_button': None,
                                 'align_and_focus_args_infos': {},
+                                'align_and_focus_args_use_global': True,
                                 }
 
         random_key = self.generate_random_key()
@@ -750,7 +751,7 @@ class TableRowHandler:
         align_and_focus_args = self.add_global_key_value_to_local_key_value(align_and_focus_args)
         _master_table_row_ui['align_and_focus_args_infos'] = align_and_focus_args
 
-        ## recap
+        # Recap.
 
         self.main_window.master_table_list_ui[random_key] = _master_table_row_ui
         self.unlock_signals_ui(list_ui=_list_ui_to_unlock)
