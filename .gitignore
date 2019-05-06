@@ -14,6 +14,9 @@ local.properties
 .loadpath
 .recommenders
 
+# pycharm
+.idea
+
 # External tool builders
 .externalToolBuilders/
 
