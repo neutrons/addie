@@ -1,4 +1,5 @@
 from __future__ import (absolute_import, division, print_function)
+from collections import OrderedDict
 import numpy as np
 from qtpy.QtWidgets import QMainWindow, QTableWidgetItem
 from qtpy import QtCore
@@ -30,6 +31,7 @@ class AlignAndFocusArgsWindow(QMainWindow):
     unused_list_algo = None
 
     local_list_key_loaded = []
+#    local_key_value_dict = OrderedDict()
 
     def __init__(self, main_window=None, key=None):
         self.main_window = main_window
@@ -43,7 +45,7 @@ class AlignAndFocusArgsWindow(QMainWindow):
 
     def init_widgets(self):
         self._init_status_of_use_global_checkbox()
-        self._init_previous_key_value()
+        self._init_key_value_table()
         self._set_column_widths()
         self._init_list_algo_combobox()
 
@@ -58,8 +60,7 @@ class AlignAndFocusArgsWindow(QMainWindow):
         self.populate_list_algo()
 
     def use_global_keys_values_clicked(self):
-        use_it = self.ui.use_global_keys_values.isChecked()
-        #fixme
+        pass
 
     def populate_list_algo(self):
         self.ui.list_key_comboBox.clear()
@@ -112,7 +113,7 @@ class AlignAndFocusArgsWindow(QMainWindow):
         for _col, _width in enumerate(COLUMNS_WIDTH):
             self.ui.key_value_table.setColumnWidth(_col, _width)
 
-    def _init_previous_key_value(self):
+    def _init_key_value_table(self):
         previous_key_value_dict = self._get_previous_key_value_dict()
         for _row, _key in enumerate(previous_key_value_dict.keys()):
             _value = previous_key_value_dict[_key]
