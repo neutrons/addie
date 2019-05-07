@@ -63,12 +63,28 @@ class AlignAndFocusArgsWindow(QMainWindow):
         global_key_value = self.main_window.global_key_value
         return key in global_key_value.keys()
 
+    def bring_back_global_key_value_removed(self):
+        list_key_in_table = self.get_list_key_in_table()
+        global_key_value = self.main_window.global_key_value
+        for _key in global_key_value.keys():
+            if not (_key in list_key_in_table):
+                value = global_key_value[_key]
+                self._add_row(row=0, key=_key, value=value)
+
+    def get_list_key_in_table(self):
+        list_key = []
+        for _row in np.arange(self.ui.key_value_table.rowCount()):
+            _key = str(self.ui.key_value_table.item(_row, 0).text())
+            list_key.append(_key)
+        return list_key
+
     def use_global_keys_values_clicked(self):
         use_global_key_value = self.ui.use_global_keys_values.isChecked()
 
-        # bring back the rows remove with global keys
-
         if use_global_key_value:
+
+            self.bring_back_global_key_value_removed()
+
             for _row in np.arange(self.ui.key_value_table.rowCount()):
                 _key = self.get_key_for_this_row(_row)
                 if self.is_key_a_global_key(_key):
