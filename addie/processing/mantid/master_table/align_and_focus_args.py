@@ -2,7 +2,7 @@ from __future__ import (absolute_import, division, print_function)
 from collections import OrderedDict
 import numpy as np
 from qtpy.QtWidgets import QMainWindow, QTableWidgetItem
-from qtpy import QtCore
+from qtpy import QtCore, QtGui
 
 from addie.utilities import load_ui
 from addie.utilities.general import get_list_algo
@@ -31,7 +31,6 @@ class AlignAndFocusArgsWindow(QMainWindow):
     unused_list_algo = None
 
     local_list_key_loaded = []
-#    local_key_value_dict = OrderedDict()
 
     def __init__(self, main_window=None, key=None):
         self.main_window = main_window
@@ -60,6 +59,40 @@ class AlignAndFocusArgsWindow(QMainWindow):
         self.populate_list_algo()
 
     def use_global_keys_values_clicked(self):
+        use_global_key_value = self.ui.use_global_keys_values.isChecked()
+        global_key_value = self.main_window.global_key_value
+
+        _font = QtGui.QFont()
+        _flag = ''
+
+        if use_global_key_value:
+            for _row in np.arange(self.ui.key_value_table.rowCount()):
+                print("working with row: {}".format(_row))
+                _key = str(self.ui.key_value_table.item(_row, 0).text())
+                print("-> _key_value is {}".format(_key))
+                if _key in global_key_value.keys():
+                    _flag = QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+                    _font.setItalic(True)
+                    self.ui.key_value_table.item(_row, 1).setFlags(_flag)
+                    _global_value = global_key_value[_key]
+                    self.ui.key_value_table.item(_row, 1).setText(_global_value)
+                    self.ui.key_value_table.item(_row, 1).setFont(_font)
+        else:
+            for _row in np.arange(self.ui.key_value_table.rowCount()):
+               _flag = QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEditable
+               _font.setItalic(False)
+               self.ui.key_value_table.item(_row, 1).setFlags(_flag)
+               self.ui.key_value_table.item(_row, 1).setFont(_font)
+
+        ## disable rows with global key and make sure value is the one defined in the settings window (global value)
+        ## user is not allow to remove that row
+
+        ## if key is not present (has been removed by user) bring it back to the table
+
+        # if us_global is unchecked
+        ## enable that row
+        ## user is allowed to remove that row
+
         pass
 
     def populate_list_algo(self):
@@ -167,6 +200,9 @@ class AlignAndFocusArgsWindow(QMainWindow):
         self.ui.key_value_table.setItem(row, column, key_item)
 
     def remove_clicked(self):
+        # FIXME
+        # make sure row of global value, if 'use global keys/values' checked can not be removed
+
         selected_row_range = self._get_selected_row_range()
         if selected_row_range is None:
             return
