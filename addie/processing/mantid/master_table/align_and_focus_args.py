@@ -47,6 +47,7 @@ class AlignAndFocusArgsWindow(QMainWindow):
         self._init_key_value_table()
         self._set_column_widths()
         self._init_list_algo_combobox()
+        self.use_global_keys_values_clicked()
 
     def _init_status_of_use_global_checkbox(self):
         master_table_list_ui = self.main_window.master_table_list_ui[self.key]
@@ -67,22 +68,22 @@ class AlignAndFocusArgsWindow(QMainWindow):
 
         if use_global_key_value:
             for _row in np.arange(self.ui.key_value_table.rowCount()):
-                print("working with row: {}".format(_row))
                 _key = str(self.ui.key_value_table.item(_row, 0).text())
-                print("-> _key_value is {}".format(_key))
                 if _key in global_key_value.keys():
                     _flag = QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
-                    _font.setItalic(True)
+                    _font.setBold(True)
                     self.ui.key_value_table.item(_row, 1).setFlags(_flag)
                     _global_value = global_key_value[_key]
                     self.ui.key_value_table.item(_row, 1).setText(_global_value)
                     self.ui.key_value_table.item(_row, 1).setFont(_font)
+                    self.ui.key_value_table.item(_row, 0).setFont(_font)
         else:
             for _row in np.arange(self.ui.key_value_table.rowCount()):
-               _flag = QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEditable
-               _font.setItalic(False)
-               self.ui.key_value_table.item(_row, 1).setFlags(_flag)
-               self.ui.key_value_table.item(_row, 1).setFont(_font)
+                _flag = QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEditable
+                _font.setBold(False)
+                self.ui.key_value_table.item(_row, 1).setFlags(_flag)
+                self.ui.key_value_table.item(_row, 1).setFont(_font)
+                self.ui.key_value_table.item(_row, 0).setFont(_font)
 
         ## disable rows with global key and make sure value is the one defined in the settings window (global value)
         ## user is not allow to remove that row
