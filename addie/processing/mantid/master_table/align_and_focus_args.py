@@ -59,31 +59,24 @@ class AlignAndFocusArgsWindow(QMainWindow):
         self.list_algo_without_blacklist = list_algo_without_blacklist
         self.populate_list_algo()
 
+    def is_key_a_global_key(self, key):
+        global_key_value = self.main_window.global_key_value
+        return key in global_key_value.keys()
+
     def use_global_keys_values_clicked(self):
         use_global_key_value = self.ui.use_global_keys_values.isChecked()
-        global_key_value = self.main_window.global_key_value
 
-        _font = QtGui.QFont()
-        _flag = ''
+        # bring back the rows remove with global keys
 
         if use_global_key_value:
             for _row in np.arange(self.ui.key_value_table.rowCount()):
-                _key = str(self.ui.key_value_table.item(_row, 0).text())
-                if _key in global_key_value.keys():
-                    _flag = QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
-                    _font.setBold(True)
-                    self.ui.key_value_table.item(_row, 1).setFlags(_flag)
-                    _global_value = global_key_value[_key]
-                    self.ui.key_value_table.item(_row, 1).setText(_global_value)
-                    self.ui.key_value_table.item(_row, 1).setFont(_font)
-                    self.ui.key_value_table.item(_row, 0).setFont(_font)
+                _key = self.get_key_for_this_row(_row)
+                if self.is_key_a_global_key(_key):
+                    self.set_row_layout(_row, is_editable=False)
+                    self.reset_value(_row)
         else:
             for _row in np.arange(self.ui.key_value_table.rowCount()):
-                _flag = QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEditable
-                _font.setBold(False)
-                self.ui.key_value_table.item(_row, 1).setFlags(_flag)
-                self.ui.key_value_table.item(_row, 1).setFont(_font)
-                self.ui.key_value_table.item(_row, 0).setFont(_font)
+                self.set_row_layout(_row, is_editable=True)
 
         ## disable rows with global key and make sure value is the one defined in the settings window (global value)
         ## user is not allow to remove that row
@@ -94,7 +87,28 @@ class AlignAndFocusArgsWindow(QMainWindow):
         ## enable that row
         ## user is allowed to remove that row
 
-        pass
+    def get_key_for_this_row(self, _row):
+        _key = str(self.ui.key_value_table.item(_row, 0).text())
+        return _key
+
+    def reset_value(self, _row):
+        global_key_value = self.main_window.global_key_value
+        _key = self.get_key_for_this_row(_row)
+        value = global_key_value[_key]
+        self.ui.key_value_table.item(_row, 1).setText(value)
+
+    def set_row_layout(self, _row, is_editable=False):
+        _font = QtGui.QFont()
+        if is_editable:
+            _flag = QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEditable
+            _font.setBold(False)
+        else:
+            _flag = QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+            _font.setBold(True)
+
+        self.ui.key_value_table.item(_row, 1).setFlags(_flag)
+        self.ui.key_value_table.item(_row, 1).setFont(_font)
+        self.ui.key_value_table.item(_row, 0).setFont(_font)
 
     def populate_list_algo(self):
         self.ui.list_key_comboBox.clear()
@@ -127,7 +141,7 @@ class AlignAndFocusArgsWindow(QMainWindow):
         nbr_row = self.ui.key_value_table.rowCount()
         list_local_key_loaded = []
         for _row in np.arange(nbr_row):
-            _item = str(self.ui.key_value_table.item(_row, 0).text())
+            _item = self.get_key_for_this_row(_row)
             list_local_key_loaded.append(_item)
         return list_local_key_loaded
 
@@ -167,7 +181,7 @@ class AlignAndFocusArgsWindow(QMainWindow):
     def _get_key_value_dict(self):
         key_value_dict = {}
         for _row in np.arange(self.get_nbr_row()):
-            _key = str(self.ui.key_value_table.item(_row, 0).text())
+            _key = self.get_key_for_this_row(_row)
             _value = str(self.ui.key_value_table.item(_row, 1).text())
             key_value_dict[_key] = _value
         return key_value_dict
@@ -201,7 +215,6 @@ class AlignAndFocusArgsWindow(QMainWindow):
         self.ui.key_value_table.setItem(row, column, key_item)
 
     def remove_clicked(self):
-        # FIXME
         # make sure row of global value, if 'use global keys/values' checked can not be removed
 
         selected_row_range = self._get_selected_row_range()
@@ -213,7 +226,10 @@ class AlignAndFocusArgsWindow(QMainWindow):
 
     def _remove_rows(self, row_range):
         first_row_selected = row_range[0]
-        for _ in row_range:
+        for _row in row_range:
+            _key = self.get_key_for_this_row(_row)
+            if self.is_key_a_global_key(_key) and self.ui.use_global_keys_values.isChecked():
+                continue
             self.ui.key_value_table.removeRow(first_row_selected)
 
     def _get_selected_row_range(self):
