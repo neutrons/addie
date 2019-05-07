@@ -176,7 +176,7 @@ class ReductionConfiguration(QDialog):
             return
         nbr_row = self.get_nbr_row()
         key = self.get_current_selected_key()
-        # self.parent.global_key_value[key] = value
+        self.parent.global_key_value[key] = value
         self.global_key_value[key] = value
         self._add_row(row=nbr_row, key=key, value=value)
         self.ui.new_value_widget.setText("")
@@ -216,7 +216,7 @@ class ReductionConfiguration(QDialog):
             _key = self._get_cell_value(_row, 0)
             _value = self._get_cell_value(_row, 1)
             global_key_value[_key] = _value
-        #self.parent.global_key_value = global_key_value
+        self.parent.global_key_value = global_key_value
         self.global_key_value = global_key_value
 
     def _get_cell_value(self, row, column):
