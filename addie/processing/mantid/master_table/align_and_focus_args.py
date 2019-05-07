@@ -209,10 +209,12 @@ class AlignAndFocusArgsWindow(QMainWindow):
         self.ui.list_key_comboBox.setFocus()
 
     def _add_new_row_at_bottom(self):
+        value = str(self.ui.new_value_widget.text())
+        if value.strip() == '':
+            return 
         nbr_row = self.get_nbr_row()
         key = self.get_current_selected_key()
         self.local_list_key_loaded.append(key)
-        value = str(self.ui.new_value_widget.text())
         self._add_row(row=nbr_row, key=key, value=value)
         self.ui.new_value_widget.setText("")
 
