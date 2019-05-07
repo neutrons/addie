@@ -211,7 +211,7 @@ class AlignAndFocusArgsWindow(QMainWindow):
     def _add_new_row_at_bottom(self):
         value = str(self.ui.new_value_widget.text())
         if value.strip() == '':
-            return 
+            return
         nbr_row = self.get_nbr_row()
         key = self.get_current_selected_key()
         self.local_list_key_loaded.append(key)

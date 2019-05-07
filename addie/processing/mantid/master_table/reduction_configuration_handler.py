@@ -91,6 +91,7 @@ class ReductionConfiguration(QDialog):
 
     def populate_list_algo(self):
         self.ui.list_key_comboBox.clear()
+        return
 
         raw_list_algo = get_list_algo('AlignAndFocusPowderFromFiles')
         list_algo_without_blacklist = self._remove_blacklist_algo(raw_list_algo)
@@ -169,9 +170,12 @@ class ReductionConfiguration(QDialog):
         self.ui.key_value_table.setItem(row, column, key_item)
 
     def _add_new_row_at_bottom(self):
+        value = str(self.ui.new_value_widget.text())
+        # do not allow to add row with empty value
+        if value.strip() == "":
+            return
         nbr_row = self.get_nbr_row()
         key = self.get_current_selected_key()
-        value = str(self.ui.new_value_widget.text())
         # self.parent.global_key_value[key] = value
         self.global_key_value[key] = value
         self._add_row(row=nbr_row, key=key, value=value)
