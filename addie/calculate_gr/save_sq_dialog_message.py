@@ -15,5 +15,3 @@ class SaveSqDialogMessageDialog(QDialog):
 
     def init_widgets(self):
         self.ui.message_label.setPixmap(QtGui.QPixmap(":/preview/save_sq_selection_image.png"))
-
-

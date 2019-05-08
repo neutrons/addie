@@ -1,5 +1,4 @@
 from __future__ import (absolute_import, division, print_function)
-from collections import OrderedDict
 import numpy as np
 from qtpy.QtWidgets import QMainWindow, QTableWidgetItem
 from qtpy import QtCore, QtGui

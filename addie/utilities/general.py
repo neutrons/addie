@@ -30,6 +30,7 @@ def json_extractor(json=None, list_args=[]):
     except KeyError:
         return "N/A"
 
+
 def get_list_algo(algo_name):
     _alg = mantid.AlgorithmManager.createUnmanaged(algo_name)
     _alg.initialize()

@@ -104,7 +104,7 @@ def do_load_bragg_file(main_window):
         print('Encountered exception')
         print(e)
 
-    except ValueError as e:
+    except ValueError:
         main_window.setStyleSheet("QStatusBar{padding-left:8px;color:red;font-weight:bold;}")
         main_window.ui.statusbar.showMessage("Error loading {}".format(bragg_file_names),
                                              main_window.statusbar_display_time)

@@ -21,7 +21,7 @@ def check_widgets_status(main_window, enable_gr_widgets=False):
 
     sofq_widgets_status(main_window, sofq_status)
     gr_widgets_status(main_window, gr_status)
-    _tree_ui = main_window.calculategr_ui.frame_treeWidget_grWsList.children()[1]
+    #_tree_ui = main_window.calculategr_ui.frame_treeWidget_grWsList.children()[1]
 
 
 def sofq_widgets_status(main_window, sofq_status):

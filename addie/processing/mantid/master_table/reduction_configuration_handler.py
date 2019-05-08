@@ -89,18 +89,6 @@ class ReductionConfiguration(QDialog):
         self._set_column_widths()
         self.init_table()
 
-    def populate_list_algo(self):
-        self.ui.list_key_comboBox.clear()
-        return
-
-        raw_list_algo = get_list_algo('AlignAndFocusPowderFromFiles')
-        list_algo_without_blacklist = self._remove_blacklist_algo(raw_list_algo)
-
-        global_list_keys = self.parent.global_key_value.keys()
-        global_unused_list_algo = self.remove_from_list(original_list=list_algo_without_blacklist,
-                                                        to_remove=global_list_keys)
-        self.ui.list_key_comboBox.addItems(global_unused_list_algo)
-
     def _remove_blacklist_algo(self, list_algo):
         list_algo_without_blacklist = []
         for _algo in list_algo:
@@ -120,14 +108,6 @@ class ReductionConfiguration(QDialog):
 
     def show_global_key_value_widgets(self, visible=False):
         self.ui.global_key_value_groupBox.setVisible(visible)
-
-    def _remove_blacklist_algo(self, list_algo):
-        list_algo_without_blacklist = []
-        for _algo in list_algo:
-            if not (_algo in self.parent.align_and_focus_powder_from_files_blacklist):
-                list_algo_without_blacklist.append(_algo)
-
-        return list_algo_without_blacklist
 
     def remove_from_list(self,
                          original_list=[],

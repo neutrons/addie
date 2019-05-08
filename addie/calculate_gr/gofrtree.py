@@ -609,13 +609,6 @@ class GofRTree(base.CustomizedTreeView):
         is_sofq_empty = self.is_sofq_empty()
         sofq_widgets_status(self.parent, not is_sofq_empty)
 
-
-
-
-
-
-
-
     def _delete_main_node(self, node_item):
         """
         Delete a main node
