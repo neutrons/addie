@@ -15,6 +15,11 @@ class EditSofQDialog(QDialog):
     MyEditSignal = Signal(str, float, float)
     MySaveSignal = Signal(str)
 
+    live_scale = None
+    live_shift = None
+
+    lock_plot = False
+
     def __init__(self, parent_window):
         """
         initialization
@@ -49,15 +54,26 @@ class EditSofQDialog(QDialog):
         self.ui.pushButton_saveNewSq.clicked.connect(self.do_save)
 
         # connect widgets' events with methods
-        self.ui.pushButton_editSQ.clicked.connect(self.do_edit_sq)
+        #self.ui.pushButton_editSQ.clicked.connect(self.do_edit_sq)
         self.ui.pushButton_cache.clicked.connect(self.do_cache_edited_sq)
 
         self.ui.pushButton_setScaleRange.clicked.connect(self.do_set_scale_range)
         self.ui.pushButton_setShiftRange.clicked.connect(self.do_set_shift_range)
 
         # connect q-slide
+        # self.ui.horizontalSlider_scale.valueChanged.connect(self.scale_slider_value_changed)
+        # self.ui.horizontalSlider_shift.valueChanged.connect(self.shift_slider_value_changed)
+        # self.ui.horizontalSlider_scale.sliderPressed.connect(self.block_scale_value_changed)
+        # self.ui.horizontalSlider_shift.sliderPressed.connect(self.block_shift_value_changed)
+        # self.ui.horizontalSlider_scale.sliderReleased.connect(self.event_cal_sq)
+        # self.ui.horizontalSlider_shift.sliderReleased.connect(self.event_cal_sq)
+
         self.ui.horizontalSlider_scale.valueChanged.connect(self.event_cal_sq)
         self.ui.horizontalSlider_shift.valueChanged.connect(self.event_cal_sq)
+        self.ui.horizontalSlider_scale.sliderPressed.connect(self.lock_plot_refresh)
+        self.ui.horizontalSlider_shift.sliderPressed.connect(self.lock_plot_refresh)
+        self.ui.horizontalSlider_scale.sliderReleased.connect(self.slider_released)
+        self.ui.horizontalSlider_shift.sliderReleased.connect(self.slider_released)
 
         # connect signals
         self.MyEditSignal.connect(self._myParentWindow.edit_sq)
@@ -72,8 +88,8 @@ class EditSofQDialog(QDialog):
         :return:
         """
         self.ui.comboBox_workspaces.clear()
-        self.ui.lineEdit_scaleFactor.setText('1.')
-        self.ui.lineEdit_shift.setText('0.')
+        self.ui.scale_value.setText('1.')
+        self.ui.shift_value.setText('0.')
 
         # slider limit
         self.ui.lineEdit_scaleMin.setText('0.0000')
@@ -101,14 +117,17 @@ class EditSofQDialog(QDialog):
         self.ui.horizontalSlider_scale.setValue(20)
         self._scaleSlideMutex = False
 
+        self.calculate_shift_value()
+        self.calculate_scale_value()
+
     def do_cache_edited_sq(self):
         """
         cache the currently edited S(Q)
         :return:
         """
         # get the current shift and scale factor
-        shift_value = float(self.ui.lineEdit_shift.text())
-        scale_factor = float(self.ui.lineEdit_scaleFactor.text())
+        shift_value = float(self.ui.shift_value.text())
+        scale_factor = float(self.ui.scale_value.text())
 
         # convert them to string with 16 precision float %.16f % ()
         key_shift = '%.16f' % shift_value
@@ -131,49 +150,6 @@ class EditSofQDialog(QDialog):
 
         # clone G(r) to new name and add to tree
         generate_gr_step2(self._myParentWindow, [new_sq_ws_name])
-
-    def do_edit_sq(self):
-        """handling for push button 'edit S(Q)' by reading the scale factor and shift
-        :return:
-        """
-        # read the scale and shift value
-        print('[DB...BAT] Shift = {0} Scale Factor = {1}'.format(self.ui.lineEdit_shift.text(),
-                                                                 self.ui.lineEdit_scaleFactor.text()))
-
-        shift_str = str(self.ui.lineEdit_shift.text())
-        scale_str = str(self.ui.lineEdit_scaleFactor.text())
-        try:
-            # parse shift
-            if len(shift_str) == 0:
-                shift = 0
-                self.ui.lineEdit_shift.setText('0.')
-            else:
-                shift = float(self.ui.lineEdit_shift.text())
-
-            # parse scaling factor
-            if len(scale_str) == 0:
-                scale_factor = 1.
-                self.ui.lineEdit_scaleFactor.setText('1.')
-            else:
-                scale_factor = float(scale_str)
-        except ValueError as val_error:
-            print('[ERROR] Shift {0} or scale factor {1} cannot be converted to float due to {2}.'
-                  ''.format(shift_str, scale_str, val_error))
-
-        # call edit_sq()
-        self.edit_sq(shift, scale_factor)
-
-        # enable mutex
-        self._scaleSlideMutex = True
-        self._shiftSlideMutex = True
-
-        # set sliders
-        self.set_slider_scale_value(scale_factor)
-        self.set_slider_shift_value(shift)
-
-        # disable mutex
-        self._scaleSlideMutex = False
-        self._shiftSlideMutex = False
 
     def do_quit(self):
         """
@@ -239,7 +215,7 @@ class EditSofQDialog(QDialog):
             self._scaleMax = max_scale
 
         # otherwise, re-set the slider
-        current_scale_factor = float(self.ui.lineEdit_scaleFactor.text())
+        current_scale_factor = float(self.ui.scale_value.text())
         if current_scale_factor < min_scale:
             current_scale_factor = min_scale
         elif current_scale_factor > max_scale:
@@ -272,7 +248,7 @@ class EditSofQDialog(QDialog):
             self._shiftMax = max_shift
 
         # otherwise, re-set the slider
-        curr_shift = float(self.ui.lineEdit_shift.text())
+        curr_shift = float(self.ui.shift_value.text())
         if curr_shift < min_shift:
             curr_shift = min_shift
         elif curr_shift > max_shift:
@@ -285,39 +261,87 @@ class EditSofQDialog(QDialog):
         shift_int = int(curr_shift/delta_shift * delta_slider_shift)
         self.ui.horizontalSlider_shift.setValue(shift_int)
 
-    def event_cal_sq(self):
-        """handling the events from a moving sliding bar such that a new S(Q) will be calculated
-        :return:
-        """
+    def shift_slider_value_pressed(self):
+        self.shift_slider_value_changed(-1)
+
+    def shift_slider_value_changed(self, _):
         # check whether mutex is on or off
         if self._shiftSlideMutex or self._scaleSlideMutex:
             # return if either mutex is on: it is not a time to do calculation
             return
 
+        shift = self.get_shift_value()
+        self.ui.shift_value.setText('%.7f' % shift)
+
+    def get_shift_value(self):
+        self.calculate_shift_value()
+        return self.live_shift
+
+    def calculate_shift_value(self):
         # read the value of sliders
         # note: change is [min, max].  and the default is [0, 100]
         shift_int = self.ui.horizontalSlider_shift.value()
-        scale_int = self.ui.horizontalSlider_scale.value()
-
         # convert to double
         delta_shift = self._shiftMax - self._shiftMin
         delta_shift_slider = self.ui.horizontalSlider_shift.maximum() - self.ui.horizontalSlider_shift.minimum()
         shift = self._shiftMin + float(shift_int) / delta_shift_slider * delta_shift
+        self.live_shift = shift
 
+    def scale_slider_value_pressed(self):
+        self.scale_slider_value_changed(-1)
+
+    def scale_slider_value_changed(self, value):
+        # check whether mutex is on or off
+        if self._shiftSlideMutex or self._scaleSlideMutex:
+            # return if either mutex is on: it is not a time to do calculation
+            return
+
+        scale = self.get_scale_value()
+        self.ui.scale_value.setText('%.7f' % scale)
+
+    def get_scale_value(self):
+        self.calculate_scale_value()
+        return self.live_scale
+
+    def calculate_scale_value(self):
+        # read the value of sliders
+        # note: change is [min, max].  and the default is [0, 100]
+        scale_int = self.ui.horizontalSlider_scale.value()
         delta_scale = self._scaleMax - self._scaleMin
         delta_scale_slider = self.ui.horizontalSlider_scale.maximum() - self.ui.horizontalSlider_scale.minimum()
         scale = self._scaleMin + float(scale_int) / delta_scale_slider * delta_scale
+        self.live_scale = scale
+
+    def lock_plot_refresh(self):
+        self.lock_plot = True
+
+    def unlock_plot_refresh(self):
+        self.lock_plot = False
+
+    def slider_released(self):
+        self.unlock_plot_refresh()
+        self.event_cal_sq()
+
+    def event_cal_sq(self):
+        """handling the events from a moving sliding bar such that a new S(Q) will be calculated
+        :return:
+        """
+        self.scale_slider_value_pressed()
+        self.shift_slider_value_pressed()
+
+        if self.lock_plot:
+            return
 
         # call edit_sq()
-        self.edit_sq(shift, scale)
+        self.edit_sq(self.live_shift, self.live_scale)
 
         # enable mutex
         self._shiftSlideMutex = True
         self._scaleSlideMutex = True
 
         # edit line edits for shift and scale
-        self.ui.lineEdit_scaleFactor.setText('%.7f' % scale)
-        self.ui.lineEdit_shift.setText('%.7f' % shift)
+        self.ui.scale_value.setText('%.7f' % self.live_scale)
+        self.ui.shift_value.setText('%.7f' % self.live_shift)
 
         # disable mutex
         self._shiftSlideMutex = False

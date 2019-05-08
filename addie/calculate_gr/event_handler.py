@@ -3,7 +3,49 @@ from qtpy.QtWidgets import QFileDialog, QMessageBox
 
 import addie.utilities.specify_plots_style as ps
 import addie.calculate_gr.edit_sq_dialog
+from addie.calculate_gr.save_sq_dialog_message import SaveSqDialogMessageDialog
 from addie.widgets.filedialog import get_save_file
+
+
+def check_widgets_status(main_window, enable_gr_widgets=False):
+    number_of_sofq = main_window.calculategr_ui.comboBox_SofQ.count() - 1 # index 0 is "all"
+    if number_of_sofq > 0:
+        sofq_status = True
+        gr_status = True
+    else:
+        sofq_status = False
+        gr_status = False
+
+    if enable_gr_widgets:
+        gr_status=True
+
+    sofq_widgets_status(main_window, sofq_status)
+    gr_widgets_status(main_window, gr_status)
+    #_tree_ui = main_window.calculategr_ui.frame_treeWidget_grWsList.children()[1]
+
+
+def sofq_widgets_status(main_window, sofq_status):
+    list_sofq_ui = [main_window.calculategr_ui.pushButton_rescaleSq,
+                    main_window.calculategr_ui.pushButton_sqColorStyle,
+                    main_window.calculategr_ui.pushButton_editSofQ,
+                    main_window.calculategr_ui.pushButton_clearSofQ,
+                    main_window.calculategr_ui.pushButton_saveSQ,
+                    main_window.calculategr_ui.pushButton_showQMinMax,
+                    main_window.calculategr_ui.pushButton_generateGR]
+
+    for _ui in list_sofq_ui:
+        _ui.setEnabled(sofq_status)
+
+
+def gr_widgets_status(main_window, gr_status):
+    list_gr_ui = [main_window.calculategr_ui.pushButton_saveGR,
+                  main_window.calculategr_ui.pushButton_rescaleGr,
+                  main_window.calculategr_ui.pushButton_grColorStyle,
+                  main_window.calculategr_ui.pushButton_generateSQ,
+                  main_window.calculategr_ui.pushButton_clearGrCanvas]
+
+    for _ui in list_gr_ui:
+        _ui.setEnabled(gr_status)
 
 
 def load_sq(main_window):
@@ -58,6 +100,8 @@ def load_sq(main_window):
 
         # calculate and calculate G(R)
         generate_gr_step1(main_window)
+
+    check_widgets_status(main_window)
 
 
 def getDefaultDir(main_window, sub_dir):
@@ -371,6 +415,8 @@ def do_load_gr(main_window):
     # put the loaded G(r) workspace to tree 'workspaces'
     main_window.calculategr_ui.treeWidget_grWsList.add_child_main_item('workspaces', gr_ws_name)
 
+    check_widgets_status(main_window, enable_gr_widgets=True)
+
 
 def do_save_gr(main_window):
     """
@@ -422,7 +468,9 @@ def do_save_sq(main_window):
                                                                                               excluded_parent='GofR',
                                                                                               return_item_text=True)
     if len(sq_name_list) == 0:
-        return
+        # show dialog message here.
+        o_dialog = SaveSqDialogMessageDialog(main_window = main_window)
+        o_dialog.show()
 
     FILE_FILTERS = {'XYE (*.xye)':'xye',
                     'CSV XYE (*.csv)':'csv',
@@ -493,6 +541,7 @@ def do_set_gofr_color_marker(main_window):
     """
     set the color/marker to plots on G(r) canvas
     """
+
     # get the line ID, color, and marker
     plot_id_label_list = main_window.calculategr_ui.graphicsView_gr.get_current_plots()
 
@@ -504,6 +553,7 @@ def do_set_gofr_color_marker(main_window):
         pass
     else:
         # set the color and mark
+
         for plot_id in plot_id_list:
             main_window.calculategr_ui.graphicsView_gr.updateLine(ikey=plot_id,
                                                                   linecolor=color,
@@ -702,8 +752,8 @@ def remove_sq_from_plot(main_window, sq_name):
     assert isinstance(sq_name, str)
 
     # remove
-    if main_window.calculation_gr_ui.graphicsView_sq.is_on_canvas(sq_name):
-        main_window.calculation_gr_ui.graphicsView_sq.remove_sq(sq_ws_name=sq_name)
+    if main_window.calculategr_ui.graphicsView_sq.is_on_canvas(sq_name):
+        main_window.calculategr_ui.graphicsView_sq.remove_sq(sq_ws_name=sq_name)
 
 
 def update_sq_boundary(main_window, boundary_index, new_position):

@@ -67,12 +67,15 @@
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout_42">
        <item>
         <layout class="QGridLayout" name="gridLayout_18">
          <item row="6" column="1">
           <widget class="QPushButton" name="pushButton_clearSofQ">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="font">
             <font>
              <pointsize>10</pointsize>
@@ -123,6 +126,9 @@
          </item>
          <item row="5" column="1">
           <widget class="QPushButton" name="pushButton_sqColorStyle">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="font">
             <font>
              <pointsize>10</pointsize>
@@ -138,6 +144,9 @@
          </item>
          <item row="5" column="0">
           <widget class="QPushButton" name="pushButton_rescaleSq">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="font">
             <font>
              <pointsize>10</pointsize>
@@ -175,6 +184,9 @@
          </item>
          <item row="6" column="0">
           <widget class="QPushButton" name="pushButton_editSofQ">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="font">
             <font>
              <pointsize>10</pointsize>
@@ -187,6 +199,9 @@
          </item>
          <item row="7" column="0">
           <widget class="QPushButton" name="pushButton_saveSQ">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="font">
             <font>
              <pointsize>10</pointsize>
@@ -221,6 +236,9 @@
             </item>
             <item row="0" column="2">
              <widget class="QPushButton" name="pushButton_showQMinMax">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="font">
                <font>
                 <pointsize>7</pointsize>
@@ -430,6 +448,9 @@
             </item>
             <item>
              <widget class="QPushButton" name="pushButton_generateGR">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="font">
                <font>
                 <weight>75</weight>
@@ -473,6 +494,9 @@
          </item>
          <item row="0" column="1">
           <widget class="QPushButton" name="pushButton_saveGR">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="font">
             <font>
              <weight>75</weight>
@@ -486,6 +510,9 @@
          </item>
          <item row="2" column="1">
           <widget class="QPushButton" name="pushButton_clearGrCanvas">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="font">
             <font>
              <pointsize>10</pointsize>
@@ -498,6 +525,9 @@
          </item>
          <item row="1" column="0">
           <widget class="QPushButton" name="pushButton_rescaleGr">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="font">
             <font>
              <pointsize>10</pointsize>
@@ -510,6 +540,9 @@
          </item>
          <item row="1" column="1">
           <widget class="QPushButton" name="pushButton_grColorStyle">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="font">
             <font>
              <pointsize>10</pointsize>
@@ -522,6 +555,9 @@
          </item>
          <item row="2" column="0">
           <widget class="QPushButton" name="pushButton_generateSQ">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="font">
             <font>
              <pointsize>10</pointsize>

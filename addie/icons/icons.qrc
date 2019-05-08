@@ -22,5 +22,6 @@
     <file>load_csv_case2.png</file>
     <file>load_csv_case3.png</file>
     <file>load_csv_case4.png</file>
+    <file>save_sq_selection_image.png</file>
   </qresource>
 </RCC>

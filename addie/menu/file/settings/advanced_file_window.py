@@ -60,18 +60,18 @@ class AdvancedWindow(QMainWindow):
 
         self.ui.centralwidget.setContentsMargins(10, 10, 10, 10)
 
+    def is_idl_selected(self):
+        return self.ui.idl_post_processing_button.isChecked()
+
     def post_processing_clicked(self):
-        if self.ui.idl_post_processing_button.isChecked():
-            # _index = 0
+        if self.is_idl_selected():
             _post = 'idl'
             _idl_groupbox_visible = True
         else:
-            # _index = 1
             _post = 'mantid'
             _idl_groupbox_visible = False
 
         self.ui.idl_groupbox.setVisible(_idl_groupbox_visible)
-#        self.parent.ui.stackedWidget.setCurrentIndex(_index)
         self.parent.post_processing = _post
         self.parent.activate_reduction_tabs() # hide or show right tabs
         self.parent.advanced_window_idl_groupbox_visible = _idl_groupbox_visible
