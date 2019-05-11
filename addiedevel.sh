@@ -30,4 +30,4 @@ echo using $RAW_PYTHON version $PYTHON_VERSION
 $CMD setup.py build
 
 # launch addie
-QT_API=$LOCAL_QT_API PYTHONPATH=build/lib:$PYTHONPATH $CMD --classic build/scripts-${PYTHON_VERSION}/addie
+QT_API=$LOCAL_QT_API PYTHONPATH=build/lib:$PYTHONPATH $CMD --classic build/lib/addie/main.py
