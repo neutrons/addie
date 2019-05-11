@@ -105,7 +105,6 @@ class PlotStyleDialog(QDialog):
         if mark == 'No Change':
             mark = None
         else:
-            print('***** "{}"'.format(mark))
             mark = mark.split('(')[0].strip()
 
         return return_list, color, mark

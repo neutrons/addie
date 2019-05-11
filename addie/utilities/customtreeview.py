@@ -35,8 +35,6 @@ class CustomizedTreeView(QTreeView):
         self._myHeaderList = list()
         self._childrenInOrder = True
 
-        return
-
     def delete_node(self, node_item):
         """ Delete a node in the tree
         """
@@ -66,10 +64,6 @@ class CustomizedTreeView(QTreeView):
 
             if parent_value in self._leafDict:
                 self._leafDict[parent_value].remove(node_value)
-            # END-IF
-        # END-IF-ELSE
-
-        return
 
     def init_setup(self, header_list):
         """
@@ -262,8 +256,6 @@ class CustomizedTreeView(QTreeView):
         self._mainNodeDict.clear()
         self._leafDict.clear()
 
-        return
-
     def _add_child_item(self, parent_item, child_item_value, append):
         """
         Add a child item
@@ -301,8 +293,6 @@ class CustomizedTreeView(QTreeView):
             row_number = self._leafDict[parent_value].index(child_item_value)
             parent_item.insertRow(row_number, [child_item])
 
-        return
-
     def get_main_nodes(self, output_str=True):
         """
         Get all name of all main nodes
@@ -339,8 +329,6 @@ class CustomizedTreeView(QTreeView):
             else:
                 error_message += 'Item of index %s not a QStandardItem instance, ' \
                                  'but of type %s.' % (str(qindex), str(type(qitem)))
-            # END-IF-ELSE
-        # END-FOR
 
         if len(error_message) > 0:
             print('[Error] %s' % error_message)
@@ -379,8 +367,6 @@ class CustomizedTreeView(QTreeView):
                 return_list.append(str(item.text()))
             else:
                 return_list.append(item)
-            # END-IF
-        # END-FOR
 
         return return_list
 

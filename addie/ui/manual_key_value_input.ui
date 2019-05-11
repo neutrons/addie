@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>373</width>
-    <height>439</height>
+    <width>459</width>
+    <height>491</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,19 +30,6 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>Value</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLineEdit" name="new_key_widget"/>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="new_value_widget"/>
-         </item>
          <item row="1" column="2">
           <widget class="QPushButton" name="add_button">
            <property name="font">
@@ -55,12 +42,28 @@
            </property>
           </widget>
          </item>
+         <item row="0" column="1">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Value</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="new_value_widget"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QComboBox" name="list_key_comboBox"/>
+         </item>
         </layout>
        </item>
        <item>
         <widget class="QTableWidget" name="key_value_table">
          <property name="alternatingRowColors">
           <bool>true</bool>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SingleSelection</enum>
          </property>
          <property name="selectionBehavior">
           <enum>QAbstractItemView::SelectRows</enum>
@@ -81,6 +84,23 @@
            <string>Value</string>
           </property>
          </column>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="font">
+          <font>
+           <family>DejaVu Sans</family>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Bold Value = Not Editable</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
         </widget>
        </item>
        <item>
@@ -112,6 +132,13 @@
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="use_global_keys_values">
+           <property name="text">
+            <string>Use global keys/values</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -156,7 +183,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>373</width>
+     <width>459</width>
      <height>22</height>
     </rect>
    </property>
@@ -172,8 +199,8 @@
    <slot>ok_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>317</x>
-     <y>396</y>
+     <x>448</x>
+     <y>458</y>
     </hint>
     <hint type="destinationlabel">
      <x>318</x>
@@ -188,8 +215,8 @@
    <slot>cancel_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>63</x>
-     <y>397</y>
+     <x>73</x>
+     <y>458</y>
     </hint>
     <hint type="destinationlabel">
      <x>111</x>
@@ -204,8 +231,8 @@
    <slot>remove_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>87</x>
-     <y>340</y>
+     <x>101</x>
+     <y>413</y>
     </hint>
     <hint type="destinationlabel">
      <x>160</x>
@@ -220,12 +247,28 @@
    <slot>add_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>308</x>
-     <y>84</y>
+     <x>436</x>
+     <y>113</y>
     </hint>
     <hint type="destinationlabel">
      <x>369</x>
      <y>215</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>use_global_keys_values</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>use_global_keys_values_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>307</x>
+     <y>395</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>347</x>
+     <y>457</y>
     </hint>
    </hints>
   </connection>
@@ -235,5 +278,6 @@
   <slot>cancel_clicked()</slot>
   <slot>remove_clicked()</slot>
   <slot>add_clicked()</slot>
+  <slot>use_global_keys_values_clicked()</slot>
  </slots>
 </ui>

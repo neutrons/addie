@@ -26,8 +26,6 @@ class IsotopeDialog(QDialog):
         self.parent = parent
         QDialog.__init__(self, parent=parent)
         self.ui = load_ui('isotopes.ui', baseinstance=self)
-        # self.ui = UiDialog()
-        # self.ui.setupUi(self)
 
         self.init_widgets(element)
 

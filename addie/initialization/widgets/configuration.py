@@ -28,3 +28,5 @@ class ConfigurationInitializer:
         parent.packing_fraction = data['packing_fraction']
 
         parent.oncat_metadata_filters = data["oncat_metadata_filters"][parent.instrument["short_name"]]
+
+        parent.align_and_focus_powder_from_files_blacklist = data["align_and_focus_powder_from_files_blacklist"]
