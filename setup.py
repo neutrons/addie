@@ -10,7 +10,11 @@ setup(name="addie",
       url="http://github.com/neutrons/addie",
       long_description="""Should have a longer description""",
       license="The MIT License (MIT)",
-      scripts=["scripts/addie"],
+      entry_points = {
+        'console_scripts': [
+            "addie = addie.main:main"
+        ]
+      },
       packages=find_packages(),
       package_data={'': ['*.ui', '*.png', '*.qrc', '*.json']},
       include_package_data=True,

@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 from __future__ import (absolute_import, division, print_function)
 
 import copy
@@ -921,32 +920,34 @@ class MainWindow(QMainWindow):
         self.close()
 
 
-def main(mode):
+def main(config=None):
+
+    if config is None:
+        import argparse  # noqa
+        parser = argparse.ArgumentParser(description='ADvanced DIffraction Environment')
+        parser.add_argument('--version', action='version', version='%(prog)s version {}'.format(__version__))
+        parser.add_argument('--mode', type=str, default='mantid',
+                        help='Set processing mode (default=%(default)s)', choices=['mantid', 'idl'])
+
+        try:  # set up bash completion as a soft dependency
+            import argcomplete  # noqa
+            argcomplete.autocomplete(parser)
+        except ImportError:
+            pass  # silently skip this
+
+        # parse the command line options
+        config = parser.parse_args()
+
+
     app = QApplication(sys.argv)
-    app.setOrganizationName("Qtrac Ltd.")
-    app.setOrganizationDomain("qtrac.eu")
-    app.setApplicationName("Image Changer")
+    app.setOrganizationName("ORNL / SNS")
+    app.setOrganizationDomain("https://neutrons.ornl.gov/")
+    app.setApplicationName("ADDIE: ADvanced DIffraction Environment")
     app.setWindowIcon(QIcon(":/icon.png"))
-    form = MainWindow(processing_mode=mode)
+    form = MainWindow(processing_mode=config.mode)
     form.show()
     app.exec_()
 
 
 if __name__ == '__main__':
-    import argparse  # noqa
-    parser = argparse.ArgumentParser(description='ADvanced DIffraction Environment')
-    parser.add_argument('--version', action='version', version='%(prog)s version {}'.format(__version__))
-    parser.add_argument('--mode', type=str, default='mantid',
-                        help='Set processing mode (default=%(default)s)', choices=['mantid', 'idl'])
-
-    try:  # set up bash completion as a soft dependency
-        import argcomplete  # noqa
-        argcomplete.autocomplete(parser)
-    except ImportError:
-        pass  # silently skip this
-
-    # parse the command line options
-    options = parser.parse_args()
-
-    # start the main program
-    main(options.mode)
+    main()
