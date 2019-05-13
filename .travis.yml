@@ -17,28 +17,31 @@ matrix:
 
 before_install:
 - |
+  # Install conda
   "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
   if [ "$TRAVIS_OS_NAME" = "linux" ]; then export CXX=g++-4.8 CC=gcc-4.8; fi
   if [ "$TRAVIS_OS_NAME" = "linux" ]; then OS=Linux-x86_64; else OS=MacOSX-x86_64; fi
   wget -O miniconda.sh https://repo.continuum.io/miniconda/Miniconda${CONDA:0:1}-latest-$OS.sh
   bash miniconda.sh -b -p $HOME/miniconda
   export PATH="$HOME/miniconda/bin:$PATH"
-  conda config --set always_yes yes --set changeps1 no
-  conda config --add channels conda-forge --add channels marshallmcdonnell --add channels mantid
-  conda update  -q conda
-  conda create  -n test-environment -q python=$CONDA
-  conda update  -n test-environment -q conda
-  conda install -n test-environment -q conda-build
-  conda install -n test-environment -c mantid mantid-workbench nexus poco
-  conda install -n test-environment flake8
-
-  sudo apt-get update
-  sudo apt-get install -y freeglut3-dev libglu1-mesa
 
 install:
 - |
-  source activate test-environment
-  conda list
+  # Setup channels
+  conda config --set always_yes yes --set changeps1 no --set anaconda_upload no
+  conda config --add channels conda-forge --add channels marshallmcdonnell --add channels mantid --add channels mantid/label/nightly
+
+  conda update  -q conda
+  conda info -a
+
+  # Activate environment
+  conda create  -n addie_env -q python=$CONDA flake8 conda-build conda-verify anaconda-client
+  source activate addie_env
+
+  # Build recipe and install addie
+  conda build conda.recipe
+  export PKG_FILE=$(conda build conda.recipe --output)
+  conda install ${PKG_FILE}
 
 before_script:
   # create a properties file that turns off network access
@@ -73,7 +76,7 @@ script:
 deploy:
  # Deploy conda package to Anaconda.org https://anaconda.org/addie-diffraction/addie
  - provider: script
-   script: chmod +x conda.recipe/anaconda_upload.sh && ./conda.recipe/anaconda_upload.sh ${CONDA}
+   script: cd conda.recipe && chmod +x anaconda_upload.sh && ./anaconda_upload.sh ${PKG_FILE}
    skip_cleanup: true
    #skip_existing: true
    on:
