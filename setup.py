@@ -25,5 +25,6 @@ setup(name="addie",
         'psutil==5.4.2',
         'QtPy==1.6.0' ],
       setup_requires=[],
-      test_suite='tests'
+      test_suite='tests',
+      tests_require=['pytest']
       )
