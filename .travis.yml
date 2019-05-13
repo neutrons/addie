@@ -44,13 +44,17 @@ install:
   conda install ${PKG_FILE}
 
 before_script:
-  # create a properties file that turns off network access
-  - mkdir ~/.mantid
-  - echo "CheckMantidVersion.OnStartup=0" > ~/.mantid/Mantid.user.properties
-  - echo "UpdateInstrumentDefinitions.OnStartup=0" >> ~/.mantid/Mantid.user.properties
-  - echo "usagereports.enabled=0" >> ~/.mantid/Mantid.user.properties
-  - export DISPLAY=:99.0
-  - sleep 3
+  - |
+    # create a properties file that turns off network access
+    mkdir ~/.mantid
+    echo "CheckMantidVersion.OnStartup=0" > ~/.mantid/Mantid.user.properties
+    echo "UpdateInstrumentDefinitions.OnStartup=0" >> ~/.mantid/Mantid.user.properties
+    echo "usagereports.enabled=0" >> ~/.mantid/Mantid.user.properties
+    export DISPLAY=:99.0
+    sleep 3
+  - |
+    conda install -c mantid/label/nightly mantid-workbench
+    conda install -c marshallmcdonnell mantid-total-scattering-python-wrapper
 
 script:
   # lint the code and generate an error if a warning is introduced
