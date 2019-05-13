@@ -21,6 +21,7 @@ requirements:
   run:
     - mantid-total-scattering-python-wrapper
     - mantid-workbench
+    - python
 
 test:
   imports:
