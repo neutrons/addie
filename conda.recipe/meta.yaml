@@ -8,18 +8,23 @@ source:
   path: ..
 
 build:
-  number: 0
+  string: py{{py}}
   script: python setup.py install --single-version-externally-managed --record=record.txt
 
 requirements:
   build:
-    - python
     - mantid-total-scattering-python-wrapper
     - mantid-workbench
+    - python
+    - setuptools
 
   run:
     - mantid-total-scattering-python-wrapper
     - mantid-workbench
+
+test:
+  imports:
+    - addie
 
 about:
   home: https://github.com/neutrons/addie
