@@ -42,8 +42,7 @@ from addie.processing.mantid.master_table.column_highlighting import ColumnHighl
 
 # PyONcat
 try:
-    from addie.processing.mantid.master_table.import_from_database.import_from_database_handler import \
-        ImportFromDatabaseHandler
+    from addie.processing.mantid.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler # noqa
     ONCAT_ENABLED = True
 except ImportError:
     print('pyoncat module not found. Functionality disabled')
@@ -54,7 +53,8 @@ import addie.processing.mantid.event_handler as processing_event_handler
 import addie.addiedriver as driver
 import addie.calculate_gr.edit_sq_dialog
 
-from addie.icons import icons_rc # necessary to see all the icons
+# necessary to see all the icons
+from addie.icons import icons_rc # noqa
 
 from addie.calculate_gr.pdf_lines_manager import PDFPlotManager
 
@@ -424,7 +424,7 @@ class MainWindow(QMainWindow):
 
     def main_tab_widget_changed(self, tab_selected):
         if tab_selected == 0:
-            o_gui = Step1GuiHandler(main_window=self)
+            Step1GuiHandler(main_window=self)
             autonom_event_handler.check_step1_gui(self)
         if tab_selected == 1:
             _o_gui = Step2GuiHandler(main_window=self)
@@ -470,7 +470,7 @@ class MainWindow(QMainWindow):
         if self.job_monitor_interface is None:
             self.logbook_thread.stop()
         else:
-            _logbook_handler = LogbookHandler(parent=self)
+            LogbookHandler(parent=self)
 
     # autoNOM
 
@@ -927,7 +927,7 @@ def main(config=None):
         parser = argparse.ArgumentParser(description='ADvanced DIffraction Environment')
         parser.add_argument('--version', action='version', version='%(prog)s version {}'.format(__version__))
         parser.add_argument('--mode', type=str, default='mantid',
-                        help='Set processing mode (default=%(default)s)', choices=['mantid', 'idl'])
+                            help='Set processing mode (default=%(default)s)', choices=['mantid', 'idl'])
 
         try:  # set up bash completion as a soft dependency
             import argcomplete  # noqa
@@ -937,7 +937,6 @@ def main(config=None):
 
         # parse the command line options
         config = parser.parse_args()
-
 
     app = QApplication(sys.argv)
     app.setOrganizationName("ORNL / SNS")
