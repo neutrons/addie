@@ -15,12 +15,16 @@ requirements:
   build:
     - mantid-total-scattering-python-wrapper
     - mantid-workbench==4.0.20190416.1125
+    - periodictable
+    - psutil
     - python
     - setuptools
 
   run:
     - mantid-total-scattering-python-wrapper
     - mantid-workbench==4.0.20190416.1125
+    - periodictable
+    - psutil
     - python
 
 test:
