@@ -53,7 +53,7 @@ before_script:
     export DISPLAY=:99.0
     sleep 3
   - |
-    conda install -c mantid/label/nightly mantid-workbench
+    conda install -c mantid/label/nightly mantid-workbench==4.0.20190416.1125
     conda install -c marshallmcdonnell mantid-total-scattering-python-wrapper
 
 script:
