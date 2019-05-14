@@ -14,7 +14,7 @@ build:
 requirements:
   build:
     - mantid-total-scattering-python-wrapper
-    - mantid-workbench==4.0.20190416.1125
+    - mantid-workbench
     - periodictable
     - psutil
     - python
@@ -22,7 +22,7 @@ requirements:
 
   run:
     - mantid-total-scattering-python-wrapper
-    - mantid-workbench==4.0.20190416.1125
+    - mantid-workbench
     - periodictable
     - psutil
     - python
