@@ -22,7 +22,6 @@ def read_requirements_from_file(filepath):
         return req_file.readlines()
 
 setup_args = dict(install_requires=read_requirements_from_file(os.path.join(THIS_DIR, 'install-requirements.txt')),
-                  setup_requires=read_requirements_from_file(os.path.join(THIS_DIR, 'setup-requirements.txt')),
                   tests_require=read_requirements_from_file(os.path.join(THIS_DIR, 'test-requirements.txt'))
 )
 
@@ -43,7 +42,7 @@ setup(name="addie",
       packages=find_packages(),
       package_data={'': ['*.ui', '*.png', '*.qrc', '*.json']},
       include_package_data=True,
-      setup_requires=setup_args["setup_requires"],
+      setup_requires=[],
       install_requires=setup_args["install_requires"],
       tests_require=setup_args["install_requires"] + setup_args["tests_require"],
       test_suite='tests'

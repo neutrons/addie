@@ -1,5 +1,0 @@
-flake8
-mantid-total-scattering
-periodictable
-psutil
-QtPy
