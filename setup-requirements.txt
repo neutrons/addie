@@ -1,0 +1,8 @@
+flake8
+matplotlib
+mantid-total-scattering
+numpy
+periodictable
+psutil
+QtPy
+six

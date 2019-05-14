@@ -1,0 +1,5 @@
+mantid-total-scattering
+periodictable
+psutil
+QtPy
+six
