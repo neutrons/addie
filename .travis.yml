@@ -82,7 +82,7 @@ deploy:
  - provider: script
    script: cd conda.recipe && chmod +x anaconda_upload.sh && ./anaconda_upload.sh ${PKG_FILE}
    skip_cleanup: true
-   #skip_existing: true
+   skip_existing: true
    on:
-     branch: conda_cd
-   #  tags: true
+     branch: master
+     tags: true
