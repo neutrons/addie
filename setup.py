@@ -11,6 +11,7 @@ THIS_DIR = os.path.dirname(__file__)
 # Package requirements helper
 # ==============================================================================
 
+
 def read_requirements_from_file(filepath):
     '''Read a list of requirements from the given file and split into a
     list of strings. It is assumed that the file is a flat
@@ -21,9 +22,9 @@ def read_requirements_from_file(filepath):
     with open(filepath, 'rU') as req_file:
         return req_file.readlines()
 
+
 setup_args = dict(install_requires=read_requirements_from_file(os.path.join(THIS_DIR, 'install-requirements.txt')),
-                  tests_require=read_requirements_from_file(os.path.join(THIS_DIR, 'test-requirements.txt'))
-)
+                  tests_require=read_requirements_from_file(os.path.join(THIS_DIR, 'test-requirements.txt')))
 
 setup(name="addie",
       version=versioneer.get_version(),
