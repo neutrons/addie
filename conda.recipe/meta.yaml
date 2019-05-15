@@ -1,0 +1,45 @@
+{% set data = load_setup_py_data() %}
+
+package:
+  name: "addie"
+  version: "{{ data['version'] }}"
+
+source:
+  path: ..
+
+build:
+  string: py{{py}}
+  script: python setup.py install --single-version-externally-managed --record=record.txt
+
+requirements:
+  build:
+    - mantid-total-scattering-python-wrapper
+    - mantid-workbench
+    - periodictable
+    - psutil
+    - python
+    - setuptools
+
+  run:
+    - mantid-total-scattering-python-wrapper
+    - mantid-workbench
+    - periodictable
+    - psutil
+    - python
+
+test:
+  imports:
+    - addie
+
+about:
+  home: https://github.com/neutrons/addie
+  license: GPL (version 3)
+  license_family: GPL3
+  license_file: 
+  summary: ADvanced DIffraction Environment
+
+extra:
+  recipe-maintainers:
+    - JeanBilheux
+    - marshallmcdonnell
+    - peterfpeterson
