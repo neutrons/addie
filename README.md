@@ -1,4 +1,7 @@
-[![Build Status](https://travis-ci.org/neutrons/addie.svg?branch=master)](https://travis-ci.org/neutrons/addie)
+| DevOps | Release |
+|--------|---------|
+| [![Build Status](https://travis-ci.org/neutrons/addie.svg?branch=master)](https://travis-ci.org/neutrons/addie) | [![Anaconda-Server Badge](https://anaconda.org/addie-diffraction/addie/badges/version.svg)](https://anaconda.org/addie-diffraction/addie) | 
+|  | [![Anaconda-Server Badge](https://anaconda.org/addie-diffraction/addie/badges/platforms.svg)](https://anaconda.org/addie-diffraction/addie) | 
 
 ADDIE
 ======
