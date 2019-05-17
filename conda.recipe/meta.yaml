@@ -13,6 +13,7 @@ build:
 
 requirements:
   build:
+    - configparser
     - mantid-total-scattering-python-wrapper
     - mantid-workbench
     - periodictable
@@ -21,6 +22,7 @@ requirements:
     - setuptools
 
   run:
+    - configparser
     - mantid-total-scattering-python-wrapper
     - mantid-workbench
     - periodictable
