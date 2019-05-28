@@ -15,7 +15,8 @@
     "Dspacing",
     "UnwrapRef",
     "LowResRef",
-    "LowResSpectrumOffset"
+    "LowResSpectrumOffset",
+    "ReductionProperties"
   ],
   "pdf": {
     "q_range": {
