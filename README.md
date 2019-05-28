@@ -29,11 +29,13 @@ conda create -n addie_env python=${python_version}
 source activate addie_env
 ```
 
-**Install**
+**Install (or Update)**
 
 ```
 conda install -c addie-diffraction addie 
 ```
+
+If there are issues with `mantid-workbench` or `mantid-total-scattering`  dependencies (broken, errors, etc.), then you can delete the environment and re-install `addie` in a new environment ("turn it off and back on again")
 
 **Notes**
 
