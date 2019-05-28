@@ -37,6 +37,12 @@ conda install -c addie-diffraction addie
 
 If there are issues with `mantid-workbench` or `mantid-total-scattering`  dependencies (broken, errors, etc.), then you can delete the environment and re-install `addie` in a new environment ("turn it off and back on again")
 
+Go here for how to delete an [environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#removing-an-environment) or use:
+
+```
+conda remove --name addie_env --all
+```
+
 **Notes**
 
 If you have an error (see below for example) related to the `libGL` library, you may not have it installed for the Mantid Framework to work. See instructions [here](https://github.com/mantidproject/conda-recipes/#gl-and-glu-libs) for installing the necessary libraries for different OS
