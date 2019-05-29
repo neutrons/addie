@@ -35,7 +35,7 @@ install:
   conda info -a
 
   # Activate environment
-  conda create -q -n addie_env python=$CONDA flake8 conda-build conda-verify anaconda-client
+  conda create -q -n addie_env python=$CONDA flake8 conda-build=3.17 conda-verify anaconda-client
   source activate addie_env
 
   # Build recipe and install addie
