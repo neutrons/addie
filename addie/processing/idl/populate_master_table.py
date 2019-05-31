@@ -138,9 +138,9 @@ class PopulateMasterTable(object):
             self.main_window_postprocessing_ui.table.setItem(row, 6, _item)
 
         _widget = QComboBox()
-        _widget.addItem("cylindrical")
-        _widget.addItem("spherical")
-        if _metadata['sample_shape'] == 'spherical':
+        _widget.addItem("Cylindrical")
+        _widget.addItem("Spherical")
+        if _metadata['sample_shape'] == 'Spherical':
             _widget.setCurrentIndex(1)
         self.main_window_postprocessing_ui.table.setCellWidget(row, 7, _widget)
 

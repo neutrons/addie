@@ -12,7 +12,7 @@ from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMN
 
 class DimensionsSetter(QDialog):
 
-    shape_selected = 'cylindrical'
+    shape_selected = 'Cylindrical'
     column = 0
 
     def __init__(self, parent=None, key=None, data_type='sample'):

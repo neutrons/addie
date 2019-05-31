@@ -369,9 +369,9 @@ class TableRowHandler:
                                             self.main_window.master_table_sample_shape_changed(index, key))
         _list_ui_to_unlock.append(_widget)
         _widget.blockSignals(True)
-        _widget.addItem("cylindrical")
-        _widget.addItem("spherical")
-        _widget.addItem("hollow cylinder")
+        _widget.addItem("Cylindrical")
+        _widget.addItem("Spherical")
+        _widget.addItem("Hollow Cylinder")
         _master_table_row_ui['sample']['shape'] = _widget
         _layout.addWidget(_widget)
         _w = QWidget()
@@ -585,9 +585,9 @@ class TableRowHandler:
                                             self.main_window.master_table_normalization_shape_changed(value, key))
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
-        _widget.addItem("cylindrical")
-        _widget.addItem("spherical")
-        _widget.addItem("hollow cylinder")
+        _widget.addItem("Cylindrical")
+        _widget.addItem("Spherical")
+        _widget.addItem("Hollow Cylinder")
         _master_table_row_ui['normalization']['shape'] = _widget
         _layout.addWidget(_widget)
         _w = QWidget()
@@ -840,7 +840,7 @@ class TableRowHandler:
 
         return ['None']
 
-    def get_inelastic_scattering_list(self, shape='cylindrical'):
+    def get_inelastic_scattering_list(self, shape='Cylindrical'):
         return ['None',
                 'Placzek',
                 ]

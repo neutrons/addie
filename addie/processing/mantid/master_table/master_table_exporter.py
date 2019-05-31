@@ -176,15 +176,17 @@ class TableFileExporter:
 
         column += 1
         shape = self._get_selected_value(row=row, column=column)
+        print("SHAPE:", shape)
+        exit()
         dict_element["Geometry"]["Shape"] = shape
 
         column += 1
         radius = str(self.parent.master_table_list_ui[key][element]['geometry']['radius']['value'].text())
         radius2 = 'N/A'
         height = 'N/A'
-        if shape == 'cylindrical':
+        if shape == 'Cylindrical':
             height = str(self.parent.master_table_list_ui[key][element]['geometry']['height']['value'].text())
-        elif shape == 'spherical':
+        elif shape == 'Spherical':
             pass
         else:
             radius2 = str(self.parent.master_table_list_ui[key][element]['geometry']['radius2']['value'].text())

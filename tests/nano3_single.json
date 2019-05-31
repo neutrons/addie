@@ -18,7 +18,7 @@
         },
         "PackingFraction": "1",
         "Geometry": {
-            "Shape": "cylindrical",
+            "Shape": "Cylindrical",
             "Radius": "0.3",
             "Radius2": "N/A",
             "Height": "1.8"
@@ -63,7 +63,7 @@
         },
         "PackingFraction": "1.0",
         "Geometry": {
-            "Shape": "cylindrical",
+            "Shape": "Cylindrical",
             "Radius": "0.2925",
             "Radius2": "N/A",
             "Height": "1.8"
