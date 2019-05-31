@@ -176,8 +176,6 @@ class TableFileExporter:
 
         column += 1
         shape = self._get_selected_value(row=row, column=column)
-        print("SHAPE:", shape)
-        exit()
         dict_element["Geometry"]["Shape"] = shape
 
         column += 1
