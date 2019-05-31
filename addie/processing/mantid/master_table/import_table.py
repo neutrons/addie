@@ -121,8 +121,8 @@ class ImportTable(object):
             #sample shape
             _widget = QtGui.QComboBox()
             _widget.addItem("Cylinder")
-            _widget.addItem("Spherical")
-            if _entry[7] == "Spherical":
+            _widget.addItem("Sphere")
+            if _entry[7] == "Sphere":
                 _widget.setCurrentIndex(1)
             self.parent.ui.table.setCellWidget(_row, 7, _widget)
 

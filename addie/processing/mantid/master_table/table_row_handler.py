@@ -82,7 +82,7 @@ class TableRowHandler:
         _label_radius_2 = 'Outer Radius'
         if shape_index == 0: # cylinder
             _enabled_radius_2 = False
-        elif shape_index == 1: # spherical
+        elif shape_index == 1: # sphere
             _enabled_height = False
             _enabled_radius_2 = False
         else:
@@ -358,7 +358,7 @@ class TableRowHandler:
         _master_table_row_ui['sample']['packing_fraction'] = _item
         self.table_ui.setItem(row, column, _item)
 
-        # column 8 - shape (cylinder or spherical)
+        # column 8 - shape (cylinder or sphere)
         column += 1
         _layout = QHBoxLayout()
         _layout.setContentsMargins(0, 0, 0, 0)
@@ -370,7 +370,7 @@ class TableRowHandler:
         _list_ui_to_unlock.append(_widget)
         _widget.blockSignals(True)
         _widget.addItem("Cylinder")
-        _widget.addItem("Spherical")
+        _widget.addItem("Sphere")
         _widget.addItem("Hollow Cylinder")
         _master_table_row_ui['sample']['shape'] = _widget
         _layout.addWidget(_widget)
@@ -575,7 +575,7 @@ class TableRowHandler:
         _item = QTableWidgetItem("")
         self.table_ui.setItem(row, column, _item)
 
-        # column 19 - shape (cylinder or spherical)
+        # column 19 - shape (cylinder or sphere)
         column += 1
         _layout = QHBoxLayout()
         _layout.setContentsMargins(0, 0, 0, 0)
@@ -586,7 +586,7 @@ class TableRowHandler:
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
         _widget.addItem("Cylinder")
-        _widget.addItem("Spherical")
+        _widget.addItem("Sphere")
         _widget.addItem("Hollow Cylinder")
         _master_table_row_ui['normalization']['shape'] = _widget
         _layout.addWidget(_widget)
@@ -833,7 +833,7 @@ class TableRowHandler:
             return ['None',
                     'Carpenter',
                     'Mayers']
-        elif shape == 1: # spherical
+        elif shape == 1: # sphere
             return ['None']
         elif shape == 2: # hollow cylinder
             return ['None']
@@ -854,7 +854,7 @@ class TableRowHandler:
                     'Monte-Carlo',
                     'Numerical',
                     ]
-        elif shape == 1: # spherical
+        elif shape == 1: # sphere
             return ['None',
                     'Monte-Carlo',
                     ]

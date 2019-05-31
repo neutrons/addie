@@ -74,7 +74,7 @@ class DimensionsSetter(QDialog):
         if self.shape_selected.lower() == 'cylinder':
             radius = self.__get_label_value('radius')
             height = self.__get_label_value('height')
-        elif self.shape_selected.lower() == 'spherical':
+        elif self.shape_selected.lower() == 'sphere':
             radius = self.__get_label_value('radius')
         else:
             radius = self.__get_label_value('radius')
@@ -105,7 +105,7 @@ class DimensionsSetter(QDialog):
             self.ui.preview.setPixmap(QtGui.QPixmap(":/preview/cylinder_reference.png"))
             self.ui.preview.setScaledContents(True)
 
-        elif self.shape_selected.lower() == 'spherical':
+        elif self.shape_selected.lower() == 'sphere':
             # change label of first label
             self.ui.radius_label.setText("Radius")
             # hide radius widgets
@@ -115,7 +115,7 @@ class DimensionsSetter(QDialog):
             for _widget in self.group['height']:
                 _widget.setVisible(False)
             # display the right image label
-            self.ui.preview.setPixmap(QtGui.QPixmap(":/preview/spherical_reference.png"))
+            self.ui.preview.setPixmap(QtGui.QPixmap(":/preview/sphere_reference.png"))
             self.ui.preview.setScaledContents(True)
 
         elif self.shape_selected.lower() == 'hollow cylinder':
@@ -140,7 +140,7 @@ class DimensionsSetter(QDialog):
         if self.shape_selected.lower() == 'cylinder':
             if is_number(radius) and is_number(height):
                 save_button_status = True
-        elif self.shape_selected.lower() == 'spherical':
+        elif self.shape_selected.lower() == 'sphere':
             if is_number(radius):
                 save_button_status = True
         else:
@@ -157,7 +157,7 @@ class DimensionsSetter(QDialog):
 
         if self.shape_selected.lower() == 'cylinder':
             height = str(self.ui.height_value.text())
-        elif self.shape_selected.lower() == 'spherical':
+        elif self.shape_selected.lower() == 'sphere':
             pass
         else:
             radius2 = str(self.ui.radius2_value.text())

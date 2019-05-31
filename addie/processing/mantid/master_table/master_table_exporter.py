@@ -184,7 +184,7 @@ class TableFileExporter:
         height = 'N/A'
         if shape == 'Cylinder':
             height = str(self.parent.master_table_list_ui[key][element]['geometry']['height']['value'].text())
-        elif shape == 'Spherical':
+        elif shape == 'Sphere':
             pass
         else:
             radius2 = str(self.parent.master_table_list_ui[key][element]['geometry']['radius2']['value'].text())

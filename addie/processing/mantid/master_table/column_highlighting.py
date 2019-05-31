@@ -172,8 +172,8 @@ class ColumnHighlighting:
         if not self._are_radius_identical():
             return False
 
-        # we are done for spherical geometry
-        if shape_selected.lower() == "spherical":
+        # we are done for sphere geometry
+        if shape_selected.lower() == "sphere":
             return True
 
         if not self._are_height_identical():
