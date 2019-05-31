@@ -286,7 +286,7 @@
              <item>
               <widget class="QLabel" name="geometry_label">
                <property name="text">
-                <string>Cylindrical</string>
+                <string>Cylinder</string>
                </property>
               </widget>
              </item>

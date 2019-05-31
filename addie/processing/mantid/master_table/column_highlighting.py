@@ -179,8 +179,8 @@ class ColumnHighlighting:
         if not self._are_height_identical():
             return False
 
-        # we are done for cylindrical geometry
-        if shape_selected.lower() == "cylindrical":
+        # we are done for cylinder geometry
+        if shape_selected.lower() == "cylinder":
             return True
 
         if not self._are_radius2_identical():

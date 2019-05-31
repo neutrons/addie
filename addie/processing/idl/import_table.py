@@ -119,7 +119,7 @@ class ImportTable(object):
 
             # sample shape
             _widget = QComboBox()
-            _widget.addItem("Cylindrical")
+            _widget.addItem("Cylinder")
             _widget.addItem("Spherical")
             if _entry[7] == "Spherical":
                 _widget.setCurrentIndex(1)

@@ -12,7 +12,7 @@ from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMN
 
 class DimensionsSetter(QDialog):
 
-    shape_selected = 'Cylindrical'
+    shape_selected = 'Cylinder'
     column = 0
 
     def __init__(self, parent=None, key=None, data_type='sample'):
@@ -71,7 +71,7 @@ class DimensionsSetter(QDialog):
         height = 'N/A'
         radius2 = 'N/A'
 
-        if self.shape_selected.lower() == 'cylindrical':
+        if self.shape_selected.lower() == 'cylinder':
             radius = self.__get_label_value('radius')
             height = self.__get_label_value('height')
         elif self.shape_selected.lower() == 'spherical':
@@ -95,14 +95,14 @@ class DimensionsSetter(QDialog):
         self.shape_selected = shape_ui.currentText()
 
         # hide/show widgets according to shape selected
-        if self.shape_selected.lower() == 'cylindrical':
+        if self.shape_selected.lower() == 'cylinder':
             # change label of first label
             self.ui.radius_label.setText("Radius")
             # hide radius 2 widgets
             for _widget in self.group['radius2']:
                 _widget.setVisible(False)
             # display right image label
-            self.ui.preview.setPixmap(QtGui.QPixmap(":/preview/cylindrical_reference.png"))
+            self.ui.preview.setPixmap(QtGui.QPixmap(":/preview/cylinder_reference.png"))
             self.ui.preview.setScaledContents(True)
 
         elif self.shape_selected.lower() == 'spherical':
@@ -120,7 +120,7 @@ class DimensionsSetter(QDialog):
 
         elif self.shape_selected.lower() == 'hollow cylinder':
             # display the right image label
-            self.ui.preview.setPixmap(QtGui.QPixmap(":/preview/hollow_cylindrical_reference.png"))
+            self.ui.preview.setPixmap(QtGui.QPixmap(":/preview/hollow_cylinder_reference.png"))
             self.ui.preview.setScaledContents(True)
 
         # display value of radius1,2,height for this row
@@ -137,7 +137,7 @@ class DimensionsSetter(QDialog):
         radius2 = str(self.ui.radius2_value.text())
         height = str(self.ui.height_value.text())
 
-        if self.shape_selected.lower() == 'cylindrical':
+        if self.shape_selected.lower() == 'cylinder':
             if is_number(radius) and is_number(height):
                 save_button_status = True
         elif self.shape_selected.lower() == 'spherical':
@@ -155,7 +155,7 @@ class DimensionsSetter(QDialog):
         radius2 = 'N/A'
         height = 'N/A'
 
-        if self.shape_selected.lower() == 'cylindrical':
+        if self.shape_selected.lower() == 'cylinder':
             height = str(self.ui.height_value.text())
         elif self.shape_selected.lower() == 'spherical':
             pass
