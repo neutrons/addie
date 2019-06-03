@@ -189,9 +189,9 @@ class TableFileExporter:
         else:
             radius2 = str(self.parent.master_table_list_ui[key][element]['geometry']['radius2']['value'].text())
 
-        dict_element["Geometry"]["Radius"] = radius
-        dict_element["Geometry"]["Radius2"] = radius2
-        dict_element["Geometry"]["Height"] = height
+        dict_element["Geometry"]["Radius"] = int(radius)
+        dict_element["Geometry"]["Radius2"] = int(radius2)
+        dict_element["Geometry"]["Height"] = int(height)
 
         column += 1
         abs_correction = self._get_selected_value(row=row, column=column)
