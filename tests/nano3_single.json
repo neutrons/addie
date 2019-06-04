@@ -1,4 +1,23 @@
 {
+    "Activate": true,
+    "Title": "NaNO3_150C",
+    "Facility": "SNS",
+    "Instrument": "NOM",
+    "CacheDir": "./tmp",
+    "OutputDir": "./output",
+    "Merging": {
+        "QBinning": [],
+        "SumBanks": [],
+        "Characterizations": "",
+        "Grouping": {
+            "Initial": "",
+            "Output": ""
+        }
+    },
+    "Calibration": {
+        "Filename": "/SNS/NOM/shared/CALIBRATION/2017_1_1B_CAL/NOM_d92639_2017_04_24_furnace.h5"
+    },
+    "AlignAndFocusArgs" : { "TMin" : 300.0, "TMax" : 16667.0 },
     "Sample": {
         "Runs": "92651,92720,92721",
         "Background": {
@@ -18,10 +37,10 @@
         },
         "PackingFraction": "1",
         "Geometry": {
-            "Shape": "cylindrical",
-            "Radius": "0.3",
+            "Shape": "Cylinder",
+            "Radius": 0.3,
             "Radius2": "N/A",
-            "Height": "1.8"
+            "Height": 1.8
         },
         "AbsorptionCorrection": {
             "Type": "None"
@@ -38,11 +57,6 @@
             "LambdaBinningForFit": "0.16,0.04,2.8",
             "LambdaBinningForCalc": "0.1,0.0001,3.0"
         }
-    },
-    "Activate": true,
-    "Title": "NaNO3_150C",
-    "Calibration": {
-        "Filename": "/SNS/NOM/shared/CALIBRATION/2017_1_1B_CAL/NOM_d92639_2017_04_24_furnace.h5"
     },
     "Normalization": {
         "Runs": "92636-92637",
@@ -63,7 +77,7 @@
         },
         "PackingFraction": "1.0",
         "Geometry": {
-            "Shape": "cylindrical",
+            "Shape": "Cylinder",
             "Radius": "0.2925",
             "Radius2": "N/A",
             "Height": "1.8"
@@ -82,19 +96,6 @@
             "FitSpectrumWith": 0,
             "LambdaBinningForFit": "0.16,0.04,2.8",
             "LambdaBinningForCalc": "0.1,0.0001,3.0"
-        }
-    },
-    "Facility": "SNS",
-    "Instrument": "NOM",
-    "CacheDir": "./tmp",
-    "OutputDir": "./output",
-    "Merging": {
-        "QBinning": [],
-        "SumBanks": [],
-        "Characterizations": "",
-        "Grouping": {
-            "Initial": "",
-            "Output": ""
         }
     }
 }

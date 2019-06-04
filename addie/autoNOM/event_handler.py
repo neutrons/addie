@@ -9,6 +9,8 @@ from mantidqt.utils.asynchronous import AsyncTask
 # Mantid Total Scattering
 # (https://github.com/marshallmcdonnell/mantid_total_scattering)
 try:
+    import total_scattering
+    print("Mantid Total Scattering Version: ", total_scattering.__version__)
     from total_scattering.reduction import TotalScatteringReduction
     MANTID_TS_ENABLED = True
 except ImportError:

@@ -19,6 +19,7 @@ fi
 # get the python version to add to the PYTHONPATH
 # the double-bracket thing isn't pure bash but will work on most os
 if [[ $CMD == *"mantidpython"* ]]; then
+    CMD=" $CMD --classic"
     RAW_PYTHON=$(grep python $CMD | grep set | tail -n 1 | awk '{print $3}')
 else
     RAW_PYTHON=$CMD
@@ -30,4 +31,4 @@ echo using $RAW_PYTHON version $PYTHON_VERSION
 $CMD setup.py build
 
 # launch addie
-QT_API=$LOCAL_QT_API PYTHONPATH=build/lib:$PYTHONPATH $CMD --classic build/lib/addie/main.py
+QT_API=$LOCAL_QT_API PYTHONPATH=build/lib:$PYTHONPATH $CMD build/lib/addie/main.py

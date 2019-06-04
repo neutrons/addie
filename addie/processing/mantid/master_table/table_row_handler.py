@@ -80,9 +80,9 @@ class TableRowHandler:
         _enabled_height = True
         _label_radius_1 = 'Radius'
         _label_radius_2 = 'Outer Radius'
-        if shape_index == 0: # cylindrical
+        if shape_index == 0: # cylinder
             _enabled_radius_2 = False
-        elif shape_index == 1: # spherical
+        elif shape_index == 1: # sphere
             _enabled_height = False
             _enabled_radius_2 = False
         else:
@@ -358,7 +358,7 @@ class TableRowHandler:
         _master_table_row_ui['sample']['packing_fraction'] = _item
         self.table_ui.setItem(row, column, _item)
 
-        # column 8 - shape (cylindrical or spherical)
+        # column 8 - shape (cylinder or sphere)
         column += 1
         _layout = QHBoxLayout()
         _layout.setContentsMargins(0, 0, 0, 0)
@@ -369,9 +369,9 @@ class TableRowHandler:
                                             self.main_window.master_table_sample_shape_changed(index, key))
         _list_ui_to_unlock.append(_widget)
         _widget.blockSignals(True)
-        _widget.addItem("cylindrical")
-        _widget.addItem("spherical")
-        _widget.addItem("hollow cylinder")
+        _widget.addItem("Cylinder")
+        _widget.addItem("Sphere")
+        _widget.addItem("Hollow Cylinder")
         _master_table_row_ui['sample']['shape'] = _widget
         _layout.addWidget(_widget)
         _w = QWidget()
@@ -575,7 +575,7 @@ class TableRowHandler:
         _item = QTableWidgetItem("")
         self.table_ui.setItem(row, column, _item)
 
-        # column 19 - shape (cylindrical or spherical)
+        # column 19 - shape (cylinder or sphere)
         column += 1
         _layout = QHBoxLayout()
         _layout.setContentsMargins(0, 0, 0, 0)
@@ -585,9 +585,9 @@ class TableRowHandler:
                                             self.main_window.master_table_normalization_shape_changed(value, key))
         _widget.blockSignals(True)
         _list_ui_to_unlock.append(_widget)
-        _widget.addItem("cylindrical")
-        _widget.addItem("spherical")
-        _widget.addItem("hollow cylinder")
+        _widget.addItem("Cylinder")
+        _widget.addItem("Sphere")
+        _widget.addItem("Hollow Cylinder")
         _master_table_row_ui['normalization']['shape'] = _widget
         _layout.addWidget(_widget)
         _w = QWidget()
@@ -829,24 +829,24 @@ class TableRowHandler:
             _ui.blockSignals(False)
 
     def get_multi_scat_correction_list(self, shape=0):
-        if shape == 0: # cylindrical
+        if shape == 0: # cylinder
             return ['None',
                     'Carpenter',
                     'Mayers']
-        elif shape == 1: # spherical
+        elif shape == 1: # sphere
             return ['None']
-        elif shape == 2: # hollow cylindrical
+        elif shape == 2: # hollow cylinder
             return ['None']
 
         return ['None']
 
-    def get_inelastic_scattering_list(self, shape='cylindrical'):
+    def get_inelastic_scattering_list(self, shape='Cylinder'):
         return ['None',
                 'Placzek',
                 ]
 
     def get_absorption_correction_list(self, shape=0):
-        if shape == 0: # cylindrical
+        if shape == 0: # cylinder
             return ['None',
                     'Carpenter',
                     'Mayers',
@@ -854,7 +854,7 @@ class TableRowHandler:
                     'Monte-Carlo',
                     'Numerical',
                     ]
-        elif shape == 1: # spherical
+        elif shape == 1: # sphere
             return ['None',
                     'Monte-Carlo',
                     ]

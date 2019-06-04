@@ -124,10 +124,10 @@ class MassDensityWindow(QMainWindow):
         radius2 = str(self.parent.master_table_list_ui[self.key][self.data_type]['geometry']['radius2']['value'].text())
         height = str(self.parent.master_table_list_ui[self.key][self.data_type]['geometry']['height']['value'].text())
 
-        if geometry_defined.lower() == 'cylindrical':
+        if geometry_defined.lower() == 'cylinder':
             if is_number(radius) and is_number(height):
                 return True
-        elif geometry_defined.lower() == 'spherical':
+        elif geometry_defined.lower() == 'sphere':
             if is_number(radius):
                 return True
         else:
@@ -142,9 +142,9 @@ class MassDensityWindow(QMainWindow):
         radius2 = str(self.parent.master_table_list_ui[self.key][self.data_type]['geometry']['radius2']['value'].text())
         height = str(self.parent.master_table_list_ui[self.key][self.data_type]['geometry']['height']['value'].text())
 
-        if geometry_defined.lower() == 'cylindrical':
+        if geometry_defined.lower() == 'cylinder':
             volume = volume_of_cylinder(radius=radius, height=height)
-        elif geometry_defined.lower() == 'spherical':
+        elif geometry_defined.lower() == 'sphere':
             volume = volume_of_sphere(radius=radius)
         else:
             volume = volume_of_hollow_cylinder(inner_radius=radius, outer_radius=radius2, height=height)

@@ -124,7 +124,7 @@ class ExportTable(object):
     def retrieve_sample_shape(self, row=0, column=7):
         _widget = self.parent.ui.table.cellWidget(row, column)
         if _widget is None:
-            return 'cylindrical'
+            return 'Cylinder'
         _selected_index = _widget.currentIndex()
         _sample_shape = str(_widget.itemText(_selected_index))
         return _sample_shape
