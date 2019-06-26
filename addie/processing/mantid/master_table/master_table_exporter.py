@@ -106,6 +106,12 @@ class TableFileExporter:
         # column 0 is 'Activate'
         return self._get_checkbox_state(row=row, column=0)
 
+    def _oneAndOnlyOneTrue(self, iterable):
+        iterator = iter(iterable)
+        has_true = any(iterator)
+        has_another_true = any(iterator)
+        return has_true and not has_another_true
+
     def getRunDescr(self, row):
         runnumbers = self._get_item_value(row=row, column=SAMPLE_FIRST_COLUMN)
         if not runnumbers:
@@ -273,3 +279,34 @@ class TableFileExporter:
             full_export_dictionary["{:03}".format(row)] = self.retrieve_row_info(row)
 
         return full_export_dictionary
+
+    def density_selection_for_reduction(self, dictionary):
+        # extract density info from dictionart
+        density = dictionary['Density']
+
+        # ensure one and only one way is selected for calculating MassDensity
+        opts = iter([density['UseMassDensity'], density['UseNumberDensity'], density['UseMass']])
+        if not self._oneAndOnlyOneTrue(opts):
+            raise Exception("Must use one and only one way to calculated MassDensity")
+
+        # simple case that we get the MassDensity
+        if density['UseMassDensity']:
+            mass_density = density['MassDensity']
+
+        # if 
+
+        # Post-process for output: take out overall Density and add MassDensity key
+        dictionary.pop('Density')
+        dictionary['MassDensity'] = mass_density
+
+        return dictionary
+
+
+
+    def convert_from_row_to_reduction(self, json_input):
+        reduction_input = json_input
+        print("\n\nBefore Reduction row:", reduction_input["Sample"])
+        print("\n\nAfter Reduction row:", self.density_selection_for_reduction(reduction_input["Sample"]))
+
+
+        return reduction_input
