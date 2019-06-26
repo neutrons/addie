@@ -482,7 +482,7 @@
   </connection>
   <connection>
    <sender>number_density_line_edit</sender>
-   <signal>textChanged()</signal>
+   <signal>textEdited()</signal>
    <receiver>MainWindow</receiver>
    <slot>number_density_value_changed()</slot>
    <hints>
@@ -498,7 +498,7 @@
   </connection>
   <connection>
    <sender>mass_line_edit</sender>
-   <signal>textChanged()</signal>
+   <signal>textEdited()</signal>
    <receiver>MainWindow</receiver>
    <slot>mass_value_changed()</slot>
    <hints>
@@ -546,7 +546,7 @@
   </connection>
   <connection>
    <sender>mass_density_line_edit</sender>
-   <signal>textChanged()</signal>
+   <signal>textEdited()</signal>
    <receiver>MainWindow</receiver>
    <slot>mass_density_value_changed()</slot>
    <hints>

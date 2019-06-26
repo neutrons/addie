@@ -74,7 +74,6 @@ class MassDensityWindow(QMainWindow):
         if self.chemical_formula_defined:
             chemical_formula = self._get_chemical_formula()
             molecular_mass, total_number_of_atoms = retrieving_molecular_mass_and_number_of_atoms_worked(chemical_formula)
-            print("I am here!!!", molecular_mass, total_number_of_atoms)
             self.total_molecular_mass = molecular_mass
             self.total_number_of_atoms = total_number_of_atoms
 
@@ -155,7 +154,6 @@ class MassDensityWindow(QMainWindow):
 
     def mass_density_value_changed(self):
         # calculate number density if chemical formula defined
-        print(self.chemical_formula_defined, )
         if self.chemical_formula_defined:
             mass_density = np.float(self.ui.mass_density_line_edit.text())
             avogadro = scipy.constants.N_A
@@ -167,13 +165,11 @@ class MassDensityWindow(QMainWindow):
             number_density = 'N/A'
 
         self.ui.number_density_line_edit.setText(number_density)
-        print('A:', number_density, self.ui.number_density_line_edit.text())
         self.update_status_of_save_button()
 
     def number_density_value_changed(self):
         # calculate mass density if chemical formula defined
         if self.chemical_formula_defined:
-            print('B:', self.ui.number_density_line_edit.text())
             number_density = np.float(self.ui.number_density_line_edit.text())
             avogadro = scipy.constants.N_A
             mass_density = number_density * self.total_molecular_mass / \
