@@ -49,6 +49,7 @@ class JobPool(object):
     def __init__(self, configurations):
         self.jobs = []
         for config in configurations:
+            print("CONFIG:", config)
             self.jobs.append(AsyncTask(TotalScatteringReduction, args=(config,),
                                        success_cb=self.on_success, error_cb=self.on_error,
                                        finished_cb=self.on_finished))

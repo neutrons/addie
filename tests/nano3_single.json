@@ -27,14 +27,7 @@
             }
         },
         "Material": "Na  N  O 3",
-        "MassDensity": {
-            "MassDensity": "1.0",
-            "UseMassDensity": true,
-            "NumberDensity": "N/A",
-            "UseNumberDensity": false,
-            "Mass": "N/A",
-            "UseMass": false
-        },
+        "MassDensity": "1.0",
         "PackingFraction": "1",
         "Geometry": {
             "Shape": "Cylinder",
@@ -67,14 +60,7 @@
             }
         },
         "Material": "V",
-        "MassDensity": {
-            "MassDensity": "6.11",
-            "UseMassDensity": true,
-            "NumberDensity": "N/A",
-            "UseNumberDensity": false,
-            "Mass": "N/A",
-            "UseMass": false
-        },
+        "MassDensity": "6.11",
         "PackingFraction": "1.0",
         "Geometry": {
             "Shape": "Cylinder",

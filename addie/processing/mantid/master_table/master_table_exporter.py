@@ -18,7 +18,7 @@ _element= {"Runs": "",
                                          },
                           },
            "Material": "",
-           "MassDensity": {"MassDensity": np.NaN,
+           "Density": {"MassDensity": np.NaN,
                            "UseMassDensity": True,
                            "NumberDensity": np.NaN,
                            "UseNumberDensity": False,
@@ -98,9 +98,6 @@ class TableFileExporter:
         if not os.path.exists(direc):
             os.mkdir(direc)
 
-        # Replace all NaN with `N/A`
-
-
         # write out the configuration
         with open(filename, 'w') as outfile:
             json.dump(dictionary, outfile)
@@ -161,16 +158,16 @@ class TableFileExporter:
         # mass density
         column += 1
         mass_density = str(self.parent.master_table_list_ui[key][element]['mass_density']['text'].text())
-        dict_element["MassDensity"]["MassDensity"] = mass_density
-        dict_element["MassDensity"]["UseMassDensity"] = \
+        dict_element["Density"]["MassDensity"] = mass_density
+        dict_element["Density"]["UseMassDensity"] = \
             self.parent.master_table_list_ui[key][element]['mass_density_infos']['mass_density']['selected']
-        dict_element["MassDensity"]["NumberDensity"] = \
+        dict_element["Density"]["NumberDensity"] = \
             self.parent.master_table_list_ui[key][element]['mass_density_infos']['number_density']['value']
-        dict_element["MassDensity"]["UseNumberDensity"] = \
+        dict_element["Density"]["UseNumberDensity"] = \
             self.parent.master_table_list_ui[key][element]['mass_density_infos']['number_density']['selected']
-        dict_element["MassDensity"]["Mass"] = \
+        dict_element["Density"]["Mass"] = \
             self.parent.master_table_list_ui[key][element]['mass_density_infos']['mass']['value']
-        dict_element["MassDensity"]["UseMass"] = \
+        dict_element["Density"]["UseMass"] = \
             self.parent.master_table_list_ui[key][element]['mass_density_infos']['mass']['selected']
 
         column += 1
@@ -222,6 +219,8 @@ class TableFileExporter:
         dict_element["InelasticCorrection"]["LambdaBinningForCalc"] = "{},{},{}".format(placzek_infos["lambda_calc_min"],
                                                                                         placzek_infos["lambda_calc_delta"],
                                                                                         placzek_infos["lambda_calc_max"])
+
+        print(dict_element)
         return dict_element
 
     def _get_key_value_dict(self, row=-1):
