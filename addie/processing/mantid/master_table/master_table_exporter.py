@@ -98,6 +98,9 @@ class TableFileExporter:
         if not os.path.exists(direc):
             os.mkdir(direc)
 
+        # Replace all NaN with `N/A`
+
+
         # write out the configuration
         with open(filename, 'w') as outfile:
             json.dump(dictionary, outfile)
@@ -189,10 +192,9 @@ class TableFileExporter:
         else:
             radius2 = str(self.parent.master_table_list_ui[key][element]['geometry']['radius2']['value'].text())
 
-        dict_element["Geometry"]["Radius"]  = float('NaN')    if (radius == 'N/A') else float(radius)
-        dict_element["Geometry"]["Radius2"] = float('NaN')    if (radius2 == 'N/A') else float(radius2)
-        dict_element["Geometry"]["Height"]  = float('NaN')    if (height == 'N/A') else float(height)
-        print(dict_element['Geometry'])
+        dict_element["Geometry"]["Radius"]  = np.NaN if (radius == 'N/A') else float(radius)
+        dict_element["Geometry"]["Radius2"] = np.NaN if (radius2 == 'N/A') else float(radius2)
+        dict_element["Geometry"]["Height"]  = np.NaN if (height == 'N/A') else float(height)
 
         column += 1
         abs_correction = self._get_selected_value(row=row, column=column)

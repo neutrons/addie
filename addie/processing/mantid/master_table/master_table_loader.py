@@ -659,11 +659,11 @@ class FromDictionaryToTableUi:
         # geometry
         column += 1
         self.parent.master_table_list_ui[key][data_type]['geometry']['radius']['value'].setText(
-            entry[data_type]['geometry']['radius'])
+            str(entry[data_type]['geometry']['radius']))
         self.parent.master_table_list_ui[key][data_type]['geometry']['radius2']['value'].setText(
-            entry[data_type]['geometry']['radius2'])
+            str(entry[data_type]['geometry']['radius2']))
         self.parent.master_table_list_ui[key][data_type]['geometry']['height']['value'].setText(
-            entry[data_type]['geometry']['height'])
+            str(entry[data_type]['geometry']['height']))
 
         # abs correction
         column += 1
