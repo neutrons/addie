@@ -1,4 +1,7 @@
+import os
+import traceback
 from qtpy.QtWidgets import QFileDialog
+from mantidqt.utils.asynchronous import AsyncTask
 
 from addie.processing.mantid.master_table.table_tree_handler import TableTreeHandler, TableConfig, H3TableHandler
 from addie.processing.mantid.master_table.selection_handler import TableHandler as MtdTableHandler
@@ -11,7 +14,10 @@ from addie.processing.mantid.master_table.import_from_database.load_into_master_
 from addie.processing.mantid.make_calibration_handler.make_calibration import MakeCalibrationLauncher
 from addie.processing.mantid.master_table.reduction_configuration_handler import ReductionConfigurationHandler
 from addie.processing.mantid.master_table.master_table_loader import AsciiLoader
+from addie.processing.mantid.master_table.master_table_exporter import TableFileExporter as MantidTableExporter
+from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_MASS_DENSITY
 
+# ONCat integration
 try:
     from addie.processing.mantid.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
     ONCAT_ENABLED = True
@@ -19,8 +25,96 @@ except ImportError:
     print('pyoncat module not found. Functionality disabled')
     ONCAT_ENABLED = False
 
-from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_MASS_DENSITY
+# Mantid Total Scattering integration
+# (https://github.com/marshallmcdonnell/mantid_total_scattering)
+try:
+    import total_scattering
+    print("Mantid Total Scattering Version: ", total_scattering.__version__)
+    from total_scattering.reduction import TotalScatteringReduction
+    MANTID_TS_ENABLED = True
+except ImportError:
+    print('total_scattering module not found. Functionality disabled')
+    MANTID_TS_ENABLED = False
 
+
+class JobPool(object):
+    task_output = None,
+    running = None
+    task_exc_type, task_exc, task_exc_stack = None, None, None
+
+    def __init__(self, configurations):
+        self.jobs = []
+        for config in configurations:
+            print("CONFIG:", config)
+            self.jobs.append(AsyncTask(TotalScatteringReduction, args=(config,),
+                                       success_cb=self.on_success, error_cb=self.on_error,
+                                       finished_cb=self.on_finished))
+
+    def _start_next(self):
+        if self.jobs:
+            self.running = self.jobs.pop(0)
+            self.running.start()
+        else:
+            self.running = None
+
+    def start(self):
+        if not self.jobs:
+            raise RuntimeError('Cannot start empty job list')
+        self._start_next()
+
+    def on_success(self, task_result):
+        # TODO should emit a signal
+        self.task_output = task_result.output
+        print('SUCCESS!!! {}'.format(self.task_output))
+
+    def on_error(self, task_result):
+        # TODO should emit a signal
+        print('ERROR!!!')
+        self.task_exc_type = task_result.exc_type
+        self.task_exc = task_result.exc_value
+        self.task_exc_stack = traceback.extract_tb(task_result.stack)
+        traceback.print_tb(task_result.stack)
+
+    def on_finished(self):
+        '''Both success and failure call this method afterwards'''
+        # TODO should emit a signal
+        self._start_next()  # kick off the next one in the pool
+
+
+def run_mantid(parent):
+    num_rows = parent.processing_ui.h3_table.rowCount()
+    if num_rows <= 0:
+        raise RuntimeError('Cannot export empty table')
+
+    exporter = MantidTableExporter(parent=parent)
+
+    # write out the full table to disk
+    # TODO make a class level name so it can be reused
+    full_reduction_filename = os.path.join(
+        os.path.expanduser('~'), '.mantid', 'addie.json')
+    print('writing out full table to "{}"'.format(full_reduction_filename))
+    exporter.export(full_reduction_filename)
+
+    # append the individual rows to input list (reduction_inputs)
+    reduction_inputs = []
+    for row in range(num_rows):
+        if not exporter.isActive(row):
+            print('skipping row {} - inactive'.format(row + 1))  # REMOVE?
+            continue
+        print('Will be running row {} for reduction'.format(
+            row + 1))  # TODO should be debug logging
+        json_input = exporter.retrieve_row_info(row)
+        reduction_input = exporter.convert_from_row_to_reduction(json_input)
+        reduction_inputs.append(reduction_input)
+    if len(reduction_inputs) == 0:
+        raise RuntimeError('None of the rows were activated')
+
+    # locate total scattering script
+    if MANTID_TS_ENABLED:
+        pool = JobPool(reduction_inputs)
+        pool.start()
+    else:
+        print('total_scattering module not found. Functionality disabled') # TODO should be on the status bar
 
 def personalization_table_clicked(main_window):
     _ = TableTreeHandler(parent=main_window)

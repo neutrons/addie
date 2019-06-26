@@ -37,6 +37,7 @@ from addie.mantid_handler.browse_file_folder_handler import BrowseFileFolderHand
 from addie.mantid_handler.mantid_reduction import GlobalMantidReduction
 from addie.mantid_handler.mantid_thread import MantidThread
 
+from addie.processing.mantid import event_handler as mantid_event_handler
 from addie.processing.mantid.master_table.align_and_focus_args import AlignAndFocusArgsHandling
 from addie.processing.mantid.master_table.column_highlighting import ColumnHighlighting
 
@@ -504,9 +505,6 @@ class MainWindow(QMainWindow):
     def manual_output_folder_button_clicked(self):
         autonom_event_handler.manual_output_folder_button_clicked(self)
 
-    def run_mantid(self):
-        autonom_event_handler.run_mantid(self)
-
     def check_step1_gui(self):
         autonom_event_handler.check_step1_gui(self)
 
@@ -517,6 +515,8 @@ class MainWindow(QMainWindow):
         autonom_event_handler.create_exp_ini_clicked(self)
 
     # post processing
+    def run_mantid(self):
+        mantid_event_handler.run_mantid(self)
     def resize_table_post_processing_tab(self, height, width):
         pass
 
