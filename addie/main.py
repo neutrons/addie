@@ -37,7 +37,7 @@ from addie.mantid_handler.browse_file_folder_handler import BrowseFileFolderHand
 from addie.mantid_handler.mantid_reduction import GlobalMantidReduction
 from addie.mantid_handler.mantid_thread import MantidThread
 
-from addie.processing.mantid import event_handler as mantid_event_handler
+from addie.processing.mantid import launch_reduction as mantid_reduction_launcher
 from addie.processing.mantid.master_table.align_and_focus_args import AlignAndFocusArgsHandling
 from addie.processing.mantid.master_table.column_highlighting import ColumnHighlighting
 
@@ -516,7 +516,8 @@ class MainWindow(QMainWindow):
 
     # post processing
     def run_mantid(self):
-        mantid_event_handler.run_mantid(self)
+        mantid_reduction_launcher.run_mantid(self)
+        
     def resize_table_post_processing_tab(self, height, width):
         pass
 
