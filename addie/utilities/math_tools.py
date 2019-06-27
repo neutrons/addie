@@ -58,12 +58,13 @@ def is_number(value):
     """
     return is_float(value)
 
+
 def oneAndOnlyOneTrue(iterable):
     """Determine if iterable (ie list) has one and only one `True` value
 
     :param iterable: 
     :type iterable: list
-    
+
     :return: If there is one and only one True
     :rtype: bool
     """
@@ -75,6 +76,7 @@ def oneAndOnlyOneTrue(iterable):
     except Exception as e:
         print(e)
         raise
+
 
 def volume_of_cylinder(radius=np.NaN, height=np.NaN):
     """Computes volume of a cylinder
@@ -120,6 +122,48 @@ def volume_of_hollow_cylinder(inner_radius=np.NaN, outer_radius=np.NaN, height=n
     return outer_cylinder - inner_cylinder
 
 
+def get_volume_from_geometry(dictionary):
+    """calculate volume given a geometry dictionary of a given shape below:
+
+    :examples:
+
+    >>> {
+    >>>   'Shape': "Cylinder",
+    >>>   'Radius': 0.25,
+    >>>   'Radius2': 'N/A',
+    >>>   'Height': 1.0
+    >>> }
+
+    :param dictionary: Geometry JSON
+    :type dictionary: dict
+
+    :return: Volume of the geometry
+    :rtype: float
+    """
+
+    if dictionary['Shape'].lower() == 'cylinder':
+        radius = dictionary['Radius']
+        height = dictionary['Height']
+        volume = volume_of_cylinder(radius=radius, height=height)
+
+    elif dictionary['Shape'].lower() == 'sphere':
+        radius = dictionary['Radius']
+        volume = volume_of_sphere(radius=radius)
+    elif dictionary['Shape'].lower() == 'hollow cylinder':
+        inner_radius = dictionary['Radius']
+        outer_radius = dictionary['Radius2']
+        height = dictionary['Height']
+        volume = volume_of_hollow_cylinder(
+            inner_radius=inner_radius,
+            outer_radius=outer_radius,
+            height=height
+        )
+    else:
+        raise Exception("Passed unkown shape into get_volume_from_geometry")
+
+    return volume
+
+
 def mass_density2number_density(mass_density, natoms, molecular_mass):
     """Converts from mass_density (:math:`g/cm^{3}`) to number density (atoms/:math:`\\AA^{3}`)
 
@@ -153,6 +197,7 @@ def number_density2mass_density(number_density, natoms, molecular_mass):
     mass_density = number_density * molecular_mass / natoms / avogadro_term
     return mass_density
 
+
 def mass2mass_density(mass, volume):
     """Converts mass (:math:`g`) and volume (:math:`cm^{3}`) to mass_density (:math:`g/cm^{3}`)
 
@@ -166,6 +211,7 @@ def mass2mass_density(mass, volume):
     """
     mass_density = mass / volume
     return mass_density
+
 
 def mass2number_density(mass, volume, natoms, molecular_mass):
     """Converts mass (:math:`g`) and volume (:math:`cm^{3}`) to number density (atoms/:math:`\\AA^{3}`)
@@ -183,8 +229,10 @@ def mass2number_density(mass, volume, natoms, molecular_mass):
     :rtype: float
     """
     mass_density = mass2mass_density(mass, volume)
-    number_density = mass_density2number_density(mass_density, natoms, molecular_mass)
+    number_density = mass_density2number_density(
+        mass_density, natoms, molecular_mass)
     return number_density
+
 
 def mass_density2mass(mass_density, volume):
     """Converts from mass_density (:math:`g/cm^{3}`) to mass (:math:`g`)
@@ -199,6 +247,7 @@ def mass_density2mass(mass_density, volume):
     """
     mass = mass_density * volume
     return mass
+
 
 def number_density2mass(number_density, volume, natoms, molecular_mass):
     """Converts from number density (atoms/:math:`\\AA^{3}`) to mass (:math:`g`)
@@ -215,6 +264,7 @@ def number_density2mass(number_density, volume, natoms, molecular_mass):
     :return: mass in (:math:`g`)
     :rtype: float
     """
-    mass_density = number_density2mass_density(number_density, natoms, molecular_mass)
+    mass_density = number_density2mass_density(
+        number_density, natoms, molecular_mass)
     mass = mass_density2mass(mass_density, volume)
     return mass

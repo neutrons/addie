@@ -6,12 +6,7 @@ from addie.utilities import load_ui
 
 from addie.processing.mantid.master_table.table_row_handler import \
     TableRowHandler
-from addie.utilities.math_tools import \
-    volume_of_cylinder, volume_of_hollow_cylinder, volume_of_sphere, \
-    mass_density2number_density, number_density2mass_density, \
-    mass_density2mass, number_density2mass, \
-    mass2mass_density, mass2number_density, \
-    is_number
+from addie.utilities import math_tools
 
 
 from addie.processing.mantid.master_table.tree_definition import \
@@ -58,7 +53,7 @@ class MassDensityWindow(QMainWindow):
         self.set_column_index()
 
     def _to_precision_string(self, value):
-            return "{:.{num}f}".format(value, num=self.precision)
+        return "{:.{num}f}".format(value, num=self.precision)
 
     def set_column_index(self):
         self.column = INDEX_OF_COLUMNS_WITH_MASS_DENSITY[0] if self.data_type == 'sample' else \
@@ -135,13 +130,13 @@ class MassDensityWindow(QMainWindow):
                      [self.data_type]['geometry']['height']['value'].text())
 
         if geometry_defined.lower() == 'cylinder':
-            if is_number(radius) and is_number(height):
+            if math_tools.is_number(radius) and math_tools.is_number(height):
                 return True
         elif geometry_defined.lower() == 'sphere':
-            if is_number(radius):
+            if math_tools.is_number(radius):
                 return True
         else:
-            if is_number(radius) and is_number(radius2) and is_number(height):
+            if math_tools.is_number(radius) and math_tools.is_number(radius2) and math_tools.is_number(height):
                 return True
 
         return False
@@ -155,13 +150,15 @@ class MassDensityWindow(QMainWindow):
         height = str(self.parent.master_table_list_ui[self.key]
                      [self.data_type]['geometry']['height']['value'].text())
 
-        if geometry_defined.lower() == 'cylinder':
-            volume = volume_of_cylinder(radius=radius, height=height)
-        elif geometry_defined.lower() == 'sphere':
-            volume = volume_of_sphere(radius=radius)
-        else:
-            volume = volume_of_hollow_cylinder(
-                inner_radius=radius, outer_radius=radius2, height=height)
+        # construct geometry object
+        geom = {
+            'Shape': geometry_defined,
+            'Radius': radius,
+            'Radius2': radius2,
+            'Height': height
+        }
+
+        volume = math_tools.get_volume_from_geometry(geom)
 
         str_volume = "{:.4}".format(volume)
         self.ui.volume_label.setText(str_volume)
@@ -176,9 +173,9 @@ class MassDensityWindow(QMainWindow):
             molecular_mass = self.total_molecular_mass
 
             # conversions
-            number_density = mass_density2number_density(
+            number_density = math_tools.mass_density2number_density(
                 mass_density, natoms, molecular_mass)
-            mass = mass_density2mass(mass_density, volume)
+            mass = math_tools.mass_density2mass(mass_density, volume)
 
             # cast as string with set precision for display
             number_density = self._to_precision_string(number_density)
@@ -202,9 +199,9 @@ class MassDensityWindow(QMainWindow):
             molecular_mass = self.total_molecular_mass
 
             # conversions
-            mass_density = number_density2mass_density(
+            mass_density = math_tools.number_density2mass_density(
                 number_density, natoms, molecular_mass)
-            mass = number_density2mass(
+            mass = math_tools.number_density2mass(
                 number_density, volume, natoms, molecular_mass)
 
             # cast as string with set precision for display
@@ -229,8 +226,8 @@ class MassDensityWindow(QMainWindow):
             molecular_mass = self.total_molecular_mass
 
             # conversions
-            mass_density = mass2mass_density(mass, volume)
-            number_density = mass2number_density(
+            mass_density = math_tools.mass2mass_density(mass, volume)
+            number_density = math_tools.mass2number_density(
                 mass, volume, natoms, molecular_mass)
 
             # cast as string with set precision for display
@@ -283,15 +280,15 @@ class MassDensityWindow(QMainWindow):
         enabled_save_button = False
         if self.ui.mass_density_radio_button.isChecked():
             string_value = str(self.ui.mass_density_line_edit.text())
-            if is_number(string_value):
+            if math_tools.is_number(string_value):
                 enabled_save_button = True
         elif self.ui.number_density_radio_button.isChecked():
             string_value = str(self.ui.number_density_line_edit.text())
-            if is_number(string_value):
+            if math_tools.is_number(string_value):
                 enabled_save_button = True
         else:
             string_value = str(self.ui.mass_line_edit.text())
-            if is_number(string_value) and self.chemical_formula_defined and \
+            if math_tools.is_number(string_value) and self.chemical_formula_defined and \
                     self.geometry_dimensions_defined:
                 enabled_save_button = True
         self.ui.ok.setEnabled(enabled_save_button)
