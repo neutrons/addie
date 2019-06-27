@@ -8,7 +8,12 @@ import psutil
 from collections import OrderedDict
 from qtpy.QtCore import QProcess
 from qtpy.QtGui import QIcon
-from qtpy.QtWidgets import (QApplication, QLabel, QMainWindow, QTableWidgetItem, QWidget)
+from qtpy.QtWidgets import (
+    QApplication,
+    QLabel,
+    QMainWindow,
+    QTableWidgetItem,
+    QWidget)
 
 from addie import __version__
 from addie.initialization.widgets.configuration import ConfigurationInitializer
@@ -43,7 +48,7 @@ from addie.processing.mantid.master_table.column_highlighting import ColumnHighl
 
 # PyONcat
 try:
-    from addie.processing.mantid.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler # noqa
+    from addie.processing.mantid.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler  # noqa
     ONCAT_ENABLED = True
 except ImportError:
     print('pyoncat module not found. Functionality disabled')
@@ -55,7 +60,7 @@ import addie.addiedriver as driver
 import addie.calculate_gr.edit_sq_dialog
 
 # necessary to see all the icons
-from addie.icons import icons_rc # noqa
+from addie.icons import icons_rc  # noqa
 
 from addie.calculate_gr.pdf_lines_manager import PDFPlotManager
 
@@ -82,7 +87,7 @@ class MainWindow(QMainWindow):
     """
 
     first_oncat_authentication = True
-    oncat = None # object to use to retrieve IPTS numbers...etc. Created by oncat_authentication_handler.py
+    oncat = None  # object to use to retrieve IPTS numbers...etc. Created by oncat_authentication_handler.py
 
     # config.json ======================================================
     # those infos will be automatically retrieve from the config.json file
@@ -97,8 +102,8 @@ class MainWindow(QMainWindow):
     calibration_extension = ""
     characterization_extension = ""
 
-    cache_folder = './' # defined in the advanced window
-    output_folder = './' # defined in the advanced window
+    cache_folder = './'  # defined in the advanced window
+    output_folder = './'  # defined in the advanced window
 
     placzek_default = {}
 
@@ -163,7 +168,10 @@ class MainWindow(QMainWindow):
 
     # config file to initialize the widgets (example Q and R range in PDF tab)
     current_path = os.path.dirname(os.path.dirname(__file__))
-    addie_config_file = os.path.join(os.path.dirname(addie.__file__),  "config.json")
+    addie_config_file = os.path.join(
+        os.path.dirname(
+            addie.__file__),
+        "config.json")
 
     # master table reduction configuration
     reduction_configuration = {}
@@ -177,26 +185,27 @@ class MainWindow(QMainWindow):
     # will list the various ui for each row using a random number as key
     dict_widget = {'ui': None,
                    'status': False}
-    master_table_right_click_buttons = {'activate': copy.deepcopy(dict_widget),
-                                        'activate_check_all': copy.deepcopy(dict_widget),
-                                        'activate_uncheck_all': copy.deepcopy(dict_widget),
-                                        'activate_inverse': copy.deepcopy(dict_widget),
-                                        'cells': copy.deepcopy(dict_widget),
-                                        'cells_paste': copy.deepcopy(dict_widget),
-                                        'cells_copy': copy.deepcopy(dict_widget),
-                                        'cells_clear': copy.deepcopy(dict_widget),
-                                        'rows_paste': copy.deepcopy(dict_widget),
-                                        'rows_copy': copy.deepcopy(dict_widget),
-                                        'rows_duplicate': copy.deepcopy(dict_widget),
-                                        'rows_remove': copy.deepcopy(dict_widget),
-                                        'reset': copy.deepcopy(dict_widget),
-                                        'clear': copy.deepcopy(dict_widget),
-                                        'import_from_config_append': copy.deepcopy(dict_widget),
-                                        'import_from_file_append': copy.deepcopy(dict_widget),
-                                        'import_from_database_append': copy.deepcopy(dict_widget),
-                                        'export': copy.deepcopy(dict_widget),
-                                        'plot': copy.deepcopy(dict_widget),
-                                        }
+    master_table_right_click_buttons = {
+        'activate': copy.deepcopy(dict_widget),
+        'activate_check_all': copy.deepcopy(dict_widget),
+        'activate_uncheck_all': copy.deepcopy(dict_widget),
+        'activate_inverse': copy.deepcopy(dict_widget),
+        'cells': copy.deepcopy(dict_widget),
+        'cells_paste': copy.deepcopy(dict_widget),
+        'cells_copy': copy.deepcopy(dict_widget),
+        'cells_clear': copy.deepcopy(dict_widget),
+        'rows_paste': copy.deepcopy(dict_widget),
+        'rows_copy': copy.deepcopy(dict_widget),
+        'rows_duplicate': copy.deepcopy(dict_widget),
+        'rows_remove': copy.deepcopy(dict_widget),
+        'reset': copy.deepcopy(dict_widget),
+        'clear': copy.deepcopy(dict_widget),
+        'import_from_config_append': copy.deepcopy(dict_widget),
+        'import_from_file_append': copy.deepcopy(dict_widget),
+        'import_from_database_append': copy.deepcopy(dict_widget),
+        'export': copy.deepcopy(dict_widget),
+        'plot': copy.deepcopy(dict_widget),
+    }
 
     placzek_default = {}
 
@@ -290,32 +299,44 @@ class MainWindow(QMainWindow):
 
         # autoNOM tab
         self.autonom_tab_widget = QWidget()
-        self.autonom_ui = load_ui('splitui_autonom_tab.ui', baseinstance=self.autonom_tab_widget)
+        self.autonom_ui = load_ui(
+            'splitui_autonom_tab.ui',
+            baseinstance=self.autonom_tab_widget)
         self.ui.main_tab.insertTab(0, self.autonom_tab_widget, "autoNOM")
         autonom_tab_initialization.run(main_window=self)
 
         # post processing
         self.postprocessing_tab_widget = QWidget()
-        self.postprocessing_ui = load_ui('splitui_postprocessing_tab.ui', baseinstance=self.postprocessing_tab_widget)
-        self.ui.main_tab.insertTab(1, self.postprocessing_tab_widget, "Post Processing")
+        self.postprocessing_ui = load_ui(
+            'splitui_postprocessing_tab.ui',
+            baseinstance=self.postprocessing_tab_widget)
+        self.ui.main_tab.insertTab(
+            1, self.postprocessing_tab_widget, "Post Processing")
         postprocessing_tab_initialization.run(main_window=self)
 
         # Mantid processing tab
         self.processing_tab_widget = QWidget()
-        self.processing_ui = load_ui('splitui_processing_tab.ui', baseinstance=self.processing_tab_widget)
+        self.processing_ui = load_ui(
+            'splitui_processing_tab.ui',
+            baseinstance=self.processing_tab_widget)
         self.ui.main_tab.insertTab(2, self.processing_tab_widget, "Processing")
         processing_tab_initialization.run(main_window=self)
 
         # Rietveld  tab
         self.rietveld_tab_widget = QWidget()
-        self.rietveld_ui = load_ui('splitui_rietveld_tab.ui', baseinstance=self.rietveld_tab_widget)
+        self.rietveld_ui = load_ui(
+            'splitui_rietveld_tab.ui',
+            baseinstance=self.rietveld_tab_widget)
         self.ui.main_tab.insertTab(3, self.rietveld_tab_widget, "Rietveld")
         rietveld_tab_initialization.run(main_window=self)
 
         # Calculate G(R) tab
         self.calculategr_tab_widget = QWidget()
-        self.calculategr_ui = load_ui('splitui_calculategr_tab.ui', baseinstance=self.calculategr_tab_widget)
-        self.ui.main_tab.insertTab(4, self.calculategr_tab_widget, 'Calculate G(R)')
+        self.calculategr_ui = load_ui(
+            'splitui_calculategr_tab.ui',
+            baseinstance=self.calculategr_tab_widget)
+        self.ui.main_tab.insertTab(
+            4, self.calculategr_tab_widget, 'Calculate G(R)')
         calculategr_tab_initialization.run(main_window=self)
 
         self.init_parameters()
@@ -439,7 +460,11 @@ class MainWindow(QMainWindow):
         return self._myController
 
     # job utility
-    def launch_job_manager(self, job_name='', script_to_run=None, thread_index=-1):
+    def launch_job_manager(
+            self,
+            job_name='',
+            script_to_run=None,
+            thread_index=-1):
         job_handler = JobStatusHandler(parent=self, job_name=job_name,
                                        script_to_run=script_to_run,
                                        thread_index=thread_index)
@@ -494,7 +519,8 @@ class MainWindow(QMainWindow):
         autonom_event_handler.check_step1_gui(self)
 
     def create_new_autonom_folder_button_clicked(self, status):
-        autonom_event_handler.create_new_autonom_folder_button_clicked(self, status)
+        autonom_event_handler.create_new_autonom_folder_button_clicked(
+            self, status)
 
     def output_folder_radio_buttons(self):
         autonom_event_handler.output_folder_radio_buttons(self)
@@ -517,7 +543,7 @@ class MainWindow(QMainWindow):
     # post processing
     def run_mantid(self):
         mantid_reduction_launcher.run_mantid(self)
-        
+
     def resize_table_post_processing_tab(self, height, width):
         pass
 
@@ -537,7 +563,8 @@ class MainWindow(QMainWindow):
         postprocessing_event_handler.export_table_clicked(main_window=self)
 
     def table_select_state_changed(self, state, row):
-        postprocessing_event_handler.table_select_state_changed(self, state, row)
+        postprocessing_event_handler.table_select_state_changed(
+            self, state, row)
 
     def name_search_clicked(self):
         postprocessing_event_handler.name_search_clicked(self)
@@ -653,7 +680,8 @@ class MainWindow(QMainWindow):
         rietveld_event_handler.do_clear_bragg_canvas(self)
 
     def plot_bragg(self, ws_list, bankIds, clear_canvas=False):
-        rietveld_event_handler.plot_bragg_bank(self, ws_list, bankIds, clear_canvas)
+        rietveld_event_handler.plot_bragg_bank(
+            self, ws_list, bankIds, clear_canvas)
 
     def set_bragg_ws_to_plot(self, gss_group_name):
         rietveld_event_handler.set_bragg_ws_to_plot(self, gss_group_name)
@@ -765,13 +793,21 @@ class MainWindow(QMainWindow):
             self.ui.dockWidget_ipython.execute(script)
 
     def update_sq_boundary(self, boundary_index, new_position):
-        calculategr_event_handler.update_sq_boundary(self, boundary_index, new_position)
+        calculategr_event_handler.update_sq_boundary(
+            self, boundary_index, new_position)
 
-    def add_edited_sofq(self, sofq_name, edited_sq_name, shift_value, scale_factor_value):
-        calculategr_event_handler.add_edited_sofq(self, sofq_name, edited_sq_name, shift_value, scale_factor_value)
+    def add_edited_sofq(
+            self,
+            sofq_name,
+            edited_sq_name,
+            shift_value,
+            scale_factor_value):
+        calculategr_event_handler.add_edited_sofq(
+            self, sofq_name, edited_sq_name, shift_value, scale_factor_value)
 
     def has_edit_sofq(self, raw_sofq_name, shift_value, scale_factor_value):
-        calculategr_event_handler.has_edit_sofq(self, raw_sofq_name, shift_value, scale_factor_value)
+        calculategr_event_handler.has_edit_sofq(
+            self, raw_sofq_name, shift_value, scale_factor_value)
 
     # Master table
     def personalization_table_clicked(self):
@@ -802,13 +838,16 @@ class MainWindow(QMainWindow):
         processing_event_handler.scroll_h3_table(self, value)
 
     def resizing_h1(self, index_column, old_size, new_size):
-        processing_event_handler.resizing_h1(self, index_column, old_size, new_size)
+        processing_event_handler.resizing_h1(
+            self, index_column, old_size, new_size)
 
     def resizing_h2(self, index_column, old_size, new_size):
-        processing_event_handler.resizing_h2(self, index_column, old_size, new_size)
+        processing_event_handler.resizing_h2(
+            self, index_column, old_size, new_size)
 
     def resizing_h3(self, index_column, old_size, new_size):
-        processing_event_handler.resizing_h3(self, index_column, old_size, new_size)
+        processing_event_handler.resizing_h3(
+            self, index_column, old_size, new_size)
 
     def init_tree(self):
         processing_event_handler.init_tree(self)
@@ -817,7 +856,8 @@ class MainWindow(QMainWindow):
         processing_event_handler.tree_item_changed(self, item)
 
     def master_table_select_state_changed(self, state, key):
-        processing_event_handler.master_table_select_state_changed(self, state, key)
+        processing_event_handler.master_table_select_state_changed(
+            self, state, key)
 
     # sample columns
     def master_table_sample_material_button_pressed(self, key):
@@ -830,7 +870,8 @@ class MainWindow(QMainWindow):
         processing_event_handler.sample_mass_density_button_pressed(self, key)
 
     def master_table_sample_mass_density_line_edit_entered(self, key):
-        processing_event_handler.sample_mass_density_line_edit_entered(self, key)
+        processing_event_handler.sample_mass_density_line_edit_entered(
+            self, key)
 
     def master_table_sample_shape_changed(self, index, key):
         processing_event_handler.sample_shape_changed(self, index, key)
@@ -838,48 +879,65 @@ class MainWindow(QMainWindow):
     def master_table_sample_abs_correction_changed(self, text, key):
         processing_event_handler.sample_abs_correction_changed(self, text, key)
 
-    def master_table_sample_multi_scattering_correction_changed(self, text, key):
-        processing_event_handler.sample_multi_scattering_correction_changed(self, text, key)
+    def master_table_sample_multi_scattering_correction_changed(
+            self, text, key):
+        processing_event_handler.sample_multi_scattering_correction_changed(
+            self, text, key)
 
     def master_table_sample_inelastic_correction_changed(self, text, key):
-        processing_event_handler.sample_inelastic_correction_changed(self, text, key)
+        processing_event_handler.sample_inelastic_correction_changed(
+            self, text, key)
 
     def master_table_sample_placzek_button_pressed(self, key):
         processing_event_handler.sample_placzek_button_pressed(self, key)
 
     def master_table_sample_dimensions_setter_button_pressed(self, key):
-        processing_event_handler.sample_dimensions_setter_button_pressed(self, key)
+        processing_event_handler.sample_dimensions_setter_button_pressed(
+            self, key)
 
     # normalization columns
     def master_table_normalization_material_button_pressed(self, key):
-        processing_event_handler.normalization_material_button_pressed(self, key)
+        processing_event_handler.normalization_material_button_pressed(
+            self, key)
 
     def master_table_normalization_material_line_edit_entered(self, key):
-        processing_event_handler.normalization_material_line_edit_entered(self, key)
+        processing_event_handler.normalization_material_line_edit_entered(
+            self, key)
 
     def master_table_normalization_mass_density_button_pressed(self, key):
-        processing_event_handler.normalization_mass_density_button_pressed(self, key)
+        processing_event_handler.normalization_mass_density_button_pressed(
+            self, key)
 
     def master_table_normalization_mass_density_line_edit_entered(self, key):
-        processing_event_handler.normalization_mass_density_line_edit_entered(self, key)
+        processing_event_handler.normalization_mass_density_line_edit_entered(
+            self, key)
 
     def master_table_normalization_shape_changed(self, text, key):
         processing_event_handler.normalization_shape_changed(self, text, key)
 
     def master_table_normalization_abs_correction_changed(self, text, key):
-        processing_event_handler.normalization_abs_correction_changed(self, text, key)
+        processing_event_handler.normalization_abs_correction_changed(
+            self, text, key)
 
-    def master_table_normalization_multi_scattering_correction_changed(self, text, key):
-        processing_event_handler.normalization_multi_scattering_correction_changed(self, text, key)
+    def master_table_normalization_multi_scattering_correction_changed(
+            self,
+            text,
+            key):
+        processing_event_handler.normalization_multi_scattering_correction_changed(
+            self, text, key)
 
-    def master_table_normalization_inelastic_correction_changed(self, text, key):
-        processing_event_handler.normalization_inelastic_correction_changed(self, text, key)
+    def master_table_normalization_inelastic_correction_changed(
+            self, text, key):
+        processing_event_handler.normalization_inelastic_correction_changed(
+            self, text, key)
 
     def master_table_normalization_placzek_button_pressed(self, key):
-        processing_event_handler.normalization_placzek_button_pressed(self, key)
+        processing_event_handler.normalization_placzek_button_pressed(
+            self, key)
 
     def master_table_normalization_dimensions_setter_button_pressed(self, key):
-        processing_event_handler.normalization_dimensions_setter_button_pressed(self, key)
+        processing_event_handler.normalization_dimensions_setter_button_pressed(
+            self, key)
 
     def launch_import_from_database_handler(self):
         processing_event_handler.launch_import_from_database_handler(self)
@@ -898,16 +956,20 @@ class MainWindow(QMainWindow):
     def browse_calibration_clicked(self):
         processing_event_handler.browse_calibration_clicked(self)
 
-    def from_oncat_to_master_table(self, json=None, with_conflict=False, ignore_conflicts=False):
-        processing_event_handler.from_oncat_to_master_table(self, json=json,
-                                                            with_conflict=with_conflict,
-                                                            ignore_conflicts=ignore_conflicts)
+    def from_oncat_to_master_table(
+            self,
+            json=None,
+            with_conflict=False,
+            ignore_conflicts=False):
+        processing_event_handler.from_oncat_to_master_table(
+            self, json=json, with_conflict=with_conflict, ignore_conflicts=ignore_conflicts)
 
     def reduction_configuration_button_clicked(self):
         processing_event_handler.reduction_configuration_button_clicked(self)
 
     def load_ascii(self, filename=''):
-        processing_event_handler.load_ascii(main_window=self, filename=filename)
+        processing_event_handler.load_ascii(
+            main_window=self, filename=filename)
 
     def check_master_table_column_highlighting(self, row=None, column=-1):
         o_highlights = ColumnHighlighting(main_window=self)
@@ -925,10 +987,20 @@ def main(config=None):
 
     if config is None:
         import argparse  # noqa
-        parser = argparse.ArgumentParser(description='ADvanced DIffraction Environment')
-        parser.add_argument('--version', action='version', version='%(prog)s version {}'.format(__version__))
-        parser.add_argument('--mode', type=str, default='mantid',
-                            help='Set processing mode (default=%(default)s)', choices=['mantid', 'idl'])
+        parser = argparse.ArgumentParser(
+            description='ADvanced DIffraction Environment')
+        parser.add_argument(
+            '--version',
+            action='version',
+            version='%(prog)s version {}'.format(__version__))
+        parser.add_argument(
+            '--mode',
+            type=str,
+            default='mantid',
+            help='Set processing mode (default=%(default)s)',
+            choices=[
+                'mantid',
+                'idl'])
 
         try:  # set up bash completion as a soft dependency
             import argcomplete  # noqa

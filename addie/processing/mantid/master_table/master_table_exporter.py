@@ -7,7 +7,8 @@ import os
 
 from qtpy.QtCore import Qt
 
-from addie.processing.mantid.master_table.periodic_table.material_handler import retrieving_molecular_mass_and_number_of_atoms_worked
+from addie.processing.mantid.master_table.periodic_table.material_handler import \
+    retrieving_molecular_mass_and_number_of_atoms_worked
 from addie.processing.mantid.master_table.tree_definition import SAMPLE_FIRST_COLUMN, NORMALIZATION_FIRST_COLUMN
 from addie.processing.mantid.master_table.utilities import Utilities
 from addie.utilities import math_tools
@@ -298,12 +299,14 @@ class TableFileExporter:
         dict_element["InelasticCorrection"]["Self"] = placzek_infos["is_self"]
         dict_element["InelasticCorrection"]["Interference"] = placzek_infos["is_interference"]
         dict_element["InelasticCorrection"]["FitSpectrumWith"] = placzek_infos["fit_spectrum_index"]
-        dict_element["InelasticCorrection"]["LambdaBinningForFit"] = "{},{},{}".format(placzek_infos["lambda_fit_min"],
-                                                                                       placzek_infos["lambda_fit_delta"],
-                                                                                       placzek_infos["lambda_fit_max"])
-        dict_element["InelasticCorrection"]["LambdaBinningForCalc"] = "{},{},{}".format(placzek_infos["lambda_calc_min"],
-                                                                                        placzek_infos["lambda_calc_delta"],
-                                                                                        placzek_infos["lambda_calc_max"])
+        dict_element["InelasticCorrection"]["LambdaBinningForFit"] = "{},{},{}".format(
+            placzek_infos["lambda_fit_min"],
+            placzek_infos["lambda_fit_delta"],
+            placzek_infos["lambda_fit_max"])
+        dict_element["InelasticCorrection"]["LambdaBinningForCalc"] = "{},{},{}".format(
+            placzek_infos["lambda_calc_min"],
+            placzek_infos["lambda_calc_delta"],
+            placzek_infos["lambda_calc_max"])
 
         print("DICT ELEMENT:", dict_element)
         return dict_element
@@ -405,30 +408,34 @@ class TableFileExporter:
         """
         activate = self._get_checkbox_state(row=row, column=0)
         title = self._get_item_value(row=row, column=1)
-        _export_dictionary_sample = self._retrieve_element_infos(element='sample',
-                                                                 row=row)
-        _export_dictionary_normalization = self._retrieve_element_infos(element='normalization',
-                                                                        row=row)
+        _export_dictionary_sample = self._retrieve_element_infos(
+            element='sample', row=row)
+        _export_dictionary_normalization = self._retrieve_element_infos(
+            element='normalization', row=row)
         _key_value_dict = self._get_key_value_dict(row=row)
 
-        dictionary = {'Activate': activate,
-                      'Title': title,
-                      'Sample': _export_dictionary_sample,
-                      'Normalization': _export_dictionary_normalization,
-                      'Calibration': {"Filename": self.calibration},
-                      'Facility': self.facility,
-                      'Instrument': self.instrument,
-                      'CacheDir': self.cachedir,
-                      'OutputDir': self.outputdir,
-                      "Merging": {"QBinning": [],
-                                  "SumBanks": [],
-                                  "Characterizations": "",
-                                  "Grouping": {"Initial": self.intermediate_grouping_file,
-                                               "Output": self.output_grouping_file,
-                                               },
-                                  },
-                      'AlignAndFocusArgs': _key_value_dict,
-                      }
+        dictionary = {
+            'Activate': activate,
+            'Title': title,
+            'Sample': _export_dictionary_sample,
+            'Normalization': _export_dictionary_normalization,
+            'Calibration': {
+                "Filename": self.calibration},
+            'Facility': self.facility,
+            'Instrument': self.instrument,
+            'CacheDir': self.cachedir,
+            'OutputDir': self.outputdir,
+            "Merging": {
+                "QBinning": [],
+                "SumBanks": [],
+                "Characterizations": "",
+                "Grouping": {
+                    "Initial": self.intermediate_grouping_file,
+                    "Output": self.output_grouping_file,
+                },
+            },
+            'AlignAndFocusArgs': _key_value_dict,
+        }
         return dictionary
 
     def retrieve_row_infos(self):
@@ -444,7 +451,8 @@ class TableFileExporter:
         nbr_row = self.table_ui.rowCount()
 
         for row in range(nbr_row):
-            # force 3 digits index (to make sure loading back the table will be done in the same order)
+            # force 3 digits index (to make sure loading back the table will be
+            # done in the same order)
             full_export_dictionary["{:03}".format(
                 row)] = self.retrieve_row_info(row)
 
@@ -483,7 +491,8 @@ class TableFileExporter:
         if density['UseMass']:
             mass_density = self._get_mass_density_from_mass(dictionary)
 
-        # Post-process for output: take out overall Density and add MassDensity key
+        # Post-process for output: take out overall Density and add MassDensity
+        # key
         dictionary.pop('Density')
         dictionary['MassDensity'] = mass_density
 

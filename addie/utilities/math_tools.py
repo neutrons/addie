@@ -62,7 +62,7 @@ def is_number(value):
 def oneAndOnlyOneTrue(iterable):
     """Determine if iterable (ie list) has one and only one `True` value
 
-    :param iterable: 
+    :param iterable:
     :type iterable: list
 
     :return: If there is one and only one True
@@ -104,7 +104,10 @@ def volume_of_sphere(radius=np.NaN):
     return (4. * np.pi * np.float(radius)**3 / np.float(3))
 
 
-def volume_of_hollow_cylinder(inner_radius=np.NaN, outer_radius=np.NaN, height=np.NaN):
+def volume_of_hollow_cylinder(
+        inner_radius=np.NaN,
+        outer_radius=np.NaN,
+        height=np.NaN):
     """Computes volume of a hollow cylinder
 
     :param inner_radius: Inner radius of cylinder (in units of length)
@@ -123,16 +126,12 @@ def volume_of_hollow_cylinder(inner_radius=np.NaN, outer_radius=np.NaN, height=n
 
 
 def get_volume_from_geometry(dictionary):
-    """calculate volume given a geometry dictionary of a given shape below:
+    """calculate volume given a geometry dictionary of the given shape in example below
 
     :examples:
 
-    >>> {
-    >>>   'Shape': "Cylinder",
-    >>>   'Radius': 0.25,
-    >>>   'Radius2': 'N/A',
-    >>>   'Height': 1.0
-    >>> }
+    >>> dictionary = {'Shape': "Cylinder", 'Radius': 0.25, 'Radius2': 'N/A', 'Height': 1.0 }
+    >>> volume = get_volume_from_geometry(dictionary)
 
     :param dictionary: Geometry JSON
     :type dictionary: dict
@@ -161,6 +160,7 @@ def get_volume_from_geometry(dictionary):
     else:
         raise Exception("Passed unkown shape into get_volume_from_geometry")
 
+    print(dictionary['Shape'])
     return volume
 
 

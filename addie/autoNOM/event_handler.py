@@ -2,6 +2,7 @@ import os
 from addie.autoNOM.step1_gui_handler import Step1GuiHandler
 from addie.autoNOM.run_step1 import RunStep1
 
+
 def select_current_folder_clicked(main_window):
     o_gui = Step1GuiHandler(main_window=main_window)
     o_gui.select_working_folder()
