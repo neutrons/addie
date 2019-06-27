@@ -6,6 +6,7 @@ import scipy.constants
 avogadro = scipy.constants.N_A
 cm3_to_angstroms3 = 1e24
 avogadro_term = avogadro / 1e24
+PRECISION = 5
 
 
 def is_int(value):
@@ -133,7 +134,7 @@ def mass_density2number_density(mass_density, natoms, molecular_mass):
     :rtype: float
     """
     number_density = mass_density * avogadro_term * natoms / molecular_mass
-    number_density = "{:.5}".format(number_density)
+    number_density = "{:.{num}f}".format(number_density, num=PRECISION)
     return number_density
 
 
@@ -151,5 +152,71 @@ def number_density2mass_density(number_density, natoms, molecular_mass):
     :rtype: float
     """
     mass_density = number_density * molecular_mass / natoms / avogadro_term
-    mass_density = "{:.5}".format(mass_density)
+    mass_density = "{:.{num}f}".format(mass_density, num=PRECISION)
     return mass_density
+
+def mass2mass_density(mass, volume):
+    """Converts mass (:math:`g`) and volume (:math:`cm^{3}`) to mass_density (:math:`g/cm^{3}`)
+
+    :param mass: mass in (:math:`g`)
+    :type mass: float
+    :param volume: volume in (:math:`cm^{3}`)
+    :type volume: float
+
+    :return: mass density in (:math:`g/cm^{3}`)
+    :rtype: float
+    """
+    return "{:.{num}f}".format(mass / volume, num=PRECISION)
+
+def mass2number_density(mass, volume, natoms, molecular_mass):
+    """Converts mass (:math:`g`) and volume (:math:`cm^{3}`) to number density (atoms/:math:`\\AA^{3}`)
+
+    :param mass: mass in (:math:`g`)
+    :type mass: float
+    :param volume: volume in (:math:`cm^{3}`)
+    :type volume: float
+    :param natoms: total number of atoms
+    :type natoms: float
+    :param molecular_mass: molecular mass in (:math:`g/mol`)
+    :type molecular_mass: float
+
+    :return: number density in (atoms/:math:`\\AA^{3}`)
+    :rtype: float
+    """
+    mass_density = mass2mass_density(mass, volume)
+    number_density = mass_density2number_density(mass_density, natoms, molecular_mass)
+    number_density = "{:.{num}f}".format(number_density, num=PRECISION)
+    return number_density
+
+def mass_density2mass(mass_density, volume):
+    """Converts from mass_density (:math:`g/cm^{3}`) to mass (:math:`g`)
+
+    :param mass_density: mass density in (:math:`g/cm^{3}`)
+    :type mass_density: float
+    :param volume: volume in (:math:`cm^{3}`)
+    :type volume: float
+
+    :return: mass in (:math:`g`)
+    :rtype: float
+    """
+    return "{:.{num}f}".format(mass_density * volume, num=PRECISION)
+
+def number_density2mass(number_density, volume, natoms, molecular_mass):
+    """Converts from number density (atoms/:math:`\\AA^{3}`) to mass (:math:`g`)
+
+    :param number_density: number density in (atoms/:math:`\\AA^{3}`)
+    :type number_density: float
+    :param volume: volume in (:math:`cm^{3}`)
+    :type volume: float
+    :param natoms: total number of atoms
+    :type natoms: float
+    :param molecular_mass: molecular mass in (:math:`g/mol`)
+    :type molecular_mass: float
+
+    :return: mass in (:math:`g`)
+    :rtype: float
+    """
+    mass_density = number_density2mass_density(number_density, natoms, molecular_mass)
+    mass = mass_density2mass(mass_density, volume)
+    mass = "{:.{num}f}".format(mass, num=PRECISION)
+    return mass
