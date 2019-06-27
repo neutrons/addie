@@ -134,7 +134,6 @@ def mass_density2number_density(mass_density, natoms, molecular_mass):
     :rtype: float
     """
     number_density = mass_density * avogadro_term * natoms / molecular_mass
-    number_density = "{:.{num}f}".format(number_density, num=PRECISION)
     return number_density
 
 
@@ -152,7 +151,6 @@ def number_density2mass_density(number_density, natoms, molecular_mass):
     :rtype: float
     """
     mass_density = number_density * molecular_mass / natoms / avogadro_term
-    mass_density = "{:.{num}f}".format(mass_density, num=PRECISION)
     return mass_density
 
 def mass2mass_density(mass, volume):
@@ -166,7 +164,8 @@ def mass2mass_density(mass, volume):
     :return: mass density in (:math:`g/cm^{3}`)
     :rtype: float
     """
-    return "{:.{num}f}".format(mass / volume, num=PRECISION)
+    mass_density = mass / volume
+    return mass_density
 
 def mass2number_density(mass, volume, natoms, molecular_mass):
     """Converts mass (:math:`g`) and volume (:math:`cm^{3}`) to number density (atoms/:math:`\\AA^{3}`)
@@ -185,7 +184,6 @@ def mass2number_density(mass, volume, natoms, molecular_mass):
     """
     mass_density = mass2mass_density(mass, volume)
     number_density = mass_density2number_density(mass_density, natoms, molecular_mass)
-    number_density = "{:.{num}f}".format(number_density, num=PRECISION)
     return number_density
 
 def mass_density2mass(mass_density, volume):
@@ -199,7 +197,8 @@ def mass_density2mass(mass_density, volume):
     :return: mass in (:math:`g`)
     :rtype: float
     """
-    return "{:.{num}f}".format(mass_density * volume, num=PRECISION)
+    mass = mass_density * volume
+    return mass
 
 def number_density2mass(number_density, volume, natoms, molecular_mass):
     """Converts from number density (atoms/:math:`\\AA^{3}`) to mass (:math:`g`)
@@ -218,5 +217,4 @@ def number_density2mass(number_density, volume, natoms, molecular_mass):
     """
     mass_density = number_density2mass_density(number_density, natoms, molecular_mass)
     mass = mass_density2mass(mass_density, volume)
-    mass = "{:.{num}f}".format(mass, num=PRECISION)
     return mass

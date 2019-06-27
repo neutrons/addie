@@ -45,6 +45,8 @@ class MassDensityWindow(QMainWindow):
 
     column = 0
 
+    precision = 5
+
     def __init__(self, parent=None, key=None, data_type='sample'):
         self.parent = parent
         self.key = key
@@ -54,6 +56,9 @@ class MassDensityWindow(QMainWindow):
         self.ui = load_ui('mass_density.ui', baseinstance=self)
         self.init_widgets()
         self.set_column_index()
+
+    def _to_precision_string(self, value):
+            return "{:.{num}f}".format(value, num=self.precision)
 
     def set_column_index(self):
         self.column = INDEX_OF_COLUMNS_WITH_MASS_DENSITY[0] if self.data_type == 'sample' else \
@@ -164,14 +169,20 @@ class MassDensityWindow(QMainWindow):
     def mass_density_value_changed(self):
         # calculate number density if chemical formula defined
         if self.chemical_formula_defined:
+            # gather needed variables
             mass_density = np.float(self.ui.mass_density_line_edit.text())
             volume = np.float(self.ui.volume_label.text())
             natoms = self.total_number_of_atoms
             molecular_mass = self.total_molecular_mass
 
+            # conversions
             number_density = mass_density2number_density(
                 mass_density, natoms, molecular_mass)
             mass = mass_density2mass(mass_density, volume)
+
+            # cast as string with set precision for display
+            number_density = self._to_precision_string(number_density)
+            mass = self._to_precision_string(mass)
 
         else:
             number_density = 'N/A'
@@ -184,15 +195,21 @@ class MassDensityWindow(QMainWindow):
     def number_density_value_changed(self):
         # calculate mass density if chemical formula defined
         if self.chemical_formula_defined:
+            # gather needed variables
             number_density = np.float(self.ui.number_density_line_edit.text())
             volume = np.float(self.ui.volume_label.text())
             natoms = self.total_number_of_atoms
             molecular_mass = self.total_molecular_mass
 
+            # conversions
             mass_density = number_density2mass_density(
                 number_density, natoms, molecular_mass)
             mass = number_density2mass(
                 number_density, volume, natoms, molecular_mass)
+
+            # cast as string with set precision for display
+            mass_density = self._to_precision_string(mass_density)
+            mass = self._to_precision_string(mass)
 
         else:
             mass_density = 'N/A'
@@ -203,15 +220,23 @@ class MassDensityWindow(QMainWindow):
         self.update_status_of_save_button()
 
     def mass_value_changed(self):
+        # calculate mass if chemical formula and geometry
         if self.geometry_dimensions_defined and self.chemical_formula_defined:
+            # gather needed variables
             mass = np.float(self.ui.mass_line_edit.text())
             volume = np.float(self.ui.volume_label.text())
             natoms = self.total_number_of_atoms
             molecular_mass = self.total_molecular_mass
 
+            # conversions
             mass_density = mass2mass_density(mass, volume)
             number_density = mass2number_density(
                 mass, volume, natoms, molecular_mass)
+
+            # cast as string with set precision for display
+            mass_density = self._to_precision_string(mass_density)
+            number_density = self._to_precision_string(number_density)
+
         else:
             mass_density = "N/A"
             number_density = "N/A"
