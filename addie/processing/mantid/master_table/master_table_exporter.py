@@ -498,10 +498,103 @@ class TableFileExporter:
 
         return dictionary
 
+    def _remove_keys_from_with_nan_values(self, dictionary, selected_values=None):
+        """Remove keys in a dictionary if the value is NaN
+
+        :param dictionary: Dictionary with keys we want to check
+        :type dictionary: dict
+        :param selected_values: Dictionary with keys we want to check
+        :type dictionary: dict
+
+        :return: Dictionary with keys removed where value is NaN
+        :rtype: dict
+        """
+        # Set default to check all keys unless selected_values defined
+        if selected_values is None:
+            selected_values = list(dictionary.keys()).copy()
+
+        # Warn if selected_values is not a proper subset of the keys in the dict
+        if not set(selected_values).issubset(dictionary.keys()):
+            err_string = "Found keys that are not part dictionary\n"
+            err_string +="  List with 'erroneous' key: {} \n".format(",".join(selected_values))
+            err_string +="  Dictionary keys: {} \n".format(",".join(dictionary.keys()))
+            raise Exception(err_string)
+
+        # Remove keys with NaN values
+        for key in selected_values:
+            try:
+                if np.isnan(dictionary[key]):
+                    dictionary.pop(key)
+            except TypeError:
+                pass
+
+        return dictionary
+
+    def geometry_selection_for_reduction(self, dictionary):
+        """Processing of the pre-reduction JSON's `Geometry` to return
+        a reduction-ready `Geometry` section in the passed dictionary
+
+        :param dictionary: Pre-reduction JSON with preliminary `Geometry` section
+        :type row: dict
+
+        :return: JSON dictionary with reduction-ready `Geometry` section
+        :rtype: dict
+        """
+        # Default value for geometry
+        geometry = {'Shape': 'Cylinder', 'Radius': 1.0}
+
+        # return a default geometry if not specified
+        if 'Geometry' not in dictionary:
+            dictionary['Geometry'] = geometry
+            print("No Geometry found, defaul geometry added:", geometry)
+            return dictionary
+
+        # Remove all NaN values from Geometry
+        dictionary['Geometry'] = self._remove_keys_from_with_nan_values(dictionary['Geometry'])
+
+        # return if no shape in Geometry, will use default in Mantid
+        if 'Shape' not in dictionary['Geometry']:    
+            return dictionary
+
+        # Get shapes
+        geometry = dictionary['Geometry']
+
+        """
+        if density['UseNumberDensity']:
+            mass_density = self._get_mass_density_from_number_density(
+                dictionary)
+
+        if density['UseMass']:
+            mass_density = self._get_mass_density_from_mass(dictionary)
+
+        # Post-process for output: take out overall Density and add MassDensity
+        # key
+        dictionary.pop('Density')
+        dictionary['MassDensity'] = mass_density
+        """
+
+        return dictionary
+
+
     def convert_from_row_to_reduction(self, json_input):
+        """Processing of the pre-reduction JSON's `Density` to return
+        a reduction-ready `MassDensity` section in the passed dictionary
+
+        :param dictionary: Pre-reduction JSON with preliminary `Density` section
+        :type row: dict
+
+        :return: JSON dictionary with reduction-ready `MassDensity` section
+        :rtype: dict
+        """
         reduction_input = json_input
-        print("\n\nBefore Reduction row:", reduction_input["Sample"])
-        print("\n\nAfter Reduction row:",
-              self.density_selection_for_reduction(reduction_input["Sample"]))
+        for element in ["Sample", "Normalization"]:
+            print("\n\n*** ", element, " ***\n\n")
+            element_section = reduction_input[element]
+            print("\n\nBefore Reduction row:", reduction_input[element])
+            element_section = self.density_selection_for_reduction(element_section)
+            self.geometry_selection_for_reduction(element_section)
+            print("\n\nAfter Reduction row:", reduction_input[element])
+
+        print("\n\n")
 
         return reduction_input
