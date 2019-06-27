@@ -58,7 +58,7 @@ def is_number(value):
     """
     return is_float(value)
 
-def oneAndOnlyOneTrue(self, iterable):
+def oneAndOnlyOneTrue(iterable):
     """Determine if iterable (ie list) has one and only one `True` value
 
     :param iterable: 
