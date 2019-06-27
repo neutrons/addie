@@ -1,15 +1,23 @@
 from __future__ import (absolute_import, division, print_function)
 import numpy as np
-import scipy.constants
 
 from qtpy.QtWidgets import QMainWindow
 from addie.utilities import load_ui
 
-from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
-from addie.utilities.math_tools import is_number, volume_of_cylinder, volume_of_hollow_cylinder, volume_of_sphere
+from addie.processing.mantid.master_table.table_row_handler import \
+    TableRowHandler
+from addie.utilities.math_tools import \
+    volume_of_cylinder, volume_of_hollow_cylinder, volume_of_sphere, \
+    mass_density2number_density, number_density2mass_density, \
+    mass_density2mass, number_density2mass, \
+    mass2mass_density, mass2number_density, \
+    is_number
 
-from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_MASS_DENSITY
-from addie.processing.mantid.master_table.periodic_table.material_handler import retrieving_molecular_mass_and_number_of_atoms_worked
+
+from addie.processing.mantid.master_table.tree_definition import \
+    INDEX_OF_COLUMNS_WITH_MASS_DENSITY
+from addie.processing.mantid.master_table.periodic_table.material_handler import \
+    retrieving_molecular_mass_and_number_of_atoms_worked
 
 
 class MassDensityHandler:
@@ -73,7 +81,8 @@ class MassDensityWindow(QMainWindow):
 
         if self.chemical_formula_defined:
             chemical_formula = self._get_chemical_formula()
-            molecular_mass, total_number_of_atoms = retrieving_molecular_mass_and_number_of_atoms_worked(chemical_formula)
+            molecular_mass, total_number_of_atoms = retrieving_molecular_mass_and_number_of_atoms_worked(
+                chemical_formula)
             self.total_molecular_mass = molecular_mass
             self.total_number_of_atoms = total_number_of_atoms
 
@@ -106,7 +115,7 @@ class MassDensityWindow(QMainWindow):
         return self.parent.master_table_list_ui[self.key][self.data_type]['material']['text'].text()
 
     def _is_chemical_formula_defined(self):
-        chemical_formula = self._get_chemical_formula() 
+        chemical_formula = self._get_chemical_formula()
         if chemical_formula == "":
             return False
         return True
@@ -156,42 +165,53 @@ class MassDensityWindow(QMainWindow):
         # calculate number density if chemical formula defined
         if self.chemical_formula_defined:
             mass_density = np.float(self.ui.mass_density_line_edit.text())
-            avogadro = scipy.constants.N_A
-            number_density = mass_density * \
-                (avogadro / 1e24) * self.total_number_of_atoms / \
-                self.total_molecular_mass
-            number_density = "{:.5}".format(number_density)
+            volume = np.float(self.ui.volume_label.text())
+            natoms = self.total_number_of_atoms
+            molecular_mass = self.total_molecular_mass
+
+            number_density = mass_density2number_density(
+                mass_density, natoms, molecular_mass)
+            mass = mass_density2mass(mass_density, volume)
+
         else:
             number_density = 'N/A'
+            mass = 'N/A'
 
         self.ui.number_density_line_edit.setText(number_density)
+        self.ui.mass_line_edit.setText(mass)
         self.update_status_of_save_button()
 
     def number_density_value_changed(self):
         # calculate mass density if chemical formula defined
         if self.chemical_formula_defined:
             number_density = np.float(self.ui.number_density_line_edit.text())
-            avogadro = scipy.constants.N_A
-            mass_density = number_density * self.total_molecular_mass / \
-                self.total_number_of_atoms / (avogadro/1e24)
-            mass_density = "{:.5}".format(mass_density)
+            volume = np.float(self.ui.volume_label.text())
+            natoms = self.total_number_of_atoms
+            molecular_mass = self.total_molecular_mass
+
+            mass_density = number_density2mass_density(
+                number_density, natoms, molecular_mass)
+            mass = number_density2mass(
+                number_density, volume, natoms, molecular_mass)
+
         else:
             mass_density = 'N/A'
+            mass = 'N/A'
+
         self.ui.mass_density_line_edit.setText(mass_density)
+        self.ui.mass_line_edit.setText(mass)
         self.update_status_of_save_button()
 
     def mass_value_changed(self):
         if self.geometry_dimensions_defined and self.chemical_formula_defined:
             mass = np.float(self.ui.mass_line_edit.text())
             volume = np.float(self.ui.volume_label.text())
-            avogadro = scipy.constants.N_A
+            natoms = self.total_number_of_atoms
+            molecular_mass = self.total_molecular_mass
 
-            mass_density = mass / volume
-            number_density = mass_density * \
-                (avogadro / 1e24) * self.total_number_of_atoms / \
-                self.total_molecular_mass
-            number_density = "{:.5}".format(number_density)
-            mass_density = "{:.5}".format(mass_density)
+            mass_density = mass2mass_density(mass, volume)
+            number_density = mass2number_density(
+                mass, volume, natoms, molecular_mass)
         else:
             mass_density = "N/A"
             number_density = "N/A"
