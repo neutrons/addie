@@ -17,54 +17,60 @@ from addie.processing.mantid.master_table.utilities import LoadGroupingFile
 
 # init test dictionary (to test loader)
 _dictionary_test = OrderedDict()
-_mass_density_dict = {"mass_density": {"value": "N/A",
-                                       "selected": True},
-                      "number_density": {"value": "N/A",
-                                         "selected": False},
-                      "mass": {"value": "N/A",
-                               "selected": False},
-                      }
-_default_empty_row = {"activate": True,
-                      "title": "",
-                      "sample": {"runs": "",
-                                 "background": {"runs": "",
-                                                "background": "",
-                                                },
-                                 "material": "",
-                                 "mass_density": copy.deepcopy(_mass_density_dict),
-                                 "packing_fraction": "",
-                                 "geometry": {"shape": "Cylinder",
-                                              "radius": "N/A",
-                                              "radius2": "N/A",
-                                              "height": "N/A",
-                                              },
-                                 "abs_correction": "",
-                                 "multi_scattering_correction": "",
-                                 "inelastic_correction": "",
-                                 "placzek": {},
-                                 },
-                      "normalization": {"runs": "",
-                                        "background": {"runs": "",
-                                                       "background": "",
-                                                       },
-                                        "material": "",
-                                        "mass_density": copy.deepcopy(_mass_density_dict),
-                                        "packing_fraction": "",
-                                        "geometry": {"shape": "Cylinder",
-                                                     "radius": "N/A",
-                                                     "radius2": "N/A",
-                                                     "height": "N/A",
-                                                     },
-                                        "abs_correction": "",
-                                        "multi_scattering_correction": "",
-                                        "inelastic_correction": "",
-                                        "placzek": {},
-                                        },
-
-                      "input_grouping": "",
-                      "output_grouping": "",
-                      "AlignAndFocusArgs": {},
-                      }
+_density_dict = {"mass_density": {"value": "N/A",
+                                  "selected": True},
+                 "number_density": {"value": "N/A",
+                                    "selected": False},
+                 "mass": {"value": "N/A",
+                          "selected": False},
+                 }
+_default_empty_row = {
+    "activate": True,
+    "title": "",
+    "sample": {
+        "runs": "",
+        "background": {
+            "runs": "",
+            "background": "",
+        },
+        "material": "",
+        "density": copy.deepcopy(_density_dict),
+        "packing_fraction": "",
+        "geometry": {
+            "shape": "Cylinder",
+            "radius": "N/A",
+            "radius2": "N/A",
+            "height": "N/A",
+        },
+        "abs_correction": "",
+        "multi_scattering_correction": "",
+        "inelastic_correction": "",
+        "placzek": {},
+    },
+    "normalization": {
+        "runs": "",
+        "background": {
+            "runs": "",
+            "background": "",
+        },
+        "material": "",
+        "density": copy.deepcopy(_density_dict),
+        "packing_fraction": "",
+        "geometry": {
+                            "shape": "Cylinder",
+                            "radius": "N/A",
+                            "radius2": "N/A",
+                            "height": "N/A",
+        },
+        "abs_correction": "",
+        "multi_scattering_correction": "",
+        "inelastic_correction": "",
+        "placzek": {},
+    },
+    "input_grouping": "",
+    "output_grouping": "",
+    "AlignAndFocusArgs": {},
+}
 # for debugging, faking a 2 row dictionary
 # _dictionary_test[0] = copy.deepcopy(_default_empty_row)
 # _dictionary_test[0]["activate"] = False
@@ -170,13 +176,13 @@ class JsonLoader:
         _target_row_entry["background"]["runs"] = _source_entry['Background']["Runs"]
         _target_row_entry["background"]["background"] = _source_entry["Background"]["Background"]["Runs"]
         _target_row_entry["material"] = _source_entry["Material"]
-        _target_row_entry["mass_density"] = copy.deepcopy(_mass_density_dict)
-        _target_row_entry["mass_density"]["mass_density"]["value"] = _source_entry["MassDensity"]["MassDensity"]
-        _target_row_entry["mass_density"]["mass_density"]["selected"] = _source_entry["MassDensity"]["UseMassDensity"]
-        _target_row_entry["mass_density"]["number_density"]["value"] = _source_entry["MassDensity"]["NumberDensity"]
-        _target_row_entry["mass_density"]["number_density"]["selected"] = _source_entry["MassDensity"]["UseNumberDensity"]
-        _target_row_entry["mass_density"]["mass"]["value"] = _source_entry["MassDensity"]["Mass"]
-        _target_row_entry["mass_density"]["mass"]["selected"] = _source_entry["MassDensity"]["UseMass"]
+        _target_row_entry["mass_density"] = copy.deepcopy(_density_dict)
+        _target_row_entry["mass_density"]["mass_density"]["value"] = _source_entry["Density"]["MassDensity"]
+        _target_row_entry["mass_density"]["mass_density"]["selected"] = _source_entry["Density"]["UseMassDensity"]
+        _target_row_entry["mass_density"]["number_density"]["value"] = _source_entry["Density"]["NumberDensity"]
+        _target_row_entry["mass_density"]["number_density"]["selected"] = _source_entry["Density"]["UseNumberDensity"]
+        _target_row_entry["mass_density"]["mass"]["value"] = _source_entry["Density"]["Mass"]
+        _target_row_entry["mass_density"]["mass"]["selected"] = _source_entry["Density"]["UseMass"]
         _target_row_entry["packing_fraction"] = _source_entry["PackingFraction"]
         _target_row_entry["geometry"] = {}
         _target_row_entry["geometry"]["shape"] = _source_entry["Geometry"]["Shape"]
@@ -186,14 +192,16 @@ class JsonLoader:
         _target_row_entry["abs_correction"] = _source_entry["AbsorptionCorrection"]["Type"]
         _target_row_entry["multi_scattering_correction"] = _source_entry["MultipleScatteringCorrection"]["Type"]
         _target_row_entry["inelastic_correction"] = _source_entry["InelasticCorrection"]["Type"]
-        _target_row_entry["placzek"] = copy.deepcopy(self.parent.placzek_default)
+        _target_row_entry["placzek"] = copy.deepcopy(
+            self.parent.placzek_default)
         _target_row_entry["placzek"]["order"]["index_selected"] = _source_entry["InelasticCorrection"]["Order"]
         _target_row_entry["placzek"]["is_self"] = _source_entry["InelasticCorrection"]["Self"]
         _target_row_entry["placzek"]["is_interference"] = _source_entry["InelasticCorrection"]["Interference"]
         _target_row_entry["placzek"]["fit_spectrum_with"]["text"] = \
             _source_entry["InelasticCorrection"]["FitSpectrumWith"]
 
-        lambda_binning_for_fit = _source_entry["InelasticCorrection"]["LambdaBinningForFit"].split(",")
+        lambda_binning_for_fit = _source_entry["InelasticCorrection"]["LambdaBinningForFit"].split(
+            ",")
         if len(lambda_binning_for_fit) == 3:
             _target_row_entry["placzek"]["lambda_binning_for_fit"]["min"] = lambda_binning_for_fit[0]
             _target_row_entry["placzek"]["lambda_binning_for_fit"]["delta"] = lambda_binning_for_fit[1]
@@ -213,8 +221,7 @@ class JsonLoader:
             data = json.load(f)
 
         # convert into UI dictionary
-        list_keys = [_key for _key in data.keys()]
-        list_keys.sort()
+        list_keys = sorted([_key for _key in data.keys()])
 
         table_dictionary = {}
         first_entry = True
@@ -226,13 +233,14 @@ class JsonLoader:
 
             _target_row_entry["activate"] = _source_row_entry['Activate']
             _target_row_entry["title"] = _source_row_entry['Title']
-            _target_row_entry["sample"] = self._retrieve_element_dict(element='Sample',
-                                                                      source_row_entry=_source_row_entry)
+            _target_row_entry["sample"] = self._retrieve_element_dict(
+                element='Sample', source_row_entry=_source_row_entry)
             _target_row_entry["runs"] = _source_row_entry['Sample']['Runs']
-            _target_row_entry["normalization"] = self._retrieve_element_dict(element='Normalization',
-                                                                             source_row_entry=_source_row_entry)
+            _target_row_entry["normalization"] = self._retrieve_element_dict(
+                element='Normalization', source_row_entry=_source_row_entry)
 
-            _target_row_entry["align_and_focus_args"] = _source_row_entry.get("AlignAndFocusArgs", {})
+            _target_row_entry["align_and_focus_args"] = _source_row_entry.get(
+                "AlignAndFocusArgs", {})
 
             table_dictionary[_row] = _target_row_entry
 
@@ -255,22 +263,28 @@ class JsonLoader:
                 output_dir = str(_source_row_entry["OutputDir"])
                 self.parent.output_folder = output_dir
 
-                calibration_file = str(_source_row_entry["Calibration"]["Filename"])
-                self.parent.processing_ui.calibration_file.setText(calibration_file)
+                calibration_file = str(
+                    _source_row_entry["Calibration"]["Filename"])
+                self.parent.processing_ui.calibration_file.setText(
+                    calibration_file)
 
-                intermediate_grouping_file = str(_source_row_entry["Merging"]["Grouping"]["Initial"])
+                intermediate_grouping_file = str(
+                    _source_row_entry["Merging"]["Grouping"]["Initial"])
                 if not (intermediate_grouping_file == ''):
                     self.parent.intermediate_grouping['filename'] = intermediate_grouping_file
                     self.parent.intermediate_grouping['enabled'] = True
-                    o_grouping = LoadGroupingFile(filename=intermediate_grouping_file)
+                    o_grouping = LoadGroupingFile(
+                        filename=intermediate_grouping_file)
                     nbr_groups = o_grouping.get_number_of_groups()
                     self.parent.intermediate_grouping['nbr_groups'] = nbr_groups
 
-                output_grouping_file = str(_source_row_entry["Merging"]["Grouping"]["Output"])
+                output_grouping_file = str(
+                    _source_row_entry["Merging"]["Grouping"]["Output"])
                 if not (output_grouping_file == ''):
                     self.parent.output_grouping['filename'] = output_grouping_file
                     self.parent.output_grouping['enabled'] = True
-                    o_grouping = LoadGroupingFile(filename=output_grouping_file)
+                    o_grouping = LoadGroupingFile(
+                        filename=output_grouping_file)
                     nbr_groups = o_grouping.get_number_of_groups()
                     self.parent.output_grouping['nbr_groups'] = nbr_groups
 
@@ -280,14 +294,15 @@ class JsonLoader:
         o_table_ui_loader.fill(input_dictionary=table_dictionary)
 
         self.parent.ui.statusbar.setStyleSheet("color: blue")
-        self.parent.ui.statusbar.showMessage("File {} has been imported".format(self.filename),
-                                             self.parent.statusbar_display_time)
+        self.parent.ui.statusbar.showMessage(
+            "File {} has been imported".format(
+                self.filename), self.parent.statusbar_display_time)
 
 
 class AsciiLoader:
 
     filename = ''
-    file_contain = [] # raw file contain
+    file_contain = []  # raw file contain
     table_dictionary = {}
 
     def __init__(self, parent=None, filename=''):
@@ -295,7 +310,8 @@ class AsciiLoader:
         self.parent = parent
 
     def show_dialog(self):
-        o_dialog = AsciiLoaderOptions(parent=self.parent, filename=self.filename)
+        o_dialog = AsciiLoaderOptions(
+            parent=self.parent, filename=self.filename)
         o_dialog.show()
 
     def load(self):
@@ -319,7 +335,8 @@ class AsciiLoader:
             o_format.option1()
 
         # option 2
-        # remove temperature part of title and merge lines with exact same title
+        # remove temperature part of title and merge lines with exact same
+        # title
         elif options == 2:
             o_format.option2()
         # option 3
@@ -355,8 +372,9 @@ class AsciiLoader:
         o_table_ui_loader.fill(input_dictionary=_table_dictionary)
 
         self.parent.ui.statusbar.setStyleSheet("color: blue")
-        self.parent.ui.statusbar.showMessage("File {} has been imported".format(self.filename),
-                                             self.parent.statusbar_display_time)
+        self.parent.ui.statusbar.showMessage(
+            "File {} has been imported".format(
+                self.filename), self.parent.statusbar_display_time)
 
 
 class FormatAsciiList:
@@ -423,7 +441,7 @@ class FormatAsciiList:
             str_element_to_merge = str(list1.pop(0))
 
             # find all indexes where element_list2 are identical
-            indices = [i for i, x in enumerate(list2) if x==element_list2]
+            indices = [i for i, x in enumerate(list2) if x == element_list2]
             if not (indices == []):
 
                 # remove all element already treated
@@ -499,7 +517,8 @@ class FormatAsciiList:
         :returns
         ["Sample A_1", "Sample B_2", "Sample C_3", "Sample D_4-6"]
         '''
-        new_list2 = [_ele2 + "_" + str(_ele1) for _ele1, _ele2 in zip(list1, list2)]
+        new_list2 = [_ele2 + "_" + str(_ele1)
+                     for _ele1, _ele2 in zip(list1, list2)]
 
         # new_list2 = []
         # for element1, element2 in zip(list1, list2):
@@ -509,33 +528,36 @@ class FormatAsciiList:
 
     def option1(self):
         # keep raw title and merge lines with exact same title
-        [self.new_list1, self.new_list2] = self.__combine_identical_elements(check_list=self.list2,
-                                                                             combine_list=self.list1)
+        [self.new_list1, self.new_list2] = self.__combine_identical_elements(
+            check_list=self.list2, combine_list=self.list1)
 
     def option2(self):
-        # remove temperature part of title and merge lines with exact same title
-        clean_list2 = self.__keep_string_before(list=self.list2,
-                                                splitter_string=" at temperature")
-        [self.new_list1, self.new_list2] = self.__combine_identical_elements(check_list=clean_list2,
-                                                                             combine_list=self.list1)
+        # remove temperature part of title and merge lines with exact same
+        # title
+        clean_list2 = self.__keep_string_before(
+            list=self.list2, splitter_string=" at temperature")
+        [self.new_list1, self.new_list2] = self.__combine_identical_elements(
+            check_list=clean_list2, combine_list=self.list1)
 
     def option3(self):
         # keep raw title, append run number
         combine_list1 = self.__convert_list_to_combine_version(list=self.list1)
-        list2_with_run_number = self.__append_list1_to_list2(list1=combine_list1, list2=self.list2)
+        list2_with_run_number = self.__append_list1_to_list2(
+            list1=combine_list1, list2=self.list2)
 
-        [self.new_list1, self.new_list2] = self.__combine_identical_elements(check_list=list2_with_run_number,
-                                                                             combine_list=self.list1)
+        [self.new_list1, self.new_list2] = self.__combine_identical_elements(
+            check_list=list2_with_run_number, combine_list=self.list1)
 
     def option4(self):
         # take raw title, remove temperature part, add run number
-        clean_list2 = self.__keep_string_before(list=self.list2,
-                                                splitter_string=" at temperature")
+        clean_list2 = self.__keep_string_before(
+            list=self.list2, splitter_string=" at temperature")
         combine_list1 = self.__convert_list_to_combine_version(list=self.list1)
-        list2_with_run_number = self.__append_list1_to_list2(list1=combine_list1, list2=clean_list2)
+        list2_with_run_number = self.__append_list1_to_list2(
+            list1=combine_list1, list2=clean_list2)
 
-        [self.new_list1, self.new_list2] = self.__combine_identical_elements(check_list=list2_with_run_number,
-                                                                             combine_list=self.list1)
+        [self.new_list1, self.new_list2] = self.__combine_identical_elements(
+            check_list=list2_with_run_number, combine_list=self.list1)
 
     def apply_option(self, option=1):
         if option == 1:
@@ -574,25 +596,33 @@ class TableFileLoader:
 
         try:
             # if extension is csv, use ascii loader
-            if FileHandler.is_file_correct_extension(filename=self.filename, ext_requested='csv'): # ascii file
-                o_loader = AsciiLoader(parent=self.parent, filename=self.filename)
+            if FileHandler.is_file_correct_extension(
+                    filename=self.filename, ext_requested='csv'):  # ascii file
+                o_loader = AsciiLoader(
+                    parent=self.parent, filename=self.filename)
                 o_loader.show_dialog()
-            elif FileHandler.is_file_correct_extension(filename=self.filename, ext_requested='json'): # json file
-                o_loader = JsonLoader(parent=self.parent, filename=self.filename)
+            # json file
+            elif FileHandler.is_file_correct_extension(filename=self.filename, ext_requested='json'):
+                o_loader = JsonLoader(
+                    parent=self.parent, filename=self.filename)
                 o_loader.load()
             else:
-                raise IOError("File format not supported!".format(self.filename))
+                raise IOError(
+                    "File format not supported!".format(
+                        self.filename))
 
             self.parent.check_master_table_column_highlighting()
 
         except ValueError:
             self.parent.ui.statusbar.setStyleSheet("color: red")
-            self.parent.ui.statusbar.showMessage("Unable to load configuration file {}!".format(self.filename),
-                                                 self.parent.statusbar_display_time)
+            self.parent.ui.statusbar.showMessage(
+                "Unable to load configuration file {}!".format(
+                    self.filename), self.parent.statusbar_display_time)
         except TypeError:
             self.parent.ui.statusbar.setStyleSheet("color: red")
-            self.parent.ui.statusbar.showMessage("Error while trying to load file {}!".format(self.filename),
-                                                 self.parent.statusbar_display_time)
+            self.parent.ui.statusbar.showMessage(
+                "Error while trying to load file {}!".format(
+                    self.filename), self.parent.statusbar_display_time)
 
 
 class FromDictionaryToTableUi:
@@ -613,34 +643,47 @@ class FromDictionaryToTableUi:
 
         for _row_entry in input_dictionary.keys():
 
-            # insert row but also initialize the hidden arguments such as placzek settings
-            o_table.insert_row(row=_row_entry,
-                               align_and_focus_args=input_dictionary[_row_entry]['align_and_focus_args'],
-                               normalization_placzek_arguments=input_dictionary[_row_entry]['normalization']['placzek'],
-                               sample_placzek_arguments=input_dictionary[_row_entry]['sample']['placzek'])
+            # insert row but also initialize the hidden arguments such as
+            # placzek settings
+            o_table.insert_row(
+                row=_row_entry,
+                align_and_focus_args=input_dictionary[_row_entry]['align_and_focus_args'],
+                normalization_placzek_arguments=input_dictionary[_row_entry]['normalization']['placzek'],
+                sample_placzek_arguments=input_dictionary[_row_entry]['sample']['placzek'])
 
             self.populate_row(row=_row_entry,
                               entry=input_dictionary[_row_entry],
                               key=o_table.key)
 
-    def __fill_data_type(self, data_type="sample", starting_col=1, row=0, entry={}, key=None):
+    def __fill_data_type(
+            self,
+            data_type="sample",
+            starting_col=1,
+            row=0,
+            entry={},
+            key=None):
 
-        column=starting_col
+        column = starting_col
 
         # run
         self.table_ui.item(row, column).setText(entry[data_type]["runs"])
 
         # background - runs
         column += 1
-        self.table_ui.item(row, column).setText(entry[data_type]["background"]["runs"])
+        self.table_ui.item(
+            row, column).setText(
+            entry[data_type]["background"]["runs"])
 
         # background - background
         column += 1
-        self.table_ui.item(row, column).setText(entry[data_type]["background"]["background"])
+        self.table_ui.item(
+            row, column).setText(
+            entry[data_type]["background"]["background"])
 
         # material
         column += 1
-        self.parent.master_table_list_ui[key][data_type]['material']['text'].setText(entry[data_type]["material"])
+        self.parent.master_table_list_ui[key][data_type]['material']['text'].setText(
+            entry[data_type]["material"])
 
         # mass density
         column += 1
@@ -648,37 +691,51 @@ class FromDictionaryToTableUi:
             entry[data_type]["mass_density"]["mass_density"]["value"])
 
         # packing_fraction
-        column +=1
-        self.table_ui.item(row, column).setText(entry[data_type]["packing_fraction"])
+        column += 1
+        self.table_ui.item(
+            row, column).setText(
+            entry[data_type]["packing_fraction"])
 
         # geometry - shape
         column += 1
         _requested_shape = entry[data_type]["geometry"]["shape"]
-        self.__set_combobox(requested_value=_requested_shape, row=row, col=column)
+        self.__set_combobox(
+            requested_value=_requested_shape,
+            row=row,
+            col=column)
 
         # geometry
         column += 1
         self.parent.master_table_list_ui[key][data_type]['geometry']['radius']['value'].setText(
-            entry[data_type]['geometry']['radius'])
+            str(entry[data_type]['geometry']['radius']))
         self.parent.master_table_list_ui[key][data_type]['geometry']['radius2']['value'].setText(
-            entry[data_type]['geometry']['radius2'])
+            str(entry[data_type]['geometry']['radius2']))
         self.parent.master_table_list_ui[key][data_type]['geometry']['height']['value'].setText(
-            entry[data_type]['geometry']['height'])
+            str(entry[data_type]['geometry']['height']))
 
         # abs correction
         column += 1
         _requested_correction = entry[data_type]["abs_correction"]
-        self.__set_combobox(requested_value=_requested_correction, row=row, col=column)
+        self.__set_combobox(
+            requested_value=_requested_correction,
+            row=row,
+            col=column)
 
         # multi scattering correction
         column += 1
         _requested_scattering = entry[data_type]["multi_scattering_correction"]
-        self.__set_combobox(requested_value=_requested_scattering, row=row, col=column)
+        self.__set_combobox(
+            requested_value=_requested_scattering,
+            row=row,
+            col=column)
 
         # inelastic correction
         column += 1
         _requested_inelastic = entry[data_type]["inelastic_correction"]
-        self.__set_combobox(requested_value=_requested_inelastic, row=row, col=column)
+        self.__set_combobox(
+            requested_value=_requested_inelastic,
+            row=row,
+            col=column)
 
     def __set_combobox(self, requested_value="", row=-1, col=-1):
         _widget = self.table_ui.cellWidget(row, col).children()[1]
@@ -698,7 +755,17 @@ class FromDictionaryToTableUi:
         self.table_ui.item(row, 1).setText(entry["title"])
 
         # sample
-        self.__fill_data_type(data_type='sample', starting_col=2, row=row, entry=entry, key=key)
+        self.__fill_data_type(
+            data_type='sample',
+            starting_col=2,
+            row=row,
+            entry=entry,
+            key=key)
 
         # normalization
-        self.__fill_data_type(data_type='normalization', starting_col=13, row=row, entry=entry, key=key)
+        self.__fill_data_type(
+            data_type='normalization',
+            starting_col=13,
+            row=row,
+            entry=entry,
+            key=key)
