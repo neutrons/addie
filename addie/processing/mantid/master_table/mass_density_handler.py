@@ -112,7 +112,8 @@ class MassDensityWindow(QMainWindow):
         self.radio_button_changed()
 
     def _get_chemical_formula(self):
-        return self.parent.master_table_list_ui[self.key][self.data_type]['material']['text'].text()
+        return self.parent.master_table_list_ui[self.key][self.data_type]['material']['text'].text(
+        )
 
     def _is_chemical_formula_defined(self):
         chemical_formula = self._get_chemical_formula()
@@ -136,7 +137,8 @@ class MassDensityWindow(QMainWindow):
             if math_tools.is_number(radius):
                 return True
         else:
-            if math_tools.is_number(radius) and math_tools.is_number(radius2) and math_tools.is_number(height):
+            if math_tools.is_number(radius) and math_tools.is_number(
+                    radius2) and math_tools.is_number(height):
                 return True
 
         return False
@@ -248,20 +250,27 @@ class MassDensityWindow(QMainWindow):
         mass_line_edit_status = False
         if self.ui.mass_density_radio_button.isChecked():
             self.ui.mass_density_error_message.setVisible(False)
-            self.ui.number_density_error_message.setVisible(not self.chemical_formula_defined)
-            self.ui.mass_error_message.setVisible(not self.geometry_dimensions_defined)
+            self.ui.number_density_error_message.setVisible(
+                not self.chemical_formula_defined)
+            self.ui.mass_error_message.setVisible(
+                not self.geometry_dimensions_defined)
             mass_density_line_edit_status = True
-            
+
         elif self.ui.number_density_radio_button.isChecked():
-            self.ui.mass_density_error_message.setVisible(not self.chemical_formula_defined)
+            self.ui.mass_density_error_message.setVisible(
+                not self.chemical_formula_defined)
             self.ui.number_density_error_message.setVisible(False)
-            self.ui.mass_error_message.setVisible(not self.chemical_formula_defined and not self.geometry_dimensions_defined)
+            self.ui.mass_error_message.setVisible(
+                not self.chemical_formula_defined and not self.geometry_dimensions_defined)
             number_density_line_edit_status = True
 
         else:
-            self.ui.mass_density_error_message.setVisible(not self.geometry_dimensions_defined)
-            self.ui.number_density_error_message.setVisible(not self.chemical_formula_defined and not self.geometry_dimensions_defined)
-            self.ui.mass_error_message.setVisible(not self.geometry_dimensions_defined)
+            self.ui.mass_density_error_message.setVisible(
+                not self.geometry_dimensions_defined)
+            self.ui.number_density_error_message.setVisible(
+                not self.chemical_formula_defined and not self.geometry_dimensions_defined)
+            self.ui.mass_error_message.setVisible(
+                not self.geometry_dimensions_defined)
             mass_line_edit_status = True
 
         self.ui.mass_line_edit.setEnabled(mass_line_edit_status)
@@ -273,7 +282,8 @@ class MassDensityWindow(QMainWindow):
         self.update_status_of_save_button()
 
     def update_status_of_save_button(self):
-        # check the active radio button and check if value is there to enable save button
+        # check the active radio button and check if value is there to enable
+        # save button
         enabled_save_button = False
         if self.ui.mass_density_radio_button.isChecked():
             string_value = str(self.ui.mass_density_line_edit.text())
@@ -291,7 +301,8 @@ class MassDensityWindow(QMainWindow):
         self.ui.ok.setEnabled(enabled_save_button)
 
     def save(self):
-        # first validate fields in case user forgot to hit enter before leaving window
+        # first validate fields in case user forgot to hit enter before leaving
+        # window
         if self.ui.mass_density_radio_button.isChecked():
             self.mass_density_value_changed()
         elif self.ui.number_density_radio_button.isChecked():
