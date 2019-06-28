@@ -116,7 +116,7 @@ class MassDensityWindow(QMainWindow):
 
     def _is_chemical_formula_defined(self):
         chemical_formula = self._get_chemical_formula()
-        if chemical_formula == "":
+        if chemical_formula == "" or chemical_formula == 'N/A':
             return False
         return True
 
@@ -164,25 +164,24 @@ class MassDensityWindow(QMainWindow):
         self.ui.volume_label.setText(str_volume)
 
     def mass_density_value_changed(self):
+        mass_density = np.float(self.ui.mass_density_line_edit.text())
+
         # calculate number density if chemical formula defined
         if self.chemical_formula_defined:
-            # gather needed variables
-            mass_density = np.float(self.ui.mass_density_line_edit.text())
-            volume = np.float(self.ui.volume_label.text())
             natoms = self.total_number_of_atoms
             molecular_mass = self.total_molecular_mass
-
-            # conversions
             number_density = math_tools.mass_density2number_density(
                 mass_density, natoms, molecular_mass)
-            mass = math_tools.mass_density2mass(mass_density, volume)
-
-            # cast as string with set precision for display
             number_density = self._to_precision_string(number_density)
-            mass = self._to_precision_string(mass)
-
         else:
             number_density = 'N/A'
+
+        # calculate mass if geometry defined
+        if self.geometry_dimensions_defined:
+            volume = np.float(self.ui.volume_label.text())
+            mass = math_tools.mass_density2mass(mass_density, volume)
+            mass = self._to_precision_string(mass)
+        else:
             mass = 'N/A'
 
         self.ui.number_density_line_edit.setText(number_density)
@@ -190,24 +189,24 @@ class MassDensityWindow(QMainWindow):
         self.update_status_of_save_button()
 
     def number_density_value_changed(self):
+        number_density = np.float(self.ui.number_density_line_edit.text())
+
         # calculate mass density if chemical formula defined
         if self.chemical_formula_defined:
-            # gather needed variables
-            number_density = np.float(self.ui.number_density_line_edit.text())
-            volume = np.float(self.ui.volume_label.text())
             natoms = self.total_number_of_atoms
             molecular_mass = self.total_molecular_mass
-
-            # conversions
             mass_density = math_tools.number_density2mass_density(
                 number_density, natoms, molecular_mass)
-            mass = math_tools.number_density2mass(
-                number_density, volume, natoms, molecular_mass)
-
-            # cast as string with set precision for display
             mass_density = self._to_precision_string(mass_density)
-            mass = self._to_precision_string(mass)
 
+            # calculate mass if geometry defined
+            if self.geometry_dimensions_defined:
+                volume = np.float(self.ui.volume_label.text())
+                mass = math_tools.number_density2mass(
+                    number_density, volume, natoms, molecular_mass)
+                mass = self._to_precision_string(mass)
+            else:
+                mass = 'N/A'
         else:
             mass_density = 'N/A'
             mass = 'N/A'
@@ -217,22 +216,23 @@ class MassDensityWindow(QMainWindow):
         self.update_status_of_save_button()
 
     def mass_value_changed(self):
-        # calculate mass if chemical formula and geometry
-        if self.geometry_dimensions_defined and self.chemical_formula_defined:
-            # gather needed variables
-            mass = np.float(self.ui.mass_line_edit.text())
+        mass = np.float(self.ui.mass_line_edit.text())
+
+        # calculate mass if geometry defined
+        if self.geometry_dimensions_defined:
             volume = np.float(self.ui.volume_label.text())
-            natoms = self.total_number_of_atoms
-            molecular_mass = self.total_molecular_mass
-
-            # conversions
             mass_density = math_tools.mass2mass_density(mass, volume)
-            number_density = math_tools.mass2number_density(
-                mass, volume, natoms, molecular_mass)
-
-            # cast as string with set precision for display
             mass_density = self._to_precision_string(mass_density)
-            number_density = self._to_precision_string(number_density)
+
+            # calculate mass if chemical formula defined
+            if self.chemical_formula_defined:
+                natoms = self.total_number_of_atoms
+                molecular_mass = self.total_molecular_mass
+                number_density = math_tools.mass2number_density(
+                    mass, volume, natoms, molecular_mass)
+                number_density = self._to_precision_string(number_density)
+            else:
+                number_density = "N/A"
 
         else:
             mass_density = "N/A"
@@ -248,24 +248,21 @@ class MassDensityWindow(QMainWindow):
         mass_line_edit_status = False
         if self.ui.mass_density_radio_button.isChecked():
             self.ui.mass_density_error_message.setVisible(False)
-            self.ui.number_density_error_message.setVisible(
-                not self.chemical_formula_defined)
+            self.ui.number_density_error_message.setVisible(not self.chemical_formula_defined)
+            self.ui.mass_error_message.setVisible(not self.geometry_dimensions_defined)
             mass_density_line_edit_status = True
-            self.ui.mass_error_message.setVisible(False)
+            
         elif self.ui.number_density_radio_button.isChecked():
-            self.ui.mass_density_error_message.setVisible(
-                not self.chemical_formula_defined)
+            self.ui.mass_density_error_message.setVisible(not self.chemical_formula_defined)
             self.ui.number_density_error_message.setVisible(False)
+            self.ui.mass_error_message.setVisible(not self.chemical_formula_defined and not self.geometry_dimensions_defined)
             number_density_line_edit_status = True
-            self.ui.mass_error_message.setVisible(False)
+
         else:
-            self.ui.mass_density_error_message.setVisible(
-                not self.chemical_formula_defined)
-            self.ui.number_density_error_message.setVisible(
-                not self.chemical_formula_defined)
+            self.ui.mass_density_error_message.setVisible(not self.geometry_dimensions_defined)
+            self.ui.number_density_error_message.setVisible(not self.chemical_formula_defined and not self.geometry_dimensions_defined)
+            self.ui.mass_error_message.setVisible(not self.geometry_dimensions_defined)
             mass_line_edit_status = True
-            self.ui.mass_error_message.setVisible(
-                not self.geometry_dimensions_defined)
 
         self.ui.mass_line_edit.setEnabled(mass_line_edit_status)
         self.ui.number_density_line_edit.setEnabled(
