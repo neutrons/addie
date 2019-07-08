@@ -160,7 +160,6 @@ def get_volume_from_geometry(dictionary):
     else:
         raise Exception("Passed unkown shape into get_volume_from_geometry")
 
-    print(dictionary['Shape'])
     return volume
 
 
