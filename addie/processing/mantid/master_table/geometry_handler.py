@@ -10,6 +10,43 @@ from addie.utilities.math_tools import is_number
 from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS
 
 
+def _sphere_csg_radius(value):
+    value = 0.01 * value  # converts from cm -> m for CSG
+    sphere_xml = " \
+        <sphere id='some-sphere'> \
+            <centre x='0.0'  y='0.0' z='0.0' /> \
+            <radius val={radius} /> \
+        </sphere> \
+        <algebra val='some-sphere' /> \
+    ".format(radius=value)
+    return sphere_xml
+
+
+_table2mantid_cylinder = {
+    "Shape": {"Key": "Shape"},
+    "Radius": {"Key": "Radius"},
+    "Height": {"Key": "Height"}
+}
+
+_table2mantid_hollow_cylinder = {
+    "Shape": {"Key": "Shape", "ValueProcessor": lambda x: "HollowCylinder"},
+    "Radius": {"Key": "InnerRadius"},
+    "Radius2": {"Key": "OuterRadius"},
+    "Height": {"Key": "Height"}
+}
+
+_table2mantid_sphere = {
+    "Shape": {"Key": "Shape", "ValueProcessor": lambda x: "CSG"},
+    "Radius": {"Key": "Value", "ValueProcessor": _sphere_csg_radius}
+}
+
+table2mantid = {
+    "Cylinder": _table2mantid_cylinder,
+    "Hollow Cylinder": _table2mantid_hollow_cylinder,
+    "Sphere": _table2mantid_sphere
+}
+
+
 class DimensionsSetter(QDialog):
 
     shape_selected = 'Cylinder'
@@ -18,7 +55,7 @@ class DimensionsSetter(QDialog):
     def __init__(self, parent=None, key=None, data_type='sample'):
         self.parent = parent
         self.key = key
-        self.data_type =  data_type
+        self.data_type = data_type
 
         QDialog.__init__(self, parent=parent)
         self.ui = load_ui('dimensions_setter.ui', baseinstance=self)
@@ -54,7 +91,8 @@ class DimensionsSetter(QDialog):
         :argument:
         geometry_type being 'radius', 'radius2' or 'height'
         '''
-        return str(self.parent.master_table_list_ui[self.key][self.data_type]['geometry'][geometry_type]['value'].text())
+        return str(self.parent.master_table_list_ui[self.key]
+                   [self.data_type]['geometry'][geometry_type]['value'].text())
 
     def __set_label_value(self, geometry_type, value):
         '''helper function to set value of label in master table.
@@ -63,7 +101,8 @@ class DimensionsSetter(QDialog):
         geometry_type being 'radius', 'radius2' or 'height'
         value: value to set
         '''
-        self.parent.master_table_list_ui[self.key][self.data_type]['geometry'][geometry_type]['value'].setText(value)
+        self.parent.master_table_list_ui[self.key][self.data_type]['geometry'][geometry_type]['value'].setText(
+            value)
 
     def init_widgets_content(self):
         '''populate the widgets using the value from the master table'''
@@ -102,7 +141,8 @@ class DimensionsSetter(QDialog):
             for _widget in self.group['radius2']:
                 _widget.setVisible(False)
             # display right image label
-            self.ui.preview.setPixmap(QtGui.QPixmap(":/preview/cylinder_reference.png"))
+            self.ui.preview.setPixmap(QtGui.QPixmap(
+                ":/preview/cylinder_reference.png"))
             self.ui.preview.setScaledContents(True)
 
         elif self.shape_selected.lower() == 'sphere':
@@ -115,12 +155,14 @@ class DimensionsSetter(QDialog):
             for _widget in self.group['height']:
                 _widget.setVisible(False)
             # display the right image label
-            self.ui.preview.setPixmap(QtGui.QPixmap(":/preview/sphere_reference.png"))
+            self.ui.preview.setPixmap(QtGui.QPixmap(
+                ":/preview/sphere_reference.png"))
             self.ui.preview.setScaledContents(True)
 
         elif self.shape_selected.lower() == 'hollow cylinder':
             # display the right image label
-            self.ui.preview.setPixmap(QtGui.QPixmap(":/preview/hollow_cylinder_reference.png"))
+            self.ui.preview.setPixmap(QtGui.QPixmap(
+                ":/preview/hollow_cylinder_reference.png"))
             self.ui.preview.setScaledContents(True)
 
         # display value of radius1,2,height for this row
@@ -168,7 +210,8 @@ class DimensionsSetter(QDialog):
         self.__set_label_value('height', height)
 
         o_table = TableRowHandler(main_window=self.parent)
-        o_table.transfer_widget_states(from_key=self.key, data_type=self.data_type)
+        o_table.transfer_widget_states(
+            from_key=self.key, data_type=self.data_type)
 
         self.parent.check_master_table_column_highlighting(column=self.column)
 
