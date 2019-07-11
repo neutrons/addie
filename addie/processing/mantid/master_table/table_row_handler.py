@@ -851,16 +851,16 @@ class TableRowHandler:
                     'Carpenter',
                     'Mayers',
                     'Podman & Pings',
-                    'Monte-Carlo',
+                    'Monte Carlo',
                     'Numerical',
                     ]
         elif shape == 1: # sphere
             return ['None',
-                    'Monte-Carlo',
+                    'Monte Carlo',
                     ]
         elif shape== 2: # hollow cylinder
             return ['None',
-                    'Monte-Carlo']
+                    'Monte Carlo']
 
         return ['None']
 
