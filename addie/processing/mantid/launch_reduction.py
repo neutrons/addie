@@ -53,6 +53,7 @@ class JobPool(object):
         self.task_exc = task_result.exc_value
         self.task_exc_stack = traceback.extract_tb(task_result.stack)
         traceback.print_tb(task_result.stack)
+        print(task_result)
 
     def on_finished(self):
         '''Both success and failure call this method afterwards'''
