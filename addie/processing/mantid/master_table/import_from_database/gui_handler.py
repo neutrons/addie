@@ -149,12 +149,6 @@ class ImportFromDatabaseTableHandler:
 
             self.parent.first_time_filling_table = False
 
-    # def _json_extractor(self, json=None, list_args=[]):
-    #     if len(list_args) == 1:
-    #         return json[list_args[0]]
-    #     else:
-    #         return self._json_extractor(json[list_args.pop(0)],
-    #                                     list_args=list_args)
 
     def _set_table_item(self, json=None, metadata_filter={}, row=-1, col=-1):
         """Populate the filter metadada table from the oncat json file of only the arguments specified in
