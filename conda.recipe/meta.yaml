@@ -20,6 +20,7 @@ requirements:
     - psutil
     - python
     - setuptools
+    - simplejson
 
   run:
     - configparser
@@ -28,6 +29,7 @@ requirements:
     - periodictable
     - psutil
     - python
+    - simplejson
 
 test:
   imports:
