@@ -10,6 +10,7 @@ from addie.processing.mantid.master_table.tree_definition import INDEX_OF_SPECIA
 from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS
 from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA
 from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_MASS_DENSITY
+from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_ALIGN_AND_FOCUS_ARGS
 from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_ITEMS
 from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_CHECKBOX
 
@@ -50,10 +51,10 @@ class SelectionHandler:
         return self.top_row
 
     def get_list_column(self):
-        return np.arange(self.left_column, self.right_column+1)
+        return np.arange(self.left_column, self.right_column + 1)
 
     def get_list_row(self):
-        return np.arange(self.top_row, self.bottom_row+1)
+        return np.arange(self.top_row, self.bottom_row + 1)
 
 
 class SelectionHandlerMaster:
@@ -63,7 +64,8 @@ class SelectionHandlerMaster:
         self.table_ui = self.parent.processing_ui.h3_table
 
     def get_ui_key_for_this_row(self, row=-1):
-        _check_box_ui_of_this_row = self.table_ui.cellWidget(row, 0).children()[1]
+        _check_box_ui_of_this_row = self.table_ui.cellWidget(row, 0).children()[
+            1]
         _table_list_ui = self.parent.master_table_list_ui
         for _key in _table_list_ui.keys():
             if _table_list_ui[_key]['active'] == _check_box_ui_of_this_row:
@@ -71,19 +73,21 @@ class SelectionHandlerMaster:
         return None
 
     def get_list_ui_for_this_row(self, row=-1):
-        _check_box_ui_of_this_row = self.table_ui.cellWidget(row, 0).children()[1]
+        _check_box_ui_of_this_row = self.table_ui.cellWidget(row, 0).children()[
+            1]
         _table_list_ui = self.parent.master_table_list_ui
         for _key in _table_list_ui.keys():
             if _table_list_ui[_key]['active'] == _check_box_ui_of_this_row:
-                list_ui = [_check_box_ui_of_this_row,
-                           _table_list_ui[_key]['sample']['shape'],
-                           _table_list_ui[_key]['sample']['abs_correction'],
-                           _table_list_ui[_key]['sample']['mult_scat_correction'],
-                           _table_list_ui[_key]['sample']['inelastic_correction'],
-                           _table_list_ui[_key]['normalization']['abs_correction'],
-                           _table_list_ui[_key]['normalization']['mult_scat_correction'],
-                           _table_list_ui[_key]['normalization']['inelastic_correction'],
-                           ]
+                list_ui = [
+                    _check_box_ui_of_this_row,
+                    _table_list_ui[_key]['sample']['shape'],
+                    _table_list_ui[_key]['sample']['abs_correction'],
+                    _table_list_ui[_key]['sample']['mult_scat_correction'],
+                    _table_list_ui[_key]['sample']['inelastic_correction'],
+                    _table_list_ui[_key]['normalization']['abs_correction'],
+                    _table_list_ui[_key]['normalization']['mult_scat_correction'],
+                    _table_list_ui[_key]['normalization']['inelastic_correction'],
+                ]
                 self.parent.master_table_list_ui[_key] = {}
                 return list_ui
         return []
@@ -123,7 +127,8 @@ class TransferH3TableWidgetState(SelectionHandlerMaster):
 
         master_table_row_ui = self.parent.master_table_list_ui
 
-        # enable or disable all other selected rows (if only first column selected)
+        # enable or disable all other selected rows (if only first column
+        # selected)
         if (o_selection.nbr_column_selected() == 1):
 
             range_row = o_selection.get_list_row()
@@ -146,42 +151,50 @@ class TransferH3TableWidgetState(SelectionHandlerMaster):
                     ui.setCheckState(state)
                     ui.blockSignals(False)
 
-            # sample or normalization, shape, abs. corr., mult. scat. corr or inelastic corr.
+            # sample or normalization, shape, abs. corr., mult. scat. corr or
+            # inelastic corr.
             elif (column_selected in INDEX_OF_COLUMNS_WITH_COMBOBOX):
 
-                ui = self.table_ui.cellWidget(from_row, column_selected).children()[1]
+                ui = self.table_ui.cellWidget(
+                    from_row, column_selected).children()[1]
                 index = ui.currentIndex()
 
                 for _row in range_row:
                     if _row == from_row:
                         continue
 
-                    ui = self.table_ui.cellWidget(_row, column_selected).children()[1]
+                    ui = self.table_ui.cellWidget(
+                        _row, column_selected).children()[1]
 
                     if index > -1:
-                        #ui.blockSignals(True)
+                        # ui.blockSignals(True)
                         ui.setCurrentIndex(index)
-                        #ui.blockSignals(False)
+                        # ui.blockSignals(False)
 
             elif (column_selected in INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA):
 
                 o_utilities = Utilities(parent=self.parent)
-                _from_key = o_utilities.get_row_key_from_row_index(row=from_row)
-                chemical_formula = str(master_table_row_ui[_from_key][data_type]['material']['text'].text())
+                _from_key = o_utilities.get_row_key_from_row_index(
+                    row=from_row)
+                chemical_formula = str(
+                    master_table_row_ui[_from_key][data_type]['material']['text'].text())
                 for _row in range_row:
                     if _row == from_row:
                         continue
 
                     _to_key = o_utilities.get_row_key_from_row_index(row=_row)
-                    master_table_row_ui[_to_key][data_type]['material']['text'].setText(chemical_formula)
+                    master_table_row_ui[_to_key][data_type]['material']['text'].setText(
+                        chemical_formula)
 
             elif (column_selected in INDEX_OF_COLUMNS_WITH_MASS_DENSITY):
 
                 o_utilities = Utilities(parent=self.parent)
-                _from_key = o_utilities.get_row_key_from_row_index(row=from_row)
+                _from_key = o_utilities.get_row_key_from_row_index(
+                    row=from_row)
 
                 mass_density_info = master_table_row_ui[_from_key][data_type]['mass_density_infos']
-                mass_density_value = str(master_table_row_ui[_from_key][data_type]['mass_density']['text'].text())
+                mass_density_value = str(
+                    master_table_row_ui[_from_key][data_type]['mass_density']['text'].text())
 
                 for _row in range_row:
                     if _row == from_row:
@@ -190,16 +203,21 @@ class TransferH3TableWidgetState(SelectionHandlerMaster):
                     _to_key = o_utilities.get_row_key_from_row_index(row=_row)
 
                     master_table_row_ui[_to_key][data_type]['mass_density_infos'] = mass_density_info
-                    master_table_row_ui[_to_key][data_type]['mass_density']['text'].setText(mass_density_value)
+                    master_table_row_ui[_to_key][data_type]['mass_density']['text'].setText(
+                        mass_density_value)
 
             elif (column_selected in INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS):
 
                 o_utilities = Utilities(parent=self.parent)
-                _from_key = o_utilities.get_row_key_from_row_index(row=from_row)
+                _from_key = o_utilities.get_row_key_from_row_index(
+                    row=from_row)
 
-                radius = str(master_table_row_ui[_from_key][data_type]['geometry']['radius']['value'].text())
-                radius2 = str(master_table_row_ui[_from_key][data_type]['geometry']['radius2']['value'].text())
-                height = str(master_table_row_ui[_from_key][data_type]['geometry']['height']['value'].text())
+                radius = str(
+                    master_table_row_ui[_from_key][data_type]['geometry']['radius']['value'].text())
+                radius2 = str(
+                    master_table_row_ui[_from_key][data_type]['geometry']['radius2']['value'].text())
+                height = str(
+                    master_table_row_ui[_from_key][data_type]['geometry']['height']['value'].text())
 
                 for _row in range_row:
                     if _row == from_row:
@@ -207,9 +225,12 @@ class TransferH3TableWidgetState(SelectionHandlerMaster):
 
                     _to_key = o_utilities.get_row_key_from_row_index(row=_row)
 
-                    master_table_row_ui[_to_key][data_type]['geometry']['radius']['value'].setText(radius)
-                    master_table_row_ui[_to_key][data_type]['geometry']['radius2']['value'].setText(radius2)
-                    master_table_row_ui[_to_key][data_type]['geometry']['height']['value'].setText(height)
+                    master_table_row_ui[_to_key][data_type]['geometry']['radius']['value'].setText(
+                        radius)
+                    master_table_row_ui[_to_key][data_type]['geometry']['radius2']['value'].setText(
+                        radius2)
+                    master_table_row_ui[_to_key][data_type]['geometry']['height']['value'].setText(
+                        height)
 
 
 class RowsHandler(SelectionHandlerMaster):
@@ -226,19 +247,20 @@ class RowsHandler(SelectionHandlerMaster):
             list_row = self.o_selection.get_list_row()
             if len(list_row) > 1:
                 self.parent.ui.statusbar.setStyleSheet("color: red")
-                self.parent.ui.statusbar.showMessage("Please select only 1 row!",
-                                                     self.parent.statusbar_display_time)
+                self.parent.ui.statusbar.showMessage(
+                    "Please select only 1 row!", self.parent.statusbar_display_time)
                 return
 
             row = list_row[0]
 
         _table_ui = self.table_ui
         nbr_col = _table_ui.columnCount()
-        _row_selection = QTableWidgetSelectionRange(row, 0, row, nbr_col-1)
+        _row_selection = QTableWidgetSelectionRange(row, 0, row, nbr_col - 1)
         _table_ui.setRangeSelected(_row_selection, True)
         self.parent.ui.statusbar.setStyleSheet("color: green")
-        self.parent.ui.statusbar.showMessage("Select another row to copy the current selected row!",
-                                             self.parent.statusbar_display_time)
+        self.parent.ui.statusbar.showMessage(
+            "Select another row to copy the current selected row!",
+            self.parent.statusbar_display_time)
 
         self.parent.master_table_cells_copy['temp'] = []
         self.parent.master_table_cells_copy['list_column'] = []
@@ -276,10 +298,10 @@ class RowsHandler(SelectionHandlerMaster):
             for _ in list_to_row:
                 self.remove(row=_first_row)
         else:
-            #self.table_ui.blockSignals(True)
+            # self.table_ui.blockSignals(True)
             self.table_ui.setRangeSelected(self.selection[0], False)
             self.table_ui.removeRow(row)
-            #self.table_ui.blockSignals(False)
+            # self.table_ui.blockSignals(False)
         self.check_right_click_buttons()
 
 
@@ -301,54 +323,63 @@ class CellsHandler(SelectionHandlerMaster):
                     self.table_ui.item(_row, _column).setText("")
 
                 elif _column in INDEX_OF_COLUMNS_WITH_COMBOBOX:
-                    self.table_ui.cellWidget(_row, _column).children()[1].setCurrentIndex(0)
+                    self.table_ui.cellWidget(_row, _column).children()[
+                        1].setCurrentIndex(0)
 
                 elif _column in INDEX_OF_COLUMNS_WITH_CHECKBOX:
                     _disable_state = Qt.Unchecked
-                    self.table_ui.cellWidget(_row, _column).children()[1].setCheckState(_disable_state)
+                    self.table_ui.cellWidget(_row, _column).children()[
+                        1].setCheckState(_disable_state)
 
                 elif _column in INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS:
                     o_utilities = Utilities(parent=self.parent)
                     _key = o_utilities.get_row_key_from_row_index(row=_row)
-                    # _master_table_row_ui = self.parent.master_table_list_ui
-                    if _column == INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS[0]:  # sample
+
+                    # sample
+                    if _column == INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS[0]:
                         data_type = 'sample'
                     else:
                         data_type = 'normalization'
 
-                    self.parent.master_table_list_ui[_key][data_type]['geometry']['radius']['value'].setText("N/A")
-                    self.parent.master_table_list_ui[_key][data_type]['geometry']['radius2']['value'].setText("N/A")
-                    self.parent.master_table_list_ui[_key][data_type]['geometry']['height']['value'].setText("N/A")
+                    geometry = self.parent.master_table_list_ui[_key][data_type]['geometry']
+                    geometry['radius']['value'].setText("N/A")
+                    geometry['radius2']['value'].setText("N/A")
+                    geometry['height']['value'].setText("N/A")
 
                 elif _column in INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA:
                     o_utilities = Utilities(parent=self.parent)
                     _key = o_utilities.get_row_key_from_row_index(row=_row)
-                    # _master_table_row_ui = self.parent.master_table_list_ui
-                    if _column == INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA[0]:  # sample
+
+                    # sample
+                    if _column == INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA[0]:
                         data_type = 'sample'
                     else:
                         data_type = 'normalization'
-                    self.parent.master_table_list_ui[_key][data_type]['material']['text'].setText("")
+                    material = self.parent.master_table_list_ui[_key][data_type]['material']
+                    material['text'].setText("")
 
                 elif _column in INDEX_OF_COLUMNS_WITH_MASS_DENSITY:
                     o_utilities = Utilities(parent=self.parent)
                     _key = o_utilities.get_row_key_from_row_index(row=_row)
-                    #_master_table_row_ui = self.parent.master_table_list_ui
-                    if _column == INDEX_OF_COLUMNS_WITH_MASS_DENSITY[0]:  # sample
+
+                    # sample
+                    if _column == INDEX_OF_COLUMNS_WITH_MASS_DENSITY[0]:
                         data_type = 'sample'
                     else:
                         data_type = 'normalization'
-                    self.parent.master_table_list_ui[_key][data_type]['mass_density']['text'].setText("N/A")
-                    self.parent.master_table_list_ui[_key][data_type]['mass_density_infos']['number_density'][
-                        'value'] = "N/A"
-                    self.parent.master_table_list_ui[_key][data_type]['mass_density_infos']['number_density'][
-                        'selected'] = False
-                    self.parent.master_table_list_ui[_key][data_type]['mass_density_infos']['mass_density'][
-                        'value'] = "N/A"
-                    self.parent.master_table_list_ui[_key][data_type]['mass_density_infos']['mass_density'][
-                        'selected'] = True
-                    self.parent.master_table_list_ui[_key][data_type]['mass_density_infos']['mass']['value'] = "N/A"
-                    self.parent.master_table_list_ui[_key][data_type]['mass_density_infos']['mass']['selected'] = False
+
+                    data_type_entry = self.parent.master_table_list_ui[_key][data_type]
+
+                    mass_density = data_type_entry['mass_density']
+                    mass_density['text'].setText("N/A")
+
+                    mass_density_infos = data_type_entry['mass_density_infos']
+                    mass_density_infos['number_density']['value'] = "N/A"
+                    mass_density_infos['number_density']['selected'] = False
+                    mass_density_infos['mass_density']['value'] = "N/A"
+                    mass_density_infos['mass_density']['selected'] = True
+                    mass_density_infos['mass']['value'] = "N/A"
+                    mass_density_infos['mass']['selected'] = False
 
     def copy(self):
         ''' only 1 row at the time is allowed in the copy'''
@@ -357,17 +388,18 @@ class CellsHandler(SelectionHandlerMaster):
 
         if nbr_row > 1:
             self.parent.ui.statusbar.setStyleSheet("color: red")
-            self.parent.ui.statusbar.showMessage("Selection of columns must be in the same row!",
-                                                 self.parent.statusbar_display_time)
+            self.parent.ui.statusbar.showMessage(
+                "Selection of columns must be in the same row!",
+                self.parent.statusbar_display_time)
             return
 
         list_column = self.o_selection.get_list_column()
         #nbr_column = len(list_column)
 
-        #row_column_items = [['' for x in np.arange(nbr_column)]
+        # row_column_items = [['' for x in np.arange(nbr_column)]
         #                    for y in np.arange(nbr_row)]
 #        for _row in np.arange(nbr_row):
-        #for _column in np.arange(nbr_column):
+        # for _column in np.arange(nbr_column):
         #    _item = self.table_ui.item(_row, _column)
         #    if _item:
         #        row_column_items[_row][_column] = _item.text()
@@ -382,7 +414,7 @@ class CellsHandler(SelectionHandlerMaster):
         list_column_copy = self.parent.master_table_cells_copy['list_column']
         row_copy = self.parent.master_table_cells_copy['row']
 
-        list_row_paste= self.o_selection.get_list_row()
+        list_row_paste = self.o_selection.get_list_row()
         list_column_paste = self.o_selection.get_list_column()
 
         # nbr_row_paste = len(list_row_paste)
@@ -396,11 +428,13 @@ class CellsHandler(SelectionHandlerMaster):
 
         if list_column_copy[0] != list_column_paste[0]:
             self.parent.ui.statusbar.setStyleSheet("color: red")
-            self.parent.ui.statusbar.showMessage("Copy and Paste first column selected do not match!",
-                                                 self.parent.statusbar_display_time)
+            self.parent.ui.statusbar.showMessage(
+                "Copy and Paste first column selected do not match!",
+                self.parent.statusbar_display_time)
             return
 
-        # we only clicked once cell before using PASTE, so we can copy as the first column are the same
+        # we only clicked once cell before using PASTE, so we can copy as the
+        # first column are the same
         if len(list_column_paste) == 1:
 
             o_copy = CopyCells(parent=self.parent)
@@ -410,30 +444,35 @@ class CellsHandler(SelectionHandlerMaster):
                                         from_col=_column,
                                         to_row=_row_paste)
 
-        else: # we clicked several columns before clicking PASTE
+        else:  # we clicked several columns before clicking PASTE
 
-            # in this case, the COPY and PASTE number of columns have to match perfectly
+            # in this case, the COPY and PASTE number of columns have to match
+            # perfectly
 
             # not the same number of copy and paste columns selected
             if len(list_column_copy) != len(list_column_paste):
                 self.parent.ui.statusbar.setStyleSheet("color: red")
-                self.parent.ui.statusbar.showMessage("Copy and Paste do not cover the same number of columns!",
-                                                     self.parent.statusbar_display_time)
+                self.parent.ui.statusbar.showMessage(
+                    "Copy and Paste do not cover the same number of columns!",
+                    self.parent.statusbar_display_time)
                 return
 
             else:
 
                 # copy and paste columns are not the same
-                list_intersection = set(list_column_copy).intersection(list_column_paste)
+                list_intersection = set(
+                    list_column_copy).intersection(list_column_paste)
                 if len(list_intersection) != len(list_column_copy):
                     self.parent.ui.statusbar.setStyleSheet("color: red")
-                    self.parent.ui.statusbar.showMessage("Copy and Paste do not cover the same columns!",
-                                                         self.parent.statusbar_display_time)
+                    self.parent.ui.statusbar.showMessage(
+                        "Copy and Paste do not cover the same columns!",
+                        self.parent.statusbar_display_time)
                     return
 
                 else:
 
-                    # we selected the same number of columns, the same ones and now we can copy countain
+                    # we selected the same number of columns, the same ones and
+                    # now we can copy countain
                     o_copy = CopyCells(parent=self.parent)
                     for _row_paste in list_row_paste:
                         for _column in list_column_copy:
@@ -449,6 +488,39 @@ class CopyCells:
         self.parent = parent
         self.table_ui = self.parent.processing_ui.h3_table
 
+    def _copy_from_to_for_dict(self, from_row, to_row, data_type):
+        """ Utility function that copies a dictionary of values
+        from one row to another given the master table key as `data_type`
+
+        :param from_row: Row index we will be copying from
+        :type from_row: int
+        :param to_row: Row index we will be copying to
+        :type to_row: int
+        :param data_type: Key in master table for column to copy dict value
+        :type data_type: str
+        """
+        o_utilities = Utilities(parent=self.parent)
+        _from_key = o_utilities.get_row_key_from_row_index(row=from_row)
+        _to_key = o_utilities.get_row_key_from_row_index(row=to_row)
+        _dict = self.parent.master_table_list_ui[_from_key][data_type]
+        self.parent.master_table_list_ui[_to_key][data_type] = _dict
+
+    def _copy_from_to_for_density(self, from_info, to_info, density_type):
+        """ Utility function that copies the density using
+        a density-type key.
+
+        :param from_info: Mass density info dictionary to copy from
+        :type from_info: dict
+        :param to_info: Mass density info dictionary to copy to
+        :type to_info: dict
+        :param density_type: Density-type key to use for copy-paste
+        :type density_type: str from ['number_density', 'mass_density', 'mass']
+        """
+        from_density = from_info[density_type]
+        to_density = to_info[density_type]
+        to_density['value'] = from_density['value']
+        to_density['selected'] = from_density['selected']
+
     def copy_from_to(self, from_row=-1, from_col=-1, to_row=-1):
 
         if from_col in INDEX_OF_COLUMNS_WITH_ITEMS:
@@ -458,77 +530,93 @@ class CopyCells:
         elif from_col in INDEX_OF_COLUMNS_WITH_COMBOBOX:
             ui = self.table_ui.cellWidget(from_row, from_col).children()[1]
             _from_index = ui.currentIndex()
-            self.table_ui.cellWidget(to_row, from_col).children()[1].setCurrentIndex(_from_index)
+            self.table_ui.cellWidget(to_row, from_col).children()[
+                1].setCurrentIndex(_from_index)
 
         elif from_col in INDEX_OF_COLUMNS_WITH_CHECKBOX:
             ui = self.table_ui.cellWidget(from_row, from_col).children()[1]
             _state = ui.checkState()
-            self.table_ui.cellWidget(to_row, from_col).children()[1].setCheckState(_state)
+            self.table_ui.cellWidget(to_row, from_col).children()[
+                1].setCheckState(_state)
 
         elif from_col in INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS:
             o_utilities = Utilities(parent=self.parent)
             _from_key = o_utilities.get_row_key_from_row_index(row=from_row)
             _to_key = o_utilities.get_row_key_from_row_index(row=to_row)
-            _master_table_row_ui = self.parent.master_table_list_ui
-            if from_col == INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS[0]: # sample
+            if from_col == INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS[0]:  # sample
                 data_type = 'sample'
             else:
                 data_type = 'normalization'
-            _radius = str(_master_table_row_ui[_from_key][data_type]['geometry']['radius']['value'].text())
-            _radius2 = str(_master_table_row_ui[_from_key][data_type]['geometry']['radius2']['value'].text())
-            _height = str(_master_table_row_ui[_from_key][data_type]['geometry']['height']['value'].text())
 
-            self.parent.master_table_list_ui[_to_key][data_type]['geometry']['radius']['value'].setText(_radius)
-            self.parent.master_table_list_ui[_to_key][data_type]['geometry']['radius2']['value'].setText(_radius2)
-            self.parent.master_table_list_ui[_to_key][data_type]['geometry']['height']['value'].setText(_height)
+            from_geometry = self.parent.master_table_list_ui[_from_key][data_type]['geometry']
+            _radius = str(from_geometry['radius']['value'].text())
+            _radius2 = str(from_geometry['radius2']['value'].text())
+            _height = str(from_geometry['height']['value'].text())
+
+            to_geometry = self.parent.master_table_list_ui[_to_key][data_type]['geometry']
+            to_geometry['radius']['value'].setText(_radius)
+            to_geometry['radius2']['value'].setText(_radius2)
+            to_geometry['height']['value'].setText(_height)
 
         elif from_col in INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA:
             o_utilities = Utilities(parent=self.parent)
             _from_key = o_utilities.get_row_key_from_row_index(row=from_row)
             _to_key = o_utilities.get_row_key_from_row_index(row=to_row)
-            _master_table_row_ui = self.parent.master_table_list_ui
-            if from_col == INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA[0]: # sample
+            if from_col == INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA[0]:  # sample
                 data_type = 'sample'
             else:
                 data_type = 'normalization'
-            _chemical_formula = str(_master_table_row_ui[_from_key][data_type]['material']['text'].text())
-            self.parent.master_table_list_ui[_to_key][data_type]['material']['text'].setText(_chemical_formula)
+            from_material = self.parent.master_table_list_ui[_from_key][data_type]['material']
+            to_material = self.parent.master_table_list_ui[_to_key][data_type]['material']
+            _chemical_formula = str(from_material['text'].text())
+            to_material['text'].setText(_chemical_formula)
 
         elif from_col in INDEX_OF_COLUMNS_WITH_MASS_DENSITY:
             o_utilities = Utilities(parent=self.parent)
             _from_key = o_utilities.get_row_key_from_row_index(row=from_row)
             _to_key = o_utilities.get_row_key_from_row_index(row=to_row)
-            _master_table_row_ui = self.parent.master_table_list_ui
-            if from_col == INDEX_OF_COLUMNS_WITH_MASS_DENSITY[0]: # sample
+            if from_col == INDEX_OF_COLUMNS_WITH_MASS_DENSITY[0]:  # sample
                 data_type = 'sample'
             else:
                 data_type = 'normalization'
-            _mass_density = str(_master_table_row_ui[_from_key][data_type]['mass_density']['text'].text())
-            self.parent.master_table_list_ui[_to_key][data_type]['mass_density']['text'].setText(_mass_density)
 
-            self.parent.master_table_list_ui[_to_key][data_type]['mass_density_infos']['number_density']['value'] = \
-                self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['number_density']['value']
+            # Get the to and from dictionaries for either sample or
+            # normalization
+            from_data_type = self.parent.master_table_list_ui[_from_key][data_type]
+            to_data_type = self.parent.master_table_list_ui[_to_key][data_type]
 
-            self.parent.master_table_list_ui[_to_key][data_type]['mass_density_infos']['number_density']['selected'] = \
-                self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['number_density']['selected']
+            # Convenience variables for the "from" variables
+            from_mass_density = from_data_type['mass_density']
+            from_info = from_data_type['mass_density_infos']
 
-            self.parent.master_table_list_ui[_to_key][data_type]['mass_density_infos']['mass_density']['value'] = \
-                self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['mass_density']['value']
+            # Convenience variables for the "to" variables
+            to_mass_density = to_data_type['mass_density']
+            to_info = to_data_type['mass_density_infos']
 
-            self.parent.master_table_list_ui[_to_key][data_type]['mass_density_infos']['mass_density']['selected'] = \
-                self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['mass_density']['selected']
+            # Copy-paste the "top-level" MassDensity (display in table)
+            _mass_density = str(from_mass_density['text'].text())
+            to_mass_density['text'].setText(_mass_density)
 
-            self.parent.master_table_list_ui[_to_key][data_type]['mass_density_infos']['mass']['value'] = \
-                self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['mass']['value']
+            # Copy-paste the NumberDensity in Widget
+            self._copy_from_to_for_density(
+                from_info, to_info, 'number_density')
 
-            self.parent.master_table_list_ui[_to_key][data_type]['mass_density_infos']['mass']['selected'] = \
-                self.parent.master_table_list_ui[_from_key][data_type]['mass_density_infos']['mass']['selected']
+            # Copy-paste the MassDensity in Widget
+            self._copy_from_to_for_density(from_info, to_info, 'mass_density')
+
+            # Copy-paste the Mass in Widget
+            self._copy_from_to_for_density(from_info, to_info, 'mass')
+
+        elif from_col in INDEX_OF_COLUMNS_WITH_ALIGN_AND_FOCUS_ARGS:
+            data_type = 'align_and_focus_args_infos'
+            self._copy_from_to_for_dict(from_row, to_row, data_type)
 
         else:
             self.parent.ui.statusbar.setStyleSheet("color: red")
-            msg = "Don't know how to copy/paste the cell from row #{} to row #{} at the column #{}".format(from_row, to_row,
-                                                                                                           from_col)
-            self.parent.ui.statusbar.showMessage(msg, self.parent.statusbar_display_time*2)
+            msg_string = "Don't know how to copy/paste the cell from row #{} to row #{} at the column #{}"
+            msg = msg_string.format(from_row, to_row, from_col)
+            time = self.parent.statusbar_display_time * 2
+            self.parent.ui.statusbar.showMessage(msg, time)
 
 
 class TableHandler(SelectionHandlerMaster):
@@ -551,15 +639,20 @@ class TableHandler(SelectionHandlerMaster):
                 hide_it = True
 
                 for _col in INDEX_OF_COLUMNS_SEARCHABLE:
-                    _text_cell = str(self.table_ui.item(_row, _col).text()).lower()
+                    _text_cell = str(self.table_ui.item(
+                        _row, _col).text()).lower()
                     if text.lower() in _text_cell:
                         hide_it = False
 
                 for _col in INDEX_OF_SPECIAL_COLUMNS_SEARCHABLE:
-                    if (_col == 6) or (_col == 17): # layout inside a layout for these cells
-                        _text_widget = str(self.table_ui.cellWidget(_row, _col).children()[1].children()[1].text()).lower()
+                    if (_col == 6) or (
+                            _col == 17):  # layout inside a layout for these cells
+                        _text_widget = str(
+                            self.table_ui.cellWidget(
+                                _row, _col).children()[1].children()[1].text()).lower()
                     else:
-                        _text_widget = str(self.table_ui.cellWidget(_row, _col).children()[1].text()).lower()
+                        _text_widget = str(self.table_ui.cellWidget(
+                            _row, _col).children()[1].text()).lower()
                     if text.lower() in _text_widget:
                         hide_it = False
 
