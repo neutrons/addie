@@ -1,7 +1,7 @@
 from __future__ import (absolute_import, division, print_function)
 from collections import OrderedDict
 import copy
-import json
+import simplejson
 import numpy as np
 import os
 
@@ -73,6 +73,7 @@ class TableFileExporter:
     def __init__(self, parent=None):
         self.parent = parent
         self.table_ui = parent.processing_ui.h3_table
+        self.__nan_list = ['N/A', 'None']
 
         # generic elements to take from the ui
         self.facility = self.parent.facility
@@ -109,7 +110,7 @@ class TableFileExporter:
 
         # write out the configuration
         with open(filename, 'w') as outfile:
-            json.dump(dictionary, outfile, indent=2)
+            simplejson.dump(dictionary, outfile, indent=2, ignore_nan=True)
 
     def isActive(self, row):
         """Determine if `row` is activated for reduction
@@ -249,7 +250,7 @@ class TableFileExporter:
 
         column += 1
         packing_fraction = self._get_item_value(row=row, column=column)
-        if packing_fraction:
+        if packing_fraction and packing_fraction not in self.__nan_list:
             dict_element["PackingFraction"] = float(packing_fraction.strip("\""))
 
         column += 1
@@ -271,11 +272,11 @@ class TableFileExporter:
                 self.parent.master_table_list_ui[key][element]['geometry']['radius2']['value'].text())
 
         dict_element["Geometry"]["Radius"] = np.NaN if (
-            radius == 'N/A') else float(radius)
+            radius in self.__nan_list) else float(radius)
         dict_element["Geometry"]["Radius2"] = np.NaN if (
-            radius2 == 'N/A') else float(radius2)
+            radius2 in self.__nan_list) else float(radius2)
         dict_element["Geometry"]["Height"] = np.NaN if (
-            height == 'N/A') else float(height)
+            height in self.__nan_list) else float(height)
 
         column += 1
         abs_correction = self._get_selected_value(row=row, column=column)
