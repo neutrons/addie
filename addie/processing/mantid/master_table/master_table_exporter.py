@@ -109,7 +109,7 @@ class TableFileExporter:
 
         # write out the configuration
         with open(filename, 'w') as outfile:
-            json.dump(dictionary, outfile)
+            json.dump(dictionary, outfile, indent=2)
 
     def isActive(self, row):
         """Determine if `row` is activated for reduction

@@ -403,7 +403,7 @@ class MakeCalibrationWindow(QMainWindow):
                                  filter={'json (*.json)':'json'})
         if _file:
             with open(_file, 'w') as fp:
-                json.dump(o_dict.dictionary, fp)
+                json.dump(o_dict.dictionary, fp, indent=2)
 
     def closeEvent(self, c):
         self.parent.make_calibration_ui = None

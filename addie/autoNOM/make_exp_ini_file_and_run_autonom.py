@@ -170,7 +170,7 @@ class MakeExpIniFileAndRunAutonom(object):
             _mantid_calibration = calstring % (_year, _month)
             _mantid_calibration += calformat % (int(_diamond), _today, _samp_env)
             with open(input_file, 'w') as handle:
-                json.dump(_cal_input, handle)
+                json.dump(_cal_input, handle, indent=2)
         elif not found_in_current_cycle and found_in_previous_cycle:
             _mantid_calibration = current_cal_file
         elif found_in_previous_cycle:
