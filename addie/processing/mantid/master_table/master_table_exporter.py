@@ -249,7 +249,8 @@ class TableFileExporter:
 
         column += 1
         packing_fraction = self._get_item_value(row=row, column=column)
-        dict_element["PackingFraction"] = packing_fraction
+        if packing_fraction:
+            dict_element["PackingFraction"] = float(packing_fraction.strip("\""))
 
         column += 1
         shape = self._get_selected_value(row=row, column=column)
@@ -491,7 +492,7 @@ class TableFileExporter:
         # Post-process for output: take out overall Density and add MassDensity
         # key
         dictionary.pop('Density')
-        dictionary['MassDensity'] = mass_density
+        dictionary['MassDensity'] = float(mass_density)
 
         return dictionary
 
