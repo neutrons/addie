@@ -4,14 +4,14 @@ import numpy as np
 
 
 class Utilities:
-    '''utilities related to work in master table'''
+    """ Utilities related to work in master table """
 
     def __init__(self, parent=None):
         self.parent = parent
         self.table_ui = parent.processing_ui.h3_table
 
     def get_row_index_from_row_key(self, row_key=None):
-        '''this methods returns the row for the given row key'''
+        """ This methods returns the row for the given row key """
 
         if row_key is None:
             return -1
@@ -30,10 +30,10 @@ class Utilities:
         return -1
 
     def get_row_key_from_row_index(self, row=-1):
-        '''this method returns the key (random key) of the given row in master table.
+        """ This method returns the key (random key) of the given row in master table.
         An example of its use is if we want to retrieve the placzek settings for this row
         as they are saved in the master_table_row_ui using random key as the key
-        '''
+        """
 
         if row == -1:
             return None
@@ -51,7 +51,9 @@ class Utilities:
 
 
 class LoadGroupingFile:
-    '''This class reads the XML file and will return the number of groups <group ID=""> found in that file'''
+    """ This class reads the XML file and will return the
+    number of groups <group ID=""> found in that file
+    """
 
     def __init__(self, filename=''):
         self.filename = filename

@@ -69,7 +69,7 @@ h1_COLUMNS_WIDTH = [h3_COLUMNS_WIDTH[0],
                     ]
 
 INDEX_OF_COLUMNS_SEARCHABLE = [1, 2, 3, 4, 7, 13, 14, 15, 18]
-INDEX_OF_SPECIAL_COLUMNS_SEARCHABLE = [5, 6, 16, 17]   # where we need to look inside the widget_cell, not only item
+INDEX_OF_SPECIAL_COLUMNS_SEARCHABLE = [5, 6, 16, 17, 24]   # where we need to look inside the widget_cell, not only item
 
 INDEX_OF_COLUMNS_SHAPE = [8, 19]
 INDEX_OF_ABS_CORRECTION = [10, 21]
@@ -92,6 +92,7 @@ INDEX_OF_COLUMNS_WITH_CHECKBOX = [0]
 INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA = [5, 16]
 INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS = [9, 20]
 INDEX_OF_COLUMNS_WITH_MASS_DENSITY = [6, 17]
+INDEX_OF_COLUMNS_WITH_ALIGN_AND_FOCUS_ARGS = [24]
 INDEX_OF_COLUMNS_WITH_ITEMS = INDEX_OF_COLUMNS_SEARCHABLE
 
 LIST_COLUMNS_TO_SEARCH_FOR_FULL_HIGHLIGTHING = [3,  # sample background runs
@@ -106,7 +107,7 @@ LIST_COLUMNS_TO_SEARCH_FOR_FULL_HIGHLIGTHING = [3,  # sample background runs
                                                 15,  # normalization background background
                                                 16,  # normalization chemical formula
                                                 17,  # normalization mass density
-                                                18,  # normalization packging fraction
+                                                18,  # normalization packing fraction
                                                 19, 20,  # normalization geometry shape and dimensions
                                                 21, 22, 23,  # normalization correction
                                                 24,  # Align and Focus Args
