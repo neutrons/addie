@@ -1,5 +1,5 @@
 from __future__ import (absolute_import, division, print_function)
-import json
+import simplejson
 from qtpy.QtWidgets import QDialog, QFileDialog, QTableWidgetItem
 from addie.utilities import load_ui
 from qtpy import QtGui, QtCore
@@ -366,7 +366,7 @@ class LoadReductionConfiguration:
         if grand_parent.reduction_configuration == {}:
             config_file = grand_parent.addie_config_file
             with open(config_file) as f:
-                data = json.load(f)
+                data = simplejson.load(f)
             pdf_q_range = data['pdf']['q_range']
             pdf_r_range = data['pdf']['r_range']
             pdf_reduction_configuration_file = data["pdf"]["reduction_configuration_file"]

@@ -1,4 +1,4 @@
-import json
+import simplejson
 
 
 class ConfigurationInitializer:
@@ -6,7 +6,7 @@ class ConfigurationInitializer:
     def __init__(self, parent=None):
 
         with open(parent.addie_config_file) as f:
-            data = json.load(f)
+            data = simplejson.load(f)
 
         parent.instrument["full_name"] = data["instrument"]["current"]["full_name"]
         parent.instrument["short_name"] = data["instrument"]["current"]["short_name"]

@@ -3,7 +3,7 @@ import os
 import numpy as np
 from collections import OrderedDict
 import copy
-import json
+import simplejson
 
 from qtpy.QtWidgets import QDialog
 from addie.utilities import load_ui
@@ -218,7 +218,7 @@ class JsonLoader:
 
         # load json
         with open(self.filename) as f:
-            data = json.load(f)
+            data = simplejson.load(f)
 
         # convert into UI dictionary
         list_keys = sorted([_key for _key in data.keys()])
@@ -693,8 +693,7 @@ class FromDictionaryToTableUi:
         # packing_fraction
         column += 1
         self.table_ui.item(
-            row, column).setText(
-            entry[data_type]["packing_fraction"])
+            row, column).setText(str(entry[data_type]["packing_fraction"]))
 
         # geometry - shape
         column += 1
