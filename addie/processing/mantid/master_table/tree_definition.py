@@ -79,7 +79,7 @@ INDEX_OF_INELASTIC_CORRECTION = [12, 23]
 INDEX_OF_COLUMNS_WITH_COMBOBOX = [INDEX_OF_COLUMNS_SHAPE[0],
                                   INDEX_OF_ABS_CORRECTION[0],
                                   INDEX_OF_MULTI_SCATTERING_CORRECTION[0],
-                                  INDEX_OF_INELASTIC_CORRECTION,
+                                  INDEX_OF_INELASTIC_CORRECTION[0],
                                   INDEX_OF_COLUMNS_SHAPE[1],
                                   INDEX_OF_ABS_CORRECTION[1],
                                   INDEX_OF_MULTI_SCATTERING_CORRECTION[1],
