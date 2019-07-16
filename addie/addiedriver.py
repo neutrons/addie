@@ -472,7 +472,9 @@ class AddieDriver(object):
         elif filetype == 'rmcprofile' or filetype == 'dat':
             self.export_to_rmcprofile(ws_name, file_name, comment=comment)
         elif filetype == 'gr':
-            simpleapi.SavePDFGui(InputWorkspace=ws_name, Filename=file_name)
+            wksp = AnalysisDataService.retrieve(ws_name)
+            wksp.getAxis(0).setUnit("Label").setLabel("r", "Angstrom")
+            simpleapi.SavePDFGui(InputWorkspace=wksp, Filename=file_name)
         elif filetype == 'sq':
             simpleapi.SaveAscii(InputWorkspace=ws_name, Filename=file_name, Separator='Space')
         else:
