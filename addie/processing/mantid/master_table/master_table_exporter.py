@@ -251,7 +251,8 @@ class TableFileExporter:
         column += 1
         packing_fraction = self._get_item_value(row=row, column=column)
         if packing_fraction and packing_fraction not in self.__nan_list:
-            dict_element["PackingFraction"] = float(packing_fraction.strip("\""))
+            dict_element["PackingFraction"] = float(
+                packing_fraction.strip("\""))
 
         column += 1
         shape = self._get_selected_value(row=row, column=column)
@@ -295,12 +296,15 @@ class TableFileExporter:
 
         placzek_infos = self.parent.master_table_list_ui[key][element]['placzek_infos']
 
-
         if inelastic_correction not in self.__nan_list:
             dict_element["InelasticCorrection"]["Order"] = placzek_infos["order_text"]
             dict_element["InelasticCorrection"]["Self"] = placzek_infos["is_self"]
             dict_element["InelasticCorrection"]["Interference"] = placzek_infos["is_interference"]
-            fit_spectrum_text = placzek_infos["fit_spectrum_text"].replace(".", "").replace(" ", "")
+            fit_spectrum_text = placzek_infos["fit_spectrum_text"].replace(
+                ".",
+                "").replace(
+                " ",
+                "")
             dict_element["InelasticCorrection"]["FitSpectrumWith"] = fit_spectrum_text
             dict_element["InelasticCorrection"]["LambdaBinningForFit"] = "{},{},{}".format(
                 placzek_infos["lambda_fit_min"],
@@ -312,8 +316,6 @@ class TableFileExporter:
                 placzek_infos["lambda_calc_max"])
         else:
             dict_element.pop("InelasticCorrection")
-
-
 
         return dict_element
 
