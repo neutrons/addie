@@ -46,15 +46,6 @@ from addie.processing.mantid import launch_reduction as mantid_reduction_launche
 from addie.processing.mantid.master_table.align_and_focus_args import AlignAndFocusArgsHandling
 from addie.processing.mantid.master_table.column_highlighting import ColumnHighlighting
 
-# PyONcat
-try:
-    from addie.processing.mantid.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler  # noqa
-    import pyoncat
-    ONCAT_ENABLED = True
-except ImportError:
-    print('pyoncat module not found. Functionality disabled')
-    ONCAT_ENABLED = False
-
 import addie.processing.mantid.event_handler as processing_event_handler
 
 import addie.addiedriver as driver
