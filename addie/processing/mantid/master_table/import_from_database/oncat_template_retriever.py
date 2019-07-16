@@ -5,8 +5,8 @@ import re
 
 from addie.databases.oncat.oncat import pyoncatGetTemplate
 try:
-    ONCAT_ENABLED = True
     import pyoncat
+    ONCAT_ENABLED = True
 except ImportError:
     print('pyoncat module not found. Functionality disabled')
     ONCAT_ENABLED = False

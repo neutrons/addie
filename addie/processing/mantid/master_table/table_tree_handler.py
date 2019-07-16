@@ -19,8 +19,9 @@ from addie.processing.mantid.master_table.master_table_loader import TableFileLo
 from addie.processing.mantid.master_table.master_table_exporter import TableFileExporter
 from addie.widgets.filedialog import get_save_file
 try:
-    ONCAT_ENABLED = True
     from addie.processing.mantid.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
+    import pyoncat  # noqa
+    ONCAT_ENABLED = True
 except ImportError:
     print('pyoncat module not found. Functionality disabled')
     ONCAT_ENABLED = False
@@ -42,21 +43,27 @@ class TableInitialization:
     def init_master_table(self):
         # set h1, h2 and h3 headers
         self.init_headers()
-        self.init_table_header(table_ui=self.main_window.processing_ui.h1_table,
-                               list_items=self.table_headers['h1'])
-        self.init_table_header(table_ui=self.main_window.processing_ui.h2_table,
-                               list_items=self.table_headers['h2'])
-        self.init_table_header(table_ui=self.main_window.processing_ui.h3_table,
-                               list_items=self.table_headers['h3'])
+        self.init_table_header(
+            table_ui=self.main_window.processing_ui.h1_table,
+            list_items=self.table_headers['h1'])
+        self.init_table_header(
+            table_ui=self.main_window.processing_ui.h2_table,
+            list_items=self.table_headers['h2'])
+        self.init_table_header(
+            table_ui=self.main_window.processing_ui.h3_table,
+            list_items=self.table_headers['h3'])
 
         # set h1, h2 and h3 width
         self.init_table_dimensions()
-        self.init_table_col_width(table_width=self.table_width['h1'],
-                                  table_ui=self.main_window.processing_ui.h1_table)
-        self.init_table_col_width(table_width=self.table_width['h2'],
-                                  table_ui=self.main_window.processing_ui.h2_table)
-        self.init_table_col_width(table_width=self.table_width['h3'],
-                                  table_ui=self.main_window.processing_ui.h3_table)
+        self.init_table_col_width(
+            table_width=self.table_width['h1'],
+            table_ui=self.main_window.processing_ui.h1_table)
+        self.init_table_col_width(
+            table_width=self.table_width['h2'],
+            table_ui=self.main_window.processing_ui.h2_table)
+        self.init_table_col_width(
+            table_width=self.table_width['h3'],
+            table_ui=self.main_window.processing_ui.h3_table)
 
         self.h1_header_table = self.main_window.processing_ui.h1_table.horizontalHeader()
         self.h2_header_table = self.main_window.processing_ui.h2_table.horizontalHeader()
@@ -66,13 +73,19 @@ class TableInitialization:
         self.save_parameters()
 
     def init_signals(self):
-        self.main_window.h1_header_table.sectionResized.connect(self.main_window.resizing_h1)
-        self.main_window.h2_header_table.sectionResized.connect(self.main_window.resizing_h2)
-        self.main_window.h3_header_table.sectionResized.connect(self.main_window.resizing_h3)
+        self.main_window.h1_header_table.sectionResized.connect(
+            self.main_window.resizing_h1)
+        self.main_window.h2_header_table.sectionResized.connect(
+            self.main_window.resizing_h2)
+        self.main_window.h3_header_table.sectionResized.connect(
+            self.main_window.resizing_h3)
 
-        self.main_window.processing_ui.h1_table.horizontalScrollBar().valueChanged.connect(self.main_window.scroll_h1_table)
-        self.main_window.processing_ui.h2_table.horizontalScrollBar().valueChanged.connect(self.main_window.scroll_h2_table)
-        self.main_window.processing_ui.h3_table.horizontalScrollBar().valueChanged.connect(self.main_window.scroll_h3_table)
+        self.main_window.processing_ui.h1_table.horizontalScrollBar(
+        ).valueChanged.connect(self.main_window.scroll_h1_table)
+        self.main_window.processing_ui.h2_table.horizontalScrollBar(
+        ).valueChanged.connect(self.main_window.scroll_h2_table)
+        self.main_window.processing_ui.h3_table.horizontalScrollBar(
+        ).valueChanged.connect(self.main_window.scroll_h3_table)
 
     def save_parameters(self):
         self.main_window.h1_header_table = self.h1_header_table
@@ -102,8 +115,8 @@ class TableInitialization:
         h2 = []
         h3 = []
 
-        h2_index=0
-        h3_index=0
+        h2_index = 0
+        h3_index = 0
 
         td = self.tree_dict
         for h1_index, _key_h1 in enumerate(td.keys()):
@@ -138,7 +151,7 @@ class TableInitialization:
                 h2.append(_h2)
 
             else:
-            # h1 does not have any h2 children
+                # h1 does not have any h2 children
 
                 h2.append([h2_index])
                 h3.append([[h3_index]])
@@ -171,10 +184,13 @@ class TableInitialization:
             table_headers['h1'].append(td[_key_h1]['name'])
             if td[_key_h1]['children']:
                 for _key_h2 in td[_key_h1]['children'].keys():
-                    table_headers['h2'].append(td[_key_h1]['children'][_key_h2]['name'])
+                    table_headers['h2'].append(
+                        td[_key_h1]['children'][_key_h2]['name'])
                     if td[_key_h1]['children'][_key_h2]['children']:
-                        for _key_h3 in td[_key_h1]['children'][_key_h2]['children'].keys():
-                            table_headers['h3'].append(td[_key_h1]['children'][_key_h2]['children'][_key_h3]['name'])
+                        for _key_h3 in td[_key_h1]['children'][_key_h2]['children'].keys(
+                        ):
+                            table_headers['h3'].append(
+                                td[_key_h1]['children'][_key_h2]['children'][_key_h3]['name'])
                     else:
                         table_headers['h3'].append('')
             else:
@@ -267,35 +283,36 @@ class TableTree(QDialog):
                     # if there are children, we need to use addParent
                     if td[_key_h1]['children'][_key_h2]['children']:
 
-                        _h2_parent = self.addParent(_h1_parent,
-                                                    td[_key_h1]['children'][_key_h2]['name'],
-                                                    _key_h2)
+                        _h2_parent = self.addParent(
+                            _h1_parent, td[_key_h1]['children'][_key_h2]['name'], _key_h2)
                         td[_key_h1]['children'][_key_h2]['ui'] = _h2_parent
                         tree_ui['h2'].append(_h2_parent)
 
                         for _key_h3 in td[_key_h1]['children'][_key_h2]['children']:
-                            _h3_child = self.addChild(_h2_parent,
-                                                      td[_key_h1]['children'][_key_h2]['children'][_key_h3]['name'],
-                                                      _key_h3)
+                            _h3_child = self.addChild(
+                                _h2_parent,
+                                td[_key_h1]['children'][_key_h2]['children'][_key_h3]['name'],
+                                _key_h3)
                             td[_key_h1]['children'][_key_h2]['children'][_key_h3]['ui'] = _h3_child
 
-                            set_h_indexes(td[_key_h1]['children'][_key_h2]['children'][_key_h3], h3=h3_index)
+                            set_h_indexes(
+                                td[_key_h1]['children'][_key_h2]['children'][_key_h3], h3=h3_index)
                             tree_ui['h3'].append(_h3_child)
                             h3_index += 1
 
-                    else: # key_h2 has no children, it's a leaf
-                        _h3_child = self.addChild(_h1_parent,
-                                                  td[_key_h1]['children'][_key_h2]['name'],
-                                                  _key_h2)
+                    else:  # key_h2 has no children, it's a leaf
+                        _h3_child = self.addChild(
+                            _h1_parent, td[_key_h1]['children'][_key_h2]['name'], _key_h2)
                         td[_key_h1]['children'][_key_h2]['ui'] = _h3_child
                         tree_ui['h2'].append(_h3_child)
                         tree_ui['h3'].append(None)
                         h3_index += 1
 
-                    set_h_indexes(td[_key_h1]['children'][_key_h2], h2=h2_index)
+                    set_h_indexes(
+                        td[_key_h1]['children'][_key_h2], h2=h2_index)
                     h2_index += 1
 
-            else: #_key_h1 has no children, using addChild
+            else:  # _key_h1 has no children, using addChild
                 _child = self.addChild(absolute_parent,
                                        td[_key_h1]['name'],
                                        _key_h1)
@@ -337,7 +354,8 @@ class SaveConfigInterface(QDialog):
         name_config = self.get_defined_name_config()
         if name_config:
             self.parent.save_as_config_name_selected(name=name_config)
-            self.grand_parent.ui.statusbar.showMessage("New configuration saved ({})".format(name_config), 8000)
+            self.grand_parent.ui.statusbar.showMessage(
+                "New configuration saved ({})".format(name_config), 8000)
             self.grand_parent.ui.statusbar.setStyleSheet("color: green")
             self.close()
 
@@ -451,11 +469,14 @@ class H3TableHandler:
 
         # Selection
         activate = menu.addMenu("Activate")
-        activate.setEnabled(self.main_window.master_table_right_click_buttons['activate']['status'])
+        activate.setEnabled(
+            self.main_window.master_table_right_click_buttons['activate']['status'])
         activate_check_all = activate.addAction("Check All")
-        self.main_window.master_table_right_click_buttons['activate_check_all']['ui'] = activate_check_all
+        self.main_window.master_table_right_click_buttons[
+            'activate_check_all']['ui'] = activate_check_all
         activate_uncheck_all = activate.addAction("Uncheck All")
-        self.main_window.master_table_right_click_buttons['activate_uncheck_all']['ui'] = activate_uncheck_all
+        self.main_window.master_table_right_click_buttons[
+            'activate_uncheck_all']['ui'] = activate_uncheck_all
         activate.addSeparator()
         activate_inverse = activate.addAction("Inverse")
         self.main_window.master_table_right_click_buttons['activate_inverse']['ui'] = activate_inverse
@@ -464,12 +485,14 @@ class H3TableHandler:
 
         # Cells
         cells = menu.addMenu("Cell(s)")
-        cells.setEnabled(self.main_window.master_table_right_click_buttons['cells']['status'])
+        cells.setEnabled(
+            self.main_window.master_table_right_click_buttons['cells']['status'])
         cells_copy = cells.addAction("Copy")
         self.main_window.master_table_right_click_buttons['cells_copy']['ui'] = cells_copy
         cells_paste = cells.addAction("Paste")
         self.main_window.master_table_right_click_buttons['cells_paste']['ui'] = cells_paste
-        cells_paste.setEnabled(self.main_window.master_table_right_click_buttons['cells_paste']['status'])
+        cells_paste.setEnabled(
+            self.main_window.master_table_right_click_buttons['cells_paste']['status'])
         cells_clear = cells.addAction("Clear")
         self.main_window.master_table_right_click_buttons['cells_clear']['ui'] = cells_clear
 
@@ -477,20 +500,24 @@ class H3TableHandler:
         rows = menu.addMenu("Row")
         rows_copy = rows.addAction("Copy")
         self.main_window.master_table_right_click_buttons['rows_copy']['ui'] = rows_copy
-        rows_copy.setEnabled(self.main_window.master_table_right_click_buttons['rows_copy']['status'])
+        rows_copy.setEnabled(
+            self.main_window.master_table_right_click_buttons['rows_copy']['status'])
         rows_paste = rows.addAction("Paste")
-        rows_paste.setEnabled(self.main_window.master_table_right_click_buttons['rows_paste']['status'])
+        rows_paste.setEnabled(
+            self.main_window.master_table_right_click_buttons['rows_paste']['status'])
         self.main_window.master_table_right_click_buttons['rows_paste']['ui'] = rows_paste
         rows_duplicate = rows.addAction("Duplicate")
         self.main_window.master_table_right_click_buttons['rows_duplicate']['ui'] = rows_duplicate
-        rows_duplicate.setEnabled(self.main_window.master_table_right_click_buttons['rows_duplicate']['status'])
+        rows_duplicate.setEnabled(
+            self.main_window.master_table_right_click_buttons['rows_duplicate']['status'])
         rows.addSeparator()
         rows_insert_blank = rows.addAction("Insert Blank")
         # rows_insert = rows.addMenu("Insert")
         # rows_insert_run_number = rows_insert.addAction("Via Run Number ...")
         #rows_insert_blank = rows_insert.addAction("Blank")
         rows_remove = rows.addAction("Remove")
-        rows_remove.setEnabled(self.main_window.master_table_right_click_buttons['rows_remove']['status'])
+        rows_remove.setEnabled(
+            self.main_window.master_table_right_click_buttons['rows_remove']['status'])
         self.main_window.master_table_right_click_buttons['rows_remove']['ui'] = rows_remove
 
         # Table
@@ -498,8 +525,10 @@ class H3TableHandler:
 
         if ONCAT_ENABLED:
             table_import_from_database = table.addMenu("Import from Database")
-            table_import_from_database_replace = table_import_from_database.addAction("Replace ...")
-            table_import_from_database_append = table_import_from_database.addAction("Append ...")
+            table_import_from_database_replace = table_import_from_database.addAction(
+                "Replace ...")
+            table_import_from_database_append = table_import_from_database.addAction(
+                "Append ...")
             table_import_from_database_append.setEnabled(
                 self.main_window.master_table_right_click_buttons['import_from_database_append']['status'])
         else:
@@ -508,30 +537,37 @@ class H3TableHandler:
             table_import_from_database_append = None
 
         table_import_from_config = table.addMenu("Import from Config. File")
-        table_import_from_config_replace = table_import_from_config.addAction("Replace ...")
-        table_import_from_config_append = table_import_from_config.addAction("Append ...")
+        table_import_from_config_replace = table_import_from_config.addAction(
+            "Replace ...")
+        table_import_from_config_append = table_import_from_config.addAction(
+            "Append ...")
         table_import_from_config_append.setEnabled(
             self.main_window.master_table_right_click_buttons['import_from_config_append']['status'])
 
         table_import_from_file = table.addMenu("Import from File(s)")
-        table_import_from_file_replace = table_import_from_file.addAction("Replace ...")
-        table_import_from_file_append = table_import_from_file.addAction("Append ...")
+        table_import_from_file_replace = table_import_from_file.addAction(
+            "Replace ...")
+        table_import_from_file_append = table_import_from_file.addAction(
+            "Append ...")
         table_import_from_file_append.setEnabled(
             self.main_window.master_table_right_click_buttons['import_from_file_append']['status'])
 
         table_export = table.addAction("Export ...")
         self.main_window.master_table_right_click_buttons['export']['ui'] = table_export
-        table_export.setEnabled(self.main_window.master_table_right_click_buttons['export']['status'])
+        table_export.setEnabled(
+            self.main_window.master_table_right_click_buttons['export']['status'])
         table.addSeparator()
         table_clear = table.addAction("Clear")
         self.main_window.master_table_right_click_buttons['clear']['ui'] = table_clear
-        table_clear.setEnabled(self.main_window.master_table_right_click_buttons['clear']['status'])
+        table_clear.setEnabled(
+            self.main_window.master_table_right_click_buttons['clear']['status'])
 
-        # remove from now, waiting on user feedback to see if this is really necessary
+        # remove from now, waiting on user feedback to see if this is really
+        # necessary
         table_reset = None
         #table_reset = table.addAction("Reset Format")
         #self.main_window.master_table_right_click_buttons['reset']['ui'] = table_reset
-        #table_reset.setEnabled(self.main_window.master_table_right_click_buttons['reset']['status'])
+        # table_reset.setEnabled(self.main_window.master_table_right_click_buttons['reset']['status'])
 
         # configuration
         config = menu.addMenu("Columns Configuration")
@@ -581,10 +617,13 @@ class H3TableHandler:
         # Plot
         _plot_menu = menu.addMenu('Plot')
         self.main_window.master_table_right_click_buttons['plot']['ui'] = _plot_menu
-        _plot_menu.setEnabled(self.main_window.master_table_right_click_buttons['plot']['status'])
+        _plot_menu.setEnabled(
+            self.main_window.master_table_right_click_buttons['plot']['status'])
         _plot_sofq = _plot_menu.addAction("S(Q) ...")
-        _plot_sofq_diff_first_run_row = _plot_menu.addAction("S(Q) Diff (1st run)...")
-        _plot_sofq_diff_average_row = _plot_menu.addAction("S(Q) Diff (Avg.)...")
+        _plot_sofq_diff_first_run_row = _plot_menu.addAction(
+            "S(Q) Diff (1st run)...")
+        _plot_sofq_diff_average_row = _plot_menu.addAction(
+            "S(Q) Diff (Avg.)...")
 
         _temp_menu = _plot_menu.addMenu("Temperature")
         _plot_cryostat = _temp_menu.addAction("Cyrostat...")
@@ -621,7 +660,7 @@ class H3TableHandler:
             self.rows_duplicate()
 
         # insert rows
-        #elif action == rows_insert_run_number:
+        # elif action == rows_insert_run_number:
         #    self.insert_row_run_number()
         elif action == rows_insert_blank:
             self.insert_row_blank()
@@ -679,14 +718,16 @@ class H3TableHandler:
             # user clicked to select config
             for _index, _signal in enumerate(list_signal_config_files):
                 if action == _signal:
-                    self.activate_this_config(config=list_config_displayed[_index])
+                    self.activate_this_config(
+                        config=list_config_displayed[_index])
 
         if not (list_signal_remove_config == []):
 
             # user clicked to remove config
             for _index, _signal in enumerate(list_signal_remove_config):
                 if action == _signal:
-                    self.remove_this_config(config=list_config_displayed[_index])
+                    self.remove_this_config(
+                        config=list_config_displayed[_index])
 
     def check_all(self):
         '''Activate (check box in first column) all the selected rows'''
@@ -759,7 +800,7 @@ class H3TableHandler:
         o_row = RowsHandler(parent=self.main_window)
         row_selected = o_row.o_selection.top_row
         o_row.copy(row=row_selected)
-        o_row.paste(row=row_selected-1)
+        o_row.paste(row=row_selected - 1)
         self.check_status_of_right_click_buttons()
         self.main_window.check_master_table_column_highlighting()
 
@@ -784,10 +825,11 @@ class H3TableHandler:
 
     def _import_table_from_file(self, clear_table=True):
         _current_folder = self.main_window.current_folder
-        [table_file, _] = QFileDialog.getOpenFileName(parent=self.main_window,
-                                                      caption='Select Table File ...',
-                                                      directory=_current_folder,
-                                                      filter="NeXus (*.nxsh5);; Raw (*.raw);; NeXus_old (*.nxs)")
+        [table_file,
+         _] = QFileDialog.getOpenFileName(parent=self.main_window,
+                                          caption='Select Table File ...',
+                                          directory=_current_folder,
+                                          filter="NeXus (*.nxsh5);; Raw (*.raw);; NeXus_old (*.nxs)")
         if table_file:
             new_path = os.path.dirname(table_file)
             self.main_window.current_folder = new_path
@@ -797,10 +839,11 @@ class H3TableHandler:
 
     def _import_table_from_config(self, clear_table=True):
         _current_folder = self.main_window.current_folder
-        [table_file, _] = QFileDialog.getOpenFileName(parent=self.main_window,
-                                                      caption='Select Table File ...',
-                                                      directory=_current_folder,
-                                                      filter="json (*.json);; Log (*.csv)")
+        [table_file,
+         _] = QFileDialog.getOpenFileName(parent=self.main_window,
+                                          caption='Select Table File ...',
+                                          directory=_current_folder,
+                                          filter="json (*.json);; Log (*.csv)")
         QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
 
         if table_file:
@@ -810,11 +853,12 @@ class H3TableHandler:
                 self.clear_table()
 
             try:
-                o_dict = TableFileLoader(parent=self.main_window, filename=table_file)
+                o_dict = TableFileLoader(
+                    parent=self.main_window, filename=table_file)
             except IOError as err:
                 self.main_window.ui.statusbar.setStyleSheet("color: red")
-                self.main_window.ui.statusbar.showMessage(err.message,
-                                                          self.main_window.statusbar_display_time)
+                self.main_window.ui.statusbar.showMessage(
+                    err.message, self.main_window.statusbar_display_time)
                 QApplication.restoreOverrideCursor()
                 return
 
@@ -826,10 +870,10 @@ class H3TableHandler:
         _table_file, _ = get_save_file(parent=self.main_window,
                                        caption="Define Output File Name ...",
                                        directory=_current_folder,
-                                       filter={'json (*.json)':'json'})
+                                       filter={'json (*.json)': 'json'})
 
         if _table_file:
-            _file_handler = FileHandler(filename = _table_file)
+            _file_handler = FileHandler(filename=_table_file)
             _file_handler.check_file_extension(ext_requested='json')
             _table_file = _file_handler.filename
 
@@ -837,12 +881,15 @@ class H3TableHandler:
             o_export.export(_table_file)
 
             self.main_window.ui.statusbar.setStyleSheet("color: blue")
-            self.main_window.ui.statusbar.showMessage("Table has been exported in file {}".format(_table_file),
-                                                      self.main_window.statusbar_display_time)
+            self.main_window.ui.statusbar.showMessage(
+                "Table has been exported in file {}".format(_table_file),
+                self.main_window.statusbar_display_time)
 
     def insert_row_run_number(self):
         '''insert row using run number information and OnCat'''
-        OncatAuthenticationHandler(parent=self.main_window, next_ui='from_run_number_ui')
+        OncatAuthenticationHandler(
+            parent=self.main_window,
+            next_ui='from_run_number_ui')
         self.check_status_of_right_click_buttons()
 
     def insert_row_blank(self):
@@ -863,13 +910,14 @@ class H3TableHandler:
         self.export_config()
 
     def remove_this_config(self, config):
-        config_dict = ConfigHandler.remove_this_config(config=self.main_window.config_dict,
-                                                       key=config)
+        config_dict = ConfigHandler.remove_this_config(
+            config=self.main_window.config_dict, key=config)
         self.main_window.config_dict = config_dict
         ConfigHandler.lazy_export_config(config_dict=config_dict)
 
     def activate_this_config(self, config):
-        config_dict = ConfigHandler.deactivate_all_config(config=self.main_window.config_dict)
+        config_dict = ConfigHandler.deactivate_all_config(
+            config=self.main_window.config_dict)
         config_dict = ConfigHandler.activate_this_config(config=config_dict,
                                                          key=config)
         self.main_window.config_dict = config_dict
@@ -895,7 +943,8 @@ class H3TableHandler:
             config_dict['FULL_RESET'] = self.main_window.reset_config_dict
             self.main_window.config_dict = config_dict
 
-        ConfigHandler.lazy_export_config(config_dict=self.main_window.config_dict)
+        ConfigHandler.lazy_export_config(
+            config_dict=self.main_window.config_dict)
         self.main_window.load_this_config(key='FULL_RESET', resize=True)
 
     def check_status_of_right_click_buttons(self):
@@ -941,7 +990,8 @@ class H3TableHandler:
                 _update_status(cells_paste=True,
                                cells_clear=True)
 
-            if self.main_window.master_table_cells_copy['row'] and (self.main_window.master_table_cells_copy['temp'] == []):
+            if self.main_window.master_table_cells_copy['row'] and (
+                    self.main_window.master_table_cells_copy['temp'] == []):
                 _update_status(rows_paste=True)
 
             # plot enabled if only user clicked a cell with runs
@@ -1016,19 +1066,25 @@ class TableConfig:
             block_h3 = False
 
         if block_h1:
-            self.main_window.h1_header_table.sectionResized.disconnect(self.main_window.resizing_h1)
+            self.main_window.h1_header_table.sectionResized.disconnect(
+                self.main_window.resizing_h1)
         else:
-            self.main_window.h1_header_table.sectionResized.connect(self.main_window.resizing_h1)
+            self.main_window.h1_header_table.sectionResized.connect(
+                self.main_window.resizing_h1)
 
         if block_h2:
-            self.main_window.h2_header_table.sectionResized.disconnect(self.main_window.resizing_h2)
+            self.main_window.h2_header_table.sectionResized.disconnect(
+                self.main_window.resizing_h2)
         else:
-            self.main_window.h2_header_table.sectionResized.connect(self.main_window.resizing_h2)
+            self.main_window.h2_header_table.sectionResized.connect(
+                self.main_window.resizing_h2)
 
         if block_h3:
-            self.main_window.h3_header_table.sectionResized.disconnect(self.main_window.resizing_h3)
+            self.main_window.h3_header_table.sectionResized.disconnect(
+                self.main_window.resizing_h3)
         else:
-            self.main_window.h3_header_table.sectionResized.connect(self.main_window.resizing_h3)
+            self.main_window.h3_header_table.sectionResized.connect(
+                self.main_window.resizing_h3)
 
     def get_h2_children_from_h1(self, h1=-1):
         if h1 == -1:
@@ -1147,7 +1203,8 @@ class TableConfig:
         for _h2 in list_visible_h2:
             full_size_h2 += self.get_size_column(h2=_h2)
 
-        self.main_window.processing_ui.h1_table.setColumnWidth(h1, full_size_h2)
+        self.main_window.processing_ui.h1_table.setColumnWidth(
+            h1, full_size_h2)
 
     def get_h_columns_from_item_name(self, item_name=None):
         # h_columns_affected = {'h1': [],
@@ -1181,16 +1238,20 @@ class TableConfig:
 
                         if td[_key_h1]['children'][_key_h2]['children']:
 
-                            list_tree_ui.append(td[_key_h1]['children'][_key_h2]['ui'])
-                            for _key_h3 in td[_key_h1]['children'][_key_h2]['children'].keys():
+                            list_tree_ui.append(
+                                td[_key_h1]['children'][_key_h2]['ui'])
+                            for _key_h3 in td[_key_h1]['children'][_key_h2]['children'].keys(
+                            ):
                                 h3_columns.append(h3_global_counter)
-                                list_tree_ui.append(td[_key_h1]['children'][_key_h2]['children'][_key_h3]['ui'])
+                                list_tree_ui.append(
+                                    td[_key_h1]['children'][_key_h2]['children'][_key_h3]['ui'])
                                 h3_global_counter += 1
 
                         else:
 
                             h2_columns.append(h2_global_counter)
-                            list_tree_ui.append(td[_key_h1]['children'][_key_h2]['ui'])
+                            list_tree_ui.append(
+                                td[_key_h1]['children'][_key_h2]['ui'])
                             h3_columns.append(h3_global_counter)
 
                             h2_global_counter += 1
@@ -1225,15 +1286,18 @@ class TableConfig:
                                 # if key_h2 has children
 
                                 # list all h3 leaves for this h2
-                                for _key_h3 in td[_key_h1]['children'][_key_h2]['children'].keys():
+                                for _key_h3 in td[_key_h1]['children'][_key_h2]['children'].keys(
+                                ):
                                     h3_columns.append(h3_global_counter)
-                                    list_tree_ui.append(td[_key_h1]['children'][_key_h2]['children'][_key_h3]['ui'])
+                                    list_tree_ui.append(
+                                        td[_key_h1]['children'][_key_h2]['children'][_key_h3]['ui'])
                                     h3_global_counter += 1
 
                             else:
                                 h3_columns = [h3_global_counter]
 
-                            list_tree_ui.append(td[_key_h1]['children'][_key_h2]['ui'])
+                            list_tree_ui.append(
+                                td[_key_h1]['children'][_key_h2]['ui'])
                             list_parent_ui.append(td[_key_h1]['ui'])
                             return {'h1': [],
                                     'h2': [h2_global_counter],
@@ -1249,19 +1313,23 @@ class TableConfig:
 
                                 # loop through all the h3 and look for item_name. If found
                                 # we are done
-                                for _key_h3 in td[_key_h1]['children'][_key_h2]['children'].keys():
+                                for _key_h3 in td[_key_h1]['children'][_key_h2]['children'].keys(
+                                ):
 
                                     if item_name == _key_h3:
                                         # we found the item name at the h3 layer,
                                         # no leaf below, so we are done
 
-                                        list_parent_ui.append(td[_key_h1]['ui'])
-                                        list_parent_ui.append(td[_key_h1]['children'][_key_h2]['ui'])
-                                        return {'h1': [],
-                                                'h2': [],
-                                                'h3': [h3_global_counter],
-                                                'list_tree_ui': list_tree_ui,
-                                                'list_parent_ui': list_parent_ui}
+                                        list_parent_ui.append(
+                                            td[_key_h1]['ui'])
+                                        list_parent_ui.append(
+                                            td[_key_h1]['children'][_key_h2]['ui'])
+                                        return {
+                                            'h1': [],
+                                            'h2': [],
+                                            'h3': [h3_global_counter],
+                                            'list_tree_ui': list_tree_ui,
+                                            'list_parent_ui': list_parent_ui}
 
                                     else:
 
@@ -1270,7 +1338,8 @@ class TableConfig:
                                 h2_global_counter += 1
 
                             else:
-                                # no children, we just keep going to the next h2 (and h3)
+                                # no children, we just keep going to the next
+                                # h2 (and h3)
 
                                 h2_global_counter += 1
                                 h3_global_counter += 1
@@ -1304,7 +1373,8 @@ class TableConfig:
 
                     if td[_key_h1]['children'][_key_h2]['children']:
 
-                        for _key_h3 in td[_key_h1]['children'][_key_h2]['children'].keys():
+                        for _key_h3 in td[_key_h1]['children'][_key_h2]['children'].keys(
+                        ):
 
                             if item == td[_key_h1]['children'][_key_h2]['children'][_key_h3]['ui']:
                                 return _key_h3
@@ -1322,18 +1392,19 @@ class TableConfig:
         :return:
         """
 
-        #self.main_window.ui.treeWidget.blockSignals(True)
+        # self.main_window.ui.treeWidget.blockSignals(True)
 
         for _ui in list_ui:
             _ui.setCheckState(0, state)
 
-        # if the leaf is enabled, we need to make sure all the parents are enabled as well.
+        # if the leaf is enabled, we need to make sure all the parents are
+        # enabled as well.
         if state == QtCore.Qt.Checked:
             for _ui in list_parent_ui:
                 _ui.setCheckState(0, state)
 
         self.update_full_tree_status()
-        #self.main_window.ui.treeWidget.blockSignals(False)
+        # self.main_window.ui.treeWidget.blockSignals(False)
 
     def update_full_tree_status(self):
         """this will update the tree_dict dictionary with the status of all the leaves"""
@@ -1353,20 +1424,24 @@ class TableConfig:
                     if td[_key_h1]['children'][_key_h2]['children']:
 
                         all_h3_disabled = True
-                        for _key_h3 in td[_key_h1]['children'][_key_h2]['children'].keys():
+                        for _key_h3 in td[_key_h1]['children'][_key_h2]['children'].keys(
+                        ):
 
-                            if td[_key_h1]['children'][_key_h2]['children'][_key_h3]['ui'].checkState(0):
+                            if td[_key_h1]['children'][_key_h2]['children'][_key_h3]['ui'].checkState(
+                                    0):
                                 all_h3_disabled = False
                                 all_h2_disabled = False
                                 break
 
                         if all_h3_disabled:
                             # we need to make sure the h2 is disabled as well
-                            td[_key_h1]['children'][_key_h2]['ui'].setCheckState(0, QtCore.Qt.Unchecked)
+                            td[_key_h1]['children'][_key_h2]['ui'].setCheckState(
+                                0, QtCore.Qt.Unchecked)
 
                     else:
 
-                        if td[_key_h1]['children'][_key_h2]['ui'].checkState(0):
+                        if td[_key_h1]['children'][_key_h2]['ui'].checkState(
+                                0):
                             all_h2_disabled = False
 
                 if all_h2_disabled:
@@ -1382,11 +1457,13 @@ class TableConfig:
 
                 for _key_h2 in td[_key_h1]['children'].keys():
 
-                    td[_key_h1]['children'][_key_h2]['state'] = td[_key_h1]['children'][_key_h2]['ui'].checkState(0)
+                    td[_key_h1]['children'][_key_h2]['state'] = td[_key_h1]['children'][_key_h2]['ui'].checkState(
+                        0)
 
                     if td[_key_h1]['children'][_key_h2]['children']:
 
-                        for _key_h3 in td[_key_h1]['children'][_key_h2]['children'].keys():
+                        for _key_h3 in td[_key_h1]['children'][_key_h2]['children'].keys(
+                        ):
                             td[_key_h1]['children'][_key_h2]['children'][_key_h3]['state'] = \
                                 td[_key_h1]['children'][_key_h2]['children'][_key_h3]['ui'].checkState(0)
 
@@ -1418,26 +1495,31 @@ class TableConfig:
 
                 for _key_h2 in td[_key_h1]['children'].keys():
 
-                    _h2_boolean_status = get_boolean_state(td[_key_h1]['children'][_key_h2])
-                    set_column_visibility(column=h2_counter,
-                                          table_ui=self.main_window.processing_ui.h2_table,
-                                          visible=_h2_boolean_status)
+                    _h2_boolean_status = get_boolean_state(
+                        td[_key_h1]['children'][_key_h2])
+                    set_column_visibility(
+                        column=h2_counter,
+                        table_ui=self.main_window.processing_ui.h2_table,
+                        visible=_h2_boolean_status)
 
                     if td[_key_h1]['children'][_key_h2]['children']:
 
-                        for _key_h3 in td[_key_h1]['children'][_key_h2]['children'].keys():
+                        for _key_h3 in td[_key_h1]['children'][_key_h2]['children'].keys(
+                        ):
                             _h3_boolean_status = get_boolean_state(
                                 td[_key_h1]['children'][_key_h2]['children'][_key_h3])
-                            set_column_visibility(column=h3_counter,
-                                                  table_ui=self.main_window.processing_ui.h3_table,
-                                                  visible=_h3_boolean_status)
+                            set_column_visibility(
+                                column=h3_counter,
+                                table_ui=self.main_window.processing_ui.h3_table,
+                                visible=_h3_boolean_status)
                             h3_counter += 1
 
                     else:
 
-                        set_column_visibility(column=h3_counter,
-                                              table_ui=self.main_window.processing_ui.h3_table,
-                                              visible=_h2_boolean_status)
+                        set_column_visibility(
+                            column=h3_counter,
+                            table_ui=self.main_window.processing_ui.h3_table,
+                            visible=_h2_boolean_status)
                         h3_counter += 1
 
                     h2_counter += 1
@@ -1445,20 +1527,23 @@ class TableConfig:
             else:
 
                 # h2 and h3 should have the same status as h1
-                set_column_visibility(column=h3_counter,
-                                      table_ui=self.main_window.processing_ui.h3_table,
-                                      visible=_h1_boolean_status)
+                set_column_visibility(
+                    column=h3_counter,
+                    table_ui=self.main_window.processing_ui.h3_table,
+                    visible=_h1_boolean_status)
 
-                set_column_visibility(column=h2_counter,
-                                      table_ui=self.main_window.processing_ui.h2_table,
-                                      visible=_h1_boolean_status)
+                set_column_visibility(
+                    column=h2_counter,
+                    table_ui=self.main_window.processing_ui.h2_table,
+                    visible=_h1_boolean_status)
 
                 h2_counter += 1
                 h3_counter += 1
 
-            set_column_visibility(column=h1_counter,
-                                  table_ui=self.main_window.processing_ui.h1_table,
-                                  visible=_h1_boolean_status)
+            set_column_visibility(
+                column=h1_counter,
+                table_ui=self.main_window.processing_ui.h1_table,
+                visible=_h1_boolean_status)
 
     def resizing_table(self, tree_dict={}, block_ui=True):
         '''updating the size of the columns using visibility of the various elements of the tree'''
@@ -1488,7 +1573,8 @@ class TableConfig:
                 # resize h2 using all visible h3
                 self.resizing_h2_using_all_visible_h3(h2=h2)
 
-                # if h1 parent is visible, re-sized h1 parent using all visible h2
+                # if h1 parent is visible, re-sized h1 parent using all visible
+                # h2
                 self.resizing_h1_using_all_visible_h2(h1=h1_parent)
 
             else:
@@ -1520,7 +1606,8 @@ class TableConfig:
                 is_h1_parent_visible = self.is_h_visible(h1=h1_parent)
 
                 if is_h1_parent_visible:
-                    # if h1 parent is visible, resized h1 parent using all visible h2
+                    # if h1 parent is visible, resized h1 parent using all
+                    # visible h2
                     self.resizing_h1_using_all_visible_h2(h1=h1_parent)
 
                 else:
@@ -1547,14 +1634,16 @@ class TableConfig:
         for _h3 in list_visible_h3:
             full_size_h3 += self.get_size_column(h3=_h3)
 
-        self.main_window.processing_ui.h2_table.setColumnWidth(h2, full_size_h3)
+        self.main_window.processing_ui.h2_table.setColumnWidth(
+            h2, full_size_h3)
 
     def get_all_h2_visible(self, list_h2=[]):
         '''return the list of all the visible h2 from the list of h2 given'''
         if list_h2 == []:
             return None
 
-        list_h2_visible = [_h2 for _h2 in list_h2 if not self.main_window.processing_ui.h2_table.isColumnHidden(_h2)]
+        list_h2_visible = [
+            _h2 for _h2 in list_h2 if not self.main_window.processing_ui.h2_table.isColumnHidden(_h2)]
         return list_h2_visible
 
     def get_all_h3_visible(self, list_h3=[]):
@@ -1562,7 +1651,8 @@ class TableConfig:
         if list_h3 == []:
             return None
 
-        list_h3_visible = [_h3 for _h3 in list_h3 if not self.main_window.processing_ui.h3_table.isColumnHidden(_h3)]
+        list_h3_visible = [
+            _h3 for _h3 in list_h3 if not self.main_window.processing_ui.h3_table.isColumnHidden(_h3)]
         return list_h3_visible
 
     def get_h1_h2_parent_from_h3(self, h3=-1):
@@ -1609,7 +1699,7 @@ class TableConfig:
                     _state = from_boolean_to_ui_status(_visibility)
                     _ui.setCheckState(0, _state)
 
-        #self.main_window.ui.treeWidget.blockSignals(True)
+        # self.main_window.ui.treeWidget.blockSignals(True)
 
         # print("config_to_load")
         # pprint.pprint(config_to_load)
@@ -1631,14 +1721,26 @@ class TableConfig:
         list_h3_tree_ui = tree_ui['h3']
         change_state_tree_widgets(list_h3_tree_ui, list_h3_columns)
 
-        #self.main_window.ui.treeWidget.blockSignals(False)
+        # self.main_window.ui.treeWidget.blockSignals(False)
 
-    def set_visibility_column(self, h1=None, h2=None, h3=None, visibility=True):
+    def set_visibility_column(
+            self,
+            h1=None,
+            h2=None,
+            h3=None,
+            visibility=True):
         table_ui = self.get_table_ui(h1=h1, h2=h2, h3=h3)
         h = self.get_master_h(h1=h1, h2=h2, h3=h3)
         table_ui.setColumnHidden(h, not visibility)
 
-    def set_size_and_visibility_column(self, h1=None, h2=None, h3=None, width=None, visibility=True, resize=False):
+    def set_size_and_visibility_column(
+            self,
+            h1=None,
+            h2=None,
+            h3=None,
+            width=None,
+            visibility=True,
+            resize=False):
         if resize:
             self.set_size_column(h1=h1, h2=h2, h3=h3, width=width)
         self.set_visibility_column(h1=h1, h2=h2, h3=h3, visibility=visibility)
