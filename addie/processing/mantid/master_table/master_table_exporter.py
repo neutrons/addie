@@ -295,18 +295,27 @@ class TableFileExporter:
 
         placzek_infos = self.parent.master_table_list_ui[key][element]['placzek_infos']
 
-        dict_element["InelasticCorrection"]["Order"] = placzek_infos["order_index"]
-        dict_element["InelasticCorrection"]["Self"] = placzek_infos["is_self"]
-        dict_element["InelasticCorrection"]["Interference"] = placzek_infos["is_interference"]
-        dict_element["InelasticCorrection"]["FitSpectrumWith"] = placzek_infos["fit_spectrum_index"]
-        dict_element["InelasticCorrection"]["LambdaBinningForFit"] = "{},{},{}".format(
-            placzek_infos["lambda_fit_min"],
-            placzek_infos["lambda_fit_delta"],
-            placzek_infos["lambda_fit_max"])
-        dict_element["InelasticCorrection"]["LambdaBinningForCalc"] = "{},{},{}".format(
-            placzek_infos["lambda_calc_min"],
-            placzek_infos["lambda_calc_delta"],
-            placzek_infos["lambda_calc_max"])
+
+        if inelastic_correction not in self.__nan_list:
+            print(inelastic_correction, self.__nan_list, placzek_infos)
+            dict_element["InelasticCorrection"]["Order"] = placzek_infos["order_text"]
+            dict_element["InelasticCorrection"]["Self"] = placzek_infos["is_self"]
+            dict_element["InelasticCorrection"]["Interference"] = placzek_infos["is_interference"]
+            fit_spectrum_text = placzek_infos["fit_spectrum_text"].replace(".", "").replace(" ", "")
+            dict_element["InelasticCorrection"]["FitSpectrumWith"] = fit_spectrum_text
+            dict_element["InelasticCorrection"]["LambdaBinningForFit"] = "{},{},{}".format(
+                placzek_infos["lambda_fit_min"],
+                placzek_infos["lambda_fit_delta"],
+                placzek_infos["lambda_fit_max"])
+            dict_element["InelasticCorrection"]["LambdaBinningForCalc"] = "{},{},{}".format(
+                placzek_infos["lambda_calc_min"],
+                placzek_infos["lambda_calc_delta"],
+                placzek_infos["lambda_calc_max"])
+            print("DICT ELEMENT Placzek:", dict_element["InelasticCorrection"])
+        else:
+            dict_element.pop("InelasticCorrection")
+
+
 
         return dict_element
 
