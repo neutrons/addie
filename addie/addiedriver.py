@@ -68,8 +68,6 @@ class AddieDriver(object):
 
         assert min_q < max_q, 'Qmin must be less than Qmax (%f >= %f)' % (min_q, max_q)
         assert isinstance(pdf_filter, str) or pdf_filter is None, 'PDF filter must be a string or None.'
-        assert isinstance(rho0, float) or rho0 is None, 'rho0 must be either None or a float but not a %s.' \
-                                                        '' % str(type(rho0))
 
         # set to the current S(q) workspace name
         self._currSqWsName = sq_ws_name
