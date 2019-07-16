@@ -559,9 +559,13 @@ class GofRTree(base.CustomizedTreeView):
             self._mainWindow.set_ipython_script(python_cmd)
 
     def is_gr_empty(self):
-        if self._leafDict['workspaces'] == []:
-            return True
-        return False
+        """ Checks if there is a G(r) workspace and returns True if empty
+        """
+        gr_exists = False
+        for key in self._leafDict.keys():
+            if key.startswith('G(r)'):
+                gr_exists = True
+        return not gr_exists
 
     def is_sofq_empty(self):
         if self._leafDict['SofQ'] == []:
