@@ -122,7 +122,9 @@ class TableRowHandler:
         if value == 0:
             show_button = False
 
-        _ui = self.main_window.master_table_list_ui[key][data_type]['placzek_button']
+        info = self.main_window.master_table_list_ui[key][data_type]
+
+        _ui = info['placzek_button']
         _ui.setVisible(show_button)
 
         # change state of other widgets of the same column if they are selected
@@ -131,6 +133,10 @@ class TableRowHandler:
         column = self.get_column(data_type=data_type,
                                  sample_norm_column=INDEX_OF_INELASTIC_CORRECTION)
         self.main_window.check_master_table_column_highlighting(column=column)
+
+        inelastic_correction = info['inelastic_correction'].currentText()
+        if inelastic_correction not in ["None", None]:
+            PlaczekHandler(parent=self.main_window, key=key, data_type=data_type)
 
     def multi_scattering_correction(self, value='', key=None, data_type='sample'):
         # change state of other widgets of the same column if they are selected
