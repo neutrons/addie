@@ -191,26 +191,29 @@ class JsonLoader:
         _target_row_entry["geometry"]["height"] = _source_entry["Geometry"]["Height"]
         _target_row_entry["abs_correction"] = _source_entry["AbsorptionCorrection"]["Type"]
         _target_row_entry["multi_scattering_correction"] = _source_entry["MultipleScatteringCorrection"]["Type"]
-        _target_row_entry["inelastic_correction"] = _source_entry["InelasticCorrection"]["Type"]
-        _target_row_entry["placzek"] = copy.deepcopy(
-            self.parent.placzek_default)
-        _target_row_entry["placzek"]["order"]["index_selected"] = _source_entry["InelasticCorrection"]["Order"]
-        _target_row_entry["placzek"]["is_self"] = _source_entry["InelasticCorrection"]["Self"]
-        _target_row_entry["placzek"]["is_interference"] = _source_entry["InelasticCorrection"]["Interference"]
-        _target_row_entry["placzek"]["fit_spectrum_with"]["text"] = \
-            _source_entry["InelasticCorrection"]["FitSpectrumWith"]
+        _target_row_entry["placzek"] = copy.deepcopy(self.parent.placzek_default)
+        if "InelasticCorrection" in _source_entry:
+            _target_row_entry["inelastic_correction"] = _source_entry["InelasticCorrection"]["Type"]
 
-        lambda_binning_for_fit = _source_entry["InelasticCorrection"]["LambdaBinningForFit"].split(
-            ",")
-        if len(lambda_binning_for_fit) == 3:
-            _target_row_entry["placzek"]["lambda_binning_for_fit"]["min"] = lambda_binning_for_fit[0]
-            _target_row_entry["placzek"]["lambda_binning_for_fit"]["delta"] = lambda_binning_for_fit[1]
-            _target_row_entry["placzek"]["lambda_binning_for_fit"]["max"] = lambda_binning_for_fit[2]
+            _target_row_entry["placzek"]["order"]["index_selected"] = _source_entry["InelasticCorrection"]["Order"]
+            _target_row_entry["placzek"]["is_self"] = _source_entry["InelasticCorrection"]["Self"]
+            _target_row_entry["placzek"]["is_interference"] = _source_entry["InelasticCorrection"]["Interference"]
+            _target_row_entry["placzek"]["fit_spectrum_with"]["text"] = \
+                _source_entry["InelasticCorrection"]["FitSpectrumWith"]
+
+            lambda_binning_for_fit = _source_entry["InelasticCorrection"]["LambdaBinningForFit"].split(
+                ",")
+            if len(lambda_binning_for_fit) == 3:
+                _target_row_entry["placzek"]["lambda_binning_for_fit"]["min"] = lambda_binning_for_fit[0]
+                _target_row_entry["placzek"]["lambda_binning_for_fit"]["delta"] = lambda_binning_for_fit[1]
+                _target_row_entry["placzek"]["lambda_binning_for_fit"]["max"] = lambda_binning_for_fit[2]
+            else:
+                default_placzek = self.parent.placzek_default["lambda_binning_for_fit"]
+                _target_row_entry["placzek"]["lambda_binning_for_fit"]["min"] = default_placzek["min"]
+                _target_row_entry["placzek"]["lambda_binning_for_fit"]["delta"] = default_placzek["delta"]
+                _target_row_entry["placzek"]["lambda_binning_for_fit"]["max"] = default_placzek["max"]
         else:
-            default_placzek = self.parent.placzek_default["lambda_binning_for_fit"]
-            _target_row_entry["placzek"]["lambda_binning_for_fit"]["min"] = default_placzek["min"]
-            _target_row_entry["placzek"]["lambda_binning_for_fit"]["delta"] = default_placzek["delta"]
-            _target_row_entry["placzek"]["lambda_binning_for_fit"]["max"] = default_placzek["max"]
+            _target_row_entry['inelastic_correction'] = None
 
         return _target_row_entry
 
