@@ -28,7 +28,8 @@ class AddieDriver(object):
         self._grWsNameDict = dict()
 
         # dictionary to manage the GSAS data
-        # key: ws_group_name, value: (gss_ws_name, ws_list).  it is in similar architecture with tree
+        # key: ws_group_name, value: (gss_ws_name, ws_list).  it is in similar
+        # architecture with tree
         self._braggDataList = list()
 
     def calculate_sqAlt(self, ws_name, outputType):
@@ -37,15 +38,30 @@ class AddieDriver(object):
         elif outputType == 'Q[S(Q)-1]':
             outputType = 'F(Q)'
         else:
-            # PDConvertReciprocalSpace doesn't currently know how to convert to S(Q)-1
-            raise ValueError('Do not know how to convert to {}'.format(outputType))
+            # PDConvertReciprocalSpace doesn't currently know how to convert to
+            # S(Q)-1
+            raise ValueError(
+                'Do not know how to convert to {}'.format(outputType))
 
         outputName = '__{}Alt'.format(ws_name)  # should be hidden
-        simpleapi.PDConvertReciprocalSpace(InputWorkspace=ws_name, OutputWorkspace=outputName,
-                                           From='S(Q)', To=outputType)
+        simpleapi.PDConvertReciprocalSpace(
+            InputWorkspace=ws_name,
+            OutputWorkspace=outputName,
+            From='S(Q)',
+            To=outputType)
         return outputName
 
-    def calculate_gr(self, sq_ws_name, pdf_type, min_r, delta_r, max_r, min_q, max_q, pdf_filter, rho0):
+    def calculate_gr(
+            self,
+            sq_ws_name,
+            pdf_type,
+            min_r,
+            delta_r,
+            max_r,
+            min_q,
+            max_q,
+            pdf_filter,
+            rho0):
         """ Calculate G(R)
         :param sq_ws_name: workspace name of S(q)
         :param pdf_type: type of PDF as G(r), g(r) and RDF(r)
@@ -59,17 +75,20 @@ class AddieDriver(object):
         :return: string as G(r) workspace's name
         """
         # check
-        assert isinstance(sq_ws_name, str) and AnalysisDataService.doesExist(sq_ws_name)
+        assert isinstance(
+            sq_ws_name,
+            str) and AnalysisDataService.doesExist(sq_ws_name)
         assert isinstance(pdf_type, str) and len(pdf_type) > 0, \
             'PDF type is %s is not supported.' % str(pdf_type)
-        assert min_r < max_r, 'Rmin must be less than Rmax (%f >= %f)' % (min_r, max_r)
+        assert min_r < max_r, 'Rmin must be less than Rmax (%f >= %f)' % (
+            min_r, max_r)
         assert delta_r < (max_r - min_r), 'Must have more than one bin in G(r) (%f >= %f)' \
                                           '' % (delta_r, (max_r - min_r))
 
-        assert min_q < max_q, 'Qmin must be less than Qmax (%f >= %f)' % (min_q, max_q)
-        assert isinstance(pdf_filter, str) or pdf_filter is None, 'PDF filter must be a string or None.'
-        assert isinstance(rho0, float) or rho0 is None, 'rho0 must be either None or a float but not a %s.' \
-                                                        '' % str(type(rho0))
+        assert min_q < max_q, 'Qmin must be less than Qmax (%f >= %f)' % (
+            min_q, max_q)
+        assert isinstance(
+            pdf_filter, str) or pdf_filter is None, 'PDF filter must be a string or None.'
 
         # set to the current S(q) workspace name
         self._currSqWsName = sq_ws_name
@@ -96,7 +115,8 @@ class AddieDriver(object):
         else:
             pdf_filter = True
             if pdf_filter != 'lorch':
-                print('[WARNING] PDF filter {0} is not supported.'.format(pdf_filter))
+                print(
+                    '[WARNING] PDF filter {0} is not supported.'.format(pdf_filter))
 
         gr_ws_name = '%s(R)_%s_%d' % (prefix, self._currSqWsName, ws_seq_index)
         kwargs = {'OutputWorkspace': gr_ws_name,
@@ -109,6 +129,10 @@ class AddieDriver(object):
         if rho0 is not None:
             kwargs['rho0'] = rho0
 
+        # Print warning about using G(r) and rho0
+        if 'rho0' in kwargs and pdf_type == "G(r)":
+            print("WARNING: Modifying the density does not affect G(r) function")
+
         # get the input unit
         sofq_type = 'S(Q)'
 
@@ -118,7 +142,8 @@ class AddieDriver(object):
                                       **kwargs)
 
         # check
-        assert AnalysisDataService.doesExist(gr_ws_name), 'Failed to do Fourier Transform.'
+        assert AnalysisDataService.doesExist(
+            gr_ws_name), 'Failed to do Fourier Transform.'
         self._grWsNameDict[(min_q, max_q)] = gr_ws_name
 
         # update state variable
@@ -140,9 +165,12 @@ class AddieDriver(object):
 
         # check existence
         if AnalysisDataService.doesExist(src_name):
-            simpleapi.CloneWorkspace(InputWorkspace=src_name, OutputWorkspace=target_name)
+            simpleapi.CloneWorkspace(
+                InputWorkspace=src_name,
+                OutputWorkspace=target_name)
         else:
-            raise RuntimeError('Workspace with name {0} does not exist in ADS. CloneWorkspace fails!'.format(src_name))
+            raise RuntimeError(
+                'Workspace with name {0} does not exist in ADS. CloneWorkspace fails!'.format(src_name))
 
     @staticmethod
     def delete_workspace(workspace_name, no_throw=False):
@@ -170,7 +198,11 @@ class AddieDriver(object):
         return
 
     @staticmethod
-    def edit_matrix_workspace(sq_name, scale_factor, shift, edited_sq_name=None):
+    def edit_matrix_workspace(
+            sq_name,
+            scale_factor,
+            shift,
+            edited_sq_name=None):
         """
         Edit the matrix workspace of S(Q) by scaling and shift
         :param sq_name: name of the SofQ workspace
@@ -181,10 +213,13 @@ class AddieDriver(object):
         """
         # get the workspace
         if AnalysisDataService.doesExist(sq_name) is False:
-            raise RuntimeError('S(Q) workspace {0} cannot be found in ADS.'.format(sq_name))
+            raise RuntimeError(
+                'S(Q) workspace {0} cannot be found in ADS.'.format(sq_name))
 
         if edited_sq_name is not None:
-            simpleapi.CloneWorkspace(InputWorkspace=sq_name, OutputWorkspace=edited_sq_name)
+            simpleapi.CloneWorkspace(
+                InputWorkspace=sq_name,
+                OutputWorkspace=edited_sq_name)
             sq_ws = AnalysisDataService.retrieve(edited_sq_name)
         else:
             sq_ws = AnalysisDataService.retrieve(sq_name)
@@ -194,7 +229,9 @@ class AddieDriver(object):
         sq_ws = sq_ws + shift
         if sq_ws.name() != edited_sq_name:
             simpleapi.DeleteWorkspace(Workspace=edited_sq_name)
-            simpleapi.RenameWorkspace(InputWorkspace=sq_ws, OutputWorkspace=edited_sq_name)
+            simpleapi.RenameWorkspace(
+                InputWorkspace=sq_ws,
+                OutputWorkspace=edited_sq_name)
 
         assert sq_ws is not None, 'S(Q) workspace cannot be None.'
         print('[DB...BAT] S(Q) workspace that is edit is {0}'.format(sq_ws))
@@ -204,30 +241,41 @@ class AddieDriver(object):
     # (title, multiplier for data, etc.), and then the X,Y pairs for G(r) or S(Q) data.
 
     @staticmethod
-    def export_to_rmcprofile(ws_name, output_file_name, comment='', ws_index=0):
+    def export_to_rmcprofile(
+            ws_name,
+            output_file_name,
+            comment='',
+            ws_index=0):
         """ Export a workspace 2D to a 2 column data for RMCProfile
         """
         # check inputs
-        assert isinstance(ws_name, str), \
-            'Workspace name {0} must be a string but not a {1}.'.format(ws_name, str(ws_name))
-        assert isinstance(output_file_name, str), \
-            'Output file name {0} must be a string but not a {1}.'.format(output_file_name,
-                                                                          type(output_file_name))
-        assert isinstance(comment, str), \
-            'Comment {0} must be a string but not a {1}.'.format(comment, type(comment))
-        assert isinstance(ws_index, int), \
-            'Workspace index must be an integer but not a {1}.'.format(ws_index, type(ws_index))
+        assert isinstance(
+            ws_name, str), 'Workspace name {0} must be a string but not a {1}.'.format(
+            ws_name, str(ws_name))
+        assert isinstance(
+            output_file_name, str), 'Output file name {0} must be a string but not a {1}.'.format(
+            output_file_name, type(output_file_name))
+        assert isinstance(
+            comment, str), 'Comment {0} must be a string but not a {1}.'.format(
+            comment, type(comment))
+        assert isinstance(
+            ws_index, int), 'Workspace index must be an integer but not a {1}.'.format(
+            ws_index, type(ws_index))
 
         # convert to point data from histogram
-        simpleapi.ConvertToPointData(InputWorkspace=ws_name, OutputWorkspace=ws_name)
+        simpleapi.ConvertToPointData(
+            InputWorkspace=ws_name,
+            OutputWorkspace=ws_name)
 
         # get workspace for vecX and vecY
         if AnalysisDataService.doesExist(ws_name):
             workspace = AnalysisDataService.retrieve(ws_name)
         else:
-            raise RuntimeError('Workspace {0} does not exist in ADS.'.format(ws_name))
+            raise RuntimeError(
+                'Workspace {0} does not exist in ADS.'.format(ws_name))
         if not 0 <= ws_index < workspace.getNumberHistograms():
-            raise RuntimeError('Workspace index {0} is out of range.'.format(ws_index))
+            raise RuntimeError(
+                'Workspace index {0} is out of range.'.format(ws_index))
 
         vec_x = workspace.readX(ws_index)
         vec_y = workspace.readY(ws_index)
@@ -246,26 +294,32 @@ class AddieDriver(object):
             ofile.close()
         except IOError as io_err:
             raise RuntimeError(
-                'Unable to export data to file {0} in RMCProfile format due to {1}.'.format(output_file_name, io_err))
+                'Unable to export data to file {0} in RMCProfile format due to {1}.'.format(
+                    output_file_name, io_err))
 
     def get_bank_numbers(self, ws_name):
         '''Returns the list of spectrum numbers in the workspace'''
         wksp = AddieDriver.get_ws(ws_name)
-        banks = [wksp.getSpectrum(i).getSpectrumNo() for i in range(wksp.getNumberHistograms())]
+        banks = [wksp.getSpectrum(i).getSpectrumNo()
+                 for i in range(wksp.getNumberHistograms())]
         return banks
 
     def convert_bragg_data(self, ws_name, x_unit):
         curr_unit = self.get_ws(ws_name).getAxis(0).getUnit().unitID()
         if curr_unit != x_unit:
-            simpleapi.ConvertUnits(InputWorkspace=ws_name, OutputWorkspace=ws_name,
-                                   Target=x_unit, EMode='Elastic')
+            simpleapi.ConvertUnits(
+                InputWorkspace=ws_name,
+                OutputWorkspace=ws_name,
+                Target=x_unit,
+                EMode='Elastic')
 
     def get_bragg_data(self, ws_name, wkspindex, x_unit):
         """ Get Bragg diffraction data of 1 bank
         """
         # check
         assert isinstance(wkspindex, int) and wkspindex >= 0
-        msg = 'Workspace groups {} does not exist in controller.'.format(ws_name)
+        msg = 'Workspace groups {} does not exist in controller.'.format(
+            ws_name)
         msg += 'Current existing are {}.'.format(self._braggDataList)
         assert ws_name in self._braggDataList, msg
 
@@ -274,9 +328,13 @@ class AddieDriver(object):
         # convert units if necessary
         curr_unit = bank_ws.getAxis(0).getUnit().unitID()
         if curr_unit != x_unit:
-            simpleapi.ConvertToHistogram(InputWorkspace=ws_name, OutputWorkspace=ws_name)
-            simpleapi.ConvertUnits(InputWorkspace=ws_name, OutputWorkspace=ws_name,
-                                   Target=x_unit, EMode='Elastic')
+            simpleapi.ConvertToHistogram(
+                InputWorkspace=ws_name, OutputWorkspace=ws_name)
+            simpleapi.ConvertUnits(
+                InputWorkspace=ws_name,
+                OutputWorkspace=ws_name,
+                Target=x_unit,
+                EMode='Elastic')
 
         return AddieDriver.get_ws_data(ws_name, wkspindex)
 
@@ -328,20 +386,23 @@ class AddieDriver(object):
             sq_name = self._currSqWsName
 
         if not AnalysisDataService.doesExist(sq_name):
-            raise RuntimeError('S(Q) matrix workspace {0} does not exist.'.format(sq_name))
+            raise RuntimeError(
+                'S(Q) matrix workspace {0} does not exist.'.format(sq_name))
 
         return AddieDriver.get_ws_data(sq_name)
 
     @staticmethod
     def get_ws(name):
         name = str(name)
-        assert AnalysisDataService.doesExist(name), 'Workspace "{}" does not exist.'.format(name)
+        assert AnalysisDataService.doesExist(
+            name), 'Workspace "{}" does not exist.'.format(name)
         return AnalysisDataService.retrieve(name)
 
     @staticmethod
     def get_ws_data(ws_name, wkspIndex=0, withDy=True):
         wksp = AddieDriver.get_ws(ws_name)
-        x, y, dy, _ = mantid.plots.helperfunctions.get_spectrum(wksp, wkspIndex, False, withDy=withDy, withDx=False)
+        x, y, dy, _ = mantid.plots.helperfunctions.get_spectrum(
+            wksp, wkspIndex, False, withDy=withDy, withDx=False)
 
         return x, y, dy
 
@@ -372,18 +433,26 @@ class AddieDriver(object):
         # load with different file type
         base_file_name = os.path.basename(file_name).lower()
         gss_ws_name = os.path.basename(file_name).split('.')[0]
-        if base_file_name.endswith('.gss') or base_file_name.endswith('.gsa') or base_file_name.endswith('.gda'):
+        if base_file_name.endswith('.gss') or base_file_name.endswith(
+                '.gsa') or base_file_name.endswith('.gda'):
             simpleapi.LoadGSS(Filename=file_name,
                               OutputWorkspace=gss_ws_name)
         elif base_file_name.endswith('.nxs'):
-            simpleapi.LoadNexusProcessed(Filename=file_name, OutputWorkspace=gss_ws_name)
-            simpleapi.ConvertUnits(InputWorkspace=gss_ws_name, OutputWorkspace=gss_ws_name, EMode='Elastic', Target='TOF')
+            simpleapi.LoadNexusProcessed(
+                Filename=file_name, OutputWorkspace=gss_ws_name)
+            simpleapi.ConvertUnits(
+                InputWorkspace=gss_ws_name,
+                OutputWorkspace=gss_ws_name,
+                EMode='Elastic',
+                Target='TOF')
         elif base_file_name.endswith('.dat'):
             simpleapi.LoadAscii(Filename=file_name,
                                 OutputWorkspace=gss_ws_name,
                                 Unit='TOF')
         else:
-            raise RuntimeError('File %s is not of a supported type.' % file_name)
+            raise RuntimeError(
+                'File %s is not of a supported type.' %
+                file_name)
         self._braggDataList.append(gss_ws_name)
 
         # check
@@ -401,12 +470,15 @@ class AddieDriver(object):
 
         # load
         gr_ws_name = os.path.basename(gr_file_name).split('.')[0]
-        simpleapi.LoadAscii(Filename=gr_file_name, OutputWorkspace=gr_ws_name, Unit='Empty')
+        simpleapi.LoadAscii(
+            Filename=gr_file_name,
+            OutputWorkspace=gr_ws_name,
+            Unit='Empty')
 
         # check output
         if not AnalysisDataService.doesExist(gr_ws_name):
-            return False, 'Unable to load file %s as target workspace %s cannot be found.' % (gr_ws_name,
-                                                                                              gr_ws_name)
+            return False, 'Unable to load file %s as target workspace %s cannot be found.' % (
+                gr_ws_name, gr_ws_name)
 
         return True, gr_ws_name
 
@@ -428,17 +500,28 @@ class AddieDriver(object):
         # call mantid LoadAscii
         ext = file_name.upper().split('.')[-1]
         if ext == 'NXS':
-            simpleapi.LoadNexusProcessed(Filename=file_name, OutputWorkspace=sq_ws_name)
-            simpleapi.ConvertUnits(InputWorkspace=sq_ws_name, OutputWorkspace=sq_ws_name,
-                                   EMode='Elastic', Target='MomentumTransfer')
-            simpleapi.ConvertToPointData(InputWorkspace=sq_ws_name, OutputWorkspace=sq_ws_name)  # TODO REMOVE THIS LINE
+            simpleapi.LoadNexusProcessed(
+                Filename=file_name, OutputWorkspace=sq_ws_name)
+            simpleapi.ConvertUnits(
+                InputWorkspace=sq_ws_name,
+                OutputWorkspace=sq_ws_name,
+                EMode='Elastic',
+                Target='MomentumTransfer')
+            simpleapi.ConvertToPointData(
+                InputWorkspace=sq_ws_name,
+                OutputWorkspace=sq_ws_name)  # TODO REMOVE THIS LINE
         elif ext == 'DAT' or ext == 'txt':
-            simpleapi.LoadAscii(Filename=file_name, OutputWorkspace=sq_ws_name, Unit='MomentumTransfer')
-            # The S(Q) file is in fact S(Q)-1 in sq file.  So need to add 1 to the workspace
+            simpleapi.LoadAscii(
+                Filename=file_name,
+                OutputWorkspace=sq_ws_name,
+                Unit='MomentumTransfer')
+            # The S(Q) file is in fact S(Q)-1 in sq file.  So need to add 1 to
+            # the workspace
             out_ws = AnalysisDataService.retrieve(sq_ws_name)
             out_ws += 1
 
-        assert AnalysisDataService.doesExist(sq_ws_name), 'Unable to load S(Q) file %s.' % file_name
+        assert AnalysisDataService.doesExist(
+            sq_ws_name), 'Unable to load S(Q) file %s.' % file_name
 
         # set to the current S(Q) workspace name
         self._currSqWsName = sq_ws_name
@@ -463,12 +546,19 @@ class AddieDriver(object):
         Returns:
 
         """
-        assert isinstance(filetype, str), 'GofR file type {0} must be a supported string.'.format(filetype)
+        assert isinstance(
+            filetype, str), 'GofR file type {0} must be a supported string.'.format(filetype)
 
         if filetype == 'xye':
-            simpleapi.SaveAscii(InputWorkspace=ws_name, Filename=file_name, Separator='Space')
+            simpleapi.SaveAscii(
+                InputWorkspace=ws_name,
+                Filename=file_name,
+                Separator='Space')
         elif filetype == 'csv':
-            simpleapi.SaveAscii(InputWorkspace=ws_name, Filename=file_name, Separator='CSV')
+            simpleapi.SaveAscii(
+                InputWorkspace=ws_name,
+                Filename=file_name,
+                Separator='CSV')
         elif filetype == 'rmcprofile' or filetype == 'dat':
             self.export_to_rmcprofile(ws_name, file_name, comment=comment)
         elif filetype == 'gr':
@@ -476,10 +566,14 @@ class AddieDriver(object):
             wksp.getAxis(0).setUnit("Label").setLabel("r", "Angstrom")
             simpleapi.SavePDFGui(InputWorkspace=wksp, Filename=file_name)
         elif filetype == 'sq':
-            simpleapi.SaveAscii(InputWorkspace=ws_name, Filename=file_name, Separator='Space')
+            simpleapi.SaveAscii(
+                InputWorkspace=ws_name,
+                Filename=file_name,
+                Separator='Space')
         else:
             # non-supported type
-            raise RuntimeError('G(r) or S(Q) file type "{0}" is not supported.'.format(filetype))
+            raise RuntimeError(
+                'G(r) or S(Q) file type "{0}" is not supported.'.format(filetype))
 
     @staticmethod
     def write_gss_file(ws_name_list, gss_file_name):
@@ -518,7 +612,8 @@ class AddieDriver(object):
             source_pos = instrument.getSource().getPos()
             L1 = sample_pos - source_pos
 
-            angle = wksp.getDetector(wkspindex).getPos().angle(L1) * 180. / math.pi
+            angle = wksp.getDetector(
+                wkspindex).getPos().angle(L1) * 180. / math.pi
             angles.append(angle)
 
         return angles
