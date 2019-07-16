@@ -49,6 +49,7 @@ from addie.processing.mantid.master_table.column_highlighting import ColumnHighl
 # PyONcat
 try:
     from addie.processing.mantid.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler  # noqa
+    import pyoncat
     ONCAT_ENABLED = True
 except ImportError:
     print('pyoncat module not found. Functionality disabled')

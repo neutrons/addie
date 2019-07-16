@@ -25,9 +25,9 @@ from addie.processing.mantid.master_table.import_from_database.format_json_from_
 from addie.utilities.gui_handler import TableHandler
 
 try:
-    ONCAT_ENABLED = True
     from addie.processing.mantid.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
     import pyoncat
+    ONCAT_ENABLED = True
 except ImportError:
     print('pyoncat module not found. Functionality disabled')
     ONCAT_ENABLED = False

@@ -19,12 +19,12 @@ from addie.processing.mantid.master_table.master_table_loader import TableFileLo
 from addie.processing.mantid.master_table.master_table_exporter import TableFileExporter
 from addie.widgets.filedialog import get_save_file
 try:
-    ONCAT_ENABLED = True
     from addie.processing.mantid.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
+    import pyoncat
+    ONCAT_ENABLED = True
 except ImportError:
     print('pyoncat module not found. Functionality disabled')
     ONCAT_ENABLED = False
-
 
 class TableInitialization:
 

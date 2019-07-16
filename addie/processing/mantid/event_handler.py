@@ -17,6 +17,7 @@ from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMN
 # ONCat integration
 try:
     from addie.processing.mantid.master_table.import_from_database.import_from_database_handler import ImportFromDatabaseHandler
+    import pyoncat
     ONCAT_ENABLED = True
 except ImportError:
     print('pyoncat module not found. Functionality disabled')
