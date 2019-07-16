@@ -222,6 +222,7 @@ def generate_gr_step2(main_window, sq_ws_name_list):
     try:
         rho0=float(rho0_str)
     except ValueError:
+        print("WARNING: rho0 is not a float, will not be used in transform")
         rho0 = None
 
     # PDF type
