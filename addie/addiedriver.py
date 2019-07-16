@@ -107,6 +107,11 @@ class AddieDriver(object):
         if rho0 is not None:
             kwargs['rho0'] = rho0
 
+        # Print warning about using G(r) and rho0
+        if 'rho0' in kwargs and pdf_type == "G(r)":
+            print("WARNING: Modifying the density does not affect G(r) function")
+
+
         # get the input unit
         sofq_type = 'S(Q)'
 
