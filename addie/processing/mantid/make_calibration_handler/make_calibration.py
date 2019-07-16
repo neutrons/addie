@@ -10,7 +10,7 @@ import datetime
 from collections import namedtuple
 import numpy as np
 import os
-import json
+import simplejson
 import re
 
 from addie.utilities.gui_handler import TableHandler
@@ -88,7 +88,7 @@ class MakeCalibrationWindow(QMainWindow):
         # list of sample environment
         config_file = self.addie_config_file
         with open(config_file) as f:
-            data = json.load(f)
+            data = simplejson.load(f)
         list_environment = data['sample_environment']
         self.ui.sample_environment_combobox.addItems(list_environment)
 
@@ -403,7 +403,7 @@ class MakeCalibrationWindow(QMainWindow):
                                  filter={'json (*.json)':'json'})
         if _file:
             with open(_file, 'w') as fp:
-                json.dump(o_dict.dictionary, fp)
+                simplejson.dump(o_dict.dictionary, fp, indent=2, ignore_nan=True)
 
     def closeEvent(self, c):
         self.parent.make_calibration_ui = None

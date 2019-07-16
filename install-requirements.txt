@@ -2,3 +2,4 @@ mantid-total-scattering
 periodictable
 psutil
 QtPy
+simplejson

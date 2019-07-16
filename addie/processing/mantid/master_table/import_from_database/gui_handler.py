@@ -15,13 +15,16 @@ class FilterTableHandler:
     def __init__(self, table_ui=None):
         self.table_ui = table_ui
 
-    def return_first_row_for_this_item_value(self, string_to_find="", column_to_look_for=-1):
+    def return_first_row_for_this_item_value(
+            self, string_to_find="", column_to_look_for=-1):
         """return the first row found where the item value matches the string passed.
         If the string can not be found, return -1
         """
         nbr_rows = self.table_ui.rowCount()
         for _row in np.arange(nbr_rows):
-            item_value = str(self.table_ui.item(_row, column_to_look_for).text())
+            item_value = str(
+                self.table_ui.item(
+                    _row, column_to_look_for).text())
             if string_to_find == item_value:
                 return _row
         return -1
@@ -54,16 +57,23 @@ class FilterResultTableHandler:
         does, return the column index. If this keyword can not be found, return -1"""
         nbr_columns = self.table_ui.columnCount()
         for _col in np.arange(nbr_columns):
-            column_header = str(self.table_ui.horizontalHeaderItem(_col).text())
+            column_header = str(
+                self.table_ui.horizontalHeaderItem(_col).text())
             if column_header == keyword:
                 return _col
         return -1
 
-    def get_rows_of_matching_string(self, column_to_look_for=-1, string_to_find='', criteria='is'):
+    def get_rows_of_matching_string(
+            self,
+            column_to_look_for=-1,
+            string_to_find='',
+            criteria='is'):
         nbr_row = self.table_ui.rowCount()
         list_matching_rows = []
         for _row in np.arange(nbr_row):
-            string_at_this_row = str(self.table_ui.item(_row, column_to_look_for).text())
+            string_at_this_row = str(
+                self.table_ui.item(
+                    _row, column_to_look_for).text())
             if criteria == 'is':
                 if string_at_this_row == string_to_find:
                     list_matching_rows.append(_row)
@@ -106,15 +116,16 @@ class GuiHandler:
 
         enable_import = False
 
-        if window_ui.toolBox.currentIndex() == 0: # import everything
+        if window_ui.toolBox.currentIndex() == 0:  # import everything
 
             nbr_row = window_ui.tableWidget_all_runs.rowCount()
             if nbr_row > 0:
                 enable_import = True
 
-        else: # rule tab
+        else:  # rule tab
 
-            o_gui = FilterResultTableHandler(table_ui=window_ui.tableWidget_filter_result)
+            o_gui = FilterResultTableHandler(
+                table_ui=window_ui.tableWidget_filter_result)
             nbr_row_visible = o_gui.get_number_of_visible_rows()
             if nbr_row_visible > 0:
                 enable_import = True
@@ -148,13 +159,6 @@ class ImportFromDatabaseTableHandler:
                                      col=_column)
 
             self.parent.first_time_filling_table = False
-
-    # def _json_extractor(self, json=None, list_args=[]):
-    #     if len(list_args) == 1:
-    #         return json[list_args[0]]
-    #     else:
-    #         return self._json_extractor(json[list_args.pop(0)],
-    #                                     list_args=list_args)
 
     def _set_table_item(self, json=None, metadata_filter={}, row=-1, col=-1):
         """Populate the filter metadada table from the oncat json file of only the arguments specified in
@@ -215,14 +219,15 @@ class ImportFromDatabaseTableHandler:
 
                 path = oncat_template[_col]['path']
                 list_path = path.split(".")
-                argument_value = json_extractor(json=json,
-                                                list_args=copy.deepcopy(list_path))
+                argument_value = json_extractor(
+                    json=json, list_args=copy.deepcopy(list_path))
 
                 # used to evaluate expression returned by ONCat
                 if oncat_template[_col]['formula']:
 
                     # the expression will look like '{value/10e11}'
-                    # so value will be replaced by argument_value and the expression will be evaluated using eval
+                    # so value will be replaced by argument_value and the
+                    # expression will be evaluated using eval
                     value = argument_value  # noqa: F841
                     argument_value = eval(oncat_template[_col]['formula'])
                     argument_value = argument_value.pop()
