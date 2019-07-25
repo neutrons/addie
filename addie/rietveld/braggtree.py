@@ -4,7 +4,6 @@ from qtpy.QtCore import QModelIndex
 from qtpy.QtGui import QStandardItem, QStandardItemModel
 from qtpy.QtWidgets import QAction
 from addie.utilities import customtreeview as base
-from addie.calculate_gr.event_handler import remove_gss_from_plot
 from addie.widgets.filedialog import get_save_file
 
 
@@ -138,7 +137,8 @@ class BraggTree(base.CustomizedTreeView):
 
     def add_bragg_ws_group(self, ws_group_name, bank_name_list):
         """
-        Add a workspace group containing a list of bank names as a main node in the tree
+        Add a workspace group containing a list of bank names as a main node
+        in the tree
         Parameters
         ----------
         ws_group_name
@@ -149,14 +149,20 @@ class BraggTree(base.CustomizedTreeView):
 
         """
         # check inputs' validity
-        assert isinstance(ws_group_name, str), 'ws_group_name must be a string but not %s.' % str(type(ws_group_name))
-        assert isinstance(bank_name_list, list) and len(bank_name_list) > 0, 'Bank name list must be a non-empty list' \
-                                                                             ' but not %s.' % str(type(bank_name_list))
+        msg = 'ws_group_name must be a string but not {}.'
+        assert isinstance(ws_group_name, str), msg.format(type(ws_group_name))
+
+        is_it_a_list = isinstance(bank_name_list, list)
+        is_list_populated = len(bank_name_list) > 0
+        is_a_list_and_populated = is_it_a_list and is_list_populated
+        msg = 'Bank name list must be a non-empty list. Currently is: {}.'
+        assert is_a_list_and_populated, msg.format(type(bank_name_list))
         # main node/leaf
         main_leaf_value = str(ws_group_name)
         self.add_main_item(main_leaf_value, True, True)
 
         for bank_name in bank_name_list:
+            print("main_leaf_value:", main_leaf_value, "bank_name:", bank_name)
             # add the tree
             self.add_child_main_item(main_leaf_value, bank_name)
             # register
@@ -177,13 +183,15 @@ class BraggTree(base.CustomizedTreeView):
         # Get current index and item
         current_index = self.currentIndex()
         if isinstance(current_index, QModelIndex) is False:
-            return False, 'Current index is not QModelIndex instance, but %s.' % str(type(current_index))
+            msg = 'Current index is not QModelIndex instance, but {}.'
+            return False, msg.format(type(current_index))
 
         assert (isinstance(current_index, QModelIndex))
 
         current_item = self.model().itemFromIndex(current_index)
         if isinstance(current_item, QStandardItem) is False:
-            return False, 'Current item is not QStandardItem instance, but %s.' % str(type(current_item))
+            msg = 'Current item is not QStandardItem instance, but {}.'
+            return False, msg.format(type(current_item))
         assert (isinstance(current_item, QStandardItem))
 
         ws_name = str(current_item.text())
@@ -192,6 +200,50 @@ class BraggTree(base.CustomizedTreeView):
 
         if self._mainWindow is not None:
             self._mainWindow.set_ipython_script(python_cmd)
+
+    def remove_gss_from_plot(main_window, gss_group_name, gss_wksps):
+        """Remove a GSAS group from canvas if they exits
+        :param gss_group_name: name of the GSS node, i.e.,
+                               GSS workspace group's name
+        :param gss_wksps: list of names of GSS single banks' workspace name
+        :return:
+        """
+        # check
+        msg = 'GSS group workspace name must be a string but not {0}.'
+        msg = msg.format(type(gss_group_name))
+        assert isinstance(gss_group_name, str), msg
+        msg = 'GSAS-single-bank workspace names {0} must be list, not {1}.'
+        msg = msg.format(gss_wksps, type(gss_wksps))
+        assert isinstance(gss_wksps, list),  msg
+
+        if len(gss_wksps) == 0:
+            raise RuntimeError(
+                'GSAS-single-bank workspace name list is empty!')
+
+        # get bank IDs
+        bank_ids = list()
+        for gss_bank_ws in gss_wksps:
+            bank_id = int(gss_bank_ws.split('_bank')[-1])
+            bank_ids.append(bank_id)
+
+        graphicsView_bragg = main_window.calculategr_ui.graphicsView_bragg
+
+        # remove
+        graphicsView_bragg.remove_gss_banks(gss_group_name, bank_ids)
+
+        # check if there is no such bank's plot on figure
+        # make sure the checkbox is unselected
+        # turn on the mutex lock
+        main_window._noEventBankWidgets = True
+
+        for bank_id in range(1, 7):
+            has_plot_on_canvas = len(
+                graphicsView_bragg.get_ws_name_on_canvas(bank_id)) > 0
+            main_window._braggBankWidgets[bank_id].setChecked(
+                has_plot_on_canvas)
+
+        # turn off the mutex lock
+        main_window._noEventBankWidgets = False
 
     def do_remove_from_plot(self):
         """
@@ -209,15 +261,14 @@ class BraggTree(base.CustomizedTreeView):
         for gss_node in selected_nodes:
             gss_ws_name = str(gss_node.text())
             gss_bank_names = self.get_child_nodes(gss_node, output_str=True)
-            remove_gss_from_plot(self._mainWindow,
-                                 gss_ws_name,
-                                 gss_bank_names)
+            self.remove_gss_from_plot(self._mainWindow,
+                                      gss_ws_name,
+                                      gss_bank_names)
 
     def do_delete_gsas(self):
         """
-        Delete a GSAS workspace and its split workspaces, and its item in the GSAS-tree as well.
-        Returns:
-        None
+        Delete a GSAS workspace and its split workspaces,
+        and its item in the GSAS-tree as well.
         """
         # get selected nodes
         gsas_node_list = self.get_selected_items()
@@ -229,24 +280,65 @@ class BraggTree(base.CustomizedTreeView):
             self._mainWindow.get_workflow().delete_workspace(gss_ws_name)
 
             # get the sub nodes and delete the workspaces
-            sub_leaves = self.get_child_nodes(parent_node=gsas_node, output_str=True)
+            sub_leaves = self.get_child_nodes(
+                parent_node=gsas_node, output_str=True)
             for ws_name in sub_leaves:
+                print(ws_name)
+                from mantid.api import AnalysisDataService
+                print(AnalysisDataService.getObjectNames())
                 self._mainWindow.get_workflow().delete_workspace(ws_name)
                 try:
-                    remove_gss_from_plot(self._mainWindow,
-                                         gss_group_name=gsas_name,
-                                         gss_bank_ws_name_list=[ws_name])
+                    self.remove_gss_from_plot(self._mainWindow,
+                                              gss_group_name=gsas_name,
+                                              gss_wksps=[ws_name])
                 except AssertionError:
                     print('Workspace %s is not on canvas.' % ws_name)
 
             # delete the node from the tree
             self.delete_node(gsas_node)
 
+    def do_reset_gsas_tab(main_window):
+        """
+        Reset the GSAS-tab including
+        1. deleting all the GSAS workspaces
+        2. clearing the GSAS tree
+        3. clearing GSAS canvas
+        """
+        bragg_list = main_window.calculategr_ui.treeWidget_braggWSList
+
+        # delete all workspaces: get GSAS workspaces from tree
+        gsas_group_node_list = bragg_list.get_main_nodes(output_str=False)
+        for gsas_group_node in gsas_group_node_list:
+            # skip if the workspace is 'workspaces'
+            gss_node_name = str(gsas_group_node.text())
+            if gss_node_name == 'workspaces':
+                continue
+
+            # get the split workspaces' names and delete
+            gsas_ws_name_list = bragg_list.get_child_nodes(
+                gsas_group_node,
+                output_str=True)
+            for workspace in gsas_ws_name_list:
+                main_window._myController.delete_workspace(workspace)
+
+            # guess for the main workspace and delete
+            gss_main_ws = gss_node_name.split('_group')[0]
+            main_window._myController.delete_workspace(
+                gss_main_ws, no_throw=True)
+
+        # reset the GSAS tree
+        bragg_list.reset_bragg_tree()
+
+        # clear checkboxes for banks
+        main_window.clear_bank_checkboxes()
+
+        # clear the canvas
+        main_window.calculategr_ui.graphicsView_bragg.reset()
+
     def do_merge_to_gss(self):
         """
-        Merge a selected GSAS workspace (with split workspaces) to a new GSAS file
-        Returns:
-
+        Merge a selected GSAS workspace (with split workspaces)
+        to a new GSAS file
         """
         # check prerequisite
         assert self._mainWindow is not None, 'Main window is not set up.'
@@ -260,15 +352,20 @@ class BraggTree(base.CustomizedTreeView):
         gss_node_list = ret_obj
         if len(gss_node_list) == 0:
             return
+
         elif len(gss_node_list) > 1:
-            print('[Error] Only 1 GSS node can be selected.  Current selected nodes are %s.' % str(gss_node_list))
+            msg = '[Error] Only 1 GSS node can be selected.'
+            msg += 'Current selected nodes are {}.'
+            print(msg.format(gss_node_list))
             return
 
         # pop-out a file dialog for GSAS file's name
-        file_ext = {'GSAS File (*.gsa)':'gsa', 'Any File (*.*)':''}
-        new_gss_file_name, _ = get_save_file(self, caption='New GSAS file name',
-                                             directory=self._mainWindow.get_default_data_dir(),
-                                             filter=file_ext)
+        file_ext = {'GSAS File (*.gsa)': 'gsa', 'Any File (*.*)': ''}
+        new_gss_file_name, _ = get_save_file(
+            self,
+            caption='New GSAS file name',
+            directory=self._mainWindow.get_default_data_dir(),
+            filter=file_ext)
 
         if not new_gss_file_name:  # user pressed cancel
             return
@@ -278,7 +375,8 @@ class BraggTree(base.CustomizedTreeView):
         bank_ws_list = self.get_child_nodes(selected_node, output_str=True)
 
         # write all the banks to a GSAS file
-        self._mainWindow.get_workflow().write_gss_file(ws_name_list=bank_ws_list, gss_file_name=new_gss_file_name)
+        self._mainWindow.get_workflow().write_gss_file(
+            ws_name_list=bank_ws_list, gss_file_name=new_gss_file_name)
 
     def do_plot_ws(self):
         """
@@ -304,7 +402,8 @@ class BraggTree(base.CustomizedTreeView):
 
     def do_select_gss_node(self):
         """
-        Select a GSAS node such that this workspace (group) will be plotted to canvas
+        Select a GSAS node such that this workspace (group)
+        will be plotted to canvas
         Returns
         -------
 
@@ -320,14 +419,15 @@ class BraggTree(base.CustomizedTreeView):
     def get_current_main_nodes(self):
         """
         Get the name of the current nodes that are selected
-        The reason to put the method here is that it is assumed that the tree only has 2 level (main and leaf)
+        The reason to put the method here is that it is assumed that the tree
+        only has 2 level (main and leaf)
         Returns: 2-tuple: boolean, a list of strings as main nodes' names
-
         """
         # Get current index and item
         current_index = self.currentIndex()
         if isinstance(current_index, QModelIndex) is False:
-            return False, 'Current index is not QModelIndex instance, but %s.' % str(type(current_index))
+            msg = 'Current index is not QModelIndex instance, but {}.'
+            return False, msg.format(type(current_index))
 
         assert (isinstance(current_index, QModelIndex))
 
@@ -339,7 +439,8 @@ class BraggTree(base.CustomizedTreeView):
             this_item = self.model().itemFromIndex(q_index)
             # check
             if isinstance(this_item, QStandardItem) is False:
-                return False, 'Current item is not QStandardItem instance, but %s.' % str(type(this_item))
+                msg = 'Current item is not QStandardItem instance, but {}.'
+                return False,  msg.format(type(this_item))
 
             # get node name of parent's node name
             if this_item.parent() is not None:
