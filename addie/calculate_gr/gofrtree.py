@@ -344,10 +344,11 @@ class GofRTree(base.CustomizedTreeView):
             raise NotImplementedError('Main window has not been set up!')
 
         if len(gr_list) > 0:
-            event_handler.plot_gr(
-                self._mainWindow, gr_list,
-                None, None, None, None, None,
-                auto=True)
+            for gr_name in gr_list:
+                event_handler.plot_gr(
+                    self._mainWindow, gr_name,
+                    None, None, None, None, None,
+                    auto=True)
 
         for sq_name in sq_list:
             event_handler.plot_sq(self._mainWindow, sq_name, None, False)
@@ -369,7 +370,7 @@ class GofRTree(base.CustomizedTreeView):
             if node_name == 'SofQ':
                 event_handler.remove_sq_from_plot(self._mainWindow, leaf_name)
             else:
-                event_handler.remove_gr_from_plot(leaf_name)
+                event_handler.remove_gr_from_plot(self._mainWindow, leaf_name)
 
     def get_current_run(self):
         """ Get current run selected by mouse
