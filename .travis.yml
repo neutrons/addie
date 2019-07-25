@@ -24,44 +24,53 @@ before_install:
   wget -O miniconda.sh https://repo.continuum.io/miniconda/Miniconda${CONDA:0:1}-latest-$OS.sh
   bash miniconda.sh -b -p $HOME/miniconda
   export PATH="$HOME/miniconda/bin:$PATH"
+  conda init bash
 
-install:
-- |
-  # Setup channels
-  conda config --set always_yes yes --set changeps1 no --set anaconda_upload no
-  conda config --add channels conda-forge --add channels marshallmcdonnell --add channels mantid --add channels mantid/label/nightly
+script:
+    # Setup conda activate/deactivate commands
+  - conda init bash
+  - source $(conda info --root)/etc/profile.d/conda.sh
+  - conda info --root
 
-  # conda update  -q conda
-  # pinned because 4.7.7 is broken when using `conda update -q conda`
-  # can remove this if this issue is closed:
-  # - https://github.com/conda/conda/issues/8934
-  conda install  -q conda==4.7.5;
+    # Conda config - behavior and channel setup
+  - conda config --set always_yes yes --set changeps1 no --set anaconda_upload no
+  - conda config --add channels conda-forge --add channels marshallmcdonnell --add channels mantid --add channels mantid/label/nightly --add channels defaults
 
-  conda info -a
+    # Install mamba
+  - conda install mamba -c conda-forge
+  - mamba update mamba -c conda-forge
+  - mamba info -a
 
-  # Activate environment
-  conda create -q -n addie_env python=$CONDA flake8 conda-build=3.17 conda-verify anaconda-client
-  source activate addie_env
+    # BUILD: Create addie build environment
+  - mamba create -q -n addie_build python=$CONDA conda-build=3.17 conda-verify
+  - conda activate addie_build
+  - mamba build conda.recipe
+  - export PKG_FILE=$(mamba build conda.recipe --output)
+  - conda activate
 
-  # Build recipe and install addie
-  conda build conda.recipe
-  export PKG_FILE=$(conda build conda.recipe --output)
-  conda install ${PKG_FILE}
+    # TEST: Create test environment and test build
+  - mamba create -q -n addie_test python=$CONDA flake8 conda-build=3.17 anaconda-client
+  - mamba info --envs
+  - conda activate addie_test
+  - mkdir -p ${CONDA_PREFIX}/conda-bld/linux-64/
+  - cp ${PKG_FILE} ${CONDA_PREFIX}/conda-bld/linux-64/
+  - ls ${CONDA_PREFIX}/conda-bld
+  - ls ${CONDA_PREFIX}/conda-bld/linux-64
+  - conda index ${CONDA_PREFIX}/conda-bld
+  - mamba install -c ${CONDA_PREFIX}/conda-bld addie
 
-before_script:
   - |
-    # create a properties file that turns off network access
+    # Mantid pre-requiste - create a properties file that turns off network access
     mkdir ~/.mantid
     echo "CheckMantidVersion.OnStartup=0" > ~/.mantid/Mantid.user.properties
     echo "UpdateInstrumentDefinitions.OnStartup=0" >> ~/.mantid/Mantid.user.properties
     echo "usagereports.enabled=0" >> ~/.mantid/Mantid.user.properties
     export DISPLAY=:99.0
     sleep 3
-  - |
-    conda install -c mantid/label/nightly mantid-workbench
-    conda install -c marshallmcdonnell mantid-total-scattering-python-wrapper
+  # - source activate addie_env
+  # - conda install -c mantid/label/nightly mantid-workbench=4.0.20190416.1125
+  # - conda install -c marshallmcdonnell mantid-total-scattering-python-wrapper
 
-script:
   # lint the code and generate an error if a warning is introduced
   - flake8 .
   - python -c "import mantid"
