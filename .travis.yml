@@ -26,7 +26,7 @@ before_install:
   export PATH="$HOME/miniconda/bin:$PATH"
   conda init bash
 
-script:
+install:
     # Setup conda activate/deactivate commands
   - conda init bash
   - source $(conda info --root)/etc/profile.d/conda.sh
@@ -48,6 +48,7 @@ script:
   - export PKG_FILE=$(mamba build conda.recipe --output)
   - conda activate
 
+script:
     # TEST: Create test environment and test build
   - mamba create -q -n addie_test python=$CONDA flake8 conda-build=3.17 anaconda-client
   - mamba info --envs
