@@ -11,6 +11,7 @@ TOF = 'TOF'
 D_SPACING = 'dSpacing'
 Q_SPACE = 'MomentumTransfer'
 
+
 def expectedWkspName(filename):
     return os.path.basename(filename).split('.')[0]
 
