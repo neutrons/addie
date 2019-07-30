@@ -1,10 +1,16 @@
 from __future__ import (absolute_import, division, print_function)
 
+import re
 from qtpy.QtCore import QModelIndex
 from qtpy.QtGui import QStandardItem, QStandardItemModel
 from qtpy.QtWidgets import QAction
 from addie.utilities import customtreeview as base
 from addie.widgets.filedialog import get_save_file
+
+
+class BankRegexException(Exception):
+    """ Exception for bank regex not finding a match"""
+    pass
 
 
 class BraggTree(base.CustomizedTreeView):
@@ -201,17 +207,36 @@ class BraggTree(base.CustomizedTreeView):
         if self._mainWindow is not None:
             self._mainWindow.set_ipython_script(python_cmd)
 
-    def remove_gss_from_plot(main_window, gss_group_name, gss_wksps):
+    def _get_bank_id(self, bank_wksp):
+        """Get bank ID from a workspace name with the structure:
+             Bank 1 - <float for theta angle>
+        :param bank_wksp: Bank workspace name to strip out bank ID from
+        :type bank_wksp: str
+        :return: Bank ID as int
+        """
+        bank_regex = r"Bank\s+(\d+)\s+-"
+        m = re.match(bank_regex, bank_wksp)
+        if m:
+            bank_id = m.group(1).strip()
+        else:
+            msg = "Did not find the bank ID in workspace name: {wksp} "
+            msg += "when using regular expression: {regex}"
+            msg = msg.format(wksp=bank_wksp, regex=bank_regex)
+            raise BankRegexException(msg)
+        return bank_id
+
+    def remove_gss_from_plot(self, main_window, gss_group_name, gss_wksps):
         """Remove a GSAS group from canvas if they exits
         :param gss_group_name: name of the GSS node, i.e.,
                                GSS workspace group's name
         :param gss_wksps: list of names of GSS single banks' workspace name
         :return:
         """
-        # check
+        # checks
         msg = 'GSS group workspace name must be a string but not {0}.'
         msg = msg.format(type(gss_group_name))
         assert isinstance(gss_group_name, str), msg
+
         msg = 'GSAS-single-bank workspace names {0} must be list, not {1}.'
         msg = msg.format(gss_wksps, type(gss_wksps))
         assert isinstance(gss_wksps, list),  msg
@@ -223,7 +248,7 @@ class BraggTree(base.CustomizedTreeView):
         # get bank IDs
         bank_ids = list()
         for gss_bank_ws in gss_wksps:
-            bank_id = int(gss_bank_ws.split('_bank')[-1])
+            bank_id = self._get_bank_id(gss_bank_ws)
             bank_ids.append(bank_id)
 
         graphicsView_bragg = main_window.calculategr_ui.graphicsView_bragg
