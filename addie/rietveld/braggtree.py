@@ -274,25 +274,10 @@ class BraggTree(base.CustomizedTreeView):
         gsas_node_list = self.get_selected_items()
 
         for gsas_node in gsas_node_list:
-            # delete a gsas workspace and the workspaces split from it
+            # delete the gsas group workspace (deletes sub-workspaces as well)
             gsas_name = str(gsas_node.text())
             gss_ws_name = gsas_name.split('_group')[0]
             self._mainWindow.get_workflow().delete_workspace(gss_ws_name)
-
-            # get the sub nodes and delete the workspaces
-            sub_leaves = self.get_child_nodes(
-                parent_node=gsas_node, output_str=True)
-            for ws_name in sub_leaves:
-                print(ws_name)
-                from mantid.api import AnalysisDataService
-                print(AnalysisDataService.getObjectNames())
-                self._mainWindow.get_workflow().delete_workspace(ws_name)
-                try:
-                    self.remove_gss_from_plot(self._mainWindow,
-                                              gss_group_name=gsas_name,
-                                              gss_wksps=[ws_name])
-                except AssertionError:
-                    print('Workspace %s is not on canvas.' % ws_name)
 
             # delete the node from the tree
             self.delete_node(gsas_node)
