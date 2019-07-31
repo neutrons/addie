@@ -56,90 +56,23 @@ class BraggTree(base.CustomizedTreeView):
         # reset
         self.reset_bragg_tree()
 
-    def reset_bragg_tree(self):
+    def _get_bank_id(self, bank_wksp):
+        """Get bank ID from a workspace name with the structure:
+             Bank 1 - <float for theta angle>
+        :param bank_wksp: Bank workspace name to strip out bank ID from
+        :type bank_wksp: str
+        :return: Bank ID as int
         """
-        Clear the leaves of the tree only leaving the main node 'workspaces'
-        Returns
-        -------
-
-        """
-        # clear all
-        if self.model() is not None:
-            self.model().clear()
-
-        # reset workspace names list
-        self._workspaceNameList = list()
-        self._myHeaderList = list()
-        self._leafDict.clear()
-
-        # re-initialize the model
-        self._myNumCols = 1
-        model = QStandardItemModel()
-        model.setColumnCount(self._myNumCols)
-        self.setModel(model)
-
-        self.init_setup(['Bragg Workspaces'])
-        self.add_main_item('workspaces', append=True, as_current_index=False)
-
-    # override
-    def mousePressEvent(self, e):
-        """
-        Over ride mouse press event
-        Parameters
-        ----------
-        e :: event
-
-        Returns
-        -------
-
-        """
-        button_pressed = e.button()
-        if button_pressed == 2:
-            # override the response for right button
-            self.pop_up_menu()
+        bank_regex = r"Bank\s+(\d+)\s+-"
+        m = re.match(bank_regex, bank_wksp)
+        if m:
+            bank_id = m.group(1).strip()
         else:
-            # keep base method for other buttons
-            base.CustomizedTreeView.mousePressEvent(self, e)
-
-    def pop_up_menu(self):
-        """
-
-        Parameters
-        ----------
-
-        Returns
-        -------
-
-        """
-        selected_items = self.get_selected_items()
-        if len(selected_items) == 0:
-            return
-
-        leaf_level = -1
-        for item in selected_items:
-            if item.parent() is None and leaf_level == -1:
-                leaf_level = 1
-            elif item.parent() is not None and leaf_level == -1:
-                leaf_level = 2
-            elif item.parent() is None and leaf_level != 1:
-                print('[Error] Nodes of different levels are selected.')
-            elif item.parent() is None and leaf_level != 2:
-                print('[Error] Nodes of different levels are selected.')
-
-        if leaf_level == 1:
-            self.removeAction(self._action_plot)
-            self.addAction(self._action_select_node)
-            self.addAction(self._action_ipython)
-            self.addAction(self._action_merge_gss)
-            self.addAction(self._action_deselect_node)
-            self.addAction(self._action_delete)
-        elif leaf_level == 2:
-            self.addAction(self._action_plot)
-            self.removeAction(self._action_select_node)
-            self.removeAction(self._action_merge_gss)
-            self.addAction(self._action_ipython)
-            self.removeAction(self._action_deselect_node)
-            self.removeAction(self._action_delete)
+            msg = "Did not find the bank ID in workspace name: {wksp} "
+            msg += "when using regular expression: {regex}"
+            msg = msg.format(wksp=bank_wksp, regex=bank_regex)
+            raise BankRegexException(msg)
+        return bank_id
 
     def add_bragg_ws_group(self, ws_group_name, bank_name_list):
         """
@@ -207,89 +140,6 @@ class BraggTree(base.CustomizedTreeView):
         if self._mainWindow is not None:
             self._mainWindow.set_ipython_script(python_cmd)
 
-    def _get_bank_id(self, bank_wksp):
-        """Get bank ID from a workspace name with the structure:
-             Bank 1 - <float for theta angle>
-        :param bank_wksp: Bank workspace name to strip out bank ID from
-        :type bank_wksp: str
-        :return: Bank ID as int
-        """
-        bank_regex = r"Bank\s+(\d+)\s+-"
-        m = re.match(bank_regex, bank_wksp)
-        if m:
-            bank_id = m.group(1).strip()
-        else:
-            msg = "Did not find the bank ID in workspace name: {wksp} "
-            msg += "when using regular expression: {regex}"
-            msg = msg.format(wksp=bank_wksp, regex=bank_regex)
-            raise BankRegexException(msg)
-        return bank_id
-
-    def remove_gss_from_plot(self, main_window, gss_group_name, gss_wksps):
-        """Remove a GSAS group from canvas if they exits
-        :param gss_group_name: name of the GSS node, i.e.,
-                               GSS workspace group's name
-        :param gss_wksps: list of names of GSS single banks' workspace name
-        :return:
-        """
-        # checks
-        msg = 'GSS group workspace name must be a string but not {0}.'
-        msg = msg.format(type(gss_group_name))
-        assert isinstance(gss_group_name, str), msg
-
-        msg = 'GSAS-single-bank workspace names {0} must be list, not {1}.'
-        msg = msg.format(gss_wksps, type(gss_wksps))
-        assert isinstance(gss_wksps, list),  msg
-
-        if len(gss_wksps) == 0:
-            raise RuntimeError(
-                'GSAS-single-bank workspace name list is empty!')
-
-        # get bank IDs
-        bank_ids = list()
-        for gss_bank_ws in gss_wksps:
-            bank_id = self._get_bank_id(gss_bank_ws)
-            bank_ids.append(bank_id)
-
-        graphicsView_bragg = main_window.rietveld_ui.graphicsView_bragg
-
-        # remove
-        graphicsView_bragg.remove_gss_banks(gss_group_name, bank_ids)
-
-        # check if there is no such bank's plot on figure
-        # make sure the checkbox is unselected
-        # turn on the mutex lock
-        main_window._noEventBankWidgets = True
-
-        for bank_id in range(1, 7):
-            has_plot_on_canvas = len(
-                graphicsView_bragg.get_ws_name_on_canvas(bank_id)) > 0
-            main_window._braggBankWidgets[bank_id].setChecked(
-                has_plot_on_canvas)
-
-        # turn off the mutex lock
-        main_window._noEventBankWidgets = False
-
-    def do_remove_from_plot(self):
-        """
-        Remove a node's plot if it is plot on canvas
-        Returns
-        -------
-
-        """
-        # get the selected gsas node
-        selected_nodes = self.get_selected_items()
-        if len(selected_nodes) == 0:
-            return
-
-        # remove it from canvas
-        for gss_node in selected_nodes:
-            gss_ws_name = str(gss_node.text())
-            gss_bank_names = self.get_child_nodes(gss_node, output_str=True)
-            self.remove_gss_from_plot(self._mainWindow,
-                                      gss_ws_name,
-                                      gss_bank_names)
-
     def do_delete_gsas(self):
         """
         Delete a GSAS workspace and its split workspaces,
@@ -306,44 +156,6 @@ class BraggTree(base.CustomizedTreeView):
 
             # delete the node from the tree
             self.delete_node(gsas_node)
-
-    def do_reset_gsas_tab(main_window):
-        """
-        Reset the GSAS-tab including
-        1. deleting all the GSAS workspaces
-        2. clearing the GSAS tree
-        3. clearing GSAS canvas
-        """
-        bragg_list = main_window.calculategr_ui.treeWidget_braggWSList
-
-        # delete all workspaces: get GSAS workspaces from tree
-        gsas_group_node_list = bragg_list.get_main_nodes(output_str=False)
-        for gsas_group_node in gsas_group_node_list:
-            # skip if the workspace is 'workspaces'
-            gss_node_name = str(gsas_group_node.text())
-            if gss_node_name == 'workspaces':
-                continue
-
-            # get the split workspaces' names and delete
-            gsas_ws_name_list = bragg_list.get_child_nodes(
-                gsas_group_node,
-                output_str=True)
-            for workspace in gsas_ws_name_list:
-                main_window._myController.delete_workspace(workspace)
-
-            # guess for the main workspace and delete
-            gss_main_ws = gss_node_name.split('_group')[0]
-            main_window._myController.delete_workspace(
-                gss_main_ws, no_throw=True)
-
-        # reset the GSAS tree
-        bragg_list.reset_bragg_tree()
-
-        # clear checkboxes for banks
-        main_window.clear_bank_checkboxes()
-
-        # clear the canvas
-        main_window.rietveld_ui.graphicsView_bragg.reset()
 
     def do_merge_to_gss(self):
         """
@@ -387,6 +199,65 @@ class BraggTree(base.CustomizedTreeView):
         # write all the banks to a GSAS file
         self._mainWindow.get_workflow().write_gss_file(
             ws_name_list=bank_ws_list, gss_file_name=new_gss_file_name)
+
+    def do_remove_from_plot(self):
+        """
+        Remove a node's plot if it is plot on canvas
+        Returns
+        -------
+
+        """
+        # get the selected gsas node
+        selected_nodes = self.get_selected_items()
+        if len(selected_nodes) == 0:
+            return
+
+        # remove it from canvas
+        for gss_node in selected_nodes:
+            gss_ws_name = str(gss_node.text())
+            gss_bank_names = self.get_child_nodes(gss_node, output_str=True)
+            self.remove_gss_from_plot(self._mainWindow,
+                                      gss_ws_name,
+                                      gss_bank_names)
+
+
+    def do_reset_gsas_tab(main_window):
+        """
+        Reset the GSAS-tab including
+        1. deleting all the GSAS workspaces
+        2. clearing the GSAS tree
+        3. clearing GSAS canvas
+        """
+        bragg_list = main_window.calculategr_ui.treeWidget_braggWSList
+
+        # delete all workspaces: get GSAS workspaces from tree
+        gsas_group_node_list = bragg_list.get_main_nodes(output_str=False)
+        for gsas_group_node in gsas_group_node_list:
+            # skip if the workspace is 'workspaces'
+            gss_node_name = str(gsas_group_node.text())
+            if gss_node_name == 'workspaces':
+                continue
+
+            # get the split workspaces' names and delete
+            gsas_ws_name_list = bragg_list.get_child_nodes(
+                gsas_group_node,
+                output_str=True)
+            for workspace in gsas_ws_name_list:
+                main_window._myController.delete_workspace(workspace)
+
+            # guess for the main workspace and delete
+            gss_main_ws = gss_node_name.split('_group')[0]
+            main_window._myController.delete_workspace(
+                gss_main_ws, no_throw=True)
+
+        # reset the GSAS tree
+        bragg_list.reset_bragg_tree()
+
+        # clear checkboxes for banks
+        main_window.clear_bank_checkboxes()
+
+        # clear the canvas
+        main_window.rietveld_ui.graphicsView_bragg.reset()
 
     def do_plot_ws(self):
         """
@@ -460,6 +331,136 @@ class BraggTree(base.CustomizedTreeView):
             main_node_list.append(node_name)
 
         return True, main_node_list
+
+    # override
+    def mousePressEvent(self, e):
+        """
+        Over ride mouse press event
+        Parameters
+        ----------
+        e :: event
+
+        Returns
+        -------
+
+        """
+        button_pressed = e.button()
+        if button_pressed == 2:
+            # override the response for right button
+            self.pop_up_menu()
+        else:
+            # keep base method for other buttons
+            base.CustomizedTreeView.mousePressEvent(self, e)
+
+    def pop_up_menu(self):
+        """
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
+        """
+        selected_items = self.get_selected_items()
+        if len(selected_items) == 0:
+            return
+
+        leaf_level = -1
+        for item in selected_items:
+            if item.parent() is None and leaf_level == -1:
+                leaf_level = 1
+            elif item.parent() is not None and leaf_level == -1:
+                leaf_level = 2
+            elif item.parent() is None and leaf_level != 1:
+                print('[Error] Nodes of different levels are selected.')
+            elif item.parent() is None and leaf_level != 2:
+                print('[Error] Nodes of different levels are selected.')
+
+        if leaf_level == 1:
+            self.removeAction(self._action_plot)
+            self.addAction(self._action_select_node)
+            self.addAction(self._action_ipython)
+            self.addAction(self._action_merge_gss)
+            self.addAction(self._action_deselect_node)
+            self.addAction(self._action_delete)
+        elif leaf_level == 2:
+            self.addAction(self._action_plot)
+            self.removeAction(self._action_select_node)
+            self.removeAction(self._action_merge_gss)
+            self.addAction(self._action_ipython)
+            self.removeAction(self._action_deselect_node)
+            self.removeAction(self._action_delete)
+
+    def remove_gss_from_plot(self, main_window, gss_group_name, gss_wksps):
+        """Remove a GSAS group from canvas if they exits
+        :param gss_group_name: name of the GSS node, i.e.,
+                               GSS workspace group's name
+        :param gss_wksps: list of names of GSS single banks' workspace name
+        :return:
+        """
+        # checks
+        msg = 'GSS group workspace name must be a string but not {0}.'
+        msg = msg.format(type(gss_group_name))
+        assert isinstance(gss_group_name, str), msg
+
+        msg = 'GSAS-single-bank workspace names {0} must be list, not {1}.'
+        msg = msg.format(gss_wksps, type(gss_wksps))
+        assert isinstance(gss_wksps, list),  msg
+
+        if len(gss_wksps) == 0:
+            raise RuntimeError(
+                'GSAS-single-bank workspace name list is empty!')
+
+        # get bank IDs
+        bank_ids = list()
+        for gss_bank_ws in gss_wksps:
+            bank_id = self._get_bank_id(gss_bank_ws)
+            bank_ids.append(bank_id)
+
+        graphicsView_bragg = main_window.rietveld_ui.graphicsView_bragg
+
+        # remove
+        graphicsView_bragg.remove_gss_banks(gss_group_name, bank_ids)
+
+        # check if there is no such bank's plot on figure
+        # make sure the checkbox is unselected
+        # turn on the mutex lock
+        main_window._noEventBankWidgets = True
+
+        for bank_id in range(1, 7):
+            has_plot_on_canvas = len(
+                graphicsView_bragg.get_ws_name_on_canvas(bank_id)) > 0
+            main_window._braggBankWidgets[bank_id].setChecked(
+                has_plot_on_canvas)
+
+        # turn off the mutex lock
+        main_window._noEventBankWidgets = False
+
+    def reset_bragg_tree(self):
+        """
+        Clear the leaves of the tree only leaving the main node 'workspaces'
+        Returns
+        -------
+
+        """
+        # clear all
+        if self.model() is not None:
+            self.model().clear()
+
+        # reset workspace names list
+        self._workspaceNameList = list()
+        self._myHeaderList = list()
+        self._leafDict.clear()
+
+        # re-initialize the model
+        self._myNumCols = 1
+        model = QStandardItemModel()
+        model.setColumnCount(self._myNumCols)
+        self.setModel(model)
+
+        self.init_setup(['Bragg Workspaces'])
+        self.add_main_item('workspaces', append=True, as_current_index=False)
 
     def set_main_window(self, parent_window):
         """
