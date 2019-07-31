@@ -20,7 +20,10 @@ class BraggTreeTests(unittest.TestCase):
         """Test for failure of extracting bank id from bank workspace name"""
         braggtree = BraggTree(None)
         bad_wksp_name = "Bank jkl 1 -- 90.0"
-        self.assertRaises(BankRegexException, braggtree._get_bank_id, bad_wksp_name)
+        self.assertRaises(
+            BankRegexException,
+            braggtree._get_bank_id,
+            bad_wksp_name)
 
 
 if __name__ == '__main__':

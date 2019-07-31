@@ -63,25 +63,6 @@ class AddieDriverLoadSofQTests(unittest.TestCase):
 
 class AddieDriverBraggDataTests(unittest.TestCase):
     def setUp(self):
-        self.files = ['NOM_127827.gsa']
-        self.files = [os.path.join(DATA_DIR, filename) for filename in self.files]
-
-    def test_load_bragg_file(self):
-        """Test that we can load Bragg *.gsa (GSAS) files"""
-        driver = AddieDriver()
-        for filename in self.files:
-            wkspname, angles = driver.load_bragg_file(filename)
-            self.assertEquals(wkspname, expectedWkspName(filename))
-
-            angles_exp = [15.1, 31., 65., 120.4, 150.1, 8.6]  # copied from file by hand
-            for obs, exp in zip(angles, angles_exp):
-                self.assertAlmostEqual(obs, exp, places=1)
-
-            # TODO actual checks on the workspace
-
-
-class AddieDriverBraggDataTests(unittest.TestCase):
-    def setUp(self):
         self.filename = os.path.join(DATA_DIR, 'NOM_127827.gsa')
         self.files = [self.filename]
         self.files = [os.path.join(DATA_DIR, filename) for filename in self.files]
