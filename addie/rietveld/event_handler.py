@@ -2,7 +2,7 @@ from qtpy.QtWidgets import QFileDialog
 import os
 
 import addie.utilities.specify_plots_style as ps
-from addie.calculate_gr.event_handler import  check_in_fixed_dir_structure, getDefaultDir
+from addie.utilities import check_in_fixed_dir_structure, get_default_dir
 
 
 def do_load_bragg_file(main_window):
@@ -16,7 +16,7 @@ def do_load_bragg_file(main_window):
     if main_window._currDataDir is None:
         default_dir = os.getcwd()
     else:
-        default_dir = getDefaultDir(main_window, sub_dir='GSAS')
+        default_dir = get_default_dir(main_window, sub_dir='GSAS')
 
     bragg_file_names = QFileDialog.getOpenFileNames(main_window, 'Choose Bragg File', default_dir, ext)
     if isinstance(bragg_file_names, tuple):
@@ -352,6 +352,9 @@ def evt_change_gss_mode(main_window):
     """ switch between multi-gss/single-bank mode and singl-gss/multiple-bank mode
     :return:
     """
+    if main_window is None:
+        raise NotImplementedError('Main window has not been set up!')
+
     # check the mode (multiple bank or multiple GSS)
     single_gss_mode = main_window.rietveld_ui.radioButton_multiBank.isChecked()
     assert single_gss_mode != main_window.rietveld_ui.radioButton_multiGSS.isChecked(), \
