@@ -346,9 +346,8 @@ class BraggView(MplGraphicsView):
         # remove line from canvas
         error_message = ''
         for bank_id in bank_id_list:
-            # check bank ID type
-            assert isinstance(bank_id, int), 'Bank ID %s must be an integer but not a %s.' % (str(bank_id),
-                                                                                              str(type(bank_id)))
+            bank_id = int(bank_id)
+            
             # from bank ID key
             plot_key = self._generate_plot_key(ws_group_name, bank_id)
 

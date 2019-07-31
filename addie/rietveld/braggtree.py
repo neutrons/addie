@@ -251,7 +251,7 @@ class BraggTree(base.CustomizedTreeView):
             bank_id = self._get_bank_id(gss_bank_ws)
             bank_ids.append(bank_id)
 
-        graphicsView_bragg = main_window.calculategr_ui.graphicsView_bragg
+        graphicsView_bragg = main_window.rietveld_ui.graphicsView_bragg
 
         # remove
         graphicsView_bragg.remove_gss_banks(gss_group_name, bank_ids)
@@ -343,7 +343,7 @@ class BraggTree(base.CustomizedTreeView):
         main_window.clear_bank_checkboxes()
 
         # clear the canvas
-        main_window.calculategr_ui.graphicsView_bragg.reset()
+        main_window.rietveld_ui.graphicsView_bragg.reset()
 
     def do_merge_to_gss(self):
         """
