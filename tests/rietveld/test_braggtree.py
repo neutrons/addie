@@ -8,6 +8,9 @@ class BraggTreeTests(unittest.TestCase):
     def setUp(self):
         self.main_window = QApplication([])
 
+    def tearDown(self):
+        self.main_window.quit()
+
     def test_get_bank_id(self):
         """Test we can extract a bank id from bank workspace name"""
         braggtree = BraggTree(None)
@@ -16,14 +19,16 @@ class BraggTreeTests(unittest.TestCase):
         bank_id = braggtree._get_bank_id(bank_wksp_name)
         self.assertEqual(int(bank_id), target)
 
-    def test_get_bank_id_fails(self):
-        """Test for failure of extracting bank id from bank workspace name"""
+    def test_get_bank_id_exception(self):
+        """Test for raised exception from a bad workspace name"""
         braggtree = BraggTree(None)
-        bad_wksp_name = "Bank jkl 1 -- 90.0"
-        self.assertRaises(
-            BankRegexException,
-            braggtree._get_bank_id,
-            bad_wksp_name)
+        bad_ws = "Bank jkl 1 -- 90.0"
+        self.assertRaises(BankRegexException, braggtree._get_bank_id, bad_ws)
+
+    def test_do_plot_ws_exception(self):
+        """Test for raised exception from MainWindow==None"""
+        braggtree = BraggTree(None)
+        self.assertRaises(NotImplementedError, braggtree.do_plot_ws())
 
 
 if __name__ == '__main__':

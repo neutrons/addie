@@ -264,20 +264,15 @@ class BraggTree(base.CustomizedTreeView):
         Add selected runs
         :return:
         """
+        # get the selected items of tree and sort them alphabetically
         item_list = self.get_selected_items()
-        leaf_list = list()
-
-        for item in item_list:
-            leaf = str(item.text())
-            leaf_list.append(leaf)
-        # END-FOR
-
-        # sort
-        leaf_list.sort()
+        item_list = [str(item.text()) for item in item_list]
+        item_list.sort()
 
         # FIXME/LATER - replace this by signal
         if self._mainWindow is not None:
-            self._mainWindow.plot_bragg(leaf_list)
+            print(item_list)
+            self._mainWindow.plot_bragg(item_list)
         else:
             raise NotImplementedError('Main window has not been set up!')
 

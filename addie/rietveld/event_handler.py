@@ -385,6 +385,7 @@ def evt_change_gss_mode(main_window):
                 raise RuntimeError(str(ws_name_list))
 
         # plot
+        print("evt handler plot_bragg:", ws_name_list[0], to_plot_bank_list)
         main_window.plot_bragg(ws_list=[ws_name_list[0]], bankIds=to_plot_bank_list, clear_canvas=True)
 
     else:
