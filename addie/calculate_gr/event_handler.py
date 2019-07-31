@@ -1,6 +1,7 @@
 import os
 from qtpy.QtWidgets import QFileDialog, QMessageBox
 
+from addie.utilities import check_in_fixed_dir_structure, get_default_dir
 import addie.utilities.specify_plots_style as ps
 import addie.calculate_gr.edit_sq_dialog
 from addie.calculate_gr.save_sq_dialog_message import SaveSqDialogMessageDialog
@@ -59,7 +60,7 @@ def load_sq(main_window):
     if main_window._currDataDir is None:
         default_dir = os.getcwd()
     else:
-        default_dir = getDefaultDir(main_window,
+        default_dir = get_default_dir(main_window,
                                     sub_dir='SofQ')
 
     # get the file
@@ -105,46 +106,6 @@ def load_sq(main_window):
         generate_gr_step1(main_window)
 
     check_widgets_status(main_window)
-
-
-def getDefaultDir(main_window, sub_dir):
-    """ Get the default data directory.
-    If is in Fixed-Directory-Structure, then _currDataDir is the
-    parent directory for all GSAS, gofr and SofQ
-    and thus return the data directory with _currDataDir joined with sub_dir
-    Otherwise, no operation
-    """
-    # check
-    msg = 'sub directory must be a string but not %s.'.format(type(sub_dir))
-    assert isinstance(sub_dir, str), msg
-
-    if main_window._inFixedDirectoryStructure:
-        default_dir = os.path.join(main_window._currDataDir, sub_dir)
-    else:
-        default_dir = main_window._currDataDir
-
-    return default_dir
-
-
-def check_in_fixed_dir_structure(main_window, sub_dir):
-    """
-    Check whether _currDataDir ends with 'GSAS', 'gofr' or 'SofQ'
-    If it is, then reset the _currDataDir to its upper directory
-    and set the in-format flag; Otherwise, keep as is.
-    """
-    # make sure that the last character of currDataDir is not /
-    currDataDir = main_window._currDataDir
-    if currDataDir.endswith('/') or currDataDir.endswith('\\'):
-        # consider Linux and Windows case
-        currDataDir = currDataDir[:-1]
-
-    # split
-    main_path, last_dir = os.path.split(currDataDir)
-    if last_dir == sub_dir:
-        main_window._inFixedDirectoryStructure = True
-        currDataDir = main_path
-    else:
-        main_window._inFixedDirectoryStructure = False
 
 
 def plot_sq(main_window, ws_name, color, clear_prev):
@@ -407,7 +368,7 @@ def do_load_gr(main_window):
     if main_window._currDataDir is None:
         default_dir = os.getcwd()
     else:
-        default_dir = getDefaultDir(main_window, 'gofr')
+        default_dir = get_default_dir(main_window, 'gofr')
 
     # pop out file
     file_filter = 'Data Files (*.dat);; PDFgui (*.gr);;All Files (*.*)'
