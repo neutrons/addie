@@ -28,7 +28,7 @@ class BraggTreeTests(unittest.TestCase):
     def test_do_plot_ws_exception(self):
         """Test for raised exception from MainWindow==None"""
         braggtree = BraggTree(None)
-        self.assertRaises(NotImplementedError, braggtree.do_plot_ws())
+        self.assertRaises(NotImplementedError, braggtree.do_plot_ws)
 
 
 if __name__ == '__main__':
