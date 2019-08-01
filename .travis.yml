@@ -50,7 +50,7 @@ install:
 
 script:
     # TEST: Create test environment and test build
-  - mamba create -q -n addie_test python=$CONDA flake8 conda-build=3.17 anaconda-client
+  - mamba create -q -n addie_test python=$CONDA flake8 conda-build=3.17 anaconda-client pytest pytest-qt
   - mamba info --envs
   - conda activate addie_test
   - mkdir -p ${CONDA_PREFIX}/conda-bld/linux-64/
