@@ -13,7 +13,7 @@ class RietveldEventHandlerTests(unittest.TestCase):
         self.main_window.quit()
     '''
 
-    def test_evt_change_gss_mode(self):
+    def test_evt_change_gss_mode_exception(self):
         """Test we can extract a bank id from bank workspace name"""
         f = event_handler.evt_change_gss_mode
         self.assertRaises(NotImplementedError, f, None)
