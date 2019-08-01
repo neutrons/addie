@@ -84,7 +84,7 @@ script:
   - xvfb-run --server-args="-screen 0 640x480x24" --auto-servernum mantidworkbench -q -x workbenchshutdown.py
 
   # run addie tests
-  - xvfb-run --server-args="-screen 0 640x480x24" --auto-servernum pytest tests
+  - xvfb-run --server-args="-screen 0 640x480x24" --auto-servernum pytest tests --disable-pytest-warnings
   - xvfb-run --server-args="-screen 0 640x480x24" --auto-servernum addie --version
 
 deploy:
