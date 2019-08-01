@@ -5,9 +5,10 @@ import addie.utilities.specify_plots_style as ps
 from addie.utilities import check_in_fixed_dir_structure, get_default_dir
 
 
-def do_load_bragg_file(main_window):
+def open_bragg_files(main_window):
     """
-    Load Bragg files including GSAS, NeXus, 3-column ASCii.
+    Get the Bragg files including GSAS, NeXus, 3-column ASCii from File Dialog
+    :retur: List of Bragg Files to load
     """
     # get file
     ext = 'GSAS (*.gsa *.gda *.gss);;Processed Nexus (*.nxs);;dat (*.dat);;All (*.*)'
@@ -33,7 +34,14 @@ def do_load_bragg_file(main_window):
         print(err_message)
 
     check_in_fixed_dir_structure(main_window, sub_dir='GSAS')
+    return bragg_file_names
 
+
+def load_bragg_files(main_window, bragg_file_names):
+    """
+    Load Bragg files including GSAS, NeXus, 3-column ASCii.
+    """
+    print("Loading: {}".format(' '.join(bragg_file_names)))
     # load file
     try:
         gss_ws_names = list()
@@ -110,6 +118,14 @@ def do_load_bragg_file(main_window):
                                              main_window.statusbar_display_time)
 
     check_rietveld_widgets(main_window)
+
+
+def open_and_load_bragg_file(main_window):
+    """
+    Load Bragg files including GSAS, NeXus, 3-column ASCii.
+    """
+    bragg_file_names = open_bragg_files(main_window)
+    load_bragg_files(main_window, bragg_file_names)
 
 
 def check_rietveld_widgets(main_window):

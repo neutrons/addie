@@ -644,8 +644,8 @@ class MainWindow(QMainWindow):
         help_button_activator(parent=self, button_name="scans")
 
     # Rietveld tab
-    def do_load_bragg_file(self):
-        rietveld_event_handler.do_load_bragg_file(main_window=self)
+    def open_and_load_bragg_file(self):
+        rietveld_event_handler.open_and_load_bragg_file(main_window=self)
 
     def do_set_bragg_color_marker(self):
         rietveld_event_handler.do_set_bragg_color_marker(self)
