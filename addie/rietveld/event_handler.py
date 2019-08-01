@@ -1,8 +1,9 @@
-from qtpy.QtWidgets import QFileDialog
 import os
+from qtpy.QtWidgets import QFileDialog
+from mantid.api import AnalysisDataService
+import mantid.simpleapi as simpleapi
 
-import addie.utilities.specify_plots_style as ps
-from addie.utilities import check_in_fixed_dir_structure, get_default_dir
+import addie.utilities.workspaces
 
 
 def open_bragg_files(main_window):
@@ -17,7 +18,7 @@ def open_bragg_files(main_window):
     if main_window._currDataDir is None:
         default_dir = os.getcwd()
     else:
-        default_dir = get_default_dir(main_window, sub_dir='GSAS')
+        default_dir = addie.utilities.get_default_dir(main_window, sub_dir='GSAS')
 
     bragg_file_names = QFileDialog.getOpenFileNames(
         main_window, 'Choose Bragg File', default_dir, ext)
@@ -37,8 +38,43 @@ def open_bragg_files(main_window):
             bragg_file_names, index_err)
         print(err_message)
 
-    check_in_fixed_dir_structure(main_window, sub_dir='GSAS')
+    addie.utilities.check_in_fixed_dir_structure(main_window, sub_dir='GSAS')
     return bragg_file_names
+
+
+def load_bragg_by_filename(file_name):
+        """
+        Load Bragg diffraction file (including 3-column data file, GSAS file) for Rietveld
+        """
+        # load with different file type
+        base_file_name = os.path.basename(file_name).lower()
+        gss_ws_name = os.path.basename(file_name).split('.')[0]
+        if base_file_name.endswith('.gss') or base_file_name.endswith(
+                '.gsa') or base_file_name.endswith('.gda'):
+            simpleapi.LoadGSS(Filename=file_name,
+                              OutputWorkspace=gss_ws_name)
+        elif base_file_name.endswith('.nxs'):
+            simpleapi.LoadNexusProcessed(
+                Filename=file_name, OutputWorkspace=gss_ws_name)
+            simpleapi.ConvertUnits(
+                InputWorkspace=gss_ws_name,
+                OutputWorkspace=gss_ws_name,
+                EMode='Elastic',
+                Target='TOF')
+        elif base_file_name.endswith('.dat'):
+            simpleapi.LoadAscii(Filename=file_name,
+                                OutputWorkspace=gss_ws_name,
+                                Unit='TOF')
+        else:
+            raise RuntimeError(
+                'File %s is not of a supported type.' %
+                file_name)
+
+        # check
+        assert AnalysisDataService.doesExist(gss_ws_name)
+        angle_list = addie.utilities.workspaces.calculate_bank_angle(gss_ws_name)
+
+        return gss_ws_name, angle_list
 
 
 def load_bragg_files(main_window, bragg_file_names):
@@ -52,8 +88,7 @@ def load_bragg_files(main_window, bragg_file_names):
     try:
         gss_ws_names = list()
         for bragg_file_name in bragg_file_names:
-            gss_ws_name, bank_angles = main_window._myController.load_bragg_file(
-                bragg_file_name)
+            gss_ws_name, bank_angles = load_bragg_by_filename(bragg_file_name)
             gss_ws_names.append(gss_ws_name)
             banks_list = list()
             for i, angle in enumerate(bank_angles):
@@ -408,8 +443,8 @@ def evt_change_gss_mode(main_window):
     if single_gss_mode:
         # switch to single GSAS mode from multiple GSAS mode.
         #  select the arbitrary gsas file to
-        assert len(
-            to_plot_bank_list) == 1, 'From multi-GSS-single-Bank mode, only 1 bank can be selected.'
+        msg = 'From multi-GSS-single-Bank mode, only 1 bank can be selected.'
+        assert len(to_plot_bank_list) == 1, msg
 
         # skip if there is one and only one workspace
         if len(on_canvas_ws_list) == 1:
@@ -420,7 +455,6 @@ def evt_change_gss_mode(main_window):
                 raise RuntimeError(str(ws_name_list))
 
         # plot
-        print("evt handler plot_bragg:", ws_name_list[0], to_plot_bank_list)
         plot_bragg(main_window, ws_list=[ws_name_list[0]], bankIds=to_plot_bank_list, clear_canvas=True)
 
     else:
@@ -495,6 +529,7 @@ def do_set_bragg_color_marker(main_window):
     plot_id_label_list = main_window.rietveld_ui.graphicsView_bragg.get_current_plots()
 
     # get the line ID, color, and marker
+    ps = addie.utilities.specify_plots_style
     plot_id_list, color, marker = ps.get_plots_color_marker(
         main_window, plot_label_list=plot_id_label_list)
     #print('"{}" "{}" "{}"'.format(plot_id_list, color, marker))

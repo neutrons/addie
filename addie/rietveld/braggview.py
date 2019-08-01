@@ -6,6 +6,7 @@ from qtpy.QtWidgets import (QAction, QMenu)
 
 from addie.plot import MplGraphicsView
 from addie.addiedriver import AddieDriver
+import addie.utilities.workspaces
 
 
 class BraggView(MplGraphicsView):
@@ -92,7 +93,6 @@ class BraggView(MplGraphicsView):
             else:
                 # previously-being plot, then to be removed from canvas
                 to_remove_banks.append(bank_id)
-        # END-FOR (bank_id)
 
         return new_plot_banks, to_remove_banks
 
@@ -139,7 +139,6 @@ class BraggView(MplGraphicsView):
                 self.setXYLimit(xmin=0, xmax=7, ymin=None, ymax=None)
             else:
                 raise RuntimeError('Unit %s unknown' % self._unitX)
-        # END-IF
 
         return
 
@@ -272,7 +271,6 @@ class BraggView(MplGraphicsView):
 
             # pop up menu
             self.menu.popup(QCursor.pos())
-        # END-IF-ELSE
         return
 
     def plot_banks(self, plot_bank_dict, unit):
@@ -304,7 +302,7 @@ class BraggView(MplGraphicsView):
                 else:
                     # multiple bank mode
                     bank_color, style, marker = self.get_multi_gss_color()
-                # END-IF-ELSE
+
 
                 print(
                     '[DB...BAT] Plot Mode (single bank) = {0}, group = {1}, bank = {2}, color = {3}, marker = {4},'
@@ -333,10 +331,8 @@ class BraggView(MplGraphicsView):
                 plot_key = self._generate_plot_key(ws_name, bank_id)
                 self._bankPlotDict[bank_id].append(plot_key)
                 self._gssDict[plot_key] = plot_id
-                self._plotScaleDict[plot_id] = self._driver.get_y_range(
+                self._plotScaleDict[plot_id] = addie.utilities.workspaces.get_y_range(
                     ws_name, bank_id - 1)  # is this needed?
-            # END-FOR (bank id)
-        # END-FOR (ws_group)
 
         # self.scale_auto()
 
@@ -355,7 +351,7 @@ class BraggView(MplGraphicsView):
             marker=None,
             color='black',
             label=ws_name)
-        self._plotScaleDict[plot_id] = self._driver.get_y_range(ws_name, 0)
+        self._plotScaleDict[plot_id] = addie.utilities.workspaces.get_y_range(ws_name, 0)
 
         # scale the plot automatically
         self.scale_auto()
@@ -399,7 +395,6 @@ class BraggView(MplGraphicsView):
             del self._gssDict[plot_key]
             del self._plotScaleDict[bank_line_id]
             self._bankPlotDict[bank_id].remove(plot_key)
-        # END-FOR
 
         # scale automatically
         # self.scale_auto()

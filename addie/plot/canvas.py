@@ -16,6 +16,7 @@ else:
 import matplotlib.image  # noqa
 from matplotlib.figure import Figure  # noqa
 from addie.addiedriver import AddieDriver  # noqa
+import addie.utilities.workspaces
 
 
 class FigureCanvas(FigureCanvasQTAgg):
@@ -85,7 +86,7 @@ class FigureCanvas(FigureCanvasQTAgg):
             line_style = '-'
 
         # color must be RGBA (4-tuple)
-        wksp = self._driver.get_ws(wkspname)
+        wksp = addie.utilities.workspaces.get_ws(wkspname)
         if plotError:
             r = self.axes.errorbar(wksp, wkspIndex=wkspindex, color=color, marker=marker, linestyle=line_style,
                                    label=label, linewidth=line_width, alpha=alpha,
@@ -410,7 +411,7 @@ class FigureCanvas(FigureCanvasQTAgg):
 
         if wkspname or (vecx and vecy):
             if wkspname:
-                vecx, vecy, _ = self._driver.get_ws_data(wkspname, wkspindex)
+                vecx, vecy, _ = addie.utilities.workspaces.get_ws_data(wkspname, wkspindex)
             line.set_data(vecx, vecy)
 
         if linecolor is not None:

@@ -3,6 +3,7 @@ from qtpy.QtWidgets import QFileDialog, QMessageBox
 
 from addie.utilities import check_in_fixed_dir_structure, get_default_dir
 import addie.utilities.specify_plots_style as ps
+import addie.utilities.workspaces
 import addie.calculate_gr.edit_sq_dialog
 from addie.calculate_gr.save_sq_dialog_message import SaveSqDialogMessageDialog
 from addie.widgets.filedialog import get_save_file
@@ -298,7 +299,7 @@ def plot_gr(main_window, ws_name, line_color, line_style,
     """Plot G(r) by their names (workspace as protocol)
     """
     # get the value
-    vec_r, vec_g, vec_ge = main_window._myController.get_ws_data(ws_name)
+    vec_r, vec_g, vec_ge = addie.utilities.workspaces.get_ws_data(ws_name)
 
     # check whether the workspace is on the figure
     graphicsView_gr = main_window.calculategr_ui.graphicsView_gr
