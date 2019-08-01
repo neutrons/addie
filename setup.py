@@ -23,28 +23,36 @@ def read_requirements_from_file(filepath):
         return req_file.readlines()
 
 
-setup_args = dict(install_requires=read_requirements_from_file(os.path.join(THIS_DIR, 'install-requirements.txt')),
-                  tests_require=read_requirements_from_file(os.path.join(THIS_DIR, 'test-requirements.txt')))
+setup_args = dict(
+    install_requires=read_requirements_from_file(
+        os.path.join(
+            THIS_DIR,
+            'install-requirements.txt')),
+    tests_require=read_requirements_from_file(
+        os.path.join(
+            THIS_DIR,
+            'test-requirements.txt')))
 
-setup(name="addie",
-      version=versioneer.get_version(),
-      cmdclass=versioneer.get_cmdclass(),
-      description="Need a description",
-      author="Dan, Wenduo, Jean",
-      author_email="oldsdp@ornl.gov, zhou@ornl.gov, bilheuxjm@ornl.gov",
-      url="http://github.com/neutrons/addie",
-      long_description="""Should have a longer description""",
-      license="The MIT License (MIT)",
-      entry_points = {
+setup(
+    name="addie",
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
+    description="Need a description",
+    author="Dan, Wenduo, Jean",
+    author_email="oldsdp@ornl.gov, zhou@ornl.gov, bilheuxjm@ornl.gov",
+    url="http://github.com/neutrons/addie",
+    long_description="""Should have a longer description""",
+    license="The MIT License (MIT)",
+    entry_points={
         'console_scripts': [
             "addie = addie.main:main"
         ]
-      },
-      packages=find_packages(),
-      package_data={'': ['*.ui', '*.png', '*.qrc', '*.json']},
-      include_package_data=True,
-      setup_requires=[],
-      install_requires=setup_args["install_requires"],
-      tests_require=setup_args["install_requires"] + setup_args["tests_require"],
-      test_suite='tests'
-      )
+    },
+    packages=find_packages(),
+    package_data={'': ['*.ui', '*.png', '*.qrc', '*.json']},
+    include_package_data=True,
+    setup_requires=[],
+    install_requires=setup_args["install_requires"],
+    tests_require=setup_args["install_requires"] + setup_args["tests_require"],
+    test_suite='tests'
+)
