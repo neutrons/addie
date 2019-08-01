@@ -1,19 +1,15 @@
 from __future__ import absolute_import, print_function
-import unittest
-from qtpy.QtWidgets import QApplication
+import pytest
 from addie.utilities.customtreeview import CustomizedTreeView
 
 
-class CustomTreeViewTests(unittest.TestCase):
-    def setUp(self):
-        self.main_window = QApplication([])
+@pytest.fixture
+def custom_tree_view(qtbot):
+    return CustomizedTreeView(None)
 
-    def tearDown(self):
-        self.main_window.quit()
 
-    def test_get_selected_items(self):
-        """Test get_selected_items in tree of CustomizedTreeView"""
-        treeview = CustomizedTreeView(None)
-        items = treeview.get_selected_items()
-        self.assertEqual(items, [])
-        self.assertEqual(type(items), list)
+def test_get_selected_items(qtbot, custom_tree_view):
+    """Test get_selected_items in tree of CustomizedTreeView"""
+    items = custom_tree_view.get_selected_items()
+    assert items == []
+    assert type(items) == list
