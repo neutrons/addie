@@ -7,13 +7,9 @@ from addie.utilities.customtreeview import CustomizedTreeView
 class CustomTreeViewTests(unittest.TestCase):
     def setUp(self):
         self.main_window = QApplication([])
-        
+
     def tearDown(self):
         self.main_window.quit()
-
-    def test_construction(self):
-        """Test construction of CustomizedTreeView"""
-        treeview = CustomizedTreeView(None)
 
     def test_get_selected_items(self):
         """Test get_selected_items in tree of CustomizedTreeView"""
