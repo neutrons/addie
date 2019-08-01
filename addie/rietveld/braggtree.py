@@ -6,6 +6,7 @@ from qtpy.QtGui import QStandardItem, QStandardItemModel
 from qtpy.QtWidgets import QAction
 from addie.utilities import customtreeview as base
 from addie.widgets.filedialog import get_save_file
+from addie.rietveld import event_handler
 
 
 class BankRegexException(Exception):
@@ -224,7 +225,7 @@ class BraggTree(base.CustomizedTreeView):
                                       gss_ws_name,
                                       gss_bank_names)
 
-    def do_reset_gsas_tab(main_window):
+    def do_reset_gsas_tab(self, main_window):
         """
         Reset the GSAS-tab including
         1. deleting all the GSAS workspaces
@@ -275,7 +276,12 @@ class BraggTree(base.CustomizedTreeView):
         # FIXME/LATER - replace this by signal
         if self._main_window is not None:
             print("do_plot_ws:", item_list)
-            self._main_window.plot_bragg(item_list)
+            ids = event_handler.get_bragg_banks_selected(self._main_window)
+            event_handler.plot_bragg(
+                self._main_window,
+                ws_list=item_list,
+                bankIds=ids,
+                clear_canvas=True)
         else:
             raise NotImplementedError('Main window has not been set up!')
 

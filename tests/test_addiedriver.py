@@ -4,6 +4,7 @@ import os
 import unittest
 from mantid.simpleapi import mtd
 from addie.addiedriver import AddieDriver
+from addie.rietveld.event_handler import load_bragg_by_filename
 
 from tests import DATA_DIR
 
@@ -67,21 +68,10 @@ class AddieDriverBraggDataTests(unittest.TestCase):
         self.files = [self.filename]
         self.files = [os.path.join(DATA_DIR, filename) for filename in self.files]
 
-    def test_load_bragg_file(self):
-        """Test that we can load Bragg *.gsa (GSAS) files"""
-        driver = AddieDriver()
-        for filename in self.files:
-            wkspname, angles = driver.load_bragg_file(filename)
-            self.assertEqual(wkspname, expectedWkspName(filename))
-
-            angles_exp = [15.1, 31., 65., 120.4, 150.1, 8.6]  # copied from file by hand
-            for obs, exp in zip(angles, angles_exp):
-                self.assertAlmostEqual(obs, exp, places=1)
-
     def test_get_data(self):
         driver = AddieDriver()
         # load the data
-        wkspname, bank_angles = driver.load_bragg_file(self.filename)
+        wkspname, bank_angles = load_bragg_by_filename(self.filename)
 
         for units in (TOF, D_SPACING, Q_SPACE):
             for wkspIndex in range(6):
