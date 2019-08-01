@@ -45,6 +45,9 @@ def load_bragg_files(main_window, bragg_file_names):
     """
     Load Bragg files including GSAS, NeXus, 3-column ASCii.
     """
+    if not bragg_file_names:
+        return list()
+
     # load file
     try:
         gss_ws_names = list()
