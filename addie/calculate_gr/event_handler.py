@@ -60,8 +60,7 @@ def load_sq(main_window):
     if main_window._currDataDir is None:
         default_dir = os.getcwd()
     else:
-        default_dir = get_default_dir(main_window,
-                                    sub_dir='SofQ')
+        default_dir = get_default_dir(main_window, sub_dir='SofQ')
 
     # get the file
     ext = 'nxs (*.nxs);;dat (*.dat);;All (*.*)'

@@ -220,7 +220,6 @@ class BraggTree(base.CustomizedTreeView):
                                       gss_ws_name,
                                       gss_bank_names)
 
-
     def do_reset_gsas_tab(main_window):
         """
         Reset the GSAS-tab including
@@ -271,7 +270,7 @@ class BraggTree(base.CustomizedTreeView):
 
         # FIXME/LATER - replace this by signal
         if self._mainWindow is not None:
-            print(item_list)
+            print("do_plot_ws:", item_list)
             self._mainWindow.plot_bragg(item_list)
         else:
             raise NotImplementedError('Main window has not been set up!')
