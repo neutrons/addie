@@ -671,10 +671,6 @@ class MainWindow(QMainWindow):
     def do_clear_bragg_canvas(self):
         rietveld_event_handler.do_clear_bragg_canvas(self)
 
-    def plot_bragg(self, ws_list, bankIds, clear_canvas=False):
-        rietveld_event_handler.plot_bragg_bank(
-            self, ws_list, bankIds, clear_canvas)
-
     def set_bragg_ws_to_plot(self, gss_group_name):
         rietveld_event_handler.set_bragg_ws_to_plot(self, gss_group_name)
 
