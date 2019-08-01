@@ -83,13 +83,9 @@ def load_bragg_files(main_window, bragg_file_names):
                 else:
                     bank_check_box.setText('Bank %.1f' %
                                            bank_angles[bank_id - 1])
-                    # END-IF
-                # END-IF-ELSE
-            # END-FOR
 
             # clear all previous lines
             main_window.rietveld_ui.graphicsView_bragg.reset()
-        # END-IF
 
         # banks
         main_window._onCanvasGSSBankList = get_bragg_banks_selected(
