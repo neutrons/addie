@@ -50,8 +50,12 @@ class BraggTree(base.CustomizedTreeView):
         self._action_deselect_node.triggered.connect(self.do_remove_from_plot)
 
         # class variables
-        self._mainWindow = None
+        self._main_window = None
         self._workspaceNameList = None
+
+        # set to parent
+        if parent:
+            self.set_main_window(parent)
 
         # reset
         self.reset_bragg_tree()
@@ -137,8 +141,8 @@ class BraggTree(base.CustomizedTreeView):
 
         python_cmd = "ws = mtd['%s']" % ws_name
 
-        if self._mainWindow is not None:
-            self._mainWindow.set_ipython_script(python_cmd)
+        if self._main_window is not None:
+            self._main_window.set_ipython_script(python_cmd)
 
     def do_delete_gsas(self):
         """
@@ -152,7 +156,7 @@ class BraggTree(base.CustomizedTreeView):
             # delete the gsas group workspace (deletes sub-workspaces as well)
             gsas_name = str(gsas_node.text())
             gss_ws_name = gsas_name.split('_group')[0]
-            self._mainWindow.get_workflow().delete_workspace(gss_ws_name)
+            self._main_window.get_workflow().delete_workspace(gss_ws_name)
 
             # delete the node from the tree
             self.delete_node(gsas_node)
@@ -163,7 +167,7 @@ class BraggTree(base.CustomizedTreeView):
         to a new GSAS file
         """
         # check prerequisite
-        assert self._mainWindow is not None, 'Main window is not set up.'
+        assert self._main_window is not None, 'Main window is not set up.'
 
         # get the selected GSAS node's name
         status, ret_obj = self.get_current_main_nodes()
@@ -186,7 +190,7 @@ class BraggTree(base.CustomizedTreeView):
         new_gss_file_name, _ = get_save_file(
             self,
             caption='New GSAS file name',
-            directory=self._mainWindow.get_default_data_dir(),
+            directory=self._main_window.get_default_data_dir(),
             filter=file_ext)
 
         if not new_gss_file_name:  # user pressed cancel
@@ -197,7 +201,7 @@ class BraggTree(base.CustomizedTreeView):
         bank_ws_list = self.get_child_nodes(selected_node, output_str=True)
 
         # write all the banks to a GSAS file
-        self._mainWindow.get_workflow().write_gss_file(
+        self._main_window.get_workflow().write_gss_file(
             ws_name_list=bank_ws_list, gss_file_name=new_gss_file_name)
 
     def do_remove_from_plot(self):
@@ -216,7 +220,7 @@ class BraggTree(base.CustomizedTreeView):
         for gss_node in selected_nodes:
             gss_ws_name = str(gss_node.text())
             gss_bank_names = self.get_child_nodes(gss_node, output_str=True)
-            self.remove_gss_from_plot(self._mainWindow,
+            self.remove_gss_from_plot(self._main_window,
                                       gss_ws_name,
                                       gss_bank_names)
 
@@ -269,9 +273,9 @@ class BraggTree(base.CustomizedTreeView):
         item_list.sort()
 
         # FIXME/LATER - replace this by signal
-        if self._mainWindow is not None:
+        if self._main_window is not None:
             print("do_plot_ws:", item_list)
-            self._mainWindow.plot_bragg(item_list)
+            self._main_window.plot_bragg(item_list)
         else:
             raise NotImplementedError('Main window has not been set up!')
 
@@ -289,7 +293,7 @@ class BraggTree(base.CustomizedTreeView):
         # set to plot
         for gss_group_node in selected_nodes:
             gss_group_name = str(gss_group_node.text())
-            self._mainWindow.set_bragg_ws_to_plot(gss_group_name)
+            self._main_window.set_bragg_ws_to_plot(gss_group_name)
 
     def get_current_main_nodes(self):
         """
@@ -470,4 +474,4 @@ class BraggTree(base.CustomizedTreeView):
         # check
         assert parent_window is not None, 'Parent window cannot be None'
 
-        self._mainWindow = parent_window
+        self._main_window = parent_window
