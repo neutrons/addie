@@ -26,7 +26,7 @@ class AddieDriverLoadGofRTests(unittest.TestCase):
         driver = AddieDriver()
         for filename in self.files:
             worked, wkspname = driver.load_gr(filename)
-            self.assertEquals(wkspname, expectedWkspName(filename))
+            self.assertEqual(wkspname, expectedWkspName(filename))
             # TODO actual checks on the workspace
 
 
@@ -44,7 +44,7 @@ class AddieDriverLoadSofQTests(unittest.TestCase):
         print('loading "{}"'.format(filename))
         wksp, qmin, qmax = driver.load_sq(filename)
         self.assertLess(qmin, qmax, 'qmin[{}] >= qmax[{}]'.format(qmin, qmax))
-        self.assertEquals(str(wksp), expectedWkspName(filename))
+        self.assertEqual(str(wksp), expectedWkspName(filename))
         # TODO actual checks on the workspace
         self.assertAlmostEqual(np.average(mtd[wksp].readY(0)[-100:]), 1., places=1)
 
@@ -72,7 +72,7 @@ class AddieDriverBraggDataTests(unittest.TestCase):
         driver = AddieDriver()
         for filename in self.files:
             wkspname, angles = driver.load_bragg_file(filename)
-            self.assertEquals(wkspname, expectedWkspName(filename))
+            self.assertEqual(wkspname, expectedWkspName(filename))
 
             angles_exp = [15.1, 31., 65., 120.4, 150.1, 8.6]  # copied from file by hand
             for obs, exp in zip(angles, angles_exp):
