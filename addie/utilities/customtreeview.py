@@ -79,7 +79,7 @@ class CustomizedTreeView(QTreeView):
         for i_col in range(self._myNumCols):
             header = header_list[i_col]
             self.model().setHeaderData(0, Qt.Horizontal, header)
-        # END-IF
+
         self._myHeaderList = header_list[:]
 
         # Enable scroll bar
