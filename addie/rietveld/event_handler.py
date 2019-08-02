@@ -18,13 +18,15 @@ def open_bragg_files(main_window):
     if main_window._currDataDir is None:
         default_dir = os.getcwd()
     else:
-        default_dir = addie.utilities.get_default_dir(main_window, sub_dir='GSAS')
+        default_dir = addie.utilities.get_default_dir(
+            main_window, sub_dir='GSAS')
 
     bragg_file_names = QFileDialog.getOpenFileNames(
         main_window, 'Choose Bragg File', default_dir, ext)
     if isinstance(bragg_file_names, tuple):
         bragg_file_names = bragg_file_names[0]
-    if bragg_file_names is None or bragg_file_names == '' or len(bragg_file_names) == 0:
+    if bragg_file_names is None or bragg_file_names == '' or len(
+            bragg_file_names) == 0:
         return
     bragg_file_names = [str(bragg_file_name)
                         for bragg_file_name in bragg_file_names]
@@ -43,38 +45,38 @@ def open_bragg_files(main_window):
 
 
 def load_bragg_by_filename(file_name):
-        """
-        Load Bragg diffraction file (including 3-column data file, GSAS file) for Rietveld
-        """
-        # load with different file type
-        base_file_name = os.path.basename(file_name).lower()
-        gss_ws_name = os.path.basename(file_name).split('.')[0]
-        if base_file_name.endswith('.gss') or base_file_name.endswith(
-                '.gsa') or base_file_name.endswith('.gda'):
-            simpleapi.LoadGSS(Filename=file_name,
-                              OutputWorkspace=gss_ws_name)
-        elif base_file_name.endswith('.nxs'):
-            simpleapi.LoadNexusProcessed(
-                Filename=file_name, OutputWorkspace=gss_ws_name)
-            simpleapi.ConvertUnits(
-                InputWorkspace=gss_ws_name,
-                OutputWorkspace=gss_ws_name,
-                EMode='Elastic',
-                Target='TOF')
-        elif base_file_name.endswith('.dat'):
-            simpleapi.LoadAscii(Filename=file_name,
-                                OutputWorkspace=gss_ws_name,
-                                Unit='TOF')
-        else:
-            raise RuntimeError(
-                'File %s is not of a supported type.' %
-                file_name)
+    """
+    Load Bragg diffraction file (including 3-column data file, GSAS file) for Rietveld
+    """
+    # load with different file type
+    base_file_name = os.path.basename(file_name).lower()
+    gss_ws_name = os.path.basename(file_name).split('.')[0]
+    if base_file_name.endswith('.gss') or base_file_name.endswith(
+            '.gsa') or base_file_name.endswith('.gda'):
+        simpleapi.LoadGSS(Filename=file_name,
+                          OutputWorkspace=gss_ws_name)
+    elif base_file_name.endswith('.nxs'):
+        simpleapi.LoadNexusProcessed(
+            Filename=file_name, OutputWorkspace=gss_ws_name)
+        simpleapi.ConvertUnits(
+            InputWorkspace=gss_ws_name,
+            OutputWorkspace=gss_ws_name,
+            EMode='Elastic',
+            Target='TOF')
+    elif base_file_name.endswith('.dat'):
+        simpleapi.LoadAscii(Filename=file_name,
+                            OutputWorkspace=gss_ws_name,
+                            Unit='TOF')
+    else:
+        raise RuntimeError(
+            'File %s is not of a supported type.' %
+            file_name)
 
-        # check
-        assert AnalysisDataService.doesExist(gss_ws_name)
-        angle_list = addie.utilities.workspaces.calculate_bank_angle(gss_ws_name)
+    # check
+    assert AnalysisDataService.doesExist(gss_ws_name)
+    angle_list = addie.utilities.workspaces.calculate_bank_angle(gss_ws_name)
 
-        return gss_ws_name, angle_list
+    return gss_ws_name, angle_list
 
 
 def load_bragg_files(main_window, bragg_file_names):
@@ -116,7 +118,8 @@ def load_bragg_files(main_window, bragg_file_names):
             for bank_id in main_window._braggBankWidgets:
                 bank_check_box = main_window._braggBankWidgets[bank_id]
 
-                if bank_id > len(bank_angles) or bank_angles[bank_id - 1] is None:
+                if bank_id > len(
+                        bank_angles) or bank_angles[bank_id - 1] is None:
                     bank_check_box.setText('Bank %d' % bank_id)
                 else:
                     bank_check_box.setText('Bank %.1f' %
@@ -136,7 +139,8 @@ def load_bragg_files(main_window, bragg_file_names):
             main_window._onCanvasGSSBankList = get_bragg_banks_selected(
                 main_window)
 
-        # while in multiple-gss mode, no change will be made on the canvas at all
+        # while in multiple-gss mode, no change will be made on the canvas at
+        # all
 
         # prepare to plot new Bragg
         plot_data_dict = dict()
@@ -158,8 +162,9 @@ def load_bragg_files(main_window, bragg_file_names):
     except ValueError:
         main_window.setStyleSheet(
             "QStatusBar{padding-left:8px;color:red;font-weight:bold;}")
-        main_window.ui.statusbar.showMessage("Error loading {}".format(bragg_file_names),
-                                             main_window.statusbar_display_time)
+        main_window.ui.statusbar.showMessage(
+            "Error loading {}".format(bragg_file_names),
+            main_window.statusbar_display_time)
 
     check_rietveld_widgets(main_window)
 
@@ -422,13 +427,14 @@ def evt_change_gss_mode(main_window):
 
     # check the mode (multiple bank or multiple GSS)
     single_gss_mode = main_window.rietveld_ui.radioButton_multiBank.isChecked()
-    assert single_gss_mode != main_window.rietveld_ui.radioButton_multiGSS.isChecked(), \
-        'Multi bank and multi GSS cannot be checked simultaneously.'
+    assert single_gss_mode != main_window.rietveld_ui.radioButton_multiGSS.isChecked(
+    ), 'Multi bank and multi GSS cannot be checked simultaneously.'
 
     # get the banks that are selected
     to_plot_bank_list = get_bragg_banks_selected(main_window)
     on_canvas_ws_list = main_window.rietveld_ui.graphicsView_bragg.get_workspaces()
-    # return with doing anything if the canvas is empty, i.e., no bank is selected
+    # return with doing anything if the canvas is empty, i.e., no bank is
+    # selected
     if len(to_plot_bank_list) == 0:
         return
     # return if there is no workspace that is plotted on canvas now
@@ -455,7 +461,12 @@ def evt_change_gss_mode(main_window):
                 raise RuntimeError(str(ws_name_list))
 
         # plot
-        plot_bragg(main_window, ws_list=[ws_name_list[0]], bankIds=to_plot_bank_list, clear_canvas=True)
+        plot_bragg(
+            main_window,
+            ws_list=[
+                ws_name_list[0]],
+            bankIds=to_plot_bank_list,
+            clear_canvas=True)
 
     else:
         # multiple GSAS mode. as currently there is one GSAS file that is plot, then the first bank
@@ -472,7 +483,8 @@ def evt_change_gss_mode(main_window):
         wkspaces = main_window.rietveld_ui.treeWidget_braggWSList.get_main_nodes()
         wkspaces.remove('workspaces')  # can't plot that
 
-        # disable all the banks except the one to plot. Notice the mutex must be on
+        # disable all the banks except the one to plot. Notice the mutex must
+        # be on
         main_window._noEventBankWidgets = True
         for bank_id in main_window._braggBankWidgets:
             if bank_id != bank_on_canvas:
@@ -480,7 +492,11 @@ def evt_change_gss_mode(main_window):
         main_window._noEventBankWidgets = False
 
         # plot
-        plot_bragg(main_window, ws_list=wkspaces, bankIds=[bank_on_canvas], clear_canvas=True)
+        plot_bragg(
+            main_window,
+            ws_list=wkspaces,
+            bankIds=[bank_on_canvas],
+            clear_canvas=True)
 
         # set
         main_window._onCanvasGSSBankList = [bank_on_canvas]
@@ -539,10 +555,8 @@ def do_set_bragg_color_marker(main_window):
     else:
         # set the color and mark
         for plot_id in plot_id_list:
-            main_window.rietveld_ui.graphicsView_bragg.updateLine(ikey=plot_id,
-                                                                  linecolor=color,
-                                                                  marker=marker,
-                                                                  markercolor=color)
+            main_window.rietveld_ui.graphicsView_bragg.updateLine(
+                ikey=plot_id, linecolor=color, marker=marker, markercolor=color)
 
 
 def set_bragg_ws_to_plot(main_window, gss_group_name):
@@ -562,7 +576,8 @@ def set_bragg_ws_to_plot(main_window, gss_group_name):
     selected_banks = get_bragg_banks_selected(main_window)
 
     # process
-    if main_window.rietveld_ui.radioButton_multiBank.isChecked():  # single-GSS/multi-bank mode
+    if main_window.rietveld_ui.radioButton_multiBank.isChecked(
+    ):  # single-GSS/multi-bank mode
         # reset canvas
         main_window.rietveld_ui.graphicsView_bragg.reset()
     else:  # multiple-GSS/single-bank mode

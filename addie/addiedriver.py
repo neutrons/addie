@@ -517,5 +517,3 @@ class AddieDriver(object):
             simpleapi.SaveGSS(InputWorkspace=ws_name, Filename=gss_file_name,
                               Format='SLOG', Bank=1, Append=append_mode)
             append_mode = True
-
-

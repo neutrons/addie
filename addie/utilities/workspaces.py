@@ -56,5 +56,3 @@ def get_y_range(ws_name, wkspindex=0):
 def get_xy_range(ws_name, wkspindex=0):
     x, y, _ = get_ws_data(ws_name, wkspindex, withDy=False)
     return x[0], x[-1], np.min(y), np.max(y)
-
-

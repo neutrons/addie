@@ -1,6 +1,5 @@
 from __future__ import absolute_import, print_function
 import os
-import unittest
 import pytest
 from tests import DATA_DIR
 from mantid.api import AnalysisDataService

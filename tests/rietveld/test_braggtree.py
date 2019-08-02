@@ -1,5 +1,8 @@
 from __future__ import absolute_import, print_function
 import pytest
+import os
+import addie.rietveld.event_handler
+from tests import DATA_DIR
 
 from addie.rietveld.braggtree import BraggTree, BankRegexException
 from addie.main import MainWindow
@@ -36,7 +39,12 @@ def test_get_bank_id_exception(qtbot, bragg_tree):
 
 
 def test_do_plot_ws(qtbot, bragg_tree):
-    """Test for raised exception from MainWindow==None"""
+    """Test for plotting selected bank workspace"""
+    filename = 'NOM_127827.gsa'
+    filename = os.path.join(DATA_DIR, filename)
+    print(bragg_tree.currentIndex())
+    #bragg_tree.setCurrentIndex(0)
+    wksp, angles = addie.rietveld.event_handler.load_bragg_by_filename(filename)
     bragg_tree.do_plot_ws()
 
 

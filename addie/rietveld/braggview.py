@@ -179,7 +179,7 @@ class BraggView(MplGraphicsView):
         style_value = self._currColorStyleMarkerIndex % value / num_color
         style_index = int(style_value)
 
-        color_value = self._currColorStyleMarkerIndex % value %  num_color
+        color_value = self._currColorStyleMarkerIndex % value % num_color
         color_index = int(color_value)
 
         color = self._gssColorList[color_index]
@@ -303,7 +303,6 @@ class BraggView(MplGraphicsView):
                     # multiple bank mode
                     bank_color, style, marker = self.get_multi_gss_color()
 
-
                 print(
                     '[DB...BAT] Plot Mode (single bank) = {0}, group = {1}, bank = {2}, color = {3}, marker = {4},'
                     'style = {5}'
@@ -351,7 +350,8 @@ class BraggView(MplGraphicsView):
             marker=None,
             color='black',
             label=ws_name)
-        self._plotScaleDict[plot_id] = addie.utilities.workspaces.get_y_range(ws_name, 0)
+        self._plotScaleDict[plot_id] = addie.utilities.workspaces.get_y_range(
+            ws_name, 0)
 
         # scale the plot automatically
         self.scale_auto()

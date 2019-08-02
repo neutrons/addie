@@ -36,7 +36,7 @@ def test_add_main_item(qtbot, custom_tree_view):
         main_item,
         append=True,
         as_current_index=False)
-    assert status == True
+    assert status is True
     assert message == ''
 
 
