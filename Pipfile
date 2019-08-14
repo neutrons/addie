@@ -5,7 +5,6 @@ verify_ssl = true
 
 [dev-packages]
 flake8 = "*"
-ipython = "*"
 mock = "*"
 pytest = "*"
 pytest-qt = "*"
@@ -14,6 +13,7 @@ yapf = "*"
 
 [packages]
 addie = {editable = true,path = "."}
+ipython = "==7.3.0"
 mantid-total-scattering = "==0.2.8"
 matplotlib = "==2.2.3"
 numpy = "==1.15.4"
