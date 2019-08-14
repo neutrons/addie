@@ -16,10 +16,22 @@ def rietveld_event_handler(qtbot):
     return event_handler
 
 
-def test_load_bragg_files(qtbot, rietveld_event_handler):
+def test_load_bragg_files_no_files(qtbot, rietveld_event_handler):
     """Test load_bragg_files when no files to load"""
     main_window = MainWindow()
-    rietveld_event_handler.load_bragg_files(main_window, bragg_file_names)
+    rietveld_event_handler.load_bragg_files(main_window, None)
+    bragg_tree = main_window.rietveld_ui.treeWidget_braggWSList
+    assert bragg_tree.model().rowCount() == 1
+
+
+def test_load_bragg_files(qtbot, rietveld_event_handler):
+    """Test load_bragg_files when we load in 2 files
+    Will have a row count == 3 since there is the empty 'workspaces' row
+    """
+    main_window = MainWindow()
+    rietveld_event_handler.load_bragg_files(main_window, bragg_file_list)
+    bragg_tree = main_window.rietveld_ui.treeWidget_braggWSList
+    assert bragg_tree.model().rowCount() == 3
 
 
 def test_plot_bragg_bank_for_multi_bank(qtbot, rietveld_event_handler):
