@@ -39,14 +39,16 @@ def diamond_gr():
 
 
 @pytest.mark.mpl_image_compare(baseline_dir=IMAGE_DIR,
-                               filename="plot_delta_d_ttheta.png")
+                               filename="plot_delta_d_ttheta.png",
+                               remove_text=True)
 def test_plot_delta_d_ttheta(res_wksp):
     fig = plot_utils.plot_delta_d_ttheta('NOM_res')
     return fig
 
 
 @pytest.mark.mpl_image_compare(baseline_dir=IMAGE_DIR,
-                               filename="plot_delta_d_ttheta_with_group.png")
+                               filename="plot_delta_d_ttheta_with_group.png",
+                               remove_text=True)
 def test_plot_delta_d_ttheta_with_group(res_wksp, grp_wksp):
     fig = plot_utils.plot_delta_d_ttheta('NOM_res',
                                          group_workspace='NOM_group')
@@ -54,7 +56,8 @@ def test_plot_delta_d_ttheta_with_group(res_wksp, grp_wksp):
 
 
 @pytest.mark.mpl_image_compare(baseline_dir=IMAGE_DIR,
-                               filename="gr_nr_plot.png")
+                               filename="gr_nr_plot.png",
+                               remove_text=True)
 def test_gr_nr_plot(diamond_gr, diamond_nr):
     fig = plot_utils.plot_gr_nr('gr', 'nr', expected_n=[4, 16, 28])
     return fig
