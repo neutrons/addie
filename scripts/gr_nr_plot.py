@@ -8,7 +8,7 @@ import mantid.simpleapi as ms
 # import numpy as np
 
 import os
-from addie.calibration.Calibration_plots import plot_gr_nr
+from addie.calibration.plot_utils import plot_gr_nr
 
 path = os.path.dirname(os.path.realpath(__file__))
 ms.LoadNexusProcessed(os.path.join(path, 'diamond_gr.nxs'),

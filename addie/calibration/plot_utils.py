@@ -59,11 +59,12 @@ def extractY(wkspc):
     mon_bool = isMonitor(h_w)
     # total_hist = h_w.getNumberHistograms()
     y = h_w.extractY()
-    y = y[not mon_bool]
+    mon_mask = [ not m for m in  mon_bool ]
+    y = y[mon_mask]
     return y, mon_bool, h_w
 
 
-def plot_delta_d_ttheta(ddwkspc,groupwkspc=None,cmapstr='viridis'):
+def plot_delta_d_ttheta(ddwkspc,group_workspace=None,cmap_str='viridis'):
     """
     generate a plot of Delta d / d vs theta given a workspace of
     Delta D/d vs. spectrum getNumberHistograms
@@ -74,8 +75,8 @@ def plot_delta_d_ttheta(ddwkspc,groupwkspc=None,cmapstr='viridis'):
     #extract Delta d/ d values and populate a numpy array
     res_y, res_mon_bool, h_nr = extractY(ddwkspc)
     # if a group workspace is present use it to determine a grouping array
-    if groupwkspc is not None:
-        grp, g_bool, h_g = extractY(groupwkspc)
+    if group_workspace is not None:
+        grp, g_bool, h_g = extractY(group_workspace)
         if len(grp)!=len(res_y):
             raise RuntimeError('the groping workspace and the Delta d/ d workspace should'
                                ' have the same number of detector specta')
@@ -98,7 +99,7 @@ def plot_delta_d_ttheta(ddwkspc,groupwkspc=None,cmapstr='viridis'):
     ax1.set_ylabel(r'$\frac{\Delta d}{d}$')
     #ax1.set_ylabel('Delta d /d')
     ax1.set_xlabel(r'$2\theta (^\circ)$')
-    if groupwkspc is not None:
+    if group_workspace is not None:
         cbar = f1.colorbar(im,ax = ax1)
         cbar.ax.set_ylabel('group number')
 
