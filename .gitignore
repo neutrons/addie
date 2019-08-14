@@ -202,6 +202,8 @@ dmypy.json
 
 # End of https://www.gitignore.io/api/pydev,python,eclipse
 
+# VSCode
+.vscode
 
 # generated files
 MANIFEST
