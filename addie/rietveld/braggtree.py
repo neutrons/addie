@@ -79,6 +79,27 @@ class BraggTree(base.CustomizedTreeView):
             raise BankRegexException(msg)
         return bank_id
 
+    def _get_tree_structure(self, model=None, parent_index=QModelIndex(), spaces=""):
+        """ Get the Bragg Tree structure information,
+        such as node names, number of children for each node, etc.
+        :param model: (optional) Model to print tree structure for
+        :type model: QAbstractItemModel
+        :param parent_index: (optional) Parent index to use for printing children of the Model
+        :type parent_index: QModelIndex
+        """
+        if not model:
+            model = self.model()
+
+        if model.rowCount(parent_index) == 0:
+            return
+
+        for i in range(model.rowCount(parent_index)):
+            index = model.index(i,0, parent_index)
+            print("{}{}".format(spaces, model.data(index)))
+
+            if model.hasChildren(index):
+                self._get_tree_structure(model, index, spaces + "  |--")
+
     def add_bragg_ws_group(self, ws_group_name, bank_name_list):
         """
         Add a workspace group containing a list of bank names as a main node
@@ -205,6 +226,29 @@ class BraggTree(base.CustomizedTreeView):
         self._main_window.get_workflow().write_gss_file(
             ws_name_list=bank_ws_list, gss_file_name=new_gss_file_name)
 
+    def do_plot_ws(self):
+        """
+        Add selected runs
+        :return:
+        """
+        # get the selected items of tree and sort them alphabetically
+        item_list = self.get_selected_items()
+        item_list = [str(item.text()) for item in item_list]
+        item_list.sort()
+
+        # FIXME/LATER - replace this by signal
+        if self._main_window is not None:
+            print("do_plot_ws: item_list", item_list)
+            ids = event_handler.get_bragg_banks_selected(self._main_window)
+            print("do_plot_ws: ids -", ids)
+            event_handler.plot_bragg(
+                self._main_window,
+                ws_list=item_list,
+                bankIds=ids,
+                clear_canvas=True)
+        else:
+            raise NotImplementedError('Main window has not been set up!')
+
     def do_remove_from_plot(self):
         """
         Remove a node's plot if it is plot on canvas
@@ -262,28 +306,6 @@ class BraggTree(base.CustomizedTreeView):
 
         # clear the canvas
         main_window.rietveld_ui.graphicsView_bragg.reset()
-
-    def do_plot_ws(self):
-        """
-        Add selected runs
-        :return:
-        """
-        # get the selected items of tree and sort them alphabetically
-        item_list = self.get_selected_items()
-        item_list = [str(item.text()) for item in item_list]
-        item_list.sort()
-
-        # FIXME/LATER - replace this by signal
-        if self._main_window is not None:
-            print("do_plot_ws:", item_list)
-            ids = event_handler.get_bragg_banks_selected(self._main_window)
-            event_handler.plot_bragg(
-                self._main_window,
-                ws_list=item_list,
-                bankIds=ids,
-                clear_canvas=True)
-        else:
-            raise NotImplementedError('Main window has not been set up!')
 
     def do_select_gss_node(self):
         """
