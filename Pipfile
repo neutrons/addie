@@ -5,6 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 flake8 = "*"
+ipython = "*"
 mock = "*"
 pytest = "*"
 pytest-qt = "*"
