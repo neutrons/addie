@@ -8,6 +8,8 @@ import mantid.simpleapi as ms
 from tests import DATA_DIR, IMAGE_DIR
 from addie.calibration import plot_utils
 
+TOLERANCE = 10
+
 
 @pytest.fixture
 def grp_wksp():
@@ -38,7 +40,8 @@ def diamond_gr():
     return ms.mtd['gr']
 
 
-@pytest.mark.mpl_image_compare(baseline_dir=IMAGE_DIR,
+@pytest.mark.mpl_image_compare(tolerance=TOLERANCE,
+                               baseline_dir=IMAGE_DIR,
                                filename="plot_delta_d_ttheta.png",
                                remove_text=True)
 def test_plot_delta_d_ttheta(res_wksp):
@@ -46,7 +49,8 @@ def test_plot_delta_d_ttheta(res_wksp):
     return fig
 
 
-@pytest.mark.mpl_image_compare(baseline_dir=IMAGE_DIR,
+@pytest.mark.mpl_image_compare(tolerance=TOLERANCE,
+                               baseline_dir=IMAGE_DIR,
                                filename="plot_delta_d_ttheta_with_group.png",
                                remove_text=True)
 def test_plot_delta_d_ttheta_with_group(res_wksp, grp_wksp):
@@ -55,7 +59,8 @@ def test_plot_delta_d_ttheta_with_group(res_wksp, grp_wksp):
     return fig
 
 
-@pytest.mark.mpl_image_compare(baseline_dir=IMAGE_DIR,
+@pytest.mark.mpl_image_compare(tolerance=TOLERANCE,
+                               baseline_dir=IMAGE_DIR,
                                filename="gr_nr_plot.png",
                                remove_text=True)
 def test_gr_nr_plot(diamond_gr, diamond_nr):
