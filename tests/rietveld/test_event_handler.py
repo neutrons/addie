@@ -19,7 +19,7 @@ def rietveld_event_handler(qtbot):
 def test_load_bragg_files(qtbot, rietveld_event_handler):
     """Test load_bragg_files when no files to load"""
     main_window = MainWindow()
-    rietveld_event_handler.load_bragg_files(main_window, None)
+    rietveld_event_handler.load_bragg_files(main_window, bragg_file_names)
 
 
 def test_plot_bragg_bank_for_multi_bank(qtbot, rietveld_event_handler):

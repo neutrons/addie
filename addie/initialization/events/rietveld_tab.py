@@ -1,5 +1,5 @@
 def run(main_window=None):
-    main_window.rietveld_ui.pushButton_loadBraggFile.clicked.connect(main_window.open_and_load_bragg_file)
+    main_window.rietveld_ui.pushButton_loadBraggFile.clicked.connect(main_window.open_and_load_bragg_files)
     main_window.rietveld_ui.checkBox_bank1.toggled.connect(main_window.evt_plot_bragg_bank)
     main_window.rietveld_ui.checkBox_bank2.toggled.connect(main_window.evt_plot_bragg_bank)
     main_window.rietveld_ui.checkBox_bank3.toggled.connect(main_window.evt_plot_bragg_bank)

@@ -169,7 +169,7 @@ def load_bragg_files(main_window, bragg_file_names):
     check_rietveld_widgets(main_window)
 
 
-def open_and_load_bragg_file(main_window):
+def open_and_load_bragg_files(main_window):
     """
     Load Bragg files including GSAS, NeXus, 3-column ASCii.
     """
