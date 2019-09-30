@@ -65,6 +65,7 @@ def test_get_bank_id_exception(qtbot, bragg_tree):
         bragg_tree._get_bank_id(bad_ws)
 
 
+@pytest.mark.skip(reason="Intentional broken test")
 def test_do_plot_ws(qtbot, bragg_tree_loaded):
     """Test for plotting selected bank workspace"""
     group_index = bragg_tree_loaded.model().index(1,0)
