@@ -1,10 +1,9 @@
 from __future__ import (absolute_import, division, print_function)
 from mantid.api import AnalysisDataService
 import mantid.simpleapi as simpleapi
-import mantid.plots.helperfunctions
+
 import os
-import math
-import numpy as np
+import addie.utilities
 
 
 class AddieDriver(object):
@@ -26,11 +25,6 @@ class AddieDriver(object):
         # dictionary of the workspace with rmin, rmax and delta r setup
         self._grWsIndex = 0
         self._grWsNameDict = dict()
-
-        # dictionary to manage the GSAS data
-        # key: ws_group_name, value: (gss_ws_name, ws_list).  it is in similar
-        # architecture with tree
-        self._braggDataList = list()
 
     def calculate_sqAlt(self, ws_name, outputType):
         if outputType == 'S(Q)':  # don't do anything
@@ -293,19 +287,20 @@ class AddieDriver(object):
             ofile.write(wbuf)
             ofile.close()
         except IOError as io_err:
-            raise RuntimeError(
-                'Unable to export data to file {0} in RMCProfile format due to {1}.'.format(
-                    output_file_name, io_err))
+            msg = 'Unable to export data to file {0} in RMCProfile format due to {1}.'
+            msg = msg.format(output_file_name, io_err)
+            raise RuntimeError(msg)
 
     def get_bank_numbers(self, ws_name):
         '''Returns the list of spectrum numbers in the workspace'''
-        wksp = AddieDriver.get_ws(ws_name)
+        wksp = addie.utilities.workspaces.get_ws(ws_name)
         banks = [wksp.getSpectrum(i).getSpectrumNo()
                  for i in range(wksp.getNumberHistograms())]
         return banks
 
     def convert_bragg_data(self, ws_name, x_unit):
-        curr_unit = self.get_ws(ws_name).getAxis(0).getUnit().unitID()
+        wksp = addie.utilities.workspaces.get_ws(ws_name)
+        curr_unit = wksp.getAxis(0).getUnit().unitID()
         if curr_unit != x_unit:
             simpleapi.ConvertUnits(
                 InputWorkspace=ws_name,
@@ -318,12 +313,7 @@ class AddieDriver(object):
         """
         # check
         assert isinstance(wkspindex, int) and wkspindex >= 0
-        msg = 'Workspace groups {} does not exist in controller.'.format(
-            ws_name)
-        msg += 'Current existing are {}.'.format(self._braggDataList)
-        assert ws_name in self._braggDataList, msg
-
-        bank_ws = self.get_ws(ws_name)
+        bank_ws = addie.utilities.workspaces.get_ws(ws_name)
 
         # convert units if necessary
         curr_unit = bank_ws.getAxis(0).getUnit().unitID()
@@ -336,7 +326,7 @@ class AddieDriver(object):
                 Target=x_unit,
                 EMode='Elastic')
 
-        return AddieDriver.get_ws_data(ws_name, wkspindex)
+        return addie.utilities.workspaces.get_ws_data(ws_name, wkspindex)
 
     def get_current_sq_name(self):
         """
@@ -370,7 +360,7 @@ class AddieDriver(object):
         # get the workspace
         gr_ws_name = self._grWsNameDict[(min_q, max_q)]
 
-        return AddieDriver.get_ws_data(gr_ws_name)
+        return addie.utilities.workspaces.get_ws_data(gr_ws_name)
 
     def get_sq(self, sq_name=None):
         """Get S(Q)
@@ -389,77 +379,7 @@ class AddieDriver(object):
             raise RuntimeError(
                 'S(Q) matrix workspace {0} does not exist.'.format(sq_name))
 
-        return AddieDriver.get_ws_data(sq_name)
-
-    @staticmethod
-    def get_ws(name):
-        name = str(name)
-        assert AnalysisDataService.doesExist(
-            name), 'Workspace "{}" does not exist.'.format(name)
-        return AnalysisDataService.retrieve(name)
-
-    @staticmethod
-    def get_ws_data(ws_name, wkspIndex=0, withDy=True):
-        wksp = AddieDriver.get_ws(ws_name)
-        x, y, dy, _ = mantid.plots.helperfunctions.get_spectrum(
-            wksp, wkspIndex, False, withDy=withDy, withDx=False)
-
-        return x, y, dy
-
-    @staticmethod
-    def get_ws_unit(ws_name):
-        """
-        Find out the unit of the workspace
-        """
-        wksp = AddieDriver.get_ws(ws_name)
-
-        return wksp.getAxis(0).getUnit().unitID()
-
-    @staticmethod
-    def get_y_range(ws_name, wkspindex=0):
-        '''Returns the y - range for the selected index'''
-        _, y, _ = AddieDriver.get_ws_data(ws_name, wkspindex, withDy=False)
-        return np.min(y), np.max(y)
-
-    @staticmethod
-    def get_xy_range(ws_name, wkspindex=0):
-        x, y, _ = AddieDriver.get_ws_data(ws_name, wkspindex, withDy=False)
-        return x[0], x[-1], np.min(y), np.max(y)
-
-    def load_bragg_file(self, file_name):
-        """
-        Load Bragg diffraction file (including 3-column data file, GSAS file) for Rietveld
-        """
-        # load with different file type
-        base_file_name = os.path.basename(file_name).lower()
-        gss_ws_name = os.path.basename(file_name).split('.')[0]
-        if base_file_name.endswith('.gss') or base_file_name.endswith(
-                '.gsa') or base_file_name.endswith('.gda'):
-            simpleapi.LoadGSS(Filename=file_name,
-                              OutputWorkspace=gss_ws_name)
-        elif base_file_name.endswith('.nxs'):
-            simpleapi.LoadNexusProcessed(
-                Filename=file_name, OutputWorkspace=gss_ws_name)
-            simpleapi.ConvertUnits(
-                InputWorkspace=gss_ws_name,
-                OutputWorkspace=gss_ws_name,
-                EMode='Elastic',
-                Target='TOF')
-        elif base_file_name.endswith('.dat'):
-            simpleapi.LoadAscii(Filename=file_name,
-                                OutputWorkspace=gss_ws_name,
-                                Unit='TOF')
-        else:
-            raise RuntimeError(
-                'File %s is not of a supported type.' %
-                file_name)
-        self._braggDataList.append(gss_ws_name)
-
-        # check
-        assert AnalysisDataService.doesExist(gss_ws_name)
-        angle_list = AddieDriver.calculate_bank_angle(gss_ws_name)
-
-        return gss_ws_name, angle_list
+        return addie.utilities.workspaces.get_ws_data(sq_name)
 
     def load_gr(self, gr_file_name):
         """
@@ -597,23 +517,3 @@ class AddieDriver(object):
             simpleapi.SaveGSS(InputWorkspace=ws_name, Filename=gss_file_name,
                               Format='SLOG', Bank=1, Append=append_mode)
             append_mode = True
-
-    @staticmethod
-    def calculate_bank_angle(name):
-        """ Calculate bank's angle (2theta) focused detector
-        """
-        wksp = AddieDriver.get_ws(name)
-
-        angles = list()
-
-        for wkspindex in range(wksp.getNumberHistograms()):
-            instrument = wksp.getInstrument()
-            sample_pos = instrument.getSample().getPos()
-            source_pos = instrument.getSource().getPos()
-            L1 = sample_pos - source_pos
-
-            angle = wksp.getDetector(
-                wkspindex).getPos().angle(L1) * 180. / math.pi
-            angles.append(angle)
-
-        return angles

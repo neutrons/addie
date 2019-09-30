@@ -233,7 +233,8 @@ class GofRTree(base.CustomizedTreeView):
             if curr_level == -1:
                 curr_level = temp_level
             elif curr_level != temp_level:
-                raise RuntimeError('Nodes of different levels are selected. It is not supported for deletion.')
+                raise RuntimeError(
+                    'Nodes of different levels are selected. It is not supported for deletion.')
 
         # get item and delete
         if curr_level == 0:
@@ -310,7 +311,8 @@ class GofRTree(base.CustomizedTreeView):
             else:
                 event_handler.remove_sq_from_plot(self.parent, leaf_node_name)
         except AssertionError as ass_err:
-            print('Unable to remove %s from canvas due to %s.' % (leaf_node_name, str(ass_err)))
+            print('Unable to remove %s from canvas due to %s.' %
+                  (leaf_node_name, str(ass_err)))
         # delete node
         self.delete_node(ws_item)
 
@@ -417,7 +419,8 @@ class GofRTree(base.CustomizedTreeView):
         """ Override event handling method
         """
         status, current_run = self.get_current_run()
-        print('[INFO] Status = {0}; Current run number = {1}'.format(status, current_run))
+        print('[INFO] Status = {0}; Current run number = {1}'.format(
+            status, current_run))
 
     def set_main_window(self, main_window):
         """

@@ -644,8 +644,8 @@ class MainWindow(QMainWindow):
         help_button_activator(parent=self, button_name="scans")
 
     # Rietveld tab
-    def do_load_bragg_file(self):
-        rietveld_event_handler.do_load_bragg_file(main_window=self)
+    def open_and_load_bragg_files(self):
+        rietveld_event_handler.open_and_load_bragg_files(main_window=self)
 
     def do_set_bragg_color_marker(self):
         rietveld_event_handler.do_set_bragg_color_marker(self)
@@ -670,10 +670,6 @@ class MainWindow(QMainWindow):
 
     def do_clear_bragg_canvas(self):
         rietveld_event_handler.do_clear_bragg_canvas(self)
-
-    def plot_bragg(self, ws_list, bankIds, clear_canvas=False):
-        rietveld_event_handler.plot_bragg_bank(
-            self, ws_list, bankIds, clear_canvas)
 
     def set_bragg_ws_to_plot(self, gss_group_name):
         rietveld_event_handler.set_bragg_ws_to_plot(self, gss_group_name)

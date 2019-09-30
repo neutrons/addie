@@ -50,7 +50,7 @@ install:
 
 script:
     # TEST: Create test environment and test build
-  - mamba create -q -n addie_test python=$CONDA flake8 conda-build=3.17 anaconda-client
+  - mamba create -q -n addie_test python=$CONDA flake8 conda-build=3.17 anaconda-client pytest pytest-qt pytest-mpl
   - mamba info --envs
   - conda activate addie_test
   - mkdir -p ${CONDA_PREFIX}/conda-bld/linux-64/
@@ -77,19 +77,14 @@ script:
   - python -c "import mantid"
   - python -c "import qtpy"
   - python -c "import mantidqt"
-  # workbench tests
+
+  # mantid workbench tests
   - xvfb-run --server-args="-screen 0 640x480x24" --auto-servernum mantidworkbench --help
   - echo "import time;time.sleep(5)" > workbenchshutdown.py
   - xvfb-run --server-args="-screen 0 640x480x24" --auto-servernum mantidworkbench -q -x workbenchshutdown.py
-  # run the unit tests (w/o any additions)
-  - python setup.py test
-  # install mantid_total_scattering for development
-  - pip install mantid-total-scattering
-  # run the unit tests (w/ total scattering reduction)
-  - python setup.py test
-  # install addie
-  - python setup.py install
-  - which addie
+
+  # run addie tests
+  - xvfb-run --server-args="-screen 0 640x480x24" --auto-servernum pytest --mpl tests --disable-pytest-warnings
   - xvfb-run --server-args="-screen 0 640x480x24" --auto-servernum addie --version
 
 deploy:

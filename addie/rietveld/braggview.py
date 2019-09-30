@@ -6,6 +6,7 @@ from qtpy.QtWidgets import (QAction, QMenu)
 
 from addie.plot import MplGraphicsView
 from addie.addiedriver import AddieDriver
+import addie.utilities.workspaces
 
 
 class BraggView(MplGraphicsView):
@@ -53,7 +54,9 @@ class BraggView(MplGraphicsView):
         self._currColorStyleMarkerIndex = 0
 
         # define the dynamic menu
-        self._myCanvas.mpl_connect('button_press_event', self.on_mouse_press_event)
+        self._myCanvas.mpl_connect(
+            'button_press_event',
+            self.on_mouse_press_event)
 
         # records of the plots on canvas
         # workspaces' names (not bank, but original workspace) on canvas
@@ -81,7 +84,8 @@ class BraggView(MplGraphicsView):
 
         for bank_id in list(self._bankPlotDict.keys()):
             if len(self._bankPlotDict[bank_id]) == 0:
-                # previously-not-being plot. either in new_plot_banks already or no-op
+                # previously-not-being plot. either in new_plot_banks already
+                # or no-op
                 continue
             elif bank_id in bank_to_plot_list:
                 # previously-being plot, then to be removed from new-plot-list
@@ -89,7 +93,6 @@ class BraggView(MplGraphicsView):
             else:
                 # previously-being plot, then to be removed from canvas
                 to_remove_banks.append(bank_id)
-        # END-FOR (bank_id)
 
         return new_plot_banks, to_remove_banks
 
@@ -107,7 +110,8 @@ class BraggView(MplGraphicsView):
         assert isinstance(x_unit, str), 'Unit of X-axis {0} must be a string but not a {1}.' \
                                         ''.format(x_unit, type(x_unit))
         if x_unit not in ['TOF', 'MomentumTransfer', 'dSpacing']:
-            raise RuntimeError('Unit {0} of X-axis is not recognized.'.format(x_unit))
+            raise RuntimeError(
+                'Unit {0} of X-axis is not recognized.'.format(x_unit))
 
         self._unitX = x_unit
 
@@ -135,7 +139,6 @@ class BraggView(MplGraphicsView):
                 self.setXYLimit(xmin=0, xmax=7, ymin=None, ymax=None)
             else:
                 raise RuntimeError('Unit %s unknown' % self._unitX)
-        # END-IF
 
         return
 
@@ -169,9 +172,15 @@ class BraggView(MplGraphicsView):
         print('[DB] Index = ', self._currColorStyleMarkerIndex)
 
         # get color with current color index
-        marker_index = int(self._currColorStyleMarkerIndex / (num_style * num_color))
-        style_index = int(self._currColorStyleMarkerIndex % (num_style * num_color) / num_color)
-        color_index = int(self._currColorStyleMarkerIndex % (num_style * num_color) % num_color)
+        value = num_style * num_color
+        marker_value = self._currColorStyleMarkerIndex / value
+        marker_index = int(marker_value)
+
+        style_value = self._currColorStyleMarkerIndex % value / num_color
+        style_index = int(style_value)
+
+        color_value = self._currColorStyleMarkerIndex % value % num_color
+        color_index = int(color_value)
 
         color = self._gssColorList[color_index]
         style = self._gssLineStyleList[style_index]
@@ -243,10 +252,12 @@ class BraggView(MplGraphicsView):
                 action1.triggered.connect(self._myCanvas.hide_legend)
 
                 action2 = QAction('Legend font larger', self)
-                action2.triggered.connect(self._myCanvas.increase_legend_font_size)
+                action2.triggered.connect(
+                    self._myCanvas.increase_legend_font_size)
 
                 action3 = QAction('Legend font smaller', self)
-                action3.triggered.connect(self._myCanvas.decrease_legend_font_size)
+                action3.triggered.connect(
+                    self._myCanvas.decrease_legend_font_size)
 
                 self.menu.addAction(action2)
                 self.menu.addAction(action3)
@@ -260,7 +271,6 @@ class BraggView(MplGraphicsView):
 
             # pop up menu
             self.menu.popup(QCursor.pos())
-        # END-IF-ELSE
         return
 
     def plot_banks(self, plot_bank_dict, unit):
@@ -282,7 +292,8 @@ class BraggView(MplGraphicsView):
             self._workspaceSet.add(ws_name)
 
             for bank_id in plot_bank_dict[ws_name]:
-                # determine the color/marker/style of the line - shouldn't be special
+                # determine the color/marker/style of the line - shouldn't be
+                # special
                 if self._singleGSSMode:
                     # single bank mode
                     bank_color = self._bankColorDict[bank_id]
@@ -291,26 +302,36 @@ class BraggView(MplGraphicsView):
                 else:
                     # multiple bank mode
                     bank_color, style, marker = self.get_multi_gss_color()
-                # END-IF-ELSE
 
-                print('[DB...BAT] Plot Mode (single bank) = {0}, group = {1}, bank = {2}, color = {3}, marker = {4},'
-                      'style = {5}'
-                      ''.format(self._singleGSSMode, ws_name, bank_id, bank_color, marker, style))
+                print(
+                    '[DB...BAT] Plot Mode (single bank) = {0}, group = {1}, bank = {2}, color = {3}, marker = {4},'
+                    'style = {5}'
+                    ''.format(
+                        self._singleGSSMode,
+                        ws_name,
+                        bank_id,
+                        bank_color,
+                        marker,
+                        style))
 
                 # plot
-                plot_id = self.add_plot_1d(ws_name, wkspindex=bank_id-1, marker=marker, color=bank_color,
-                                           line_style=style,
-                                           x_label=unit,
-                                           y_label='I({0})'.format(unit),
-                                           label='%s Bank %d' % (ws_name, bank_id))
+                plot_id = self.add_plot_1d(
+                    ws_name,
+                    wkspindex=bank_id - 1,
+                    marker=marker,
+                    color=bank_color,
+                    line_style=style,
+                    x_label=unit,
+                    y_label='I({0})'.format(unit),
+                    label='%s Bank %d' % (ws_name, bank_id)
+                )
 
                 # plot key
                 plot_key = self._generate_plot_key(ws_name, bank_id)
                 self._bankPlotDict[bank_id].append(plot_key)
                 self._gssDict[plot_key] = plot_id
-                self._plotScaleDict[plot_id] = self._driver.get_y_range(ws_name, bank_id-1)  # is this needed?
-            # END-FOR (bank id)
-        # END-FOR (ws_group)
+                self._plotScaleDict[plot_id] = addie.utilities.workspaces.get_y_range(
+                    ws_name, bank_id - 1)  # is this needed?
 
         # self.scale_auto()
 
@@ -323,9 +344,14 @@ class BraggView(MplGraphicsView):
         self._workspaceSet.add(ws_name)
 
         # plot
-        plot_id = self.add_plot_1d(ws_name, wkspindex=0, marker=None, color='black',
-                                   label=ws_name)
-        self._plotScaleDict[plot_id] = self._driver.get_y_range(ws_name, 0)
+        plot_id = self.add_plot_1d(
+            ws_name,
+            wkspindex=0,
+            marker=None,
+            color='black',
+            label=ws_name)
+        self._plotScaleDict[plot_id] = addie.utilities.workspaces.get_y_range(
+            ws_name, 0)
 
         # scale the plot automatically
         self.scale_auto()
@@ -346,15 +372,15 @@ class BraggView(MplGraphicsView):
         # remove line from canvas
         error_message = ''
         for bank_id in bank_id_list:
-            # check bank ID type
-            assert isinstance(bank_id, int), 'Bank ID %s must be an integer but not a %s.' % (str(bank_id),
-                                                                                              str(type(bank_id)))
+            bank_id = int(bank_id)
+
             # from bank ID key
             plot_key = self._generate_plot_key(ws_group_name, bank_id)
 
             # line is not plot
             if plot_key not in self._gssDict:
-                error_message += 'Workspace %s Bank %d is not on canvas to delete.\n' % (ws_group_name, bank_id)
+                error_message += 'Workspace %s Bank %d is not on canvas to delete.\n' % (
+                    ws_group_name, bank_id)
                 continue
 
             bank_line_id = self._gssDict[plot_key]
@@ -362,15 +388,13 @@ class BraggView(MplGraphicsView):
             try:
                 self.remove_line(bank_line_id)
             except ValueError as val_error:
-                error_message = 'Unable to remove bank %d plot (ID = %d) due to %s.' % (bank_id,
-                                                                                        bank_line_id,
-                                                                                        str(val_error))
+                error_message = 'Unable to remove bank %d plot (ID = %d) due to %s.' % (
+                    bank_id, bank_line_id, str(val_error))
                 raise ValueError(error_message)
             # remove from data structure
             del self._gssDict[plot_key]
             del self._plotScaleDict[bank_line_id]
             self._bankPlotDict[bank_id].remove(plot_key)
-        # END-FOR
 
         # scale automatically
         # self.scale_auto()
@@ -416,7 +440,8 @@ class BraggView(MplGraphicsView):
         """Scale automatically for the plots on the canvas
         """
         # get Y min and Y max
-        y_min = min(0., self._plotScaleDict.values()[0][0])  # always include zero
+        y_min = min(0., self._plotScaleDict.values()
+                    [0][0])  # always include zero
         y_max = self._plotScaleDict.values()[0][1]
         for temp_min, temp_max in self._plotScaleDict.values():
             y_min = min(y_min, temp_min)

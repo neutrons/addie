@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QVBoxLayout, QWidget
 from addie.plot import IndicatorManager, NavigationToolbar
 from addie.plot import FigureCanvas
 from addie.plot.constants import BASIC_COLORS, LINE_MARKERS, LINE_STYLES
-from addie.addiedriver import AddieDriver  # TODO remove this import
+import addie.utilities.workspaces
 
 
 class MplGraphicsView(QWidget):
@@ -55,8 +55,6 @@ class MplGraphicsView(QWidget):
         # some statistic recorder for convenient operation
         self._statDict = dict()
 
-        self._driver = AddieDriver()
-
     def add_arrow(self, start_x, start_y, stop_x, stop_y):
         self._myCanvas.add_arrow(start_x, start_y, stop_x, stop_y)
 
@@ -82,7 +80,7 @@ class MplGraphicsView(QWidget):
         line_key = self._myCanvas.add_plot_1d(wkspname, wkspindex, color, label, x_label, y_label, marker, line_style,
                                               line_width, alpha, show_legend)
 
-        xmin, xmax, ymin, ymax = self._driver.get_xy_range(wkspname, wkspindex)
+        xmin, xmax, ymin, ymax = addie.utilities.workspaces.get_xy_range(wkspname, wkspindex)
 
         # record min/max
         self._statDict[line_key] = xmin, xmax, ymin, ymax
@@ -439,7 +437,7 @@ class MplGraphicsView(QWidget):
 
         # update line
         if wkspname:
-            ymin, ymax = self._driver.get_y_range(wkspname, wkspindex)
+            ymin, ymax = addie.utilities.workspaces.get_y_range(wkspname, wkspindex)
             self._my1DPlotMinYDict[ikey] = ymin
             self._my1DPlotMaxYDict[ikey] = ymax
         self._myCanvas.updateLine(ikey=ikey, wkspname=wkspname, wkspindex=wkspindex,

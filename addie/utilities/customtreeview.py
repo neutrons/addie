@@ -35,91 +35,88 @@ class CustomizedTreeView(QTreeView):
         self._myHeaderList = list()
         self._childrenInOrder = True
 
-    def delete_node(self, node_item):
-        """ Delete a node in the tree
+    def _add_child_item(self, parent_item, child_item_value, append):
         """
-        # check input
-        assert isinstance(node_item, QStandardItem)
+        Add a child item
+        :param parent_item:
+        :param child_item_value:
+        :param append:
+        :return:
+        """
+        # Check
+        assert(isinstance(parent_item, QStandardItem))
+        assert(isinstance(child_item_value, str))
+        assert(child_item_value != '')
+        assert(isinstance(append, bool))
 
-        # Get current item
-        node_index = self.model().indexFromItem(node_item)
-        assert node_index is not None
+        parent_value = str(parent_item.text())
+        if parent_value not in self._leafDict:
+            raise RuntimeError('No parent leaf with key value %s' % parent_value)
+        elif child_item_value in self._leafDict[parent_value]:
+            raise RuntimeError('Child item %s has existed in parent %s. '
+                               'Unable to add duplicate item!' % (child_item_value, parent_value))
 
-        # get row number and node value
-        row_number = node_index.row()
-        node_value = str(node_item.text())
+        # New item
+        # child_item = QStandardItem(child_item_value)
+        child_item = QStandardItem(str(child_item_value))
+        self._leafDict[parent_value].append(child_item_value)
+        if append is False:
+            self._leafDict[parent_value].sort()
 
-        # delete by using parent
-        the_parent = node_item.parent()
-        if the_parent is None:
-            # top main item: remove the item and delete from the leaf dictionary
-            self.model().removeRows(row_number, 1)
-            del self._leafDict[node_value]
-            del self._mainNodeDict[node_value]
+        if append is True:
+            # Append
+            num_children = parent_item.rowCount()
+            parent_item.setChild(num_children, 0, child_item)
         else:
-            # it is a child
-            parent_index = self.model().indexFromItem(the_parent)
-            self.model().removeRows(row_number, 1, parent_index)
-            parent_value = str(the_parent.text())
+            # Insert
+            row_number = self._leafDict[parent_value].index(child_item_value)
+            parent_item.insertRow(row_number, [child_item])
 
-            if parent_value in self._leafDict:
-                self._leafDict[parent_value].remove(node_value)
-
-    def init_setup(self, header_list):
+    def add_child_current_item(self, child_value):
         """
-        To set up customized header
-        :param header_list:
-        :param header_list:
+
+        :param child_value:
         :return:
         """
-        assert(isinstance(header_list, list))
-        assert(len(header_list) == self._myNumCols)
-
-        # Set up header
-        for i_col in range(self._myNumCols):
-            header = header_list[i_col]
-            self.model().setHeaderData(0, Qt.Horizontal, header)
-        # END-IF
-        self._myHeaderList = header_list[:]
-
-        # Enable scroll bar
-        header = self.header()
-        assert isinstance(header, QHeaderView), 'Header must be a QHeaderView instance.'
-        # header.setHorizontalScrollBar(QScrollBar())
-
-        header.setHorizontalScrollMode(QAbstractItemView.ScrollPerItem)
-        header.setSectionResizeMode(QHeaderView.ResizeToContents)
-        header.setStretchLastSection(False)
-
-        return
-
-    def do_show_info(self):
-        """
-        :return:
-        """
-        # Get current item
         current_index = self.currentIndex()
         assert(isinstance(current_index, QModelIndex))
         current_row = current_index.row()
+        print('[DEV] Current Index of Row = %d ' % current_row)
 
-        current_data = current_index.data()
-        assert(isinstance(current_data, QVariant))
-        current_int_value, is_int = current_data.toInt()
+        # Get model
+        my_model = self.model()
+        assert(isinstance(my_model, QStandardItemModel))
+        current_item = my_model.itemFromIndex(current_index)
+        if current_item is None:
+            print('[INFO] Current item has not been set up.')
+            return
 
-        print('[DEV] Current Index of Row = %d ' % current_row, end=' ')
-        if is_int is True:
-            print('with integer value %d' % current_int_value)
-        else:
-            print('with a value other than integer %s' % str(current_data.toString()))
+        self._add_child_item(current_item, child_value, False)
 
-        current_item = self.model().itemFromIndex(current_index)
-        assert(isinstance(current_item, QStandardItem))
-        print('Current item has %d rows; ' % current_item.rowCount(), end=' ')
-        print('Current item has child = %s; ' % str(current_item.hasChildren()), end=' ')
-        print('Current item has parent = %s; ' % str(current_item.parent()), end=' ')
-        print('Current item has text = %s. ' % str(current_item.text()))
+    def add_child_main_item(self, main_item_value, child_value):
+        """ Add a child under a main item with given name
+        :return: boolean. True: add the child item successfully. False: unable to add child due to being duplicate.
+        """
+        main_item_value = str(main_item_value)
+        child_value = str(child_value)
 
-        return
+        # find the main item value
+        if main_item_value not in self._mainNodeDict:
+            raise KeyError('Main node item %s does not exist in the tree.' % main_item_value)
+
+        # get the model of the tree
+        my_model = self.model()
+        assert(isinstance(my_model, QStandardItemModel))
+
+        # check whether the child item (value) has exist
+        if child_value in self._leafDict[main_item_value]:
+            return False
+
+        # add the child item to main item
+        main_node_item = self._mainNodeDict[main_item_value]
+        self._add_child_item(main_node_item, child_value, not self._childrenInOrder)
+
+        return True
 
     def add_main_item(self, item_value, append, as_current_index):
         """
@@ -166,82 +163,6 @@ class CustomizedTreeView(QTreeView):
 
         return True, ''
 
-    def add_child_current_item(self, child_value):
-        """
-
-        :param child_value:
-        :return:
-        """
-        current_index = self.currentIndex()
-        assert(isinstance(current_index, QModelIndex))
-        current_row = current_index.row()
-        print('[DEV] Current Index of Row = %d ' % current_row)
-
-        # Get model
-        my_model = self.model()
-        assert(isinstance(my_model, QStandardItemModel))
-        current_item = my_model.itemFromIndex(current_index)
-        if current_item is None:
-            print('[INFO] Current item has not been set up.')
-            return
-
-        self._add_child_item(current_item, child_value, False)
-
-        return
-
-    def add_child_main_item(self, main_item_value, child_value):
-        """ Add a child under a main item with given name
-        :return: boolean. True: add the child item successfully. False: unable to add child due to being duplicate.
-        """
-        main_item_value = str(main_item_value)
-        child_value = str(child_value)
-
-        # find the main item value
-        if main_item_value not in self._mainNodeDict:
-            raise KeyError('Main node item %s does not exist in the tree.' % main_item_value)
-
-        # get the model of the tree
-        my_model = self.model()
-        assert(isinstance(my_model, QStandardItemModel))
-
-        # check whether the child item (value) has exist
-        if child_value in self._leafDict[main_item_value]:
-            return False
-
-        # add the child item to main item
-        main_node_item = self._mainNodeDict[main_item_value]
-        self._add_child_item(main_node_item, child_value, not self._childrenInOrder)
-
-        return True
-
-    def insert_child_current_item(self, child_value):
-        """
-        Insert a child item to currently selected item
-        Args:
-            child_value:
-
-        Returns:
-
-        """
-        current_index = self.currentIndex()
-        assert(isinstance(current_index, QModelIndex))
-        current_row = current_index.row()
-        print('[DEV] Current Index of Row = %d ' % current_row)
-
-        # Get model
-        my_model = self.model()
-        assert(isinstance(my_model, QStandardItemModel))
-        current_item = my_model.itemFromIndex(current_index)
-
-        assert(isinstance(current_item, QStandardItem))
-
-        print('Add Child Value ', child_value)
-        # child_item = QStandardItem(child_value)
-        child_item = QStandardItem(str(child_value))
-        current_item.insertRow(0, [child_item])
-
-        return
-
     def clear_tree(self):
         """
         Clear the items in the tree
@@ -256,42 +177,87 @@ class CustomizedTreeView(QTreeView):
         self._mainNodeDict.clear()
         self._leafDict.clear()
 
-    def _add_child_item(self, parent_item, child_item_value, append):
+    def delete_node(self, node_item):
+        """ Delete a node in the tree
         """
-        Add a child item
-        :param parent_item:
-        :param child_item_value:
-        :param append:
+        # check input
+        assert isinstance(node_item, QStandardItem)
+
+        # Get current item
+        node_index = self.model().indexFromItem(node_item)
+        assert node_index is not None
+
+        # get row number and node value
+        row_number = node_index.row()
+        node_value = str(node_item.text())
+
+        # delete by using parent
+        the_parent = node_item.parent()
+        if the_parent is None:
+            # top main item: remove the item and delete from the leaf dictionary
+            self.model().removeRows(row_number, 1)
+            del self._leafDict[node_value]
+            del self._mainNodeDict[node_value]
+        else:
+            # it is a child
+            parent_index = self.model().indexFromItem(the_parent)
+            self.model().removeRows(row_number, 1, parent_index)
+            parent_value = str(the_parent.text())
+
+            if parent_value in self._leafDict:
+                self._leafDict[parent_value].remove(node_value)
+
+    def init_setup(self, header_list):
+        """
+        To set up customized header
+        :param header_list:
+        :param header_list:
         :return:
         """
-        # Check
-        assert(isinstance(parent_item, QStandardItem))
-        assert(isinstance(child_item_value, str))
-        assert(child_item_value != '')
-        assert(isinstance(append, bool))
+        assert(isinstance(header_list, list))
+        assert(len(header_list) == self._myNumCols)
 
-        parent_value = str(parent_item.text())
-        if parent_value not in self._leafDict:
-            raise RuntimeError('No parent leaf with key value %s' % parent_value)
-        elif child_item_value in self._leafDict[parent_value]:
-            raise RuntimeError('Child item %s has existed in parent %s. '
-                               'Unable to add duplicate item!' % (child_item_value, parent_value))
+        # Set up header
+        for i_col in range(self._myNumCols):
+            header = header_list[i_col]
+            self.model().setHeaderData(0, Qt.Horizontal, header)
 
-        # New item
-        # child_item = QStandardItem(child_item_value)
-        child_item = QStandardItem(str(child_item_value))
-        self._leafDict[parent_value].append(child_item_value)
-        if append is False:
-            self._leafDict[parent_value].sort()
+        self._myHeaderList = header_list[:]
 
-        if append is True:
-            # Append
-            num_children = parent_item.rowCount()
-            parent_item.setChild(num_children, 0, child_item)
+        # Enable scroll bar
+        header = self.header()
+        assert isinstance(header, QHeaderView), 'Header must be a QHeaderView instance.'
+        # header.setHorizontalScrollBar(QScrollBar())
+
+        header.setHorizontalScrollMode(QAbstractItemView.ScrollPerItem)
+        header.setSectionResizeMode(QHeaderView.ResizeToContents)
+        header.setStretchLastSection(False)
+
+        return
+
+    def do_show_info(self):
+        """
+        :return:
+        """
+        # Get current item
+        current_index = self.currentIndex()
+        assert(isinstance(current_index, QModelIndex))
+        current_row = current_index.row()
+
+        current_data = current_index.data()
+        assert(isinstance(current_data, QVariant))
+        current_int_value, is_int = current_data.toInt()
+
+        print('[DEV] Current Index of Row = %d ' % current_row, end=' ')
+        if is_int is True:
+            print('with integer value %d' % current_int_value)
         else:
-            # Insert
-            row_number = self._leafDict[parent_value].index(child_item_value)
-            parent_item.insertRow(row_number, [child_item])
+            print('with a value other than integer %s' % str(current_data.toString()))
+
+        current_item = self.model().itemFromIndex(current_index)
+        assert(isinstance(current_item, QStandardItem))
+        print('Current item has %d rows; ' % current_item.rowCount(), end=' ')
+        print('Current item has child = %s; ' % str(current_item.hasChildren()), end=' ')
 
     def get_main_nodes(self, output_str=True):
         """
@@ -433,3 +399,31 @@ class CustomizedTreeView(QTreeView):
                 q_item = q_item.parent()
 
         return has
+
+    def insert_child_current_item(self, child_value):
+        """
+        Insert a child item to currently selected item
+        Args:
+            child_value:
+
+        Returns:
+
+        """
+        current_index = self.currentIndex()
+        assert(isinstance(current_index, QModelIndex))
+        current_row = current_index.row()
+        print('[DEV] Current Index of Row = %d ' % current_row)
+
+        # Get model
+        my_model = self.model()
+        assert(isinstance(my_model, QStandardItemModel))
+        current_item = my_model.itemFromIndex(current_index)
+
+        assert(isinstance(current_item, QStandardItem))
+
+        print('Add Child Value ', child_value)
+        # child_item = QStandardItem(child_value)
+        child_item = QStandardItem(str(child_value))
+        current_item.insertRow(0, [child_item])
+
+        return

@@ -95,17 +95,10 @@ Similarly, there is a script for windows (experimental)
 addiedevel.bat
 ```
 
-The test suite can be run using [unittests](https://docs.python.org/3/library/unittest.html) `discover` mode on the `tests` module
+The test suite can be run using [pytest](https://docs.pytest.org/en/latest/)
+with the [pytest-qt](https://pytest-qt.readthedocs.io/en/latest/) plugin.
 ```bash
-$ python -m unittest discover
-```
-or through the `setup.py` script
-```bash
-$ python setup.py test
-```
-Individual test files can be run directly as
-```bash
-$ python tests/test_fileio.py
+$ pytest tests
 ```
 
 

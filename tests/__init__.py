@@ -1,5 +1,7 @@
 from __future__ import absolute_import, print_function
 import os
 
-DATA_DIR = os.path.dirname(os.path.abspath(__file__))
+TEST_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(TEST_DIR, "test_files")
+IMAGE_DIR = os.path.join(TEST_DIR, "mpl_baseline_images")
 print('looking for data in "{}"'.format(DATA_DIR))

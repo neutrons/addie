@@ -1,4 +1,5 @@
-# pylint: disable=invalid-name,too-many-public-methods,too-many-arguments,non-parent-init-called,R0902,too-many-branches,C0302
+# pylint:
+# disable=invalid-name,too-many-public-methods,too-many-arguments,non-parent-init-called,R0902,too-many-branches,C0302
 from __future__ import (absolute_import, division, print_function)
 import numpy as np
 
@@ -16,6 +17,7 @@ else:
 import matplotlib.image  # noqa
 from matplotlib.figure import Figure  # noqa
 from addie.addiedriver import AddieDriver  # noqa
+import addie.utilities.workspaces # noqa
 
 
 class FigureCanvas(FigureCanvasQTAgg):
@@ -41,7 +43,8 @@ class FigureCanvas(FigureCanvasQTAgg):
         self.setParent(parent)
 
         # Set size policy to be able to expanding and resizable with frame
-        FigureCanvasQTAgg.setSizePolicy(self, QSizePolicy.Expanding, QSizePolicy.Expanding)
+        FigureCanvasQTAgg.setSizePolicy(
+            self, QSizePolicy.Expanding, QSizePolicy.Expanding)
         FigureCanvasQTAgg.updateGeometry(self)
 
         # Variables to manage all lines/subplot
@@ -73,8 +76,20 @@ class FigureCanvas(FigureCanvasQTAgg):
         self.axes.arrrow(start_x, start_y, stop_x, stop_y, head_width,
                          head_length, fc, ec)
 
-    def add_plot_1d(self, wkspname, wkspindex, color=None, label="", x_label=None, y_label=None,
-                    marker=None, line_style=None, line_width=1, alpha=1., show_legend=True, plotError=False):
+    def add_plot_1d(
+            self,
+            wkspname,
+            wkspindex,
+            color=None,
+            label="",
+            x_label=None,
+            y_label=None,
+            marker=None,
+            line_style=None,
+            line_width=1,
+            alpha=1.,
+            show_legend=True,
+            plotError=False):
 
         # process inputs and defaults
         if color is None:
@@ -85,15 +100,31 @@ class FigureCanvas(FigureCanvasQTAgg):
             line_style = '-'
 
         # color must be RGBA (4-tuple)
-        wksp = self._driver.get_ws(wkspname)
+        wksp = addie.utilities.workspaces.get_ws(wkspname)
         if plotError:
-            r = self.axes.errorbar(wksp, wkspIndex=wkspindex, color=color, marker=marker, linestyle=line_style,
-                                   label=label, linewidth=line_width, alpha=alpha,
-                                   markersize=40)
+            r = self.axes.errorbar(
+                wksp,
+                wkspIndex=wkspindex,
+                color=color,
+                marker=marker,
+                linestyle=line_style,
+                label=label,
+                linewidth=line_width,
+                alpha=alpha,
+                markersize=40)
         else:
             # return: list of matplotlib.lines.Line2D object
-            r = self.axes.plot(wksp, wkspIndex=wkspindex, color=color, marker=marker, markersize=2, linestyle=line_style,
-                               label=label, linewidth=line_width, alpha=alpha,distribution=True)
+            r = self.axes.plot(
+                wksp,
+                wkspIndex=wkspindex,
+                color=color,
+                marker=marker,
+                markersize=2,
+                linestyle=line_style,
+                label=label,
+                linewidth=line_width,
+                alpha=alpha,
+                distribution=True)
 
         self.axes.set_aspect('auto')
 
@@ -123,7 +154,15 @@ class FigureCanvas(FigureCanvasQTAgg):
 
         return line_key
 
-    def addPlot2D(self, array2d, xmin, xmax, ymin, ymax, holdprev, yticklabels=None):
+    def addPlot2D(
+            self,
+            array2d,
+            xmin,
+            xmax,
+            ymin,
+            ymax,
+            holdprev,
+            yticklabels=None):
         """ Add a 2D plot
 
         Arguments:
@@ -138,11 +177,19 @@ class FigureCanvas(FigureCanvasQTAgg):
         # self.axes.set_yticks(yticks)
 
         # show image
-        imgplot = self.axes.imshow(array2d, extent=[xmin, xmax, ymin, ymax], interpolation='none')
+        imgplot = self.axes.imshow(
+            array2d,
+            extent=[
+                xmin,
+                xmax,
+                ymin,
+                ymax],
+            interpolation='none')
         # set y ticks as an option:
         if yticklabels is not None:
             # it will always label the first N ticks even image is zoomed in
-            print("--------> [FixMe]: The way to set up the Y-axis ticks is wrong!")
+            print(
+                "--------> [FixMe]: The way to set up the Y-axis ticks is wrong!")
             # self.axes.set_yticklabels(yticklabels)
 
         # explicitly set aspect ratio of the image
@@ -174,13 +221,17 @@ class FigureCanvas(FigureCanvasQTAgg):
         contour_plot = self.axes.contourf(grid_x, grid_y, matrix_z, 100)
 
         labels = [item.get_text() for item in self.axes.get_yticklabels()]
-        print('[DB...BAT] Number of Y labels = ', len(labels), ', Number of Y = ', len(vec_y))
+        print(
+            '[DB...BAT] Number of Y labels = ',
+            len(labels),
+            ', Number of Y = ',
+            len(vec_y))
 
         # TODO/ISSUE/55: how to make this part more powerful
-        if len(labels) == 2*len(vec_y) - 1:
+        if len(labels) == 2 * len(vec_y) - 1:
             new_labels = [''] * len(labels)
             for i in range(len(vec_y)):
-                new_labels[i*2] = '%d' % int(vec_y[i])
+                new_labels[i * 2] = '%d' % int(vec_y[i])
             self.axes.set_yticklabels(new_labels)
 
         # explicitly set aspect ratio of the image
@@ -208,7 +259,15 @@ class FigureCanvas(FigureCanvasQTAgg):
         img = matplotlib.image.imread(str(imagefilename))
         # lum_img = img[:,:,0]
         # FUTURE : refactor for image size, interpolation and origin
-        imgplot = self.axes.imshow(img, extent=[0, 1000, 800, 0], interpolation='none', origin='lower')
+        imgplot = self.axes.imshow(
+            img,
+            extent=[
+                0,
+                1000,
+                800,
+                0],
+            interpolation='none',
+            origin='lower')
 
         # Set color bar.  plt.colorbar() does not work!
         if self._colorBar is None:
@@ -231,8 +290,10 @@ class FigureCanvas(FigureCanvasQTAgg):
                 try:
                     self.axes.lines.remove(plot)
                 except ValueError as e:
-                    print("[Error] Plot %s is not in axes.lines which has %d lines. Error mesage: %s" % (
-                        str(plot), len(self.axes.lines), str(e)))
+                    print(
+                        "[Error] Plot %s is not in axes.lines which has %d lines. Error mesage: %s" %
+                        (str(plot), len(
+                            self.axes.lines), str(e)))
                 del self._lineDict[ikey]
             else:
                 # error bar
@@ -264,7 +325,8 @@ class FigureCanvas(FigureCanvasQTAgg):
         if len(self.fig.axes) > 1:
             self.fig.delaxes(self.fig.axes[1])
             self._colorBar = None
-            # This clears the space claimed by color bar but destroys sub_plot too.
+            # This clears the space claimed by color bar but destroys sub_plot
+            # too.
             self.fig.clear()
             # Re-create subplot
             self.axes = self.fig.add_subplot(111)
@@ -279,7 +341,8 @@ class FigureCanvas(FigureCanvasQTAgg):
         Returns:
 
         """
-        # minimum legend font size is 2! return if it already uses the smallest font size.
+        # minimum legend font size is 2! return if it already uses the smallest
+        # font size.
         if self._legendFontSize <= 2:
             return
 
@@ -291,7 +354,7 @@ class FigureCanvas(FigureCanvasQTAgg):
     def getLastPlotIndexKey(self):
         """ Get the index/key of the last added line
         """
-        return self._lineIndex-1
+        return self._lineIndex - 1
 
     def getPlot(self):
         """ reture figure's axes to expose the matplotlib figure to PyQt client
@@ -369,8 +432,8 @@ class FigureCanvas(FigureCanvasQTAgg):
             try:
                 self.axes.lines.remove(self._lineDict[plot_key])
             except ValueError as r_error:
-                error_message = 'Unable to remove to 1D line %s (ID=%d) due to %s.' % (str(self._lineDict[plot_key]),
-                                                                                       plot_key, str(r_error))
+                error_message = 'Unable to remove to 1D line %s (ID=%d) due to %s.' % (
+                    str(self._lineDict[plot_key]), plot_key, str(r_error))
                 raise RuntimeError(error_message)
             # remove the plot key from dictionary
             del self._lineDict[plot_key]
@@ -397,8 +460,17 @@ class FigureCanvas(FigureCanvasQTAgg):
             # set flag on
             self._isLegendOn = True
 
-    def updateLine(self, ikey=-1, wkspname=None, wkspindex=None, vecx=None, vecy=None,
-                   linestyle=None, linecolor=None, marker=None, markercolor=None):
+    def updateLine(
+            self,
+            ikey=-1,
+            wkspname=None,
+            wkspindex=None,
+            vecx=None,
+            vecy=None,
+            linestyle=None,
+            linecolor=None,
+            marker=None,
+            markercolor=None):
         """
         Update a plot line or a series plot line
         """
@@ -410,7 +482,8 @@ class FigureCanvas(FigureCanvasQTAgg):
 
         if wkspname or (vecx and vecy):
             if wkspname:
-                vecx, vecy, _ = self._driver.get_ws_data(wkspname, wkspindex)
+                vecx, vecy, _ = addie.utilities.workspaces.get_ws_data(
+                    wkspname, wkspindex)
             line.set_data(vecx, vecy)
 
         if linecolor is not None:
@@ -481,7 +554,7 @@ class FigureCanvas(FigureCanvasQTAgg):
         """ A dirty hack to flush the image
         """
         w, h = self.get_width_height()
-        self.resize(w+1, h)
+        self.resize(w + 1, h)
         self.resize(w, h)
 
     def _setup_legend(self, location='best'):
@@ -507,6 +580,7 @@ class FigureCanvas(FigureCanvasQTAgg):
             location = 'best'
 
         handles, labels = self.axes.get_legend_handles_labels()
-        self.axes.legend(handles, labels, loc=location, fontsize=self._legendFontSize)
+        self.axes.legend(handles, labels, loc=location,
+                         fontsize=self._legendFontSize)
 
         self._isLegendOn = True
