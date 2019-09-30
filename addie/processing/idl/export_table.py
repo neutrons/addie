@@ -14,6 +14,7 @@ class ExportTable(object):
     def __init__(self, parent=None, filename=''):
         self.parent = parent
         self.filename = filename
+        self.table_ui = self.parent.processing_ui.h3_table
 
     def run(self):
         self.collect_data()
@@ -21,16 +22,16 @@ class ExportTable(object):
         self.export_data()
 
     def collect_data(self):
-        nbr_row = self.parent.ui.table.rowCount()
+        nbr_row = self.table_ui.rowCount()
 
         # collect current folder
         _path = self.parent.current_folder
         self.current_path = "current_folder: %s" % _path
 
         _full_column_label = []
-        nbr_column = self.parent.ui.table.columnCount()
+        nbr_column = self.table_ui.columnCount()
         for j in range(nbr_column):
-            _column_label = str(self.parent.ui.table.horizontalHeaderItem(j).text())
+            _column_label = str(self.table_ui.horizontalHeaderItem(j).text())
             _full_column_label.append(_column_label)
         self.column_label = _full_column_label
 
@@ -79,9 +80,9 @@ class ExportTable(object):
         self.data = _data
 
     def get_item_value(self, row, column):
-        if self.parent.ui.table.item(row, column) is None:
+        if self.table_ui.item(row, column) is None:
             return ''
-        return str(self.parent.ui.table.item(row, column).text())
+        return str(self.table_ui.item(row, column).text())
 
     def format_data(self):
         _current_path = self.current_path
@@ -109,16 +110,16 @@ class ExportTable(object):
         _o_file.create_ascii(contain=_output_text)
 
     def retrieve_abs_corr_state(self, row=0, column=8):
-        if self.parent.ui.table.cellWidget(row, 8) is None:
+        if self.table_ui.cellWidget(row, 8) is None:
             return "False"
-        _widget = self.parent.ui.table.cellWidget(row, 8).children()[1]
+        _widget = self.table_ui.cellWidget(row, 8).children()[1]
         if (_widget.checkState() == Qt.Checked):
             return 'True'
         else:
             return 'False'
 
     def retrieve_sample_shape(self, row=0, column=7):
-        _widget = self.parent.ui.table.cellWidget(row, column)
+        _widget = self.table_ui.cellWidget(row, column)
         if _widget is None:
             return 'Cylinder'
         _selected_index = _widget.currentIndex()
@@ -126,7 +127,7 @@ class ExportTable(object):
         return _sample_shape
 
     def retrieve_flag_state(self, row=0, column=0):
-        _widget = self.parent.ui.table.cellWidget(row, column).children()[1]
+        _widget = self.table_ui.cellWidget(row, column).children()[1]
         if _widget is None:
             return "False"
         if _widget.checkState() == Qt.Checked:
