@@ -62,7 +62,7 @@ class PopulateMasterTable(object):
         # o_table._clear_table()
 
         # disable sorting
-        self.main_window.postprocessing_ui.table.setSortingEnabled(False)
+        self.parent.postprocessing_ui.table.setSortingEnabled(False)
 
         _index = 0
         _columns_runs = self.get_columns_value(column=2)
@@ -84,13 +84,13 @@ class PopulateMasterTable(object):
             self.add_new_row(_metadata, row=_index)
             _index += 1
 
-        self.main_window.postprocessing_ui.table.setSortingEnabled(True)
+        self.parent.postprocessing_ui.table.setSortingEnabled(True)
 
     def get_columns_value(self, column=2):
         column_values = []
-        nbr_row = self.main_window.postprocessing_ui.table.rowCount()
+        nbr_row = self.parent.postprocessing_ui.table.rowCount()
         for _row in range(nbr_row):
-            _value = str(self.main_window.postprocessing_ui.table.item(_row, column).text())
+            _value = str(self.parent.postprocessing_ui.table.item(_row, column).text())
             column_values.append(_value)
         return column_values
 
@@ -101,7 +101,7 @@ class PopulateMasterTable(object):
 
     def add_new_row(self, _metadata, row=0):
 
-        self.main_window.postprocessing_ui.table.insertRow(row)
+        self.parent.postprocessing_ui.table.insertRow(row)
 
         _layout = QHBoxLayout()
         _widget = QCheckBox()
@@ -113,36 +113,36 @@ class PopulateMasterTable(object):
 
         _widget.stateChanged.connect(lambda state=0, row=row:
                                      self.parent.table_select_state_changed(state, row))
-        self.main_window_postprocessing_ui.table.setCellWidget(row, 0, _new_widget)
+        self.parent.postprocessing_ui.table.setCellWidget(row, 0, _new_widget)
 
         _item = QTableWidgetItem(_metadata['name'])
-        self.main_window_postprocessing_ui.table.setItem(row, 1, _item)
+        self.parent.postprocessing_ui.table.setItem(row, 1, _item)
 
         _item = QTableWidgetItem(_metadata['runs'])
-        self.main_window_postprocessing_ui.table.setItem(row, 2, _item)
+        self.parent.postprocessing_ui.table.setItem(row, 2, _item)
 
         if not _metadata['sample_formula']:
             _item = QTableWidgetItem(_metadata['sample_formula'])
-            self.main_window_postprocessing_ui.table.setItem(row, 3, _item)
+            self.parent.postprocessing_ui.table.setItem(row, 3, _item)
 
         if not _metadata['mass_density']:
             _item = QTableWidgetItem(_metadata['mass_density'])
-            self.main_window_postprocessing_ui.table.setItem(row, 4, _item)
+            self.parent.postprocessing_ui.table.setItem(row, 4, _item)
 
         if not _metadata['radius']:
             _item = QTableWidgetItem(_metadata['radius'])
-            self.main_window_postprocessing_ui.table.setItem(row, 5, _item)
+            self.parent.postprocessing_ui.table.setItem(row, 5, _item)
 
         if not _metadata['packing_fraction']:
             _item = QTableWidgetItem(_metadata['packing_fraction'])
-            self.main_window_postprocessing_ui.table.setItem(row, 6, _item)
+            self.parent.postprocessing_ui.table.setItem(row, 6, _item)
 
         _widget = QComboBox()
         _widget.addItem("Cylinder")
         _widget.addItem("Sphere")
         if _metadata['sample_shape'] == 'Sphere':
             _widget.setCurrentIndex(1)
-        self.main_window_postprocessing_ui.table.setCellWidget(row, 7, _widget)
+        self.parent.postprocessing_ui.table.setCellWidget(row, 7, _widget)
 
         _layout = QHBoxLayout()
         _widget = QCheckBox()
@@ -155,4 +155,4 @@ class PopulateMasterTable(object):
         _layout.addStretch()
         _new_widget = QWidget()
         _new_widget.setLayout(_layout)
-        self.main_window_postprocessing_ui.table.setCellWidget(row, 8, _new_widget)
+        self.parent.postprocessing_ui.table.setCellWidget(row, 8, _new_widget)
