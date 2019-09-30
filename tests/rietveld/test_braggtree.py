@@ -1,14 +1,13 @@
 from __future__ import absolute_import, print_function
 import pytest
 import os
-from qtpy.QtCore import QModelIndex
-
+from mantid.api import AnalysisDataService
 
 from tests import DATA_DIR
 
 from addie.rietveld.braggtree import BraggTree, BankRegexException
-from addie.rietveld import event_handler
 from addie.main import MainWindow
+from addie.rietveld import event_handler
 
 
 @pytest.fixture
@@ -71,6 +70,9 @@ def test_do_plot_ws(qtbot, bragg_tree_loaded):
     group_index = bragg_tree_loaded.model().index(1,0)
     bank_index = bragg_tree_loaded.model().index(0,0,group_index)
     bragg_tree_loaded.setCurrentIndex(bank_index)
+    print(AnalysisDataService.getObjectNames())
+    ws = AnalysisDataService.retrieve('GSAS_NaNO3_230C')
+    print(ws.id())
     bragg_tree_loaded.do_plot_ws()
 
 
