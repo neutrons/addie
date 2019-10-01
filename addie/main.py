@@ -618,7 +618,7 @@ class MainWindow(QMainWindow):
         o_gui.check_gui()
 
     def table_right_click(self, position):
-        _o_table = IdlTableHandler(main_window=self)
+        _o_table = IdlTableHandler(parent=self)
         _o_table.right_click(position=position)
 
     def run_sum_scans_clicked(self):

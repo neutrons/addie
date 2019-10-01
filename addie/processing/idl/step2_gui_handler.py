@@ -103,7 +103,7 @@ class Step2GuiHandler(object):
 
     def define_new_output_file_name(self):
         """retrieve name of first row selected and use it to define output file name"""
-        o_table_handler = addie.processing.idl.table_handler.TableHandler(main_window=self.main_window)
+        o_table_handler = addie.processing.idl.table_handler.TableHandler(parent=self.main_window)
         o_table_handler.retrieve_list_of_selected_rows()
         list_of_selected_row = o_table_handler.list_selected_row
         if len(list_of_selected_row) > 0:
@@ -206,7 +206,7 @@ class Step2GuiHandler(object):
         check_status(parent=self.main_window, button_name='ndabs')
 
     def at_least_one_row_checked(self):
-        o_table_handler = addie.processing.idl.table_handler.TableHandler(main_window=self.main_window)
+        o_table_handler = addie.processing.idl.table_handler.TableHandler(parent=self.main_window)
         o_table_handler.retrieve_list_of_selected_rows()
         list_of_selected_row = o_table_handler.list_selected_row
         if len(list_of_selected_row) > 0:
@@ -219,7 +219,7 @@ class Step2GuiHandler(object):
         _selected_widget = self.main_window.postprocessing_ui.table.cellWidget(row, 0).children()
         if len(_selected_widget) > 0:
             if (_selected_widget[1].checkState() == Qt.Checked):
-                _table_handler = addie.processing.idl.table_handler.TableHandler(main_window=self.main_window)
+                _table_handler = addie.processing.idl.table_handler.TableHandler(parent=self.main_window)
                 for _column in range(1, 7):
                     if _table_handler.retrieve_item_text(row, _column) == '':
                         _status_ok = False
