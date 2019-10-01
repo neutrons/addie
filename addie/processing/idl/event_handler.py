@@ -64,7 +64,7 @@ def populate_table_clicked(main_window):
 
 
 def table_select_state_changed(main_window, state, row):
-    _o_table_handler = IdlTableHandler(parent=main_window)
+    _o_table_handler = IdlTableHandler(main_window=main_window)
     _o_table_handler.check_selection_status(state, row)
 
     _o_gui = Step2GuiHandler(main_window=main_window)
