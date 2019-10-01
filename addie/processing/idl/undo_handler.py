@@ -36,7 +36,6 @@ class UndoHandler(object):
 
         self.parent.undo_table = undo_table
 
-
     def undo_table(self):
         if self.parent.undo_index == 0:
             return
