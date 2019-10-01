@@ -9,6 +9,7 @@ class UndoHandler(object):
 
     def __init__(self, parent=None):
         self.parent = parent
+        self.table = self.parent.postprocessing_ui.table
 
     def save_table(self, first_save=False):
 
@@ -35,6 +36,7 @@ class UndoHandler(object):
 
         self.parent.undo_table = undo_table
 
+
     def undo_table(self):
         if self.parent.undo_index == 0:
             return
@@ -50,7 +52,7 @@ class UndoHandler(object):
         self.check_undo_widgets()
 
     def load_table(self):
-        self.parent.ui.table.blockSignals(True)
+        self.table.blockSignals(True)
 
         _table_to_reload = self.parent.undo_table[str(self.parent.undo_index)]
 
@@ -62,10 +64,10 @@ class UndoHandler(object):
         o_import.parser()
         o_import.populate_gui()
 
-        _pop_back_wdg = PopulateBackgroundWidgets(parent=self.parent)
+        _pop_back_wdg = PopulateBackgroundWidgets(main_window=self.parent)
         _pop_back_wdg.run()
 
-        self.parent.ui.table.blockSignals(False)
+        self.table.blockSignals(False)
 
     def check_undo_widgets(self):
         _undo_index = self.parent.undo_index
