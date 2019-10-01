@@ -14,7 +14,7 @@ class ExportTable(object):
     def __init__(self, parent=None, filename=''):
         self.parent = parent
         self.filename = filename
-        self.table_ui = self.parent.processing_ui.h3_table
+        self.table_ui = self.parent.postprocessing_ui.table
 
     def run(self):
         self.collect_data()

@@ -9,7 +9,7 @@ from addie.processing.idl.populate_master_table import PopulateMasterTable
 def import_table_clicked(main_window):
     main_window.postprocessing_ui.table.blockSignals(True)
 
-    _o_table = IdlTableHandler(main_window=main_window)
+    _o_table = IdlTableHandler(parent=main_window)
     _o_table._import()
     main_window.name_search_clicked()
 
@@ -20,7 +20,7 @@ def import_table_clicked(main_window):
 
 
 def export_table_clicked(main_window):
-    _o_table = IdlTableHandler(main_window=main_window)
+    _o_table = IdlTableHandler(parent=main_window)
     _o_table._export()
 
 
@@ -64,7 +64,7 @@ def populate_table_clicked(main_window):
 
 
 def table_select_state_changed(main_window, state, row):
-    _o_table_handler = IdlTableHandler(main_window=main_window)
+    _o_table_handler = IdlTableHandler(parent=main_window)
     _o_table_handler.check_selection_status(state, row)
 
     _o_gui = Step2GuiHandler(main_window=main_window)
@@ -74,12 +74,12 @@ def table_select_state_changed(main_window, state, row):
 
 
 def name_search_clicked(main_window):
-    o_table = IdlTableHandler(main_window=main_window)
+    o_table = IdlTableHandler(parent=main_window)
     o_table.name_search()
 
 
 def clear_name_search_clicked(main_window):
-    o_table = IdlTableHandler(main_window=main_window)
+    o_table = IdlTableHandler(parent=main_window)
     main_window.postprocessing_ui.name_search.setText('')
     o_table.name_search()
 
