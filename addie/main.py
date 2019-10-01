@@ -565,7 +565,7 @@ class MainWindow(QMainWindow):
         postprocessing_event_handler.clear_name_search_clicked(self)
 
     def check_step2_gui(self, row, column):
-        postprocessing_event_handler.check_step2_gui(self)
+        postprocessing_event_handler.check_step2_gui(self, row, column)
 
     # PDF
 
