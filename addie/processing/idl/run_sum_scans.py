@@ -63,7 +63,7 @@ class RunSumScans(object):
         f.write("endsamples\n")
         f.write("Background %s\n" % self._background)
 
-        o_gui_handler = Step2GuiHandler(parent=self.parent_no_ui)
+        o_gui_handler = Step2GuiHandler(main_window=self.parent_no_ui)
 
         # hydrogen flag
         plattype_flag = 0
