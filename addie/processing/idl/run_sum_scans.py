@@ -10,7 +10,7 @@ class RunSumScans(object):
     output_file = ''
 
     def __init__(self, parent=None):
-        self.parent = parent.ui
+        self.parent = parent.ui.postprocessing_ui
         self.parent_no_ui = parent
         self.folder = os.getcwd()
 
@@ -94,12 +94,13 @@ class RunSumScans(object):
         print("[LOG] created file %s" % _full_output_file_name)
 
     def collect_runs_checked(self):
+        table = self.parent.table
         _runs = {}
-        for _row_index in range(self.parent.table.rowCount()):
-            _selected_widget = self.parent.table.cellWidget(_row_index, 0).children()[1]
+        for _row_index in range(table.rowCount()):
+            _selected_widget = table.cellWidget(_row_index, 0).children()[1]
             if (_selected_widget.checkState() == Qt.Checked):
-                _label = str(self.parent.table.item(_row_index, 1).text())
-                _value = str(self.parent.table.item(_row_index, 2).text())
+                _label = str(table.item(_row_index, 1).text())
+                _value = str(table.item(_row_index, 2).text())
                 _runs[_label] = _value
 
         return _runs
