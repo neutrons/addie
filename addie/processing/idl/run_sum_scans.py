@@ -27,12 +27,6 @@ class RunSumScans(object):
         self.parent_no_ui.launch_job_manager(job_name="SumScans",
                                              script_to_run=_script_to_run)
 
-        #_run_thread = self.parent_no_ui._run_thread_sum_scans
-        #_run_thread.setup(script = _script_to_run)
-        # _run_thread.start()
-
-#        os.system(_script_to_run)
-#        print("[LOG] executing in its own thread:")
         print("[LOG] " + _script_to_run)
 
     def add_script_flags(self):

@@ -35,6 +35,9 @@ from addie.processing.idl.step2_gui_handler import Step2GuiHandler
 from addie.processing.idl.table_handler import TableHandler as IdlTableHandler
 from addie.processing.idl.run_sum_scans import RunSumScans
 from addie.processing.idl.run_thread import RunThread
+from addie.processing.idl.create_sample_files import CreateSampleFiles
+from addie.processing.idl.create_ndsum_file import CreateNdsumFile
+from addie.processing.idl.run_ndabs import RunNDabs
 
 import addie.processing.idl.event_handler as postprocessing_event_handler
 
@@ -597,17 +600,17 @@ class MainWindow(QMainWindow):
         o_gui = Step2GuiHandler(main_window=self)
         o_gui.reset_q_range()
 
-    # def run_ndabs_clicked(self):
-    #     o_create_sample_files = CreateSampleFiles(parent=self)
-    #     o_create_sample_files.run()
-    #
-    #     list_sample_files = o_create_sample_files.list_sample_files
-    #
-    #     o_create_ndsum_file = CreateNdsumFile(parent=self)
-    #     o_create_ndsum_file.run()
-    #
-    #     o_run_ndsum = RunNDabs(parent=self, list_sample_files=list_sample_files)
-    #     o_run_ndsum.run()
+    def run_ndabs_clicked(self):
+        o_create_sample_files = CreateSampleFiles(parent=self)
+        o_create_sample_files.run()
+
+        list_sample_files = o_create_sample_files.list_sample_files
+
+        o_create_ndsum_file = CreateNdsumFile(parent=self)
+        o_create_ndsum_file.run()
+
+        o_run_ndsum = RunNDabs(parent=self, list_sample_files=list_sample_files)
+        o_run_ndsum.run()
 
     def check_fourier_filter_widgets(self):
         o_gui = Step2GuiHandler(main_window=self)

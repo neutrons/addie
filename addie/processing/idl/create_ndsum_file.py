@@ -12,6 +12,7 @@ class CreateNdsumFile(object):
 
     def __init__(self, parent=None):
         self.parent = parent
+        self.ui = parent.postprocessing_ui
         self.current_folder = self.parent.current_folder
 
     def run(self):
@@ -26,24 +27,24 @@ class CreateNdsumFile(object):
 
     def _retrieve_gui_settings(self):
         _gui_settings = {}
-        _gui_settings['background_flag'] = self.parent.ui.background_yes.isChecked()
-        _gui_settings['background_no_field'] = str(self.parent.ui.background_no_field.text())
-        _gui_settings['background_yes_field'] = str(self.parent.ui.background_line_edit.text())
-        _gui_settings['muscat_flag'] = self.parent.ui.muscat_yes.isChecked()
-        _gui_settings['scale_data_flag'] = self.parent.ui.scale_data_yes.isChecked()
-        _gui_settings['run_rmc_flag'] = self.parent.ui.run_rmc_yes.isChecked()
-        _gui_settings['plazcek_from'] = str(self.parent.ui.plazcek_fit_range_min.text())
-        _gui_settings['plazcek_to'] = str(self.parent.ui.plazcek_fit_range_max.text())
-        _gui_settings['bfil_from'] = str(self.parent.ui.fourier_filter_from.text())
-        _gui_settings['bfil_to'] = str(self.parent.ui.fourier_filter_to.text())
-        _gui_settings['platype'] = self.parent.ui.hydrogen_yes.isChecked()
+        _gui_settings['background_flag'] = self.ui.background_yes.isChecked()
+        _gui_settings['background_no_field'] = str(self.ui.background_no_field.text())
+        _gui_settings['background_yes_field'] = str(self.ui.background_line_edit.text())
+        _gui_settings['muscat_flag'] = self.ui.muscat_yes.isChecked()
+        _gui_settings['scale_data_flag'] = self.ui.scale_data_yes.isChecked()
+        _gui_settings['run_rmc_flag'] = self.ui.run_rmc_yes.isChecked()
+        _gui_settings['plazcek_from'] = str(self.ui.plazcek_fit_range_min.text())
+        _gui_settings['plazcek_to'] = str(self.ui.plazcek_fit_range_max.text())
+        _gui_settings['bfil_from'] = str(self.ui.fourier_filter_from.text())
+        _gui_settings['bfil_to'] = str(self.ui.fourier_filter_to.text())
+        _gui_settings['platype'] = self.ui.hydrogen_yes.isChecked()
 
-        o_gui_handler = Step2GuiHandler(parent=self.parent)
+        o_gui_handler = Step2GuiHandler(main_window=self.parent)
         _gui_settings['qrangeft'] = o_gui_handler.get_q_range()
         self.gui_settings = _gui_settings
 
     def _create_sto_output_file(self):
-        _sto_file_name = str(self.parent.ui.run_ndabs_output_file_name.text()) + '.ndsum'
+        _sto_file_name = str(self.ui.run_ndabs_output_file_name.text()) + '.ndsum'
         full_file_name = os.path.join(self.current_folder, _sto_file_name)
         _text = []
         for _entry in self.list_selected_row:

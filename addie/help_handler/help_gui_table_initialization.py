@@ -14,6 +14,7 @@ class HelpGuiTableInitialization(object):
 
     def __init__(self, parent=None, button_name='autonom'):
         self.parent = parent
+        self.ui = self.parent.parent.postprocessing_ui
         self.button_name = button_name
 
     def fill(self):
@@ -35,32 +36,32 @@ class HelpGuiTableInitialization(object):
     # STEP 1
 
     def jump_to_step1_diamond(self):
-        self.parent.parent.ui.tabWidget_2.setCurrentIndex(0)
+        self.ui.tabWidget_2.setCurrentIndex(0)
         self.parent.parent.autonom_ui.diamond.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step1_diamond_background(self):
-        self.parent.parent.ui.tabWidget_2.setCurrentIndex(0)
+        self.ui.tabWidget_2.setCurrentIndex(0)
         self.parent.parent.autonom_ui.diamond_background.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step1_vanadium(self):
-        self.parent.parent.ui.tabWidget_2.setCurrentIndex(0)
+        self.ui.tabWidget_2.setCurrentIndex(0)
         self.parent.parent.autonom_ui.vanadium.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step1_vanadium_background(self):
-        self.parent.parent.ui.tabWidget_2.setCurrentIndex(0)
+        self.ui.tabWidget_2.setCurrentIndex(0)
         self.parent.parent.autonom_ui.vanadium_background.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step1_sample_background(self):
-        self.parent.parent.ui.tabWidget_2.setCurrentIndex(0)
+        self.ui.tabWidget_2.setCurrentIndex(0)
         self.parent.parent.autonom_ui.sample_background.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step1_create_folder(self):
-        self.parent.parent.ui.tabWidget_2.setCurrentIndex(0)
+        self.ui.tabWidget_2.setCurrentIndex(0)
         self.parent.parent.autonom_ui.manual_output_folder_field.setFocus()
         self.parent.parent.activateWindow()
 
@@ -172,99 +173,99 @@ class HelpGuiTableInitialization(object):
     # STEP 2
 
     def jump_to_step2_table(self):
-        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
-        self.parent.parent.ui.tabWidget.setCurrentIndex(0)
-        self.parent.parent.ui.table.setFocus()
+        self.ui.tabWidget_2.setCurrentIndex(1)
+        self.ui.tabWidget.setCurrentIndex(0)
+        self.ui.table.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step2_fourier_from(self):
-        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
-        self.parent.parent.ui.tabWidget.setCurrentIndex(0)
-        self.parent.parent.ui.fourier_filter_from.setFocus()
+        self.ui.tabWidget_2.setCurrentIndex(1)
+        self.ui.tabWidget.setCurrentIndex(0)
+        self.ui.fourier_filter_from.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step2_fourier_to(self):
-        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
-        self.parent.parent.ui.tabWidget.setCurrentIndex(0)
-        self.parent.parent.ui.fourier_filter_to.setFocus()
+        self.ui.tabWidget_2.setCurrentIndex(1)
+        self.ui.tabWidget.setCurrentIndex(0)
+        self.ui.fourier_filter_to.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step2_plazcek_from(self):
-        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
-        self.parent.parent.ui.tabWidget.setCurrentIndex(0)
-        self.parent.parent.ui.plazcek_fit_range_min.setFocus()
+        self.ui.tabWidget_2.setCurrentIndex(1)
+        self.ui.tabWidget.setCurrentIndex(0)
+        self.ui.plazcek_fit_range_min.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step2_plazcek_to(self):
-        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
-        self.parent.parent.ui.tabWidget.setCurrentIndex(0)
-        self.parent.parent.ui.plazcek_fit_range_max.setFocus()
+        self.ui.tabWidget_2.setCurrentIndex(1)
+        self.ui.tabWidget.setCurrentIndex(0)
+        self.ui.plazcek_fit_range_max.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step2_q_min(self):
-        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
-        self.parent.parent.ui.tabWidget.setCurrentIndex(0)
-        self.parent.parent.ui.q_range_min.setFocus()
+        self.ui.tabWidget_2.setCurrentIndex(1)
+        self.ui.tabWidget.setCurrentIndex(0)
+        self.ui.q_range_min.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step2_q_max(self):
-        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
-        self.parent.parent.ui.tabWidget.setCurrentIndex(0)
-        self.parent.parent.ui.q_range_max.setFocus()
+        self.ui.tabWidget_2.setCurrentIndex(1)
+        self.ui.tabWidget.setCurrentIndex(0)
+        self.ui.q_range_max.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step2_output_empty(self):
-        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
-        self.parent.parent.ui.tabWidget.setCurrentIndex(0)
-        self.parent.parent.ui.run_ndabs_output_file_name.setFocus()
+        self.ui.tabWidget_2.setCurrentIndex(1)
+        self.ui.tabWidget.setCurrentIndex(0)
+        self.ui.run_ndabs_output_file_name.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step2_scans_output_file_name(self):
-        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
-        self.parent.parent.ui.tabWidget.setCurrentIndex(0)
-        self.parent.parent.ui.sum_scans_output_file_name.setFocus()
+        self.ui.tabWidget_2.setCurrentIndex(1)
+        self.ui.tabWidget.setCurrentIndex(0)
+        self.ui.sum_scans_output_file_name.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step2_mantid_browse_calibration(self):
-        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
-        self.parent.parent.ui.tabWidget.setCurrentIndex(1)
-        self.parent.parent.ui.mantid_browse_calibration_button.setFocus()
+        self.ui.tabWidget_2.setCurrentIndex(1)
+        self.ui.tabWidget.setCurrentIndex(1)
+        self.ui.mantid_browse_calibration_button.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step2_mantid_browse_characterization(self):
-        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
-        self.parent.parent.ui.tabWidget.setCurrentIndex(1)
-        self.parent.parent.ui.mantid_browse_characterization_button.setFocus()
+        self.ui.tabWidget_2.setCurrentIndex(1)
+        self.ui.tabWidget.setCurrentIndex(1)
+        self.ui.mantid_browse_characterization_button.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step2_mantid_number_of_bins(self):
-        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
-        self.parent.parent.ui.tabWidget.setCurrentIndex(1)
-        self.parent.parent.ui.mantid_number_of_bins.setFocus()
+        self.ui.tabWidget_2.setCurrentIndex(1)
+        self.ui.tabWidget.setCurrentIndex(1)
+        self.ui.mantid_number_of_bins.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step2_mantid_min_crop_wavelength(self):
-        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
-        self.parent.parent.ui.tabWidget.setCurrentIndex(1)
-        self.parent.parent.ui.mantid_min_crop_wavelength.setFocus()
+        self.ui.tabWidget_2.setCurrentIndex(1)
+        self.ui.tabWidget.setCurrentIndex(1)
+        self.ui.mantid_min_crop_wavelength.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step2_mantid_max_crop_wavelength(self):
-        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
-        self.parent.parent.ui.tabWidget.setCurrentIndex(1)
-        self.parent.parent.ui.mantid_max_crop_wavelength.setFocus()
+        self.ui.tabWidget_2.setCurrentIndex(1)
+        self.ui.tabWidget.setCurrentIndex(1)
+        self.ui.mantid_max_crop_wavelength.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step2_mantid_vanadium_radius(self):
-        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
-        self.parent.parent.ui.tabWidget.setCurrentIndex(1)
-        self.parent.parent.ui.mantid_vanadium_radius.setFocus()
+        self.ui.tabWidget_2.setCurrentIndex(1)
+        self.ui.tabWidget.setCurrentIndex(1)
+        self.ui.mantid_vanadium_radius.setFocus()
         self.parent.parent.activateWindow()
 
     def jump_to_step2_mantid_output_directory_button(self):
-        self.parent.parent.ui.tabWidget_2.setCurrentIndex(1)
-        self.parent.parent.ui.tabWidget.setCurrentIndex(1)
-        self.parent.parent.ui.mantid_output_directoy_button.setFocus()
+        self.ui.tabWidget_2.setCurrentIndex(1)
+        self.ui.tabWidget.setCurrentIndex(1)
+        self.ui.mantid_output_directoy_button.setFocus()
         self.parent.parent.activateWindow()
 
     def fill_scans(self):

@@ -34,6 +34,7 @@ class HelpGui(QMainWindow):
         self.o_table.refill()
 
     def closeEvent(self, event=None):
+
         if self.button_name == 'autonom':
             self.parent.o_help_autonom = None
         elif self.button_name == 'ndabs':
@@ -49,8 +50,6 @@ class HelpGui(QMainWindow):
 
 
 def help_button_activator(parent=None, button_name='autonom'):
-    #    pos = parent.mapToGlobal(parent.pos())
- #   width = parent.frameGeometry().width()
     if button_name == 'autonom':
         if parent.o_help_autonom is None:
             o_help = HelpGui(parent=parent, button_name=button_name)
