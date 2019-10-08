@@ -27,3 +27,4 @@ def run(main_window=None):
     main_window.postprocessing_ui.pushButton_3.clicked.connect(main_window.help_button_clicked_ndabs)
     main_window.postprocessing_ui.pushButton_4.clicked.connect(main_window.help_button_clicked_scans)
     main_window.postprocessing_ui.run_sum_scans_button.clicked.connect(main_window.run_sum_scans_clicked)
+    main_window.postprocessing_ui.run_ndabs_button.clicked.connect(main_window.run_ndabs_clicked)
