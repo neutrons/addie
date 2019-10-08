@@ -24,5 +24,6 @@ def run(main_window=None):
     main_window.postprocessing_ui.pdf_qmax_line_edit.editingFinished.connect(main_window.pdf_qmax_line_edit_changed)
     main_window.postprocessing_ui.sum_scans_output_file_name.editingFinished.connect(
         main_window.sum_scans_output_file_name_changed)
+    main_window.postprocessing_ui.pushButton_3.clicked.connect(main_window.help_button_clicked_ndabs)
     main_window.postprocessing_ui.pushButton_4.clicked.connect(main_window.help_button_clicked_scans)
     main_window.postprocessing_ui.run_sum_scans_button.clicked.connect(main_window.run_sum_scans_clicked)
