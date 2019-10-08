@@ -173,7 +173,6 @@ class HelpGuiTableInitialization(object):
     # STEP 2
 
     def jump_to_step2_table(self):
-        
         self.ui.tabWidget_2.setCurrentIndex(1)
         self.ui.tabWidget.setCurrentIndex(0)
         self.ui.table.setFocus()
