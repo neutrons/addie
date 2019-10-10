@@ -3,16 +3,9 @@
 from __future__ import (absolute_import, division, print_function)
 import numpy as np
 
-from qtpy import PYQT4, PYQT5
 from qtpy.QtWidgets import QSizePolicy
 from addie.plot.constants import BASIC_COLORS, LINE_MARKERS, LINE_STYLES
-
-if PYQT5:
-    from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
-elif PYQT4:
-    from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg
-else:
-    raise ImportError('do not know which matplotlib backend to use')
+from mantidqt.MPLwidgets import FigureCanvasQTAgg
 
 import matplotlib.image  # noqa
 from matplotlib.figure import Figure  # noqa
