@@ -64,7 +64,7 @@ def load_sq(main_window):
         default_dir = get_default_dir(main_window, sub_dir='SofQ')
 
     # get the file
-    ext = 'nxs (*.nxs);;dat (*.dat);;All (*.*)'
+    ext = 'dat (*.dat);;nxs (*.nxs);;All (*.*)'
     sq_file_names = QFileDialog.getOpenFileNames(main_window,
                                                  'Choose S(Q) File',
                                                  default_dir,
