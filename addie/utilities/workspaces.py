@@ -1,7 +1,10 @@
 import math
 import numpy as np
 from mantid.api import AnalysisDataService
-import mantid.plots.helperfunctions
+try:
+    from mantid.plots.datafunctions import get_spectrum    # mantid >4.2
+except ImportError:
+    from mantid.plots.helperfunctions import get_spectrum  # mantid <=4.2
 
 
 def calculate_bank_angle(name):
@@ -33,8 +36,8 @@ def get_ws(name):
 
 def get_ws_data(ws_name, wkspIndex=0, withDy=True):
     wksp = get_ws(ws_name)
-    x, y, dy, _ = mantid.plots.helperfunctions.get_spectrum(
-        wksp, wkspIndex, False, withDy=withDy, withDx=False)
+    x, y, dy, _ = get_spectrum(wksp, wkspIndex, False,
+                               withDy=withDy, withDx=False)
     return x, y, dy
 
 
