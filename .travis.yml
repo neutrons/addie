@@ -40,7 +40,7 @@ install:
   - mamba info -a
 
     # BUILD: Create addie build environment
-  - mamba create -q -n addie_build python=$CONDA jupyter_client=5.3.4 conda-build=3.17 conda-verify
+  - mamba create -q -n addie_build python=$CONDA jupyter_client=5.3.4 conda-build conda-verify
   - conda activate addie_build
   - mamba build conda.recipe
   - export PKG_FILE=$(mamba build conda.recipe --output)
@@ -48,7 +48,7 @@ install:
 
 script:
     # TEST: Create test environment and test build
-  - mamba create -q -n addie_test python=$CONDA flake8 jupyter_client=5.3.4 conda-build=3.17 qt=5.6.2 anaconda-client pytest pytest-qt pytest-mpl
+  - mamba create -q -n addie_test python=$CONDA flake8 jupyter_client=5.3.4 conda-build qt=5.6.2 anaconda-client pytest pytest-qt pytest-mpl
   - mamba info --envs
   - conda activate addie_test
   - mkdir -p ${CONDA_PREFIX}/conda-bld/linux-64/
