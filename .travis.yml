@@ -11,8 +11,6 @@ cache:
 matrix:
   include:
   - os: linux
-    env: CONDA=2.7
-  - os: linux
     env: CONDA=3.6.7
 
 before_install:
