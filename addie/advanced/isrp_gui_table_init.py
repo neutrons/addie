@@ -86,38 +86,38 @@ class IsRepGuiTableInitialization(object):
             return
         if not self.parent.ui.sample_2_title.text().strip():
             self.err_messenger("'Sample-1 Title' missing!")
-            return 
+            return
         if not self.parent.ui.bkg_title.text().strip():
             self.err_messenger("'Background Title' missing!")
             return
         if not self.parent.ui.bkg_scans.text().strip():
             self.err_messenger("'Background Scans' missing!")
-            return 
+            return
         if not self.parent.ui.sample_1_scans.text().strip():
             self.err_messenger("'Sample-1 Scans' missing!")
-            return 
+            return
         if not self.parent.ui.sample_2_scans.text().strip():
             self.err_messenger("'Sample-2 Scans' missing!")
-            return 
+            return
         if not self.parent.ui.secondary_scattering_ratio.text().strip():
             self.err_messenger("'Secondary Scattering Ratio' missing!")
-            return 
+            return
         cond1 = self.parent.ui.plazcek_fit_range_min.text().strip()
         cond2 = self.parent.ui.plazcek_fit_range_max.text().strip()
         if not cond1 or not cond2:
             self.err_messenger("Plazcek info incomplete!")
-            return 
+            return
         cond1 = self.parent.ui.subs_init.text().strip()
         cond2 = self.parent.ui.subs_rep.text().strip()
         if not cond1 or not cond2:
             self.err_messenger("Substitution info incomplete!")
-            return 
+            return
         cond1 = self.parent.ui.ft_qrange.text().strip()
         cond2 = self.parent.ui.ff_rrange.text().strip()
         cond3 = self.parent.ui.ff_qrange.text().strip()
         if not cond1 or not cond2 or not cond3:
             self.err_messenger("Fourier transform info incomplete!")
-            return 
+            return
         _current_folder = self.parent.parent.current_folder
         [_out_file, _] = QFileDialog.getSaveFileName(parent=self.parent,
                                                      caption="Output inp File",
@@ -156,38 +156,38 @@ class IsRepGuiTableInitialization(object):
             return
         if not self.parent.ui.sample_2_title.text().strip():
             self.err_messenger("'Sample-1 Title' missing!")
-            return 
+            return
         if not self.parent.ui.bkg_title.text().strip():
             self.err_messenger("'Background Title' missing!")
             return
         if not self.parent.ui.bkg_scans.text().strip():
             self.err_messenger("'Background Scans' missing!")
-            return 
+            return
         if not self.parent.ui.sample_1_scans.text().strip():
             self.err_messenger("'Sample-1 Scans' missing!")
-            return 
+            return
         if not self.parent.ui.sample_2_scans.text().strip():
             self.err_messenger("'Sample-2 Scans' missing!")
-            return 
+            return
         if not self.parent.ui.secondary_scattering_ratio.text().strip():
             self.err_messenger("'Secondary Scattering Ratio' missing!")
-            return 
+            return
         cond1 = self.parent.ui.plazcek_fit_range_min.text().strip()
         cond2 = self.parent.ui.plazcek_fit_range_max.text().strip()
         if not cond1 or not cond2:
             self.err_messenger("Plazcek info incomplete!")
-            return 
+            return
         cond1 = self.parent.ui.subs_init.text().strip()
         cond2 = self.parent.ui.subs_rep.text().strip()
         if not cond1 or not cond2:
             self.err_messenger("Substitution info incomplete!")
-            return 
+            return
         cond1 = self.parent.ui.ft_qrange.text().strip()
         cond2 = self.parent.ui.ff_rrange.text().strip()
         cond3 = self.parent.ui.ff_qrange.text().strip()
         if not cond1 or not cond2 or not cond3:
             self.err_messenger("Fourier transform info incomplete!")
-            return 
+            return
         _current_folder = self.parent.parent.current_folder
         working_dir = QFileDialog.getExistingDirectory(self.parent,
                                                        "Select Working Directory",
@@ -198,11 +198,19 @@ class IsRepGuiTableInitialization(object):
             return
 
         try:
-            fod_output = open(os.path.join(working_dir, "fod.inp"), "w")
+            fod_save_input(working_dir)
         except IOError:
             self.err_messenger("Permission denied! Choose another working folder!")
             return
 
+        os.chdir(working_dir)
+        os.system("python /SNS/users/zjn/pytest/FOD.py -f fod.inp")
+
+        return
+
+
+    def fod_save_input(self, working_dir):
+        fod_output = open(os.path.join(working_dir, "fod.inp"), "w")
         fod_output.write(self.parent.ui.sample_1_title.text() + "  # sample_1_title\n")
         fod_output.write(self.parent.ui.sample_2_title.text() + "  # sample_2_title\n")
         fod_output.write(self.parent.ui.bkg_title.text() + "  # background_title\n")
@@ -217,11 +225,6 @@ class IsRepGuiTableInitialization(object):
         fod_output.write(self.parent.ui.ff_qrange.text() + "  # fourier_range_Q\n")
         fod_output.write(self.parent.ui.secondary_scattering_ratio.text() + "  # secondary_scattering_ratio")
         fod_output.close()
-
-        os.chdir(working_dir)
-        os.system("python /SNS/users/zjn/pytest/FOD.py -f fod.inp")
-
-        return
 
 
     def iso_rep_linker(self):
