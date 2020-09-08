@@ -29,3 +29,4 @@ def run(main_window=None):
     main_window.postprocessing_ui.run_sum_scans_button.clicked.connect(main_window.run_sum_scans_clicked)
     main_window.postprocessing_ui.run_ndabs_button.clicked.connect(main_window.run_ndabs_clicked)
     main_window.postprocessing_ui.adv_pushButton_isotope.clicked.connect(main_window.isrp_button_clicked)
+
