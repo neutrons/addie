@@ -5,7 +5,6 @@
 # of this file.
 
 import json
-import sys
 
 version_json = '''
 {
