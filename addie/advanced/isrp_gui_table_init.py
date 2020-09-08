@@ -1,5 +1,5 @@
-from __future__ import (absolute_import, division, print_function)
-from qtpy.QtWidgets import (QMessageBox, QFileDialog, QPushButton, QTextEdit)
+from __future__ import (absolute_import)
+from qtpy.QtWidgets import (QMessageBox, QFileDialog)
 import os
 
 
