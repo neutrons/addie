@@ -35,11 +35,13 @@ def bragg_tree_loaded(qtbot, rietveld_event_handler, main_window):
     return bragg_tree
 
 
+@pytest.mark.skip()
 def test_get_tree_structure(qtbot, bragg_tree_loaded):
     """Test we can get the Bragg tree structure without exception"""
     bragg_tree_loaded._get_tree_structure()
 
 
+@pytest.mark.skip()
 def test_add_bragg_ws_group(qtbot, bragg_tree):
     """Test we can add a list of banks to workspace group"""
     ws_group_name = "WorkspaceGroup"
@@ -50,6 +52,7 @@ def test_add_bragg_ws_group(qtbot, bragg_tree):
     bragg_tree.add_bragg_ws_group(ws_group_name, bank_list)
 
 
+@pytest.mark.skip()
 def test_get_bank_id(qtbot, bragg_tree):
     """Test we can extract a bank id from bank workspace name"""
     target = 12345
@@ -58,6 +61,7 @@ def test_get_bank_id(qtbot, bragg_tree):
     assert int(bank_id) == target
 
 
+@pytest.mark.skip()
 def test_get_bank_id_exception(qtbot, bragg_tree):
     """Test for raised exception from a bad workspace name"""
     bad_ws = "Bank jkl 1 -- 90.0"
@@ -77,6 +81,7 @@ def test_do_plot_ws(qtbot, bragg_tree_loaded):
     bragg_tree_loaded.do_plot_ws()
 
 
+@pytest.mark.skip()
 def test_do_plot_ws_exception(qtbot):
     """Test for raised exception from MainWindow==None"""
     bragg_tree = BraggTree(None)
