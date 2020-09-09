@@ -1,11 +1,15 @@
 from __future__ import (absolute_import)
-from qtpy.QtWidgets import (QMessageBox, QFileDialog)
+
 import os
+from qtpy.QtWidgets import (QMessageBox, QFileDialog)
+
+from addie.utilities import math_tools
 
 
 class IsRepGuiTableInitialization(object):
-    script = "python /SNS/users/zjn/pytest/FOD.py"
-    fod_filename = "fod.inp"
+    _script = "/SNS/users/zjn/pytest/FOD.py"
+    _cmd = "python {}".format(_script)
+    _fod_filename = "fod.inp"
 
     def __init__(self, parent=None):
         self.parent = parent
@@ -17,46 +21,105 @@ class IsRepGuiTableInitialization(object):
         :return: True if all checks are valid, False otherwise
         :rtype: bool
         '''
+        # sample one title
         if not self.parent.ui.sample_1_title.text().strip():
             self.err_messenger("'Sample-1 Title' missing!")
             return False
 
+        # sample two title
         if not self.parent.ui.sample_2_title.text().strip():
             self.err_messenger("'Sample-2 Title' missing!")
             return False
 
+        # background title
         if not self.parent.ui.bkg_title.text().strip():
             self.err_messenger("'Background Title' missing!")
             return False
 
-        if not self.parent.ui.bkg_scans.text().strip():
+        # background scans
+        back_scans = self.parent.ui.bkg_scans.text().strip()
+        if not back_scans:
             self.err_messenger("'Background Scans' missing!")
             return False
 
-        if not self.parent.ui.sample_1_scans.text().strip():
+        if not math_tools.is_int(back_scans):
+            self.err_messenger("'Background Scans' not integer")
+            return False
+
+        # sample one scans
+        sample_1_scans = self.parent.ui.sample_1_scans.text().strip()
+        if not sample_1_scans:
             self.err_messenger("'Sample-1 Scans' missing!")
             return False
 
-        if not self.parent.ui.sample_2_scans.text().strip():
+        sample_1_scans_list = sample_1_scans.split("-")
+        for scan in sample_1_scans_list:
+            if not math_tools.is_int(scan):
+                msg = "One of 'Sample-1 Scans' is not integer: {}".format(scan)
+                self.err_messenger(msg)
+                return False
+
+        if len(sample_1_scans_list) > 2:
+            msg = "'Sample-1 Scans' format is <min>-<max>, too many '-'"
+            self.err_messenger(msg)
+            return False
+
+        if len(sample_1_scans_list) == 2:
+            if int(sample_1_scans_list[0]) >= int(sample_1_scans_list[1]):
+                msg = "'Sample-1 Scans' is not monotonically increasing"
+                self.err_messenger(msg)
+                return False
+
+        # sample two scans
+        sample_2_scans = self.parent.ui.sample_2_scans.text().strip()
+        if not sample_2_scans:
             self.err_messenger("'Sample-2 Scans' missing!")
             return False
 
-        if not self.parent.ui.secondary_scattering_ratio.text().strip():
+        sample_2_scans_list = sample_2_scans.split("-")
+        for scan in sample_2_scans_list:
+            if not math_tools.is_int(scan):
+                msg = "One of 'Sample-2 Scans' is not integer: {}".format(scan)
+                self.err_messenger(msg)
+                return False
+
+        if len(sample_2_scans_list) > 2:
+            msg = "'Sample-2 Scans' format is <min>-<max>, too many '-'"
+            self.err_messenger(msg)
+            return False
+
+        if len(sample_1_scans_list) == 2:
+            if int(sample_2_scans_list[0]) >= int(sample_2_scans_list[1]):
+                msg = "'Sample-2 Scans' is not monotonically increasing"
+                self.err_messenger(msg)
+                return False
+
+        # secondary scattering ratio
+        ratio = self.parent.ui.secondary_scattering_ratio.text().strip()
+        if not ratio:
             self.err_messenger("'Secondary Scattering Ratio' missing!")
             return False
 
+        if not math_tools.is_float(ratio):
+            msg = "'Secondary Scattering Ratio is not a float: {}".format(ratio)
+            self.err_messenger(msg)
+            return False
+
+        # plazcek
         cond1 = self.parent.ui.plazcek_fit_range_min.text().strip()
         cond2 = self.parent.ui.plazcek_fit_range_max.text().strip()
         if not cond1 or not cond2:
             self.err_messenger("Plazcek info incomplete!")
             return False
 
+        # substitution
         cond1 = self.parent.ui.subs_init.text().strip()
         cond2 = self.parent.ui.subs_rep.text().strip()
         if not cond1 or not cond2:
             self.err_messenger("Substitution info incomplete!")
             return False
 
+        # fourier transform
         cond1 = self.parent.ui.ft_qrange.text().strip()
         cond2 = self.parent.ui.ff_rrange.text().strip()
         cond3 = self.parent.ui.ff_qrange.text().strip()
@@ -72,7 +135,7 @@ class IsRepGuiTableInitialization(object):
             parent=self.parent,
             caption="Input inp File",
             directory=_current_folder,
-             filter=("inp files (*.inp);; All Files (*.*)"))
+            filter=("inp files (*.inp);; All Files (*.*)"))
 
         if not _table_file:
             return
@@ -178,18 +241,26 @@ class IsRepGuiTableInitialization(object):
         if not working_dir:
             return
 
-        out_filename = "fod.inp"
+        fod_path = os.path.join(working_dir, self._fod_filename)
         try:
             fod_file_contents = self.create_fod_file()
-            with open(os.path.join(working_dir, out_filename), "w") as fod_output:
+            with open(fod_path, "w") as fod_output:
                 fod_output.write(fod_file_contents)
         except IOError:
             self.err_messenger("Permission denied! Choose another working folder!")
             return
 
+        if not os.path.isfile(self._script):
+            msg = "Unable to find run script: {}".format(self._script)
+            self.err_messenger(msg)
+            return
+
         os.chdir(working_dir)
-        _script_to_run = self.script + ' -f ' + self.fod_filename
-        os.system(self.script + ' -f ' + self.fod_filename)
+        script_to_run = self._cmd + ' -f ' + fod_path
+        main_gui = self.parent.parent
+        main_gui.launch_job_manager(
+            job_name="Isotope Substitution",
+            script_to_run=script_to_run)
         return
 
     def create_fod_file(self):
@@ -232,12 +303,10 @@ class IsRepGuiTableInitialization(object):
             "ratio": self.parent.ui.secondary_scattering_ratio.text()
         }
 
-        out_string.format(kwargs)
-        return out_string
+        return out_string.format(**kwargs)
 
     def iso_rep_linker(self):
         self.parent.ui.load_fod_input_button.clicked.connect(self.load_fod_input)
         self.parent.ui.save_fod_input_button.clicked.connect(self.save_fod_input)
         self.parent.ui.save_and_run_fod_input.clicked.connect(self.save_and_run_fod_input)
         return
-
