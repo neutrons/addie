@@ -10,13 +10,69 @@ class IsRepGuiTableInitialization(object):
         self.parent = parent
         self.parameters={}
 
+    def _is_table_input_valid(self):
+        '''
+        Validate the table input
+        :return: True if all checks are valid, False otherwise
+        :rtype: bool
+        '''
+        if not self.parent.ui.sample_1_title.text().strip():
+            self.err_messenger("'Sample-1 Title' missing!")
+            return False
+
+        if not self.parent.ui.sample_2_title.text().strip():
+            self.err_messenger("'Sample-1 Title' missing!")
+            return False
+
+        if not self.parent.ui.bkg_title.text().strip():
+            self.err_messenger("'Background Title' missing!")
+            return False
+
+        if not self.parent.ui.bkg_scans.text().strip():
+            self.err_messenger("'Background Scans' missing!")
+            return False
+
+        if not self.parent.ui.sample_1_scans.text().strip():
+            self.err_messenger("'Sample-1 Scans' missing!")
+            return False
+
+        if not self.parent.ui.sample_2_scans.text().strip():
+            self.err_messenger("'Sample-2 Scans' missing!")
+            return False
+
+        if not self.parent.ui.secondary_scattering_ratio.text().strip():
+            self.err_messenger("'Secondary Scattering Ratio' missing!")
+            return False
+
+        cond1 = self.parent.ui.plazcek_fit_range_min.text().strip()
+        cond2 = self.parent.ui.plazcek_fit_range_max.text().strip()
+        if not cond1 or not cond2:
+            self.err_messenger("Plazcek info incomplete!")
+            return False
+
+        cond1 = self.parent.ui.subs_init.text().strip()
+        cond2 = self.parent.ui.subs_rep.text().strip()
+        if not cond1 or not cond2:
+            self.err_messenger("Substitution info incomplete!")
+            return False
+
+        cond1 = self.parent.ui.ft_qrange.text().strip()
+        cond2 = self.parent.ui.ff_rrange.text().strip()
+        cond3 = self.parent.ui.ff_qrange.text().strip()
+        if not cond1 or not cond2 or not cond3:
+            self.err_messenger("Fourier transform info incomplete!")
+            return False
+
+        return True
 
     def load_fod_input(self):
         _current_folder = self.parent.parent.current_folder
-        [_table_file, _] = QFileDialog.getOpenFileName(parent=self.parent,
-                                                       caption="Input inp File",
-                                                       directory=_current_folder,
-                                                       filter=("inp files (*.inp);; All Files (*.*)"))
+        [_table_file, _] = QFileDialog.getOpenFileName(
+            parent=self.parent,
+            caption="Input inp File",
+            directory=_current_folder,
+             filter=("inp files (*.inp);; All Files (*.*)"))
+
         if not _table_file:
             return
 
@@ -58,6 +114,7 @@ class IsRepGuiTableInitialization(object):
                 self.parent.ui.ff_qrange.setText(self.parameters['fourier_range_q'])
             except KeyError:
                 self.parent.ui.ff_qrange.setText(self.parameters['fourier_range_Q'])
+
         except (IndexError, KeyError):
             msgBox = QMessageBox()
             msgBox.setIcon(QMessageBox.Critical)
@@ -69,7 +126,6 @@ class IsRepGuiTableInitialization(object):
 
         return
 
-
     def err_messenger(self, message):
         msgBox = QMessageBox()
         msgBox.setIcon(QMessageBox.Critical)
@@ -79,50 +135,18 @@ class IsRepGuiTableInitialization(object):
         msgBox.exec_()
         return
 
-
     def save_fod_input(self):
-        if not self.parent.ui.sample_1_title.text().strip():
-            self.err_messenger("'Sample-1 Title' missing!")
+        valid = self._is_table_input_valid()
+        if not valid:
             return
-        if not self.parent.ui.sample_2_title.text().strip():
-            self.err_messenger("'Sample-1 Title' missing!")
-            return
-        if not self.parent.ui.bkg_title.text().strip():
-            self.err_messenger("'Background Title' missing!")
-            return
-        if not self.parent.ui.bkg_scans.text().strip():
-            self.err_messenger("'Background Scans' missing!")
-            return
-        if not self.parent.ui.sample_1_scans.text().strip():
-            self.err_messenger("'Sample-1 Scans' missing!")
-            return
-        if not self.parent.ui.sample_2_scans.text().strip():
-            self.err_messenger("'Sample-2 Scans' missing!")
-            return
-        if not self.parent.ui.secondary_scattering_ratio.text().strip():
-            self.err_messenger("'Secondary Scattering Ratio' missing!")
-            return
-        cond1 = self.parent.ui.plazcek_fit_range_min.text().strip()
-        cond2 = self.parent.ui.plazcek_fit_range_max.text().strip()
-        if not cond1 or not cond2:
-            self.err_messenger("Plazcek info incomplete!")
-            return
-        cond1 = self.parent.ui.subs_init.text().strip()
-        cond2 = self.parent.ui.subs_rep.text().strip()
-        if not cond1 or not cond2:
-            self.err_messenger("Substitution info incomplete!")
-            return
-        cond1 = self.parent.ui.ft_qrange.text().strip()
-        cond2 = self.parent.ui.ff_rrange.text().strip()
-        cond3 = self.parent.ui.ff_qrange.text().strip()
-        if not cond1 or not cond2 or not cond3:
-            self.err_messenger("Fourier transform info incomplete!")
-            return
+
         _current_folder = self.parent.parent.current_folder
-        [_out_file, _] = QFileDialog.getSaveFileName(parent=self.parent,
-                                                     caption="Output inp File",
-                                                     directory=_current_folder,
-                                                     filter=("inp files (*.inp);; All Files (*.*)"))
+        [_out_file, _] = QFileDialog.getSaveFileName(
+            parent=self.parent,
+            caption="Output inp File",
+            directory=_current_folder,
+            filter=("inp files (*.inp);; All Files (*.*)"))
+
         if not _out_file:
             return
 
@@ -146,59 +170,27 @@ class IsRepGuiTableInitialization(object):
         fod_output.write(self.parent.ui.ff_qrange.text() + "  # fourier_range_Q\n")
         fod_output.write(self.parent.ui.secondary_scattering_ratio.text() + "  # secondary_scattering_ratio")
         fod_output.close()
-
         return
 
-
     def run_save_file(self):
-        if not self.parent.ui.sample_1_title.text().strip():
-            self.err_messenger("'Sample-1 Title' missing!")
+        valid = self._is_table_input_valid()
+        if not valid:
             return
-        if not self.parent.ui.sample_2_title.text().strip():
-            self.err_messenger("'Sample-1 Title' missing!")
-            return
-        if not self.parent.ui.bkg_title.text().strip():
-            self.err_messenger("'Background Title' missing!")
-            return
-        if not self.parent.ui.bkg_scans.text().strip():
-            self.err_messenger("'Background Scans' missing!")
-            return
-        if not self.parent.ui.sample_1_scans.text().strip():
-            self.err_messenger("'Sample-1 Scans' missing!")
-            return
-        if not self.parent.ui.sample_2_scans.text().strip():
-            self.err_messenger("'Sample-2 Scans' missing!")
-            return
-        if not self.parent.ui.secondary_scattering_ratio.text().strip():
-            self.err_messenger("'Secondary Scattering Ratio' missing!")
-            return
-        cond1 = self.parent.ui.plazcek_fit_range_min.text().strip()
-        cond2 = self.parent.ui.plazcek_fit_range_max.text().strip()
-        if not cond1 or not cond2:
-            self.err_messenger("Plazcek info incomplete!")
-            return
-        cond1 = self.parent.ui.subs_init.text().strip()
-        cond2 = self.parent.ui.subs_rep.text().strip()
-        if not cond1 or not cond2:
-            self.err_messenger("Substitution info incomplete!")
-            return
-        cond1 = self.parent.ui.ft_qrange.text().strip()
-        cond2 = self.parent.ui.ff_rrange.text().strip()
-        cond3 = self.parent.ui.ff_qrange.text().strip()
-        if not cond1 or not cond2 or not cond3:
-            self.err_messenger("Fourier transform info incomplete!")
-            return
+
         _current_folder = self.parent.parent.current_folder
-        working_dir = QFileDialog.getExistingDirectory(self.parent,
-                                                       "Select Working Directory",
-                                                       _current_folder,
-                                                       QFileDialog.ShowDirsOnly)
+        working_dir = QFileDialog.getExistingDirectory(
+            self.parent,
+            "Select Working Directory",
+            _current_folder,
+            QFileDialog.ShowDirsOnly)
 
         if not working_dir:
             return
 
+        out_filename = "fod.inp"
         try:
-            fod_save_input(working_dir)
+            with open(os.path.join(working_dir, out_filename), "w") as fod_output:
+                fod_save_input(fod_output)
         except IOError:
             self.err_messenger("Permission denied! Choose another working folder!")
             return
@@ -208,9 +200,7 @@ class IsRepGuiTableInitialization(object):
 
         return
 
-
     def fod_save_input(self, working_dir):
-        fod_output = open(os.path.join(working_dir, "fod.inp"), "w")
         fod_output.write(self.parent.ui.sample_1_title.text() + "  # sample_1_title\n")
         fod_output.write(self.parent.ui.sample_2_title.text() + "  # sample_2_title\n")
         fod_output.write(self.parent.ui.bkg_title.text() + "  # background_title\n")
@@ -225,7 +215,6 @@ class IsRepGuiTableInitialization(object):
         fod_output.write(self.parent.ui.ff_qrange.text() + "  # fourier_range_Q\n")
         fod_output.write(self.parent.ui.secondary_scattering_ratio.text() + "  # secondary_scattering_ratio")
         fod_output.close()
-
 
     def iso_rep_linker(self):
         self.parent.ui.load_fod_input_button.clicked.connect(self.load_fod_input)
