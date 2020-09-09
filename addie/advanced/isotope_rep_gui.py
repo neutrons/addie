@@ -5,8 +5,6 @@ from addie.advanced.isrp_gui_table_init import IsRepGuiTableInitialization
 
 
 class IsoRepGui(QMainWindow):
-
-
     def __init__(self, parent=None):
         QMainWindow.__init__(self, parent)
         self.parent = parent
@@ -15,19 +13,15 @@ class IsoRepGui(QMainWindow):
 
         self.init_IsRepTable()
 
-
     def init_IsRepTable(self):
         self.o_table = IsRepGuiTableInitialization(parent=self)
         self.o_table.iso_rep_linker()
 
-
     def refresh(self):
         self.o_table.clear()
 
-
     def closeEvent(self, event=None):
         self.parent.isrp_win = None
-
 
     def hide_button_clicked(self):
         self.closeEvent(event=None)
@@ -42,4 +36,3 @@ def isrp_button_activator(parent=None):
     else:
         parent.isrp_win.refresh()
         parent.isrp_win.activateWindow()
-
