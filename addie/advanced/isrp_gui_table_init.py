@@ -4,7 +4,8 @@ import os
 
 
 class IsRepGuiTableInitialization(object):
-
+    script = "python /SNS/users/zjn/pytest/FOD.py"
+    fod_filename = "fod.inp"
 
     def __init__(self, parent=None):
         self.parent = parent
@@ -21,7 +22,7 @@ class IsRepGuiTableInitialization(object):
             return False
 
         if not self.parent.ui.sample_2_title.text().strip():
-            self.err_messenger("'Sample-1 Title' missing!")
+            self.err_messenger("'Sample-2 Title' missing!")
             return False
 
         if not self.parent.ui.bkg_title.text().strip():
@@ -151,7 +152,7 @@ class IsRepGuiTableInitialization(object):
             return
 
         try:
-            fod_file_contents = self.create_fod_file(fod_output)
+            fod_file_contents = self.create_fod_file()
             with open(_out_file, "w") as fod_output:
                 fod_output.write(fod_file_contents)
         except IOError:
@@ -160,6 +161,9 @@ class IsRepGuiTableInitialization(object):
         return
 
     def save_and_run_fod_input(self):
+        '''
+        Save FOD .inp file and run via job monitor
+        '''
         valid = self._is_table_input_valid()
         if not valid:
             return
@@ -176,7 +180,7 @@ class IsRepGuiTableInitialization(object):
 
         out_filename = "fod.inp"
         try:
-            fod_file_contents = self.create_fod_file(fod_output)
+            fod_file_contents = self.create_fod_file()
             with open(os.path.join(working_dir, out_filename), "w") as fod_output:
                 fod_output.write(fod_file_contents)
         except IOError:
@@ -184,11 +188,11 @@ class IsRepGuiTableInitialization(object):
             return
 
         os.chdir(working_dir)
-        os.system("python /SNS/users/zjn/pytest/FOD.py -f fod.inp")
-
+        _script_to_run = self.script + ' -f ' + self.fod_filename
+        os.system(self.script + ' -f ' + self.fod_filename)
         return
 
-    def create_fod_file(self, out):
+    def create_fod_file(self):
         '''
         Creates FOD file input as string to write to output file handle
         :return: FOD file input to save to file handle
@@ -205,9 +209,9 @@ class IsRepGuiTableInitialization(object):
             "{plazcek_type}  # pla_type\n"
             "{plazcek_min}, {plazcek_max}  # pla_range\n"
             "{qrangeft}  # qrangeft\n"
-            "{fourier_range_r}  # fourier_range_r\n")
-            "{fourier_range_q}  # fourier_range_Q\n")
-            "{ratio}  # secondary_scattering_ratio")
+            "{fourier_range_r}  # fourier_range_r\n"
+            "{fourier_range_q}  # fourier_range_Q\n"
+            "{ratio}  # secondary_scattering_ratio"
         )
 
         kwargs = {
