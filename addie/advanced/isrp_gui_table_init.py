@@ -151,28 +151,14 @@ class IsRepGuiTableInitialization(object):
             return
 
         try:
-            fod_output = open(_out_file, "w")
+            with open(_out_file, "w") as fod_output:
+                self.write_fod_file(fod_output)
         except IOError:
             self.err_messenger("Permission denied! Choose another save target!")
             return
-
-        fod_output.write(self.parent.ui.sample_1_title.text() + "  # sample_1_title\n")
-        fod_output.write(self.parent.ui.sample_2_title.text() + "  # sample_2_title\n")
-        fod_output.write(self.parent.ui.bkg_title.text() + "  # background_title\n")
-        fod_output.write(self.parent.ui.bkg_scans.text() + "  # background scannrs\n")
-        fod_output.write(self.parent.ui.sample_1_scans.text() + "  # sample_1_scannrs\n")
-        fod_output.write(self.parent.ui.sample_2_scans.text() + "  # sample_2_scannrs\n")
-        fod_output.write(self.parent.ui.subs_init.text() + " / " + self.parent.ui.subs_rep.text() + "  # substitution_type\n")
-        fod_output.write(str(self.parent.ui.ndeg.value()) + "  # pla_type\n")
-        fod_output.write(self.parent.ui.plazcek_fit_range_min.text() + ", " + self.parent.ui.plazcek_fit_range_max.text() + "  # pla_range\n")
-        fod_output.write(self.parent.ui.ft_qrange.text() + "  # qrangeft\n")
-        fod_output.write(self.parent.ui.ff_rrange.text() + "  # fourier_range_r\n")
-        fod_output.write(self.parent.ui.ff_qrange.text() + "  # fourier_range_Q\n")
-        fod_output.write(self.parent.ui.secondary_scattering_ratio.text() + "  # secondary_scattering_ratio")
-        fod_output.close()
         return
 
-    def run_save_file(self):
+    def save_and_run_fod_input(self):
         valid = self._is_table_input_valid()
         if not valid:
             return
@@ -190,7 +176,7 @@ class IsRepGuiTableInitialization(object):
         out_filename = "fod.inp"
         try:
             with open(os.path.join(working_dir, out_filename), "w") as fod_output:
-                fod_save_input(fod_output)
+                self.write_fod_file(fod_output)
         except IOError:
             self.err_messenger("Permission denied! Choose another working folder!")
             return
@@ -200,25 +186,29 @@ class IsRepGuiTableInitialization(object):
 
         return
 
-    def fod_save_input(self, working_dir):
-        fod_output.write(self.parent.ui.sample_1_title.text() + "  # sample_1_title\n")
-        fod_output.write(self.parent.ui.sample_2_title.text() + "  # sample_2_title\n")
-        fod_output.write(self.parent.ui.bkg_title.text() + "  # background_title\n")
-        fod_output.write(self.parent.ui.bkg_scans.text() + "  # background scannrs\n")
-        fod_output.write(self.parent.ui.sample_1_scans.text() + "  # sample_1_scannrs\n")
-        fod_output.write(self.parent.ui.sample_2_scans.text() + "  # sample_2_scannrs\n")
-        fod_output.write(self.parent.ui.subs_init.text() + " / " + self.parent.ui.subs_rep.text() + "  # substitution_type\n")
-        fod_output.write(str(self.parent.ui.ndeg.value()) + "  # pla_type\n")
-        fod_output.write(self.parent.ui.plazcek_fit_range_min.text() + ", " + self.parent.ui.plazcek_fit_range_max.text() + "  # pla_range\n")
-        fod_output.write(self.parent.ui.ft_qrange.text() + "  # qrangeft\n")
-        fod_output.write(self.parent.ui.ff_rrange.text() + "  # fourier_range_r\n")
-        fod_output.write(self.parent.ui.ff_qrange.text() + "  # fourier_range_Q\n")
-        fod_output.write(self.parent.ui.secondary_scattering_ratio.text() + "  # secondary_scattering_ratio")
-        fod_output.close()
+    def write_fod_file(self, out):
+        '''
+        Writes FOD file to output file handle
+        :param out: File handle
+        '''
+        out.write(self.parent.ui.sample_1_title.text() + "  # sample_1_title\n")
+        out.write(self.parent.ui.sample_2_title.text() + "  # sample_2_title\n")
+        out.write(self.parent.ui.bkg_title.text() + "  # background_title\n")
+        out.write(self.parent.ui.bkg_scans.text() + "  # background scannrs\n")
+        out.write(self.parent.ui.sample_1_scans.text() + "  # sample_1_scannrs\n")
+        out.write(self.parent.ui.sample_2_scans.text() + "  # sample_2_scannrs\n")
+        out.write(self.parent.ui.subs_init.text() + " / " + self.parent.ui.subs_rep.text() + "  # substitution_type\n")
+        out.write(str(self.parent.ui.ndeg.value()) + "  # pla_type\n")
+        out.write(self.parent.ui.plazcek_fit_range_min.text() + ", " + self.parent.ui.plazcek_fit_range_max.text() + "  # pla_range\n")
+        out.write(self.parent.ui.ft_qrange.text() + "  # qrangeft\n")
+        out.write(self.parent.ui.ff_rrange.text() + "  # fourier_range_r\n")
+        out.write(self.parent.ui.ff_qrange.text() + "  # fourier_range_Q\n")
+        out.write(self.parent.ui.secondary_scattering_ratio.text() + "  # secondary_scattering_ratio")
+        return
 
     def iso_rep_linker(self):
         self.parent.ui.load_fod_input_button.clicked.connect(self.load_fod_input)
         self.parent.ui.save_fod_input_button.clicked.connect(self.save_fod_input)
-        self.parent.ui.run_save_file.clicked.connect(self.run_save_file)
+        self.parent.ui.save_and_run_fod_input.clicked.connect(self.save_and_run_fod_input)
         return
 

@@ -612,7 +612,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="run_save_file">
+       <widget class="QPushButton" name="save_and_run_fod_input">
         <property name="minimumSize">
          <size>
           <width>200</width>
