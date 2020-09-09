@@ -151,8 +151,9 @@ class IsRepGuiTableInitialization(object):
             return
 
         try:
+            fod_file_contents = self.create_fod_file(fod_output)
             with open(_out_file, "w") as fod_output:
-                self.write_fod_file(fod_output)
+                fod_output.write(fod_file_contents)
         except IOError:
             self.err_messenger("Permission denied! Choose another save target!")
             return
@@ -175,8 +176,9 @@ class IsRepGuiTableInitialization(object):
 
         out_filename = "fod.inp"
         try:
+            fod_file_contents = self.create_fod_file(fod_output)
             with open(os.path.join(working_dir, out_filename), "w") as fod_output:
-                self.write_fod_file(fod_output)
+                fod_output.write(fod_file_contents)
         except IOError:
             self.err_messenger("Permission denied! Choose another working folder!")
             return
@@ -186,25 +188,48 @@ class IsRepGuiTableInitialization(object):
 
         return
 
-    def write_fod_file(self, out):
+    def create_fod_file(self, out):
         '''
-        Writes FOD file to output file handle
-        :param out: File handle
+        Creates FOD file input as string to write to output file handle
+        :return: FOD file input to save to file handle
+        :rtype: str
         '''
-        out.write(self.parent.ui.sample_1_title.text() + "  # sample_1_title\n")
-        out.write(self.parent.ui.sample_2_title.text() + "  # sample_2_title\n")
-        out.write(self.parent.ui.bkg_title.text() + "  # background_title\n")
-        out.write(self.parent.ui.bkg_scans.text() + "  # background scannrs\n")
-        out.write(self.parent.ui.sample_1_scans.text() + "  # sample_1_scannrs\n")
-        out.write(self.parent.ui.sample_2_scans.text() + "  # sample_2_scannrs\n")
-        out.write(self.parent.ui.subs_init.text() + " / " + self.parent.ui.subs_rep.text() + "  # substitution_type\n")
-        out.write(str(self.parent.ui.ndeg.value()) + "  # pla_type\n")
-        out.write(self.parent.ui.plazcek_fit_range_min.text() + ", " + self.parent.ui.plazcek_fit_range_max.text() + "  # pla_range\n")
-        out.write(self.parent.ui.ft_qrange.text() + "  # qrangeft\n")
-        out.write(self.parent.ui.ff_rrange.text() + "  # fourier_range_r\n")
-        out.write(self.parent.ui.ff_qrange.text() + "  # fourier_range_Q\n")
-        out.write(self.parent.ui.secondary_scattering_ratio.text() + "  # secondary_scattering_ratio")
-        return
+        out_string = (
+            "{sample_one_title}  # sample_1_title\n"
+            "{sample_two_title}  # sample_2_title\n"
+            "{background_title}  # background_title\n"
+            "{background_scans}  # background scannrs\n"
+            "{sample_one_scans}  # sample_1_scannrs\n"
+            "{sample_two_scans}  # sample_2_scannrs\n"
+            "{sub_init} / {sub_replace}  # substitution_type\n"
+            "{plazcek_type}  # pla_type\n"
+            "{plazcek_min}, {plazcek_max}  # pla_range\n"
+            "{qrangeft}  # qrangeft\n"
+            "{fourier_range_r}  # fourier_range_r\n")
+            "{fourier_range_q}  # fourier_range_Q\n")
+            "{ratio}  # secondary_scattering_ratio")
+        )
+
+        kwargs = {
+            "sample_one_title": self.parent.ui.sample_1_title.text(),
+            "sample_two_title": self.parent.ui.sample_2_title.text(),
+            "background_title": self.parent.ui.bkg_title.text(),
+            "background_scans": self.parent.ui.bkg_scans.text(),
+            "sample_one_scans": self.parent.ui.sample_1_scans.text(),
+            "sample_two_scans": self.parent.ui.sample_2_scans.text(),
+            "sub_init": self.parent.ui.subs_init.text(),
+            "sub_replace": self.parent.ui.subs_rep.text(),
+            "plazcek_type": str(self.parent.ui.ndeg.value()),
+            "plazcek_min": self.parent.ui.plazcek_fit_range_min.text(),
+            "plazcek_max": self.parent.ui.plazcek_fit_range_max.text(),
+            "qrangeft": self.parent.ui.ft_qrange.text(),
+            "fourier_range_r": self.parent.ui.ff_rrange.text(),
+            "fourier_range_q": self.parent.ui.ff_qrange.text(),
+            "ratio": self.parent.ui.secondary_scattering_ratio.text()
+        }
+
+        out_string.format(kwargs)
+        return out_string
 
     def iso_rep_linker(self):
         self.parent.ui.load_fod_input_button.clicked.connect(self.load_fod_input)
