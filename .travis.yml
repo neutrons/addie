@@ -40,7 +40,7 @@ install:
 
 script:
     # TEST: Create test environment
-  - mamba create -q -n addie_test python=$CONDA mantid-workbench>=4.2 --file requirements-install.txt --file requirements-test.txt
+  - mamba create -q -n addie_test python=$CONDA mantid-workbench>=4.2 --file requirements.txt --file requirements-dev.txt
   - mamba info --envs
   - conda activate addie_test
   - python --version
@@ -67,18 +67,13 @@ script:
   # run addie tests
   - QT_DEBUG_PLUGINS=1 xvfb-run --server-args="-screen 0 640x480x24" --auto-servernum pytest --mpl tests --disable-pytest-warnings
 
-  # DEBUG: testing deployment ci
-  - |
-    cd conda.recipe
-    chmod +x anaconda_upload.sh
-    ./anaconda_upload.sh 
 
-#deploy:
+deploy:
  # Deploy conda package to Anaconda.org https://anaconda.org/addie-diffraction/addie
-# - provider: script
-#   script: cd conda.recipe && chmod +x anaconda_upload.sh && ./anaconda_upload.sh ${PKG_FILE}
-#   skip_cleanup: true
-#   skip_existing: true
-#   on:
-#     branch: master
-#     tags: true
+ - provider: script
+   script: cd conda.recipe && chmod +x anaconda_upload.sh && ./anaconda_upload.sh
+   skip_cleanup: true
+   skip_existing: true
+   on:
+     branch: master
+     tags: true

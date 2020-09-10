@@ -27,11 +27,11 @@ setup_args = dict(
     install_requires=read_requirements_from_file(
         os.path.join(
             THIS_DIR,
-            'requirements-install.txt')),
+            'requirements.txt')),
     tests_require=read_requirements_from_file(
         os.path.join(
             THIS_DIR,
-            'requirements-test.txt')))
+            'requirements-dev.txt')))
 
 setup(
     name="addie",
