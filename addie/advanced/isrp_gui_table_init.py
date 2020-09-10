@@ -172,16 +172,16 @@ class IsRepGuiTableInitialization(object):
                 self.sample_info['sample_1']['abs'] = 'nogo'
             else:
                 self.sample_info['sample_1']['abs'] = 'go'
-            if self.sample_info['sample_1']['formula'].strip() is '':
+            if self.sample_info['sample_1']['formula'].strip() == '':
                 self.err_messenger("Formula for sample-1 missing! Check the sample table!")
                 return False
-            if self.sample_info['sample_1']['md'].strip() is '':
+            if self.sample_info['sample_1']['md'].strip() == '':
                 self.err_messenger("Mass density for sample-1 missing! Check the sample table!")
                 return False
-            if self.sample_info['sample_1']['radius'].strip() is '':
+            if self.sample_info['sample_1']['radius'].strip() == '':
                 self.err_messenger("Container radius for sample-1 missing! Check the sample table!")
                 return False
-            if self.sample_info['sample_1']['pf'].strip() is '':
+            if self.sample_info['sample_1']['pf'].strip() == '':
                 self.err_messenger("Packing fraction for sample-1 missing! Check sample table!")
                 return False
         else:
@@ -212,16 +212,16 @@ class IsRepGuiTableInitialization(object):
                 self.sample_info['sample_2']['abs'] = 'nogo'
             else:
                 self.sample_info['sample_2']['abs'] = 'go'
-            if self.sample_info['sample_2']['formula'].strip() is '':
+            if self.sample_info['sample_2']['formula'].strip() == '':
                 self.err_messenger("Formula for sample-1 missing! Check the sample table!")
                 return False
-            if self.sample_info['sample_2']['md'].strip() is '':
+            if self.sample_info['sample_2']['md'].strip() == '':
                 self.err_messenger("Mass density for sample-1 missing! Check the sample table!")
                 return False
-            if self.sample_info['sample_2']['radius'].strip() is '':
+            if self.sample_info['sample_2']['radius'].strip() == '':
                 self.err_messenger("Container radius for sample-1 missing! Check the sample table!")
                 return False
-            if self.sample_info['sample_2']['pf'].strip() is '':
+            if self.sample_info['sample_2']['pf'].strip() == '':
                 self.err_messenger("Packing fraction for sample-1 missing! Check sample table!")
                 return False
         else:
