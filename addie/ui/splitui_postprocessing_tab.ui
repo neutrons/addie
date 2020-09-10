@@ -1164,6 +1164,62 @@ p, li { white-space: pre-wrap; }
             </item>
            </layout>
           </widget>
+          <widget class="QWidget" name="adv_tab">
+           <attribute name="title">
+            <string>Advanced</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="adv_verticalLayout">
+            <item>
+             <layout class="QHBoxLayout" name="adv_horizontalLayout_1">
+              <item>
+               <widget class="QPushButton" name="adv_pushButton_isotope">
+                <property name="minimumSize">
+                 <size>
+                  <width>150</width>
+                  <height>40</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>150</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Isotope Substitution</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="adv_horizontalSpacer_1">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <spacer name="adv_verticalSpacer_1">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
          </widget>
         </widget>
        </item>

@@ -22,6 +22,7 @@ from addie.utilities import load_ui
 import addie.menu.event_handler as menu_event_handler
 
 from addie.help_handler.help_gui import help_button_activator
+from addie.advanced.isotope_rep_gui import isrp_button_activator
 
 from addie.utilities.job_monitor_thread import JobMonitorThread
 from addie.utilities.job_status_handler import JobStatusHandler
@@ -271,6 +272,7 @@ class MainWindow(QMainWindow):
     o_help_ndabs = None
     o_help_scans = None
     o_help_mantid = None
+    isrp_win = None
 
     # list of key/value defined in the settings advanced window
     global_key_value = {}
@@ -427,6 +429,9 @@ class MainWindow(QMainWindow):
 
     def help_button_clicked_autonom(self):
         help_button_activator(parent=self, button_name="autonom")
+
+    def isrp_button_clicked(self):
+        isrp_button_activator(parent=self)
 
     # def save_raw_config(self):
     #     '''this will allow the user to reset the full table and get it back in its initial state'''
