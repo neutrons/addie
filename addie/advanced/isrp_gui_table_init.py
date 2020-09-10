@@ -7,31 +7,21 @@ from addie.utilities import math_tools
 
 
 class IsRepGuiTableInitialization(object):
-    _script = "/SNS/users/zjn/pytest/FOD.py"
-    _cmd = "/usr/bin/python {}".format(_script)
-    _fod_filename = "fod.inp"
+    _SCRIPT = "/SNS/users/zjn/pytest/FOD.py"
+    _COMMAND = "/usr/bin/python {}".format(_SCRIPT)
+    _FOD_INPUT_FILENAME = "fod.inp"
+
+    _ROW_KEY = 'row'
+    _SHAPE_KEY = 'shape'
+    _FORMULA_KEY = 'formula'
+    _DENSITY_KEY = 'density'
+    _RADIUS_KEY = 'radius'
+    _PACKING_FRACTION_KEY = 'packing_fraction'
+    _ABS_CORR_KEY = 'abs'
 
     def __init__(self, parent=None):
         self.parent = parent
         self.parameters={}
-        self.sample_info = {
-            "sample_1":{
-                "formula": '',
-                "radius": '',
-                "md": '',
-                "pf": '',
-                "ss": 0,
-                "abs": 0
-                },
-            "sample_2":{
-                "formula": '',
-                "radius": '',
-                "md": '',
-                "pf": '',
-                "ss": 0,
-                "abs": 0
-                }
-            }
 
     def _is_table_input_valid(self):
         '''
@@ -147,88 +137,100 @@ class IsRepGuiTableInitialization(object):
 
         return True
 
-    def _is_info_in_sample_table(self):
-        sample_1_row = -1
+    def _get_sample_row_from_table(self, title):
+        '''
+        Get row for the sample in the post-processing table given the title
+        :param title: Title to search for in the post-processing table
+        :type title: str
+        :return: Row number in the table if found, -1 if not found.
+        :rtype: int
+        '''
         for _row_index in range(self.parent.parent.postprocessing_ui.table.rowCount()):
             _item = self.parent.parent.postprocessing_ui.table.item(_row_index, 1)
             if _item is not None:
                 title_temp = str(_item.text())
-                title_1 = self.parent.ui.sample_1_title.text().strip()
-                if title_temp == title_1:
-                    sample_1_row = _row_index
-                    break
-        if sample_1_row >= 0:
-            self.sample_info['sample_1']['formula'] = str(self.parent.parent.postprocessing_ui.table.item(sample_1_row, 3).text())
-            self.sample_info['sample_1']['md'] = str(self.parent.parent.postprocessing_ui.table.item(sample_1_row, 4).text())
-            self.sample_info['sample_1']['radius'] = str(self.parent.parent.postprocessing_ui.table.item(sample_1_row, 5).text())
-            self.sample_info['sample_1']['pf'] = str(self.parent.parent.postprocessing_ui.table.item(sample_1_row, 6).text())
-            _widget = self.parent.parent.postprocessing_ui.table.cellWidget(sample_1_row, 7)
-            if _widget.currentIndex() == 0:
-                self.sample_info['sample_1']['ss'] = 'cylindrical'
-            else:
-                self.sample_info['sample_1']['ss'] = 'spherical'
-            _widget = self.parent.parent.postprocessing_ui.table.cellWidget(sample_1_row, 8).children()[1]
-            if _widget.checkState() == 0:
-                self.sample_info['sample_1']['abs'] = 'nogo'
-            else:
-                self.sample_info['sample_1']['abs'] = 'go'
-            if self.sample_info['sample_1']['formula'].strip() == '':
-                self.err_messenger("Formula for sample-1 missing! Check the sample table!")
-                return False
-            if self.sample_info['sample_1']['md'].strip() == '':
-                self.err_messenger("Mass density for sample-1 missing! Check the sample table!")
-                return False
-            if self.sample_info['sample_1']['radius'].strip() == '':
-                self.err_messenger("Container radius for sample-1 missing! Check the sample table!")
-                return False
-            if self.sample_info['sample_1']['pf'].strip() == '':
-                self.err_messenger("Packing fraction for sample-1 missing! Check sample table!")
-                return False
-        else:
-            self.err_messenger("Title not found in sample table for sample-1! Check sample table!")
+                if title_temp == title:
+                    return _row_index
+        return -1
+
+    def _get_sample_info_from_table_row(self, row):
+        '''
+        Get sample info from the post-processing table given the row number
+        :param row: Sample row number in the post-processing table
+        :type row: int
+        :return: Dictionary with sub-set of the sample info
+        :rtype: dict{str:str}
+        '''
+        table = self.parent.parent.postprocessing_ui.table
+
+        # Get the widget
+        _sample_widget = table.cellWidget(row, 7)
+        _abs_widget = table.cellWidget(row, 8).children()[1]
+
+        sample_info = dict()
+        sample_info[self._ROW_KEY] = row
+        sample_info[self._SHAPE_KEY] = 'cylindrical' if _sample_widget.currentIndex() == 0 else 'spherical'
+        sample_info[self._ABS_CORR_KEY] = 'nogo' if _abs_widget.checkState() == 0 else 'go'
+        sample_info[self._FORMULA_KEY] = str(table.item(row, 3).text())
+        sample_info[self._DENSITY_KEY] = str(table.item(row, 4).text())
+        sample_info[self._RADIUS_KEY] = str(table.item(row, 5).text())
+        sample_info[self._PACKING_FRACTION_KEY] = str(table.item(row, 6).text())
+        return sample_info
+
+    def _is_sample_info_valid(self, sample_info):
+        '''
+        Validate the sample info from the post-processing table
+        :return: True if all checks are valid, False otherwise
+        :rtype: bool
+        '''
+        row = sample_info[self._ROW_KEY]
+
+        if sample_info[self._FORMULA_KEY].strip() == '':
+            msg = "Formula is missing on row {}! Check the sample table!"
+            self.err_messenger(msg.format(row))
             return False
 
-        sample_2_row = -1
-        for _row_index in range(self.parent.parent.postprocessing_ui.table.rowCount()):
-            _item = self.parent.parent.postprocessing_ui.table.item(_row_index, 1)
-            if _item is not None:
-                title_temp = str(_item.text())
-                title_1 = self.parent.ui.sample_2_title.text().strip()
-                if title_temp == title_1:
-                    sample_2_row = _row_index
-                    break
-        if sample_2_row >= 0:
-            self.sample_info['sample_2']['formula'] = str(self.parent.parent.postprocessing_ui.table.item(sample_2_row, 3).text())
-            self.sample_info['sample_2']['md'] = str(self.parent.parent.postprocessing_ui.table.item(sample_2_row, 4).text())
-            self.sample_info['sample_2']['radius'] = str(self.parent.parent.postprocessing_ui.table.item(sample_2_row, 5).text())
-            self.sample_info['sample_2']['pf'] = str(self.parent.parent.postprocessing_ui.table.item(sample_2_row, 6).text())
-            _widget = self.parent.parent.postprocessing_ui.table.cellWidget(sample_2_row, 7)
-            if _widget.currentIndex() == 0:
-                self.sample_info['sample_2']['ss'] = 'cylindrical'
-            else:
-                self.sample_info['sample_2']['ss'] = 'spherical'
-            _widget = self.parent.parent.postprocessing_ui.table.cellWidget(sample_2_row, 8).children()[1]
-            if _widget.checkState() == 0:
-                self.sample_info['sample_2']['abs'] = 'nogo'
-            else:
-                self.sample_info['sample_2']['abs'] = 'go'
-            if self.sample_info['sample_2']['formula'].strip() == '':
-                self.err_messenger("Formula for sample-1 missing! Check the sample table!")
-                return False
-            if self.sample_info['sample_2']['md'].strip() == '':
-                self.err_messenger("Mass density for sample-1 missing! Check the sample table!")
-                return False
-            if self.sample_info['sample_2']['radius'].strip() == '':
-                self.err_messenger("Container radius for sample-1 missing! Check the sample table!")
-                return False
-            if self.sample_info['sample_2']['pf'].strip() == '':
-                self.err_messenger("Packing fraction for sample-1 missing! Check sample table!")
-                return False
-        else:
-            self.err_messenger("Title not found in sample table for sample-1! Check sample table!")
+        if sample_info[self._DENSITY_KEY].strip() == '':
+            msg = "Mass density is missing on row {}! Check the sample table!"
+            self.err_messenger(msg.format(row))
+            return False
+
+        if sample_info[self._RADIUS_KEY].strip() == '':
+            msg = "Container radius is missing on row {}! Check the sample table!"
+            self.err_messenger(msg.format(row))
+            return False
+
+        if sample_info[self._PACKING_FRACTION_KEY].strip() == '':
+            msg = "Packing fraction is missing on row {}! Check the sample table!"
+            self.err_messenger(msg.format(row))
             return False
 
         return True
+
+    def get_sample_info(self, title):
+        '''
+        Get sample info in the post-processing table given the title
+        :param title: Title to search for in the post-processing table
+        :type title: str
+        :return: Dictionary with sub-set of sample info or None if not valid
+        :rtype: dict{str:str} or None
+        '''
+        # Get sample row number
+        row = self._get_sample_row_from_table(title)
+        if row < 0:
+            msg = "Title {} not found in sample table!".format(title)
+            self.err_messenger(msg)
+            return None
+
+        # Get sample info given the row number
+        sample_info = self._get_sample_info_from_table_row(row)
+
+        # Validate the sample info returned
+        valid = self._is_sample_info_valid(sample_info)
+        if not valid:
+            return None
+
+        return sample_info
 
     def load_fod_input(self):
         _current_folder = self.parent.parent.current_folder
@@ -328,14 +330,24 @@ class IsRepGuiTableInitialization(object):
         '''
         Save FOD .inp file and run via job monitor
         '''
+        # Validate the Isotope Substitution GUI table
         valid = self._is_table_input_valid()
         if not valid:
             return
 
-        valid = self._is_info_in_sample_table()
-        if not valid:
+        # Get sample info from post-processing table using sample titles
+        # in Isotope Substitution GUI. Return if invalid.
+        sample_1_title = self.parent.ui.sample_1_title.text().strip()
+        sample_1_info = self.get_sample_info(sample_1_title)
+        if not sample_1_info:
             return
 
+        sample_2_title = self.parent.ui.sample_2_title.text().strip()
+        sample_2_info = self.get_sample_info(sample_2_title)
+        if not sample_2_info:
+            return
+
+        # Let User pick the working directory
         _current_folder = self.parent.parent.current_folder
         working_dir = QFileDialog.getExistingDirectory(
             self.parent,
@@ -346,7 +358,8 @@ class IsRepGuiTableInitialization(object):
         if not working_dir:
             return
 
-        fod_path = os.path.join(working_dir, self._fod_filename)
+        # Create the Isotope Substitution input files
+        fod_path = os.path.join(working_dir, self._FOD_INPUT_FILENAME)
         try:
             fod_file_contents = self.create_fod_file()
             with open(fod_path, "w") as fod_output:
@@ -355,33 +368,38 @@ class IsRepGuiTableInitialization(object):
             self.err_messenger("Permission denied! Choose another working folder!")
             return
 
-        sample_1_title = self.parent.ui.sample_1_title.text().strip()
         sample_1_ini_path = os.path.join(working_dir, sample_1_title + '.ini')
         try:
-            sample_1_ini_contents = self.create_sample_ini_file(sample_1_title, self.sample_info['sample_1'])
+            sample_1_ini_contents = self.create_sample_ini_file(
+                sample_1_title,
+                sample_1_info)
+
             with open(sample_1_ini_path, "w") as sample_1_ini_out:
                 sample_1_ini_out.write(sample_1_ini_contents)
         except IOError:
             self.err_messenger("Permission denied! Choose another working folder!")
             return
 
-        sample_2_title = self.parent.ui.sample_2_title.text().strip()
         sample_2_ini_path = os.path.join(working_dir, sample_2_title + '.ini')
         try:
-            sample_2_ini_contents = self.create_sample_ini_file(sample_2_title, self.sample_info['sample_2'])
+            sample_2_ini_contents = self.create_sample_ini_file(
+                sample_2_title,
+                sample_2_info)
+
             with open(sample_2_ini_path, "w") as sample_2_ini_out:
                 sample_2_ini_out.write(sample_2_ini_contents)
         except IOError:
             self.err_messenger("Permission denied! Choose another working folder!")
             return
 
-        if not os.path.isfile(self._script):
-            msg = "Unable to find run script: {}".format(self._script)
+        # Run Isotope Substitution program via job manager
+        if not os.path.isfile(self._SCRIPT):
+            msg = "Unable to find run script: {}".format(self._SCRIPT)
             self.err_messenger(msg)
             return
 
         os.chdir(working_dir)
-        script_to_run = self._cmd + ' -f ' + fod_path
+        script_to_run = self._COMMAND + ' -f ' + fod_path
         main_gui = self.parent.parent
         main_gui.launch_job_manager(
             job_name="Isotope Substitution",
@@ -448,12 +466,12 @@ class IsRepGuiTableInitialization(object):
 
         kwargs = {
             "sample_title": sample_title,
-            "sample_formula": sample_info['formula'],
-            "mass_density": sample_info['md'],
-            "radius": sample_info['radius'],
-            "packing_fraction": sample_info['pf'],
-            "sample_shape": sample_info['ss'],
-            "absorption_corr": sample_info['abs']
+            "sample_formula": sample_info[self._FORMULA_KEY],
+            "mass_density": sample_info[self._DENSITY_KEY],
+            "radius": sample_info[self._RADIUS_KEY],
+            "packing_fraction": sample_info[self._PACKING_FRACTION_KEY],
+            "sample_shape": sample_info[self._SHAPE_KEY],
+            "absorption_corr": sample_info[self._ABS_CORR_KEY]
         }
 
         return out_string.format(**kwargs)
