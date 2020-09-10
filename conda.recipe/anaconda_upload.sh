@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
   
 
-conda install conda-build conda-verify
+conda install conda-build conda-verify anaconda-client 
 conda build . 
 
 export PKG_PATH=$(conda build . --output)
