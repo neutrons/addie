@@ -9,7 +9,7 @@ PKG_FILE=$(basename ${PKG_PATH})
 echo ${PKG_FILE}
 echo ${PKG_PATH}
 
-#echo "Uploading ${PKG_PATH} artifact..."
-#anaconda -v -t ${CONDA_UPLOAD_TOKEN} upload ${PKG_PATH} --force
+echo "Uploading ${PKG_PATH} artifact..."
+anaconda -v -t ${CONDA_UPLOAD_TOKEN} upload ${PKG_PATH} --force
 
-#echo "Successfully deployed ${PKG_FILE} to Anaconda.org."
+echo "Successfully deployed ${PKG_FILE} to Anaconda.org."
