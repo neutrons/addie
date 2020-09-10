@@ -253,8 +253,8 @@ class AddieDriver(object):
             comment, str), 'Comment {0} must be a string but not a {1}.'.format(
             comment, type(comment))
         assert isinstance(
-            ws_index, int), 'Workspace index must be an integer but not a {1}.'.format(
-            ws_index, type(ws_index))
+            ws_index, int), 'Workspace index must be an integer but not a {0}.'.format(
+            type(ws_index))
 
         # convert to point data from histogram
         simpleapi.ConvertToPointData(

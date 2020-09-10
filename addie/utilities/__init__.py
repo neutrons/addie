@@ -43,7 +43,7 @@ def get_default_dir(main_window, sub_dir):
     Otherwise, no operation
     """
     # check
-    msg = 'sub directory must be a string but not %s.'.format(type(sub_dir))
+    msg = 'sub directory must be a string but not {}.'.format(type(sub_dir))
     assert isinstance(sub_dir, str), msg
 
     if main_window._inFixedDirectoryStructure:

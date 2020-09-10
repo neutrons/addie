@@ -611,7 +611,7 @@ class TableFileLoader:
                 o_loader.load()
             else:
                 raise IOError(
-                    "File format not supported!".format(
+                    "File format not supported for {}!".format(
                         self.filename))
 
             self.parent.check_master_table_column_highlighting()
