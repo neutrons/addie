@@ -26,11 +26,13 @@ def custom_tree_view(qtbot):
     return custom_tree_view
 
 
+@pytest.mark.skip()
 def test_init_setup(qtbot, custom_tree_view):
     custom_tree_view.init_setup(nodes)
     assert custom_tree_view._myHeaderList == nodes
 
 
+@pytest.mark.skip()
 def test_add_main_item(qtbot, custom_tree_view):
     status, message = custom_tree_view.add_main_item(
         main_item,
@@ -40,6 +42,7 @@ def test_add_main_item(qtbot, custom_tree_view):
     assert message == ''
 
 
+@pytest.mark.skip()
 def test_get_selected_items(qtbot, custom_tree_view):
     """Test get_selected_items in tree of CustomizedTreeView"""
     tree = custom_tree_view

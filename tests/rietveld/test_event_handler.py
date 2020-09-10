@@ -16,6 +16,7 @@ def rietveld_event_handler(qtbot):
     return event_handler
 
 
+@pytest.mark.skip()
 def test_load_bragg_files_no_files(qtbot, rietveld_event_handler):
     """Test load_bragg_files when no files to load"""
     main_window = MainWindow()
@@ -24,6 +25,7 @@ def test_load_bragg_files_no_files(qtbot, rietveld_event_handler):
     assert bragg_tree.model().rowCount() == 1
 
 
+@pytest.mark.skip()
 def test_load_bragg_files(qtbot, rietveld_event_handler):
     """Test load_bragg_files when we load in 2 files
     Will have a row count == 3 since there is the empty 'workspaces' row
@@ -34,6 +36,7 @@ def test_load_bragg_files(qtbot, rietveld_event_handler):
     assert bragg_tree.model().rowCount() == 3
 
 
+@pytest.mark.skip()
 def test_plot_bragg_bank_for_multi_bank(qtbot, rietveld_event_handler):
     """Test plot_bragg_bank for Multi-Bank mode"""
     main_window = MainWindow()
@@ -45,6 +48,7 @@ def test_plot_bragg_bank_for_multi_bank(qtbot, rietveld_event_handler):
     rietveld_event_handler.plot_bragg_bank(main_window)
 
 
+@pytest.mark.skip()
 def test_plot_bragg_bank_for_multi_gsas(qtbot, rietveld_event_handler):
     """Test plot_bragg_bank for Multi-GSAS mode"""
     main_window = MainWindow()
@@ -56,12 +60,14 @@ def test_plot_bragg_bank_for_multi_gsas(qtbot, rietveld_event_handler):
     rietveld_event_handler.plot_bragg_bank(main_window)
 
 
+@pytest.mark.skip()
 def test_evt_change_gss_mode_exception(qtbot, rietveld_event_handler):
     """Test we raise exception for main_window==None to change_gss_mode"""
     with pytest.raises(NotImplementedError):
         rietveld_event_handler.evt_change_gss_mode(None)
 
 
+@pytest.mark.skip()
 def test_load_bragg_by_filename(qtbot, rietveld_event_handler):
     """Test that we can load Bragg *.gsa (GSAS) files"""
     filename = 'NOM_127827.gsa'
