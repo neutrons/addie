@@ -8,12 +8,30 @@ from addie.utilities import math_tools
 
 class IsRepGuiTableInitialization(object):
     _script = "/SNS/users/zjn/pytest/FOD.py"
-    _cmd = "python {}".format(_script)
+    _cmd = "/usr/bin/python {}".format(_script)
     _fod_filename = "fod.inp"
 
     def __init__(self, parent=None):
         self.parent = parent
         self.parameters={}
+        self.sample_info = {
+            "sample_1":{
+                "formula": '',
+                "radius": '',
+                "md": '',
+                "pf": '',
+                "ss": 0,
+                "abs": 0
+                },
+            "sample_2":{
+                "formula": '',
+                "radius": '',
+                "md": '',
+                "pf": '',
+                "ss": 0,
+                "abs": 0
+                }
+            }
 
     def _is_table_input_valid(self):
         '''
@@ -129,6 +147,89 @@ class IsRepGuiTableInitialization(object):
 
         return True
 
+    def _is_info_in_sample_table(self):
+        sample_1_row = -1
+        for _row_index in range(self.parent.parent.postprocessing_ui.table.rowCount()):
+            _item = self.parent.parent.postprocessing_ui.table.item(_row_index, 1)
+            if _item is not None:
+                title_temp = str(_item.text())
+                title_1 = self.parent.ui.sample_1_title.text().strip()
+                if title_temp == title_1:
+                    sample_1_row = _row_index
+                    break
+        if sample_1_row >= 0:
+            self.sample_info['sample_1']['formula'] = str(self.parent.parent.postprocessing_ui.table.item(sample_1_row, 3).text())
+            self.sample_info['sample_1']['md'] = str(self.parent.parent.postprocessing_ui.table.item(sample_1_row, 4).text())
+            self.sample_info['sample_1']['radius'] = str(self.parent.parent.postprocessing_ui.table.item(sample_1_row, 5).text())
+            self.sample_info['sample_1']['pf'] = str(self.parent.parent.postprocessing_ui.table.item(sample_1_row, 6).text())
+            _widget = self.parent.parent.postprocessing_ui.table.cellWidget(sample_1_row, 7)
+            if _widget.currentIndex() == 0:
+                self.sample_info['sample_1']['ss'] = 'cylindrical'
+            else:
+                self.sample_info['sample_1']['ss'] = 'spherical'
+            _widget = self.parent.parent.postprocessing_ui.table.cellWidget(sample_1_row, 8).children()[1]
+            if _widget.checkState() == 0:
+                self.sample_info['sample_1']['abs'] = 'nogo'
+            else:
+                self.sample_info['sample_1']['abs'] = 'go'
+            if self.sample_info['sample_1']['formula'].strip() is '':
+                self.err_messenger("Formula for sample-1 missing! Check the sample table!")
+                return False
+            if self.sample_info['sample_1']['md'].strip() is '':
+                self.err_messenger("Mass density for sample-1 missing! Check the sample table!")
+                return False
+            if self.sample_info['sample_1']['radius'].strip() is '':
+                self.err_messenger("Container radius for sample-1 missing! Check the sample table!")
+                return False
+            if self.sample_info['sample_1']['pf'].strip() is '':
+                self.err_messenger("Packing fraction for sample-1 missing! Check sample table!")
+                return False
+        else:
+            self.err_messenger("Title not found in sample table for sample-1! Check sample table!")
+            return False
+
+        sample_2_row = -1
+        for _row_index in range(self.parent.parent.postprocessing_ui.table.rowCount()):
+            _item = self.parent.parent.postprocessing_ui.table.item(_row_index, 1)
+            if _item is not None:
+                title_temp = str(_item.text())
+                title_1 = self.parent.ui.sample_2_title.text().strip()
+                if title_temp == title_1:
+                    sample_2_row = _row_index
+                    break
+        if sample_2_row >= 0:
+            self.sample_info['sample_2']['formula'] = str(self.parent.parent.postprocessing_ui.table.item(sample_2_row, 3).text())
+            self.sample_info['sample_2']['md'] = str(self.parent.parent.postprocessing_ui.table.item(sample_2_row, 4).text())
+            self.sample_info['sample_2']['radius'] = str(self.parent.parent.postprocessing_ui.table.item(sample_2_row, 5).text())
+            self.sample_info['sample_2']['pf'] = str(self.parent.parent.postprocessing_ui.table.item(sample_2_row, 6).text())
+            _widget = self.parent.parent.postprocessing_ui.table.cellWidget(sample_2_row, 7)
+            if _widget.currentIndex() == 0:
+                self.sample_info['sample_2']['ss'] = 'cylindrical'
+            else:
+                self.sample_info['sample_2']['ss'] = 'spherical'
+            _widget = self.parent.parent.postprocessing_ui.table.cellWidget(sample_2_row, 8).children()[1]
+            if _widget.checkState() == 0:
+                self.sample_info['sample_2']['abs'] = 'nogo'
+            else:
+                self.sample_info['sample_2']['abs'] = 'go'
+            if self.sample_info['sample_2']['formula'].strip() is '':
+                self.err_messenger("Formula for sample-1 missing! Check the sample table!")
+                return False
+            if self.sample_info['sample_2']['md'].strip() is '':
+                self.err_messenger("Mass density for sample-1 missing! Check the sample table!")
+                return False
+            if self.sample_info['sample_2']['radius'].strip() is '':
+                self.err_messenger("Container radius for sample-1 missing! Check the sample table!")
+                return False
+            if self.sample_info['sample_2']['pf'].strip() is '':
+                self.err_messenger("Packing fraction for sample-1 missing! Check sample table!")
+                return False
+        else:
+            self.err_messenger("Title not found in sample table for sample-1! Check sample table!")
+            return False
+
+        return True
+
     def load_fod_input(self):
         _current_folder = self.parent.parent.current_folder
         [_table_file, _] = QFileDialog.getOpenFileName(
@@ -231,6 +332,10 @@ class IsRepGuiTableInitialization(object):
         if not valid:
             return
 
+        valid = self._is_info_in_sample_table()
+        if not valid:
+            return
+
         _current_folder = self.parent.parent.current_folder
         working_dir = QFileDialog.getExistingDirectory(
             self.parent,
@@ -246,6 +351,26 @@ class IsRepGuiTableInitialization(object):
             fod_file_contents = self.create_fod_file()
             with open(fod_path, "w") as fod_output:
                 fod_output.write(fod_file_contents)
+        except IOError:
+            self.err_messenger("Permission denied! Choose another working folder!")
+            return
+
+        sample_1_title = self.parent.ui.sample_1_title.text().strip()
+        sample_1_ini_path = os.path.join(working_dir, sample_1_title + '.ini')
+        try:
+            sample_1_ini_contents = self.create_sample_ini_file(sample_1_title, self.sample_info['sample_1'])
+            with open(sample_1_ini_path, "w") as sample_1_ini_out:
+                sample_1_ini_out.write(sample_1_ini_contents)
+        except IOError:
+            self.err_messenger("Permission denied! Choose another working folder!")
+            return
+
+        sample_2_title = self.parent.ui.sample_2_title.text().strip()
+        sample_2_ini_path = os.path.join(working_dir, sample_2_title + '.ini')
+        try:
+            sample_2_ini_contents = self.create_sample_ini_file(sample_2_title, self.sample_info['sample_2'])
+            with open(sample_2_ini_path, "w") as sample_2_ini_out:
+                sample_2_ini_out.write(sample_2_ini_contents)
         except IOError:
             self.err_messenger("Permission denied! Choose another working folder!")
             return
@@ -301,6 +426,34 @@ class IsRepGuiTableInitialization(object):
             "fourier_range_r": self.parent.ui.ff_rrange.text(),
             "fourier_range_q": self.parent.ui.ff_qrange.text(),
             "ratio": self.parent.ui.secondary_scattering_ratio.text()
+        }
+
+        return out_string.format(**kwargs)
+
+    def create_sample_ini_file(self, sample_title, sample_info):
+        '''
+        Creates sample ini file input as string to write to output file handle
+        :return: sample ini file input to save to file handle
+        :rtype: str
+        '''
+        out_string = (
+            "{sample_title}  # sample title\n"
+            "{sample_formula}  # # sample formula\n"
+            "{mass_density}  # mass density\n"
+            "{radius}  # radius\n"
+            "{packing_fraction}  # packing fraction\n"
+            "{sample_shape}  # sample shape\n"
+            "{absorption_corr}  # do abskorr in IDL"
+        )
+
+        kwargs = {
+            "sample_title": sample_title,
+            "sample_formula": sample_info['formula'],
+            "mass_density": sample_info['md'],
+            "radius": sample_info['radius'],
+            "packing_fraction": sample_info['pf'],
+            "sample_shape": sample_info['ss'],
+            "absorption_corr": sample_info['abs']
         }
 
         return out_string.format(**kwargs)
