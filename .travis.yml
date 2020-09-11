@@ -11,6 +11,8 @@ cache:
 matrix:
   include:
   - os: linux
+    env: CONDA=2.7
+  - os: linux
     env: CONDA=3.6.7
 
 before_install:
@@ -34,14 +36,10 @@ install:
   - conda config --set always_yes yes --set changeps1 no --set anaconda_upload no
   - conda config --add channels conda-forge --add channels marshallmcdonnell --add channels mantid --add channels mantid/label/nightly
 
-    # Install mamba
-  - conda install mamba -c conda-forge
-  - mamba update mamba -c conda-forge
-
 script:
     # TEST: Create test environment
-  - mamba create -q -n addie_test python=$CONDA mantid-workbench>=4.2 --file requirements.txt --file requirements-dev.txt
-  - mamba info --envs
+  - conda create -q -n addie_test python=$CONDA mantid-workbench>=4.2 --file requirements.txt --file requirements-dev.txt
+  - conda info --envs
   - conda activate addie_test
   - python --version
 
