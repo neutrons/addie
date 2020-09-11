@@ -4,3 +4,4 @@ pytest
 pytest-mpl
 pytest-qt
 simplejson
+typing
