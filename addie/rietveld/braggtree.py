@@ -236,6 +236,34 @@ class BraggTree(base.CustomizedTreeView):
         item_list = [str(item.text()) for item in item_list]
         item_list.sort()
 
+        # ZYP -> If both parent and children are selected from the tree, we want
+        # to get rid of children from the selected wks list. Meanwhile, we want
+        # to check the box corresponding to the selected children.
+        leaf_dict_temp = self._main_window.rietveld_ui.treeWidget_braggWSList._leafDict
+        for item_temp in item_list:
+            if item_temp not in list(leaf_dict_temp.keys()):
+                parent_found = False
+                for key, list_temp in leaf_dict_temp.items():
+                    for item_temp_1 in list_temp:
+                        if item_temp in item_temp_1:
+                            bank_temp = list_temp.index(item_temp_1) + 1
+                            self._main_window._braggBankWidgets[bank_temp].setChecked(True)
+                            parent_found = True
+                            parent_in_tree = key
+                            break
+                    if parent_found:
+                        break
+                if parent_in_tree not in item_list:
+                    item_list.append(parent_in_tree)
+        
+        item_list_temp = []
+        for item_temp in item_list:
+            if item_temp in list(leaf_dict_temp.keys()):
+                item_list_temp.append(item_temp)
+        item_list = item_list_temp
+
+        item_list.sort()
+
         # FIXME/LATER - replace this by signal
         if self._main_window is not None:
             print("do_plot_ws: item_list", item_list)
@@ -317,11 +345,39 @@ class BraggTree(base.CustomizedTreeView):
         """
         # get selected nodes
         selected_nodes = self.get_selected_items()
+        selected_nodes = [str(item.text()) for item in selected_nodes]
+
+        # ZYP -> If both parent and children are selected from the tree, we want
+        # to get rid of children from the selected wks list. Meanwhile, we want
+        # to check the box corresponding to the selected children.
+        leaf_dict_temp = self._main_window.rietveld_ui.treeWidget_braggWSList._leafDict
+        for item_temp in selected_nodes:
+            if item_temp not in list(leaf_dict_temp.keys()):
+                parent_found = False
+                for key, list_temp in leaf_dict_temp.items():
+                    for item_temp_1 in list_temp:
+                        if item_temp in item_temp_1:
+                            bank_temp = list_temp.index(item_temp_1) + 1
+                            self._main_window._braggBankWidgets[bank_temp].setChecked(True)
+                            parent_found = True
+                            parent_in_tree = key
+                            break
+                    if parent_found:
+                        break
+                if parent_in_tree not in selected_nodes:
+                    selected_nodes.append(parent_in_tree)
+        
+        selected_nodes_temp = []
+        for item_temp in selected_nodes:
+            if item_temp in list(leaf_dict_temp.keys()):
+                selected_nodes_temp.append(item_temp)
+        selected_nodes = selected_nodes_temp
 
         # set to plot
         for gss_group_node in selected_nodes:
-            gss_group_name = str(gss_group_node.text())
-            self._main_window.set_bragg_ws_to_plot(gss_group_name)
+            # gss_group_name = str(gss_group_node.text())
+            # self._main_window.set_bragg_ws_to_plot(gss_group_name)
+            self._main_window.set_bragg_ws_to_plot(gss_group_node)
 
     def get_current_main_nodes(self):
         """
