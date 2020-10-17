@@ -261,16 +261,24 @@ def plot_bragg_bank(main_window):
         # multiple GSAS file/single bank mode: get GSAS group from tree
         gss_group_list = main_window.rietveld_ui.treeWidget_braggWSList.get_main_nodes()
         gss_group_list.remove('workspaces')
-
     else:
         # single GSAS file mode
         status, ret_obj = main_window.rietveld_ui.treeWidget_braggWSList.get_current_main_nodes()
+        # ZYP -> Sometimes, it can happen that the returned `status` here is
+        # `True`, but we have empty `ret_obj`. So we need to tackle such a
+        # situation. Since this will happen when multiple GSS files exist in wks,
+        # and therefore when this happens, we just simply roll into the multiple GSS mode.
         if status:
-            gss_group = ret_obj[0]
+            if len(ret_obj) > 0:
+                gss_group = ret_obj[0]
+            else:
+                gss_group_list = main_window.rietveld_ui.treeWidget_braggWSList.get_main_nodes()
+                gss_group_list.remove('workspaces')
         else:
             raise RuntimeError(
                 'Unable to get current selected main node(s) due to {0}.'.format(ret_obj))
-        gss_group_list = [gss_group]
+        if len(ret_obj) > 0:
+            gss_group_list = [gss_group]
 
     # remove banks from plot
     for gss_group_name in gss_group_list:
@@ -282,22 +290,42 @@ def plot_bragg_bank(main_window):
     for ws_group in gss_group_list:
         plot_data_dict[ws_group] = new_bank_list[:]
 
+    # ZYP -> Check whether selected bank (to plot) exists or not.
+    # ZYP -> If not, no action will be taken and msg will be printed out to terminal.
+    banks_checker_ok = True
+    leaf_dict_temp = main_window.rietveld_ui.treeWidget_braggWSList._leafDict
+    for ws_group in gss_group_list:
+        for bank_to_check in plot_data_dict[ws_group]:
+            if int(bank_to_check) > len(leaf_dict_temp[ws_group]):
+                print("Bank-{0} not existing in {1} and therefore not to be plotted.".format(bank_to_check, ws_group))
+                banks_checker_ok = False
+                break
+
     if plot_multi_gss:
         main_window.rietveld_ui.graphicsView_bragg.set_to_single_gss(False)
     else:
         main_window.rietveld_ui.graphicsView_bragg.set_to_single_gss(True)
         status, ws_name_list = main_window.rietveld_ui.treeWidget_braggWSList.get_current_main_nodes()
+        # ZYP -> Sometimes, it can happen that the returned `status` here is
+        # `True`, but we have empty `ret_obj`. So we need to tackle such a
+        # situation. Since this will happen when multiple GSS files exist in wks,
+        # and therefore when this happens, we just simply roll into the multiple GSS mode.
+        if len(ws_name_list) == 0:
+            ws_name_list = main_window.rietveld_ui.treeWidget_braggWSList.get_main_nodes()
+            ws_name_list.remove("workspaces")
         plot_data_dict = {ws_name_list[0]: plot_data_dict[ws_name_list[0]]}
 
     # plot new
-    main_window.rietveld_ui.graphicsView_bragg.plot_banks(
-        plot_data_dict, main_window._currBraggXUnit)
+    # ZYP -> Check whether selected bank (to plot) exists or not.
+    if banks_checker_ok:
+        main_window.rietveld_ui.graphicsView_bragg.plot_banks(
+            plot_data_dict, main_window._currBraggXUnit)
 
-    # reset
-    reset_bragg_data_range(main_window, main_window._currBraggXUnit)
+        # reset
+        reset_bragg_data_range(main_window, main_window._currBraggXUnit)
 
-    # rescale
-    do_rescale_bragg(main_window)
+        # rescale
+        do_rescale_bragg(main_window)
 
 
 def do_rescale_bragg(main_window):
@@ -526,10 +554,18 @@ def plot_bragg(main_window, ws_list, bankIds, clear_canvas=False):
 
     # plot all workspsaces
     plot_data_dict = dict()
+    leaf_dict_temp = main_window.rietveld_ui.treeWidget_braggWSList._leafDict
     for bragg_ws_name in ws_list:
         # construct dictionary for plotting
         # main_window._myController.get_bank_numbers(ws_group)
-        plot_data_dict[bragg_ws_name] = bankIds
+        to_plot = []
+        for bank_temp in bankIds:
+            if int(bank_temp) <= len(leaf_dict_temp[bragg_ws_name]):
+                to_plot.append(bank_temp)
+            else:
+                print("Bank-{0} not existing in {1} and therefore not to be plotted.".format(bank_temp, bragg_ws_name))
+        # plot_data_dict[bragg_ws_name] = bankIds
+        plot_data_dict[bragg_ws_name] = to_plot
 
     # plot
     main_window.rietveld_ui.graphicsView_bragg.plot_banks(
