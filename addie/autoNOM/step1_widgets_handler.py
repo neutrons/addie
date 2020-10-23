@@ -4,7 +4,7 @@ from __future__ import (absolute_import, division, print_function)
 class Step1WidgetsHandler(object):
 
     def __init__(self, parent=None):
-        self.parent = parent.ui
+        self.parent = parent.autonom_ui
         self.parent_no_ui = parent
 
     def set_recalibration(self, status):
