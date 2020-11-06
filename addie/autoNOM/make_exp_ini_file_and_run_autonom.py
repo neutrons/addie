@@ -24,7 +24,8 @@ class MakeExpIniFileAndRunAutonom(object):
 
     def __init__(self, parent=None, folder=None):
         self.parent_no_ui = parent
-        self.parent = parent.ui
+        # self.parent = parent.ui
+        self.parent = parent.autonom_ui
         self.folder = folder
 
     def create(self):
@@ -207,7 +208,8 @@ class MakeExpIniFileAndRunAutonom(object):
         _script_to_run = self.script_to_run + self.script_flag
         os.chdir(self.folder)
 
-        o_gui = Step1GuiHandler(parent=self.parent_no_ui)
+        # o_gui = Step1GuiHandler(parent=self.parent_no_ui)
+        o_gui = Step1GuiHandler(main_window=self.parent_no_ui)
         o_gui.set_main_window_title()
 
         _dict_mandatory = self._dict_mandatory

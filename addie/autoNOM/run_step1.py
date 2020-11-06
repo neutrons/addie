@@ -13,7 +13,8 @@ class RunStep1(object):
     auto_folder_base_name = 'autoNOM'
 
     def __init__(self, parent=None, run_autonom=True):
-        self.parent = parent.ui
+        # self.parent = parent.ui
+        self.parent = parent.autonom_ui
         self.parent_no_ui = parent
         self.run_autonom = run_autonom
 
