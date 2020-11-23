@@ -84,6 +84,8 @@ def load_sq(main_window):
         sq_file_name = str(sq_file_name)
         sq_ws_name, q_min, q_max = main_window._myController.load_sq(
             sq_file_name)
+        if sq_ws_name == "InvalidInput" and q_min == 0 and q_max == 0:
+            return
         # add to color management
         color = main_window._pdfColorManager.add_sofq(sq_ws_name)
 
