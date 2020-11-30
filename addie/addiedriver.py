@@ -431,10 +431,14 @@ class AddieDriver(object):
                 InputWorkspace=sq_ws_name,
                 OutputWorkspace=sq_ws_name)  # TODO REMOVE THIS LINE
         elif ext == 'DAT' or ext == 'txt':
-            simpleapi.LoadAscii(
-                Filename=file_name,
-                OutputWorkspace=sq_ws_name,
-                Unit='MomentumTransfer')
+            try:
+                simpleapi.LoadAscii(
+                    Filename=file_name,
+                    OutputWorkspace=sq_ws_name,
+                    Unit='MomentumTransfer')
+            except RuntimeError:
+                sq_ws_name, q_min, q_max = "InvalidInput", 0, 0
+                return sq_ws_name, q_min, q_max
             # The S(Q) file is in fact S(Q)-1 in sq file.  So need to add 1 to
             # the workspace
             out_ws = AnalysisDataService.retrieve(sq_ws_name)
