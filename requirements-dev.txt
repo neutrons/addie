@@ -1,7 +1,7 @@
 flake8
 mock
-pytest
-pytest-mpl
-pytest-qt
-simplejson
+pytest==6.2
+pytest-mpl==0.12
+pytest-qt==3.3
+simplejson==3.17
 typing

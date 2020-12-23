@@ -1,5 +1,4 @@
-mantid-total-scattering
 periodictable
-psutil
-qtpy
-simplejson
+psutil==5.8
+qtpy==1.6
+simplejson==3.17
