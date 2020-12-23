@@ -1,6 +1,6 @@
 | CI     | Release |
 |--------|---------|
-|  | [![Anaconda-Server Badge](https://anaconda.org/addie-diffraction/addie/badges/version.svg)](https://anaconda.org/addie-diffraction/addie) | 
+| [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fneutrons%2Faddie%2Fbadge&style=plastic)](https://actions-badge.atrox.dev/neutrons/addie/goto)  | [![Anaconda-Server Badge](https://anaconda.org/addie-diffraction/addie/badges/version.svg)](https://anaconda.org/addie-diffraction/addie) | 
 |  | [![Anaconda-Server Badge](https://anaconda.org/addie-diffraction/addie/badges/platforms.svg)](https://anaconda.org/addie-diffraction/addie) | 
 
 ADDIE
