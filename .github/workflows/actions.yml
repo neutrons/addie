@@ -1,4 +1,4 @@
-name: addie_feature_branch
+name: addie_ci
 
 env: {}
 
@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-18.04]
+        os: [ubuntu-18.04, ubuntu-20.04]
         python-version: ["3.6"]
 
     steps:
