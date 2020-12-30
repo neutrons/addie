@@ -3,6 +3,9 @@ name: addie_ci
 env: {}
 
 on:
+  pull_request:
+    branches:
+      - '*'
   push:
     branches:
       - '*'
