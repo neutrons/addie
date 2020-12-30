@@ -7,6 +7,9 @@ import addie.utilities.workspaces
 import addie.calculate_gr.edit_sq_dialog
 from addie.calculate_gr.save_sq_dialog_message import SaveSqDialogMessageDialog
 from addie.widgets.filedialog import get_save_file
+from mantid.api import AnalysisDataService
+import mantid.simpleapi as simpleapi
+from pystog import Transformer, FourierFilter
 
 
 def check_widgets_status(main_window, enable_gr_widgets=False):
@@ -207,8 +210,35 @@ def generate_gr_step2(main_window, sq_ws_name_list):
     # loop for all selected S(Q)
     for sq_ws_name in sq_ws_name_list:
         # calculate G(r)
-        gr_ws_name = main_window._myController.calculate_gr(
+        gr_ws_name_temp = main_window._myController.calculate_gr(
             sq_ws_name,
+            pdf_type,
+            min_r,
+            delta_r,
+            max_r,
+            min_q,
+            max_q,
+            pdf_filter,
+            rho0)
+        # Fourier filter
+        out_ws_temp = AnalysisDataService.retrieve(sq_ws_name)
+        out_ws_r_temp = AnalysisDataService.retrieve(gr_ws_name_temp)
+        r_in = out_ws_r_temp.readX(0)
+        q_in = out_ws_temp.readX(0)
+        sq_in = out_ws_temp.readY(0)
+        transformer = Transformer()
+        r_in, gr_in = transformer.S_to_G(q_in, sq_in, r_in)
+        ff = FourierFilter()
+        # 'rho' here is for internal transformation only. Its value does not
+        # matter in this case and therefore it is set to 1 ANYHOW.
+        q_ft, sq_ft, q_out, sq_out, r_out, gr_out = ff.G_using_S(r_in, gr_in,
+                                                                 q_in, sq_in,
+                                                                 min_r, rho=1)
+        sq_ws_ff_name = simpleapi.CreateWorkspace(DataX=q_out, DataY=sq_out,
+                                                  NSpec=1,
+                                                  unitX="MomentumTransfer")
+        gr_ws_name = main_window._myController.calculate_gr(
+            str(sq_ws_ff_name),
             pdf_type,
             min_r,
             delta_r,
