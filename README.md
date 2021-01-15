@@ -13,12 +13,19 @@ This "reduction" entails taking raw neutron counts from detectors in the diffrac
 
 ADDIE is a front-end GUI for total scattering that hopes to support multiple diffractometers performing total scattering measurements. The back-end that uses the [Mantid Framework](https://docs.mantidproject.org/nightly/) is the [`mantid-total-scattering`](https://github.com/marshallmcdonnell/mantid_total_scattering) project.
 
-## Installation
+## Install
 
 ```
 conda config --add channels conda-forge --add channels marshallmcdonnell --add channels mantid --add channels mantid/label/nightly
 conda create -n addie_env python=${python_version}
 source activate addie_env
+```
+
+## Uninstall
+
+```
+conda deactivate
+conda remove -n addie_env --all
 ```
 
 ## Launch 
@@ -43,6 +50,12 @@ MANTIDPATH=/path/to/mantid/build/bin PATH=$MANTIDPATH:$PATH PYTHONPATH=$MANTIDPA
 conda env create
 source activate addie
 python setup.py install
+```
+### Uninstall
+
+```
+conda deactivate
+conda remove -n addie --all
 ```
 
 **Notes**
