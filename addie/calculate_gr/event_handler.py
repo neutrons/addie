@@ -209,24 +209,24 @@ def generate_gr_step2(main_window, sq_ws_name_list):
 
     # loop for all selected S(Q)
     for sq_ws_name in sq_ws_name_list:
+        # calculate G(r)
+        gr_ws_name = main_window._myController.calculate_gr(
+            sq_ws_name,
+            pdf_type,
+            min_r,
+            delta_r,
+            max_r,
+            min_q,
+            max_q,
+            pdf_filter,
+            rho0)
         if main_window.calculategr_ui.ff_check.checkState() == 2:
             if rho0 is None:
                 print("WARNING: rho0 is not a float. Necessary for applying meaningful Fourier filter.")
                 return
-            # calculate G(r)
-            gr_ws_name_temp = main_window._myController.calculate_gr(
-                sq_ws_name,
-                pdf_type,
-                min_r,
-                delta_r,
-                max_r,
-                min_q,
-                max_q,
-                pdf_filter,
-                rho0)
             # Fourier filter
             out_ws_temp = AnalysisDataService.retrieve(sq_ws_name)
-            out_ws_r_temp = AnalysisDataService.retrieve(gr_ws_name_temp)
+            out_ws_r_temp = AnalysisDataService.retrieve(gr_ws_name)
             r_in = out_ws_r_temp.readX(0)
             q_in = out_ws_temp.readX(0)
             sq_in = out_ws_temp.readY(0)
@@ -254,18 +254,6 @@ def generate_gr_step2(main_window, sq_ws_name_list):
             plot_sq(main_window, new_sq_wks, color=None, clear_prev=False)
             gr_ws_name = main_window._myController.calculate_gr(
                 new_sq_wks,
-                pdf_type,
-                min_r,
-                delta_r,
-                max_r,
-                min_q,
-                max_q,
-                pdf_filter,
-                rho0)
-        else:
-            # calculate G(r)
-            gr_ws_name = main_window._myController.calculate_gr(
-                sq_ws_name,
                 pdf_type,
                 min_r,
                 delta_r,

@@ -278,6 +278,8 @@ class MainWindow(QMainWindow):
     global_key_value = {}
     align_and_focus_powder_from_files_blacklist = []
 
+    idl_modes = ("idl", "idl_dev")
+
     def __init__(self, parent=None, processing_mode=None):
         """ Initialization
         Parameters

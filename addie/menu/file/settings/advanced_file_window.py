@@ -33,7 +33,7 @@ class AdvancedWindow(QMainWindow):
     def init_widgets(self):
         _idl_status = False
         _mantid_status = False
-        if self.parent.post_processing in ("idl", "idl_dev"):
+        if self.parent.post_processing in self.parent.idl_modes:
             _idl_status = True
         else:
             _mantid_status = True
