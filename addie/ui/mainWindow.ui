@@ -450,8 +450,8 @@
   <slot>run_ndabs_clicked()</slot>
   <slot>populate_table_clicked()</slot>
   <slot>check_plazcek_widgets()</slot>
-  <slot>hidrogen_clicked()</slot>
-  <slot>no_hidrogen_clicked()</slot>
+  <slot>hydrogen_clicked()</slot>
+  <slot>no_hydrogen_clicked()</slot>
   <slot>check_fourier_filter_widgets()</slot>
   <slot>create_sample_properties_files_clicked()</slot>
   <slot>yes_background_clicked()</slot>

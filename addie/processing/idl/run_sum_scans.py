@@ -6,13 +6,19 @@ from addie.processing.idl.step2_gui_handler import Step2GuiHandler
 
 class RunSumScans(object):
 
-    script = 'python  /SNS/NOM/shared/autoNOM/stable/sumscans.py '
     output_file = ''
 
     def __init__(self, parent=None):
         self.parent = parent.ui.postprocessing_ui
         self.parent_no_ui = parent
+        self.o_gui_handler = Step2GuiHandler(main_window=self.parent_no_ui)
         self.folder = os.getcwd()
+        self.set_sum_scans_script()
+
+    def set_sum_scans_script(self):
+        self.script_path = self.o_gui_handler.get_sum_scans_script()
+        self.script = 'python ' + self.script_path
+        print("SumScans: ", self.script)
 
     def run(self):
         self._background = self.collect_background_runs()
@@ -30,12 +36,13 @@ class RunSumScans(object):
         print("[LOG] " + _script_to_run)
 
     def add_script_flags(self):
+        self.set_sum_scans_script()
         _script = self.script
 
         if not self.parent.interactive_mode_checkbox.isChecked():
-            _script += "-n True"
-        if self.parent.pytest.isChecked():
-            _script += "-u True"
+            _script += " -n True "
+        if self.parent_no_ui._is_sum_scans_python_checked:
+            _script += " -u True "
 
         qmax_list = str(self.parent.pdf_qmax_line_edit.text()).strip()
         if not (qmax_list == ""):
@@ -45,9 +52,9 @@ class RunSumScans(object):
 
     def create_output_file(self):
         _output_file_name = "sum_" + self.parent.sum_scans_output_file_name.text() + ".inp"
-#        print("_output_file_name: {}".format(_output_file_name))
+        # print("_output_file_name: {}".format(_output_file_name))
         _full_output_file_name = os.path.join(self.folder, _output_file_name)
- #       print("_full_output_file_name: {}".format(_full_output_file_name))
+        # print("_full_output_file_name: {}".format(_full_output_file_name))
         self.full_output_file_name = _full_output_file_name
 
         f = open(_full_output_file_name, 'w')
@@ -61,7 +68,7 @@ class RunSumScans(object):
 
         # hydrogen flag
         plattype_flag = 0
-        if o_gui_handler.is_hidrogen_clicked():
+        if o_gui_handler.is_hydrogen_clicked():
             plattype_flag = 2
         f.write("platype {}\n".format(plattype_flag))
 

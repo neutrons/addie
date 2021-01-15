@@ -27,6 +27,7 @@ class MakeExpIniFileAndRunAutonom(object):
         # self.parent = parent.ui
         self.parent = parent.autonom_ui
         self.folder = folder
+        self.script_to_run = "python " + parent._autonom_script + " -l -P " + parent.idl_script_dir
 
     def create(self):
         self.retrieve_metadata()
@@ -208,6 +209,7 @@ class MakeExpIniFileAndRunAutonom(object):
         _script_to_run = self.script_to_run + self.script_flag
         os.chdir(self.folder)
 
+        print("[LOG] " + _script_to_run)
         # o_gui = Step1GuiHandler(parent=self.parent_no_ui)
         o_gui = Step1GuiHandler(main_window=self.parent_no_ui)
         o_gui.set_main_window_title()

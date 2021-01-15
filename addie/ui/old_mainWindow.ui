@@ -5946,7 +5946,7 @@ p, li { white-space: pre-wrap; }
    <sender>hydrogen_no</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>no_hidrogen_clicked()</slot>
+   <slot>no_hydrogen_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>1107</x>
@@ -6026,7 +6026,7 @@ p, li { white-space: pre-wrap; }
    <sender>hydrogen_yes</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>hidrogen_clicked()</slot>
+   <slot>hydrogen_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>937</x>
@@ -6452,8 +6452,8 @@ p, li { white-space: pre-wrap; }
   <slot>run_ndabs_clicked()</slot>
   <slot>populate_table_clicked()</slot>
   <slot>check_plazcek_widgets()</slot>
-  <slot>hidrogen_clicked()</slot>
-  <slot>no_hidrogen_clicked()</slot>
+  <slot>hydrogen_clicked()</slot>
+  <slot>no_hydrogen_clicked()</slot>
   <slot>check_fourier_filter_widgets()</slot>
   <slot>create_sample_properties_files_clicked()</slot>
   <slot>yes_background_clicked()</slot>

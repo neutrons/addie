@@ -54,7 +54,7 @@ def help_about_clicked(main_window):
 
 
 def activate_reduction_tabs(main_window):
-    if main_window.post_processing == 'idl':
+    if main_window.post_processing in ("idl", "idl_dev"):
         tab_0 = True
         tab_1 = True
         tab_2 = False
