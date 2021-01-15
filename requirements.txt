@@ -1,4 +1,5 @@
 periodictable
 psutil==5.8
+pystog==0.3.0
 qtpy==1.6
 simplejson==3.17
