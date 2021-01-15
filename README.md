@@ -1,10 +1,9 @@
-| CI     | Release |
-|--------|---------|
-| [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fneutrons%2Faddie%2Fbadge&style=plastic)](https://actions-badge.atrox.dev/neutrons/addie/goto)  | [![Anaconda-Server Badge](https://anaconda.org/addie-diffraction/addie/badges/version.svg)](https://anaconda.org/addie-diffraction/addie) | 
-|  | [![Anaconda-Server Badge](https://anaconda.org/addie-diffraction/addie/badges/platforms.svg)](https://anaconda.org/addie-diffraction/addie) | 
+| CI     | Release | Other |
+|--------|---------|-------|
+| [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fneutrons%2Faddie%2Fbadge&style=plastic)](https://actions-badge.atrox.dev/neutrons/addie/goto)  | [![Anaconda-Server Badge](https://anaconda.org/addie-diffraction/addie/badges/version.svg)](https://anaconda.org/addie-diffraction/addie) | [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT) |
+|  | [![Anaconda-Server Badge](https://anaconda.org/addie-diffraction/addie/badges/platforms.svg)](https://anaconda.org/addie-diffraction/addie) | |
 
-ADDIE
-======
+# ADDIE
 
 **ADDIE** stands for **AD**vandced **DI**ffraction **E**nvironment, a data reduction application for total scattering powder diffraction data. 
 
@@ -14,14 +13,7 @@ This "reduction" entails taking raw neutron counts from detectors in the diffrac
 
 ADDIE is a front-end GUI for total scattering that hopes to support multiple diffractometers performing total scattering measurements. The back-end that uses the [Mantid Framework](https://docs.mantidproject.org/nightly/) is the [`mantid-total-scattering`](https://github.com/marshallmcdonnell/mantid_total_scattering) project.
 
-Installation
-------------
-
-### Anaconda
-
-**Setup** 
-
-Add channels with dependencies, create a conda environment with `python_version` set to either `2.7.14` or `3.6`, and activate the environment
+## Install
 
 ```
 conda config --add channels conda-forge --add channels marshallmcdonnell --add channels mantid --add channels mantid/label/nightly
@@ -29,34 +21,14 @@ conda create -n addie_env python=${python_version}
 source activate addie_env
 ```
 
-**Install (or Update)**
+## Uninstall
 
 ```
-conda install -c addie-diffraction addie 
+conda deactivate
+conda remove -n addie_env --all
 ```
 
-If there are issues with `mantid-workbench` or `mantid-total-scattering`  dependencies (broken, errors, etc.), then you can delete the environment and re-install `addie` in a new environment ("turn it off and back on again")
-
-Go here for how to delete an [environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#removing-an-environment) or use:
-
-```
-conda remove --name addie_env --all
-```
-
-**Notes**
-
-If you have an error (see below for example) related to the `libGL` library, you may not have it installed for the Mantid Framework to work. See instructions [here](https://github.com/mantidproject/conda-recipes/#gl-and-glu-libs) for installing the necessary libraries for different OS
-
-Example error:
-`ImportError: First import of "._api" failed with "libGL.so.1: cannot open shared object file...`
-
-If you have an error that another version of Mantid is installed on the machine and being imported via `PYTHONPATH`, you can use the following as a workaround for CLI tool:
-
-```
-PYTHONPATH="" addie
-```
-
-# Usage (CLI reduction tool)
+## Launch 
 
 To launch ADDIE, run the following from the command line:
 
@@ -70,30 +42,34 @@ MANTIDPATH=/path/to/mantid/build/bin PATH=$MANTIDPATH:$PATH PYTHONPATH=$MANTIDPA
 ```
 
 
-Development
-------------
+## Development
 
-### Building
 
-Before doing the normal `python setup.py ...` things you must convert the
-`designer/*.ui` files to `addie*.py`. This is done with
-`python setup.py pyuic`. After that, all the normal
-[setuptools](https://pythonhosted.org/setuptools/setuptools.html) magic applies.
-
-To run from source (step 1 only needs to be done if the `.ui` file changes):
-```bash
-$ addiedevel.sh
+### Installation development environment using Conda
 ```
-If you are want to specify a different `mantidpython`, then add it as
-a command line argument
-```bash
-$ addiedevel.sh /opt/mantid37/bin/mantidpython
+conda env create
+source activate addie
+python setup.py install
+```
+### Uninstall
+
+```
+conda deactivate
+conda remove -n addie --all
 ```
 
-Similarly, there is a script for windows (experimental)
+**Notes**
+
+If you have an error (see below for example) related to the `libGL` library, you may not have it installed for the Mantid Framework to work. See instructions [here](https://github.com/mantidproject/conda-recipes/#gl-and-glu-libs) for installing the necessary libraries for different OS
+
+Example error:
+
 ```
-addiedevel.bat
+ImportError: First import of "._api" failed with "libGL.so.1: cannot open shared object file...
 ```
+
+
+### Testing
 
 The test suite can be run using [pytest](https://docs.pytest.org/en/latest/)
 with the [pytest-qt](https://pytest-qt.readthedocs.io/en/latest/) plugin.
@@ -102,8 +78,7 @@ $ pytest tests
 ```
 
 
-Developing using virtual environments
--------------------------------------
+### Developing using a local Mantid install
 
 If you normally develop using `virtualenv` or friends, you can develop
 addie that way as well. After creating the virtual environment, run
@@ -138,8 +113,7 @@ echo layout_pipenv > .envrc
 direnv allow
 ```
 
-Creating RPMs
--------------
+## Creating RPMs
 
 Python generated `srpm` are not as flexible as they should be. To
 generate one that is run `buildrpm` and look for the files in the
@@ -151,4 +125,3 @@ $ ./buildrpm
 [copr](https://copr.fedorainfracloud.org/coprs/peterfpeterson/addie/).
 
 
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
