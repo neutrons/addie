@@ -231,7 +231,9 @@ def generate_gr_step2(main_window, sq_ws_name_list):
             q_in = out_ws_temp.readX(0)
             sq_in = out_ws_temp.readY(0)
             transformer = Transformer()
-            r_in, gr_in = transformer.S_to_G(q_in, sq_in, r_in)
+            import pystog
+            print("PYSTOG:", pystog.__file__)
+            r_in, gr_in, dg_in = transformer.S_to_G(q_in, sq_in, r_in)
             ff = FourierFilter()
             r_cutoff_ff_text = main_window.calculategr_ui.lineEdit_rcutoff.text()
             try:
@@ -240,15 +242,21 @@ def generate_gr_step2(main_window, sq_ws_name_list):
                 print("WARNING: rcutoff is not a float. Necessary for applying Fourier filter.")
                 return
 
-            q_ft, sq_ft, q_out, sq_out, r_out, gr_out = ff.G_using_S(r_in, gr_in,
-                                                                     q_in, sq_in,
-                                                                     r_cutoff_ff,
-                                                                     rho=rho0)
+            q_ft, sq_ft, q_out, sq_out, r_out, gr_out, dsq_ft, dsq, dgr = ff.G_using_S(
+                r_in,
+                gr_in,
+                q_in,
+                sq_in,
+                r_cutoff_ff,
+                rho=rho0)
+
             new_sq_wks = sq_ws_name + "_ff_rcutoff_" + r_cutoff_ff_text.replace(".", "p")
-            simpleapi.CreateWorkspace(DataX=q_out, DataY=sq_out,
-                                      OutputWorkspace=new_sq_wks,
-                                      NSpec=1,
-                                      unitX="MomentumTransfer")
+            simpleapi.CreateWorkspace(
+                DataX=q_out,
+                DataY=sq_out,
+                OutputWorkspace=new_sq_wks,
+                NSpec=1,
+                unitX="MomentumTransfer")
             main_window.calculategr_ui.treeWidget_grWsList.add_sq(new_sq_wks)
             main_window.calculategr_ui.treeWidget_grWsList._workspaceNameList.append(new_sq_wks)
             plot_sq(main_window, new_sq_wks, color=None, clear_prev=False)
