@@ -28,7 +28,7 @@ jobs:
         with:
           auto-update-conda: true
           python-version: ${{ matrix.python-version }} 
-          channels: marshallmcdonnell,conda-forge,mantid
+          channels: marshallmcdonnell,conda-forge,mantid,neutrons
 
       - name: Apt install deps
         run: sudo apt-get install xvfb freeglut3-dev libglu1-mesa
