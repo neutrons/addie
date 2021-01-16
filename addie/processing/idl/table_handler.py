@@ -90,7 +90,8 @@ class TableHandler(object):
         _refresh_table = -1
         _clear_table = -1
         # _import = -1
-        # _export = -1        _check_all = -1
+        # _export = -1
+        _check_all = -1
         _uncheck_all = -1
         _undo = -1
         _redo = -1

@@ -34,14 +34,14 @@ class Step2GuiHandler(object):
             self.main_window.current_folder = _new_folder
             self.main_window.setWindowTitle(_new_folder)
 
-    def is_hidrogen_clicked(self):
+    def is_hydrogen_clicked(self):
         return self.main_window.postprocessing_ui.hydrogen_yes.isChecked()
 
-    def hidrogen_clicked(self):
+    def hydrogen_clicked(self):
         _range = self.hidrogen_range
         self.populate_hidrogen_range(_range)
 
-    def no_hidrogen_clicked(self):
+    def no_hydrogen_clicked(self):
         _range = self.no_hidrogen_range
         self.populate_hidrogen_range(_range)
 
@@ -112,6 +112,9 @@ class Step2GuiHandler(object):
         else:
             _output_file_name = self.default_ndabs_output_file_name
         return _output_file_name
+
+    def get_sum_scans_script(self):
+        return self.main_window._sum_scans_script
 
     def check_import_export_buttons(self):
         _export_status = False

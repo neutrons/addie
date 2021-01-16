@@ -811,7 +811,7 @@
    <sender>hydrogen_yes</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>hidrogen_clicked()</slot>
+   <slot>hydrogen_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>785</x>
@@ -827,7 +827,7 @@
    <sender>hydrogen_no</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>no_hidrogen_clicked()</slot>
+   <slot>no_hydrogen_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>868</x>
@@ -986,8 +986,8 @@
  </connections>
  <slots>
   <slot>populate_table_clicked()</slot>
-  <slot>hidrogen_clicked()</slot>
-  <slot>no_hidrogen_clicked()</slot>
+  <slot>hydrogen_clicked()</slot>
+  <slot>no_hydrogen_clicked()</slot>
   <slot>no_background_clicked()</slot>
   <slot>yes_background_clicked()</slot>
   <slot>background_combobox_changed()</slot>

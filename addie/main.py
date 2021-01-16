@@ -278,6 +278,8 @@ class MainWindow(QMainWindow):
     global_key_value = {}
     align_and_focus_powder_from_files_blacklist = []
 
+    idl_modes = ("idl", "idl_dev")
+
     def __init__(self, parent=None, processing_mode=None):
         """ Initialization
         Parameters
@@ -362,6 +364,16 @@ class MainWindow(QMainWindow):
 
         # color management
         self._pdfColorManager = PDFPlotManager()
+
+        # IDL config scripts
+        idl_script_dir = "/SNS/NOM/shared/autoNOM/stable/"
+        if self.post_processing == "idl_dev":
+            idl_script_dir = "/SNS/NOM/shared/autoNOM/dev/"
+        self.idl_script_dir = idl_script_dir
+        self._autonom_script = os.path.join(idl_script_dir, "autoNOM.py")
+        self._sum_scans_script = os.path.join(idl_script_dir, "sumscans.py")
+        self._ndabs_script = os.path.join(idl_script_dir, "NDabs.py")
+        self._is_sum_scans_python_checked = False
 
         # Connecting all the widgets
         main_tab_events_handler.run(main_window=self)
@@ -581,13 +593,13 @@ class MainWindow(QMainWindow):
         _o_gui = Step2GuiHandler(main_window=self)
         _o_gui.check_gui()
 
-    def hidrogen_clicked(self):
+    def hydrogen_clicked(self):
         o_gui = Step2GuiHandler(main_window=self)
-        o_gui.hidrogen_clicked()
+        o_gui.hydrogen_clicked()
 
-    def no_hidrogen_clicked(self):
+    def no_hydrogen_clicked(self):
         o_gui = Step2GuiHandler(main_window=self)
-        o_gui.no_hidrogen_clicked()
+        o_gui.no_hydrogen_clicked()
 
     def yes_background_clicked(self):
         o_gui = Step2GuiHandler(main_window=self)
@@ -996,7 +1008,8 @@ def main(config=None):
             help='Set processing mode (default=%(default)s)',
             choices=[
                 'mantid',
-                'idl'])
+                'idl',
+                'idl_dev'])
 
         try:  # set up bash completion as a soft dependency
             import argcomplete  # noqa

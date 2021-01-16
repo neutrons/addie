@@ -15,8 +15,8 @@ def run(main_window=None):
     main_window.postprocessing_ui.pushButton.clicked.connect(main_window.reset_q_range)
     main_window.postprocessing_ui.plazcek_fit_range_max.editingFinished.connect(main_window.check_plazcek_widgets)
     main_window.postprocessing_ui.plazcek_fit_range_min.editingFinished.connect(main_window.check_plazcek_widgets)
-    main_window.postprocessing_ui.hydrogen_no.clicked.connect(main_window.no_hidrogen_clicked)
-    main_window.postprocessing_ui.hydrogen_yes.clicked.connect(main_window.hidrogen_clicked)
+    main_window.postprocessing_ui.hydrogen_no.clicked.connect(main_window.no_hydrogen_clicked)
+    main_window.postprocessing_ui.hydrogen_yes.clicked.connect(main_window.hydrogen_clicked)
     main_window.postprocessing_ui.fourier_filter_from.editingFinished.connect(main_window.check_fourier_filter_widgets)
     main_window.postprocessing_ui.fourier_filter_to.editingFinished.connect(main_window.check_fourier_filter_widgets)
     main_window.postprocessing_ui.run_ndabs_output_file_name.textChanged['QString'].connect(

@@ -73,9 +73,9 @@ class RunStep1(object):
 
         self._make_folder(_full_path)
         if self.run_autonom:
-            self.parent.statusbar.showMessage("Created folder: " + _full_path + " and running autoNOM script !")
+            self.parent_no_ui.ui.statusbar.showMessage("Created folder: " + _full_path + " and running autoNOM script !")
         else:
-            self.parent.statusbar.showMessage("Created folder: " + _full_path)
+            self.parent_no_ui.ui.statusbar.showMessage("Created folder: " + _full_path)
 
     def retrieve_last_incremented_index(self, list_folder):
         _list_index = []

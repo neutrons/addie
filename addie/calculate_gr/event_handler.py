@@ -7,6 +7,9 @@ import addie.utilities.workspaces
 import addie.calculate_gr.edit_sq_dialog
 from addie.calculate_gr.save_sq_dialog_message import SaveSqDialogMessageDialog
 from addie.widgets.filedialog import get_save_file
+from mantid.api import AnalysisDataService
+import mantid.simpleapi as simpleapi
+from pystog import Transformer, FourierFilter
 
 
 def check_widgets_status(main_window, enable_gr_widgets=False):
@@ -217,6 +220,56 @@ def generate_gr_step2(main_window, sq_ws_name_list):
             max_q,
             pdf_filter,
             rho0)
+        if main_window.calculategr_ui.ff_check.checkState() == 2:
+            if rho0 is None:
+                print("WARNING: rho0 is not a float. Necessary for applying meaningful Fourier filter.")
+                return
+            # Fourier filter
+            out_ws_temp = AnalysisDataService.retrieve(sq_ws_name)
+            out_ws_r_temp = AnalysisDataService.retrieve(gr_ws_name)
+            r_in = out_ws_r_temp.readX(0)
+            q_in = out_ws_temp.readX(0)
+            sq_in = out_ws_temp.readY(0)
+            transformer = Transformer()
+            import pystog
+            print("PYSTOG:", pystog.__file__)
+            r_in, gr_in, dg_in = transformer.S_to_G(q_in, sq_in, r_in)
+            ff = FourierFilter()
+            r_cutoff_ff_text = main_window.calculategr_ui.lineEdit_rcutoff.text()
+            try:
+                r_cutoff_ff = float(r_cutoff_ff_text)
+            except ValueError:
+                print("WARNING: rcutoff is not a float. Necessary for applying Fourier filter.")
+                return
+
+            q_ft, sq_ft, q_out, sq_out, r_out, gr_out, dsq_ft, dsq, dgr = ff.G_using_S(
+                r_in,
+                gr_in,
+                q_in,
+                sq_in,
+                r_cutoff_ff,
+                rho=rho0)
+
+            new_sq_wks = sq_ws_name + "_ff_rcutoff_" + r_cutoff_ff_text.replace(".", "p")
+            simpleapi.CreateWorkspace(
+                DataX=q_out,
+                DataY=sq_out,
+                OutputWorkspace=new_sq_wks,
+                NSpec=1,
+                unitX="MomentumTransfer")
+            main_window.calculategr_ui.treeWidget_grWsList.add_sq(new_sq_wks)
+            main_window.calculategr_ui.treeWidget_grWsList._workspaceNameList.append(new_sq_wks)
+            plot_sq(main_window, new_sq_wks, color=None, clear_prev=False)
+            gr_ws_name = main_window._myController.calculate_gr(
+                new_sq_wks,
+                pdf_type,
+                min_r,
+                delta_r,
+                max_r,
+                min_q,
+                max_q,
+                pdf_filter,
+                rho0)
 
         # check whether G(r) is in GofR plot to either update or add new plot
         update = main_window.calculategr_ui.graphicsView_gr.has_gr(gr_ws_name)

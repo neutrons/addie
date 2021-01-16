@@ -19,6 +19,7 @@ requirements:
     - periodictable
     - psutil
     - python
+    - pystog
     - setuptools
     - simplejson
 
@@ -29,6 +30,7 @@ requirements:
     - periodictable
     - psutil
     - python
+    - pystog
     - simplejson
 
 test:
