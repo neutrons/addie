@@ -31,7 +31,9 @@ jobs:
           channels: marshallmcdonnell,conda-forge,mantid,neutrons
 
       - name: Apt install deps
-        run: sudo apt-get install xvfb freeglut3-dev libglu1-mesa
+        run: |
+          sudo apt update
+          sudo apt-get install xvfb freeglut3-dev libglu1-mesa
 
       - name: Conda install deps
         shell: bash -l {0}
