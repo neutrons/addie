@@ -38,6 +38,7 @@ jobs:
       - name: Conda install deps
         shell: bash -l {0}
         run: |
+          conda config --remove channels defaults
           conda install -c conda-forge nexus==4.4.3
           conda install -c conda-forge poco==1.7.3
           conda install mantid-workbench
