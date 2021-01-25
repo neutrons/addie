@@ -28,7 +28,7 @@ jobs:
         with:
           auto-update-conda: true
           python-version: ${{ matrix.python-version }} 
-          channels: marshallmcdonnell,conda-forge,mantid,neutrons
+          channels: neutrons,conda-forge,mantid,neutrons
 
       - name: Apt install deps
         run: |

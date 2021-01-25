@@ -11,12 +11,12 @@ The name came about from being developed for the Diffraction Group at SNS locate
 
 This "reduction" entails taking raw neutron counts from detectors in the diffraction experiment and turning them into the reciprocal-space structure factor patterns, F(Q) or S(Q), and applying a Fourier Transform to real-space to give the pair distribution fuction, PDF.
 
-ADDIE is a front-end GUI for total scattering that hopes to support multiple diffractometers performing total scattering measurements. The back-end that uses the [Mantid Framework](https://docs.mantidproject.org/nightly/) is the [`mantid-total-scattering`](https://github.com/marshallmcdonnell/mantid_total_scattering) project.
+ADDIE is a front-end GUI for total scattering that hopes to support multiple diffractometers performing total scattering measurements. The back-end that uses the [Mantid Framework](https://docs.mantidproject.org/nightly/) is the [`mantid-total-scattering`](https://github.com/neutrons/mantid_total_scattering) project.
 
 ## Install
 
 ```
-conda config --add channels conda-forge --add channels marshallmcdonnell --add channels mantid --add channels mantid/label/nightly
+conda config --add channels conda-forge --add channels neutrons --add channels mantid --add channels mantid/label/nightly
 conda create -n addie_env python=${python_version}
 source activate addie_env
 ```
