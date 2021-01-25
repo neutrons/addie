@@ -1,7 +1,7 @@
 name: addie
 channels:
 - conda-forge
-- marshallmcdonnell
+- neutrons 
 - mantid
 dependencies:
 - python=3.6

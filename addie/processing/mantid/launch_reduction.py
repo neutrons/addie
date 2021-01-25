@@ -5,7 +5,7 @@ from mantidqt.utils.asynchronous import AsyncTask
 from addie.processing.mantid.master_table.master_table_exporter import TableFileExporter as MantidTableExporter
 
 # Mantid Total Scattering integration
-# (https://github.com/marshallmcdonnell/mantid_total_scattering)
+# (https://github.com/neutrons/mantid_total_scattering)
 try:
     import total_scattering
     print("Mantid Total Scattering Version: ", total_scattering.__version__)
