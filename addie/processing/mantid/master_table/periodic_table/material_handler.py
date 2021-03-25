@@ -44,8 +44,7 @@ def get_periodictable_formatted_element_and_number_of_atoms(element):
             number_of_atoms = np.float(
                 m3.group('stochiometric_coefficient'))
         return ["{}[{}]{}".format(m3.group('isotope_element'), m3.group('isotope_number'),
-                                  m3.group('stochiometric_coefficient')),
-                                  number_of_atoms, case]
+                                  m3.group('stochiometric_coefficient')), number_of_atoms, case]
 
     raise ValueError
 
