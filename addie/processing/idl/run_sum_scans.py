@@ -2,11 +2,19 @@ from __future__ import (absolute_import, division, print_function)
 import os
 from qtpy.QtCore import Qt
 from addie.processing.idl.step2_gui_handler import Step2GuiHandler
+from addie.processing.mantid.master_table.periodic_table.material_handler import get_periodictable_formatted_element_and_number_of_atoms
+import numpy as np
+import re
 
 
 class RunSumScans(object):
 
     output_file = ''
+    # Variable for Jeorg's new routine, controlling maximum r one could get to.
+    # For almost all situations, we don't need to change it, but it is good to
+    # put the variable explicitly just in case we may need to change it for
+    # whatever reason in the future.
+    q_interval_min = 0.02
 
     def __init__(self, parent=None):
         self.parent = parent.ui.postprocessing_ui
@@ -22,7 +30,14 @@ class RunSumScans(object):
 
     def run(self):
         self._background = self.collect_background_runs()
-        self._runs = self.collect_runs_checked()
+        collect_return = self.collect_runs_checked()
+        self._runs = collect_return[0]
+        self._runs_name = collect_return[1]
+        self._sam_formula = collect_return[2]
+        self._mass_den = collect_return[3]
+        self._radius = collect_return[4]
+        self._pack_frac = collect_return[5]
+        self._geom = collect_return[6]
         self.create_output_file()
         self.run_script()
 
@@ -94,17 +109,61 @@ class RunSumScans(object):
         f.close()
         print("[LOG] created file %s" % _full_output_file_name)
 
+        # redpar file
+        for _label in self._runs:
+            f = open(self._runs_name[_label] + ".redpar", "w")
+            chem_form_temp = self._sam_formula[_label]
+            list_element = chem_form_temp.split(" ")
+            formated_ele_list = []
+            for _element in list_element:
+                [formated_element, number_of_atoms, case] = get_periodictable_formatted_element_and_number_of_atoms(_element)
+                formated_ele_list.append(formated_element)
+            sample_form_str = ""
+            for item in formated_ele_list:
+                if case == 1:
+                    to_append = item + "_"
+                elif case == 2:
+                    to_append = re.findall('[A-Z][a-z]*', item)[-1]
+                    to_append += ("_" + re.findall('[0-9]+', item)[-1] + "_")
+                else:
+                    to_append = item.split("[")[1].split("]")[0] + item.split("[")[0] + "_" + item.split("]")[1] + "_"
+                sample_form_str += to_append
+            sample_form_str = sample_form_str[:-1]
+            f.write("{0:13s}{1:<s}\n".format("formula", sample_form_str))
+            f.write("{0:13s}{1:<s}\n".format("massdensity", self._mass_den[_label]))
+            f.write("{0:13s}{1:<s}\n".format("radius", self._radius[_label]))
+            f.write("{0:13s}{1:<s}\n".format("packfrac", self._pack_frac[_label]))
+            f.write("{0:13s}{1:<s}\n".format("geometry", self._geom[_label]))
+            [r_range_min, r_range_max] = o_gui_handler.get_r_range()
+            r_max_possible = "{0:6.2F}".format(np.pi / self.q_interval_min)
+            if r_range_min and r_range_max:
+                f.write("{0:13s}{1:<s}\n".format("rfilter", r_range_min + "," + r_range_max + "," + r_max_possible))
+            if q_range_min and q_range_max:
+                f.write("{0:13s}{1:<s}\n".format("qfilter", q_range_min + "," + q_range_max))
+            f.close()
+
     def collect_runs_checked(self):
         table = self.parent.table
+        _runs_name = {}
         _runs = {}
+        _sam_formula = {}
+        _mass_den = {}
+        _radius = {}
+        _pack_frac = {}
+        _geom = {}
         for _row_index in range(table.rowCount()):
             _selected_widget = table.cellWidget(_row_index, 0).children()[1]
             if (_selected_widget.checkState() == Qt.Checked):
-                _label = str(table.item(_row_index, 1).text())
-                _value = str(table.item(_row_index, 2).text())
-                _runs[_label] = _value
+                _runs = self.load_table(_runs, table, _row_index, 2)
+                # for Joerg's new script.
+                _runs_name = self.load_table(_runs_name, table, _row_index, 1)
+                _sam_formula = self.load_table(_sam_formula, table, _row_index, 3)
+                _mass_den = self.load_table(_mass_den, table, _row_index, 4)
+                _radius = self.load_table(_radius, table, _row_index, 5)
+                _pack_frac= self.load_table(_pack_frac, table, _row_index, 6)
+                _geom = self.load_table(_geom, table, _row_index, 7)
 
-        return _runs
+        return [_runs, _runs_name, _sam_formula, _mass_den, _radius, _pack_frac, _geom]
 
     def collect_background_runs(self):
         if self.parent.background_no.isChecked():
@@ -112,3 +171,16 @@ class RunSumScans(object):
         else:
             _background = str(self.parent.background_line_edit.text())
         return _background
+
+    def load_table(self, dict_in, table_in, row, col):
+        _label = str(table_in.item(row, 1).text())
+        if col != 7:
+            _value = str(table_in.item(row, col).text())
+        else:
+            _widget = table_in.cellWidget(row, col)
+            _selected_index = _widget.currentIndex()
+            _value = _widget.itemText(_selected_index)
+        dict_in[_label] = _value
+
+        return dict_in
+
