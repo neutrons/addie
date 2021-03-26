@@ -2,7 +2,8 @@ from __future__ import (absolute_import, division, print_function)
 import os
 from qtpy.QtCore import Qt
 from addie.processing.idl.step2_gui_handler import Step2GuiHandler
-from addie.processing.mantid.master_table.periodic_table.material_handler import get_periodictable_formatted_element_and_number_of_atoms
+from addie.processing.mantid.master_table.periodic_table.material_handler \
+    import get_periodictable_formatted_element_and_number_of_atoms
 import numpy as np
 import re
 
@@ -178,4 +179,3 @@ class RunSumScans(object):
             dict_in[_label]["geometry"] = _value
 
         return dict_in
-
