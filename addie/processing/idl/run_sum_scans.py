@@ -30,14 +30,7 @@ class RunSumScans(object):
 
     def run(self):
         self._background = self.collect_background_runs()
-        collect_return = self.collect_runs_checked()
-        self._runs = collect_return[0]
-        self._runs_name = collect_return[1]
-        self._sam_formula = collect_return[2]
-        self._mass_den = collect_return[3]
-        self._radius = collect_return[4]
-        self._pack_frac = collect_return[5]
-        self._geom = collect_return[6]
+        self._runs = self.collect_runs_checked()
         self.create_output_file()
         self.run_script()
 
@@ -75,7 +68,7 @@ class RunSumScans(object):
         f = open(_full_output_file_name, 'w')
 
         for _label in self._runs:
-            f.write("%s %s\n" % (_label, self._runs[_label]))
+            f.write("%s %s\n" % (_label, self._runs[_label]["runs"]))
         f.write("endsamples\n")
         f.write("Background %s\n" % self._background)
 
@@ -111,8 +104,8 @@ class RunSumScans(object):
 
         # redpar file
         for _label in self._runs:
-            f = open(self._runs_name[_label] + ".redpar", "w")
-            chem_form_temp = self._sam_formula[_label]
+            f = open(self._runs[_label]["sam_name"] + ".redpar", "w")
+            chem_form_temp = self._runs[_label]["sam_formula"]
             list_element = chem_form_temp.split(" ")
             formated_ele_list = []
             for _element in list_element:
@@ -130,10 +123,10 @@ class RunSumScans(object):
                 sample_form_str += to_append
             sample_form_str = sample_form_str[:-1]
             f.write("{0:13s}{1:<s}\n".format("formula", sample_form_str))
-            f.write("{0:13s}{1:<s}\n".format("massdensity", self._mass_den[_label]))
-            f.write("{0:13s}{1:<s}\n".format("radius", self._radius[_label]))
-            f.write("{0:13s}{1:<s}\n".format("packfrac", self._pack_frac[_label]))
-            f.write("{0:13s}{1:<s}\n".format("geometry", self._geom[_label]))
+            f.write("{0:13s}{1:<s}\n".format("massdensity", self._runs[_label]["mass_density"]))
+            f.write("{0:13s}{1:<s}\n".format("radius", self._runs[_label]["radius"]))
+            f.write("{0:13s}{1:<s}\n".format("packfrac", self._runs[_label]["packing_fraction"]))
+            f.write("{0:13s}{1:<s}\n".format("geometry", self._runs[_label]["geometry"]))
             [r_range_min, r_range_max] = o_gui_handler.get_r_range()
             r_max_possible = "{0:6.2F}".format(np.pi / self.q_interval_min)
             if r_range_min and r_range_max:
@@ -144,26 +137,17 @@ class RunSumScans(object):
 
     def collect_runs_checked(self):
         table = self.parent.table
-        _runs_name = {}
         _runs = {}
-        _sam_formula = {}
-        _mass_den = {}
-        _radius = {}
-        _pack_frac = {}
-        _geom = {}
         for _row_index in range(table.rowCount()):
             _selected_widget = table.cellWidget(_row_index, 0).children()[1]
+            _label = str(table.item(_row_index, 1).text())
+            _runs[_label] = {}
             if (_selected_widget.checkState() == Qt.Checked):
-                _runs = self.load_table(_runs, table, _row_index, 2)
                 # for Joerg's new script.
-                _runs_name = self.load_table(_runs_name, table, _row_index, 1)
-                _sam_formula = self.load_table(_sam_formula, table, _row_index, 3)
-                _mass_den = self.load_table(_mass_den, table, _row_index, 4)
-                _radius = self.load_table(_radius, table, _row_index, 5)
-                _pack_frac= self.load_table(_pack_frac, table, _row_index, 6)
-                _geom = self.load_table(_geom, table, _row_index, 7)
+                for i in range(7):
+                    _runs = self.load_table(_runs, table, _label, _row_index, i + 1)
 
-        return [_runs, _runs_name, _sam_formula, _mass_den, _radius, _pack_frac, _geom]
+        return _runs
 
     def collect_background_runs(self):
         if self.parent.background_no.isChecked():
@@ -172,15 +156,26 @@ class RunSumScans(object):
             _background = str(self.parent.background_line_edit.text())
         return _background
 
-    def load_table(self, dict_in, table_in, row, col):
-        _label = str(table_in.item(row, 1).text())
+    def load_table(self, dict_in, table_in, _label, row, col):
         if col != 7:
             _value = str(table_in.item(row, col).text())
+            if col == 1:
+                dict_in[_label]["sam_name"] = _value
+            elif col == 2:
+                dict_in[_label]["runs"] = _value
+            elif col == 3:
+                dict_in[_label]["sam_formula"] = _value
+            elif col == 4:
+                dict_in[_label]["mass_density"] = _value
+            elif col == 5:
+                dict_in[_label]["radius"] = _value
+            elif col == 6:
+                dict_in[_label]["packing_fraction"] = _value
         else:
             _widget = table_in.cellWidget(row, col)
             _selected_index = _widget.currentIndex()
             _value = _widget.itemText(_selected_index)
-        dict_in[_label] = _value
+            dict_in[_label]["geometry"] = _value
 
         return dict_in
 
