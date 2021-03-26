@@ -21,27 +21,30 @@ def get_periodictable_formatted_element_and_number_of_atoms(element):
     regular_expression_1 = r'^(?P<stable_element>[A-Z]{1}[a-z]{0,1}$)'
     m1 = re.search(regular_expression_1, element)
     if m1 is not None:
-        return [m1.group('stable_element'), 1.]
+        case = 1
+        return [m1.group('stable_element'), 1., case]
 
     # stable with stochiometric coefficient
     regular_expression_2 = r'^(?P<stable_element>[A-Z]{1}[a-z]{0,1})(?P<stochiometric_coefficient>\d*\.{0,1}\d*)$'
     m2 = re.search(regular_expression_2, element)
     if m2 is not None:
+        case = 2
         return ["{}{}".format(m2.group('stable_element'), m2.group('stochiometric_coefficient')),
-                np.float(m2.group('stochiometric_coefficient'))]
+                np.float(m2.group('stochiometric_coefficient')), case]
 
     # isotope with or without stochiometric coefficient
     regular_expression_3 = r'\((?P<isotope_element>[A-Z]{1}[a-z]{0,1})(?P<isotope_number>\d+)\)' \
                            r'(?P<stochiometric_coefficient>\d*\.{0,1}\d*)'
     m3 = re.search(regular_expression_3, element)
     if m3 is not None:
+        case = 3
         if m3.group('stochiometric_coefficient') == "":
             number_of_atoms = 1.
         else:
             number_of_atoms = np.float(
                 m3.group('stochiometric_coefficient'))
         return ["{}[{}]{}".format(m3.group('isotope_element'), m3.group('isotope_number'),
-                                  m3.group('stochiometric_coefficient')), number_of_atoms]
+                                  m3.group('stochiometric_coefficient')), number_of_atoms, case]
 
     raise ValueError
 

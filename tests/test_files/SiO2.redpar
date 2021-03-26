@@ -1,0 +1,7 @@
+formula      Si_1_O_2
+massdensity  2.5
+radius       0.15
+packfrac     0.7
+geometry     Cylinder
+rfilter      1.5,50,157.08
+qfilter      0.2,31.4
