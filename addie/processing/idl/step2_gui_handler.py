@@ -60,10 +60,10 @@ class Step2GuiHandler(object):
         q_range_max = self.main_window.postprocessing_ui.q_range_max.text().strip()
         return [q_range_min, q_range_max]
 
-    def get_r_range(self):
+    def get_r_range(self, r_max_possible):
         r_range_min = self.main_window.postprocessing_ui.fourier_filter_from.text().strip()
         r_range_max = self.main_window.postprocessing_ui.fourier_filter_to.text().strip()
-        return [r_range_min, r_range_max]
+        return [r_range_min, r_range_max, r_max_possible]
 
     def step2_background_flag(self):
         if self.main_window.postprocessing_ui.background_no.isChecked():
