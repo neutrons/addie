@@ -205,7 +205,8 @@ class RunSumScans(object):
             else:
                 for _label_1 in runs_in[_label]:
                     if runs_in[_label][_label_1] == "":
-                        print("[Warning] {0:s} info not provided for {1:s} and thus redpar file will not be created.".format(_label_1, _label))
+                        print("[Warning] {0:s} info not provided for {1:s}".format(_label_1, _label))
+                        print("[Warning] Hence the redpar file will not be created.")
                         return False
 
         return True
