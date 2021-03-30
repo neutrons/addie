@@ -198,7 +198,7 @@ class RunSumScans(object):
                 if any(runs_in[_label]) == "":
                     print("[Warning] R range info not provided and thus redpar file will not be created.")
                     return False
-            if _label == "q_range":
+            elif _label == "q_range":
                 if any(runs_in[_label]) == "":
                     print("[Warning] Q range info not provided and thus redpar file will not be created.")
                     return False
