@@ -120,7 +120,6 @@ class RunSumScans(object):
         formated_ele_list = []
         for _element in list_element:
             [formated_element, number_of_atoms, case] = format_ele(_element)
-            print("Debugging -> ", formated_element,number_of_atoms,case)
             formated_ele_list.append(formated_element)
         sample_form_str = ""
         for item in formated_ele_list:
