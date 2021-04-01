@@ -108,10 +108,11 @@ class RunSumScans(object):
         r_range = o_gui_handler.get_r_range(r_max_possible)
         self._runs["r_range"] = r_range
         self._runs["q_range"] = [q_range_min, q_range_max]
-        for _label in self._runs:
-            if _label != "r_range" and _label != "q_range":
-                self._runs = self.collect_info_for_redpar(self._runs, _label)
-                self.write_redpar(self._runs, _label)
+        if self.validate_table(self._runs):
+            for _label in self._runs:
+                if _label != "r_range" and _label != "q_range":
+                    self._runs = self.collect_info_for_redpar(self._runs, _label)
+                    self.write_redpar(self._runs, _label)
 
     def collect_info_for_redpar(self, runs_info, _label):
         chem_form_temp = runs_info[_label]["sam_formula"]
@@ -146,6 +147,7 @@ class RunSumScans(object):
                 f.write("{0:13s}{1:<s}\n".format("rfilter", ",".join(runs_info["r_range"])))
             if None not in runs_info["q_range"]:
                 f.write("{0:13s}{1:<s}\n".format("qfilter", ",".join(runs_info["q_range"])))
+        print("[LOG] created redpar file {}".format(file_name))
 
     def collect_runs_checked(self):
         table = self.parent.table
@@ -153,8 +155,8 @@ class RunSumScans(object):
         for _row_index in range(table.rowCount()):
             _selected_widget = table.cellWidget(_row_index, 0).children()[1]
             _label = str(table.item(_row_index, 1).text())
-            _runs[_label] = {}
             if (_selected_widget.checkState() == Qt.Checked):
+                _runs[_label] = {}
                 # for Joerg's new script.
                 for i in range(7):
                     _runs = self.load_table(_runs, table, _label, _row_index, i + 1)
@@ -190,3 +192,22 @@ class RunSumScans(object):
             dict_in[_label]["geometry"] = _value
 
         return dict_in
+
+    def validate_table(self, runs_in):
+        for _label in runs_in:
+            if _label == "r_range":
+                if any(runs_in[_label]) == "":
+                    print("[Warning] R range info not provided and thus redpar file will not be created.")
+                    return False
+            elif _label == "q_range":
+                if any(runs_in[_label]) == "":
+                    print("[Warning] Q range info not provided and thus redpar file will not be created.")
+                    return False
+            else:
+                for _label_1 in runs_in[_label]:
+                    if runs_in[_label][_label_1] == "":
+                        print("[Warning] {0:s} info not provided for {1:s}".format(_label_1, _label))
+                        print("[Warning] Hence the redpar file will not be created.")
+                        return False
+
+        return True
