@@ -75,7 +75,7 @@ class TableInitialization:
 
         _table_config = TableConfig(main_window=self.main_window)
         current_config = _table_config.get_current_config()
- 
+
         inside_dict = OrderedDict()
         inside_dict['table'] = current_config
         inside_dict['active'] = False
