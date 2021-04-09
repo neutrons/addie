@@ -20,6 +20,8 @@ from addie.processing.mantid.master_table.tree_definition import (INDEX_OF_COLUM
 
 class TableRowHandler:
 
+    inserted_row = -1
+
     def __init__(self, main_window=None):
         self.main_window = main_window
         self.table_ui = main_window.processing_ui.h3_table
@@ -27,6 +29,7 @@ class TableRowHandler:
     def insert_blank_row(self):
         row = self._calculate_insert_row()
         self.insert_row(row=row)
+        self.inserted_row = row
 
     def transfer_widget_states(self, from_key=None, data_type='sample'):
         o_transfer = TransferH3TableWidgetState(parent=self.main_window)

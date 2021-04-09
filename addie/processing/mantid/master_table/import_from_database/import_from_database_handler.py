@@ -123,9 +123,6 @@ class ImportFromDatabaseWindow(QMainWindow):
         self.ui.ipts_combobox.addItems(list_ipts)
 
     def init_widgets(self):
-        if self.parent.oncat is None:
-            return
-
         self.ui.tableWidget.setColumnHidden(0, True)
 
         self.ui.error_message.setStyleSheet("color: red")
@@ -137,6 +134,11 @@ class ImportFromDatabaseWindow(QMainWindow):
 
         self.ui.search_logo_label.setPixmap(QtGui.QPixmap(":/MPL Toolbar/search_icon.png"))
         self.ui.clear_search_button.setIcon(QtGui.QIcon(":/MPL Toolbar/clear_icon.png"))
+
+        # With this verification sitting on the top of currnet method, all icons
+        # above will fail to load at first launching.
+        if self.parent.oncat is None:
+            return
 
         for _col, _width in enumerate(self.filter_column_widths):
             self.ui.tableWidget.setColumnWidth(_col, _width)
@@ -480,6 +482,8 @@ class ImportFromDatabaseWindow(QMainWindow):
         o_search = TableSearchEngine(table_ui=self.ui.tableWidget_all_runs)
         list_row_matching_string = o_search.locate_string(new_text)
 
+        self.list_row_to_show = list_row_matching_string
+
         o_table = TableHandler(table_ui=self.ui.tableWidget_all_runs)
         o_table.show_list_of_rows(list_of_rows=list_row_matching_string)
 
@@ -490,7 +494,7 @@ class ImportFromDatabaseWindow(QMainWindow):
     def toolbox_changed(self, index):
         if index == 0:
             self.nexus_json = {}
-            self.ui.import_button.setText("Import All Runs")
+            self.ui.import_button.setText("Import All Listed Runs")
         elif index == 1:
             self.ui.import_button.setText("Import Filtered Runs")
             self.refresh_filter_page()

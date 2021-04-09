@@ -84,7 +84,7 @@ def pyoncatGetIptsList(oncat=None,
         instrument=instrument,
         projection=['id']
     )
-    return [ipts.name for ipts in ipts_list]
+    return [ipts.id for ipts in ipts_list]
 
 # if __name__ == "__main__":
 #     useRcFile = True
