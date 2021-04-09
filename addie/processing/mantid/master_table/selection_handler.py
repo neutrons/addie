@@ -306,9 +306,6 @@ class RowsHandler(SelectionHandlerMaster):
     def remove(self, row=None):
         if row is None:
             list_to_row = self.o_selection.get_list_row()
-            # if len(list_to_row) == 0:
-            #     print("[Info] No row(s) selected! Highlight any cell(s) in row(s) to remove followed by right click.")
-            #     return
             msg = "No row(s) selected! Highlight any cell(s) in row(s) to remove followed by right click."
             if not rows_selected(list_to_row, msg):
                 self.parent.ui.statusbar.setStyleSheet("color: red")
