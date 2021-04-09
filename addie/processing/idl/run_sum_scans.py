@@ -147,6 +147,7 @@ class RunSumScans(object):
                 f.write("{0:13s}{1:<s}\n".format("rfilter", ",".join(runs_info["r_range"])))
             if None not in runs_info["q_range"]:
                 f.write("{0:13s}{1:<s}\n".format("qfilter", ",".join(runs_info["q_range"])))
+        print("[LOG] created redpar file {}".format(file_name))
 
     def collect_runs_checked(self):
         table = self.parent.table
