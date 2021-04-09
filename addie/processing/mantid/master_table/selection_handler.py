@@ -250,8 +250,15 @@ class RowsHandler(SelectionHandlerMaster):
                 self.parent.ui.statusbar.showMessage(
                     "Please select only 1 row!", self.parent.statusbar_display_time)
                 return
+            elif len(list_row) == 0:
+                self.parent.ui.statusbar.setStyleSheet("color: red")
+                self.parent.ui.statusbar.showMessage(
+                    "Please select a row to copy from!", self.parent.statusbar_display_time)
+                return
 
             row = list_row[0]
+
+        self.parent.copied_row = row
 
         _table_ui = self.table_ui
         nbr_col = _table_ui.columnCount()
@@ -259,7 +266,7 @@ class RowsHandler(SelectionHandlerMaster):
         _table_ui.setRangeSelected(_row_selection, True)
         self.parent.ui.statusbar.setStyleSheet("color: green")
         self.parent.ui.statusbar.showMessage(
-            "Select another row to copy the current selected row!",
+            "Select another row to copy the current selected row to!",
             self.parent.statusbar_display_time)
 
         self.parent.master_table_cells_copy['temp'] = []
@@ -285,6 +292,11 @@ class RowsHandler(SelectionHandlerMaster):
         nbr_col = self.table_ui.columnCount()
         o_copy = CopyCells(parent=self.parent)
         list_column_copy = np.arange(0, nbr_col)
+        msg = "No row(s) selected. Highlight any cell(s) in row(s) to duplicate followed by right click."
+        if not rows_selected(list_to_row, msg):
+            self.parent.ui.statusbar.setStyleSheet("color: red")
+            self.parent.ui.statusbar.showMessage(msg, self.parent.statusbar_display_time)
+            return
         for _row in list_to_row:
             for _column in list_column_copy:
                 o_copy.copy_from_to(from_row=from_row,
@@ -294,6 +306,11 @@ class RowsHandler(SelectionHandlerMaster):
     def remove(self, row=None):
         if row is None:
             list_to_row = self.o_selection.get_list_row()
+            msg = "No row(s) selected! Highlight any cell(s) in row(s) to remove followed by right click."
+            if not rows_selected(list_to_row, msg):
+                self.parent.ui.statusbar.setStyleSheet("color: red")
+                self.parent.ui.statusbar.showMessage(msg, self.parent.statusbar_display_time)
+                return
             _first_row = list_to_row[0]
             for _ in list_to_row:
                 self.remove(row=_first_row)
@@ -386,6 +403,13 @@ class CellsHandler(SelectionHandlerMaster):
         list_row = self.o_selection.get_list_row()
         nbr_row = len(list_row)
 
+        if len(list_row) == 0:
+            msg = "No cells selected! Highlight columns in the same row followed by right click."
+            self.parent.ui.statusbar.setStyleSheet("color: red")
+            self.parent.ui.statusbar.showMessage(msg, self.parent.statusbar_display_time)
+            print("[Info] " + msg)
+            return
+
         if nbr_row > 1:
             self.parent.ui.statusbar.setStyleSheet("color: red")
             self.parent.ui.statusbar.showMessage(
@@ -429,7 +453,7 @@ class CellsHandler(SelectionHandlerMaster):
         if list_column_copy[0] != list_column_paste[0]:
             self.parent.ui.statusbar.setStyleSheet("color: red")
             self.parent.ui.statusbar.showMessage(
-                "Copy and Paste first column selected do not match!",
+                "The first column selected for Copy and Paste does not match!",
                 self.parent.statusbar_display_time)
             return
 
@@ -661,3 +685,10 @@ class TableHandler(SelectionHandlerMaster):
     def clear_search(self):
         self.parent.processing_ui.name_search_3.setText("")
         self.search("")
+
+
+def rows_selected(selected_rows, message):
+    if len(selected_rows) == 0 or any([item < 0 for item in selected_rows]):
+        print("[Info] " + message)
+        return False
+    return True

@@ -34,7 +34,8 @@ class DataToImportHandler:
         if self.is_with_filter():
             # work only with filtered runs
             list_of_rows_to_load = list(self.parent.list_of_rows_with_global_rule)
-
+        elif self.parent.ui.name_search.text() is not None or self.parent.ui.name_search.text() != "":
+            list_of_rows_to_load = self.parent.list_row_to_show
         else:
             # work with entire stack of runs
             nbr_rows = self.parent.ui.tableWidget_all_runs.rowCount()

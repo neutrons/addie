@@ -210,6 +210,8 @@ class MainWindow(QMainWindow):
                                'list_column': [],
                                'row': [],
                                }
+    table_inserted_row = -1
+    copied_row = -1
 
     table_headers = {'h1': [],
                      'h2': [],

@@ -18,6 +18,7 @@ from addie.processing.mantid.master_table.selection_handler import CellsHandler,
 from addie.processing.mantid.master_table.master_table_loader import TableFileLoader
 from addie.processing.mantid.master_table.master_table_exporter import TableFileExporter
 from addie.widgets.filedialog import get_save_file
+from addie.processing.mantid.master_table.selection_handler import rows_selected as rows_selected_valid
 try:
     from addie.processing.mantid.master_table.import_from_database.oncat_authentication_handler import OncatAuthenticationHandler
     import pyoncat  # noqa
@@ -71,6 +72,15 @@ class TableInitialization:
 
         self.make_tree_of_column_references()
         self.save_parameters()
+
+        _table_config = TableConfig(main_window=self.main_window)
+        current_config = _table_config.get_current_config()
+
+        inside_dict = OrderedDict()
+        inside_dict['table'] = current_config
+        inside_dict['active'] = False
+
+        self.main_window.reset_config_dict = inside_dict
 
     def init_signals(self):
         self.main_window.h1_header_table.sectionResized.connect(
@@ -776,13 +786,21 @@ class H3TableHandler:
     def rows_copy(self):
         '''copy entire row'''
         o_rows = RowsHandler(parent=self.main_window)
+        o_rows.parent.table_inserted_row = -1
+        o_rows.parent.copied_row = -1
         o_rows.copy()
         self.check_status_of_right_click_buttons()
 
     def rows_paste(self):
         '''paste entire row'''
         o_rows = RowsHandler(parent=self.main_window)
-        o_rows.paste()
+        if o_rows.parent.table_inserted_row == -1:
+            o_rows.paste()
+        else:
+            if o_rows.parent.table_inserted_row <= o_rows.parent.copied_row:
+                o_rows.parent.master_table_cells_copy['row'] += 1
+                o_rows.parent.copied_row += 1
+            o_rows.paste()
         self.check_status_of_right_click_buttons()
         self.main_window.check_master_table_column_highlighting()
 
@@ -795,14 +813,22 @@ class H3TableHandler:
 
     def rows_duplicate(self):
         '''duplicate currently selected rows'''
-        o_table_row = TableRowHandler(main_window=self.main_window)
-        o_table_row.insert_blank_row()
         o_row = RowsHandler(parent=self.main_window)
         row_selected = o_row.o_selection.top_row
-        o_row.copy(row=row_selected)
-        o_row.paste(row=row_selected - 1)
-        self.check_status_of_right_click_buttons()
-        self.main_window.check_master_table_column_highlighting()
+        msg = "No row(s) selected. Highlight any cell(s) in row(s) to duplicate followed by right click."
+        if not rows_selected_valid([row_selected], msg):
+            self.main_window.ui.statusbar.setStyleSheet("color: red")
+            self.main_window.ui.statusbar.showMessage(msg, self.main_window.statusbar_display_time)
+            return
+        else:
+            o_table_row = TableRowHandler(main_window=self.main_window)
+            o_table_row.insert_blank_row()
+            o_row = RowsHandler(parent=self.main_window)
+            row_selected = o_row.o_selection.top_row
+            o_row.copy(row=row_selected)
+            o_row.paste(row=row_selected - 1)
+            self.check_status_of_right_click_buttons()
+            self.main_window.check_master_table_column_highlighting()
 
     def refresh_table(self):
         '''reload the initial file'''
@@ -896,6 +922,7 @@ class H3TableHandler:
         '''insert a blank row'''
         o_row = TableRowHandler(main_window=self.main_window)
         o_row.insert_blank_row()
+        self.main_window.table_inserted_row = o_row.inserted_row
         self.check_status_of_right_click_buttons()
         self.main_window.check_master_table_column_highlighting()
 
