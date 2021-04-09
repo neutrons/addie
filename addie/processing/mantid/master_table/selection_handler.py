@@ -689,6 +689,7 @@ class TableHandler(SelectionHandlerMaster):
         self.parent.processing_ui.name_search_3.setText("")
         self.search("")
 
+
 def rows_selected(selected_rows, message):
     if len(selected_rows) == 0 or any([item < 0 for item in selected_rows]):
         print("[Info] " + message)

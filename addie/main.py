@@ -77,7 +77,6 @@ from addie.initialization.events import calculategr_tab as calculategr_tab_event
 from addie.rietveld import event_handler as rietveld_event_handler
 from addie.calculate_gr import event_handler as calculategr_event_handler
 
-from addie.processing.mantid.master_table.table_tree_handler import TableConfig
 
 class MainWindow(QMainWindow):
     """ Main addie window
