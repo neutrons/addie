@@ -75,6 +75,7 @@ from addie.initialization.events import rietveld_tab as rietveld_tab_events_hand
 from addie.initialization.events import calculategr_tab as calculategr_tab_events_handler
 
 from addie.rietveld import event_handler as rietveld_event_handler
+from addie.rietveld import braggtree as bragg_event_handler
 from addie.calculate_gr import event_handler as calculategr_event_handler
 
 
@@ -769,7 +770,7 @@ class MainWindow(QMainWindow):
         calculategr_event_handler.do_reset_gr_tab(self)
 
     def do_reset_gsas_tab(self):
-        calculategr_event_handler.do_reset_gsas_tab(self)
+        bragg_event_handler.BraggTree.do_reset_gsas_tab(self)
 
     def edit_sq(self, sq_name, scale_factor, shift):
         calculategr_event_handler.edit_sq(self, sq_name, scale_factor, shift)

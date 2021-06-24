@@ -179,11 +179,11 @@ def open_and_load_bragg_files(main_window):
 
 def check_rietveld_widgets(main_window):
     """enable or not the widgets according to status of plots"""
+
     if not main_window._onCanvasGSSBankList:
         enable_widgets = False
     else:
         enable_widgets = True
-
     ui = main_window.rietveld_ui
     ui.checkBox_bank1.setEnabled(enable_widgets)
     ui.checkBox_bank2.setEnabled(enable_widgets)
@@ -372,9 +372,11 @@ def switch_bragg_unit(main_window=None):
     # get data sets
     ws_group_list = main_window.rietveld_ui.treeWidget_braggWSList.get_selected_items_of_level(
         target_item_level=1, excluded_parent=None, return_item_text=True)
-    if 'workspace' in ws_group_list:
+    if 'workspaces' in ws_group_list:
         ws_group_list.remove('workspaces')
-    assert len(ws_group_list) > 0, 'At least 1 GSS file must be selected.'
+    if len(ws_group_list) == 0:
+        print("[Warning] At least 1 GSS file must be selected.")
+        return
 
     # check
     assert len(bank_list) == 1 or len(ws_group_list) == 1, 'Must be either single bank (%d now) or ' \

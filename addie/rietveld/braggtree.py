@@ -200,6 +200,10 @@ class BraggTree(base.CustomizedTreeView):
 
         ws_name = str(current_item.text())
 
+        if ws_name == "workspaces":
+            print("[Warning] No valid workspace selected.")
+            return
+
         python_cmd = "ws = mtd['%s']" % ws_name
 
         if self._main_window is not None:
@@ -212,15 +216,20 @@ class BraggTree(base.CustomizedTreeView):
         """
         # get selected nodes
         gsas_node_list = self.get_selected_items()
-
         for gsas_node in gsas_node_list:
             # delete the gsas group workspace (deletes sub-workspaces as well)
             gsas_name = str(gsas_node.text())
             gss_ws_name = gsas_name.split('_group')[0]
+            if gss_ws_name == "workspaces":
+                continue
             self._main_window.get_workflow().delete_workspace(gss_ws_name)
 
             # delete the node from the tree
             self.delete_node(gsas_node)
+        if len(self._mainNodeDict) == 1:
+            event_handler.do_clear_bragg_canvas(self._main_window)
+            self._main_window._onCanvasGSSBankList = []
+            event_handler.check_rietveld_widgets(self._main_window)
 
     def do_merge_to_gss(self):
         """
@@ -244,6 +253,10 @@ class BraggTree(base.CustomizedTreeView):
             msg = '[Error] Only 1 GSS node can be selected.'
             msg += 'Current selected nodes are {}.'
             print(msg.format(gss_node_list))
+            return
+
+        if str(gss_node_list[0]) == "workspaces":
+            print("[Warning] No valid workspace selected!")
             return
 
         # pop-out a file dialog for GSAS file's name
@@ -311,14 +324,14 @@ class BraggTree(base.CustomizedTreeView):
                                       gss_ws_name,
                                       gss_bank_names)
 
-    def do_reset_gsas_tab(self, main_window):
+    def do_reset_gsas_tab(main_window):
         """
         Reset the GSAS-tab including
         1. deleting all the GSAS workspaces
         2. clearing the GSAS tree
         3. clearing GSAS canvas
         """
-        bragg_list = main_window.calculategr_ui.treeWidget_braggWSList
+        bragg_list = main_window.rietveld_ui.treeWidget_braggWSList
 
         # delete all workspaces: get GSAS workspaces from tree
         gsas_group_node_list = bragg_list.get_main_nodes(output_str=False)
@@ -327,13 +340,6 @@ class BraggTree(base.CustomizedTreeView):
             gss_node_name = str(gsas_group_node.text())
             if gss_node_name == 'workspaces':
                 continue
-
-            # get the split workspaces' names and delete
-            gsas_ws_name_list = bragg_list.get_child_nodes(
-                gsas_group_node,
-                output_str=True)
-            for workspace in gsas_ws_name_list:
-                main_window._myController.delete_workspace(workspace)
 
             # guess for the main workspace and delete
             gss_main_ws = gss_node_name.split('_group')[0]
@@ -348,6 +354,8 @@ class BraggTree(base.CustomizedTreeView):
 
         # clear the canvas
         main_window.rietveld_ui.graphicsView_bragg.reset()
+        main_window._onCanvasGSSBankList = []
+        event_handler.check_rietveld_widgets(main_window)
 
     def do_select_gss_node(self):
         """
@@ -365,7 +373,9 @@ class BraggTree(base.CustomizedTreeView):
 
         # set to plot
         for gss_group_node in selected_nodes:
-            # gss_group_name = str(gss_group_node.text())
+            gss_group_name = str(gss_group_node)
+            if gss_group_name == "workspaces":
+                continue
             # self._main_window.set_bragg_ws_to_plot(gss_group_name)
             self._main_window.set_bragg_ws_to_plot(gss_group_node)
 
@@ -481,8 +491,8 @@ class BraggTree(base.CustomizedTreeView):
         assert isinstance(gss_wksps, list),  msg
 
         if len(gss_wksps) == 0:
-            raise RuntimeError(
-                'GSAS-single-bank workspace name list is empty!')
+            print("[Warning] GSAS-single-bank workspace name list is empty!")
+            return
 
         # get bank IDs
         bank_ids = list()
