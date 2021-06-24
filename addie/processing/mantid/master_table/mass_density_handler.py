@@ -166,83 +166,89 @@ class MassDensityWindow(QMainWindow):
         self.ui.volume_label.setText(str_volume)
 
     def mass_density_value_changed(self):
-        mass_density = np.float(self.ui.mass_density_line_edit.text())
-
-        # calculate number density if chemical formula defined
-        if self.chemical_formula_defined:
-            natoms = self.total_number_of_atoms
-            molecular_mass = self.total_molecular_mass
-            number_density = math_tools.mass_density2number_density(
-                mass_density, natoms, molecular_mass)
-            number_density = self._to_precision_string(number_density)
-        else:
-            number_density = 'N/A'
-
-        # calculate mass if geometry defined
-        if self.geometry_dimensions_defined:
-            volume = np.float(self.ui.volume_label.text())
-            mass = math_tools.mass_density2mass(mass_density, volume)
-            mass = self._to_precision_string(mass)
-        else:
-            mass = 'N/A'
-
-        self.ui.number_density_line_edit.setText(number_density)
-        self.ui.mass_line_edit.setText(mass)
-        self.update_status_of_save_button()
-
-    def number_density_value_changed(self):
-        number_density = np.float(self.ui.number_density_line_edit.text())
-
-        # calculate mass density if chemical formula defined
-        if self.chemical_formula_defined:
-            natoms = self.total_number_of_atoms
-            molecular_mass = self.total_molecular_mass
-            mass_density = math_tools.number_density2mass_density(
-                number_density, natoms, molecular_mass)
-            mass_density = self._to_precision_string(mass_density)
+        try:
+            mass_density = np.float(self.ui.mass_density_line_edit.text())
+            # calculate number density if chemical formula defined
+            if self.chemical_formula_defined:
+                natoms = self.total_number_of_atoms
+                molecular_mass = self.total_molecular_mass
+                number_density = math_tools.mass_density2number_density(
+                     mass_density, natoms, molecular_mass)
+                number_density = self._to_precision_string(number_density)
+            else:
+                number_density = 'N/A'
 
             # calculate mass if geometry defined
             if self.geometry_dimensions_defined:
                 volume = np.float(self.ui.volume_label.text())
-                mass = math_tools.number_density2mass(
-                    number_density, volume, natoms, molecular_mass)
+                mass = math_tools.mass_density2mass(mass_density, volume)
                 mass = self._to_precision_string(mass)
             else:
                 mass = 'N/A'
-        else:
-            mass_density = 'N/A'
-            mass = 'N/A'
 
-        self.ui.mass_density_line_edit.setText(mass_density)
-        self.ui.mass_line_edit.setText(mass)
-        self.update_status_of_save_button()
+            self.ui.number_density_line_edit.setText(number_density)
+            self.ui.mass_line_edit.setText(mass)
+            self.update_status_of_save_button()
+        except:
+            pass
 
-    def mass_value_changed(self):
-        mass = np.float(self.ui.mass_line_edit.text())
+    def number_density_value_changed(self):
+        try:
+            number_density = np.float(self.ui.number_density_line_edit.text())
 
-        # calculate mass if geometry defined
-        if self.geometry_dimensions_defined:
-            volume = np.float(self.ui.volume_label.text())
-            mass_density = math_tools.mass2mass_density(mass, volume)
-            mass_density = self._to_precision_string(mass_density)
-
-            # calculate mass if chemical formula defined
+            # calculate mass density if chemical formula defined
             if self.chemical_formula_defined:
                 natoms = self.total_number_of_atoms
                 molecular_mass = self.total_molecular_mass
-                number_density = math_tools.mass2number_density(
-                    mass, volume, natoms, molecular_mass)
-                number_density = self._to_precision_string(number_density)
+                mass_density = math_tools.number_density2mass_density(
+                     number_density, natoms, molecular_mass)
+                mass_density = self._to_precision_string(mass_density)
+
+            #calculate mass if geometry defined
+                if self.geometry_dimensions_defined:
+                    volume = np.float(self.ui.volume_label.text())
+                    mass = math_tools.number_density2mass(
+                        number_density, volume, natoms, molecular_mass)
+                    mass = self._to_precision_string(mass)
+                else:
+                    mass = 'N/A'
             else:
+                mass_density = 'N/A'
+                mass = 'N/A'
+
+            self.ui.mass_density_line_edit.setText(mass_density)
+            self.ui.mass_line_edit.setText(mass)
+            self.update_status_of_save_button()
+        except:
+            pass
+
+    def mass_value_changed(self):
+        try:
+            mass = np.float(self.ui.mass_line_edit.text())
+
+            # calculate mass if geometry defined
+            if self.geometry_dimensions_defined:
+                volume = np.float(self.ui.volume_label.text())
+                mass_density = math_tools.mass2mass_density(mass, volume)
+                mass_density = self._to_precision_string(mass_density)
+
+                # calculate mass if chemical formula defined
+                if self.chemical_formula_defined:
+                    natoms = self.total_number_of_atoms
+                    molecular_mass = self.total_molecular_mass
+                    number_density = math_tools.mass2number_density(
+                        mass, volume, natoms, molecular_mass)
+                    number_density = self._to_precision_string(number_density)
+                else:
+                    number_density = "N/A"
+            else:
+                mass_density = "N/A"
                 number_density = "N/A"
-
-        else:
-            mass_density = "N/A"
-            number_density = "N/A"
-
-        self.ui.mass_density_line_edit.setText(mass_density)
-        self.ui.number_density_line_edit.setText(number_density)
-        self.update_status_of_save_button()
+            self.ui.mass_density_line_edit.setText(mass_density)
+            self.ui.number_density_line_edit.setText(number_density)
+            self.update_status_of_save_button()
+        except:
+            pass
 
     def radio_button_changed(self):
         mass_density_line_edit_status = False

@@ -62,8 +62,8 @@ def retrieving_molecular_mass_and_number_of_atoms_worked(chemical_formula):
     total_number_of_atoms = 0.
     try:
         for _element in list_element:
-            [formated_element, number_of_atoms] = get_periodictable_formatted_element_and_number_of_atoms(
-                _element)
+            [formated_element, number_of_atoms, case] = get_periodictable_formatted_element_and_number_of_atoms(
+                 _element)
             periodictable_list_element_format.append(formated_element)
             total_number_of_atoms += number_of_atoms
 

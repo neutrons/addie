@@ -258,6 +258,11 @@ class ImportFromDatabaseWindow(QMainWindow):
         """using either the IPTS number selected or the runs defined, this will use the ONCat template to
         retrieve all the information from the template and populate the preview table """
 
+        if self.parent.oncat is None:
+            print("[Warning] ONCat connection not set up properly. Make sure you have logged in successfully.")
+            self.ui.run_radio_button.setChecked(True)
+            return
+
         QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
         QApplication.processEvents()
 
@@ -371,7 +376,9 @@ class ImportFromDatabaseWindow(QMainWindow):
     # EVENT HANDLER ---------------------------------------------------
 
     def change_user_clicked(self):
-        OncatAuthenticationHandler(parent=self.parent)
+        OncatAuthenticationHandler(parent=self.parent,
+                                   next_ui='from_database_ui',
+                                   next_function=self.next_function)
 
     def radio_button_changed(self):
 
