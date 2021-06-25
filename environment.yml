@@ -10,5 +10,6 @@ dependencies:
 - mantid-workbench
 - periodictable
 - psutil
+- pystog
 - setuptools
 - simplejson
