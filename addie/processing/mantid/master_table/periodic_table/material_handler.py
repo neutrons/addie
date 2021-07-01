@@ -18,14 +18,14 @@ def get_periodictable_formatted_element_and_number_of_atoms(element):
     the format accepted by the periodictable library (to calculate the molecular mass for example) (Si[28]2)'''
 
     # if we have a single stable element
-    regular_expression_1 = r'^(?P<stable_element>[A-Z]{1}[a-z]{0,1}$)'
+    regular_expression_1 = r'^(?P<stable_element>[(]{0,1}[A-Z]{1}[a-z]{0,1}[)]{0,1}$)'
     m1 = re.search(regular_expression_1, element)
     if m1 is not None:
         case = 1
         return [m1.group('stable_element'), 1., case]
 
     # stable with stochiometric coefficient
-    regular_expression_2 = r'^(?P<stable_element>[A-Z]{1}[a-z]{0,1})(?P<stochiometric_coefficient>\d*\.{0,1}\d*)$'
+    regular_expression_2 = r'^(?P<stable_element>[(]{1}[A-Z]{1}[a-z]{0,1}[)]{1})(?P<stochiometric_coefficient>\d*\.{0,1}\d*)$'
     m2 = re.search(regular_expression_2, element)
     if m2 is not None:
         case = 2
@@ -297,7 +297,7 @@ class PeriodicTable(QMainWindow):
         if is_natural_element:
             if number == 1:
                 number = ''
-            new_isotope_string = "{}{}".format(isotope, number)
+            new_isotope_string = "({}){}".format(isotope, number)
         elif number > 1:
             new_isotope_string = "({}){}".format(isotope, number)
         else:

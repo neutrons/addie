@@ -280,10 +280,20 @@ class ReductionConfiguration(QDialog):
             self.parent.output_grouping['nbr_groups'] = nbr_groups
 
     def pdf_reset_q_range_button(self):
-        pass
+        pdf_q_range,pdf_r_range = self.get_reset_data()
+        LoadReductionConfiguration._set_text_value(LoadReductionConfiguration,ui=self.ui.pdf_q_range_min,value=pdf_q_range["min"])
+        LoadReductionConfiguration._set_text_value(LoadReductionConfiguration,ui=self.ui.pdf_q_range_max,value=pdf_q_range["max"])
+        LoadReductionConfiguration._set_text_value(LoadReductionConfiguration,
+                                                   ui=self.ui.pdf_q_range_delta,
+                                                   value=pdf_q_range["delta"])
 
     def pdf_reset_r_range_button(self):
-        pass
+        pdf_q_range,pdf_r_range = self.get_reset_data()
+        LoadReductionConfiguration._set_text_value(LoadReductionConfiguration,ui=self.ui.pdf_r_range_min,value=pdf_r_range["min"])
+        LoadReductionConfiguration._set_text_value(LoadReductionConfiguration,ui=self.ui.pdf_r_range_max,value=pdf_r_range["max"])
+        LoadReductionConfiguration._set_text_value(LoadReductionConfiguration,
+                                                   ui=self.ui.pdf_r_range_delta,
+                                                   value=pdf_r_range["delta"])
 
     def bragg_browse_characterization_clicked(self):
         _characterization_folder = self.parent.characterization_folder
@@ -357,9 +367,21 @@ class ReductionConfiguration(QDialog):
     def cancel_clicked(self):
         self.close()
 
+    def get_reset_data(self):
+        # list of sample environment
+        if self.parent.reduction_configuration == {}:
+            config_file = self.parent.addie_config_file
+            with open(config_file) as f:
+                data = simplejson.load(f)
+            pdf_q_range = data['pdf']['q_range']
+            pdf_r_range = data['pdf']['r_range']
+        else:
+            pdf_q_range = self.parent.reduction_configuration['pdf']['q_range']
+            pdf_r_range = self.parent.reduction_configuration['pdf']['r_range']
+        return pdf_q_range,pdf_r_range
+
 
 class LoadReductionConfiguration:
-
     def __init__(self, parent=None, grand_parent=None):
 
         # list of sample environment

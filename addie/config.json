@@ -27,7 +27,7 @@
     "r_range": {
       "min": 0,
       "max": 40,
-      "delta": 1.02
+      "delta": 0.02
     },
     "reduction_configuration_file": "",
     "characterization_file": ""

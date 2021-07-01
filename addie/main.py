@@ -824,7 +824,7 @@ class MainWindow(QMainWindow):
     def personalization_table_clicked(self):
         processing_event_handler.personalization_table_clicked(self)
 
-    def table_search(self, text):
+    def table_search(self):
         processing_event_handler.table_search(self)
 
     def table_search_clear(self):

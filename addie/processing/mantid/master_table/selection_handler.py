@@ -652,6 +652,7 @@ class TableHandler(SelectionHandlerMaster):
 
     def search(self, text=""):
         nbr_row = self.table_ui.rowCount()
+        text = self.parent.processing_ui.name_search_3.text()
         if text == "":
             # show everything
             for _row in np.arange(nbr_row):
