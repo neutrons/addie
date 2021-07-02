@@ -31,9 +31,9 @@ def personalization_table_clicked(main_window):
     _table_config.update_tree_dict_and_tree(config_to_load=current_config)
 
 
-def table_search(main_window, text):
+def table_search(main_window):
     o_table = MtdTableHandler(parent=main_window)
-    o_table.search(text)
+    o_table.search(main_window)
 
 
 def table_search_clear(main_window):

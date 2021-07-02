@@ -19,7 +19,7 @@ def do_show_help(main_window):
     main_window._assistantProcess.waitForFinished()
 
     # launch
-    helper_url = QUrl('https://neutrons.github.io/addie/index.html')
+    helper_url = QUrl('https://neutrons.ornl.gov/nomad/users')
     QDesktopServices.openUrl(helper_url)
 
 
