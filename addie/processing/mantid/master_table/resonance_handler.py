@@ -71,7 +71,7 @@ class ResonanceSetter(QDialog):
         self.parent.master_table_list_ui[self.key][self.data_type]['resonance'][resonance_type]['value'].setText(
             value)
         if val_list:
-            self.parent.master_table_list_ui[self.key][self.data_type]['resonance']
+            self.parent.master_table_list_ui[self.key][self.data_type]['resonance']\
             [resonance_type]['lim_list'] = self.limit_str2list(value)
 
     def init_widgets_content(self):

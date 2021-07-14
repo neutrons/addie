@@ -56,8 +56,8 @@ class ScatteringSetter(QDialog):
         self.parent.master_table_list_ui[self.key]['self_scattering_level'][scattering_type]['value'].setText(
             value)
         if val_list:
-            self.parent.master_table_list_ui[self.key]['self_scattering_level']
-            [scattering_type]['lim_list'] = self.limit_str2list(value)
+            self.parent.master_table_list_ui[self.key]['self_scattering_level']\
+                [scattering_type]['lim_list'] = self.limit_str2list(value)
 
     def init_widgets_content(self):
         '''populate the widgets using the value from the master table'''

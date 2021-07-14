@@ -37,7 +37,7 @@ h3_COLUMNS_WIDTH = [90,  #activate #0
                     200, # geometry dimensions #21
                     150, 200, 150,  # correction #22, 23, 24
                     150, # key/value pairs #25
-                    300, # self-scattering level #26
+                    350, # self-scattering level #26
                     ]
 
 h2_COLUMNS_WIDTH = [h3_COLUMNS_WIDTH[0], #0
