@@ -75,7 +75,7 @@ class TableRowHandler:
 
         # mult. scat. correction
         mult_scat_correction_ui = self.main_window.master_table_list_ui[key][data_type]['mult_scat_correction']
-        list_mult_scat_correction = self.get_multi_scat_correction_list(shape=shape_index)
+        list_mult_scat_correction = self.get_multi_scat_correction_list(shape=shape_index,section='Sample')
         update_ui(ui=mult_scat_correction_ui, new_list=list_mult_scat_correction)
 
         _enabled_radius_1 = True
@@ -201,9 +201,16 @@ class TableRowHandler:
         _list_ui_to_unlock = [self.table_ui]
 
         _dimension_widgets = {'label': None, 'value': 'N/A', 'units': None}
+        _resonance_widgets = {'label': None, 'value': 'N/A', 'units': None, 'lim_list': []}
+        _self_scattering_widgets = {'label': None, 'value': 'N/A','val_list': []}
         _full_dimension_widgets = {'radius': copy.deepcopy(_dimension_widgets),
                                    'radius2': copy.deepcopy(_dimension_widgets),
                                    'height': copy.deepcopy(_dimension_widgets)}
+        _resonance_widgets = {'axis': copy.deepcopy(_dimension_widgets),
+                              'lower': copy.deepcopy(_resonance_widgets),
+                              'upper': copy.deepcopy(_resonance_widgets)}
+        _self_scattering_widgets = {'lower': copy.deepcopy(_self_scattering_widgets),
+                                    'upper': copy.deepcopy(_self_scattering_widgets)}
         _text_button = {'text': None, 'button': None}
         _mass_density_options = {'value': "N/A",
                                  "selected": False}
@@ -235,6 +242,7 @@ class TableRowHandler:
                                            'inelastic_correction': None,
                                            'placzek_button': None,
                                            'placzek_infos': None,
+                                           'resonance': copy.deepcopy(_resonance_widgets)
                                            },
                                 'normalization': {'runs': None,
                                                   'background': {'runs': None,
@@ -256,6 +264,7 @@ class TableRowHandler:
                                 'align_and_focus_args_button': None,
                                 'align_and_focus_args_infos': {},
                                 'align_and_focus_args_use_global': True,
+                                'self_scattering_level': copy.deepcopy(_self_scattering_widgets)
                                 }
 
         random_key = self.generate_random_key()
@@ -452,7 +461,7 @@ class TableRowHandler:
         _layout.setContentsMargins(0, 0, 0, 0)
         _widget = QComboBox()
         _shape_default_value = 0
-        list_abs_correction = self.get_absorption_correction_list(shape=_shape_default_value)
+        list_abs_correction = self.get_absorption_correction_list(shape=_shape_default_value,type='Sample')
         _widget.currentIndexChanged.connect(lambda value=list_abs_correction[0],
                                             key = random_key:
                                             self.main_window.master_table_sample_abs_correction_changed(value, key))
@@ -519,24 +528,81 @@ class TableRowHandler:
         _sample_formated_placzek_default = self.formated_placzek_default(sample_placzek_arguments)
         _master_table_row_ui['sample']['placzek_infos'] = _sample_formated_placzek_default
 
+        # column 13 - resonance
+        column += 1
+
+        # layout 1
+        _grid_layout = QGridLayout()
+
+        _label1 = QLabel("Axis:")
+        _grid_layout.addWidget(_label1, 1, 0)
+        _value1 = QLabel("N/A")
+        _grid_layout.addWidget(_value1, 1, 1)
+
+        _label2 = QLabel("Lower Limit:")
+        _grid_layout.addWidget(_label2, 2, 0)
+        _value2 = QLabel("N/A")
+        _grid_layout.addWidget(_value2, 2, 1)
+        #Not sure what the units of the limits will be, keeping the option to
+        #display units and hiding visiblity in case functionality is desired in the future
+        _dim_lower = QLabel("eV")
+        _dim_lower.setVisible(False)
+        _grid_layout.addWidget(_dim_lower, 2, 2)
+
+        _label3 = QLabel("Upper Limit:")
+        _grid_layout.addWidget(_label3, 3, 0)
+        _value3 = QLabel("N/A")
+        _grid_layout.addWidget(_value3, 3, 1)
+        _dim_upper = QLabel("eV")
+        _dim_upper.setVisible(False)
+        _grid_layout.addWidget(_dim_upper, 3, 2)
+
+        _master_table_row_ui['sample']['resonance']['axis']['value'] = _value1
+        _master_table_row_ui['sample']['resonance']['lower']['value'] = _value2
+        _master_table_row_ui['sample']['resonance']['upper']['value'] = _value3
+
+        _master_table_row_ui['sample']['resonance']['axis']['label'] = _label1
+        _master_table_row_ui['sample']['resonance']['lower']['label'] = _label2
+        _master_table_row_ui['sample']['resonance']['upper']['label'] = _label3
+
+        _master_table_row_ui['sample']['resonance']['lower']['units'] = _dim_lower
+        _master_table_row_ui['sample']['resonance']['upper']['units'] = _dim_upper
+
+        _geometry_widget = QWidget()
+        _geometry_widget.setLayout(_grid_layout)
+
+        _set_dimensions_button = QPushButton("...")
+        _set_dimensions_button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
+        _set_dimensions_button.setFixedWidth(CONFIG_BUTTON_WIDTH)
+        _verti_layout = QVBoxLayout()
+        _verti_layout.addWidget(_geometry_widget)
+        _verti_layout.addWidget(_set_dimensions_button)
+        _verti_widget = QWidget()
+        _verti_widget.setLayout(_verti_layout)
+
+        _set_dimensions_button.pressed.connect(lambda key=random_key:
+                                               self.main_window.master_table_resonance_setter_button_pressed(key))
+
+        self.table_ui.setCellWidget(row, column, _verti_widget)
+
         ## normalization
 
-        # column 13 - sample runs
+        # column 14 - sample runs
         column += 1
         _item = QTableWidgetItem("")
         self.table_ui.setItem(row, column, _item)
 
-        # column 14 - background runs
+        # column 15 - background runs
         column += 1
         _item = QTableWidgetItem("")
         self.table_ui.setItem(row, column, _item)
 
-        # column 15 - background background
+        # column 16 - background background
         column += 1
         _item = QTableWidgetItem("")
         self.table_ui.setItem(row, column, _item)
 
-        # column 16 - material (chemical formula)
+        # column 17 - material (chemical formula)
         column += 1
         #_material_text = QLineEdit("")
         _material_text = QLabel("N/A")
@@ -554,7 +620,7 @@ class TableRowHandler:
         _master_table_row_ui['normalization']['material']['text'] = _material_text
         _master_table_row_ui['normalization']['material']['button'] = _material_button
 
-        # column 17 - mass density
+        # column 18 - mass density
         column += 1
         _mass_text = QLineEdit("N/A")
         _mass_text.returnPressed.connect(lambda key=random_key:
@@ -579,12 +645,12 @@ class TableRowHandler:
         _master_table_row_ui['normalization']['mass_density']['text'] = _mass_text
         _master_table_row_ui['normalization']['mass_density']['button'] = _mass_button
 
-        # column 18 - packing fraction
+        # column 19 - packing fraction
         column += 1
         _item = QTableWidgetItem("")
         self.table_ui.setItem(row, column, _item)
 
-        # column 19 - shape (cylinder or sphere)
+        # column 20 - shape (cylinder or sphere)
         column += 1
         _layout = QHBoxLayout()
         _layout.setContentsMargins(0, 0, 0, 0)
@@ -603,7 +669,7 @@ class TableRowHandler:
         _w.setLayout(_layout)
         self.table_ui.setCellWidget(row, column, _w)
 
-        # column 20 - dimensions
+        # column 21 - dimensions
         column += 1
 
         # layout 1
@@ -662,11 +728,12 @@ class TableRowHandler:
 
         self.table_ui.setCellWidget(row, column, _verti_widget)
 
-        # column 21 - abs. correction
+        # column 22 - abs. correction
         column += 1
         _layout = QHBoxLayout()
         _layout.setContentsMargins(0, 0, 0, 0)
         _widget = QComboBox()
+        list_abs_correction = self.get_absorption_correction_list(shape=_shape_default_value,type='Normalization')
         _widget.currentIndexChanged.connect(lambda value=list_abs_correction[0],
                                             key=random_key:
                                             self.main_window.master_table_normalization_abs_correction_changed(value, key))  # noqa
@@ -681,7 +748,7 @@ class TableRowHandler:
         _w.setLayout(_layout)
         self.table_ui.setCellWidget(row, column, _w)
 
-        # column 24 - multi. scattering correction
+        # column 23 - multi. scattering correction
         column += 1
         _layout = QHBoxLayout()
         _layout.setContentsMargins(0, 0, 0, 0)
@@ -700,7 +767,7 @@ class TableRowHandler:
         _w.setLayout(_layout)
         self.table_ui.setCellWidget(row, column, _w)
 
-        # column 22 - inelastic correction
+        # column 24 - inelastic correction
         column += 1
         _layout = QHBoxLayout()
         _layout.setContentsMargins(0, 0, 0, 0)
@@ -734,7 +801,7 @@ class TableRowHandler:
         _norm_formated_placzek_default = self.formated_placzek_default(normalization_placzek_arguments)
         _master_table_row_ui['normalization']['placzek_infos'] = _norm_formated_placzek_default
 
-        # column 23 - key/value pair
+        # column 25 - key/value pair
         column += 1
         _layout = QHBoxLayout()
         _spacer_kv1 = QSpacerItem(40, 20,
@@ -760,6 +827,44 @@ class TableRowHandler:
         align_and_focus_args = self.add_global_key_value_to_local_key_value(align_and_focus_args)
         _master_table_row_ui['align_and_focus_args_infos'] = align_and_focus_args
 
+        # column 26 - Self Scattering levels
+        column += 1
+
+        # layout 1
+        _grid_layout = QGridLayout()
+
+        _label1 = QLabel("Lower Limit:")
+        _grid_layout.addWidget(_label1, 2, 0)
+        _value1 = QLabel("20.0,20.0,20.0,30.0,30.0,10.0")
+        _grid_layout.addWidget(_value1, 2, 1)
+
+        _label2 = QLabel("Upper Limit:")
+        _grid_layout.addWidget(_label2, 3, 0)
+        _value2 = QLabel("30.0,25.0,30.0,40.0,40.0,15.0")
+        _grid_layout.addWidget(_value2, 3, 1)
+
+        _master_table_row_ui['self_scattering_level']['lower']['value'] = _value1
+        _master_table_row_ui['self_scattering_level']['upper']['value'] = _value2
+
+        _master_table_row_ui['self_scattering_level']['lower']['label'] = _label1
+        _master_table_row_ui['self_scattering_level']['upper']['label'] = _label2
+
+        _geometry_widget = QWidget()
+        _geometry_widget.setLayout(_grid_layout)
+
+        _set_dimensions_button = QPushButton("...")
+        _set_dimensions_button.setFixedHeight(CONFIG_BUTTON_HEIGHT)
+        _set_dimensions_button.setFixedWidth(CONFIG_BUTTON_WIDTH)
+        _verti_layout = QVBoxLayout()
+        _verti_layout.addWidget(_geometry_widget)
+        _verti_layout.addWidget(_set_dimensions_button)
+        _verti_widget = QWidget()
+        _verti_widget.setLayout(_verti_layout)
+
+        _set_dimensions_button.pressed.connect(lambda key=random_key:
+                                               self.main_window.master_table_scattering_setter_button_pressed(key))
+
+        self.table_ui.setCellWidget(row, column, _verti_widget)
         # Recap.
 
         self.main_window.master_table_list_ui[random_key] = _master_table_row_ui
@@ -854,15 +959,17 @@ class TableRowHandler:
                 'Placzek',
                 ]
 
-    def get_absorption_correction_list(self, shape=0):
-        if shape == 0: # cylinder
+    def get_absorption_correction_list(self, shape=0,type='Sample'):
+        if shape == 0 and type == 'Sample': # cylinder, Sample
             return ['None',
-                    'Carpenter',
-                    'Mayers',
-                    'Podman & Pings',
-                    'Monte Carlo',
-                    'Numerical',
+                    'SampleOnly',
+                    'SampleAndContainer',
+                    'FullPaalmanPings',
                     ]
+        elif shape == 0 and type == 'Normalization': #cylinder, normalization
+            return ['None',
+                    'SampleOnly',
+                    'SampleAndContainer']
         elif shape == 1: # sphere
             return ['None',
                     'Monte Carlo',

@@ -6,6 +6,8 @@ from addie.processing.mantid.master_table.table_row_handler import TableRowHandl
 from addie.processing.mantid.master_table.periodic_table.material_handler import MaterialHandler
 from addie.processing.mantid.master_table.mass_density_handler import MassDensityHandler
 from addie.processing.mantid.master_table.geometry_handler import DimensionsSetter
+from addie.processing.mantid.master_table.resonance_handler import ResonanceSetter
+from addie.processing.mantid.master_table.self_scattering_handler import ScatteringSetter
 from addie.processing.mantid.master_table.import_from_run_number_handler import ImportFromRunNumberHandler
 from addie.processing.mantid.master_table.import_from_database.load_into_master_table import LoadIntoMasterTable
 from addie.processing.mantid.make_calibration_handler.make_calibration import MakeCalibrationLauncher
@@ -257,6 +259,18 @@ def sample_dimensions_setter_button_pressed(main_window, key):
     o_dimensions_ui = DimensionsSetter(
         parent=main_window, key=key, data_type='sample')
     o_dimensions_ui.show()
+
+
+def sample_resonance_button_pressed(main_window, key):
+    o_resonance_ui = ResonanceSetter(
+        parent=main_window, key=key, data_type='sample')
+    o_resonance_ui.show()
+
+
+def self_scattering_button_pressed(main_window, key):
+    o_scattering_ui = ScatteringSetter(
+        parent=main_window, key=key)
+    o_scattering_ui.show()
 
 
 # normalization columns
