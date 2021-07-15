@@ -162,6 +162,8 @@ class MainWindow(QMainWindow):
     mass_density_ui_position = None
 
     geometry_ui_position = None
+    resonance_ui_position = None
+    scattering_ui_position = None
 
     # config file to initialize the widgets (example Q and R range in PDF tab)
     current_path = os.path.dirname(os.path.dirname(__file__))
@@ -905,6 +907,12 @@ class MainWindow(QMainWindow):
     def master_table_sample_dimensions_setter_button_pressed(self, key):
         processing_event_handler.sample_dimensions_setter_button_pressed(
             self, key)
+
+    def master_table_resonance_setter_button_pressed(self, key):
+        processing_event_handler.sample_resonance_button_pressed(self,key)
+
+    def master_table_scattering_setter_button_pressed(self, key):
+        processing_event_handler.self_scattering_button_pressed(self,key)
 
     # normalization columns
     def master_table_normalization_material_button_pressed(self, key):

@@ -8,6 +8,7 @@ from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMN
 from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_COMBOBOX
 from addie.processing.mantid.master_table.tree_definition import INDEX_OF_SPECIAL_COLUMNS_SEARCHABLE
 from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS
+from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_RESONANCE_INFOS
 from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA
 from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_MASS_DENSITY
 from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_ALIGN_AND_FOCUS_ARGS
@@ -363,6 +364,16 @@ class CellsHandler(SelectionHandlerMaster):
                     geometry['radius2']['value'].setText("N/A")
                     geometry['height']['value'].setText("N/A")
 
+                elif _column in INDEX_OF_COLUMNS_WITH_RESONANCE_INFOS:
+                    o_utilities = Utilities(parent=self.parent)
+                    _key = o_utilities.get_row_key_from_row_index(row=_row)
+                    data_type = 'sample'
+
+                    resonance = self.parent.master_table_list_ui[_key][data_type]['resonance']
+                    resonance['axis']['value'].setText("N/A")
+                    resonance['lower']['value'].setText("N/A")
+                    resonance['upper']['value'].setText("N/A")
+
                 elif _column in INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA:
                     o_utilities = Utilities(parent=self.parent)
                     _key = o_utilities.get_row_key_from_row_index(row=_row)
@@ -671,7 +682,7 @@ class TableHandler(SelectionHandlerMaster):
 
                 for _col in INDEX_OF_SPECIAL_COLUMNS_SEARCHABLE:
                     if (_col == 6) or (
-                            _col == 17):  # layout inside a layout for these cells
+                            _col == 18):  # layout inside a layout for these cells
                         _text_widget = str(
                             self.table_ui.cellWidget(
                                 _row, _col).children()[1].children()[1].text()).lower()

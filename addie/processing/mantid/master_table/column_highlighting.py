@@ -12,7 +12,9 @@ from addie.processing.mantid.master_table.tree_definition import (
     INDEX_OF_ABS_CORRECTION,
     INDEX_OF_MULTI_SCATTERING_CORRECTION,
     INDEX_OF_INELASTIC_CORRECTION,
-    LIST_COLUMNS_TO_SEARCH_FOR_FULL_HIGHLIGTHING
+    LIST_COLUMNS_TO_SEARCH_FOR_FULL_HIGHLIGTHING,
+    INDEX_OF_COLUMNS_WITH_RESONANCE_INFOS,
+    INDEX_OF_COLUMNS_WITH_SCATTERING_LEVELS
 )
 from addie.processing.mantid.master_table.tree_definition import (
     COLUMNS_IDENTICAL_VALUES_COLOR,
@@ -76,6 +78,12 @@ class ColumnHighlighting:
 
                 elif column in INDEX_OF_COLUMNS_WITH_GEOMETRY_INFOS:
                     are_all_same = self.are_geometry_identical()
+
+                elif column in INDEX_OF_COLUMNS_WITH_RESONANCE_INFOS:
+                    are_all_same = self.are_resonance_identical()
+
+                elif column in INDEX_OF_COLUMNS_WITH_SCATTERING_LEVELS:
+                    are_all_same = self.are_scattering_identical()
 
                 elif column in INDEX_OF_ABS_CORRECTION:
                     are_all_same = self.are_abs_correction_identical()
@@ -209,6 +217,25 @@ class ColumnHighlighting:
             return False
         return True
 
+    def are_resonance_identical(self,type="Resonance"):
+        if not self._are_axis_identical():
+            return False
+
+        if not self._are_lowerlim_identical(type):
+            return False
+
+        if not self._are_upperlim_identical(type):
+            return False
+        return True
+
+    def are_scattering_identical(self,type="Scattering"):
+        if not self._are_lowerlim_identical(type):
+            return False
+
+        if not self._are_upperlim_identical(type):
+            return False
+        return True
+
     def are_abs_correction_identical(self):
         ref_value = self._get_abs_correction_widget_value(row=0)
         for _row in np.arange(1, self.nbr_row):
@@ -308,6 +335,41 @@ class ColumnHighlighting:
                 return False
         return True
 
+    def _are_axis_identical(self):
+        return self._are_resonance_value_identical(variable_name='axis')
+
+    def _are_lowerlim_identical(self,type="Resonance"):
+        if type == "Resonance":
+            return self._are_resonance_value_identical(variable_name='lower')
+        elif type == "Scattering":
+            return self._are_scattering_value_identical(variable_name='lower')
+
+    def _are_upperlim_identical(self,type="Resonance"):
+        if type == "Resonance":
+            return self._are_resonance_value_identical(variable_name='upper')
+        elif type == "Scattering":
+            return self._are_scattering_value_identical(variable_name='upper')
+
+    def _are_resonance_value_identical(self, variable_name='axis'):
+        ref_widgets = self._get_resonance_correction_widgets(row=0)
+        ref_value = str(ref_widgets[variable_name].text())
+        for _row in np.arange(1, self.nbr_row):
+            val_widgets = self._get_resonance_correction_widgets(row=_row)
+            _value = str(val_widgets[variable_name].text())
+            if _value != ref_value:
+                return False
+            return True
+
+    def _are_scattering_value_identical(self, variable_name='lower'):
+        ref_widgets = self._get_scattering_correction_widgets(row=0)
+        ref_value = str(ref_widgets[variable_name].text())
+        for _row in np.arange(1,self.nbr_row):
+            val_widgets = self._get_scattering_correction_widgets(row=_row)
+            _value = str(val_widgets[variable_name].text())
+            if _value != ref_value:
+                return False
+            return True
+
     def _get_abs_correction_widget_value(self, row=-1):
         master_table_list_ui_for_row = self._get_master_table_list_ui_for_row(
             row=row)
@@ -325,6 +387,34 @@ class ColumnHighlighting:
             row=row)
         widget_ui = master_table_list_ui_for_row[self.data_type]
         return str(widget_ui['inelastic_correction'].currentText())
+
+    def _get_resonance_correction_widgets(self, row=-1):
+        master_table_list_ui_for_row = self._get_master_table_list_ui_for_row(
+            row=row)
+        resonance = master_table_list_ui_for_row[self.data_type]['resonance']
+
+        axis_ui = resonance['axis']['value']
+        lower_ui = resonance['lower']['value']
+        upper_ui = resonance['upper']['value']
+
+        return {
+            'axis': axis_ui,
+            'lower': lower_ui,
+            'upper': upper_ui
+        }
+
+    def _get_scattering_correction_widgets(self, row=-1):
+        master_table_list_ui_for_row = self._get_master_table_list_ui_for_row(
+            row=row)
+        scattering = master_table_list_ui_for_row['self_scattering_level']
+
+        lower_ui = scattering['lower']['value']
+        upper_ui = scattering['upper']['value']
+
+        return {
+            'lower': lower_ui,
+            'upper': upper_ui
+        }
 
     def _get_placzek_infos(self, row=-1):
         master_table_list_ui_for_row = self._get_master_table_list_ui_for_row(
