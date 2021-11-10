@@ -137,7 +137,7 @@ class TableRowHandler:
                                  sample_norm_column=INDEX_OF_INELASTIC_CORRECTION)
         self.main_window.check_master_table_column_highlighting(column=column)
 
-        inelastic_correction = info['inelastic_correction'].currentText()
+        # inelastic_correction = info['inelastic_correction'].currentText()
         # if inelastic_correction not in ["None", None]:
         #     PlaczekHandler(parent=self.main_window, key=key, data_type=data_type)
 

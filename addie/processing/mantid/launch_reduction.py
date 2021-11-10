@@ -83,8 +83,8 @@ def run_mantid(parent):
     print('writing out full table to "{}"'.format(full_reduction_filename))
     for row in range(num_rows):
         dictionary,activate = exporter.retrieve_row_info(row)
-        if activate == True:
-            filename = os.path.join(os.path.expanduser('~'),'.mantid' ,'JSON_output',dictionary['Title'] +'_'+ str(row) + '.json') 
+        if activate is True:
+            filename = os.path.join(os.path.expanduser('~'),'.mantid' ,'JSON_output',dictionary['Title'] +'_'+ str(row) + '.json')
             exporter.export(filename,row)
             print("Row",row,"Successfully output to",filename)
 
