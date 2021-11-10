@@ -14,6 +14,7 @@ from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMN
 from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_ALIGN_AND_FOCUS_ARGS
 from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_ITEMS
 from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_CHECKBOX
+from addie.processing.mantid.master_table.tree_definition import INDEX_OF_COLUMNS_WITH_SCATTERING_LEVELS
 
 from addie.processing.mantid.master_table.utilities import Utilities
 
@@ -593,6 +594,25 @@ class CopyCells:
             to_geometry['radius2']['value'].setText(_radius2)
             to_geometry['height']['value'].setText(_height)
 
+        elif from_col in INDEX_OF_COLUMNS_WITH_RESONANCE_INFOS:
+            o_utilities = Utilities(parent=self.parent)
+            _from_key = o_utilities.get_row_key_from_row_index(row=from_row)
+            _to_key = o_utilities.get_row_key_from_row_index(row=to_row)
+            data_type = 'sample'
+            from_resonance = self.parent.master_table_list_ui[_from_key][data_type]['resonance']
+            axis_val = str(from_resonance['axis']['value'].text())
+            lower_val = str(from_resonance['lower']['value'].text())
+            upper_val = str(from_resonance['upper']['value'].text())
+            lower_list = from_resonance['lower']['lim_list']
+            upper_list = from_resonance['upper']['lim_list']
+
+            to_resonance = self.parent.master_table_list_ui[_to_key][data_type]['resonance']
+            to_resonance['axis']['value'].setText(axis_val)
+            to_resonance['lower']['value'].setText(lower_val)
+            to_resonance['upper']['value'].setText(upper_val)
+            to_resonance['lower']['lim_list'] = lower_list
+            to_resonance['upper']['lim_list'] = upper_list
+
         elif from_col in INDEX_OF_COLUMNS_WITH_CHEMICAL_FORMULA:
             o_utilities = Utilities(parent=self.parent)
             _from_key = o_utilities.get_row_key_from_row_index(row=from_row)
@@ -645,6 +665,22 @@ class CopyCells:
         elif from_col in INDEX_OF_COLUMNS_WITH_ALIGN_AND_FOCUS_ARGS:
             data_type = 'align_and_focus_args_infos'
             self._copy_from_to_for_dict(from_row, to_row, data_type)
+
+        elif from_col in INDEX_OF_COLUMNS_WITH_SCATTERING_LEVELS:
+            o_utilities = Utilities(parent=self.parent)
+            _from_key = o_utilities.get_row_key_from_row_index(row=from_row)
+            _to_key = o_utilities.get_row_key_from_row_index(row=to_row)
+            from_ss_level = self.parent.master_table_list_ui[_from_key]['self_scattering_level']
+            ss_lower_val = str(from_ss_level['lower']['value'].text())
+            ss_upper_val = str(from_ss_level['upper']['value'].text())
+            ss_lower_list = from_ss_level['lower']['val_list']
+            ss_upper_list = from_ss_level['upper']['val_list']
+
+            to_ss_level = self.parent.master_table_list_ui[_to_key]['self_scattering_level']
+            to_ss_level['lower']['value'].setText(ss_lower_val)
+            to_ss_level['upper']['value'].setText(ss_upper_val)
+            to_ss_level['lower']['lim_list'] = ss_lower_list
+            to_ss_level['upper']['lim_list'] = ss_upper_list
 
         else:
             self.parent.ui.statusbar.setStyleSheet("color: red")

@@ -138,8 +138,8 @@ class TableRowHandler:
         self.main_window.check_master_table_column_highlighting(column=column)
 
         inelastic_correction = info['inelastic_correction'].currentText()
-        if inelastic_correction not in ["None", None]:
-            PlaczekHandler(parent=self.main_window, key=key, data_type=data_type)
+        # if inelastic_correction not in ["None", None]:
+        #     PlaczekHandler(parent=self.main_window, key=key, data_type=data_type)
 
     def multi_scattering_correction(self, value='', key=None, data_type='sample'):
         # change state of other widgets of the same column if they are selected
@@ -836,15 +836,19 @@ class TableRowHandler:
         _label1 = QLabel("Lower Limit:")
         _grid_layout.addWidget(_label1, 2, 0)
         _value1 = QLabel("20.0,20.0,20.0,30.0,30.0,10.0")
+        _lim_list1 = [20.0,20.0,20.0,30.0,30.0,10.0]
         _grid_layout.addWidget(_value1, 2, 1)
 
         _label2 = QLabel("Upper Limit:")
         _grid_layout.addWidget(_label2, 3, 0)
         _value2 = QLabel("30.0,25.0,30.0,40.0,40.0,15.0")
+        _lim_list2 = [30.0,25.0,30.0,40.0,40.0,15.0]
         _grid_layout.addWidget(_value2, 3, 1)
 
         _master_table_row_ui['self_scattering_level']['lower']['value'] = _value1
+        _master_table_row_ui['self_scattering_level']['lower']['val_list'] = _lim_list1
         _master_table_row_ui['self_scattering_level']['upper']['value'] = _value2
+        _master_table_row_ui['self_scattering_level']['upper']['val_list'] = _lim_list2
 
         _master_table_row_ui['self_scattering_level']['lower']['label'] = _label1
         _master_table_row_ui['self_scattering_level']['upper']['label'] = _label2
@@ -868,6 +872,7 @@ class TableRowHandler:
         # Recap.
 
         self.main_window.master_table_list_ui[random_key] = _master_table_row_ui
+
         self.unlock_signals_ui(list_ui=_list_ui_to_unlock)
         self.main_window.check_status_of_right_click_buttons()
 
@@ -896,20 +901,20 @@ class TableRowHandler:
         else:
             _dict = placzek
 
-        order_index = _dict['order']['index_selected']
-        is_self = _dict['is_self']
-        is_interference = _dict['is_interference']
-        fit_spectrum_index =  _dict['fit_spectrum_with']['index_selected']
-        lambda_fit_min = _dict['lambda_binning_for_fit']['min']
-        lambda_fit_max = _dict['lambda_binning_for_fit']['max']
-        lambda_fit_delta = _dict['lambda_binning_for_fit']['delta']
-        lambda_calc_min = _dict['lambda_binning_for_calc']['min']
-        lambda_calc_max = _dict['lambda_binning_for_calc']['max']
-        lambda_calc_delta = _dict['lambda_binning_for_calc']['delta']
+        is_self = True if _dict is None else _dict['is_self']
+        is_interference = True if _dict is None else _dict['is_interference']
+        sample_t = 300 if _dict is None else _dict['sample_t']
+        fit_spectrum_index = 0 if _dict is None else _dict['fit_spectrum_with']['index_selected']
+        lambda_fit_min = 0.16 if _dict is None else _dict['lambda_binning_for_fit']['min']
+        lambda_fit_max = 2.8 if _dict is None else _dict['lambda_binning_for_fit']['max']
+        lambda_fit_delta = 0.04 if _dict is None else _dict['lambda_binning_for_fit']['delta']
+        lambda_calc_min = 0.1 if _dict is None else _dict['lambda_binning_for_calc']['min']
+        lambda_calc_max = 3.0 if _dict is None else _dict['lambda_binning_for_calc']['max']
+        lambda_calc_delta = 0.0001 if _dict is None else _dict['lambda_binning_for_calc']['delta']
 
-        new_format = {'order_index': order_index,
-                      'is_self': is_self,
+        new_format = {'is_self': is_self,
                       'is_interference': is_interference,
+                      'sample_t': sample_t,
                       'fit_spectrum_index': fit_spectrum_index,
                       'lambda_fit_min': lambda_fit_min,
                       'lambda_fit_max': lambda_fit_max,

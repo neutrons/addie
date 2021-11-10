@@ -9,7 +9,7 @@ from addie.processing.mantid.master_table.master_table_exporter import TableFile
 try:
     import total_scattering
     print("Mantid Total Scattering Version: ", total_scattering.__version__)
-    from total_scattering.reduction import TotalScatteringReduction
+    from total_scattering.reduction.total_scattering_reduction import TotalScatteringReduction
     MANTID_TS_ENABLED = True
 except ImportError:
     print('total_scattering module not found. Functionality disabled')
@@ -64,16 +64,29 @@ class JobPool(object):
 def run_mantid(parent):
     num_rows = parent.processing_ui.h3_table.rowCount()
     if num_rows <= 0:
-        raise RuntimeError('Cannot export empty table')
+        print("Cannot import empty table.")
+        return
 
     exporter = MantidTableExporter(parent=parent)
 
     # write out the full table to disk
     # TODO make a class level name so it can be reused
+    try:
+        import shutil
+        path = os.path.join(os.path.expanduser('~'),'.mantid' ,'JSON_output')
+        shutil.rmtree(path)
+    except:
+        pass
+
     full_reduction_filename = os.path.join(
         os.path.expanduser('~'), '.mantid', 'addie.json')
     print('writing out full table to "{}"'.format(full_reduction_filename))
-    exporter.export(full_reduction_filename)
+    for row in range(num_rows):
+        dictionary,activate = exporter.retrieve_row_info(row)
+        if activate == True:
+            filename = os.path.join(os.path.expanduser('~'),'.mantid' ,'JSON_output',dictionary['Title'] +'_'+ str(row) + '.json') 
+            exporter.export(filename,row)
+            print("Row",row,"Successfully output to",filename)
 
     # append the individual rows to input list (reduction_inputs)
     reduction_inputs = []
@@ -81,13 +94,15 @@ def run_mantid(parent):
         if not exporter.isActive(row):
             print('skipping row {} - inactive'.format(row + 1))  # REMOVE?
             continue
-        print('Will be running row {} for reduction'.format(
-            row + 1))  # TODO should be debug logging
-        json_input = exporter.retrieve_row_info(row)
+        print('Will be running row {} for reduction'.format(row + 1))  # TODO should be debug logging
+        json_input = exporter.retrieve_row_info(row)[0]
         reduction_input = exporter.convert_from_row_to_reduction(json_input)
+        if not reduction_input:
+            return
         reduction_inputs.append(reduction_input)
     if len(reduction_inputs) == 0:
-        raise RuntimeError('None of the rows were activated')
+        print('None of the rows were activated')
+        return
 
     # locate total scattering script
     if MANTID_TS_ENABLED:
@@ -96,3 +111,4 @@ def run_mantid(parent):
     else:
         # TODO should be on the status bar
         print('total_scattering module not found. Functionality disabled')
+        return

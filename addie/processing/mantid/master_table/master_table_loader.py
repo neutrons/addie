@@ -5,7 +5,7 @@ from collections import OrderedDict
 import copy
 import simplejson
 
-from qtpy.QtWidgets import QDialog
+from qtpy.QtWidgets import QDialog, QLabel
 from addie.utilities import load_ui
 from qtpy import QtCore, QtGui
 
@@ -44,8 +44,11 @@ _default_empty_row = {
         },
         "abs_correction": "",
         "multi_scattering_correction": "",
-        "inelastic_correction": "",
-        "placzek": {},
+        "inelastic_correction": {},
+        "resonance": {
+            "axis": "None",
+            "lower": "N/A",
+            "upper": "N/A"}
     },
     "normalization": {
         "runs": "",
@@ -70,6 +73,10 @@ _default_empty_row = {
     "input_grouping": "",
     "output_grouping": "",
     "AlignAndFocusArgs": {},
+    "self_scattering_level": {
+        "lower": "",
+        "upper": ""
+        }
 }
 # for debugging, faking a 2 row dictionary
 # _dictionary_test[0] = copy.deepcopy(_default_empty_row)
@@ -168,52 +175,109 @@ class JsonLoader:
         self.filename = filename
         self.parent = parent
 
-    def _retrieve_element_dict(self, element='sample', source_row_entry={}):
+    def _retrieve_element_dict(self, element='Sample', source_row_entry={}):
         _target_row_entry = {}
         _source_entry = source_row_entry[element]
-        _target_row_entry["runs"] = _source_entry['Runs']
+
+        if 'Runs' in _source_entry:
+            _target_row_entry["runs"] = _source_entry['Runs']
+        else:
+            _target_row_entry["runs"] = ''
         _target_row_entry["background"] = {}
-        _target_row_entry["background"]["runs"] = _source_entry['Background']["Runs"]
-        _target_row_entry["background"]["background"] = _source_entry["Background"]["Background"]["Runs"]
-        _target_row_entry["material"] = _source_entry["Material"]
+        if 'Background' in _source_entry:
+            _target_row_entry["background"]["runs"] = _source_entry['Background']["Runs"]
+            if "Background" in _source_entry["Background"]:
+                _target_row_entry["background"]["background"] = _source_entry["Background"]["Background"]["Runs"]
+            else:
+                _target_row_entry["background"]["background"] = ''
+        else:
+            _target_row_entry["background"]["runs"] = ''
+            _target_row_entry["background"]["background"] = ''
+        if "Material" in _source_entry:
+            _target_row_entry["material"] = _source_entry["Material"]
+        else:
+            _target_row_entry["material"] = ''
         _target_row_entry["mass_density"] = copy.deepcopy(_density_dict)
-        _target_row_entry["mass_density"]["mass_density"]["value"] = _source_entry["Density"]["MassDensity"]
-        _target_row_entry["mass_density"]["mass_density"]["selected"] = _source_entry["Density"]["UseMassDensity"]
-        _target_row_entry["mass_density"]["number_density"]["value"] = _source_entry["Density"]["NumberDensity"]
-        _target_row_entry["mass_density"]["number_density"]["selected"] = _source_entry["Density"]["UseNumberDensity"]
-        _target_row_entry["mass_density"]["mass"]["value"] = _source_entry["Density"]["Mass"]
-        _target_row_entry["mass_density"]["mass"]["selected"] = _source_entry["Density"]["UseMass"]
-        _target_row_entry["packing_fraction"] = _source_entry["PackingFraction"]
+        if _source_entry["Density"]["UseMassDensity"]:
+            if "MassDensity" in _source_entry["Density"]:
+                _target_row_entry["mass_density"]["mass_density"]["value"] = _source_entry["Density"]["MassDensity"]
+            else:
+                _target_row_entry["mass_density"]["mass_density"]["value"] = "N/A"
+            _target_row_entry["mass_density"]["mass_density"]["selected"] = True
+        else:
+            _target_row_entry["mass_density"]["mass_density"]["value"] = 'N/A'
+            _target_row_entry["mass_density"]["mass_density"]["selected"] = False
+        if _source_entry["Density"]["UseNumberDensity"]:
+            _target_row_entry["mass_density"]["number_density"]["value"] = _source_entry["Density"]["NumberDensity"]
+            _target_row_entry["mass_density"]["number_density"]["selected"] = True
+        else:
+            _target_row_entry["mass_density"]["number_density"]["value"] = 'N/A'
+            _target_row_entry["mass_density"]["number_density"]["selected"] = False
+        if _source_entry["Density"]["UseMass"]:
+            _target_row_entry["mass_density"]["mass"]["value"] = _source_entry["Density"]["Mass"]
+            _target_row_entry["mass_density"]["mass"]["selected"] = True
+        else:
+            _target_row_entry["mass_density"]["mass"]["value"] = 'N/A'
+            _target_row_entry["mass_density"]["mass"]["selected"] = False
+        if "PackingFraction" in _source_entry:
+            _target_row_entry["packing_fraction"] = _source_entry["PackingFraction"]
+        else:
+            _target_row_entry["packing_fraction"] = ''
         _target_row_entry["geometry"] = {}
         _target_row_entry["geometry"]["shape"] = _source_entry["Geometry"]["Shape"]
-        _target_row_entry["geometry"]["radius"] = _source_entry["Geometry"]["Radius"]
-        _target_row_entry["geometry"]["radius2"] = _source_entry["Geometry"]["Radius2"]
-        _target_row_entry["geometry"]["height"] = _source_entry["Geometry"]["Height"]
-        _target_row_entry["abs_correction"] = _source_entry["AbsorptionCorrection"]["Type"]
-        _target_row_entry["multi_scattering_correction"] = _source_entry["MultipleScatteringCorrection"]["Type"]
-        _target_row_entry["placzek"] = copy.deepcopy(self.parent.placzek_default)
-        if "InelasticCorrection" in _source_entry:
-            _target_row_entry["inelastic_correction"] = _source_entry["InelasticCorrection"]["Type"]
+        if "Radius" in _source_entry["Geometry"]:
+            _target_row_entry["geometry"]["radius"] = _source_entry["Geometry"]["Radius"]
+        else:
+            _target_row_entry["geometry"]["radius"] = "N/A"
 
-            _target_row_entry["placzek"]["order"]["index_selected"] = _source_entry["InelasticCorrection"]["Order"]
-            _target_row_entry["placzek"]["is_self"] = _source_entry["InelasticCorrection"]["Self"]
-            _target_row_entry["placzek"]["is_interference"] = _source_entry["InelasticCorrection"]["Interference"]
-            _target_row_entry["placzek"]["fit_spectrum_with"]["text"] = \
+        if "Height" in _source_entry["Geometry"]:
+            _target_row_entry["geometry"]["height"] = _source_entry["Geometry"]["Height"]
+        else:
+            _target_row_entry["geometry"]["height"] = "N/A"
+        if "AbsorptionCorrection" in _source_entry:
+            _target_row_entry["abs_correction"] = _source_entry["AbsorptionCorrection"]["Type"]
+        else:
+            _target_row_entry["abs_correction"] = "None"
+        if "MultipleScatteringCorrection" in _source_entry:
+            _target_row_entry["multi_scattering_correction"] = _source_entry["MultipleScatteringCorrection"]["Type"]
+        else:
+            _target_row_entry["multi_scattering_correction"] = "None"
+        _target_row_entry["inelastic_correction"] = copy.deepcopy(self.parent.placzek_default)
+        if "InelasticCorrection" in _source_entry:
+            _target_row_entry["inelastic_correction"]["is_self"] = _source_entry["InelasticCorrection"]["Self"]
+            _target_row_entry["inelastic_correction"]["is_interference"] = \
+                _source_entry["InelasticCorrection"]["Interference"]
+            _target_row_entry["inelastic_correction"]["sample_t"] = \
+                _source_entry["InelasticCorrection"]["SampleTemperature"]
+            _target_row_entry["inelastic_correction"]["fit_spectrum_with"]["text"] = \
                 _source_entry["InelasticCorrection"]["FitSpectrumWith"]
 
             lambda_binning_for_fit = _source_entry["InelasticCorrection"]["LambdaBinningForFit"].split(
                 ",")
             if len(lambda_binning_for_fit) == 3:
-                _target_row_entry["placzek"]["lambda_binning_for_fit"]["min"] = lambda_binning_for_fit[0]
-                _target_row_entry["placzek"]["lambda_binning_for_fit"]["delta"] = lambda_binning_for_fit[1]
-                _target_row_entry["placzek"]["lambda_binning_for_fit"]["max"] = lambda_binning_for_fit[2]
+                _target_row_entry["inelastic_correction"]["lambda_binning_for_fit"]["min"] = lambda_binning_for_fit[0]
+                _target_row_entry["inelastic_correction"]["lambda_binning_for_fit"]["delta"] = lambda_binning_for_fit[1]
+                _target_row_entry["inelastic_correction"]["lambda_binning_for_fit"]["max"] = lambda_binning_for_fit[2]
             else:
                 default_placzek = self.parent.placzek_default["lambda_binning_for_fit"]
-                _target_row_entry["placzek"]["lambda_binning_for_fit"]["min"] = default_placzek["min"]
-                _target_row_entry["placzek"]["lambda_binning_for_fit"]["delta"] = default_placzek["delta"]
-                _target_row_entry["placzek"]["lambda_binning_for_fit"]["max"] = default_placzek["max"]
+                _target_row_entry["inelastic_correction"]["lambda_binning_for_fit"]["min"] = default_placzek["min"]
+                _target_row_entry["inelastic_correction"]["lambda_binning_for_fit"]["delta"] = default_placzek["delta"]
+                _target_row_entry["inelastic_correction"]["lambda_binning_for_fit"]["max"] = default_placzek["max"]
         else:
             _target_row_entry['inelastic_correction'] = None
+        if element == 'Sample':
+            _target_row_entry["resonance"] = {}
+            _target_row_entry["resonance"]["axis"] = _source_entry["Resonance"]["Axis"]
+            if isinstance(_source_entry["Resonance"]["LowerLimits"], list):
+                lower_tmp = ",".join([str(item) for item in _source_entry["Resonance"]["LowerLimits"]])
+            else:
+                lower_tmp = _source_entry["Resonance"]["LowerLimits"]
+            if isinstance(_source_entry["Resonance"]["UpperLimits"], list):
+                upper_tmp = ",".join([str(item) for item in _source_entry["Resonance"]["UpperLimits"]])
+            else:
+                upper_tmp = _source_entry["Resonance"]["UpperLimits"]
+            _target_row_entry["resonance"]["lower"] = lower_tmp 
+            _target_row_entry["resonance"]["upper"] = upper_tmp 
 
         return _target_row_entry
 
@@ -231,10 +295,11 @@ class JsonLoader:
         for _row in list_keys:
 
             _source_row_entry = data[str(_row)]
+
             _row = np.int(_row)
             _target_row_entry = copy.deepcopy(_default_empty_row)
 
-            _target_row_entry["activate"] = _source_row_entry['Activate']
+            # _target_row_entry["activate"] = _source_row_entry['Activate']
             _target_row_entry["title"] = _source_row_entry['Title']
             _target_row_entry["sample"] = self._retrieve_element_dict(
                 element='Sample', source_row_entry=_source_row_entry)
@@ -244,6 +309,9 @@ class JsonLoader:
 
             _target_row_entry["align_and_focus_args"] = _source_row_entry.get(
                 "AlignAndFocusArgs", {})
+
+            _target_row_entry["SelfScatteringLevelCorrection"] = _source_row_entry.get(
+                "SelfScatteringLevelCorrection", {})
 
             table_dictionary[_row] = _target_row_entry
 
@@ -266,13 +334,29 @@ class JsonLoader:
                 output_dir = str(_source_row_entry["OutputDir"])
                 self.parent.output_folder = output_dir
 
-                calibration_file = str(
-                    _source_row_entry["Calibration"]["Filename"])
+                if "Filename" in _source_row_entry["Calibration"]:
+                    calibration_file = str(
+                        _source_row_entry["Calibration"]["Filename"])
+                else:
+                    calibration_file = "N/A"
                 self.parent.processing_ui.calibration_file.setText(
                     calibration_file)
 
-                intermediate_grouping_file = str(
-                    _source_row_entry["Merging"]["Grouping"]["Initial"])
+                if "Grouping" in _source_row_entry["Merging"]:
+                    if "Initial" in _source_row_entry["Merging"]["Grouping"]:
+                        intermediate_grouping_file = str(
+                            _source_row_entry["Merging"]["Grouping"]["Initial"])
+                    else:
+                        intermediate_grouping_file = ''
+                    if "Output" in _source_row_entry["Merging"]["Grouping"]:
+                        output_grouping_file = str(
+                            _source_row_entry["Merging"]["Grouping"]["Output"])
+                    else:
+                        output_grouping_file = ''
+                else:
+                    intermediate_grouping_file = ''
+                    output_grouping_file = ''
+
                 if not (intermediate_grouping_file == ''):
                     self.parent.intermediate_grouping['filename'] = intermediate_grouping_file
                     self.parent.intermediate_grouping['enabled'] = True
@@ -280,9 +364,6 @@ class JsonLoader:
                         filename=intermediate_grouping_file)
                     nbr_groups = o_grouping.get_number_of_groups()
                     self.parent.intermediate_grouping['nbr_groups'] = nbr_groups
-
-                output_grouping_file = str(
-                    _source_row_entry["Merging"]["Grouping"]["Output"])
                 if not (output_grouping_file == ''):
                     self.parent.output_grouping['filename'] = output_grouping_file
                     self.parent.output_grouping['enabled'] = True
@@ -592,8 +673,8 @@ class TableFileLoader:
         self.init_raw_dict()
 
     def init_raw_dict(self):
-        _default_empty_row['sample']['placzek'] = self.parent.placzek_default
-        _default_empty_row['normalization']['placzek'] = self.parent.placzek_default
+        _default_empty_row['sample']['inelastic_correction'] = self.parent.placzek_default
+        _default_empty_row['normalization']['inelastic_correction'] = self.parent.placzek_default
 
     def display_dialog(self):
 
@@ -651,8 +732,8 @@ class FromDictionaryToTableUi:
             o_table.insert_row(
                 row=_row_entry,
                 align_and_focus_args=input_dictionary[_row_entry]['align_and_focus_args'],
-                normalization_placzek_arguments=input_dictionary[_row_entry]['normalization']['placzek'],
-                sample_placzek_arguments=input_dictionary[_row_entry]['sample']['placzek'])
+                normalization_placzek_arguments=input_dictionary[_row_entry]['normalization']['inelastic_correction'],
+                sample_placzek_arguments=input_dictionary[_row_entry]['sample']['inelastic_correction'])
 
             self.populate_row(row=_row_entry,
                               entry=input_dictionary[_row_entry],
@@ -667,8 +748,9 @@ class FromDictionaryToTableUi:
             key=None):
 
         column = starting_col
-
+        #print("ran")
         # run
+        #print(self.table_ui.item(row,column))
         self.table_ui.item(row, column).setText(entry[data_type]["runs"])
 
         # background - runs
@@ -710,8 +792,6 @@ class FromDictionaryToTableUi:
         column += 1
         self.parent.master_table_list_ui[key][data_type]['geometry']['radius']['value'].setText(
             str(entry[data_type]['geometry']['radius']))
-        self.parent.master_table_list_ui[key][data_type]['geometry']['radius2']['value'].setText(
-            str(entry[data_type]['geometry']['radius2']))
         self.parent.master_table_list_ui[key][data_type]['geometry']['height']['value'].setText(
             str(entry[data_type]['geometry']['height']))
 
@@ -734,10 +814,42 @@ class FromDictionaryToTableUi:
         # inelastic correction
         column += 1
         _requested_inelastic = entry[data_type]["inelastic_correction"]
+        if _requested_inelastic is not None:
+            _requested_inelastic = "Placzek"
+        else:
+            _requested_inelastic = "None"
         self.__set_combobox(
             requested_value=_requested_inelastic,
             row=row,
             col=column)
+        #print(entry[data_type])
+        #resonance filter
+        try:
+            if data_type == "sample":
+                column += 1
+                if 'resonance' in entry[data_type].keys():
+                    text1_tmp = str(entry[data_type]['resonance']['axis'])
+                    text2_tmp = str(entry[data_type]['resonance']['lower'])
+                    text3_tmp = str(entry[data_type]['resonance']['upper'])
+                else:
+                    text1_tmp = 'N/A'
+                    text2_tmp = 'N/A'
+                    text3_tmp = 'N/A'
+                self.parent.master_table_list_ui[key][data_type]['resonance']['axis']['value'].setText(text1_tmp)
+                self.parent.master_table_list_ui[key][data_type]['resonance']['lower']['value'].setText(text2_tmp)
+                self.parent.master_table_list_ui[key][data_type]['resonance']['upper']['value'].setText(text3_tmp)
+                if text2_tmp == 'N/A':
+                    self.parent.master_table_list_ui[key][data_type]['resonance']['lower']['lim_list'] = []
+                else:
+                    list_tmp = list(map(float, text2_tmp.split(",")))
+                    self.parent.master_table_list_ui[key][data_type]['resonance']['lower']['lim_list'] = list_tmp
+                if text3_tmp == "N/A":
+                    self.parent.master_table_list_ui[key][data_type]['resonance']['upper']['lim_list'] = []
+                else:
+                    list_tmp = list(map(float, text3_tmp.split(",")))
+                    self.parent.master_table_list_ui[key][data_type]['resonance']['upper']['lim_list'] = list_tmp
+        except:
+            pass
 
     def __set_combobox(self, requested_value="", row=-1, col=-1):
         _widget = self.table_ui.cellWidget(row, col).children()[1]
@@ -767,7 +879,34 @@ class FromDictionaryToTableUi:
         # normalization
         self.__fill_data_type(
             data_type='normalization',
-            starting_col=13,
+            starting_col=14,
             row=row,
             entry=entry,
             key=key)
+
+        if "SelfScatteringLevelCorrection" in entry.keys():
+            if entry["SelfScatteringLevelCorrection"]:
+                lower_list = []
+                upper_list = []
+                for i in range(6):
+                    key_tmp = "Bank" + str(i + 1)
+                    lower_list.append(entry["SelfScatteringLevelCorrection"][key_tmp][0])
+                    upper_list.append(entry["SelfScatteringLevelCorrection"][key_tmp][1])
+                lower_text = ",".join(list(map(str, lower_list)))
+                upper_text = ",".join(list(map(str, upper_list)))
+            else:
+                lower_list = []
+                upper_list = []
+                lower_text = ""
+                upper_text = ""
+        else:
+            lower_list = []
+            upper_list = []
+            lower_text = ""
+            upper_text = ""
+
+        self.parent.master_table_list_ui[key]["self_scattering_level"]["lower"]["value"].setText(lower_text)
+        self.parent.master_table_list_ui[key]["self_scattering_level"]["upper"]["value"].setText(upper_text)
+        self.parent.master_table_list_ui[key]["self_scattering_level"]["lower"]["val_list"] = lower_list
+        self.parent.master_table_list_ui[key]["self_scattering_level"]["upper"]["val_list"] = upper_list
+
