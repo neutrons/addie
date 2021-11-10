@@ -38,7 +38,6 @@ class TableInitialization:
         self.main_window = main_window
 #        self.parent = parent
 #        self.parent_ui = parent.processing_ui
-
         self.tree_dict = TREE_DICT
 
     def init_master_table(self):

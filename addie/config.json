@@ -44,7 +44,8 @@
     "calibration_file": ""
   },
   "advanced": {
-    "push_data_positive": false
+    "push_data_positive": false,
+    "abs_ms_ele_size": 1.0
   },
   "instrument": {
     "current": {
@@ -76,15 +77,10 @@
   "cacheDir": "./tmp",
   "outputDir": "./output",
   "packing_fraction": 1,
-  "placzek": {
-    "order": {
-      "name_list": [
-        "1st"
-      ],
-      "index_selected": 0
-    },
+  "InelasticCorrection": {
     "is_self": true,
     "is_interference": false,
+    "sample_t": 300,
     "fit_spectrum_with": {
       "short_name_list": [
         "GaussConvCubicSpline"

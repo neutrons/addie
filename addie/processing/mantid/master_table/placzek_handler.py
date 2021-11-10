@@ -47,14 +47,14 @@ class PlaczekWindow(QMainWindow):
         # initialize the widgets using previous values set
         info_dict = master_table_list_ui[self.data_type]['placzek_infos']
 
-        order_index = info_dict['order_index']
-        self.ui.order_comboBox.setCurrentIndex(order_index)
-
         is_self = info_dict['is_self']
         self.ui.self_checkBox.setChecked(is_self)
 
         is_interference = info_dict['is_interference']
         self.ui.interference_checkBox.setChecked(is_interference)
+
+        sample_t = info_dict['sample_t']
+        self.ui.sample_temperature.setText(str(sample_t))
 
         fit_spectrum_index = info_dict['fit_spectrum_index']
         self.ui.fit_spectrum_comboBox.setCurrentIndex(fit_spectrum_index)
@@ -80,10 +80,9 @@ class PlaczekWindow(QMainWindow):
     def save_widgets(self):
         master_table_list_ui = self.parent.master_table_list_ui[self.key]
 
-        order_combobox_text = self.ui.order_comboBox.currentText()
-        order_combobox_index = self.ui.order_comboBox.currentIndex()
         is_self_checked = self.ui.self_checkBox.isChecked()
         is_interference_checked = self.ui.interference_checkBox.isChecked()
+        sample_t_text = self.ui.sample_temperature.text()
         fit_spectrum_combobox_text = self.ui.fit_spectrum_comboBox.currentText()
         fit_spectrum_combobox_index = self.ui.fit_spectrum_comboBox.currentIndex()
         lambda_fit_min = self.ui.lambda_fit_min.text()
@@ -93,10 +92,9 @@ class PlaczekWindow(QMainWindow):
         lambda_calc_max = self.ui.lambda_calc_max.text()
         lambda_calc_delta = self.ui.lambda_calc_delta.text()
 
-        info_dict = {'order_text': order_combobox_text,
-                     'order_index': order_combobox_index,
-                     'is_self': is_self_checked,
+        info_dict = {'is_self': is_self_checked,
                      'is_interference': is_interference_checked,
+                     'sample_t': sample_t_text,
                      'fit_spectrum_text': fit_spectrum_combobox_text,
                      'fit_spectrum_index': fit_spectrum_combobox_index,
                      'lambda_fit_min': lambda_fit_min,

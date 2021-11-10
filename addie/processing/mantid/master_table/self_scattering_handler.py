@@ -25,6 +25,10 @@ class ScatteringSetter(QDialog):
         if parent.scattering_ui_position:
             self.move(parent.scattering_ui_position)
 
+        o_table = TableRowHandler(main_window=self.parent)
+        o_table.transfer_widget_states(
+            from_key=self.key)
+
         self.check_save_button()
         self.set_column_index()
 
@@ -53,11 +57,15 @@ class ScatteringSetter(QDialog):
         scattering_type being 'lower' or 'upper'
         value: value to set
         '''
+
         self.parent.master_table_list_ui[self.key]['self_scattering_level'][scattering_type]['value'].setText(
             value)
         if val_list:
-            self.parent.master_table_list_ui[self.key]['self_scattering_level']\
-                [scattering_type]['val_list'] = self.limit_str2list(value)
+            if len(value.strip()) == 0:
+                list_tmp = []
+            else:
+                list_tmp = self.limit_str2list(value)
+            self.parent.master_table_list_ui[self.key]['self_scattering_level'][scattering_type]['val_list'] = list_tmp
 
     def init_widgets_content(self):
         '''populate the widgets using the value from the master table'''
@@ -90,6 +98,9 @@ class ScatteringSetter(QDialog):
 
         if self.check_list_format(lower) and self.check_list_format(upper):
             save_button_status = True
+        else:
+            if len(lower.strip()) == 0 and len(upper.strip()) == 0:
+                save_button_status = True
 
         self.ui.ok.setEnabled(save_button_status)
 
@@ -108,7 +119,6 @@ class ScatteringSetter(QDialog):
             from_key=self.key)
 
         self.parent.check_master_table_column_highlighting(column=self.column)
-
         self.close()
 
     def closeEvent(self, c):

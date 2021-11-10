@@ -13,6 +13,7 @@ from addie.processing.mantid.master_table.periodic_table.material_handler import
 from addie.processing.mantid.master_table.tree_definition import SAMPLE_FIRST_COLUMN, NORMALIZATION_FIRST_COLUMN
 from addie.processing.mantid.master_table.utilities import Utilities
 from addie.utilities import math_tools
+from addie.processing.mantid.master_table.reduction_configuration_handler import SaveReductionConfiguration
 
 _export_dictionary = OrderedDict()
 
@@ -39,13 +40,17 @@ _element = {"Runs": "",
             "MultipleScatteringCorrection": {"Type": "",
                                              },
             "InelasticCorrection": {"Type": "",
-                                    "Order": "",
                                     "Self": True,
                                     "Interference": False,
                                     "FitSpectrumWith": "GaussConvCubicSpline",
                                     "LambdaBinningForFit": "",
                                     "LambdaBinningForCalc": "",
                                     },
+            "Resonance": {
+                "Axis": "",
+                "LowerLimits": "",
+                "UpperLimits": ""
+                }
             }
 
 _data = {"Facility": "SNS",
@@ -67,6 +72,8 @@ _data = {"Facility": "SNS",
          "AlignAndFocusArgs": {},
          }
 
+placzek_fit_methods = ["GaussConvCubicSpline"]
+
 
 class TableFileExporter:
 
@@ -80,10 +87,24 @@ class TableFileExporter:
         self.instrument = self.parent.instrument["short_name"]
         self.cachedir = self.parent.cache_folder
         self.outputdir = self.parent.output_folder
-        self.intermediate_grouping_file = self.parent.intermediate_grouping['filename']
-        self.output_grouping_file = self.parent.output_grouping['filename']
-        self.calibration = str(
-            self.parent.processing_ui.calibration_file.text())
+        if not self.parent.reduction_configuration:
+            SaveReductionConfiguration(parent.reduction_configuration_ui, grand_parent=parent)
+        if self.parent.reduction_configuration['initial'] is False:
+            self.intermediate_grouping_file = str(self.parent.processing_ui.calibration_file.text())
+            if self.intermediate_grouping_file == 'N/A':
+                self.intermediate_grouping_file = ''
+        else:
+            self.intermediate_grouping_file = self.parent.intermediate_grouping['filename']
+        if self.parent.reduction_configuration['output'] is False:
+            self.output_grouping_file = str(self.parent.processing_ui.calibration_file.text())
+            if self.output_grouping_file == 'N/A':
+                self.output_grouping_file = ''
+        else:
+            self.output_grouping_file = self.parent.output_grouping['filename']
+
+        self.calibration = str(self.parent.processing_ui.calibration_file.text())
+
+        self.NA_list = ["None","N/A","",np.NaN]
 
     def export(self, filename='', row=None):
         """create dictionary of all rows unless `row` argument is specified,
@@ -99,15 +120,13 @@ class TableFileExporter:
 
         # put together the data to write out
         if row is not None:
-            dictionary = self.retrieve_row_info(row)
+            dictionary,activate = self.retrieve_row_info(row)
         else:
             dictionary = self.retrieve_row_infos()
-
         # create the directory if it doesn't already exist
         direc = os.path.dirname(filename)
         if not os.path.exists(direc):
             os.mkdir(direc)
-
         # write out the configuration
         with open(filename, 'w') as outfile:
             simplejson.dump(dictionary, outfile, indent=2, ignore_nan=True)
@@ -294,12 +313,15 @@ class TableFileExporter:
 
 #        if inelastic_correction.lower() == 'placzek':
 
+        fit_method_index = int(self.parent.master_table_list_ui[key][element]['placzek_infos']['fit_spectrum_index'])
+        fit_method = placzek_fit_methods[fit_method_index]
+        self.parent.master_table_list_ui[key][element]['placzek_infos']['fit_spectrum_text'] = fit_method
         placzek_infos = self.parent.master_table_list_ui[key][element]['placzek_infos']
 
         if inelastic_correction not in self.__nan_list:
-            dict_element["InelasticCorrection"]["Order"] = placzek_infos["order_text"]
             dict_element["InelasticCorrection"]["Self"] = placzek_infos["is_self"]
             dict_element["InelasticCorrection"]["Interference"] = placzek_infos["is_interference"]
+            dict_element["InelasticCorrection"]["SampleTemperature"] = placzek_infos["sample_t"]
             fit_spectrum_text = placzek_infos["fit_spectrum_text"].replace(
                 ".",
                 "").replace(
@@ -317,6 +339,21 @@ class TableFileExporter:
         else:
             dict_element.pop("InelasticCorrection")
 
+        if element == "sample":
+            column += 1
+            axis_tmp = self.parent.master_table_list_ui[key][element]['resonance']['axis']['value'].text()
+            dict_element['Resonance']['Axis'] = axis_tmp
+            lim_list_tmp = self.parent.master_table_list_ui[key][element]['resonance']['lower']['lim_list']
+            dict_element['Resonance']['LowerLimits'] = lim_list_tmp
+            lim_list_tmp = self.parent.master_table_list_ui[key][element]['resonance']['upper']['lim_list']
+            dict_element['Resonance']['UpperLimits'] = lim_list_tmp
+        elif element == "normalization":
+            dict_element.pop('Resonance', None)
+
+        if len(dict_element['Background']['Background']['Runs']) == 0:
+            dict_element['Background']['Background'].pop('Runs')
+        dict_element = self.delete_empty_rows(dict_element)
+
         return dict_element
 
     def _get_key_value_dict(self, row=-1):
@@ -324,7 +361,6 @@ class TableFileExporter:
 
         :param row: Row index
         :type row: int
-
         :return: Dictionary of the AlignAndFocusArgs info
         :rtype: dict
         """
@@ -421,20 +457,52 @@ class TableFileExporter:
         _export_dictionary_normalization = self._retrieve_element_infos(
             element='normalization', row=row)
         _key_value_dict = self._get_key_value_dict(row=row)
+        key = self.get_key_from_row(row)
+        self.scattering_lower = self.parent.master_table_list_ui[key]['self_scattering_level']['lower']['val_list']
+        self.scattering_upper = self.parent.master_table_list_ui[key]['self_scattering_level']['upper']['val_list']
+        try:
+            self.QBin_min = self.parent.reduction_configuration['pdf']['q_range']['min']
+            self.QBin_del = self.parent.reduction_configuration['pdf']['q_range']['delta']
+            self.QBin_max = self.parent.reduction_configuration['pdf']['q_range']['max']
+            self.advanced_params = self.parent.reduction_configuration['advanced']
+        except:
+            self.QBin_min = 0
+            self.QBin_del = 0.02
+            self.QBin_max = 40
+            self.advanced_params = {"push_data_positive": False,
+                                    "abs_ms_ele_size": "1.0"}
+
+        _export_dictionary_sample["AbsMSParameters"] = {"ElementSize": self.advanced_params["abs_ms_ele_size"]}
+        _export_dictionary_normalization["AbsMSParameters"] = {"ElementSize": self.advanced_params["abs_ms_ele_size"]}
+
+        if len(self.scattering_lower) > 0 and len(self.scattering_upper) > 0:
+            bank1_list = [self.scattering_lower[0], self.scattering_upper[0]]
+            bank2_list = [self.scattering_lower[1], self.scattering_upper[1]]
+            bank3_list = [self.scattering_lower[2], self.scattering_upper[2]]
+            bank4_list = [self.scattering_lower[3], self.scattering_upper[3]]
+            bank5_list = [self.scattering_lower[4], self.scattering_upper[4]]
+            bank6_list = [self.scattering_lower[5], self.scattering_upper[5]]
+        else:
+            bank1_list = "N/A"
+            bank2_list = "N/A"
+            bank3_list = "N/A"
+            bank4_list = "N/A"
+            bank5_list = "N/A"
+            bank6_list = "N/A"
 
         dictionary = {
             'Activate': activate,
+            'Facility': self.facility,
+            'Instrument': self.instrument,
             'Title': title,
             'Sample': _export_dictionary_sample,
             'Normalization': _export_dictionary_normalization,
             'Calibration': {
                 "Filename": self.calibration},
-            'Facility': self.facility,
-            'Instrument': self.instrument,
             'CacheDir': self.cachedir,
             'OutputDir': self.outputdir,
             "Merging": {
-                "QBinning": [],
+                "QBinning": [self.QBin_min,self.QBin_del,self.QBin_max],
                 "SumBanks": [],
                 "Characterizations": "",
                 "Grouping": {
@@ -443,7 +511,55 @@ class TableFileExporter:
                 },
             },
             'AlignAndFocusArgs': _key_value_dict,
+            'SelfScatteringLevelCorrection': {
+                "Bank1": bank1_list,
+                "Bank2": bank2_list,
+                "Bank3": bank3_list,
+                "Bank4": bank4_list,
+                "Bank5": bank5_list,
+                "Bank6": bank6_list
+                }
         }
+
+        #Checking for empty lists and values
+        dictionary = self.delete_empty_rows(dictionary)
+        dictionary.pop('Activate')
+
+        return dictionary,activate
+
+    #Shouldn't delete the main category
+    def delete_empty_rows(self, dictionary):
+        del_set = set()
+        del_sub_set = set()
+        for key in dictionary:
+            if dictionary[key] in self.NA_list:
+                del_set.add(key)
+            try:
+                if len(dictionary[key]) == 0:
+                    del_set.add(key)
+            except:
+                pass
+            if type(dictionary[key]) is dict:
+                for sub_key in dictionary[key]:
+                    if dictionary[key][sub_key] in self.NA_list:
+                        del_sub_set.add(sub_key)
+                        del_set.add(key)
+                    try:
+                        if len(dictionary[key][sub_key]) == 0:
+                            del_sub_set.add(sub_key)
+                            del_set.add(key)
+                    except:
+                        pass
+        for key in del_set:
+            for sub_key in del_sub_set:
+                try:
+                    if type(dictionary[key]) is dict:
+                        if sub_key in dictionary[key]:
+                            dictionary[key].pop(sub_key)
+                    else:
+                        dictionary.pop(key)
+                except:
+                    pass
         return dictionary
 
     def retrieve_row_infos(self):
@@ -462,7 +578,7 @@ class TableFileExporter:
             # force 3 digits index (to make sure loading back the table will be
             # done in the same order)
             full_export_dictionary["{:03}".format(
-                row)] = self.retrieve_row_info(row)
+                row)],activate = self.retrieve_row_info(row)
 
         return full_export_dictionary
 
@@ -501,8 +617,9 @@ class TableFileExporter:
 
         # Post-process for output: take out overall Density and add MassDensity
         # key
+
         dictionary.pop('Density')
-        dictionary['MassDensity'] = float(mass_density)
+        dictionary['MassDensity'] = np.NaN if (mass_density in self.__nan_list) else float(mass_density)
 
         return dictionary
 
@@ -563,7 +680,10 @@ class TableFileExporter:
             if key not in geometry:
                 err_string = "Did not find key {} in geometry {}".format(
                     key, geometry)
-                raise Exception(err_string)
+                print(err_string)
+                return False
+
+        return True
 
     def _map_table_to_mantid_geometry(self, geometry):
         """ Map from table geometry to mantid geometry using geometry_handler.table2mantid
@@ -610,7 +730,7 @@ class TableFileExporter:
         # return a default geometry if not specified
         if 'Geometry' not in dictionary:
             dictionary['Geometry'] = geometry
-            print("No Geometry found, defaul geometry added:", geometry)
+            print("No Geometry found, default geometry added:", geometry)
             return dictionary
 
         # Remove all NaN values from Geometry
@@ -624,13 +744,34 @@ class TableFileExporter:
         # Get geometry and check if we have the necessary geometry keys for the
         # shape
         geometry = dictionary['Geometry']
-        self._check_necessary_geometry_keys_exist(geometry)
+        if not self._check_necessary_geometry_keys_exist(geometry):
+            return []
 
         # Construct new geometry dict based on table to mantid mapping
         geometry = self._map_table_to_mantid_geometry(geometry)
         dictionary['Geometry'] = geometry
 
         return dictionary
+
+    def pre_validator(self, json_input):
+
+        necessary_keys = ["Calibration"]
+        invalid_values = ['', 'nan', "N/A"]
+
+        for key in necessary_keys:
+            if key not in json_input:
+                print(f"Key '{key}' not found in the input. We cannot continue.")
+                return False
+            else:
+                if not json_input[key]:
+                    print(f"No valid key found in {key}. We cannot continue.")
+                    return False
+                else:
+                    for key_1, item_1 in json_input[key].items():
+                        if item_1 in invalid_values:
+                            print(f"Invalid value '{item_1}' given for key '{key_1}' of '{key}'. We cannot continue.")
+                            return False
+        return True
 
     def convert_from_row_to_reduction(self, json_input):
         """Processing of the pre-reduction JSON's `Density` to return
@@ -643,10 +784,13 @@ class TableFileExporter:
         :rtype: dict
         """
         reduction_input = json_input
+        if not self.pre_validator(reduction_input):
+            return []
         for element in ["Sample", "Normalization"]:
             element_section = reduction_input[element]
             element_section = self.density_selection_for_reduction(
                 element_section)
-            self.geometry_selection_for_reduction(element_section)
+            if not self.geometry_selection_for_reduction(element_section):
+                return []
 
         return reduction_input
