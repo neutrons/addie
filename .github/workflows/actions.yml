@@ -63,9 +63,9 @@ jobs:
       - name: Test
         shell: bash -l {0}
         run: |
-          python -c "import mantid"
-          python -c "import qtpy"
-          python -c "import mantidqt"
+          QT_API=pyqt5 python -c "import mantid"
+          QT_API=pyqt5 python -c "import qtpy"
+          QT_API=pyqt5 python -c "import mantidqt"
           xvfb-run --server-args="-screen 0 640x480x24" --auto-servernum mantidworkbench --help
           echo "import time;time.sleep(5)" > workbenchshutdown.py
           xvfb-run --auto-servernum pytest --mpl tests
