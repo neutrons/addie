@@ -2,5 +2,5 @@ flake8
 mock
 pytest
 pytest-mpl
-pytest-qt
+pytest-qt<=3.3.0
 typing
