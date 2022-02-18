@@ -81,6 +81,8 @@ class ReductionConfiguration(QDialog):
         self.ui.output_browse_value.setText(output_grouping['filename'])
         self.ui.output_browse_groups_value.setText(str(output_grouping['nbr_groups']))
 
+        self.ui.abs_ms_ele_size.setText(self.parent.advanced_dict["ele_size"])
+
         self.init_global_key_value_widgets()
         self.update_key_value_widgets()
 
@@ -392,7 +394,6 @@ class LoadReductionConfiguration:
                 data = simplejson.load(f)
             pdf_q_range = data['pdf']['q_range']
             pdf_r_range = data['pdf']['r_range']
-            pdf_reduction_configuration_file = data["pdf"]["reduction_configuration_file"]
             pdf_characterization_file = data["pdf"]["characterization_file"]
 
             bragg_characterization_file = data["bragg"]["characterization_file"]
@@ -405,7 +406,6 @@ class LoadReductionConfiguration:
         else:
             pdf_q_range = grand_parent.reduction_configuration['pdf']['q_range']
             pdf_r_range = grand_parent.reduction_configuration['pdf']['r_range']
-            pdf_reduction_configuration_file = grand_parent.reduction_configuration['pdf']['reduction_configuration_file']
             pdf_characterization_file = grand_parent.reduction_configuration['pdf']['characterization_file']
 
             bragg_characterization_file = grand_parent.reduction_configuration["bragg"]["characterization_file"]
@@ -414,6 +414,7 @@ class LoadReductionConfiguration:
 
             #calibration_file = grand_parent.reduction_configuration["pdf_bragg"]["calibration_file"]
             push_data_positive = grand_parent.reduction_configuration["advanced"]["push_data_positive"]
+            abs_ms_ele_size = grand_parent.reduction_configuration["advanced"]["abs_ms_ele_size"]
 
         # PDF and Bragg
         #self._set_text_value(ui=parent.ui.calibration_file, value=calibration_file)
@@ -425,7 +426,6 @@ class LoadReductionConfiguration:
         self._set_text_value(ui=parent.ui.pdf_r_range_min, value=pdf_r_range["min"])
         self._set_text_value(ui=parent.ui.pdf_r_range_max, value=pdf_r_range["max"])
         self._set_text_value(ui=parent.ui.pdf_r_range_delta, value=pdf_r_range["delta"])
-        self._set_text_value(ui=parent.ui.pdf_reduction_configuration_file, value=pdf_reduction_configuration_file)
         self._set_text_value(ui=parent.ui.pdf_characterization_file, value=pdf_characterization_file)
 
         # Bragg
@@ -471,8 +471,6 @@ class SaveReductionConfiguration:
             pdf_r_range_max = self._get_text_value(parent.ui.pdf_r_range_max)
             pdf_r_range_delta = self._get_text_value(parent.ui.pdf_r_range_delta)
 
-            pdf_reduction_configuration_file = self._get_text_value(parent.ui.pdf_reduction_configuration_file)
-
             bragg_characterization_file = self._get_text_value(parent.ui.bragg_characterization_file)
             bragg_number_of_bins = self._get_text_value(parent.ui.bragg_number_of_bins)
             bragg_wavelength_min = self._get_text_value(parent.ui.bragg_wavelength_min)
@@ -489,12 +487,10 @@ class SaveReductionConfiguration:
             pdf_q_range_min = '0.0'
             pdf_q_range_max = '40.0'
             pdf_q_range_delta = '0.02'
-
+            
             pdf_r_range_min = '0.0'
             pdf_r_range_max = '40.0'
             pdf_r_range_delta = '0.02'
-
-            pdf_reduction_configuration_file = ''
 
             bragg_characterization_file = ''
             bragg_number_of_bins = '-6000'
@@ -509,12 +505,11 @@ class SaveReductionConfiguration:
         pdf_reduction_configuration['q_range'] = {'min': pdf_q_range_min,
                                                   'max': pdf_q_range_max,
                                                   'delta': pdf_q_range_delta}
-
+        
         pdf_reduction_configuration['r_range'] = {'min': pdf_r_range_min,
                                                   'max': pdf_r_range_max,
                                                   'delta': pdf_r_range_delta}
 
-        pdf_reduction_configuration['reduction_configuration_file'] = pdf_reduction_configuration_file
         reduction_configuration['pdf'] = pdf_reduction_configuration
 
         bragg_reduction_configuration["characterization_file"] = bragg_characterization_file

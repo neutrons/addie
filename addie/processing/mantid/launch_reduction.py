@@ -1,19 +1,9 @@
 import os
 import traceback
+import json
 from mantidqt.utils.asynchronous import AsyncTask
 
 from addie.processing.mantid.master_table.master_table_exporter import TableFileExporter as MantidTableExporter
-
-# Mantid Total Scattering integration
-# (https://github.com/neutrons/mantid_total_scattering)
-try:
-    import total_scattering
-    print("Mantid Total Scattering Version: ", total_scattering.__version__)
-    from total_scattering.reduction.total_scattering_reduction import TotalScatteringReduction
-    MANTID_TS_ENABLED = True
-except ImportError:
-    print('total_scattering module not found. Functionality disabled')
-    MANTID_TS_ENABLED = False
 
 
 class JobPool(object):
@@ -83,32 +73,60 @@ def run_mantid(parent):
     print('writing out full table to "{}"'.format(full_reduction_filename))
     for row in range(num_rows):
         dictionary,activate = exporter.retrieve_row_info(row)
-        if activate is True:
-            filename = os.path.join(os.path.expanduser('~'),'.mantid' ,'JSON_output',dictionary['Title'] +'_'+ str(row) + '.json')
+        if activate == True:
+            filename = os.path.join(os.path.expanduser('~'),'.mantid' ,'JSON_output',dictionary['Title'] +'_'+ str(row) + '.json') 
             exporter.export(filename,row)
             print("Row",row,"Successfully output to",filename)
-
-    # append the individual rows to input list (reduction_inputs)
-    reduction_inputs = []
-    for row in range(num_rows):
-        if not exporter.isActive(row):
-            print('skipping row {} - inactive'.format(row + 1))  # REMOVE?
-            continue
-        print('Will be running row {} for reduction'.format(row + 1))  # TODO should be debug logging
-        json_input = exporter.retrieve_row_info(row)[0]
-        reduction_input = exporter.convert_from_row_to_reduction(json_input)
-        if not reduction_input:
-            return
-        reduction_inputs.append(reduction_input)
-    if len(reduction_inputs) == 0:
-        print('None of the rows were activated')
-        return
-
-    # locate total scattering script
-    if MANTID_TS_ENABLED:
-        pool = JobPool(reduction_inputs)
-        pool.start()
-    else:
-        # TODO should be on the status bar
-        print('total_scattering module not found. Functionality disabled')
-        return
+            with open(filename) as json_file:
+                data_tmp = json.load(json_file)
+            dict_out_tmp = {}
+            container_type=""
+            for key, item in data_tmp.items():
+                if "Sample" in key:
+                    sample_tmp = {}
+                    for key_s, item_s in item.items():
+                        if not "Density" in key_s:
+                            if "Material" in key_s:
+                                string_tmp = item_s.replace("(", "").replace(")", "")
+                                sample_tmp[key_s] = string_tmp
+                            else:
+                                sample_tmp[key_s] = item_s
+                            if "Geometry" in key_s:
+                                known_shape = ["PAC03", "PAC06", "PAC08",
+                                               "PAC10", "QuartzTube03"]
+                                if item_s["Shape"] in known_shape:
+                                    shape_tmp = "Cylinder"
+                                    container_type = item_s["Shape"]
+                                else:
+                                    shape_tmp = item_s["Shape"]
+                                geo_dict_tmp = {}
+                                for key_tmp in item_s:
+                                    geo_dict_tmp[key_tmp] = item_s[key_tmp]
+                                geo_dict_tmp["Shape"] = shape_tmp
+                                sample_tmp[key_s] = geo_dict_tmp
+                        else:
+                            sample_tmp["MassDensity"] = float(item_s["MassDensity"])
+                    dict_out_tmp[key] = sample_tmp
+                elif "Normalization" in key or "Normalisation" in key:
+                    van_tmp = {}
+                    for key_v, item_v in item.items():
+                        if not "Density" in key_v:
+                            if "Material" in key_v:
+                                string_tmp = item_v.replace("(", "").replace(")", "")
+                                van_tmp[key_v] = string_tmp
+                            else:
+                                van_tmp[key_v] = item_v
+                        else:
+                            van_tmp["MassDensity"] = float(item_v["MassDensity"])
+                    dict_out_tmp[key] = van_tmp
+                else:
+                    dict_out_tmp[key] = item
+            if container_type:
+                dict_out_tmp["Environment"] = { "Name": "InAir",
+                                                "Container": container_type}
+            filename_to_run = os.path.join(os.path.expanduser('~'),'.mantid' ,'JSON_output', 'running_tmp.json')
+            with open(filename_to_run, 'w') as outfile:
+                json.dump(dict_out_tmp, outfile, indent=2)
+            _script_to_run = "bash /SNS/NOM/shared/scripts/mantidtotalscattering/run_mts.sh " + filename_to_run
+            parent.launch_job_manager(job_name='MantidTotalScattering',
+                                      script_to_run=_script_to_run)

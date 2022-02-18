@@ -34,7 +34,7 @@ class MakeCalibrationLauncher(object):
 
 class MakeCalibrationWindow(QMainWindow):
 
-    table_column_width = [60, 250, 350, 350, 90, 300]
+    table_column_width = [60, 250, 600, 90, 300]
     table_row_height = 85
     entry_level =  0
 
@@ -49,9 +49,6 @@ class MakeCalibrationWindow(QMainWindow):
                                                  "calibration_value",
                                                  "calibration_browser",
                                                  "calibration_browser_value",
-                                                 "vanadium_value",
-                                                 "vanadium_browser",
-                                                 "vanadium_browser_value",
                                                  "date",
                                                  "output_dir_browser",
                                                  "output_dir_value",
@@ -175,17 +172,6 @@ class MakeCalibrationWindow(QMainWindow):
             return result.group(1)
         return None
 
-    def vanadium_browser_clicked(self, entry=""):
-        sample_type = "Vanadium"
-        value_ui = self.master_list_ui[entry].vanadium_browser_value
-
-        [_file, run_number] = self._general_browser_clicked(sample_type=sample_type,
-                                                            value_ui=value_ui)
-        if _file:
-            self.master_list_value[entry]["vanadium_browser"] = _file
-            self.master_list_ui[entry].vanadium_value.setText(str(run_number))
-            self.check_run_calibration_status()
-
     def calibration_browser_clicked(self, entry=""):
         sample_type = "Calibration"
         value_ui = self.master_list_ui[entry].calibration_browser_value
@@ -273,41 +259,14 @@ class MakeCalibrationWindow(QMainWindow):
         col1_widget.setLayout(verti_layout)
         self.ui.tableWidget.setCellWidget(row, col, col1_widget)
 
-        # new column - Vanadium
-        col = 3
-        # first row
-        # first row
-        label = QLabel("Run #:")
-        vana_value = QLineEdit("")
-        vana_value.returnPressed.connect(lambda entry=_name: self.run_entered(entry))
-        vana_browser_button = QPushButton("Browse...")
-        vana_browser_button.setMinimumWidth(button_width)
-        vana_browser_button.setMaximumWidth(button_width)
-        vana_browser_button.clicked.connect(lambda state, entry=_name:  self.vanadium_browser_clicked(entry))
-        first_row = QHBoxLayout()
-        first_row.addWidget(label)
-        first_row.addWidget(vana_value)
-        first_row.addWidget(vana_browser_button)
-        first_row_widget = QWidget()
-        first_row_widget.setLayout(first_row)
-        # second row
-        vana_browser_button_value = QLabel("N/A")
-
-        verti_layout = QVBoxLayout()
-        verti_layout.addWidget(first_row_widget)
-        verti_layout.addWidget(vana_browser_button_value)
-        col1_widget = QWidget()
-        col1_widget.setLayout(verti_layout)
-        self.ui.tableWidget.setCellWidget(row, col, col1_widget)
-
         # new column - date
-        col = 4
+        col = 3
         date = QDateEdit()
         date.setDate(self.master_date_value)
         self.ui.tableWidget.setCellWidget(row, col, date)
 
         # new column - output dir
-        col = 5
+        col = 4
         browser_button = QPushButton("Browse...")
         browser_button.setMinimumWidth(button_width)
         browser_button.setMaximumWidth(button_width)
@@ -329,18 +288,13 @@ class MakeCalibrationWindow(QMainWindow):
                                            calibration_value=cali_value,
                                            calibration_browser=cali_browser_button,
                                            calibration_browser_value=cali_browser_button_value,
-                                           vanadium_value=vana_value,
-                                           vanadium_browser=vana_browser_button,
-                                           vanadium_browser_value=vana_browser_button_value,
                                            date=date,
                                            output_dir_browser=browser_button,
                                            output_dir_value=browser_value,
                                            output_reset=reset)
         self.master_list_ui[_name] = list_local_ui
 
-        list_local_name = dict(vanadium_run_number="",
-                               vanadium_browser="",
-                               calibration_run_number="",
+        list_local_name = dict(calibration_run_number="",
                                calibration_browser="")
         self.master_list_value[_name] = list_local_name
 
@@ -357,10 +311,6 @@ class MakeCalibrationWindow(QMainWindow):
 
         # Calibration column
         if not self._check_local_column(run_value = local_list_ui.calibration_value):
-            return False
-
-        # Vanadium column
-        if not self._check_local_column(run_value=local_list_ui.vanadium_value):
             return False
 
         # output dir
@@ -395,15 +345,37 @@ class MakeCalibrationWindow(QMainWindow):
         self.ui.run_calibration_button.setEnabled(_status)
 
     def run_calibration_button_clicked(self):
-        # make dictionary of all infos
+        instr_dict = {"NOM": "NOMAD",
+                      "PG3": "PG3}"}
         o_dict = MakeCalibrationDictionary(parent=self)
-        _file, _ = get_save_file(parent=self,
-                                 caption="Select where and name of json file to create...",
-                                 # directory = '/SNS/users/ntm/',
-                                 filter={'json (*.json)':'json'})
-        if _file:
-            with open(_file, 'w') as fp:
-                simplejson.dump(o_dict.dictionary, fp, indent=2, ignore_nan=True)
+        for calibrant in o_dict.dictionary['Calibrants'].keys():
+            calib_tmp_dict = o_dict.dictionary['Calibrants'][calibrant]
+            calib_file = calib_tmp_dict['Filename']
+            calib_date = calib_tmp_dict['Date'].replace("_", "-")
+            calib_senv = calib_tmp_dict['SampleEnvironment']
+            calib_outd = calib_tmp_dict['CalDirectory']
+            if "/" in calib_file:
+                instrument_name = calib_file.split("/")[2]
+            else:
+                instrument_name = calib_file.split("_")[0]
+            calib_control_file = os.path.join('/SNS/', instrument_name,
+                                              'shared/CALIBRATION/Group_calib_scripts',
+                                              'control_' + calibrant + ".dat")
+            with open(calib_control_file, "w") as calib_f:
+                calib_f.write("{0:<25s}:: {1:s}\n".format("diamond file", calib_file))
+                calib_f.write("{0:<25s}:: {1:s}\n".format("instrument",
+                                                          instr_dict[instrument_name]))
+                calib_f.write("{0:<25s}:: {1:s}\n".format("date", calib_date))
+                calib_f.write("{0:<25s}:: {1:s}\n".format("sample environment",
+                                                          calib_senv))
+                calib_f.write("{0:<25s}:: {1:s}\n".format("output directory",
+                                                          calib_outd))
+            running_script = os.path.join('/SNS/', instrument_name,
+                                          'shared/CALIBRATION/Group_calib_scripts',
+                                          'running')
+            running_script += (" " + calib_control_file)
+            self.parent.launch_job_manager(job_name='MakeCalibration',
+                                           script_to_run=running_script)
 
     def closeEvent(self, c):
         self.parent.make_calibration_ui = None
@@ -452,15 +424,6 @@ class MakeCalibrationDictionary:
             else:
                 cali_filename = None
 
-            # vanadium run number
-            vana_run_number = str(local_list_ui.vanadium_value.text())
-
-            # vanadium full file name (if any)
-            if str(local_list_ui.vanadium_browser.text()) != "N/A":
-                vana_filename = str(local_list_value["vanadium_browser"])
-            else:
-                vana_filename = None
-
             # local date
             _date = local_list_ui.date.date()
             [year, month, day] = _date.getDate()
@@ -472,14 +435,7 @@ class MakeCalibrationDictionary:
             # local output dir
             local_output_dir = str(local_list_ui.output_dir_value.text())
 
-            # save data in vanadium dict
-            vanadium_dict = {}
-            vanadium_dict["RunNumber"] = vana_run_number
-            if vana_filename:
-                vanadium_dict["Filename"] = vana_filename
-
             cali_dict = {}
-            cali_dict["Vanadium"] = vanadium_dict
             if cali_filename:
                 cali_dict["Filename"] = cali_filename
 

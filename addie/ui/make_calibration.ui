@@ -192,11 +192,6 @@
       </column>
       <column>
        <property name="text">
-        <string>Vanadium</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
         <string>Date</string>
        </property>
       </column>

@@ -4,6 +4,7 @@ import copy
 import simplejson
 import numpy as np
 import os
+import re
 
 from qtpy.QtCore import Qt
 
@@ -89,21 +90,21 @@ class TableFileExporter:
         self.outputdir = self.parent.output_folder
         if not self.parent.reduction_configuration:
             SaveReductionConfiguration(parent.reduction_configuration_ui, grand_parent=parent)
-        if self.parent.reduction_configuration['initial'] is False:
-            self.intermediate_grouping_file = str(self.parent.processing_ui.calibration_file.text())
+        if self.parent.reduction_configuration['initial'] == False:
+            self.intermediate_grouping_file = str(self.parent.processing_ui.calibration_file.text()) 
             if self.intermediate_grouping_file == 'N/A':
                 self.intermediate_grouping_file = ''
         else:
             self.intermediate_grouping_file = self.parent.intermediate_grouping['filename']
-        if self.parent.reduction_configuration['output'] is False:
-            self.output_grouping_file = str(self.parent.processing_ui.calibration_file.text())
+        if self.parent.reduction_configuration['output'] == False:
+            self.output_grouping_file = str(self.parent.processing_ui.calibration_file.text()) 
             if self.output_grouping_file == 'N/A':
                 self.output_grouping_file = ''
-        else:
+        else: 
             self.output_grouping_file = self.parent.output_grouping['filename']
 
         self.calibration = str(self.parent.processing_ui.calibration_file.text())
-
+        
         self.NA_list = ["None","N/A","",np.NaN]
 
     def export(self, filename='', row=None):
@@ -282,7 +283,9 @@ class TableFileExporter:
             self.parent.master_table_list_ui[key][element]['geometry']['radius']['value'].text())
         radius2 = 'N/A'
         height = 'N/A'
-        if shape in ['Cylinder', 'Hollow Cylinder']:
+        height_avail = ['Cylinder', 'Hollow Cylinder', 'PAC03', 'PAC06',
+                        'PAC08', 'PAC10', 'QuartzTube03']
+        if shape in height_avail:
             height = str(
                 self.parent.master_table_list_ui[key][element]['geometry']['height']['value'].text())
         elif shape == 'Sphere':
@@ -353,7 +356,7 @@ class TableFileExporter:
         if len(dict_element['Background']['Background']['Runs']) == 0:
             dict_element['Background']['Background'].pop('Runs')
         dict_element = self.delete_empty_rows(dict_element)
-
+        
         return dict_element
 
     def _get_key_value_dict(self, row=-1):
@@ -461,8 +464,8 @@ class TableFileExporter:
         self.scattering_lower = self.parent.master_table_list_ui[key]['self_scattering_level']['lower']['val_list']
         self.scattering_upper = self.parent.master_table_list_ui[key]['self_scattering_level']['upper']['val_list']
         try:
-            self.QBin_min = self.parent.reduction_configuration['pdf']['q_range']['min']
-            self.QBin_del = self.parent.reduction_configuration['pdf']['q_range']['delta']
+            self.QBin_min = self.parent.reduction_configuration['pdf']['q_range']['min'] 
+            self.QBin_del = self.parent.reduction_configuration['pdf']['q_range']['delta'] 
             self.QBin_max = self.parent.reduction_configuration['pdf']['q_range']['max']
             self.advanced_params = self.parent.reduction_configuration['advanced']
         except:
@@ -472,8 +475,12 @@ class TableFileExporter:
             self.advanced_params = {"push_data_positive": False,
                                     "abs_ms_ele_size": "1.0"}
 
-        _export_dictionary_sample["AbsMSParameters"] = {"ElementSize": self.advanced_params["abs_ms_ele_size"]}
-        _export_dictionary_normalization["AbsMSParameters"] = {"ElementSize": self.advanced_params["abs_ms_ele_size"]}
+        ele_size_tmp = [float(item) for item in re.split(',| ', self.advanced_params["abs_ms_ele_size"])]
+        if len(ele_size_tmp) == 1:
+            _export_dictionary_sample["AbsMSParameters"] = {"ElementSize": ele_size_tmp[0]}
+        else:
+            _export_dictionary_sample["AbsMSParameters"] = {"ElementSize": ele_size_tmp[:2]}
+        _export_dictionary_normalization["AbsMSParameters"] = {"ElementSize": ele_size_tmp[0]}
 
         if len(self.scattering_lower) > 0 and len(self.scattering_upper) > 0:
             bank1_list = [self.scattering_lower[0], self.scattering_upper[0]]
@@ -524,9 +531,9 @@ class TableFileExporter:
         #Checking for empty lists and values
         dictionary = self.delete_empty_rows(dictionary)
         dictionary.pop('Activate')
+             
 
         return dictionary,activate
-
     #Shouldn't delete the main category
     def delete_empty_rows(self, dictionary):
         del_set = set()
@@ -556,11 +563,12 @@ class TableFileExporter:
                     if type(dictionary[key]) is dict:
                         if sub_key in dictionary[key]:
                             dictionary[key].pop(sub_key)
-                    else:
+                    else:      
                         dictionary.pop(key)
                 except:
                     pass
         return dictionary
+
 
     def retrieve_row_infos(self):
         """Retrieve all of the rows' information in a pre-reduction JSON format
@@ -616,7 +624,7 @@ class TableFileExporter:
             mass_density = self._get_mass_density_from_mass(dictionary)
 
         # Post-process for output: take out overall Density and add MassDensity
-        # key
+        # key 
 
         dictionary.pop('Density')
         dictionary['MassDensity'] = np.NaN if (mass_density in self.__nan_list) else float(mass_density)
@@ -754,7 +762,7 @@ class TableFileExporter:
         return dictionary
 
     def pre_validator(self, json_input):
-
+        
         necessary_keys = ["Calibration"]
         invalid_values = ['', 'nan', "N/A"]
 

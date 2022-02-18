@@ -75,7 +75,7 @@ class TableRowHandler:
 
         # mult. scat. correction
         mult_scat_correction_ui = self.main_window.master_table_list_ui[key][data_type]['mult_scat_correction']
-        list_mult_scat_correction = self.get_multi_scat_correction_list(shape=shape_index,section='Sample')
+        list_mult_scat_correction = self.get_multi_scat_correction_list(shape=shape_index)
         update_ui(ui=mult_scat_correction_ui, new_list=list_mult_scat_correction)
 
         _enabled_radius_1 = True
@@ -83,8 +83,21 @@ class TableRowHandler:
         _enabled_height = True
         _label_radius_1 = 'Radius'
         _label_radius_2 = 'Outer Radius'
-        if shape_index == 0: # cylinder
+        cylinder_sam = [0, 3, 4, 5, 6, 7]
+        if shape_index in cylinder_sam: # cylinder
             _enabled_radius_2 = False
+            if shape_index == 3:
+                sam_radius_val = "0.135"
+            elif shape_index == 4:
+                sam_radius_val = "0.295"
+            elif shape_index == 5:
+                sam_radius_val = "0.385"
+            elif shape_index == 6:
+                sam_radius_val = "0.460"
+            elif shape_index == 7:
+                sam_radius_val = "0.14"
+            else:
+                sam_radius_val = "N/A"
         elif shape_index == 1: # sphere
             _enabled_height = False
             _enabled_radius_2 = False
@@ -92,6 +105,8 @@ class TableRowHandler:
             _label_radius_1 = 'Inner Radius'
 
         self.main_window.master_table_list_ui[key][data_type]['geometry']['radius']['value'].setVisible(_enabled_radius_1)
+        if shape_index in cylinder_sam: # cylinder
+            self.main_window.master_table_list_ui[key][data_type]['geometry']['radius']['value'].setText(sam_radius_val)
         self.main_window.master_table_list_ui[key][data_type]['geometry']['radius2']['value'].setVisible(_enabled_radius_2)
         self.main_window.master_table_list_ui[key][data_type]['geometry']['height']['value'].setVisible(_enabled_height)
 
@@ -137,7 +152,7 @@ class TableRowHandler:
                                  sample_norm_column=INDEX_OF_INELASTIC_CORRECTION)
         self.main_window.check_master_table_column_highlighting(column=column)
 
-        # inelastic_correction = info['inelastic_correction'].currentText()
+        inelastic_correction = info['inelastic_correction'].currentText()
         # if inelastic_correction not in ["None", None]:
         #     PlaczekHandler(parent=self.main_window, key=key, data_type=data_type)
 
@@ -390,6 +405,11 @@ class TableRowHandler:
         _widget.addItem("Cylinder")
         _widget.addItem("Sphere")
         _widget.addItem("Hollow Cylinder")
+        _widget.addItem("PAC03")
+        _widget.addItem("PAC06")
+        _widget.addItem("PAC08")
+        _widget.addItem("PAC10")
+        _widget.addItem("QuartzTube03")
         _master_table_row_ui['sample']['shape'] = _widget
         _layout.addWidget(_widget)
         _w = QWidget()
@@ -948,14 +968,16 @@ class TableRowHandler:
             _ui.blockSignals(False)
 
     def get_multi_scat_correction_list(self, shape=0):
-        if shape == 0: # cylinder
+        cylinder_sam = [0, 3, 4, 5, 6, 7]
+        if shape in cylinder_sam: # cylinder
             return ['None',
-                    'Carpenter',
-                    'Mayers']
+                    'SampleOnly']
         elif shape == 1: # sphere
-            return ['None']
+            return ['None',
+                    'SampleOnly']
         elif shape == 2: # hollow cylinder
-            return ['None']
+            return ['None',
+                    'SampleOnly']
 
         return ['None']
 
@@ -965,16 +987,18 @@ class TableRowHandler:
                 ]
 
     def get_absorption_correction_list(self, shape=0,type='Sample'):
-        if shape == 0 and type == 'Sample': # cylinder, Sample
-            return ['None',
-                    'SampleOnly',
-                    'SampleAndContainer',
-                    'FullPaalmanPings',
-                    ]
-        elif shape == 0 and type == 'Normalization': #cylinder, normalization
-            return ['None',
-                    'SampleOnly',
-                    'SampleAndContainer']
+        cylinder_sam = [0, 3, 4, 5, 6, 7]
+        if shape in cylinder_sam:  # cylinder
+            if type == 'Sample':  # Sample
+                return ['None',
+                        'SampleOnly',
+                        'SampleAndContainer',
+                        'FullPaalmanPings',
+                        ]
+            else:  # normalization
+                return ['None',
+                        'SampleOnly'
+                       ]
         elif shape == 1: # sphere
             return ['None',
                     'Monte Carlo',

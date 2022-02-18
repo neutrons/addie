@@ -29,7 +29,6 @@
       "max": 40,
       "delta": 0.02
     },
-    "reduction_configuration_file": "",
     "characterization_file": ""
   },
   "bragg": {

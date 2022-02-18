@@ -131,6 +131,9 @@ class MainWindow(QMainWindow):
     intermediate_grouping = copy.deepcopy(grouping_dict)
     output_grouping = copy.deepcopy(grouping_dict)
 
+    advanced_dict = {'push_bkg': False,
+                     'ele_size': "1.0"}
+
     statusbar_display_time = 5000  # 5s
 
     # external ui (use to make sure there is only one open at a time

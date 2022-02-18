@@ -24,7 +24,7 @@ class ScatteringSetter(QDialog):
 
         if parent.scattering_ui_position:
             self.move(parent.scattering_ui_position)
-
+        
         o_table = TableRowHandler(main_window=self.parent)
         o_table.transfer_widget_states(
             from_key=self.key)

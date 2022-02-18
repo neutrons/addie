@@ -5,7 +5,7 @@ from collections import OrderedDict
 import copy
 import simplejson
 
-from qtpy.QtWidgets import QDialog  # , QLabel
+from qtpy.QtWidgets import QDialog, QLabel
 from addie.utilities import load_ui
 from qtpy import QtCore, QtGui
 
@@ -267,17 +267,18 @@ class JsonLoader:
             _target_row_entry['inelastic_correction'] = None
         if element == 'Sample':
             _target_row_entry["resonance"] = {}
-            _target_row_entry["resonance"]["axis"] = _source_entry["Resonance"]["Axis"]
-            if isinstance(_source_entry["Resonance"]["LowerLimits"], list):
-                lower_tmp = ",".join([str(item) for item in _source_entry["Resonance"]["LowerLimits"]])
-            else:
-                lower_tmp = _source_entry["Resonance"]["LowerLimits"]
-            if isinstance(_source_entry["Resonance"]["UpperLimits"], list):
-                upper_tmp = ",".join([str(item) for item in _source_entry["Resonance"]["UpperLimits"]])
-            else:
-                upper_tmp = _source_entry["Resonance"]["UpperLimits"]
-            _target_row_entry["resonance"]["lower"] = lower_tmp
-            _target_row_entry["resonance"]["upper"] = upper_tmp
+            if "Resonance" in _source_entry:
+                _target_row_entry["resonance"]["axis"] = _source_entry["Resonance"]["Axis"]
+                if isinstance(_source_entry["Resonance"]["LowerLimits"], list):
+                    lower_tmp = ",".join([str(item) for item in _source_entry["Resonance"]["LowerLimits"]])
+                else:
+                    lower_tmp = _source_entry["Resonance"]["LowerLimits"]
+                if isinstance(_source_entry["Resonance"]["UpperLimits"], list):
+                    upper_tmp = ",".join([str(item) for item in _source_entry["Resonance"]["UpperLimits"]])
+                else:
+                    upper_tmp = _source_entry["Resonance"]["UpperLimits"]
+                _target_row_entry["resonance"]["lower"] = lower_tmp 
+                _target_row_entry["resonance"]["upper"] = upper_tmp 
 
         return _target_row_entry
 
@@ -371,6 +372,14 @@ class JsonLoader:
                         filename=output_grouping_file)
                     nbr_groups = o_grouping.get_number_of_groups()
                     self.parent.output_grouping['nbr_groups'] = nbr_groups
+
+                if "AbsMSParameters" in _source_row_entry["Sample"]:
+                    ele_size_val = _source_row_entry["Sample"]["AbsMSParameters"]["ElementSize"]
+                    if type(ele_size_val) == list:
+                        ele_size_val = ",".join([str(item) for item in ele_size_val])
+                    else:
+                        ele_size_val = str(ele_size_val)
+                    self.parent.advanced_dict["ele_size"] = ele_size_val
 
                 first_entry = False
 
@@ -909,3 +918,4 @@ class FromDictionaryToTableUi:
         self.parent.master_table_list_ui[key]["self_scattering_level"]["upper"]["value"].setText(upper_text)
         self.parent.master_table_list_ui[key]["self_scattering_level"]["lower"]["val_list"] = lower_list
         self.parent.master_table_list_ui[key]["self_scattering_level"]["upper"]["val_list"] = upper_list
+
