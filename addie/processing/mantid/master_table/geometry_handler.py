@@ -43,7 +43,12 @@ _table2mantid_sphere = {
 table2mantid = {
     "Cylinder": _table2mantid_cylinder,
     "Hollow Cylinder": _table2mantid_hollow_cylinder,
-    "Sphere": _table2mantid_sphere
+    "Sphere": _table2mantid_sphere,
+    "PAC03": _table2mantid_cylinder,
+    "PAC06": _table2mantid_cylinder,
+    "PAC08": _table2mantid_cylinder,
+    "PAC10": _table2mantid_cylinder,
+    "QuartzTube03": _table2mantid_cylinder
 }
 
 
@@ -110,7 +115,9 @@ class DimensionsSetter(QDialog):
         height = 'N/A'
         radius2 = 'N/A'
 
-        if self.shape_selected.lower() == 'cylinder':
+        cylinder_sam = ['cylinder', 'pac03', 'pac06', 'pac08', 'pac10',
+                        'quartztube03']
+        if self.shape_selected.lower() in cylinder_sam:
             radius = self.__get_label_value('radius')
             height = self.__get_label_value('height')
         elif self.shape_selected.lower() == 'sphere':
@@ -134,7 +141,9 @@ class DimensionsSetter(QDialog):
         self.shape_selected = shape_ui.currentText()
 
         # hide/show widgets according to shape selected
-        if self.shape_selected.lower() == 'cylinder':
+        cylinder_sam = ['cylinder', 'pac03', 'pac06', 'pac08', 'pac10',
+                        'quartztube03']
+        if self.shape_selected.lower() in cylinder_sam:
             # change label of first label
             self.ui.radius_label.setText("Radius")
             # hide radius 2 widgets
@@ -179,7 +188,9 @@ class DimensionsSetter(QDialog):
         radius2 = str(self.ui.radius2_value.text())
         height = str(self.ui.height_value.text())
 
-        if self.shape_selected.lower() == 'cylinder':
+        cylinder_sam = ['cylinder', 'pac03', 'pac06', 'pac08', 'pac10',
+                        'quartztube03']
+        if self.shape_selected.lower() in cylinder_sam:
             if is_number(radius) and is_number(height):
                 save_button_status = True
         elif self.shape_selected.lower() == 'sphere':
@@ -197,7 +208,9 @@ class DimensionsSetter(QDialog):
         radius2 = 'N/A'
         height = 'N/A'
 
-        if self.shape_selected.lower() == 'cylinder':
+        cylinder_sam = ['cylinder', 'pac03', 'pac06', 'pac08', 'pac10',
+                        'quartztube03']
+        if self.shape_selected.lower() in cylinder_sam:
             height = str(self.ui.height_value.text())
         elif self.shape_selected.lower() == 'sphere':
             pass

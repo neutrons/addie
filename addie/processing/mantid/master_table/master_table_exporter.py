@@ -4,6 +4,7 @@ import copy
 import simplejson
 import numpy as np
 import os
+import re
 
 from qtpy.QtCore import Qt
 
@@ -89,22 +90,18 @@ class TableFileExporter:
         self.outputdir = self.parent.output_folder
         if not self.parent.reduction_configuration:
             SaveReductionConfiguration(parent.reduction_configuration_ui, grand_parent=parent)
-        if self.parent.reduction_configuration['initial'] is False:
-            self.intermediate_grouping_file = str(self.parent.processing_ui.calibration_file.text())
-            if self.intermediate_grouping_file == 'N/A':
-                self.intermediate_grouping_file = ''
+        if not self.parent.reduction_configuration['initial']:
+            self.intermediate_grouping_file = ''
         else:
             self.intermediate_grouping_file = self.parent.intermediate_grouping['filename']
-        if self.parent.reduction_configuration['output'] is False:
-            self.output_grouping_file = str(self.parent.processing_ui.calibration_file.text())
-            if self.output_grouping_file == 'N/A':
-                self.output_grouping_file = ''
+        if not self.parent.reduction_configuration['output']:
+            self.output_grouping_file = ''
         else:
             self.output_grouping_file = self.parent.output_grouping['filename']
 
         self.calibration = str(self.parent.processing_ui.calibration_file.text())
 
-        self.NA_list = ["None","N/A","",np.NaN]
+        self.NA_list = ["None", "N/A", "", np.NaN]
 
     def export(self, filename='', row=None):
         """create dictionary of all rows unless `row` argument is specified,
@@ -120,7 +117,7 @@ class TableFileExporter:
 
         # put together the data to write out
         if row is not None:
-            dictionary,activate = self.retrieve_row_info(row)
+            dictionary, activate = self.retrieve_row_info(row)
         else:
             dictionary = self.retrieve_row_infos()
         # create the directory if it doesn't already exist
@@ -282,7 +279,9 @@ class TableFileExporter:
             self.parent.master_table_list_ui[key][element]['geometry']['radius']['value'].text())
         radius2 = 'N/A'
         height = 'N/A'
-        if shape in ['Cylinder', 'Hollow Cylinder']:
+        height_avail = ['Cylinder', 'Hollow Cylinder', 'PAC03', 'PAC06',
+                        'PAC08', 'PAC10', 'QuartzTube03']
+        if shape in height_avail:
             height = str(
                 self.parent.master_table_list_ui[key][element]['geometry']['height']['value'].text())
         elif shape == 'Sphere':
@@ -472,8 +471,12 @@ class TableFileExporter:
             self.advanced_params = {"push_data_positive": False,
                                     "abs_ms_ele_size": "1.0"}
 
-        _export_dictionary_sample["AbsMSParameters"] = {"ElementSize": self.advanced_params["abs_ms_ele_size"]}
-        _export_dictionary_normalization["AbsMSParameters"] = {"ElementSize": self.advanced_params["abs_ms_ele_size"]}
+        ele_size_tmp = [float(item) for item in re.split(',| ', self.advanced_params["abs_ms_ele_size"])]
+        if len(ele_size_tmp) == 1:
+            _export_dictionary_sample["AbsMSParameters"] = {"ElementSize": ele_size_tmp[0]}
+        else:
+            _export_dictionary_sample["AbsMSParameters"] = {"ElementSize": ele_size_tmp[:2]}
+        _export_dictionary_normalization["AbsMSParameters"] = {"ElementSize": ele_size_tmp[0]}
 
         if len(self.scattering_lower) > 0 and len(self.scattering_upper) > 0:
             bank1_list = [self.scattering_lower[0], self.scattering_upper[0]]
@@ -502,7 +505,7 @@ class TableFileExporter:
             'CacheDir': self.cachedir,
             'OutputDir': self.outputdir,
             "Merging": {
-                "QBinning": [self.QBin_min,self.QBin_del,self.QBin_max],
+                "QBinning": [self.QBin_min, self.QBin_del, self.QBin_max],
                 "SumBanks": [],
                 "Characterizations": "",
                 "Grouping": {
@@ -525,7 +528,7 @@ class TableFileExporter:
         dictionary = self.delete_empty_rows(dictionary)
         dictionary.pop('Activate')
 
-        return dictionary,activate
+        return dictionary, activate
 
     #Shouldn't delete the main category
     def delete_empty_rows(self, dictionary):
@@ -578,7 +581,7 @@ class TableFileExporter:
             # force 3 digits index (to make sure loading back the table will be
             # done in the same order)
             full_export_dictionary["{:03}".format(
-                row)],activate = self.retrieve_row_info(row)
+                row)], activate = self.retrieve_row_info(row)
 
         return full_export_dictionary
 
@@ -760,16 +763,19 @@ class TableFileExporter:
 
         for key in necessary_keys:
             if key not in json_input:
-                print(f"Key '{key}' not found in the input. We cannot continue.")
+                print("Key {0:s} not found in the input. We cannot continue.".format(key))
                 return False
             else:
                 if not json_input[key]:
-                    print(f"No valid key found in {key}. We cannot continue.")
+                    print("No valid key found in {0:s}. We cannot continue.".format(key))
                     return False
                 else:
                     for key_1, item_1 in json_input[key].items():
                         if item_1 in invalid_values:
-                            print(f"Invalid value '{item_1}' given for key '{key_1}' of '{key}'. We cannot continue.")
+                            str_tmp = "Invalid value '{0:s}' given ".format(item_1)
+                            str_tmp += "for key '{0:s}' ".format(key_1)
+                            str_tmp += "of '{0:s}'. We cannot continue.".format(key)
+                            print(str_tmp)
                             return False
         return True
 
