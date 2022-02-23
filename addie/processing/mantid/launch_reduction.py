@@ -1,5 +1,4 @@
 import os
-import traceback
 import json
 
 from addie.processing.mantid.master_table.master_table_exporter import TableFileExporter as MantidTableExporter

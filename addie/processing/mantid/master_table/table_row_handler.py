@@ -989,12 +989,10 @@ class TableRowHandler:
                 return ['None',
                         'SampleOnly',
                         'SampleAndContainer',
-                        'FullPaalmanPings',
-                        ]
+                        'FullPaalmanPings']
             else:  # normalization
                 return ['None',
-                        'SampleOnly'
-                       ]
+                        'SampleOnly']
         elif shape == 1: # sphere
             return ['None',
                     'Monte Carlo']
