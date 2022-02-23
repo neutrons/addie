@@ -1,54 +1,8 @@
 import os
 import traceback
 import json
-from mantidqt.utils.asynchronous import AsyncTask
 
 from addie.processing.mantid.master_table.master_table_exporter import TableFileExporter as MantidTableExporter
-
-
-class JobPool(object):
-    task_output = None,
-    running = None
-    task_exc_type, task_exc, task_exc_stack = None, None, None
-
-    def __init__(self, configurations):
-        self.jobs = []
-        for config in configurations:
-            print("CONFIG:", config)
-            self.jobs.append(AsyncTask(TotalScatteringReduction, args=(config,),
-                                       success_cb=self.on_success, error_cb=self.on_error,
-                                       finished_cb=self.on_finished))
-
-    def _start_next(self):
-        if self.jobs:
-            self.running = self.jobs.pop(0)
-            self.running.start()
-        else:
-            self.running = None
-
-    def start(self):
-        if not self.jobs:
-            raise RuntimeError('Cannot start empty job list')
-        self._start_next()
-
-    def on_success(self, task_result):
-        # TODO should emit a signal
-        self.task_output = task_result.output
-        print('SUCCESS!!! {}'.format(self.task_output))
-
-    def on_error(self, task_result):
-        # TODO should emit a signal
-        print('ERROR!!!')
-        self.task_exc_type = task_result.exc_type
-        self.task_exc = task_result.exc_value
-        self.task_exc_stack = traceback.extract_tb(task_result.stack)
-        traceback.print_tb(task_result.stack)
-        print(task_result)
-
-    def on_finished(self):
-        '''Both success and failure call this method afterwards'''
-        # TODO should emit a signal
-        self._start_next()  # kick off the next one in the pool
 
 
 def run_mantid(parent):
@@ -73,8 +27,8 @@ def run_mantid(parent):
     print('writing out full table to "{}"'.format(full_reduction_filename))
     for row in range(num_rows):
         dictionary,activate = exporter.retrieve_row_info(row)
-        if activate == True:
-            filename = os.path.join(os.path.expanduser('~'),'.mantid' ,'JSON_output',dictionary['Title'] +'_'+ str(row) + '.json') 
+        if activate is True:
+            filename = os.path.join(os.path.expanduser('~'),'.mantid' ,'JSON_output',dictionary['Title'] +'_'+ str(row) + '.json')
             exporter.export(filename,row)
             print("Row",row,"Successfully output to",filename)
             with open(filename) as json_file:
@@ -85,7 +39,7 @@ def run_mantid(parent):
                 if "Sample" in key:
                     sample_tmp = {}
                     for key_s, item_s in item.items():
-                        if not "Density" in key_s:
+                        if "Density" not in key_s:
                             if "Material" in key_s:
                                 string_tmp = item_s.replace("(", "").replace(")", "")
                                 sample_tmp[key_s] = string_tmp
@@ -110,7 +64,7 @@ def run_mantid(parent):
                 elif "Normalization" in key or "Normalisation" in key:
                     van_tmp = {}
                     for key_v, item_v in item.items():
-                        if not "Density" in key_v:
+                        if "Density" not in key_v:
                             if "Material" in key_v:
                                 string_tmp = item_v.replace("(", "").replace(")", "")
                                 van_tmp[key_v] = string_tmp

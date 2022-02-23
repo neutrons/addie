@@ -487,7 +487,7 @@ class SaveReductionConfiguration:
             pdf_q_range_min = '0.0'
             pdf_q_range_max = '40.0'
             pdf_q_range_delta = '0.02'
-            
+
             pdf_r_range_min = '0.0'
             pdf_r_range_max = '40.0'
             pdf_r_range_delta = '0.02'
@@ -505,7 +505,7 @@ class SaveReductionConfiguration:
         pdf_reduction_configuration['q_range'] = {'min': pdf_q_range_min,
                                                   'max': pdf_q_range_max,
                                                   'delta': pdf_q_range_delta}
-        
+
         pdf_reduction_configuration['r_range'] = {'min': pdf_r_range_min,
                                                   'max': pdf_r_range_max,
                                                   'delta': pdf_r_range_delta}

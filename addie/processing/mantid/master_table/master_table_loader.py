@@ -5,7 +5,7 @@ from collections import OrderedDict
 import copy
 import simplejson
 
-from qtpy.QtWidgets import QDialog, QLabel
+from qtpy.QtWidgets import QDialog
 from addie.utilities import load_ui
 from qtpy import QtCore, QtGui
 
@@ -277,8 +277,8 @@ class JsonLoader:
                     upper_tmp = ",".join([str(item) for item in _source_entry["Resonance"]["UpperLimits"]])
                 else:
                     upper_tmp = _source_entry["Resonance"]["UpperLimits"]
-                _target_row_entry["resonance"]["lower"] = lower_tmp 
-                _target_row_entry["resonance"]["upper"] = upper_tmp 
+                _target_row_entry["resonance"]["lower"] = lower_tmp
+                _target_row_entry["resonance"]["upper"] = upper_tmp
 
         return _target_row_entry
 
@@ -918,4 +918,3 @@ class FromDictionaryToTableUi:
         self.parent.master_table_list_ui[key]["self_scattering_level"]["upper"]["value"].setText(upper_text)
         self.parent.master_table_list_ui[key]["self_scattering_level"]["lower"]["val_list"] = lower_list
         self.parent.master_table_list_ui[key]["self_scattering_level"]["upper"]["val_list"] = upper_list
-

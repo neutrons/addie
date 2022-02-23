@@ -152,10 +152,6 @@ class TableRowHandler:
                                  sample_norm_column=INDEX_OF_INELASTIC_CORRECTION)
         self.main_window.check_master_table_column_highlighting(column=column)
 
-        inelastic_correction = info['inelastic_correction'].currentText()
-        # if inelastic_correction not in ["None", None]:
-        #     PlaczekHandler(parent=self.main_window, key=key, data_type=data_type)
-
     def multi_scattering_correction(self, value='', key=None, data_type='sample'):
         # change state of other widgets of the same column if they are selected
         self.transfer_widget_states(from_key=key, data_type=data_type)
@@ -1001,8 +997,7 @@ class TableRowHandler:
                        ]
         elif shape == 1: # sphere
             return ['None',
-                    'Monte Carlo',
-                    ]
+                    'Monte Carlo']
         elif shape== 2: # hollow cylinder
             return ['None',
                     'Monte Carlo']

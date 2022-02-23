@@ -90,22 +90,18 @@ class TableFileExporter:
         self.outputdir = self.parent.output_folder
         if not self.parent.reduction_configuration:
             SaveReductionConfiguration(parent.reduction_configuration_ui, grand_parent=parent)
-        if self.parent.reduction_configuration['initial'] == False:
-            self.intermediate_grouping_file = str(self.parent.processing_ui.calibration_file.text()) 
-            if self.intermediate_grouping_file == 'N/A':
-                self.intermediate_grouping_file = ''
+        if not self.parent.reduction_configuration['initial']:
+            self.intermediate_grouping_file = ''
         else:
             self.intermediate_grouping_file = self.parent.intermediate_grouping['filename']
-        if self.parent.reduction_configuration['output'] == False:
-            self.output_grouping_file = str(self.parent.processing_ui.calibration_file.text()) 
-            if self.output_grouping_file == 'N/A':
-                self.output_grouping_file = ''
-        else: 
+        if not self.parent.reduction_configuration['output']:
+            self.output_grouping_file = ''
+        else:
             self.output_grouping_file = self.parent.output_grouping['filename']
 
         self.calibration = str(self.parent.processing_ui.calibration_file.text())
-        
-        self.NA_list = ["None","N/A","",np.NaN]
+
+        self.NA_list = ["None", "N/A", "", np.NaN]
 
     def export(self, filename='', row=None):
         """create dictionary of all rows unless `row` argument is specified,
@@ -121,7 +117,7 @@ class TableFileExporter:
 
         # put together the data to write out
         if row is not None:
-            dictionary,activate = self.retrieve_row_info(row)
+            dictionary, activate = self.retrieve_row_info(row)
         else:
             dictionary = self.retrieve_row_infos()
         # create the directory if it doesn't already exist
@@ -356,7 +352,7 @@ class TableFileExporter:
         if len(dict_element['Background']['Background']['Runs']) == 0:
             dict_element['Background']['Background'].pop('Runs')
         dict_element = self.delete_empty_rows(dict_element)
-        
+
         return dict_element
 
     def _get_key_value_dict(self, row=-1):
@@ -464,8 +460,8 @@ class TableFileExporter:
         self.scattering_lower = self.parent.master_table_list_ui[key]['self_scattering_level']['lower']['val_list']
         self.scattering_upper = self.parent.master_table_list_ui[key]['self_scattering_level']['upper']['val_list']
         try:
-            self.QBin_min = self.parent.reduction_configuration['pdf']['q_range']['min'] 
-            self.QBin_del = self.parent.reduction_configuration['pdf']['q_range']['delta'] 
+            self.QBin_min = self.parent.reduction_configuration['pdf']['q_range']['min']
+            self.QBin_del = self.parent.reduction_configuration['pdf']['q_range']['delta']
             self.QBin_max = self.parent.reduction_configuration['pdf']['q_range']['max']
             self.advanced_params = self.parent.reduction_configuration['advanced']
         except:
@@ -509,7 +505,7 @@ class TableFileExporter:
             'CacheDir': self.cachedir,
             'OutputDir': self.outputdir,
             "Merging": {
-                "QBinning": [self.QBin_min,self.QBin_del,self.QBin_max],
+                "QBinning": [self.QBin_min, self.QBin_del, self.QBin_max],
                 "SumBanks": [],
                 "Characterizations": "",
                 "Grouping": {
@@ -531,9 +527,9 @@ class TableFileExporter:
         #Checking for empty lists and values
         dictionary = self.delete_empty_rows(dictionary)
         dictionary.pop('Activate')
-             
 
-        return dictionary,activate
+        return dictionary, activate
+
     #Shouldn't delete the main category
     def delete_empty_rows(self, dictionary):
         del_set = set()
@@ -563,12 +559,11 @@ class TableFileExporter:
                     if type(dictionary[key]) is dict:
                         if sub_key in dictionary[key]:
                             dictionary[key].pop(sub_key)
-                    else:      
+                    else:
                         dictionary.pop(key)
                 except:
                     pass
         return dictionary
-
 
     def retrieve_row_infos(self):
         """Retrieve all of the rows' information in a pre-reduction JSON format
@@ -586,7 +581,7 @@ class TableFileExporter:
             # force 3 digits index (to make sure loading back the table will be
             # done in the same order)
             full_export_dictionary["{:03}".format(
-                row)],activate = self.retrieve_row_info(row)
+                row)], activate = self.retrieve_row_info(row)
 
         return full_export_dictionary
 
@@ -624,7 +619,7 @@ class TableFileExporter:
             mass_density = self._get_mass_density_from_mass(dictionary)
 
         # Post-process for output: take out overall Density and add MassDensity
-        # key 
+        # key
 
         dictionary.pop('Density')
         dictionary['MassDensity'] = np.NaN if (mass_density in self.__nan_list) else float(mass_density)
@@ -762,22 +757,25 @@ class TableFileExporter:
         return dictionary
 
     def pre_validator(self, json_input):
-        
+
         necessary_keys = ["Calibration"]
         invalid_values = ['', 'nan', "N/A"]
 
         for key in necessary_keys:
             if key not in json_input:
-                print(f"Key '{key}' not found in the input. We cannot continue.")
+                print("Key {0:s} not found in the input. We cannot continue.".format(key))
                 return False
             else:
                 if not json_input[key]:
-                    print(f"No valid key found in {key}. We cannot continue.")
+                    print("No valid key found in {0:s}. We cannot continue.".format(key))
                     return False
                 else:
                     for key_1, item_1 in json_input[key].items():
                         if item_1 in invalid_values:
-                            print(f"Invalid value '{item_1}' given for key '{key_1}' of '{key}'. We cannot continue.")
+                            str_tmp = "Invalid value '{0:s}' given ".format(item_1)
+                            str_tmp += "for key '{0:s}' ".format(key_1)
+                            str_tmp += "of '{0:s}'. We cannot continue.".format(key)
+                            print(str_tmp)
                             return False
         return True
 

@@ -3,7 +3,6 @@ from __future__ import (absolute_import, division, print_function)
 from qtpy.QtWidgets import (QMainWindow, QComboBox, QFileDialog, QHBoxLayout, QLabel, QDateEdit, QLineEdit, QPushButton,
                             QTableWidgetItem, QVBoxLayout, QWidget)
 from addie.utilities import load_ui
-from addie.widgets.filedialog import get_save_file
 from qtpy import QtCore
 
 import datetime
