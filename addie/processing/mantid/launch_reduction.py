@@ -72,6 +72,31 @@ def run_mantid(parent):
                         else:
                             van_tmp["MassDensity"] = float(item_v["MassDensity"])
                     dict_out_tmp[key] = van_tmp
+                elif "Merging" in key:
+                    merging_tmp = {}
+                    for key_m, item_m in item.items():
+                        if "QBinning" in key_m:
+                            qbin_tmp = [float(entry_tmp) for entry_tmp in item_m]
+                            merging_tmp[key_m] = qbin_tmp
+                        else:
+                            merging_tmp[key_m] = item_m
+                    dict_out_tmp[key] = merging_tmp
+                elif "AlignAndFocusArgs" in key:
+                    af_tmp = {}
+                    for key_af, item_af in item.items():
+                        if type(item_af) == list:
+                            try:
+                                list_tmp = [float(entry_tmp) for entry_tmp in item_af]
+                            except ValueError:
+                                list_tmp = item_af
+                            af_tmp[key_af] = list_tmp
+                        else:
+                            try:
+                                entry_tmp = float(item_af)
+                            except ValueError:
+                                entry_tmp = item_af
+                            af_tmp[key_af] = entry_tmp
+                    dict_out_tmp[key] = af_tmp
                 else:
                     dict_out_tmp[key] = item
             if container_type:
