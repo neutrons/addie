@@ -13,7 +13,7 @@ yapf = "*"
 
 [packages]
 addie = {editable = true,path = "."}
-ipython = "==7.3.0"
+ipython = "==7.16.3"
 mantid-total-scattering = "==0.2.8"
 matplotlib = "==2.2.3"
 numpy = "==1.15.4"
