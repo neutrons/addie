@@ -9,6 +9,7 @@ from addie.plot import IndicatorManager, NavigationToolbar
 from addie.plot import FigureCanvas
 from addie.plot.constants import BASIC_COLORS, LINE_MARKERS, LINE_STYLES
 import addie.utilities.workspaces
+import mantid.simpleapi as simpleapi
 
 
 class MplGraphicsView(QWidget):
@@ -62,12 +63,16 @@ class MplGraphicsView(QWidget):
         """ Add a set of line and manage together
         """
         key_list = list()
+        bd_tmp_list = []
+        i = 0
         for vec_x, vec_y in vec_set:
-            temp_key = self._myCanvas.add_plot_1d(vec_x, vec_y, color=color, marker=marker,
+            bd_tmp_list.append(simpleapi.CreateWorkspace(DataX=vec_x, DataY=vec_y, NSpec=1))
+            temp_key = self._myCanvas.add_plot_1d(wkspname=bd_tmp_list[i], wkspindex=0, color=color, marker=marker,
                                                   line_style=line_style, line_width=line_width)
             assert isinstance(temp_key, int)
             assert temp_key >= 0
             key_list.append(temp_key)
+            i += 1
 
         return key_list
 
@@ -149,7 +154,10 @@ class MplGraphicsView(QWidget):
         my_id = self._myIndicatorsManager.add_horizontal_indicator(y, x_min, x_max, color)
         vec_x, vec_y = self._myIndicatorsManager.get_data(my_id)
 
-        canvas_line_index = self._myCanvas.add_plot_1d(vec_x=vec_x, vec_y=vec_y,
+        bd_tmp_h = simpleapi.CreateWorkspace(DataX=vec_x, DataY=vec_y, NSpec=1)
+
+
+        canvas_line_index = self._myCanvas.add_plot_1d(wkspname=bd_tmp_h, wkspindex=0,
                                                        color=color, marker=self._myIndicatorsManager.get_marker(),
                                                        line_style=self._myIndicatorsManager.get_line_style(),
                                                        line_width=1)
@@ -190,7 +198,9 @@ class MplGraphicsView(QWidget):
         my_id = self._myIndicatorsManager.add_vertical_indicator(x, y_min, y_max, color)
         vec_x, vec_y = self._myIndicatorsManager.get_data(my_id)
 
-        canvas_line_index = self._myCanvas.add_plot_1d(vec_x=vec_x, vec_y=vec_y,
+        bd_tmp = simpleapi.CreateWorkspace(DataX=vec_x, DataY=vec_y, NSpec=1)
+
+        canvas_line_index = self._myCanvas.add_plot_1d(wkspname=bd_tmp, wkspindex=0,
                                                        color=color, marker=self._myIndicatorsManager.get_marker(),
                                                        line_style=self._myIndicatorsManager.get_line_style(),
                                                        line_width=1)

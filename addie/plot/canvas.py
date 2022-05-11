@@ -473,7 +473,7 @@ class FigureCanvas(FigureCanvasQTAgg):
             print('[ERROR] Line (key = %d) is None. Unable to update' % ikey)
             return
 
-        if wkspname or (vecx and vecy):
+        if wkspname or (vecx.all() and vecy.all()):
             if wkspname:
                 vecx, vecy, _ = addie.utilities.workspaces.get_ws_data(
                     wkspname, wkspindex)
