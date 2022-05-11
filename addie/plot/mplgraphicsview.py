@@ -156,7 +156,6 @@ class MplGraphicsView(QWidget):
 
         bd_tmp_h = simpleapi.CreateWorkspace(DataX=vec_x, DataY=vec_y, NSpec=1)
 
-
         canvas_line_index = self._myCanvas.add_plot_1d(wkspname=bd_tmp_h, wkspindex=0,
                                                        color=color, marker=self._myIndicatorsManager.get_marker(),
                                                        line_style=self._myIndicatorsManager.get_line_style(),
