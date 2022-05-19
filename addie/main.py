@@ -26,6 +26,7 @@ from addie.advanced.isotope_rep_gui import isrp_button_activator
 
 from addie.utilities.job_monitor_thread import JobMonitorThread
 from addie.utilities.job_status_handler import JobStatusHandler
+from addie.utilities.job_status_handler import JobStatusHandlerMTS
 from addie.utilities.logbook_thread import LogbookThread
 from addie.utilities.logbook_handler import LogbookHandler
 
@@ -490,13 +491,31 @@ class MainWindow(QMainWindow):
                                        thread_index=thread_index)
         job_handler.start()
 
+    # job utility for mantidtotalscattering
+    def launch_job_manager_mts(
+            self,
+            job_name='',
+            all_commands=None,
+            thread_index=-1):
+        job_handler = JobStatusHandlerMTS(parent=self, job_name=job_name,
+                                          all_commands=all_commands,
+                                          thread_index=thread_index)
+        job_handler.start()
+
     def kill_job(self, row=-1):
         job_row = self.job_list[row]
         parent = psutil.Process(job_row['pid'])
         for child in parent.children(recursive=True):
-            child.kill()
-        #	    child.wait()
-        parent.kill()
+            if child.status != psutil.STATUS_ZOMBIE:
+                for count, item in enumerate(self.job_list):
+                    job_row_tmp = item
+                    if job_row_tmp['pid'] == child.pid:
+                        job_row_tmp['status'] = "killed"
+                        job_row_tmp['pid'] = None
+                        self.job_list[count] = job_row_tmp
+                child.kill()
+        if parent.name() != 'addie':
+            parent.kill()
 
         table_widget = self.job_monitor_interface.ui.tableWidget
         table_widget.removeCellWidget(row, 2)
