@@ -34,7 +34,7 @@ class JobMonitorThread(QThread):
                 _item = QTableWidgetItem("Done!")
                 self.job_monitor_interafce.ui.tableWidget.setItem(_row, 2, _item)
             else:
-                if not process.status() == 'sleeping':
+                if _job['status'] == 'killed':
                     self.job_monitor_interafce.ui.tableWidget.removeCellWidget(_row, 2)
-                    _item = QTableWidgetItem("Done!")
+                    _item = QTableWidgetItem("Killed!")
                     self.job_monitor_interafce.ui.tableWidget.setItem(_row, 2, _item)

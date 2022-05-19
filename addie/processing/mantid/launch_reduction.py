@@ -25,6 +25,8 @@ def run_mantid(parent):
     full_reduction_filename = os.path.join(
         os.path.expanduser('~'), '.mantid', 'addie.json')
     print('writing out full table to "{}"'.format(full_reduction_filename))
+    all_commands = list()
+    all_files = list()
     for row in range(num_rows):
         dictionary, activate = exporter.retrieve_row_info(row)
         if activate is True:
@@ -119,12 +121,36 @@ def run_mantid(parent):
                                                "Container": container_type}
 
             if final_validator(dict_out_tmp):
-                filename_to_run = os.path.join(os.path.expanduser('~'), '.mantid', 'JSON_output', 'running_tmp.json')
+                filename_to_run = os.path.join(os.path.expanduser('~'),
+                                               '.mantid',
+                                               'JSON_output',
+                                               'running_tmp_' + str(row) + '.json')
                 with open(filename_to_run, 'w') as outfile:
                     json.dump(dict_out_tmp, outfile, indent=2)
                 _script_to_run = "bash /SNS/NOM/shared/scripts/mantidtotalscattering/run_mts.sh " + filename_to_run
-                parent.launch_job_manager(job_name='MantidTotalScattering',
-                                          script_to_run=_script_to_run)
+                all_commands.append(_script_to_run.split())
+                all_files.append(filename_to_run)
+
+    limit = 4
+
+    if len(all_commands) > limit:
+        all_commands = list()
+        num_runs = len(all_files)
+        chunk_size = num_runs // limit
+        left_over = num_runs - (limit - 1) * chunk_size
+        for i in range(limit):
+            command_tmp = ""
+            if i < limit - 1:
+                for j in range(i * chunk_size, (i + 1) * chunk_size):
+                    command_tmp += (" " + all_files[j])
+            else:
+                for j in range(left_over):
+                    command_tmp += (" " + all_files[i * chunk_size + j])
+            command_tmp = "bash /SNS/NOM/shared/scripts/mantidtotalscattering/run_mts_all.sh" + command_tmp
+            all_commands.append(command_tmp.split())
+
+    parent.launch_job_manager_mts(job_name='MantidTotalScattering',
+                                  all_commands=all_commands)
 
 
 def log_error(type_err, key):
@@ -373,3 +399,5 @@ def final_validator(final_dict):
     else:
         log_error(1, '["Merging"]["QBinning"]')
         return False
+
+    return True
