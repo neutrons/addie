@@ -1,15 +1,17 @@
 name: addie
 channels:
 - conda-forge
-- neutrons 
-- mantid
+- neutrons
+- mantid/label/nightly
 dependencies:
-- python=3.6
 - configparser
 - mantid-total-scattering-python-wrapper
-- mantid-workbench
+- mantidworkbench
 - periodictable
 - psutil
 - pystog
 - setuptools
 - simplejson
+- pip
+- pip:
+    - https://oncat.ornl.gov/packages/pyoncat-1.5.1-py3-none-any.whl
