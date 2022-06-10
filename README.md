@@ -1,10 +1,7 @@
 | CI     | Release | Other |
 |--------|---------|-------|
-| [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fneutrons%2Faddie%2Fbadge&style=plastic)](https://actions-badge.atrox.dev/neutrons/addie/goto)  | [![Anaconda-Server Badge](https://anaconda.org/neutrons/addie/badges/version.svg)](https://anaconda.org/neutrons/addie) | 
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT) |
-|  
-| [![Anaconda-Server Badge](https://anaconda.org/neutrons/addie/badges/platforms.svg)](https://anaconda.org/neutrons/addie) 
-| 
+| [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fneutrons%2Faddie%2Fbadge&style=plastic)](https://actions-badge.atrox.dev/neutrons/addie/goto)  | [![Anaconda-Server Badge](https://anaconda.org/neutrons/addie/badges/version.svg)](https://anaconda.org/neutrons/addie) | [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT) |
+|  | [![Anaconda-Server Badge](https://anaconda.org/neutrons/addie/badges/platforms.svg)](https://anaconda.org/neutrons/addie) | 
 |
 
 # ADDIE
