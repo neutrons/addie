@@ -5,7 +5,7 @@
 
 [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fneutrons%2Faddie%2Fbadge&style=plastic)](https://actions-badge.atrox.dev/neutrons/addie/goto) 
 
-[![GitHub Actions](https://github.com/ChalkLab/SciDataLib/actions/workflows/actions.yml/badge.svg?branch=master)](https://github.com/ChalkLab/SciDataLib/actions/workflows/actions.yml)
+[![GitHub Actions](https://github.com/neutrons/addie/actions/workflows/actions.yml/badge.svg?branch=master)](https://github.com/ChalkLab/SciDataLib/actions/workflows/actions.yml)
 
 # ADDIE
 
