@@ -43,7 +43,7 @@ Install ADDIE in the conda environment:
 ```
 conda install -q -y -c conda-forge nexus==4.4.3
 conda install -q -y -c mantid poco==1.7.3
-conda install -q -y -c mantid mantid-workbench==5.0.20200504.1630
+conda install -q -y -c mantid mantidworkbench
 conda install -q -y -c neutrons mantid-total-scattering-python-wrapper
 conda install -q -y -c neutrons addie==${ADDIE_VERSION}
 ```

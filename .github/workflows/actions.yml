@@ -20,7 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-20.04]
-        python-version: ["3.6"]
+        python-version: ["3.8"]
 
     steps:
       - uses: actions/checkout@v2
@@ -38,7 +38,7 @@ jobs:
 
       - name: Conda install deps
         shell: bash -l {0}
-        run: mamba install mantid-workbench mantid-total-scattering-python-wrapper --file requirements.txt --file requirements-dev.txt
+        run: mamba install mantidworkbench mantid-total-scattering-python-wrapper --file requirements.txt --file requirements-dev.txt
 
       - name: Mantid pre-requisites
         shell: bash -l {0}
