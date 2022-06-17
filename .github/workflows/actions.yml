@@ -5,6 +5,8 @@ env: {}
 on:
   workflow_dispatch:
   pull_request:
+  push:
+    branches: [next, qa, main]
 
 jobs:
 
