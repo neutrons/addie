@@ -1,9 +1,7 @@
 | CI     | Release | Other |
 |--------|---------|-------|
 | [![GitHub Actions](https://github.com/neutrons/addie/actions/workflows/actions.yml/badge.svg?branch=master)](https://github.com/neutrons/addie/actions/workflows/actions.yml) | [![Anaconda-Server Badge](https://anaconda.org/neutrons/addie/badges/version.svg)](https://anaconda.org/neutrons/addie) | [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT) |
-|  | [![Anaconda-Server Badge](https://anaconda.org/neutrons/addie/badges/platforms.svg)](https://anaconda.org/neutrons/addie) | 
-
-
+|  | [![Anaconda-Server Badge](https://anaconda.org/neutrons/addie/badges/platforms.svg)](https://anaconda.org/neutrons/addie) |
 
 
 
@@ -51,7 +49,7 @@ conda install -q -y -c neutrons addie==${ADDIE_VERSION}
 The install steps above have been found to create a reproducible install.
 If not done in this order, conda can identify different configurations that are NOT in a working state.
 
-NOTE: You may need to ensure some packages are not imported from the `defaults` channel. 
+NOTE: You may need to ensure some packages are not imported from the `defaults` channel.
 As above, add them prior to installing ADDIE where the channel is set explicitly
 
 ## Uninstall
@@ -61,7 +59,7 @@ conda deactivate
 conda remove -n addie_env --all
 ```
 
-## Launch 
+## Launch
 
 To launch ADDIE, run the following from the command line:
 
@@ -124,7 +122,7 @@ addie that way as well. After creating the virtual environment, run
 ```
 
 which will add a file, `mantid.pth` to your environment with the
-location of mantid. Then you need to setup for development: 
+location of mantid. Then you need to setup for development:
 
 ```bash
 python setup.py develop
@@ -160,5 +158,3 @@ $ ./buildrpm
 ```
  The `rpm`s are available on
 [copr](https://copr.fedorainfracloud.org/coprs/peterfpeterson/addie/).
-
-
