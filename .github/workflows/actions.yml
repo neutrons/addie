@@ -3,14 +3,8 @@ name: addie_ci
 env: {}
 
 on:
+  workflow_dispatch:
   pull_request:
-    branches:
-      - '*'
-  push:
-    branches:
-      - '*'
-    tags:
-      - 'v*'
 
 jobs:
 
