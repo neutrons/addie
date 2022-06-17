@@ -28,7 +28,7 @@ jobs:
         with:
           auto-update-conda: true
           mamba-version: "*"
-          python-version: ${{ matrix.python-version }} 
+          python-version: ${{ matrix.python-version }}
           channels: neutrons,conda-forge,mantid/label/nightly,neutrons
 
       - name: Apt install deps
@@ -51,7 +51,7 @@ jobs:
           export DISPLAY=:99.0
           sleep 3
 
-      - name: Lint 
+      - name: Lint
         shell: bash -l {0}
         run: flake8 . --count
 
@@ -73,5 +73,5 @@ jobs:
         run: |
           conda install -y anaconda-client conda-build conda-verify
           cd conda.recipe
-          conda build --output-folder . .
-          anaconda upload --label main linux-64/*.tar.bz2
+          conda build --output-folder . . -c neutrons -c mantid/label/nightly
+          anaconda upload --label main linux-64/addie-*.tar.bz2
