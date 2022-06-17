@@ -3,14 +3,8 @@ name: addie_ci
 env: {}
 
 on:
+  workflow_dispatch:
   pull_request:
-    branches:
-      - '*'
-  push:
-    branches:
-      - '*'
-    tags:
-      - 'v*'
 
 jobs:
 
@@ -28,7 +22,7 @@ jobs:
         with:
           auto-update-conda: true
           mamba-version: "*"
-          python-version: ${{ matrix.python-version }} 
+          python-version: ${{ matrix.python-version }}
           channels: neutrons,conda-forge,mantid/label/nightly,neutrons
 
       - name: Apt install deps
@@ -51,7 +45,7 @@ jobs:
           export DISPLAY=:99.0
           sleep 3
 
-      - name: Lint 
+      - name: Lint
         shell: bash -l {0}
         run: flake8 . --count
 
@@ -65,13 +59,17 @@ jobs:
           echo "import time;time.sleep(5)" > workbenchshutdown.py
           xvfb-run --auto-servernum pytest --mpl tests
 
+      - name: Build conda libraray
+        shell: bash -l {0}
+        run: |
+          conda install -y anaconda-client conda-build conda-verify
+          cd conda.recipe
+          conda build --output-folder . . -c neutrons -c mantid/label/nightly
+
       - name: Deploy to Anaconda
         shell: bash -l {0}
         if: startsWith( github.ref, 'refs/tags/v')
         env:
           ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
         run: |
-          conda install -y anaconda-client conda-build conda-verify
-          cd conda.recipe
-          conda build --output-folder . .
-          anaconda upload --label main linux-64/*.tar.bz2
+          anaconda upload --label main linux-64/addie-*.tar.bz2
