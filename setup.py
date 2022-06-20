@@ -19,7 +19,7 @@ def read_requirements_from_file(filepath):
     :param filepath: Path to the file to read
     :return: A list of strings containing the requirements
     '''
-    with open(filepath, 'rU') as req_file:
+    with open(filepath, 'r') as req_file:
         return req_file.readlines()
 
 
