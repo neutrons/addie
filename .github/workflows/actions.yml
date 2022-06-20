@@ -79,4 +79,4 @@ jobs:
           # label is main or rc depending on the tag-name
           CONDA_LABEL="main"
           if [ *"rc"* = "${{ github.ref }}" ]; then CONDA_LABEL="rc"; fi
-          anaconda upload --label $CONDA_LABEL noarch/addie-*.tar.bz2
+          anaconda upload --label $CONDA_LABEL conda.recipe/noarch/addie-*.tar.bz2
