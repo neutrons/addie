@@ -8,6 +8,7 @@ source:
   path: ..
 
 build:
+  noarch: python
   string: py{{py}}
   script: python setup.py install --single-version-externally-managed --record=record.txt
 
@@ -41,7 +42,7 @@ about:
   home: https://github.com/neutrons/addie
   license: GPL (version 3)
   license_family: GPL3
-  license_file: 
+  license_file: ../LICENSE
   summary: ADvanced DIffraction Environment
 
 extra:
