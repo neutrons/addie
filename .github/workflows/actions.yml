@@ -22,21 +22,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Check name matchingDeploy to Anaconda
-        shell: bash -l {0}
-        if: startsWith(github.ref, 'refs/tags/v')
-        env:
-          ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
-          IS_RC: ${{ contains(github.ref, 'rc') }}
-        run: |
-          # label is main or rc depending on the tag-name
-          CONDA_LABEL="main"
-          if [ "${{ github.ref }}" == *"rc"* ]; then CONDA_LABEL="rc"; fi
-          echo pushing ${{ github.ref }} with label $CONDA_LABEL
-          if [ "${IS_RC}" = "true" ]; then CONDA_LABEL="rc"; fi
-          echo pushing ${{ github.ref }} with label $CONDA_LABEL
-          echo IS_RC ${IS_RC}
-
       - uses: conda-incubator/setup-miniconda@v2
         with:
           auto-update-conda: true
@@ -95,6 +80,6 @@ jobs:
         run: |
           # label is main or rc depending on the tag-name
           CONDA_LABEL="main"
-          if [ ${IS_RC} ="${{ github.ref }}" == *"rc"* ]; then CONDA_LABEL="rc"; fi
+          if [ "${IS_RC}" = "true" ]; then CONDA_LABEL="rc"; fi
           echo pushing ${{ github.ref }} with label $CONDA_LABEL
           anaconda upload --label $CONDA_LABEL conda.recipe/noarch/addie-*.tar.bz2
