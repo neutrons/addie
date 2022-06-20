@@ -33,6 +33,8 @@ jobs:
           CONDA_LABEL="main"
           if [ "${{ github.ref }}" == *"rc"* ]; then CONDA_LABEL="rc"; fi
           echo pushing ${{ github.ref }} with label $CONDA_LABEL
+          if [ "${IS_RC}" = "true" ]; then CONDA_LABEL="rc"; fi
+          echo pushing ${{ github.ref }} with label $CONDA_LABEL
           echo IS_RC ${IS_RC}
 
       - uses: conda-incubator/setup-miniconda@v2
@@ -93,6 +95,6 @@ jobs:
         run: |
           # label is main or rc depending on the tag-name
           CONDA_LABEL="main"
-          if [ "${{ github.ref }}" == *"rc"* ]; then CONDA_LABEL="rc"; fi
+          if [ ${IS_RC} ="${{ github.ref }}" == *"rc"* ]; then CONDA_LABEL="rc"; fi
           echo pushing ${{ github.ref }} with label $CONDA_LABEL
           anaconda upload --label $CONDA_LABEL conda.recipe/noarch/addie-*.tar.bz2
