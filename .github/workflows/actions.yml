@@ -6,7 +6,8 @@ on:
   workflow_dispatch:
   pull_request:
   push:
-    branches: [next, qa, main]
+    branches: [next]
+    tags: ['v*']
 
 jobs:
 
@@ -69,18 +70,13 @@ jobs:
           cd conda.recipe
           conda build --output-folder . . -c neutrons -c mantid/label/nightly
 
-      - name: Deploy qa to Anaconda
+      - name: Deploy to Anaconda
         shell: bash -l {0}
-        if: ${{ github.ref == 'refs/heads/qa' }}
+        if: startsWith( github.ref, 'refs/tags/v')
         env:
           ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
         run: |
-          anaconda upload --label rc linux-64/addie-*.tar.bz2
-
-      - name: Deploy main to Anaconda
-        shell: bash -l {0}
-        if: ${{ github.ref == 'refs/heads/main' }}
-        env:
-          ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
-        run: |
-          anaconda upload --label main linux-64/addie-*.tar.bz2
+          # label is main or rc depending on the tag-name
+          CONDA_LABEL="main"
+          if [ *"rc"* = "${{ github.ref }}" ]; then CONDA_LABEL="rc"; fi
+          anaconda upload --label $CONDA_LABEL noarch/addie-*.tar.bz2
