@@ -64,13 +64,22 @@ jobs:
       - name: Build conda libraray
         shell: bash -l {0}
         run: |
+          echo GITHUB REF ${{ github.ref }}
           conda install -y anaconda-client conda-build conda-verify
           cd conda.recipe
           conda build --output-folder . . -c neutrons -c mantid/label/nightly
 
-      - name: Deploy to Anaconda
+      - name: Deploy qa to Anaconda
         shell: bash -l {0}
-        if: startsWith( github.ref, 'refs/tags/v')
+        if: ${{ github.ref == 'refs/heads/qa' }}
+        env:
+          ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
+        run: |
+          anaconda upload --label rc linux-64/addie-*.tar.bz2
+
+      - name: Deploy main to Anaconda
+        shell: bash -l {0}
+        if: ${{ github.ref == 'refs/heads/main' }}
         env:
           ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
         run: |
