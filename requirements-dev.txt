@@ -1,6 +1,14 @@
+build
 flake8
 mock
+periodictable
+psutil
+pystog
+qtpy
+simplejson
 pytest
 pytest-mpl
 pytest-qt<=3.3.0
+setuptools>=48
 typing
+versioningit>=1.1,<1.2
