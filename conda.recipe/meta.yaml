@@ -1,8 +1,13 @@
-{% set data = load_setup_py_data() %}
+# this will reproduce the version from tags to match versioningit
+{% set version_tag = environ.get('GIT_DESCRIBE_TAG', '0.0.0') %}
+{% set version_number = environ.get('GIT_DESCRIBE_NUMBER', '0') | string %}
+{% set version_number = '_' + version_number if version_number != '0' else '' %}
+
+{% set version = version_tag + version_number %}
 
 package:
   name: "addie"
-  version: "{{ data['version'] }}"
+  version: {{ version }}
 
 source:
   path: ..
@@ -10,9 +15,13 @@ source:
 build:
   noarch: python
   string: py{{py}}
-  script: python setup.py install --single-version-externally-managed --record=record.txt
+  script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed -vvv
 
 requirements:
+  host:
+    - python
+    - versioningit
+
   build:
     - configparser
     - mantid-total-scattering-python-wrapper
@@ -23,6 +32,7 @@ requirements:
     - pystog
     - setuptools
     - simplejson
+    - versioningit
 
   run:
     - configparser
