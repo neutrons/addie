@@ -323,7 +323,7 @@ class MainWindow(QMainWindow):
         self.ui.main_tab.insertTab(
             1, self.postprocessing_tab_widget, "Post Processing")
         postprocessing_tab_initialization.run(main_window=self)
-        
+
         # Mantid processing tab
         self.processing_tab_widget = QWidget()
         self.processing_ui = load_ui(
