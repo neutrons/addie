@@ -3,3 +3,6 @@ psutil
 pystog
 qtpy
 simplejson
+requests
+oauthlib
+requests-oauthlib
