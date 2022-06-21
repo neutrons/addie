@@ -58,17 +58,26 @@ def activate_reduction_tabs(main_window):
         tab_0 = True
         tab_1 = True
         tab_2 = False
+        tab_3 = False
+        tab_4 = True
+        tab_5 = True
         current_index = 0
         visible_menu_configuration = True
     else:
         tab_0 = False
         tab_1 = False
         tab_2 = True
+        tab_3 = True
+        tab_4 = True
+        tab_5 = True
         current_index = 2
         visible_menu_configuration = False
     main_window.ui.main_tab.setTabEnabled(0, tab_0)
     main_window.ui.main_tab.setTabEnabled(1, tab_1)
     main_window.ui.main_tab.setTabEnabled(2, tab_2)
+    main_window.ui.main_tab.setTabEnabled(3, tab_3)
+    main_window.ui.main_tab.setTabEnabled(4, tab_4)
+    main_window.ui.main_tab.setTabEnabled(5, tab_5)
     main_window.setStyleSheet("QTabBar::tab::disabled {width: 0; height: 0; margin: 0; padding: 0; border: none;} ")
     main_window.ui.main_tab.setCurrentIndex(current_index)
 

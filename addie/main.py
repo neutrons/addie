@@ -64,6 +64,7 @@ from addie.calculate_gr.pdf_lines_manager import PDFPlotManager
 from addie.initialization.widgets import main_tab as main_tab_initialization
 from addie.initialization.widgets import autonom_tab as autonom_tab_initialization
 from addie.initialization.widgets import postprocessing_tab as postprocessing_tab_initialization
+from addie.initialization.widgets import postprocessing_tab_m as postprocessing_tab_m_initialization
 from addie.initialization.widgets import processing_tab as processing_tab_initialization
 from addie.initialization.widgets import rietveld_tab as rietveld_tab_initialization
 from addie.initialization.widgets import calculategr_tab as calculategr_tab_initialization
@@ -71,6 +72,7 @@ from addie.initialization.widgets import calculategr_tab as calculategr_tab_init
 from addie.initialization.events import main_tab as main_tab_events_handler
 from addie.initialization.events import autonom_tab as autonom_tab_events_handler
 from addie.initialization.events import postprocessing_tab as postprocessing_tab_events_handler
+from addie.initialization.events import postprocessing_tab_m as postprocessing_tab_m_events_handler
 from addie.initialization.events import processing_tab as processing_tab_events_handler
 from addie.initialization.events import rietveld_tab as rietveld_tab_events_handler
 from addie.initialization.events import calculategr_tab as calculategr_tab_events_handler
@@ -313,7 +315,7 @@ class MainWindow(QMainWindow):
         self.ui.main_tab.insertTab(0, self.autonom_tab_widget, "autoNOM")
         autonom_tab_initialization.run(main_window=self)
 
-        # post processing
+        # post processing idl
         self.postprocessing_tab_widget = QWidget()
         self.postprocessing_ui = load_ui(
             'splitui_postprocessing_tab.ui',
@@ -330,12 +332,21 @@ class MainWindow(QMainWindow):
         self.ui.main_tab.insertTab(2, self.processing_tab_widget, "Processing")
         processing_tab_initialization.run(main_window=self)
 
+        # post processing mantid
+        self.postprocessing_tab_widget_m = QWidget()
+        self.postprocessing_ui_m = load_ui(
+            'splitui_postprocessing_mantid_tab.ui',
+            baseinstance=self.postprocessing_tab_widget_m)
+        self.ui.main_tab.insertTab(
+            3, self.postprocessing_tab_widget_m, "Post Processing")
+        postprocessing_tab_m_initialization.run(main_window=self)
+
         # Rietveld  tab
         self.rietveld_tab_widget = QWidget()
         self.rietveld_ui = load_ui(
             'splitui_rietveld_tab.ui',
             baseinstance=self.rietveld_tab_widget)
-        self.ui.main_tab.insertTab(3, self.rietveld_tab_widget, "Rietveld")
+        self.ui.main_tab.insertTab(4, self.rietveld_tab_widget, "Rietveld")
         rietveld_tab_initialization.run(main_window=self)
 
         # Calculate G(R) tab
@@ -344,7 +355,7 @@ class MainWindow(QMainWindow):
             'splitui_calculategr_tab.ui',
             baseinstance=self.calculategr_tab_widget)
         self.ui.main_tab.insertTab(
-            4, self.calculategr_tab_widget, 'Calculate G(R)')
+            5, self.calculategr_tab_widget, 'Calculate G(R)')
         calculategr_tab_initialization.run(main_window=self)
 
         self.init_parameters()
@@ -388,6 +399,7 @@ class MainWindow(QMainWindow):
         main_tab_events_handler.run(main_window=self)
         autonom_tab_events_handler.run(main_window=self)
         postprocessing_tab_events_handler.run(main_window=self)
+        postprocessing_tab_m_events_handler.run(main_window=self)
         processing_tab_events_handler.run(main_window=self)
         rietveld_tab_events_handler.run(main_window=self)
         calculategr_tab_events_handler.run(main_window=self)
