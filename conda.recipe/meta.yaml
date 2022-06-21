@@ -23,9 +23,6 @@ requirements:
     - pystog
     - setuptools
     - simplejson
-    - requests
-    - oauthlib
-    - requests-oauthlib
 
   run:
     - configparser
@@ -36,9 +33,6 @@ requirements:
     - python
     - pystog
     - simplejson
-    - requests
-    - oauthlib
-    - requests-oauthlib
 
 test:
   imports:
