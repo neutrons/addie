@@ -36,10 +36,10 @@ def open_workspaces(main_window):
     return workspace_file_names[0]
 
 def load_workspaces(main_window, workspace_files):
-    
     workspaces, banks = extract_info(workspace_files)
-
     main_window.postprocessing_ui_m.label_numBanks.setText(str(banks))
+    for bank in range(1, banks + 1):
+        main_window.postprocessing_ui_m.comboBox_banks.addItem(str(bank))
 
 def extract_info(input_file):
     wks_list = list()
