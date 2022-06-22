@@ -21,7 +21,7 @@ def open_workspaces(main_window):
             workspace_file_names) == 0:
         return
     workspace_file_names = [str(workspace_file_name)
-                        for workspace_file_name in workspace_file_names]
+                            for workspace_file_name in workspace_file_names]
 
     # update stored data directory
     try:
@@ -35,11 +35,13 @@ def open_workspaces(main_window):
     addie.utilities.check_in_fixed_dir_structure(main_window, sub_dir='GSAS')
     return workspace_file_names[0]
 
+
 def load_workspaces(main_window, workspace_files):
     workspaces, banks = extract_info(workspace_files)
     main_window.postprocessing_ui_m.label_numBanks.setText(str(banks))
     for bank in range(1, banks + 1):
         main_window.postprocessing_ui_m.comboBox_banks.addItem(str(bank))
+
 
 def extract_info(input_file):
     wks_list = list()
@@ -58,6 +60,7 @@ def extract_info(input_file):
             break
 
     return wks_list, len(data[ypath][()])
+
 
 def open_and_load_workspaces(main_window):
     workspace_files = open_workspaces(main_window)
