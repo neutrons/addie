@@ -1,3 +1,4 @@
-from addie. _version import get_versions
-__version__ = get_versions()['version']
-del get_versions
+try:
+    from addie._version import __version__  # noqa: F401
+except ImportError:
+    __version__ = "unknown"
