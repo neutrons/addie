@@ -1,2 +1,2 @@
 def run(main_window=None):
-    pass
+    main_window.postprocessing_ui_m.pushButton_loadWorkspaces.clicked.connect(main_window.open_and_load_workspaces)
