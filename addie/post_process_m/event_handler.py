@@ -1,5 +1,5 @@
 import os
-from qtpy.QtWidgets import QFileDialog
+from qtpy.QtWidgets import QFileDialog, QLineEdit, QLabel
 from h5py import File
 import addie.utilities.workspaces
 
@@ -37,10 +37,33 @@ def open_workspaces(main_window):
 
 
 def load_workspaces(main_window, workspace_files):
+
+    # extract the workspaces and banks
     workspaces, banks = extract_info(workspace_files)
+
+    # display number of banks
     main_window.postprocessing_ui_m.label_numBanks.setText(str(banks))
+
+    # clear the combobox before adding
+    main_window.postprocessing_ui_m.comboBox_banks.clear()
+
+    workspace_table = main_window.postprocessing_ui_m.tableWidget_workspaces
+
+    # clear rows
+    workspace_table.setRowCount(0)
+
+    # load the combobox with banks
     for bank in range(1, banks + 1):
         main_window.postprocessing_ui_m.comboBox_banks.addItem(str(bank))
+
+    # load the workspace table
+    for workspace in workspaces:
+        row_count = workspace_table.rowCount()
+        workspace_table.insertRow(row_count)
+        cell = QLabel(workspace)
+        workspace_table.setCellWidget(row_count,0, cell)
+
+    workspace_table.verticalHeader().hide()
 
 
 def extract_info(input_file):
