@@ -370,6 +370,7 @@ class MainWindow(QMainWindow):
         # class variable for easy access
         self._gssGroupName = None
         self._currDataDir = None
+        self._inputFile = None
         self._inFixedDirectoryStructure = False
         self._currWorkDir = os.getcwd()
 
@@ -631,6 +632,9 @@ class MainWindow(QMainWindow):
 
     def open_and_load_workspaces(self):
         post_processing_m_event_handler.open_and_load_workspaces(main_window=self)
+
+    def extract_button(self):
+        post_processing_m_event_handler.extract_button(main_window=self)
 
     # PDF
 

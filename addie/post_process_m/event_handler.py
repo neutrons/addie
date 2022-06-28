@@ -2,6 +2,7 @@ import os
 from qtpy.QtWidgets import QFileDialog, QLineEdit, QLabel
 from h5py import File
 import addie.utilities.workspaces
+from pystog.stog import StoG
 
 
 def open_workspaces(main_window):
@@ -39,7 +40,7 @@ def open_workspaces(main_window):
 def load_workspaces(main_window, workspace_files):
 
     # extract the workspaces and banks
-    workspaces, banks = extract_info(workspace_files)
+    workspaces, banks = extract_from_input_file(workspace_files, main_window)
 
     # display number of banks
     main_window.postprocessing_ui_m.label_numBanks.setText(str(banks))
@@ -47,26 +48,17 @@ def load_workspaces(main_window, workspace_files):
     # clear the combobox before adding
     main_window.postprocessing_ui_m.comboBox_banks.clear()
 
-    workspace_table = main_window.postprocessing_ui_m.tableWidget_workspaces
-
-    # clear rows
-    workspace_table.setRowCount(0)
+    workspace_table = main_window.postprocessing_ui_m.frame_workspaces_table
 
     # load the combobox with banks
     for bank in range(1, banks + 1):
         main_window.postprocessing_ui_m.comboBox_banks.addItem(str(bank))
 
-    # load the workspace table
-    for workspace in workspaces:
-        row_count = workspace_table.rowCount()
-        workspace_table.insertRow(row_count)
-        cell = QLabel(workspace)
-        workspace_table.setCellWidget(row_count,0, cell)
-
-    workspace_table.verticalHeader().hide()
+    workspace_table.load(workspaces, main_window)
 
 
-def extract_info(input_file):
+def extract_from_input_file(input_file, main_window):
+    main_window._inputFile = input_file
     wks_list = list()
     data = File(input_file, "r")
     for name, group in data.items():
@@ -92,3 +84,32 @@ def open_and_load_workspaces(main_window):
         return
     else:
         load_workspaces(main_window, workspace_files)
+
+
+def get_active_workspace(main_window):
+    return main_window.postprocessing_ui_m.frame_workspaces_table.cur_wks
+
+
+def extract_button(main_window):
+    nxs = main_window._inputFile
+    banks = int(main_window.postprocessing_ui_m.label_numBanks.text())
+    wks = get_active_workspace(main_window)
+    out = main_window.output_folder
+    files = extractor(nxs, banks, wks, out)
+
+    file_list = main_window.postprocessing_ui_m.frame_filelist_tree
+    file_list.load_raw_data(main_window, files)
+
+
+def extractor(nexus_file: str, num_banks: int, wks_name: str, out_dir: str):
+    stog = StoG(**{"Outputs": {"StemName": out_dir + "/"}})
+
+    head, tail = os.path.split(nexus_file)
+    all_files = list()
+
+    for i in range(num_banks):
+        stog.read_nexus_file_by_bank(nexus_file, i + 1, wks_name)
+        output_file = "{}_bank{}".format(tail.split(".")[0], i + 1)
+        all_files.append(output_file)
+
+    return all_files
