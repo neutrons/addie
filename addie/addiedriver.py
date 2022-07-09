@@ -256,10 +256,10 @@ class AddieDriver(object):
             ws_index, int), 'Workspace index must be an integer but not a {0}.'.format(
             type(ws_index))
 
-        # convert to point data from histogram
-        simpleapi.ConvertToPointData(
-            InputWorkspace=ws_name,
-            OutputWorkspace=ws_name)
+        # # convert to point data from histogram
+        # simpleapi.ConvertToPointData(
+        #     InputWorkspace=ws_name,
+        #     OutputWorkspace=ws_name)
 
         # get workspace for vecX and vecY
         if AnalysisDataService.doesExist(ws_name):
@@ -271,7 +271,7 @@ class AddieDriver(object):
             raise RuntimeError(
                 'Workspace index {0} is out of range.'.format(ws_index))
 
-        vec_x = workspace.readX(ws_index)
+        vec_x = workspace.readX(ws_index)[:-1]
         vec_y = workspace.readY(ws_index)
 
         # write to buffer
@@ -279,7 +279,7 @@ class AddieDriver(object):
         wbuf += '{0}\n'.format(len(vec_x))
         wbuf += '{0}\n'.format(comment)
         for index in range(len(vec_x)):
-            wbuf += ' {0} {1}\n'.format(vec_x[index], vec_y[index])
+            wbuf += '{0:10.3F}{1:15.5F}\n'.format(vec_x[index], vec_y[index])
 
         # write to file
         try:
@@ -474,15 +474,31 @@ class AddieDriver(object):
             filetype, str), 'GofR file type {0} must be a supported string.'.format(filetype)
 
         if filetype == 'xye':
-            simpleapi.SaveAscii(
-                InputWorkspace=ws_name,
-                Filename=file_name,
-                Separator='Space')
+            x_val = simpleapi.mtd[ws_name].readX(0)[:-1]
+            y_val = simpleapi.mtd[ws_name].readY(0)
+            e_val = simpleapi.mtd[ws_name].readE(0)
+
+            file_out = open(file_name, "w")
+            file_out.write("# X   Y   E\n")
+            file_out.write("1\n")
+            for i, item in enumerate(x_val):
+                file_out.write("{0:10.3F}{1:15.5F}{2:15.5F}\n".format(item,
+                                                                      y_val[i],
+                                                                      e_val[i]))
+            file_out.close()
         elif filetype == 'csv':
-            simpleapi.SaveAscii(
-                InputWorkspace=ws_name,
-                Filename=file_name,
-                Separator='CSV')
+            x_val = simpleapi.mtd[ws_name].readX(0)[:-1]
+            y_val = simpleapi.mtd[ws_name].readY(0)
+            e_val = simpleapi.mtd[ws_name].readE(0)
+
+            file_out = open(file_name, "w")
+            file_out.write("# X,   Y,   E\n")
+            file_out.write("1\n")
+            for i, item in enumerate(x_val):
+                file_out.write("{0:10.3F},{1:15.5F},{2:15.5F}\n".format(item,
+                                                                        y_val[i],
+                                                                        e_val[i]))
+            file_out.close()
         elif filetype == 'rmcprofile' or filetype == 'dat':
             self.export_to_rmcprofile(ws_name, file_name, comment=comment)
         elif filetype == 'gr':
