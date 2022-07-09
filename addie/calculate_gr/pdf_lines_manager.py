@@ -100,6 +100,7 @@ class PDFPlotManager(object):
 
             self._sofqInfoDict[sq_ws_name] = color_index, style_marker_index
             alpha = ((curr_q_max - Q_MIN) / (Q_MAX - Q_MIN) + 1.) * 0.5
+            alpha = min(alpha, 1.0)
         # END-IF-ELSE
 
         self._gofrInfoDict[gr_ws_name] = color, line_style, alpha
