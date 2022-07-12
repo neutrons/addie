@@ -83,3 +83,36 @@ jobs:
           if [ "${IS_RC}" = "true" ]; then CONDA_LABEL="rc"; fi
           echo pushing ${{ github.ref }} with label $CONDA_LABEL
           anaconda upload --label $CONDA_LABEL conda.recipe/noarch/addie-*.tar.bz2
+
+  trigger-prod-deploy:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-22.04
+    needs: [linux]
+    steps:
+      - name: ornl-trigger
+        run: |
+          TRIGGER_URL="https://gitlab.example.com/api/v4/projects/5749/trigger/pipeline"
+          echo "Launching gitlab webhook to deploy ${GITHUB_REF_NAME} from ${GITHUB_REF}"
+          curl --fail-with-body -sX POST -F token=${{ secrets.GITLAB_TRIGGER_TOKEN }} -F ref="${GITHUB_REF_NAME}" -F PLAY=update -F CONDA_ENV=addie ${TRIGGER_URL} | jq '. | del( .user )' ; exit ${PIPESTATUS[0]}
+
+  trigger-qa-deploy:
+    if: ${{ github.ref == 'refs/heads/qa' }}
+    runs-on: ubuntu-22.04
+    needs: [linux]
+    steps:
+      - name: ornl-trigger
+        run: |
+          TRIGGER_URL="https://gitlab.example.com/api/v4/projects/5749/trigger/pipeline"
+          echo "Launching gitlab webhook to deploy ${GITHUB_REF_NAME} from ${GITHUB_REF}"
+          curl --fail-with-body -sX POST -F token=${{ secrets.GITLAB_TRIGGER_TOKEN }} -F ref="${GITHUB_REF_NAME}" -F PLAY=update -F CONDA_ENV=addie-qa ${TRIGGER_URL} | jq '. | del( .user )' ; exit ${PIPESTATUS[0]}
+
+  trigger-dev-deploy:
+    #if: ${{ github.ref == 'refs/heads/next' }}
+    runs-on: ubuntu-22.04
+    needs: [linux]
+    steps:
+      - name: ornl-trigger
+        run: |
+          TRIGGER_URL="https://gitlab.example.com/api/v4/projects/5749/trigger/pipeline"
+          echo "Launching gitlab webhook to deploy ${GITHUB_REF_NAME} from ${GITHUB_REF}"
+          curl --fail-with-body -sX POST -F token=${{ secrets.GITLAB_TRIGGER_TOKEN }} -F ref="${GITHUB_REF_NAME}" -F PLAY=update -F CONDA_ENV=addie-dev ${TRIGGER_URL} | jq '. | del( .user )' ; exit ${PIPESTATUS[0]}
