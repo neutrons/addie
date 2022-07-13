@@ -1,6 +1,7 @@
 name: addie_ci
 
-env: {}
+env:
+  TRIGGER_URL: "https://code.ornl.gov/api/v4/projects/5749/trigger/pipeline"
 
 on:
   workflow_dispatch:
@@ -91,7 +92,6 @@ jobs:
     steps:
       - name: ornl-trigger
         run: |
-          TRIGGER_URL="https://gitlab.example.com/api/v4/projects/5749/trigger/pipeline"
           echo "Launching gitlab webhook to deploy ${GITHUB_REF_NAME} from ${GITHUB_REF}"
           curl --fail-with-body -sX POST -F token=${{ secrets.GITLAB_TRIGGER_TOKEN }} -F ref="${GITHUB_REF_NAME}" -F PLAY=update -F CONDA_ENV=addie ${TRIGGER_URL} | jq '. | del( .user )' ; exit ${PIPESTATUS[0]}
 
@@ -102,7 +102,6 @@ jobs:
     steps:
       - name: ornl-trigger
         run: |
-          TRIGGER_URL="https://gitlab.example.com/api/v4/projects/5749/trigger/pipeline"
           echo "Launching gitlab webhook to deploy ${GITHUB_REF_NAME} from ${GITHUB_REF}"
           curl --fail-with-body -sX POST -F token=${{ secrets.GITLAB_TRIGGER_TOKEN }} -F ref="${GITHUB_REF_NAME}" -F PLAY=update -F CONDA_ENV=addie-qa ${TRIGGER_URL} | jq '. | del( .user )' ; exit ${PIPESTATUS[0]}
 
@@ -113,6 +112,5 @@ jobs:
     steps:
       - name: ornl-trigger
         run: |
-          TRIGGER_URL="https://gitlab.example.com/api/v4/projects/5749/trigger/pipeline"
           echo "Launching gitlab webhook to deploy ${GITHUB_REF_NAME} from ${GITHUB_REF}"
           curl --fail-with-body -sX POST -F token=${{ secrets.GITLAB_TRIGGER_TOKEN }} -F ref="${GITHUB_REF_NAME}" -F PLAY=update -F CONDA_ENV=addie-dev ${TRIGGER_URL} | jq '. | del( .user )' ; exit ${PIPESTATUS[0]}
