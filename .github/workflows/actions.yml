@@ -114,37 +114,7 @@ jobs:
             ;;
 
           esac
-      - name: ornl-trigger
+      - name: Trigger deploy
         run: |
           echo "Launching gitlab webhook to deploy ${GITHUB_REF_NAME} from ${GITHUB_REF} for environment ${{ steps.conda_env_name.outputs.name }}"
-          curl --fail-with-body -sX POST -F token=${{ secrets.GITLAB_TRIGGER_TOKEN }} -F ref=master -F PLAY=update -F CONDA_ENV=${{ steps.conda_env_name.outputs.name }} ${TRIGGER_URL} | jq '. | del( .user )' ; exit ${PIPESTATUS[0]}
-
-  trigger-prod-deploy:
-    if: ${{ github.ref == 'refs/heads/main' }}
-    runs-on: ubuntu-22.04
-    needs: [linux]
-    steps:
-      - name: ornl-trigger
-        run: |
-          echo "Launching gitlab webhook to deploy ${GITHUB_REF_NAME} from ${GITHUB_REF}"
-          curl --fail-with-body -sX POST -F token=${{ secrets.GITLAB_TRIGGER_TOKEN }} -F ref="${GITHUB_REF_NAME}" -F PLAY=update -F CONDA_ENV=addie ${TRIGGER_URL} | jq '. | del( .user )' ; exit ${PIPESTATUS[0]}
-
-  trigger-qa-deploy:
-    if: ${{ github.ref == 'refs/heads/qa' }}
-    runs-on: ubuntu-22.04
-    needs: [linux]
-    steps:
-      - name: ornl-trigger
-        run: |
-          echo "Launching gitlab webhook to deploy ${GITHUB_REF_NAME} from ${GITHUB_REF}"
-          curl --fail-with-body -sX POST -F token=${{ secrets.GITLAB_TRIGGER_TOKEN }} -F ref="${GITHUB_REF_NAME}" -F PLAY=update -F CONDA_ENV=addie-qa ${TRIGGER_URL} | jq '. | del( .user )' ; exit ${PIPESTATUS[0]}
-
-  trigger-dev-deploy:
-    #if: ${{ github.ref == 'refs/heads/next' }}
-    runs-on: ubuntu-22.04
-    needs: [linux]
-    steps:
-      - name: ornl-trigger
-        run: |
-          echo "Launching gitlab webhook to deploy ${GITHUB_REF_NAME} from ${GITHUB_REF}"
-          curl --fail-with-body -sX POST -F token=${{ secrets.GITLAB_TRIGGER_TOKEN }} -F ref=master -F "variables[PLAY]=update" -F "variables[CONDA_ENV]=addie-dev" ${TRIGGER_URL} | jq '. | del( .user )' ; exit ${PIPESTATUS[0]}
+          curl --fail-with-body -sX POST -F token=${{ secrets.GITLAB_TRIGGER_TOKEN }} -F ref=master -F variables[PLAY]=update -F variables[CONDA_ENV]=${{ steps.conda_env_name.outputs.name }} ${TRIGGER_URL} | jq '. | del( .user )' ; exit ${PIPESTATUS[0]}
