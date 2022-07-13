@@ -85,6 +85,40 @@ jobs:
           echo pushing ${{ github.ref }} with label $CONDA_LABEL
           anaconda upload --label $CONDA_LABEL conda.recipe/noarch/addie-*.tar.bz2
 
+  trigger-deploy:
+    # TODO protected branch only
+    runs-on: ubuntu-22.04
+    #needs: [linux]
+    steps:
+      - name: Determine Environment
+        id: conda_env_name
+        run: |
+          case ${{ github.ref }} in
+
+          refs/heads/next)
+            echo "::set-output name=name::addie-dev"
+            ;;
+
+          refs/heads/qa)
+            echo "::set-output name=name::addie-qa"
+            ;;
+
+          refs/heads/main)
+            echo "::set-output name=name::addie"
+            ;;
+
+          *)
+            # TODO should just exit
+            echo "::set-output name=name::addie-dev"
+            #exit 1
+            ;;
+
+          esac
+      - name: ornl-trigger
+        run: |
+          echo "Launching gitlab webhook to deploy ${GITHUB_REF_NAME} from ${GITHUB_REF} for environment ${{ steps.conda_env_name.outputs.name }}"
+          curl --fail-with-body -sX POST -F token=${{ secrets.GITLAB_TRIGGER_TOKEN }} -F ref=master -F PLAY=update -F CONDA_ENV=${{ steps.conda_env_name.outputs.name }} ${TRIGGER_URL} | jq '. | del( .user )' ; exit ${PIPESTATUS[0]}
+
   trigger-prod-deploy:
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-22.04
@@ -113,4 +147,4 @@ jobs:
       - name: ornl-trigger
         run: |
           echo "Launching gitlab webhook to deploy ${GITHUB_REF_NAME} from ${GITHUB_REF}"
-          curl --fail-with-body -sX POST -F token=${{ secrets.GITLAB_TRIGGER_TOKEN }} -F ref=master -F PLAY=update -F CONDA_ENV=addie-dev ${TRIGGER_URL} | jq '. | del( .user )' ; exit ${PIPESTATUS[0]}
+          curl --fail-with-body -sX POST -F token=${{ secrets.GITLAB_TRIGGER_TOKEN }} -F ref=master -F "variables[PLAY]=update" -F "variables[CONDA_ENV]=addie-dev" ${TRIGGER_URL} | jq '. | del( .user )' ; exit ${PIPESTATUS[0]}
