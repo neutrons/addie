@@ -113,4 +113,4 @@ jobs:
       - name: ornl-trigger
         run: |
           echo "Launching gitlab webhook to deploy ${GITHUB_REF_NAME} from ${GITHUB_REF}"
-          curl --fail-with-body -sX POST -F token=${{ secrets.GITLAB_TRIGGER_TOKEN }} -F ref="${GITHUB_REF_NAME}" -F PLAY=update -F CONDA_ENV=addie-dev ${TRIGGER_URL} | jq '. | del( .user )' ; exit ${PIPESTATUS[0]}
+          curl --fail-with-body -sX POST -F token=${{ secrets.GITLAB_TRIGGER_TOKEN }} -F ref=master -F PLAY=update -F CONDA_ENV=addie-dev ${TRIGGER_URL} | jq '. | del( .user )' ; exit ${PIPESTATUS[0]}
