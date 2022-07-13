@@ -86,9 +86,10 @@ jobs:
           anaconda upload --label $CONDA_LABEL conda.recipe/noarch/addie-*.tar.bz2
 
   trigger-deploy:
-    # TODO protected branch only
     runs-on: ubuntu-22.04
-    #needs: [linux]
+    needs: [linux]
+    # only trigger deploys from protected branches
+    if: github.ref_protected
     steps:
       - name: Determine Environment
         id: conda_env_name
@@ -108,12 +109,12 @@ jobs:
             ;;
 
           *)
-            # TODO should just exit
-            echo "::set-output name=name::addie-dev"
-            #exit 1
+            echo "This job should not run on unprotected branches"
+            exit 1
             ;;
 
           esac
+
       - name: Trigger deploy
         run: |
           echo "Launching gitlab webhook to deploy ${GITHUB_REF_NAME} from ${GITHUB_REF} for environment ${{ steps.conda_env_name.outputs.name }}"
