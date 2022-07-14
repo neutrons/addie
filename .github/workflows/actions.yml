@@ -1,6 +1,7 @@
 name: addie_ci
 
-env: {}
+env:
+  TRIGGER_URL: "https://code.ornl.gov/api/v4/projects/5749/trigger/pipeline"
 
 on:
   workflow_dispatch:
@@ -83,3 +84,38 @@ jobs:
           if [ "${IS_RC}" = "true" ]; then CONDA_LABEL="rc"; fi
           echo pushing ${{ github.ref }} with label $CONDA_LABEL
           anaconda upload --label $CONDA_LABEL conda.recipe/noarch/addie-*.tar.bz2
+
+  trigger-deploy:
+    runs-on: ubuntu-22.04
+    needs: [linux]
+    # only trigger deploys from protected branches
+    if: github.ref_protected
+    steps:
+      - name: Determine Environment
+        id: conda_env_name
+        run: |
+          case ${{ github.ref }} in
+
+          refs/heads/next)
+            echo "::set-output name=name::addie-dev"
+            ;;
+
+          refs/heads/qa)
+            echo "::set-output name=name::addie-qa"
+            ;;
+
+          refs/heads/main)
+            echo "::set-output name=name::addie"
+            ;;
+
+          *)
+            echo "This job should not run on unprotected branches"
+            exit 1
+            ;;
+
+          esac
+
+      - name: Trigger deploy
+        run: |
+          echo "Launching gitlab webhook to deploy ${GITHUB_REF_NAME} from ${GITHUB_REF} for environment ${{ steps.conda_env_name.outputs.name }}"
+          curl --fail-with-body -sX POST -F token=${{ secrets.GITLAB_TRIGGER_TOKEN }} -F ref=master -F variables[PLAY]=update -F variables[CONDA_ENV]=${{ steps.conda_env_name.outputs.name }} ${TRIGGER_URL} | jq '. | del( .user )' ; exit ${PIPESTATUS[0]}
