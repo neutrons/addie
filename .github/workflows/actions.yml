@@ -116,7 +116,7 @@ jobs:
           esac
 
       - name: Trigger deploy
-        id: gitlabpipeline
+        id: trigger
         uses: eic/trigger-gitlab-ci@v1
         with:
           url: https://code.ornl.gov
@@ -126,3 +126,6 @@ jobs:
           variables: |
             PLAY="update"
             CONDA_ENV="${{ steps.conda_env_name.outputs.name }}"
+
+      - name: Print web_url for further use
+        run: echo ${{ steps.trigger.outputs.web_url }}
