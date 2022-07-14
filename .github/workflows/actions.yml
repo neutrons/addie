@@ -116,6 +116,13 @@ jobs:
           esac
 
       - name: Trigger deploy
-        run: |
-          echo "Launching gitlab webhook to deploy ${GITHUB_REF_NAME} from ${GITHUB_REF} for environment ${{ steps.conda_env_name.outputs.name }}"
-          curl --fail-with-body -sX POST -F token=${{ secrets.GITLAB_TRIGGER_TOKEN }} -F ref=master -F variables[PLAY]=update -F variables[CONDA_ENV]=${{ steps.conda_env_name.outputs.name }} ${TRIGGER_URL} | jq '. | del( .user )' ; exit ${PIPESTATUS[0]}
+        id: gitlabpipeline
+        uses: eic/trigger-gitlab-ci@v1
+        with:
+          url: https://code.ornl.gov
+          token: ${{ secrets.GITLAB_TRIGGER_TOKEN }}
+          project_id: 5749
+          ref_name: master
+          variables: |
+            PLAY="update"
+            CONDA_ENV="${{ steps.conda_env_name.outputs.name }}"
