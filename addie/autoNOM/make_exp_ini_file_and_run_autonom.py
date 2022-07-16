@@ -19,7 +19,7 @@ class MakeExpIniFileAndRunAutonom(object):
     title_optional = 'optional ' + _star
     list_mandatory = ['Dia', 'DiaBg', 'Vana', 'VanaBg', 'MTc']
     list_optional = ['recali', 'renorm', 'autotemp', 'scan1', 'scanl', 'Hz', '#']
-    script_to_run = "python /SNS/NOM/shared/autoNOM/stable/autoNOM.py -l -P /SNS/NOM/shared/autoNOM/stable/"
+    script_to_run = "/usr/bin/python /SNS/NOM/shared/autoNOM/stable/autoNOM.py -l -P /SNS/NOM/shared/autoNOM/stable/"
     script_flag = ""
 
     def __init__(self, parent=None, folder=None):
@@ -27,7 +27,7 @@ class MakeExpIniFileAndRunAutonom(object):
         # self.parent = parent.ui
         self.parent = parent.autonom_ui
         self.folder = folder
-        self.script_to_run = "python " + parent._autonom_script + " -l -P " + parent.idl_script_dir
+        self.script_to_run = "/usr/bin/python " + parent._autonom_script + " -l -P " + parent.idl_script_dir
 
     def create(self):
         self.retrieve_metadata()
