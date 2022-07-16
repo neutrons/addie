@@ -1055,7 +1055,7 @@ def main(config=None):
         parser.add_argument(
             '--mode',
             type=str,
-            default='mantid',
+            default='idl',
             help='Set processing mode (default=%(default)s)',
             choices=[
                 'mantid',
