@@ -89,7 +89,7 @@ jobs:
     runs-on: ubuntu-22.04
     needs: [linux]
     # only trigger deploys from protected branches
-    if: ${ github.ref_protected || github.ref_type = "tag" }
+    if: ${{ github.ref_protected || github.ref_type = "tag" }}
     steps:
       - name: Determine Environment
         id: conda_env_name
