@@ -91,7 +91,7 @@ jobs:
     # only trigger deploys from protected branches
     if: |
       github.ref_protected ||
-      ${{ github.ref_type == "tag" }}
+      ${{ github.ref_type == 'tag' }}
     steps:
       - name: Determine Environment
         id: conda_env_name
