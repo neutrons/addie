@@ -96,6 +96,7 @@ jobs:
       - name: Determine Environment
         id: conda_env_name
         run: |
+          echo "REF=${{ github.ref }}"
           case ${{ github.ref }} in
 
           refs/heads/next)
