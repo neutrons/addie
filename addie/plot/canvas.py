@@ -419,7 +419,6 @@ class FigureCanvas(FigureCanvasQTAgg):
         """
         # Get all lines in list
         lines = self.axes.lines
-        assert isinstance(lines, list), 'Lines must be list'
 
         if plot_key in self._lineDict:
             try:
