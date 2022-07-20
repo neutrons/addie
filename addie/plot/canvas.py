@@ -417,9 +417,6 @@ class FigureCanvas(FigureCanvasQTAgg):
     def remove_plot_1d(self, plot_key):
         """ Remove the line with its index as key
         """
-        # Get all lines in list
-        lines = self.axes.lines
-
         if plot_key in self._lineDict:
             try:
                 self.axes.lines.remove(self._lineDict[plot_key])
