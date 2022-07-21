@@ -473,14 +473,12 @@ class AddieDriver(object):
         assert isinstance(
             filetype, str), 'GofR file type {0} must be a supported string.'.format(filetype)
 
-        if filetype == 'xye':
+        if filetype == 'xye' or filetype == 'gr':
             x_val = simpleapi.mtd[ws_name].readX(0)[:-1]
             y_val = simpleapi.mtd[ws_name].readY(0)
             e_val = simpleapi.mtd[ws_name].readE(0)
 
             file_out = open(file_name, "w")
-            file_out.write("# X   Y   E\n")
-            file_out.write("1\n")
             for i, item in enumerate(x_val):
                 file_out.write("{0:10.3F}{1:15.5F}{2:15.5F}\n".format(item,
                                                                       y_val[i],
@@ -492,8 +490,6 @@ class AddieDriver(object):
             e_val = simpleapi.mtd[ws_name].readE(0)
 
             file_out = open(file_name, "w")
-            file_out.write("# X,   Y,   E\n")
-            file_out.write("1\n")
             for i, item in enumerate(x_val):
                 file_out.write("{0:10.3F},{1:15.5F},{2:15.5F}\n".format(item,
                                                                         y_val[i],
@@ -501,10 +497,6 @@ class AddieDriver(object):
             file_out.close()
         elif filetype == 'rmcprofile' or filetype == 'dat':
             self.export_to_rmcprofile(ws_name, file_name, comment=comment)
-        elif filetype == 'gr':
-            wksp = AnalysisDataService.retrieve(ws_name)
-            wksp.getAxis(0).setUnit("Label").setLabel("r", "Angstrom")
-            simpleapi.SavePDFGui(InputWorkspace=wksp, Filename=file_name)
         elif filetype == 'sq':
             simpleapi.SaveAscii(
                 InputWorkspace=ws_name,
