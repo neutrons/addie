@@ -92,30 +92,10 @@ jobs:
     if: ${{ github.ref_protected || github.ref_type == 'tag' }}
     steps:
       - name: Determine Environment
+        uses: neutrons/branch-mapper@main
         id: conda_env_name
-        run: |
-          case ${{ github.ref }} in
-
-          refs/heads/next)
-            echo "::set-output name=name::addie-dev"
-            ;;
-
-          refs/tags/v*rc*)
-            echo "::set-output name=name::addie-qa"
-            ;;
-
-
-            # when rc isn't in the tag name
-          refs/tags/v*)
-            echo "::set-output name=name::addie"
-            ;;
-
-          *)
-            echo "This job should not run on unprotected branches REF=${{ github.ref }}"
-            exit 1
-            ;;
-
-          esac
+        with:
+          prefix: addie
 
       - name: Trigger deploy
         id: trigger
