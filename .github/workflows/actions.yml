@@ -104,6 +104,7 @@ jobs:
             echo "::set-output name=name::addie-qa"
             ;;
 
+
             # when rc isn't in the tag name
           refs/tags/v*)
             echo "::set-output name=name::addie"
@@ -128,5 +129,8 @@ jobs:
             PLAY="update"
             CONDA_ENV="${{ steps.conda_env_name.outputs.name }}"
 
-      - name: Print web_url for further use
-        run: echo ${{ steps.trigger.outputs.web_url }}
+      - name: Annotate commit
+        uses: peter-evans/commit-comment@v2
+        with:
+          body: |
+            GitLab pipeline for ${{ steps.conda_env_name.outputs.name }} has been submitted for this commit: ${{ steps.trigger.outputs.web_url }}
