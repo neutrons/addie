@@ -241,7 +241,7 @@
         </widget>
        </item>
        <item row="9" column="0" colspan="4">
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="pushButton_mergeBanks">
          <property name="maximumSize">
           <size>
            <width>330</width>

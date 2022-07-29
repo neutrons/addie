@@ -119,6 +119,7 @@ def extractor(nexus_file: str, num_banks: int, wks_name: str, out_dir: str):
 
 
 def plot(main_window, bank_list, banks, workspace):
+    print(banks)
     for bank in bank_list:
         output_file = main_window.output_folder + "/" + workspace + "_bank" + str(int(bank[len(bank) - 1]) - 1) + ".dat"
         main_window.postprocessing_ui_m.ppm_view.plot_bank(bank, workspace, output_file)
