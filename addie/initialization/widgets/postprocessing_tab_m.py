@@ -3,10 +3,17 @@ from qtpy.QtWidgets import QVBoxLayout, QHeaderView, QTreeWidgetItem
 from qtpy.QtCore import Qt
 from addie.post_process_m.postprocesstable import PostProcessTable
 from addie.post_process_m.filelisttree import FileListTree
+from addie.post_process_m.ppmview import PPMView
 
 
 def run(main_window=None):
     main_window.postprocessing_ui_m.pushButton_extract.setEnabled(False)
+
+   # setup the plot view
+    graphics_view = QVBoxLayout()
+    main_window.postprocessing_ui_m.frame_ppm_view.setLayout(graphics_view)
+    main_window.postprocessing_ui_m.ppm_view = PPMView(main_window)
+    graphics_view.addWidget(main_window.postprocessing_ui_m.ppm_view)
 
    # setup the workspaces table
     temp_layout = QVBoxLayout()
@@ -26,8 +33,8 @@ def run(main_window=None):
     main_window.postprocessing_ui_m.frame_filelist_tree.setLayout(temp_layout)
     main_window.postprocessing_ui_m.frame_filelist_tree = FileListTree(main_window)
     temp_layout.addWidget(main_window.postprocessing_ui_m.frame_filelist_tree)
-    main_window.postprocessing_ui_m.frame_filelist_tree.setHeaderLabel('File List')
-
+    tree = main_window.postprocessing_ui_m.frame_filelist_tree
+    tree.header().setStretchLastSection(True)
 
     main_window.postprocessing_ui_m.frame_filelist_tree.setStyleSheet("""
     FileListTree {

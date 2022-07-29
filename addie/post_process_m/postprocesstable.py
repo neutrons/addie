@@ -1,6 +1,7 @@
 from qtpy.QtWidgets import QTableWidget
 from qtpy.QtWidgets import QAction, QLabel
 from qtpy.QtCore import Qt
+import addie.post_process_m.event_handler as event
 
 
 class PostProcessTable(QTableWidget):
@@ -10,7 +11,8 @@ class PostProcessTable(QTableWidget):
 
         self._action_extract = QAction('Extract', self)
         self._action_extract.triggered.connect(self.extract)
-        # self.clicked.connect(self.on_click)
+
+        self.parent = parent
         self.setContextMenuPolicy(Qt.ActionsContextMenu)
         self.cellClicked.connect(self.on_click)
         self.selected_item = None
@@ -22,7 +24,10 @@ class PostProcessTable(QTableWidget):
 
 
     def extract(self):
-        pass
+        if self.main is not None:
+            self.cur_wks = str(self.cellWidget(self.cur_row, self.cur_col).text())
+            event.extract_button(self.main)
+
 
     def load(self, workspaces, main_window):
         self.main = main_window
@@ -41,7 +46,6 @@ class PostProcessTable(QTableWidget):
 
     def on_click(self):
         self.cur_row = self.currentRow()
-        self.cur_wks = self.itemAt(self.cur_row, self.cur_col)
 
 
     def mousePressEvent(self, e):
@@ -49,26 +53,34 @@ class PostProcessTable(QTableWidget):
         if button == 2:
             # override the response for right button
             QTableWidget.mousePressEvent(self, e)
+            self.enable_disable_extract()
             self.pop_up_menu()
         else:
             # keep base method for other buttons
-            self.enable_extract()
             QTableWidget.mousePressEvent(self, e)
+            self.enable_disable_extract()
 
 
-    def enable_extract(self):
-        if self.main is not None:
+    def enable_disable_extract(self):
+        indexes = self.selectedIndexes()
+        if self.main is not None and len(indexes) == 1:
             self.main.postprocessing_ui_m.pushButton_extract.setEnabled(True)
+            self.cur_row = self.currentRow()
+            self.cur_wks = str(self.cellWidget(self.cur_row, self.cur_col).text())
+        elif len(indexes) != 1:
+            self.main.postprocessing_ui_m.pushButton_extract.setDisabled(True)
 
 
     def pop_up_menu(self):
+        indexes_selected = self.selectedIndexes()
 
-        rows = self.selectedItems()
-
-        if len(rows) > 1 or len(rows) < 1:
-            self.addAction(self._action_extract)
-            self._action_extract.setDisabled(True)
-
+        if len(indexes_selected) != 1:
+            self.removeAction(self._action_extract)
         else:
             self.addAction(self._action_extract)
-            self._action_extract.setEnabled(True)
+
+    def get_current_workspace(self):
+        # if self.cur_wks is None:
+        #     self.cur_row = self.currentRow()
+        #     self.cur_wks = str(self.cellWidget(self.cur_row, self.cur_col).text())
+        return self.cur_wks

@@ -241,6 +241,49 @@ class FigureCanvas(FigureCanvasQTAgg):
         # Flush...
         self._flush()
 
+
+    def add_plot_postprocess(self, bank, workspace, bank_file):
+        x_label = 'Q(angstrom^-1)'
+        y_label = 'S(Q), F(Q), ...'
+        color = None
+        marker = None
+        line_style = None
+        # process inputs and defaults
+        if color is None:
+            color = (0, 1, 0, 1)
+        if marker is None:
+            marker = 'None'
+        if line_style is None:
+            line_style = '-'
+
+        file_in = open(bank_file, "r")
+        line = file_in.readline()
+        line = file_in.readline()
+        x_list = []
+        y_list = []
+        while line:
+            line = file_in.readline()
+            if line:
+                if line.split()[1] != "nan":
+                    x_list.append(float(line.split()[0]))
+                    y_list.append(float(line.split()[1]))
+        file_in.close()
+
+        self.axes.plot(x_list, y_list)
+
+        self.axes.set_aspect('auto')
+
+        # set x-axis and y-axis label
+        if x_label is not None:
+            self.axes.set_xlabel(x_label, fontsize=20)
+        if y_label is not None:
+            self.axes.set_ylabel(y_label, fontsize=20)
+
+        # Flush/commit
+        self.draw()
+
+
+
     def addImage(self, imagefilename):
         """ Add an image by file
         """
