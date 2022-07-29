@@ -22,12 +22,10 @@ class PostProcessTable(QTableWidget):
         self.cur_wks = None
         self.len_workspace = 0
 
-
     def extract(self):
         if self.main is not None:
             self.cur_wks = str(self.cellWidget(self.cur_row, self.cur_col).text())
             event.extract_button(self.main)
-
 
     def load(self, workspaces, main_window):
         self.main = main_window
@@ -43,10 +41,8 @@ class PostProcessTable(QTableWidget):
 
         self.verticalHeader().hide()
 
-
     def on_click(self):
         self.cur_row = self.currentRow()
-
 
     def mousePressEvent(self, e):
         button = e.button()
@@ -60,7 +56,6 @@ class PostProcessTable(QTableWidget):
             QTableWidget.mousePressEvent(self, e)
             self.enable_disable_extract()
 
-
     def enable_disable_extract(self):
         indexes = self.selectedIndexes()
         if self.main is not None and len(indexes) == 1:
@@ -69,7 +64,6 @@ class PostProcessTable(QTableWidget):
             self.cur_wks = str(self.cellWidget(self.cur_row, self.cur_col).text())
         elif len(indexes) != 1:
             self.main.postprocessing_ui_m.pushButton_extract.setDisabled(True)
-
 
     def pop_up_menu(self):
         indexes_selected = self.selectedIndexes()

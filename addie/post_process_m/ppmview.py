@@ -1,8 +1,4 @@
 from addie.plot import MplGraphicsView
-from addie.plot import FigureCanvas
-from addie.plot import IndicatorManager, NavigationToolbar
-from qtpy.QtWidgets import QVBoxLayout, QWidget
-from matplotlib import pyplot as plt
 
 
 class PPMView(MplGraphicsView):
@@ -31,7 +27,6 @@ class PPMView(MplGraphicsView):
         print("cur_wks:", cur_wks)
         print("output:", output_file)
         self._myCanvas.add_plot_postprocess(bank, workspace, output_file)
-
 
     def canvas_reset(self):
         self._myCanvas.axes.cla()

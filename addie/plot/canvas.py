@@ -241,7 +241,6 @@ class FigureCanvas(FigureCanvasQTAgg):
         # Flush...
         self._flush()
 
-
     def add_plot_postprocess(self, bank, workspace, bank_file):
         x_label = 'Q(angstrom^-1)'
         y_label = 'S(Q), F(Q), ...'
@@ -281,8 +280,6 @@ class FigureCanvas(FigureCanvasQTAgg):
 
         # Flush/commit
         self.draw()
-
-
 
     def addImage(self, imagefilename):
         """ Add an image by file

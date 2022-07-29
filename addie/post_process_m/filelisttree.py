@@ -1,11 +1,12 @@
-from qtpy.QtWidgets import QTreeWidget, QTreeWidgetItem
-from qtpy.QtWidgets import QAction, QLabel
+from qtpy.QtWidgets import QAction
 from qtpy.QtGui import QStandardItemModel
-from qtpy.QtCore import Qt
 from addie.utilities import customtreeview as base
 from addie.post_process_m import event_handler
 
+
 class FileListTree(base.CustomizedTreeView):
+
+
     def __init__(self, parent):
         base.CustomizedTreeView.__init__(self, parent)
         self._action_plot = QAction('Plot', self)
@@ -16,12 +17,10 @@ class FileListTree(base.CustomizedTreeView):
             self.set_main_window(parent)
         self.reset_files_tree()
 
-
     def load_data(self, files, workspace):
         self._current_workspace = workspace
         for extracted_file in files:
             self.add_child_current_item(extracted_file)
-
 
     def reset_files_tree(self):
         if self.model() is not None:
@@ -39,7 +38,6 @@ class FileListTree(base.CustomizedTreeView):
         self.add_main_item('Merged Data', append=True, as_current_index=False)
         self.add_main_item('StoG Data', append=True, as_current_index=False)
 
-
     def do_plot(self):
         item_list = self.get_selected_items()
         item_list = [str(item.text()) for item in item_list]
@@ -54,7 +52,6 @@ class FileListTree(base.CustomizedTreeView):
                 self._current_workspace
             )
 
-
     def mousePressEvent(self, e):
         button_pressed = e.button()
         if button_pressed == 2:
@@ -62,7 +59,6 @@ class FileListTree(base.CustomizedTreeView):
             self.pop_up_menu()
         else:
             base.CustomizedTreeView.mousePressEvent(self, e)
-
 
     def pop_up_menu(self):
         selected_items = self.get_selected_items()

@@ -1,5 +1,5 @@
 # from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QVBoxLayout, QHeaderView, QTreeWidgetItem
+from qtpy.QtWidgets import QVBoxLayout, QHeaderView
 from qtpy.QtCore import Qt
 from addie.post_process_m.postprocesstable import PostProcessTable
 from addie.post_process_m.filelisttree import FileListTree

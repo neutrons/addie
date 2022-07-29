@@ -171,4 +171,4 @@ def set_merge_values(main_window):
 
 
 def merge_banks(main_window):
-    
+    pass
