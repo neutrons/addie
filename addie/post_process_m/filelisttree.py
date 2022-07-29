@@ -8,30 +8,19 @@ from addie.post_process_m import event_handler
 class FileListTree(base.CustomizedTreeView):
     def __init__(self, parent):
         base.CustomizedTreeView.__init__(self, parent)
-
         self._action_plot = QAction('Plot', self)
         self._action_plot.triggered.connect(self.do_plot)
-
         self._main_window = None
-
         self._current_workspace = None
-
         if parent:
             self.set_main_window(parent)
-
-
         self.reset_files_tree()
 
 
     def load_data(self, files, workspace):
-        parent_item = self.get_main_nodes()
-
         self._current_workspace = workspace
-
         for extracted_file in files:
-            
             self.add_child_current_item(extracted_file)
-
 
 
     def reset_files_tree(self):

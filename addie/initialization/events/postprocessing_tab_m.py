@@ -7,3 +7,4 @@ def run(main_window=None):
     main_window.postprocessing_ui_m.doubleSpinBox_Qmax.valueChanged.connect(main_window.set_merge_values)
     main_window.postprocessing_ui_m.lineEdit_Yoffset.textChanged.connect(main_window.set_merge_values)
     main_window.postprocessing_ui_m.lineEdit_Yscale.textChanged.connect(main_window.set_merge_values)
+    main_window.postprocessing_ui_m.pushButton_mergeBanks.clicked.connect(main_window.merge_banks)

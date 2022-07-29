@@ -127,11 +127,6 @@ def plot(main_window, bank_list, banks, workspace):
 
 def clear_canvas(main_window):
     main_window.postprocessing_ui_m.ppm_view.canvas_reset()
-    # graphics_view = QVBoxLayout()
-    # main_window.postprocessing_ui_m.ppm_view.deleteLater()
-    # main_window.postprocessing_ui_m.frame_ppm_view.setLayout(graphics_view)
-    # main_window.postprocessing_ui_m.ppm_view = PPMView(main_window)
-    # graphics_view.addWidget(main_window.postprocessing_ui_m.ppm_view)
 
 
 def change_bank(main_window):
@@ -142,7 +137,6 @@ def change_bank(main_window):
         q_max = bank_dict[current_bank]["Qmax"]
         y_offset = bank_dict[current_bank]["Yoffset"]
         y_scale = bank_dict[current_bank]["Yscale"]
-        print(q_min)
         main_window.postprocessing_ui_m.doubleSpinBox_Qmin.setValue(q_min)
         main_window.postprocessing_ui_m.doubleSpinBox_Qmax.setValue(q_max)
         main_window.postprocessing_ui_m.lineEdit_Yoffset.setText(y_offset)
@@ -161,4 +155,20 @@ def initialize_banks(main_window, banks):
 
 
 def set_merge_values(main_window):
-    pass
+    q_min = main_window.postprocessing_ui_m.doubleSpinBox_Qmin.value()
+    q_max = main_window.postprocessing_ui_m.doubleSpinBox_Qmax.value()
+    y_offset = main_window.postprocessing_ui_m.lineEdit_Yoffset.text()
+    y_scale = main_window.postprocessing_ui_m.lineEdit_Yscale.text()
+
+    current_bank = int(main_window.postprocessing_ui_m.comboBox_banks.currentText())
+    bank_dict = main_window._bankDict
+
+    if bank_dict is not None:
+        bank_dict[current_bank]["Qmin"] = q_min
+        bank_dict[current_bank]["Qmax"] = q_max
+        bank_dict[current_bank]["Yoffset"] = y_offset
+        bank_dict[current_bank]["Yscale"] = y_scale
+
+
+def merge_banks(main_window):
+    

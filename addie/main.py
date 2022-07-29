@@ -646,6 +646,9 @@ class MainWindow(QMainWindow):
     def set_merge_values(self):
         post_processing_m_event_handler.set_merge_values(main_window=self)
 
+    def merge_banks(self):
+        post_processing_m_event_handler.merge_banks(main_window=self)
+
     # PDF
 
     def check_q_range(self):
