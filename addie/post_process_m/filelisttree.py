@@ -6,7 +6,6 @@ from addie.post_process_m import event_handler
 
 class FileListTree(base.CustomizedTreeView):
 
-
     def __init__(self, parent):
         base.CustomizedTreeView.__init__(self, parent)
         self._action_plot = QAction('Plot', self)

@@ -1,9 +1,8 @@
 import os
-from qtpy.QtWidgets import QFileDialog, QLineEdit, QLabel, QVBoxLayout
+from qtpy.QtWidgets import QFileDialog
 from h5py import File
 import addie.utilities.workspaces
 from pystog.stog import StoG
-from addie.post_process_m.ppmview import PPMView
 
 
 def open_workspaces(main_window):
@@ -141,6 +140,7 @@ def change_bank(main_window):
         main_window.postprocessing_ui_m.doubleSpinBox_Qmax.setValue(q_max)
         main_window.postprocessing_ui_m.lineEdit_Yoffset.setText(y_offset)
         main_window.postprocessing_ui_m.lineEdit_Yscale.setText(y_scale)
+
 
 # initialize a dictionary holding data about a bank (starts at default)
 def initialize_banks(main_window, banks):
