@@ -119,9 +119,31 @@ def extractor(nexus_file: str, num_banks: int, wks_name: str, out_dir: str):
 
 
 def plot(main_window, bank_list, banks, workspace):
-    print(banks)
     for bank in bank_list:
+
         output_file = main_window.output_folder + "/" + workspace + "_bank" + str(int(bank[len(bank) - 1]) - 1) + ".dat"
+
+        #read the file for this bank
+        # file_in = open(output_file, "r")
+        # line = file_in.readline()
+        # line = file_in.readline()
+
+        # #plot lists
+        # x_list = []
+        # y_list = []
+
+        # #add to the lis
+        # while line:
+        #     line = file_in.readline()
+        #     if line:
+        #         if line.split()[1] != "nan":
+        #             x_list.append(float(line.split()[0]))
+        #             y_list.append(float(line.split()[1]))
+        # file_in.close()
+
+        #add the x_list and y_list to the dictionary entry for the bank
+
+
         main_window.postprocessing_ui_m.ppm_view.plot_bank(bank, workspace, output_file)
 
 

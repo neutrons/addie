@@ -23,7 +23,6 @@ class PPMView(MplGraphicsView):
         pass
 
     def plot_bank(self, bank, workspace, output_file):
-        cur_wks = workspace
         self._myCanvas.add_plot_postprocess(bank, workspace, output_file)
 
     def canvas_reset(self):
