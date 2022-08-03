@@ -308,7 +308,6 @@ class MainWindow(QMainWindow):
         o_gui = Step1GuiHandler(main_window=self)
         o_gui.set_main_window_title()
 
-        print("Launching -> 1...")
         # autoNOM tab
         self.autonom_tab_widget = QWidget()
         self.autonom_ui = load_ui(
@@ -326,7 +325,6 @@ class MainWindow(QMainWindow):
             1, self.postprocessing_tab_widget, "Post Processing")
         postprocessing_tab_initialization.run(main_window=self)
 
-        print("Launching -> 2...")
         # Mantid processing tab
         self.processing_tab_widget = QWidget()
         self.processing_ui = load_ui(
@@ -398,22 +396,14 @@ class MainWindow(QMainWindow):
         self._ndabs_script = os.path.join(idl_script_dir, "NDabs.py")
         self._is_sum_scans_python_checked = False
 
-        print("Launching -> 3...")
         # Connecting all the widgets
         main_tab_events_handler.run(main_window=self)
-        print("Launching -> 4...")
         autonom_tab_events_handler.run(main_window=self)
-        print("Launching -> 5...")
         postprocessing_tab_events_handler.run(main_window=self)
-        print("Launching -> 6...")
         postprocessing_tab_m_events_handler.run(main_window=self)
-        print("Launching -> 7...")
         processing_tab_events_handler.run(main_window=self)
-        print("Launching -> 8...")
         rietveld_tab_events_handler.run(main_window=self)
-        print("Launching -> 9...")
         calculategr_tab_events_handler.run(main_window=self)
-        print("Launching -> 10...")
 
         self.activate_reduction_tabs()
 
