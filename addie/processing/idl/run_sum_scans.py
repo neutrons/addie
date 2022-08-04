@@ -26,7 +26,7 @@ class RunSumScans(object):
 
     def set_sum_scans_script(self):
         self.script_path = self.o_gui_handler.get_sum_scans_script()
-        self.script = 'python ' + self.script_path
+        self.script = '/usr/bin/python ' + self.script_path
         print("SumScans: ", self.script)
 
     def run(self):
