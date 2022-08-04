@@ -370,8 +370,10 @@ class MainWindow(QMainWindow):
         # class variable for easy access
         self._gssGroupName = None
         self._currDataDir = None
+        self._inputFile = None
         self._inFixedDirectoryStructure = False
         self._currWorkDir = os.getcwd()
+        self._bankDict = None
 
         # mutex-like variables
         self._noEventBankWidgets = False
@@ -631,6 +633,21 @@ class MainWindow(QMainWindow):
 
     def open_and_load_workspaces(self):
         post_processing_m_event_handler.open_and_load_workspaces(main_window=self)
+
+    def extract_button(self):
+        post_processing_m_event_handler.extract_button(main_window=self)
+
+    def clear_post_processing_canvas(self):
+        post_processing_m_event_handler.clear_canvas(main_window=self)
+
+    def change_bank(self):
+        post_processing_m_event_handler.change_bank(main_window=self)
+
+    def set_merge_values(self):
+        post_processing_m_event_handler.set_merge_values(main_window=self)
+
+    def merge_banks(self):
+        post_processing_m_event_handler.merge_banks(main_window=self)
 
     # PDF
 

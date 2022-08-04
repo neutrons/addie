@@ -115,7 +115,6 @@ class CustomizedTreeView(QTreeView):
         # add the child item to main item
         main_node_item = self._mainNodeDict[main_item_value]
         self._add_child_item(main_node_item, child_value, not self._childrenInOrder)
-
         return True
 
     def add_main_item(self, item_value, append, as_current_index):
