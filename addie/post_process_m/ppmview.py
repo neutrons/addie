@@ -22,8 +22,8 @@ class PPMView(MplGraphicsView):
     def on_mouse_press_event(self, e):
         pass
 
-    def plot_bank(self, bank, workspace, output_file):
-        self._myCanvas.add_plot_postprocess(bank, workspace, output_file)
+    def plot_bank(self, bank, x_list, y_list):
+        self._myCanvas.add_plot_postprocess(bank, x_list, y_list)
 
     def canvas_reset(self):
         self._myCanvas.axes.cla()

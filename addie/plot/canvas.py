@@ -241,7 +241,7 @@ class FigureCanvas(FigureCanvasQTAgg):
         # Flush...
         self._flush()
 
-    def add_plot_postprocess(self, bank, workspace, bank_file):
+    def add_plot_postprocess(self, bank, x_list, y_list):
         x_label = 'Q(angstrom^-1)'
         y_label = 'S(Q), F(Q), ...'
         color = None
@@ -254,19 +254,6 @@ class FigureCanvas(FigureCanvasQTAgg):
             marker = 'None'
         if line_style is None:
             line_style = '-'
-
-        file_in = open(bank_file, "r")
-        line = file_in.readline()
-        line = file_in.readline()
-        x_list = []
-        y_list = []
-        while line:
-            line = file_in.readline()
-            if line:
-                if line.split()[1] != "nan":
-                    x_list.append(float(line.split()[0]))
-                    y_list.append(float(line.split()[1]))
-        file_in.close()
 
         self.axes.plot(x_list, y_list)
 

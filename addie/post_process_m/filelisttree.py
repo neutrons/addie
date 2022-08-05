@@ -10,6 +10,8 @@ class FileListTree(base.CustomizedTreeView):
         base.CustomizedTreeView.__init__(self, parent)
         self._action_plot = QAction('Plot', self)
         self._action_plot.triggered.connect(self.do_plot)
+        self._action_save = QAction('Save', self)
+        self._action_save.triggered.connect(self.save_merge)
         self._main_window = None
         self._current_workspace = None
         if parent:
@@ -39,16 +41,23 @@ class FileListTree(base.CustomizedTreeView):
 
     def do_plot(self):
         item_list = self.get_selected_items()
-        item_list = [str(item.text()) for item in item_list]
-
+        mode = ''
+        if item_list[0].parent().text() == 'Raw Data':
+            item_list = [str(item.text()) for item in item_list]
+            mode = 'Raw'
+        elif item_list[0].parent().text() == 'Merged Data':
+            item_list = [str(item.text()) for item in item_list]
+            mode = 'Merged'
+        elif item_list[0].parent().text() == 'StoG Data':
+            mode = 'StoG'
         if self._main_window is not None:
-            print("do_plot: banks", item_list)
             bank_indexes = self.selectedIndexes()
             event_handler.plot(
                 self._main_window,
                 item_list,
                 bank_indexes,
-                self._current_workspace
+                self._current_workspace,
+                mode
             )
 
     def mousePressEvent(self, e):
@@ -61,7 +70,6 @@ class FileListTree(base.CustomizedTreeView):
 
     def pop_up_menu(self):
         selected_items = self.get_selected_items()
-
         if len(selected_items) == 0:
             return
 
@@ -80,7 +88,17 @@ class FileListTree(base.CustomizedTreeView):
                 self.removeAction(self._action_plot)
             if leaf_level == 2:
                 self.addAction(self._action_plot)
+                if item.parent().text() == 'Merged Data':
+                    self.addAction(self._action_save)
+                else:
+                    self.removeAction(self._action_save)
 
     def set_main_window(self, parent):
         assert parent is not None, 'Parent window cannot be None'
         self._main_window = parent
+
+    def add_merged_data(self, merged_banks_ref):
+        self.add_child_main_item('Merged Data', merged_banks_ref)
+
+    def save_merge(self):
+        event_handler.save_file_merged(self._main_window)
