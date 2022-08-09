@@ -130,7 +130,7 @@ class FileListTree(base.CustomizedTreeView):
         event_handler.save_file_stog(self._main_window, self._selected_items[0].text())
 
     def add_stog_data(self, file_name):
-        output = self._main_window.output_folder
+        # output = self._main_window.output_folder
         self.add_child_main_item('StoG Data', file_name)
 
     def add_raw_data(self, banks):

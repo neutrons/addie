@@ -1,4 +1,6 @@
-import os, json, subprocess
+import os 
+import json
+import subprocess
 from qtpy.QtWidgets import QFileDialog, QMessageBox
 from h5py import File
 import addie.utilities.workspaces
@@ -247,8 +249,10 @@ def merge_banks(main_window):
 
     initiate_stog_data(main_window)
 
+
 def save_file_raw(main_window, file_name):
     print(file_name)
+
 
 def save_file_merged(main_window, auto=False):
     if auto:
@@ -259,7 +263,7 @@ def save_file_merged(main_window, auto=False):
 
     else:
         save_directory_user = QFileDialog.getSaveFileName(main_window, 'Save Merged File',
-                                                main_window.output_folder + '/' + main_window._stem + '_merged.sq', '*.sq')
+        main_window.output_folder + '/' + main_window._stem + '_merged.sq', '*.sq')
                                                 # QFileDialog.ShowDirsOnly
                                                 # | QFileDialog.DontResolveSymlinks)
         # save_file = main_window._stem + '_merged.sq'
@@ -267,7 +271,6 @@ def save_file_merged(main_window, auto=False):
         # full_path = save_directory + '/' + save_file
         main_window._full_merged_path = save_directory_user[0]
         save_directory = save_directory_user[0]
-
 
     x_merged = main_window._merged_data[main_window._stem]['XList']
     y_merged = main_window._merged_data[main_window._stem]['YList']
@@ -278,9 +281,11 @@ def save_file_merged(main_window, auto=False):
         for i in range(len(x_merged)):
             new_file.write(str(x_merged[i]) + ' ' + str(y_merged[i]) + '\n')
 
+
 def save_file_stog(main_window, file_name):
     print(file_name)
-    save_file = QFileDialog.getSaveFileName(main_window, 'Save StoG File', main_window.output_folder + '/' + file_name, '*.sq;;*.fq;;*.gr;;All (*.*)')
+    save_file = QFileDialog.getSaveFileName(main_window, 'Save StoG File', 
+    main_window.output_folder + '/' + file_name, '*.sq;;*.fq;;*.gr;;All (*.*)')
     save_directory = save_file[0]
 
     x_stog = main_window._pystog_output_files[file_name]["xlist"]
@@ -291,6 +296,7 @@ def save_file_stog(main_window, file_name):
         new_file.write('#\n')
         for i in range(len(x_stog)):
             new_file.write(str(x_stog[i]) + ' ' + str(y_stog[i]) + '\n')
+
 
 # TODO: Add checking of inputs
 def initiate_stog_data(main_window):
@@ -311,6 +317,7 @@ def initiate_stog_data(main_window):
     pystog_inputs["Rmin"] = str(main_window.postprocessing_ui_m.doubleSpinBox_Rmin.value())
     pystog_inputs["RippleParams"] = main_window.postprocessing_ui_m.lineEdit_rippleParams.text()
 
+
 def set_stog_values(main_window):
     pystog_inputs = main_window._pystog_inputs_collect
     pystog_inputs["Qmin"] = 0.0
@@ -326,6 +333,7 @@ def set_stog_values(main_window):
     pystog_inputs["FourierFilter"] = main_window.postprocessing_ui_m.buttonGroup_FF.checkedButton().text() == 'Yes'
     pystog_inputs["Rmin"] = str(main_window.postprocessing_ui_m.doubleSpinBox_Rmin.value())
     pystog_inputs["RippleParams"] = main_window.postprocessing_ui_m.lineEdit_rippleParams.text()
+
 
 # verify the stog values, also converts the rippleparams
 def check_verify_stog(stog_dict):
@@ -345,6 +353,7 @@ def check_verify_stog(stog_dict):
                 return False
     return True
 
+
 def execute_stog(main_window):
     pystog_inputs = main_window._pystog_inputs_collect
     if not check_verify_stog(pystog_inputs):
@@ -353,7 +362,7 @@ def execute_stog(main_window):
         msg.setText("Some StoG data or parameters are incorrect. StoG was not run.")
         msg.exec()
         return
-  
+
     json_format = convert_json(main_window, pystog_inputs)
     with open('pystog_input.json', 'w') as pystog_file:
         json.dump(json_format, pystog_file)
@@ -362,16 +371,17 @@ def execute_stog(main_window):
     add_stog_data(main_window)
     generate_final(main_window)
 
+
 def convert_json(main_window, stog_dict):
     json_dict = dict()
 
     json_dict["Files"] = [{"Filename": main_window._full_merged_path,
-                          "ReciprocalFunction": "S(Q)",
-                          "Qmin": stog_dict["Qmin"],
-                          "Qmax": stog_dict["Qmax"],
-                          "Y": {"Offset": float(stog_dict["Yoffset"]),
-                                "Scale": float(stog_dict["Yscale"])},
-                          "X": {"Offset": float(stog_dict["Qoffset"])}}]
+    "ReciprocalFunction": "S(Q)",
+    "Qmin": stog_dict["Qmin"],
+    "Qmax": stog_dict["Qmax"],
+    "Y": {"Offset": float(stog_dict["Yoffset"]),
+        "Scale": float(stog_dict["Yscale"])},
+    "X": {"Offset": float(stog_dict["Qoffset"])}}]
 
     json_dict["RealSpaceFunction"] = "G(r)"
 
@@ -385,6 +395,7 @@ def convert_json(main_window, stog_dict):
     output = main_window.output_folder + "/" + main_window._stem
     json_dict["Outputs"] = {"StemName": output}
     return json_dict
+
 
 def add_stog_data(main_window):
     file_list_tree = main_window.postprocessing_ui_m.frame_filelist_tree
@@ -416,6 +427,7 @@ def add_stog_data(main_window):
 
         main_window._pystog_output_files[file_name] = {"xlist": x_list, "ylist": y_list}
         file_list_tree.add_stog_data(file_name)
+
 
 def generate_final(main_window):
     x_vals_final = main_window._pystog_output_files[main_window._stem + "_rmc.gr"]["xlist"]
