@@ -105,6 +105,7 @@ def extract_button(main_window):
     file_list.reset_files_tree()
     file_list.set_workspace(wks)
     file_list.add_raw_data(files)
+    initiate_bank_data(main_window, files, wks)
 
 
 def extractor(main_window, nexus_file: str, num_banks: int, wks_name: str, out_dir: str):
@@ -121,6 +122,28 @@ def extractor(main_window, nexus_file: str, num_banks: int, wks_name: str, out_d
     return all_files
 
 
+def initiate_bank_data(main_window, item_list, workspace):
+    for item in item_list:
+        current_bank = int(item[-1])
+        output_file = main_window.output_folder + "/" + workspace + "_bank" + str(int(item[len(item) - 1]) - 1) + ".dat"
+        # read the file for this bank
+        file_in = open(output_file, "r")
+        line = file_in.readline()
+        line = file_in.readline()
+        x_list = []
+        y_list = []
+        #add to the list
+        while line:
+            line = file_in.readline()
+            if line:
+                if line.split()[1] != "nan":
+                    x_list.append(float(line.split()[0]))
+                    y_list.append(float(line.split()[1]))
+        file_in.close()
+        main_window._bankDict[current_bank]['xList'] = x_list
+        main_window._bankDict[current_bank]['yList'] = y_list
+
+
 def plot(main_window, item_list, banks, workspace, mode):
     for item in item_list:
         if mode == 'Merged':
@@ -129,26 +152,9 @@ def plot(main_window, item_list, banks, workspace, mode):
             main_window.postprocessing_ui_m.ppm_view.plot(item, x_list, y_list)
 
         elif mode == 'Raw':
-            current_bank = int(item[-1])
-            output_file = main_window.output_folder + "/" + workspace + "_bank" + str(int(item[len(item) - 1]) - 1) + ".dat"
-            # read the file for this bank
-            file_in = open(output_file, "r")
-            line = file_in.readline()
-            line = file_in.readline()
-            #plot lists
-            x_list = []
-            y_list = []
-            #add to the list
-            while line:
-                line = file_in.readline()
-                if line:
-                    if line.split()[1] != "nan":
-                        x_list.append(float(line.split()[0]))
-                        y_list.append(float(line.split()[1]))
-            file_in.close()
-            main_window._bankDict[current_bank]['xList'] = x_list
-            main_window._bankDict[current_bank]['yList'] = y_list
             # add the x_list and y_list to the dictionary entry for the bank
+            x_list = main_window._bankDict[int(item[-1])]['xList']
+            y_list = main_window._bankDict[int(item[-1])]['yList']
             main_window.postprocessing_ui_m.ppm_view.plot(item, x_list, y_list)
 
         elif mode == 'StoG':
@@ -251,7 +257,15 @@ def merge_banks(main_window):
 
 
 def save_file_raw(main_window, file_name):
-    print(file_name)
+    x_bank = main_window._bankDict[int(file_name[-1])]['xList']
+    y_bank = main_window._bankDict[int(file_name[-1])]['yList']
+    save_directory = QFileDialog.getSaveFileName(main_window, 'Save Bank',
+                                                 main_window.output_folder + '/' + file_name + '.dat')
+    with open(save_directory[0], 'w') as new_file:
+        new_file.write(str(len(x_bank)) + '\n')
+        new_file.write('#\n')
+        for i in range(len(x_bank)):
+            new_file.write(str(x_bank[i]) + ' ' + str(y_bank[i]) + '\n')
 
 
 def save_file_merged(main_window, auto=False):
@@ -284,7 +298,6 @@ def save_file_merged(main_window, auto=False):
 
 
 def save_file_stog(main_window, file_name):
-    print(file_name)
     save_file = QFileDialog.getSaveFileName(main_window, 'Save StoG File',
                                             main_window.output_folder + '/' + file_name, '*.sq;;*.fq;;*.gr;;All (*.*)')
     save_directory = save_file[0]
