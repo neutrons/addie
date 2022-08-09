@@ -1,4 +1,4 @@
-import os 
+import os
 import json
 import subprocess
 from qtpy.QtWidgets import QFileDialog, QMessageBox
@@ -263,7 +263,8 @@ def save_file_merged(main_window, auto=False):
 
     else:
         save_directory_user = QFileDialog.getSaveFileName(main_window, 'Save Merged File',
-        main_window.output_folder + '/' + main_window._stem + '_merged.sq', '*.sq')
+                                                          main_window.output_folder + '/' + 
+                                                          main_window._stem + '_merged.sq', '*.sq')
                                                 # QFileDialog.ShowDirsOnly
                                                 # | QFileDialog.DontResolveSymlinks)
         # save_file = main_window._stem + '_merged.sq'
@@ -284,9 +285,9 @@ def save_file_merged(main_window, auto=False):
 
 def save_file_stog(main_window, file_name):
     print(file_name)
-    save_file = QFileDialog.getSaveFileName(main_window, 'Save StoG File', 
-    main_window.output_folder + '/' + file_name, '*.sq;;*.fq;;*.gr;;All (*.*)')
-    save_directory = save_file[0]
+    save_file = QFileDialog.getSaveFileName(main_window, 'Save StoG File',
+                                            main_window.output_folder + '/' + file_name, '*.sq;;*.fq;;*.gr;;All (*.*)')
+                                            save_directory = save_file[0]
 
     x_stog = main_window._pystog_output_files[file_name]["xlist"]
     y_stog = main_window._pystog_output_files[file_name]["ylist"]
@@ -376,12 +377,12 @@ def convert_json(main_window, stog_dict):
     json_dict = dict()
 
     json_dict["Files"] = [{"Filename": main_window._full_merged_path,
-    "ReciprocalFunction": "S(Q)",
-    "Qmin": stog_dict["Qmin"],
-    "Qmax": stog_dict["Qmax"],
-    "Y": {"Offset": float(stog_dict["Yoffset"]),
-        "Scale": float(stog_dict["Yscale"])},
-    "X": {"Offset": float(stog_dict["Qoffset"])}}]
+                           "ReciprocalFunction": "S(Q)",
+                           "Qmin": stog_dict["Qmin"],
+                           "Qmax": stog_dict["Qmax"],
+                           "Y": {"Offset": float(stog_dict["Yoffset"]),
+                                 "Scale": float(stog_dict["Yscale"])},
+                           "X": {"Offset": float(stog_dict["Qoffset"])}}]
 
     json_dict["RealSpaceFunction"] = "G(r)"
 
