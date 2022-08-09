@@ -287,7 +287,7 @@ def save_file_stog(main_window, file_name):
     print(file_name)
     save_file = QFileDialog.getSaveFileName(main_window, 'Save StoG File',
                                             main_window.output_folder + '/' + file_name, '*.sq;;*.fq;;*.gr;;All (*.*)')
-                                            save_directory = save_file[0]
+    save_directory = save_file[0]
 
     x_stog = main_window._pystog_output_files[file_name]["xlist"]
     y_stog = main_window._pystog_output_files[file_name]["ylist"]
