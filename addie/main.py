@@ -374,6 +374,11 @@ class MainWindow(QMainWindow):
         self._inFixedDirectoryStructure = False
         self._currWorkDir = os.getcwd()
         self._bankDict = None
+        self._stem = None
+        self._full_merged_path = None
+        self._merged_data = dict()
+        self._pystog_inputs_collect = dict()
+        self._pystog_output_files = dict()
 
         # mutex-like variables
         self._noEventBankWidgets = False
@@ -648,6 +653,12 @@ class MainWindow(QMainWindow):
 
     def merge_banks(self):
         post_processing_m_event_handler.merge_banks(main_window=self)
+
+    def execute_stog(self):
+        post_processing_m_event_handler.execute_stog(main_window=self)
+
+    def set_stog_values(self):
+        post_processing_m_event_handler.set_stog_values(main_window=self)
 
     # PDF
 

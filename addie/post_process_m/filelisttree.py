@@ -10,16 +10,21 @@ class FileListTree(base.CustomizedTreeView):
         base.CustomizedTreeView.__init__(self, parent)
         self._action_plot = QAction('Plot', self)
         self._action_plot.triggered.connect(self.do_plot)
+        self._action_save_merge = QAction('Save', self)
+        self._action_save_merge.triggered.connect(self.save_merge)
+        self._action_save_raw = QAction('Save', self)
+        self._action_save_raw.triggered.connect(self.save_raw)
+        self._action_save_stog = QAction('Save', self)
+        self._action_save_stog.triggered.connect(self.save_stog)
         self._main_window = None
         self._current_workspace = None
+        self._selected_items = None
         if parent:
             self.set_main_window(parent)
         self.reset_files_tree()
 
-    def load_data(self, files, workspace):
+    def set_workspace(self, workspace):
         self._current_workspace = workspace
-        for extracted_file in files:
-            self.add_child_current_item(extracted_file)
 
     def reset_files_tree(self):
         if self.model() is not None:
@@ -39,16 +44,24 @@ class FileListTree(base.CustomizedTreeView):
 
     def do_plot(self):
         item_list = self.get_selected_items()
-        item_list = [str(item.text()) for item in item_list]
-
+        mode = ''
+        if item_list[0].parent().text() == 'Raw Data':
+            item_list = [str(item.text()) for item in item_list]
+            mode = 'Raw'
+        elif item_list[0].parent().text() == 'Merged Data':
+            item_list = [str(item.text()) for item in item_list]
+            mode = 'Merged'
+        elif item_list[0].parent().text() == 'StoG Data':
+            item_list = [str(item.text()) for item in item_list]
+            mode = 'StoG'
         if self._main_window is not None:
-            print("do_plot: banks", item_list)
             bank_indexes = self.selectedIndexes()
             event_handler.plot(
                 self._main_window,
                 item_list,
                 bank_indexes,
-                self._current_workspace
+                self._current_workspace,
+                mode
             )
 
     def mousePressEvent(self, e):
@@ -60,13 +73,11 @@ class FileListTree(base.CustomizedTreeView):
             base.CustomizedTreeView.mousePressEvent(self, e)
 
     def pop_up_menu(self):
-        selected_items = self.get_selected_items()
-
-        if len(selected_items) == 0:
+        self._selected_items = self.get_selected_items()
+        if len(self._selected_items) == 0:
             return
-
         leaf_level = -1
-        for item in selected_items:
+        for item in self._selected_items:
             if item.parent() is None and leaf_level == -1:
                 leaf_level = 1
             elif item.parent() is not None and leaf_level == -1:
@@ -80,7 +91,48 @@ class FileListTree(base.CustomizedTreeView):
                 self.removeAction(self._action_plot)
             if leaf_level == 2:
                 self.addAction(self._action_plot)
+                if item.parent().text() == 'Merged Data':
+                    self.addAction(self._action_save_merge)
+                    self.removeAction(self._action_save_raw)
+                    self.removeAction(self._action_save_stog)
+                elif item.parent().text() == 'Raw Data':
+                    self.addAction(self._action_save_raw)
+                    self.removeAction(self._action_save_merge)
+                    self.removeAction(self._action_save_stog)
+                elif item.parent().text() == 'StoG Data':
+                    self.addAction(self._action_save_stog)
+                    self.removeAction(self._action_save_raw)
+                    self.removeAction(self._action_save_merge)
 
     def set_main_window(self, parent):
         assert parent is not None, 'Parent window cannot be None'
         self._main_window = parent
+
+    def add_merged_data(self, merged_banks_ref):
+        self.add_child_main_item('Merged Data', merged_banks_ref)
+        # save the merged data file with the automated mode set true
+        event_handler.save_file_merged(self._main_window, auto=True)
+
+    def save_merge(self):
+        # save the merged data file with the automated mode set false
+        if len(self._selected_items) > 1:
+            return
+        event_handler.save_file_merged(self._main_window)
+
+    def save_raw(self):
+        if len(self._selected_items) > 1:
+            return
+        event_handler.save_file_raw(self._main_window, self._selected_items[0].text())
+
+    def save_stog(self):
+        if len(self._selected_items) > 1:
+            return
+        event_handler.save_file_stog(self._main_window, self._selected_items[0].text())
+
+    def add_stog_data(self, file_name):
+        # output = self._main_window.output_folder
+        self.add_child_main_item('StoG Data', file_name)
+
+    def add_raw_data(self, banks):
+        for bank in banks:
+            self.add_child_main_item('Raw Data', bank)

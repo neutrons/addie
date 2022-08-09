@@ -283,7 +283,7 @@
         </widget>
        </item>
        <item row="20" column="0" colspan="4">
-        <widget class="QPushButton" name="pushButton_4">
+        <widget class="QPushButton" name="pushButton_StoG">
          <property name="maximumSize">
           <size>
            <width>320</width>
@@ -296,7 +296,7 @@
         </widget>
        </item>
        <item row="15" column="3">
-        <widget class="QRadioButton" name="radioButton_2">
+        <widget class="QRadioButton" name="radioButton_Lorch_false">
          <property name="maximumSize">
           <size>
            <width>50</width>
@@ -310,7 +310,7 @@
           <bool>true</bool>
          </property>
          <attribute name="buttonGroup">
-          <string notr="true">buttonGroup</string>
+          <string notr="true">buttonGroup_Lorch</string>
          </attribute>
         </widget>
        </item>
@@ -328,7 +328,7 @@
         </widget>
        </item>
        <item row="15" column="2">
-        <widget class="QRadioButton" name="radioButton">
+        <widget class="QRadioButton" name="radioButton_Lorch_true">
          <property name="maximumSize">
           <size>
            <width>50</width>
@@ -342,7 +342,7 @@
           <bool>false</bool>
          </property>
          <attribute name="buttonGroup">
-          <string notr="true">buttonGroup</string>
+          <string notr="true">buttonGroup_Lorch</string>
          </attribute>
         </widget>
        </item>
@@ -386,7 +386,7 @@
         </widget>
        </item>
        <item row="19" column="0" colspan="4">
-        <widget class="QLineEdit" name="lineEdit_16">
+        <widget class="QLineEdit" name="lineEdit_rippleParams">
          <property name="maximumSize">
           <size>
            <width>320</width>
@@ -415,7 +415,7 @@
         </widget>
        </item>
        <item row="14" column="2" colspan="2">
-        <widget class="QLineEdit" name="lineEdit_15">
+        <widget class="QLineEdit" name="lineEdit_faberZiman">
          <property name="maximumSize">
           <size>
            <width>120</width>
@@ -451,7 +451,7 @@
         </widget>
        </item>
        <item row="13" column="2" colspan="2">
-        <widget class="QLineEdit" name="lineEdit_11">
+        <widget class="QLineEdit" name="lineEdit_numberDensity">
          <property name="maximumSize">
           <size>
            <width>120</width>
@@ -461,7 +461,7 @@
         </widget>
        </item>
        <item row="16" column="3">
-        <widget class="QRadioButton" name="radioButton_4">
+        <widget class="QRadioButton" name="radioButton_ff_false">
          <property name="maximumSize">
           <size>
            <width>50</width>
@@ -472,12 +472,12 @@
           <string>No</string>
          </property>
          <attribute name="buttonGroup">
-          <string notr="true">buttonGroup_2</string>
+          <string notr="true">buttonGroup_FF</string>
          </attribute>
         </widget>
        </item>
        <item row="16" column="2">
-        <widget class="QRadioButton" name="radioButton_3">
+        <widget class="QRadioButton" name="radioButton_ff_true">
          <property name="maximumSize">
           <size>
            <width>50</width>
@@ -491,7 +491,7 @@
           <bool>true</bool>
          </property>
          <attribute name="buttonGroup">
-          <string notr="true">buttonGroup_2</string>
+          <string notr="true">buttonGroup_FF</string>
          </attribute>
         </widget>
        </item>
@@ -528,7 +528,7 @@
         </widget>
        </item>
        <item row="12" column="1">
-        <widget class="QDoubleSpinBox" name="doubleSpinBox_5">
+        <widget class="QDoubleSpinBox" name="doubleSpinBox_Rmax">
          <property name="maximumSize">
           <size>
            <width>50</width>
@@ -575,7 +575,7 @@
         </widget>
        </item>
        <item row="12" column="3">
-        <widget class="QDoubleSpinBox" name="doubleSpinBox_6">
+        <widget class="QDoubleSpinBox" name="doubleSpinBox_Rstep">
          <property name="maximumSize">
           <size>
            <width>60</width>
@@ -603,7 +603,7 @@
         </widget>
        </item>
        <item row="17" column="2" colspan="2">
-        <widget class="QDoubleSpinBox" name="doubleSpinBox_7">
+        <widget class="QDoubleSpinBox" name="doubleSpinBox_Rmin">
          <property name="maximumSize">
           <size>
            <width>110</width>
@@ -669,7 +669,7 @@
         </widget>
        </item>
        <item row="10" column="1">
-        <widget class="QLineEdit" name="lineEdit_3">
+        <widget class="QLineEdit" name="lineEdit_Yoffset_stog">
          <property name="maximumSize">
           <size>
            <width>50</width>
@@ -685,7 +685,7 @@
         </widget>
        </item>
        <item row="10" column="3">
-        <widget class="QLineEdit" name="lineEdit_4">
+        <widget class="QLineEdit" name="lineEdit_Yscale_stog">
          <property name="maximumSize">
           <size>
            <width>50</width>
@@ -701,7 +701,7 @@
         </widget>
        </item>
        <item row="11" column="1">
-        <widget class="QLineEdit" name="lineEdit_5">
+        <widget class="QLineEdit" name="lineEdit_Qoffset">
          <property name="maximumSize">
           <size>
            <width>50</width>
@@ -749,7 +749,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_2"/>
-  <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_Lorch"/>
+  <buttongroup name="buttonGroup_FF"/>
  </buttongroups>
 </ui>
