@@ -263,8 +263,8 @@ def save_file_merged(main_window, auto=False):
 
     else:
         save_directory_user = QFileDialog.getSaveFileName(main_window, 'Save Merged File',
-                                                          main_window.output_folder + '/' + 
-                                                          main_window._stem + '_merged.sq', '*.sq')
+                                                          main_window.output_folder + '/' + main_window._stem + '_merged.sq',
+                                                          '*.sq')
                                                 # QFileDialog.ShowDirsOnly
                                                 # | QFileDialog.DontResolveSymlinks)
         # save_file = main_window._stem + '_merged.sq'
