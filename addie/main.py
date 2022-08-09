@@ -378,6 +378,7 @@ class MainWindow(QMainWindow):
         self._full_merged_path = None
         self._merged_data = dict()
         self._pystog_inputs_collect = dict()
+        self._pystog_output_files = dict()
 
         # mutex-like variables
         self._noEventBankWidgets = False
