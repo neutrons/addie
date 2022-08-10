@@ -317,8 +317,15 @@ def save_file_merged(main_window, auto=False):
 
 
 def save_file_stog(main_window, file_name):
+    last_char = file_name[-2:]
+    if last_char == 'sq':
+        default = '*.sq;;*.fq;;*.gr;;All (*.*)'
+    elif last_char == 'fq':
+        default = '*.fq;;*.sq;;*.gr;;All (*.*)'
+    elif last_char == 'gr':
+        default = '*.gr;;*.fq;;*.sq;;All (*.*)'
     save_file = QFileDialog.getSaveFileName(main_window, 'Save StoG File',
-                                            main_window.output_folder + '/' + file_name, '*.sq;;*.fq;;*.gr;;All (*.*)')
+                                            main_window.output_folder + '/' + file_name, default)
     if isinstance(save_file, tuple):
         save_file = save_file[0]
     if save_file is None or save_file == '' or len(
@@ -339,7 +346,6 @@ def save_file_stog(main_window, file_name):
 def initiate_stog_data(main_window):
     pystog_inputs = main_window._pystog_inputs_collect
 
-    # TODO: Qmin, Qmax logic
     pystog_inputs["Qmin"] = main_window._merged_data[main_window._stem]['XList'][0]
     pystog_inputs["Qmax"] = main_window._merged_data[main_window._stem]['XList'][-1]
     pystog_inputs["Yoffset"] = main_window.postprocessing_ui_m.lineEdit_Yoffset_stog.text()
