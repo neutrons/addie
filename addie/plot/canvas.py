@@ -242,6 +242,7 @@ class FigureCanvas(FigureCanvasQTAgg):
         self._flush()
 
     def add_plot_postprocess(self, bank, x_list, y_list):
+        print(bank)
         x_label = 'Q(angstrom^-1)'
         y_label = 'S(Q), F(Q), ...'
         color = None
@@ -255,8 +256,8 @@ class FigureCanvas(FigureCanvasQTAgg):
         if line_style is None:
             line_style = '-'
 
-        self.axes.plot(x_list, y_list)
-
+        self.axes.plot(x_list, y_list, label=bank)
+        self.axes.legend()
         self.axes.set_aspect('auto')
 
         # set x-axis and y-axis label
