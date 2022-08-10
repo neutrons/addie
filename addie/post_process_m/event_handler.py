@@ -263,7 +263,6 @@ def merge_banks(main_window):
     main_window._merged_data[main_window._stem] = {'Name': merged_data_ref, 'XList': x_merged, 'YList': y_merged}
 
     file_list.add_merged_data(merged_data_ref)
-
     initiate_stog_data(main_window)
 
 
@@ -341,8 +340,8 @@ def initiate_stog_data(main_window):
     pystog_inputs = main_window._pystog_inputs_collect
 
     # TODO: Qmin, Qmax logic
-    pystog_inputs["Qmin"] = 0.0
-    pystog_inputs["Qmax"] = 35.0
+    pystog_inputs["Qmin"] = main_window._merged_data[main_window._stem]['XList'][0]
+    pystog_inputs["Qmax"] = main_window._merged_data[main_window._stem]['XList'][-1]
     pystog_inputs["Yoffset"] = main_window.postprocessing_ui_m.lineEdit_Yoffset_stog.text()
     pystog_inputs["Yscale"] = main_window.postprocessing_ui_m.lineEdit_Yscale_stog.text()
     pystog_inputs["Qoffset"] = main_window.postprocessing_ui_m.lineEdit_Qoffset.text()
@@ -358,8 +357,8 @@ def initiate_stog_data(main_window):
 
 def set_stog_values(main_window):
     pystog_inputs = main_window._pystog_inputs_collect
-    pystog_inputs["Qmin"] = 0.0
-    pystog_inputs["Qmax"] = 35.0
+    pystog_inputs["Qmin"] = main_window._merged_data[main_window._stem]['XList'][0]
+    pystog_inputs["Qmax"] = main_window._merged_data[main_window._stem]['XList'][-1]
     pystog_inputs["Yoffset"] = main_window.postprocessing_ui_m.lineEdit_Yoffset_stog.text()
     pystog_inputs["Yscale"] = main_window.postprocessing_ui_m.lineEdit_Yscale_stog.text()
     pystog_inputs["Qoffset"] = main_window.postprocessing_ui_m.lineEdit_Qoffset.text()
@@ -393,7 +392,7 @@ def check_verify_stog(stog_dict):
 
 
 def execute_stog(main_window):
-    if main_window._workspace_files is None:
+    if main_window._workspace_files is None or len(main_window._merged_data) == 0:
         return
     pystog_inputs = main_window._pystog_inputs_collect
     if not check_verify_stog(pystog_inputs):
@@ -477,7 +476,6 @@ def generate_final(main_window):
     rcut_final = main_window._pystog_inputs_collect["RippleParams"][0]
     rmax_final = main_window._pystog_inputs_collect["RippleParams"][2]
     rmin_final = main_window._pystog_inputs_collect["RippleParams"][1]
-    print(f"rcut: {rcut_final}, rmax: {rmax_final}, rmin: {rmin_final}")
     faber_ziman = float(main_window._pystog_inputs_collect["FaberZiman"])
     for count, item in enumerate(x_vals_final):
         if (item <= rcut_final) and (item >= rmax_final or item <= rmin_final):

@@ -242,7 +242,6 @@ class FigureCanvas(FigureCanvasQTAgg):
         self._flush()
 
     def add_plot_postprocess(self, bank, x_list, y_list):
-        print(bank)
         x_label = 'Q(angstrom^-1)'
         y_label = 'S(Q), F(Q), ...'
         color = None
