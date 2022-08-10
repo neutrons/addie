@@ -88,6 +88,10 @@ def open_and_load_workspaces(main_window):
         main_window._workspace_files = workspace_files
         load_workspaces(main_window, workspace_files)
 
+        if main_window.postprocessing_ui_m.checkBox_defaultWorkspace.isChecked():
+            main_window.postprocessing_ui_m.pushButton_extract.setEnabled(True)
+            main_window.postprocessing_ui_m.frame_workspaces_table.cur_wks = 'SQ_banks_normalized'
+
 
 def extract_button(main_window):
     nxs = main_window._inputFile

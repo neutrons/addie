@@ -267,7 +267,7 @@
         </widget>
        </item>
        <item row="1" column="0" colspan="4">
-        <widget class="QCheckBox" name="checkBox">
+        <widget class="QCheckBox" name="checkBox_defaultWorkspace">
          <property name="maximumSize">
           <size>
            <width>320</width>
@@ -764,7 +764,7 @@
   <tabstop>pushButton_StoG</tabstop>
   <tabstop>pushButton_loadWorkspaces</tabstop>
   <tabstop>pushButton_extract</tabstop>
-  <tabstop>checkBox</tabstop>
+  <tabstop>checkBox_defaultWorkspace</tabstop>
   <tabstop>pushButton_mergeBanks</tabstop>
   <tabstop>radioButton_Lorch_true</tabstop>
   <tabstop>radioButton_Lorch_false</tabstop>
