@@ -746,10 +746,36 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>comboBox_banks</tabstop>
+  <tabstop>doubleSpinBox_Qmin</tabstop>
+  <tabstop>doubleSpinBox_Qmax</tabstop>
+  <tabstop>lineEdit_Yoffset</tabstop>
+  <tabstop>lineEdit_Yscale</tabstop>
+  <tabstop>lineEdit_Yoffset_stog</tabstop>
+  <tabstop>lineEdit_Yscale_stog</tabstop>
+  <tabstop>lineEdit_Qoffset</tabstop>
+  <tabstop>doubleSpinBox_Rmax</tabstop>
+  <tabstop>doubleSpinBox_Rstep</tabstop>
+  <tabstop>lineEdit_numberDensity</tabstop>
+  <tabstop>lineEdit_faberZiman</tabstop>
+  <tabstop>doubleSpinBox_Rmin</tabstop>
+  <tabstop>lineEdit_rippleParams</tabstop>
+  <tabstop>pushButton_StoG</tabstop>
+  <tabstop>pushButton_loadWorkspaces</tabstop>
+  <tabstop>pushButton_extract</tabstop>
+  <tabstop>checkBox</tabstop>
+  <tabstop>pushButton_mergeBanks</tabstop>
+  <tabstop>radioButton_Lorch_true</tabstop>
+  <tabstop>radioButton_Lorch_false</tabstop>
+  <tabstop>radioButton_ff_true</tabstop>
+  <tabstop>radioButton_ff_false</tabstop>
+  <tabstop>pushButton_clearPostProcessingCanvas</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_Lorch"/>
   <buttongroup name="buttonGroup_FF"/>
+  <buttongroup name="buttonGroup_Lorch"/>
  </buttongroups>
 </ui>

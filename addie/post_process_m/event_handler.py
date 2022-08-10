@@ -85,6 +85,7 @@ def open_and_load_workspaces(main_window):
     if workspace_files is None:
         return
     else:
+        main_window._workspace_files = workspace_files
         load_workspaces(main_window, workspace_files)
 
 
@@ -169,6 +170,8 @@ def clear_canvas(main_window):
 
 
 def change_bank(main_window):
+    if main_window._workspace_files is None:
+        return
     current_bank = int(main_window.postprocessing_ui_m.comboBox_banks.currentText())
     bank_dict = main_window._bankDict
     if bank_dict is not None:
@@ -194,6 +197,8 @@ def initialize_banks(main_window, banks):
 
 
 def set_merge_values(main_window):
+    if main_window._workspace_files is None:
+        return
     q_min = main_window.postprocessing_ui_m.doubleSpinBox_Qmin.value()
     q_max = main_window.postprocessing_ui_m.doubleSpinBox_Qmax.value()
     y_offset = main_window.postprocessing_ui_m.lineEdit_Yoffset.text()
@@ -210,6 +215,8 @@ def set_merge_values(main_window):
 
 
 def merge_banks(main_window):
+    if main_window._workspace_files is None:
+        return
     banks_x = []
     banks_y = []
     for bank in main_window._bankDict:
@@ -369,6 +376,8 @@ def check_verify_stog(stog_dict):
 
 
 def execute_stog(main_window):
+    if main_window._workspace_files is None:
+        return
     pystog_inputs = main_window._pystog_inputs_collect
     if not check_verify_stog(pystog_inputs):
         msg = QMessageBox()
