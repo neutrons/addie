@@ -219,7 +219,7 @@ def set_merge_values(main_window):
 
 
 def merge_banks(main_window):
-    if main_window._workspace_files is None:
+    if main_window._workspace_files is None or main_window._bankDict is None:
         return
     banks_x = []
     banks_y = []
