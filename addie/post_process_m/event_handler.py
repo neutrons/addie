@@ -272,6 +272,11 @@ def save_file_raw(main_window, file_name):
     y_bank = main_window._bankDict[int(file_name[-1])]['yList']
     save_directory = QFileDialog.getSaveFileName(main_window, 'Save Bank',
                                                  main_window.output_folder + '/' + file_name + '.dat')
+    if isinstance(save_directory, tuple):
+        save_directory = save_directory[0]
+    if save_directory is None or save_directory == '' or len(
+    save_directory) == 0:
+        return
     with open(save_directory[0], 'w') as new_file:
         new_file.write(str(len(x_bank)) + '\n')
         new_file.write('#\n')
@@ -293,10 +298,14 @@ def save_file_merged(main_window, auto=False):
                                                 # QFileDialog.ShowDirsOnly
                                                 # | QFileDialog.DontResolveSymlinks)
         # save_file = main_window._stem + '_merged.sq'
-        save_file = save_directory_user[0].split('/')[-1]
+        if isinstance(save_directory_user, tuple):
+            save_directory_user = save_directory_user[0]
+        if save_directory_user is None or save_directory_user == '' or len(
+        save_directory_user) == 0:
+            return
+        save_file = save_directory_user.split('/')[-1]
         # full_path = save_directory + '/' + save_file
-        main_window._full_merged_path = save_directory_user[0]
-        save_directory = save_directory_user[0]
+        main_window._full_merged_path = save_directory_user
 
     x_merged = main_window._merged_data[main_window._stem]['XList']
     y_merged = main_window._merged_data[main_window._stem]['YList']
@@ -311,12 +320,16 @@ def save_file_merged(main_window, auto=False):
 def save_file_stog(main_window, file_name):
     save_file = QFileDialog.getSaveFileName(main_window, 'Save StoG File',
                                             main_window.output_folder + '/' + file_name, '*.sq;;*.fq;;*.gr;;All (*.*)')
-    save_directory = save_file[0]
+    if isinstance(save_file, tuple):
+        save_file = save_file[0]
+    if save_file is None or save_file == '' or len(
+        save_file) == 0:
+        return
 
     x_stog = main_window._pystog_output_files[file_name]["xlist"]
     y_stog = main_window._pystog_output_files[file_name]["ylist"]
 
-    with open(save_directory, 'w') as new_file:
+    with open(save_file, 'w') as new_file:
         new_file.write(str(len(x_stog)) + '\n')
         new_file.write('#\n')
         for i in range(len(x_stog)):
