@@ -85,7 +85,12 @@ def open_and_load_workspaces(main_window):
     if workspace_files is None:
         return
     else:
+        main_window._workspace_files = workspace_files
         load_workspaces(main_window, workspace_files)
+
+        if main_window.postprocessing_ui_m.checkBox_defaultWorkspace.isChecked():
+            main_window.postprocessing_ui_m.pushButton_extract.setEnabled(True)
+            main_window.postprocessing_ui_m.frame_workspaces_table.cur_wks = 'SQ_banks_normalized'
 
 
 def extract_button(main_window):
@@ -169,6 +174,8 @@ def clear_canvas(main_window):
 
 
 def change_bank(main_window):
+    if main_window._workspace_files is None:
+        return
     current_bank = int(main_window.postprocessing_ui_m.comboBox_banks.currentText())
     bank_dict = main_window._bankDict
     if bank_dict is not None:
@@ -194,6 +201,8 @@ def initialize_banks(main_window, banks):
 
 
 def set_merge_values(main_window):
+    if main_window._workspace_files is None:
+        return
     q_min = main_window.postprocessing_ui_m.doubleSpinBox_Qmin.value()
     q_max = main_window.postprocessing_ui_m.doubleSpinBox_Qmax.value()
     y_offset = main_window.postprocessing_ui_m.lineEdit_Yoffset.text()
@@ -210,6 +219,8 @@ def set_merge_values(main_window):
 
 
 def merge_banks(main_window):
+    if main_window._workspace_files is None or main_window._bankDict is None:
+        return
     banks_x = []
     banks_y = []
     for bank in main_window._bankDict:
@@ -252,7 +263,6 @@ def merge_banks(main_window):
     main_window._merged_data[main_window._stem] = {'Name': merged_data_ref, 'XList': x_merged, 'YList': y_merged}
 
     file_list.add_merged_data(merged_data_ref)
-
     initiate_stog_data(main_window)
 
 
@@ -261,6 +271,10 @@ def save_file_raw(main_window, file_name):
     y_bank = main_window._bankDict[int(file_name[-1])]['yList']
     save_directory = QFileDialog.getSaveFileName(main_window, 'Save Bank',
                                                  main_window.output_folder + '/' + file_name + '.dat')
+    if isinstance(save_directory, tuple):
+        save_directory = save_directory[0]
+    if save_directory is None or save_directory == '' or len(save_directory) == 0:
+        return
     with open(save_directory[0], 'w') as new_file:
         new_file.write(str(len(x_bank)) + '\n')
         new_file.write('#\n')
@@ -282,10 +296,13 @@ def save_file_merged(main_window, auto=False):
                                                 # QFileDialog.ShowDirsOnly
                                                 # | QFileDialog.DontResolveSymlinks)
         # save_file = main_window._stem + '_merged.sq'
-        save_file = save_directory_user[0].split('/')[-1]
+        if isinstance(save_directory_user, tuple):
+            save_directory_user = save_directory_user[0]
+        if save_directory_user is None or save_directory_user == '' or len(save_directory_user) == 0:
+            return
+        save_file = save_directory_user.split('/')[-1]
         # full_path = save_directory + '/' + save_file
-        main_window._full_merged_path = save_directory_user[0]
-        save_directory = save_directory_user[0]
+        main_window._full_merged_path = save_directory_user
 
     x_merged = main_window._merged_data[main_window._stem]['XList']
     y_merged = main_window._merged_data[main_window._stem]['YList']
@@ -298,14 +315,24 @@ def save_file_merged(main_window, auto=False):
 
 
 def save_file_stog(main_window, file_name):
+    last_char = file_name[-2:]
+    if last_char == 'sq':
+        default = '*.sq;;*.fq;;*.gr;;All (*.*)'
+    elif last_char == 'fq':
+        default = '*.fq;;*.sq;;*.gr;;All (*.*)'
+    elif last_char == 'gr':
+        default = '*.gr;;*.fq;;*.sq;;All (*.*)'
     save_file = QFileDialog.getSaveFileName(main_window, 'Save StoG File',
-                                            main_window.output_folder + '/' + file_name, '*.sq;;*.fq;;*.gr;;All (*.*)')
-    save_directory = save_file[0]
+                                            main_window.output_folder + '/' + file_name, default)
+    if isinstance(save_file, tuple):
+        save_file = save_file[0]
+    if save_file is None or save_file == '' or len(save_file) == 0:
+        return
 
     x_stog = main_window._pystog_output_files[file_name]["xlist"]
     y_stog = main_window._pystog_output_files[file_name]["ylist"]
 
-    with open(save_directory, 'w') as new_file:
+    with open(save_file, 'w') as new_file:
         new_file.write(str(len(x_stog)) + '\n')
         new_file.write('#\n')
         for i in range(len(x_stog)):
@@ -316,9 +343,8 @@ def save_file_stog(main_window, file_name):
 def initiate_stog_data(main_window):
     pystog_inputs = main_window._pystog_inputs_collect
 
-    # TODO: Qmin, Qmax logic
-    pystog_inputs["Qmin"] = 0.0
-    pystog_inputs["Qmax"] = 35.0
+    pystog_inputs["Qmin"] = main_window._merged_data[main_window._stem]['XList'][0]
+    pystog_inputs["Qmax"] = main_window._merged_data[main_window._stem]['XList'][-1]
     pystog_inputs["Yoffset"] = main_window.postprocessing_ui_m.lineEdit_Yoffset_stog.text()
     pystog_inputs["Yscale"] = main_window.postprocessing_ui_m.lineEdit_Yscale_stog.text()
     pystog_inputs["Qoffset"] = main_window.postprocessing_ui_m.lineEdit_Qoffset.text()
@@ -334,8 +360,8 @@ def initiate_stog_data(main_window):
 
 def set_stog_values(main_window):
     pystog_inputs = main_window._pystog_inputs_collect
-    pystog_inputs["Qmin"] = 0.0
-    pystog_inputs["Qmax"] = 35.0
+    pystog_inputs["Qmin"] = main_window._merged_data[main_window._stem]['XList'][0]
+    pystog_inputs["Qmax"] = main_window._merged_data[main_window._stem]['XList'][-1]
     pystog_inputs["Yoffset"] = main_window.postprocessing_ui_m.lineEdit_Yoffset_stog.text()
     pystog_inputs["Yscale"] = main_window.postprocessing_ui_m.lineEdit_Yscale_stog.text()
     pystog_inputs["Qoffset"] = main_window.postprocessing_ui_m.lineEdit_Qoffset.text()
@@ -369,6 +395,8 @@ def check_verify_stog(stog_dict):
 
 
 def execute_stog(main_window):
+    if main_window._workspace_files is None or len(main_window._merged_data) == 0:
+        return
     pystog_inputs = main_window._pystog_inputs_collect
     if not check_verify_stog(pystog_inputs):
         msg = QMessageBox()
@@ -451,7 +479,6 @@ def generate_final(main_window):
     rcut_final = main_window._pystog_inputs_collect["RippleParams"][0]
     rmax_final = main_window._pystog_inputs_collect["RippleParams"][2]
     rmin_final = main_window._pystog_inputs_collect["RippleParams"][1]
-    print(f"rcut: {rcut_final}, rmax: {rmax_final}, rmin: {rmin_final}")
     faber_ziman = float(main_window._pystog_inputs_collect["FaberZiman"])
     for count, item in enumerate(x_vals_final):
         if (item <= rcut_final) and (item >= rmax_final or item <= rmin_final):

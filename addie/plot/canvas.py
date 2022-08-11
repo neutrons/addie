@@ -255,8 +255,8 @@ class FigureCanvas(FigureCanvasQTAgg):
         if line_style is None:
             line_style = '-'
 
-        self.axes.plot(x_list, y_list)
-
+        self.axes.plot(x_list, y_list, label=bank)
+        self.axes.legend()
         self.axes.set_aspect('auto')
 
         # set x-axis and y-axis label

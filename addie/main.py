@@ -376,6 +376,7 @@ class MainWindow(QMainWindow):
         self._bankDict = None
         self._stem = None
         self._full_merged_path = None
+        self._workspace_files = None
         self._merged_data = dict()
         self._pystog_inputs_collect = dict()
         self._pystog_output_files = dict()
