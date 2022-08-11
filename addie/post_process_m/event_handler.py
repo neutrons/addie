@@ -258,6 +258,10 @@ def merge_banks(main_window):
                 x_merged.append(x_val)
                 y_merged.append(banks_y[bank][i] / yscale_tmp + yoffset_tmp)
 
+    if len(x_merged) == 0:
+        print("[Error] Qmin and Qmax values are all zero for all banks. Please input valid values and try again.")
+        return
+
     file_list = main_window.postprocessing_ui_m.frame_filelist_tree
     merged_data_ref = main_window._stem + '_merged.sq'
     main_window._merged_data[main_window._stem] = {'Name': merged_data_ref, 'XList': x_merged, 'YList': y_merged}
