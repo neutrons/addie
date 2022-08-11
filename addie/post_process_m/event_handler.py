@@ -273,8 +273,7 @@ def save_file_raw(main_window, file_name):
                                                  main_window.output_folder + '/' + file_name + '.dat')
     if isinstance(save_directory, tuple):
         save_directory = save_directory[0]
-    if save_directory is None or save_directory == '' or len(
-    save_directory) == 0:
+    if save_directory is None or save_directory == '' or len(save_directory) == 0:
         return
     with open(save_directory[0], 'w') as new_file:
         new_file.write(str(len(x_bank)) + '\n')
@@ -299,8 +298,7 @@ def save_file_merged(main_window, auto=False):
         # save_file = main_window._stem + '_merged.sq'
         if isinstance(save_directory_user, tuple):
             save_directory_user = save_directory_user[0]
-        if save_directory_user is None or save_directory_user == '' or len(
-        save_directory_user) == 0:
+        if save_directory_user is None or save_directory_user == '' or len(save_directory_user) == 0:
             return
         save_file = save_directory_user.split('/')[-1]
         # full_path = save_directory + '/' + save_file
@@ -328,8 +326,7 @@ def save_file_stog(main_window, file_name):
                                             main_window.output_folder + '/' + file_name, default)
     if isinstance(save_file, tuple):
         save_file = save_file[0]
-    if save_file is None or save_file == '' or len(
-        save_file) == 0:
+    if save_file is None or save_file == '' or len(save_file) == 0:
         return
 
     x_stog = main_window._pystog_output_files[file_name]["xlist"]
