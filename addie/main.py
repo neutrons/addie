@@ -297,6 +297,9 @@ class MainWindow(QMainWindow):
         Parameters
         ----------
         """
+
+        print("\nLaunching...This may take a while...\n")
+
         QMainWindow.__init__(self, parent)
 
         # Initialize the UI widgets
