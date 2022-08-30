@@ -1,6 +1,4 @@
-from qtpy.QtWidgets import QVBoxLayout
 import os
-
 from addie.utilities.general import get_ucams
 
 
