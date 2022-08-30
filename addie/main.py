@@ -10,7 +10,6 @@ from qtpy.QtCore import QProcess
 from qtpy.QtGui import QIcon
 from qtpy.QtWidgets import (
     QApplication,
-    QLabel,
     QMainWindow,
     QTableWidgetItem,
     QWidget)
@@ -137,8 +136,6 @@ class MainWindow(QMainWindow):
 
     advanced_dict = {'push_bkg': False,
                      'ele_size': "1.0"}
-
-    statusbar_display_time = 5000  # 5s
 
     # external ui (use to make sure there is only one open at a time
     import_from_database_ui = None
@@ -308,8 +305,6 @@ class MainWindow(QMainWindow):
         main_tab_initialization.run(main_window=self)
 
         print("Debugging -> check point #2 ")
-        status_bar_label = QLabel()
-        self.ui.statusbar.addPermanentWidget(status_bar_label)
         o_gui = Step1GuiHandler(main_window=self)
         o_gui.set_main_window_title()
         print("Debugging -> check point #3 ")

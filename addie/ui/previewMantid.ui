@@ -37,7 +37,6 @@
    </widget>
    <addaction name="menuFile"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="actionSave_as">
    <property name="text">
     <string>Save as ...</string>
