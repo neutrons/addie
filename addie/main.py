@@ -10,7 +10,6 @@ from qtpy.QtCore import QProcess
 from qtpy.QtGui import QIcon
 from qtpy.QtWidgets import (
     QApplication,
-    QLabel,
     QMainWindow,
     QTableWidgetItem,
     QWidget)
