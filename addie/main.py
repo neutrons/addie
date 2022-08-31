@@ -10,6 +10,7 @@ from qtpy.QtCore import QProcess
 from qtpy.QtGui import QIcon
 from qtpy.QtWidgets import (
     QApplication,
+    QLabel,
     QMainWindow,
     QTableWidgetItem,
     QWidget)
@@ -136,6 +137,8 @@ class MainWindow(QMainWindow):
 
     advanced_dict = {'push_bkg': False,
                      'ele_size': "1.0"}
+
+    statusbar_display_time = 5000  # 5s
 
     # external ui (use to make sure there is only one open at a time
     import_from_database_ui = None
@@ -294,30 +297,29 @@ class MainWindow(QMainWindow):
         Parameters
         ----------
         """
+
+        print("\nLaunching...This may take a while...\n")
+
         QMainWindow.__init__(self, parent)
 
         # Initialize the UI widgets
-        print("Debugging -> check point #1 ")
         self.ui = load_ui('mainWindow.ui', baseinstance=self)
         main_tab_initialization.run(main_window=self)
 
-        print("Debugging -> check point #2 ")
+        status_bar_label = QLabel()
+        self.ui.statusbar.addPermanentWidget(status_bar_label)
         o_gui = Step1GuiHandler(main_window=self)
         o_gui.set_main_window_title()
-        print("Debugging -> check point #3 ")
 
         # autoNOM tab
         self.autonom_tab_widget = QWidget()
-        print("Debugging -> check point #4 ")
         self.autonom_ui = load_ui(
             'splitui_autonom_tab.ui',
             baseinstance=self.autonom_tab_widget)
         self.ui.main_tab.insertTab(0, self.autonom_tab_widget, "autoNOM")
         autonom_tab_initialization.run(main_window=self)
-        print("Debugging -> check point #5 ")
 
         # post processing idl
-        print("Debugging -> check point #6 ")
         self.postprocessing_tab_widget = QWidget()
         self.postprocessing_ui = load_ui(
             'splitui_postprocessing_tab.ui',
@@ -325,17 +327,14 @@ class MainWindow(QMainWindow):
         self.ui.main_tab.insertTab(
             1, self.postprocessing_tab_widget, "Post Processing")
         postprocessing_tab_initialization.run(main_window=self)
-        print("Debugging -> check point #7 ")
 
         # Mantid processing tab
-        print("Debugging -> check point #8 ")
         self.processing_tab_widget = QWidget()
         self.processing_ui = load_ui(
             'splitui_processing_tab.ui',
             baseinstance=self.processing_tab_widget)
         self.ui.main_tab.insertTab(2, self.processing_tab_widget, "Processing")
         processing_tab_initialization.run(main_window=self)
-        print("Debugging -> check point #9 ")
 
         # post processing mantid
         self.postprocessing_tab_widget_m = QWidget()
@@ -345,7 +344,6 @@ class MainWindow(QMainWindow):
         self.ui.main_tab.insertTab(
             3, self.postprocessing_tab_widget_m, "Post Processing")
         postprocessing_tab_m_initialization.run(main_window=self)
-        print("Debugging -> check point #10 ")
 
         # Rietveld  tab
         self.rietveld_tab_widget = QWidget()
@@ -354,7 +352,6 @@ class MainWindow(QMainWindow):
             baseinstance=self.rietveld_tab_widget)
         self.ui.main_tab.insertTab(4, self.rietveld_tab_widget, "Rietveld")
         rietveld_tab_initialization.run(main_window=self)
-        print("Debugging -> check point #11 ")
 
         # Calculate G(R) tab
         self.calculategr_tab_widget = QWidget()
@@ -364,20 +361,16 @@ class MainWindow(QMainWindow):
         self.ui.main_tab.insertTab(
             5, self.calculategr_tab_widget, 'Calculate G(R)')
         calculategr_tab_initialization.run(main_window=self)
-        print("Debugging -> check point #12 ")
 
         self.init_parameters()
 
-        print("Debugging -> check point #13 ")
         # Set the post-processing mode
         self.post_processing = processing_mode  # mantid or 'idl'
 
         # define the driver
-        print("Debugging -> check point #14 ")
         self._myController = driver.AddieDriver()
 
         # class variable for easy access
-        print("Debugging -> check point #15 ")
         self._gssGroupName = None
         self._currDataDir = None
         self._inputFile = None
@@ -390,7 +383,6 @@ class MainWindow(QMainWindow):
         self._merged_data = dict()
         self._pystog_inputs_collect = dict()
         self._pystog_output_files = dict()
-        print("Debugging -> check point #16 ")
 
         # mutex-like variables
         self._noEventBankWidgets = False
@@ -398,7 +390,6 @@ class MainWindow(QMainWindow):
         # help (refer to DGSPlanner and HFIR Powder reduction GUI)
         self._assistantProcess = QProcess(self)
 
-        print("Debugging -> check point #17 ")
         # a collection of sub window
         self._editSqDialog = None
         self._editedSofQDict = dict()
@@ -406,7 +397,6 @@ class MainWindow(QMainWindow):
         # color management
         self._pdfColorManager = PDFPlotManager()
 
-        print("Debugging -> check point #18 ")
         # IDL config scripts
         idl_script_dir = "/SNS/NOM/shared/autoNOM/stable/"
         if self.post_processing == "idl_dev":
@@ -417,7 +407,6 @@ class MainWindow(QMainWindow):
         self._ndabs_script = os.path.join(idl_script_dir, "NDabs.py")
         self._is_sum_scans_python_checked = False
 
-        print("Debugging -> check point #19 ")
         # Connecting all the widgets
         main_tab_events_handler.run(main_window=self)
         autonom_tab_events_handler.run(main_window=self)
@@ -427,7 +416,6 @@ class MainWindow(QMainWindow):
         rietveld_tab_events_handler.run(main_window=self)
         calculategr_tab_events_handler.run(main_window=self)
 
-        print("Debugging -> check point #20 ")
         self.activate_reduction_tabs()
 
     # main window

@@ -166,6 +166,7 @@
    <addaction name="menuTools"/>
    <addaction name="menuHelp"/>
   </widget>
+  <widget class="QStatusBar" name="statusbar"/>
   <action name="actionReset_GSAS_tab">
    <property name="text">
     <string>Reset GSAS-tab</string>

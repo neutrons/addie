@@ -799,6 +799,7 @@
     </rect>
    </property>
   </widget>
+  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <tabstops>
   <tabstop>diamond</tabstop>
