@@ -64,13 +64,18 @@ jobs:
           echo "import time;time.sleep(5)" > workbenchshutdown.py
           xvfb-run --auto-servernum pytest --mpl tests
 
+      - name: Build python wheel # cannot be used without mantid
+        run: |
+          python -m build --wheel --no-isolation
+          # check-wheel-contents dist/addie-*.whl # currently bad package
+
       - name: Build conda libraray
         shell: bash -l {0}
         run: |
-          echo GITHUB REF ${{ github.ref }}
           conda install -y anaconda-client conda-build conda-verify
           cd conda.recipe
           conda build --output-folder . . -c neutrons -c mantid/label/nightly
+          conda verify addie*.tar.bz2
 
       - name: Deploy to Anaconda
         shell: bash -l {0}
