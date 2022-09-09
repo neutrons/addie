@@ -1,5 +1,9 @@
 def run(main_window=None):
     main_window.postprocessing_ui_m.pushButton_loadWorkspaces.clicked.connect(main_window.open_and_load_workspaces)
+    main_window.postprocessing_ui_m.pushButton_savemc.clicked.connect(main_window.save_mconfig)
+    main_window.postprocessing_ui_m.pushButton_loadmc.clicked.connect(main_window.load_mconfig)
+    main_window.postprocessing_ui_m.pushButton_savesc.clicked.connect(main_window.save_sconfig)
+    main_window.postprocessing_ui_m.pushButton_loadsc.clicked.connect(main_window.load_sconfig)
     main_window.postprocessing_ui_m.pushButton_extract.clicked.connect(main_window.extract_button)
     main_window.postprocessing_ui_m.pushButton_clearPostProcessingCanvas.clicked.connect(main_window.clear_post_processing_canvas)
     main_window.postprocessing_ui_m.comboBox_banks.currentTextChanged.connect(main_window.change_bank)

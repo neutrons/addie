@@ -63,7 +63,8 @@ class PostProcessTable(QTableWidget):
             self.cur_row = self.currentRow()
             self.cur_wks = str(self.cellWidget(self.cur_row, self.cur_col).text())
         elif len(indexes) != 1:
-            self.main.postprocessing_ui_m.pushButton_extract.setDisabled(True)
+            if self.main:
+                self.main.postprocessing_ui_m.pushButton_extract.setDisabled(True)
 
     def pop_up_menu(self):
         indexes_selected = self.selectedIndexes()
