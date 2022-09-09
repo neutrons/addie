@@ -240,7 +240,7 @@
          </property>
         </widget>
        </item>
-       <item row="9" column="0" colspan="4">
+       <item row="9" column="2" colspan="2">
         <widget class="QPushButton" name="pushButton_mergeBanks">
          <property name="maximumSize">
           <size>
@@ -250,6 +250,32 @@
          </property>
          <property name="text">
           <string>Merge</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0" colspan="2">
+        <widget class="QPushButton" name="pushButton_savemc">
+         <property name="maximumSize">
+          <size>
+           <width>160</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Save Config</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0" colspan="2">
+        <widget class="QPushButton" name="pushButton_loadmc">
+         <property name="maximumSize">
+          <size>
+           <width>160</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Load Config</string>
          </property>
         </widget>
        </item>
@@ -282,7 +308,7 @@
          </property>
         </widget>
        </item>
-       <item row="20" column="0" colspan="4">
+       <item row="21" column="0" colspan="4">
         <widget class="QPushButton" name="pushButton_StoG">
          <property name="maximumSize">
           <size>
@@ -292,6 +318,32 @@
          </property>
          <property name="text">
           <string>StoG</string>
+         </property>
+        </widget>
+       </item>
+       <item row="20" column="0" colspan="2">
+        <widget class="QPushButton" name="pushButton_loadsc">
+         <property name="maximumSize">
+          <size>
+           <width>320</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Load Config</string>
+         </property>
+        </widget>
+       </item>
+       <item row="20" column="2" colspan="2">
+        <widget class="QPushButton" name="pushButton_savesc">
+         <property name="maximumSize">
+          <size>
+           <width>320</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Save Config</string>
          </property>
         </widget>
        </item>
@@ -356,6 +408,29 @@
          </property>
          <property name="text">
           <string>Qoffset</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="2">
+        <widget class="QLabel" name="label_9_1">
+         <property name="maximumSize">
+          <size>
+           <width>50</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>rForm</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="3">
+        <widget class="QComboBox" name="comboBox_pdfform">
+         <property name="maximumSize">
+          <size>
+           <width>60</width>
+           <height>16777215</height>
+          </size>
          </property>
         </widget>
        </item>

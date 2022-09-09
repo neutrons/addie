@@ -39,6 +39,66 @@ def open_workspaces(main_window):
     return workspace_file_names[0]
 
 
+def open_config_file(main_window):
+    ext = 'JSON (*.json)'
+
+    if main_window._currDataDir is None:
+        default_dir = os.getcwd()
+    else:
+        default_dir = addie.utilities.get_default_dir(
+            main_window, sub_dir='GSAS')
+
+    mconfig_file_name = QFileDialog.getSaveFileName(
+        main_window, 'Choose Config File to Save As', default_dir, ext)
+    if isinstance(mconfig_file_name, tuple):
+        mconfig_file_name = str(mconfig_file_name[0])
+    if mconfig_file_name is None or mconfig_file_name == '' or len(
+            mconfig_file_name) == 0:
+        return
+
+    # update stored data directory
+    try:
+        main_window._currDataDir = os.path.split(
+            os.path.abspath(mconfig_file_name))[0]
+    except IndexError as index_err:
+        err_message = 'Unable to get absolute path of {0} due to {1}'.format(
+            mconfig_file_name, index_err)
+        print(err_message)
+
+    addie.utilities.check_in_fixed_dir_structure(main_window, sub_dir='GSAS')
+    return mconfig_file_name
+
+
+def open_config_file_r(main_window):
+    ext = 'JSON (*.json)'
+
+    if main_window._currDataDir is None:
+        default_dir = os.getcwd()
+    else:
+        default_dir = addie.utilities.get_default_dir(
+            main_window, sub_dir='GSAS')
+
+    mconfig_file_name = QFileDialog.getOpenFileName(
+        main_window, 'Choose Config File to Load', default_dir, ext)
+    if isinstance(mconfig_file_name, tuple):
+        mconfig_file_name = str(mconfig_file_name[0])
+    if mconfig_file_name is None or mconfig_file_name == '' or len(
+            mconfig_file_name) == 0:
+        return
+
+    # update stored data directory
+    try:
+        main_window._currDataDir = os.path.split(
+            os.path.abspath(mconfig_file_name))[0]
+    except IndexError as index_err:
+        err_message = 'Unable to get absolute path of {0} due to {1}'.format(
+            mconfig_file_name, index_err)
+        print(err_message)
+
+    addie.utilities.check_in_fixed_dir_structure(main_window, sub_dir='GSAS')
+    return mconfig_file_name
+
+
 def load_workspaces(main_window, workspace_files):
 
     # extract the workspaces and banks
@@ -79,6 +139,54 @@ def extract_from_input_file(input_file, main_window):
     return wks_list, len(data[ypath][()])
 
 
+def save_mconfig(main_window):
+    mcofnig_file_name = open_config_file(main_window)
+    if mcofnig_file_name is None:
+        return
+
+    dict_tmp = dict()
+    if mcofnig_file_name[-5:] == ".json":
+        file_out = open(mcofnig_file_name, "w")
+    else:
+        file_out = open(mcofnig_file_name + ".json", "w")
+    for key in main_window._bankDict.keys():
+        dict_tmp[key] = { "Qmin": main_window._bankDict[key]['Qmin'],
+                          "Qmax": main_window._bankDict[key]['Qmax'],
+                          "Yoffset": main_window._bankDict[key]['Yoffset'],
+                          "Yscale": main_window._bankDict[key]['Yscale'] }
+    json.dump(dict_tmp, file_out, indent=2)
+    file_out.close()
+
+
+def load_mconfig(main_window):
+    mcofnig_file_name = open_config_file_r(main_window)
+    if mcofnig_file_name is None:
+        return
+
+    if mcofnig_file_name[-5:] == ".json":
+        with open(mcofnig_file_name, "r") as mconfig_json:
+            try:
+                mconfig_in = json.load(mconfig_json)
+            except json.decoder.JSONDecodeError as err:
+                print("[Error] Could not load in JSON file", mcofnig_file_name)
+                print("[Error]", err)
+                return
+    else:
+        print("[Error] Not a JSON file selected. Try again.")
+        return
+
+    for key in main_window._bankDict.keys():
+        if str(key) in mconfig_in.keys():
+            if 'Qmin' in mconfig_in[str(key)].keys():
+                main_window._bankDict[key]['Qmin'] = mconfig_in[str(key)]['Qmin']
+            if 'Qmax' in mconfig_in[str(key)].keys():
+                main_window._bankDict[key]['Qmax'] = mconfig_in[str(key)]['Qmax']
+            if 'Yoffset' in mconfig_in[str(key)].keys():
+                main_window._bankDict[key]['Yoffset'] = mconfig_in[str(key)]['Yoffset']
+            if 'Yscale' in mconfig_in[str(key)].keys():
+                main_window._bankDict[key]['Yscale'] = mconfig_in[str(key)]['Yscale']
+
+
 def open_and_load_workspaces(main_window):
     workspace_files = open_workspaces(main_window)
 
@@ -88,6 +196,10 @@ def open_and_load_workspaces(main_window):
         main_window._workspace_files = workspace_files
         load_workspaces(main_window, workspace_files)
 
+        main_window.postprocessing_ui_m.pushButton_loadmc.setEnabled(False)
+        main_window.postprocessing_ui_m.pushButton_loadsc.setEnabled(False)
+        main_window.postprocessing_ui_m.pushButton_savemc.setEnabled(False)
+        main_window.postprocessing_ui_m.pushButton_savesc.setEnabled(False)
         if main_window.postprocessing_ui_m.checkBox_defaultWorkspace.isChecked():
             main_window.postprocessing_ui_m.pushButton_extract.setEnabled(True)
             main_window.postprocessing_ui_m.frame_workspaces_table.cur_wks = 'SQ_banks_normalized'
@@ -102,7 +214,10 @@ def extract_button(main_window):
     if not os.path.exists(out):
         os.makedirs(out)
 
-    files = extractor(main_window, nxs, banks, wks, out)
+    try:
+        files = extractor(main_window, nxs, banks, wks, out)
+    except:
+        return
 
     initialize_banks(main_window, banks)
 
@@ -111,6 +226,9 @@ def extract_button(main_window):
     file_list.set_workspace(wks)
     file_list.add_raw_data(files)
     initiate_bank_data(main_window, files, wks)
+
+    main_window.postprocessing_ui_m.pushButton_loadmc.setEnabled(True)
+    main_window.postprocessing_ui_m.pushButton_savemc.setEnabled(True)
 
 
 def extractor(main_window, nexus_file: str, num_banks: int, wks_name: str, out_dir: str):
@@ -175,6 +293,8 @@ def clear_canvas(main_window):
 
 def change_bank(main_window):
     if main_window._workspace_files is None:
+        return
+    if not main_window.postprocessing_ui_m.comboBox_banks.currentText():
         return
     current_bank = int(main_window.postprocessing_ui_m.comboBox_banks.currentText())
     bank_dict = main_window._bankDict
@@ -269,6 +389,9 @@ def merge_banks(main_window):
     file_list.add_merged_data(merged_data_ref)
     initiate_stog_data(main_window)
 
+    main_window.postprocessing_ui_m.pushButton_savesc.setEnabled(True)
+    main_window.postprocessing_ui_m.pushButton_loadsc.setEnabled(True)
+
 
 def save_file_raw(main_window, file_name):
     x_bank = main_window._bankDict[int(file_name[-1])]['xList']
@@ -360,6 +483,7 @@ def initiate_stog_data(main_window):
     pystog_inputs["FourierFilter"] = main_window.postprocessing_ui_m.buttonGroup_FF.checkedButton().text() == 'Yes'
     pystog_inputs["Rmin"] = str(main_window.postprocessing_ui_m.doubleSpinBox_Rmin.value())
     pystog_inputs["RippleParams"] = main_window.postprocessing_ui_m.lineEdit_rippleParams.text()
+    pystog_inputs["RealSpaceFunction"] = main_window.postprocessing_ui_m.comboBox_pdfform.currentText()
 
 
 def set_stog_values(main_window):
@@ -377,6 +501,48 @@ def set_stog_values(main_window):
     pystog_inputs["FourierFilter"] = main_window.postprocessing_ui_m.buttonGroup_FF.checkedButton().text() == 'Yes'
     pystog_inputs["Rmin"] = str(main_window.postprocessing_ui_m.doubleSpinBox_Rmin.value())
     pystog_inputs["RippleParams"] = main_window.postprocessing_ui_m.lineEdit_rippleParams.text()
+    pystog_inputs["RealSpaceFunction"] = main_window.postprocessing_ui_m.comboBox_pdfform.currentText()
+
+
+def set_stog_values_load(main_window, stog_dict):
+    pystog_inputs = main_window._pystog_inputs_collect
+    pystog_inputs["Qmin"] = main_window._merged_data[main_window._stem]['XList'][0]
+    pystog_inputs["Qmax"] = main_window._merged_data[main_window._stem]['XList'][-1]
+
+    pystog_inputs["Yoffset"] = stog_dict["Yoffset"]
+    main_window.postprocessing_ui_m.lineEdit_Yoffset_stog.setText(stog_dict["Yoffset"])
+    pystog_inputs["Yscale"] = stog_dict["Yscale"]
+    main_window.postprocessing_ui_m.lineEdit_Yscale_stog.setText(stog_dict["Yscale"])
+    pystog_inputs["Qoffset"] = stog_dict["Qoffset"]
+    main_window.postprocessing_ui_m.lineEdit_Qoffset.setText(stog_dict["Qoffset"])
+    pystog_inputs["Rmax"] = stog_dict["Rmax"]
+    main_window.postprocessing_ui_m.doubleSpinBox_Rmax.setValue(float(stog_dict["Rmax"]))
+    pystog_inputs["Rstep"] = stog_dict["Rstep"]
+    main_window.postprocessing_ui_m.doubleSpinBox_Rstep.setValue(float(stog_dict["Rstep"]))
+    pystog_inputs["NumberDensity"] = stog_dict["NumberDensity"]
+    main_window.postprocessing_ui_m.lineEdit_numberDensity.setText(stog_dict["NumberDensity"])
+    pystog_inputs["FaberZiman"] = stog_dict["FaberZiman"]
+    main_window.postprocessing_ui_m.lineEdit_faberZiman.setText(stog_dict["FaberZiman"])
+    pystog_inputs["RealSpaceFunction"] = stog_dict["RealSpaceFunction"]
+    if stog_dict["RealSpaceFunction"] == "g(r)":
+        main_window.postprocessing_ui_m.comboBox_pdfform.setCurrentIndex(0)
+    else:
+        main_window.postprocessing_ui_m.comboBox_pdfform.setCurrentIndex(1)
+    pystog_inputs["Lorch"] = stog_dict["Lorch"]
+    if stog_dict["Lorch"]:
+        main_window.postprocessing_ui_m.buttonGroup_Lorch.checkedButton().setText("Yes")
+    else:
+        main_window.postprocessing_ui_m.buttonGroup_Lorch.checkedButton().setText("No")
+    pystog_inputs["FourierFilter"] = stog_dict["FourierFilter"]
+    if stog_dict["FourierFilter"]:
+        main_window.postprocessing_ui_m.buttonGroup_FF.checkedButton().setText("Yes")
+    else:
+        main_window.postprocessing_ui_m.buttonGroup_FF.checkedButton().setText("No")
+    pystog_inputs["Rmin"] = stog_dict["Rmin"]
+    main_window.postprocessing_ui_m.doubleSpinBox_Rmin.setValue(float(stog_dict["Rmin"]))
+    if "RippleParams" in stog_dict.keys():
+        pystog_inputs["RippleParams"] = stog_dict["RippleParams"]
+        main_window.postprocessing_ui_m.lineEdit_rippleParams.setText(stog_dict["RippleParams"])
 
 
 # verify the stog values, also converts the rippleparams
@@ -392,9 +558,13 @@ def check_verify_stog(stog_dict):
             if len(stog_dict["RippleParams"]) != 3:
                 return False
         else:
-            value = float(stog_dict[key])
-            if not isinstance(value, float):
-                return False
+            if key != "RealSpaceFunction":
+                try:
+                    value = float(stog_dict[key])
+                    if not isinstance(value, float):
+                        return False
+                except ValueError:
+                    return False
     return True
 
 
@@ -402,6 +572,7 @@ def execute_stog(main_window):
     if main_window._workspace_files is None or len(main_window._merged_data) == 0:
         return
     pystog_inputs = main_window._pystog_inputs_collect
+    initiate_stog_data(main_window)
     if not check_verify_stog(pystog_inputs):
         msg = QMessageBox()
         msg.setWindowTitle("Warning")
@@ -411,11 +582,57 @@ def execute_stog(main_window):
 
     json_format = convert_json(main_window, pystog_inputs)
     with open('pystog_input.json', 'w') as pystog_file:
-        json.dump(json_format, pystog_file)
-    print("The json file is created")
+        json.dump(json_format, pystog_file, indent=2)
+    print("[Info] The json file is created.")
     subprocess.run(["pystog_cli", "--json", "pystog_input.json"])
     add_stog_data(main_window)
     generate_final(main_window)
+
+
+def save_sconfig(main_window):
+    pystog_inputs = main_window._pystog_inputs_collect
+    initiate_stog_data(main_window)
+    if not check_verify_stog(pystog_inputs):
+        msg = QMessageBox()
+        msg.setWindowTitle("Warning")
+        msg.setText("Some StoG data or parameters are incorrect. StoG was not run.")
+        msg.exec()
+        return
+
+    scofnig_file_name = open_config_file(main_window)
+    if scofnig_file_name is None:
+        return
+
+    if scofnig_file_name[-5:] == ".json":
+        file_out = open(scofnig_file_name, "w")
+    else:
+        file_out = open(scofnig_file_name + ".json", "w")
+
+    json_format = convert_json(main_window, pystog_inputs)
+    json.dump(json_format, file_out, indent=2)
+    file_out.close()
+    print("[Info] The json file is saved to ", scofnig_file_name)
+
+
+def load_sconfig(main_window):
+    scofnig_file_name = open_config_file_r(main_window)
+    if scofnig_file_name is None:
+        return
+
+    if scofnig_file_name[-5:] == ".json":
+        with open(scofnig_file_name, "r") as sconfig_json:
+            try:
+                sconfig_in = json.load(sconfig_json)
+            except json.decoder.JSONDecodeError as err:
+                print("[Error] Could not load in JSON file", scofnig_file_name)
+                print("[Error]", err)
+                return
+    else:
+        print("[Error] Not a JSON file selected. Try again.")
+        return
+
+    stog_format = convert_json_inverse(main_window, sconfig_in)
+    set_stog_values_load(main_window, stog_format)
 
 
 def convert_json(main_window, stog_dict):
@@ -429,7 +646,7 @@ def convert_json(main_window, stog_dict):
                                  "Scale": float(stog_dict["Yscale"])},
                            "X": {"Offset": float(stog_dict["Qoffset"])}}]
 
-    json_dict["RealSpaceFunction"] = "G(r)"
+    json_dict["RealSpaceFunction"] = stog_dict["RealSpaceFunction"]
 
     json_dict["NumberDensity"] = float(stog_dict["NumberDensity"])
     json_dict["Rmax"] = float(stog_dict["Rmax"])
@@ -438,9 +655,41 @@ def convert_json(main_window, stog_dict):
         json_dict["FourierFilter"] = {"Cutoff": float(stog_dict["Rmin"])}
     json_dict["<b_coh>^2"] = float(stog_dict["FaberZiman"])
     json_dict["LorchFlag"] = stog_dict["Lorch"]
+    json_dict["RippleParams"] = stog_dict["RippleParams"]
     output = main_window.output_folder + "/" + main_window._stem
     json_dict["Outputs"] = {"StemName": output}
     return json_dict
+
+
+def convert_json_inverse(main_window, json_dict):
+    stog_dict = dict()
+
+    stog_dict["Qmin"] = str(json_dict["Files"][0]["Qmin"])
+    stog_dict["Qmax"] = str(json_dict["Files"][0]["Qmax"])
+    stog_dict["Yoffset"] = str(json_dict["Files"][0]["Y"]["Offset"])
+    stog_dict["Yscale"] = str(json_dict["Files"][0]["Y"]["Scale"])
+    stog_dict["Qoffset"] = str(json_dict["Files"][0]["X"]["Offset"])
+    stog_dict["NumberDensity"] = str(json_dict["NumberDensity"])
+    stog_dict["Rmax"] = str(json_dict["Rmax"])
+    stog_dict["Rstep"] = "{0:5.3F}".format(float(json_dict["Rmax"]) / float(json_dict["Rpoints"]))
+    if "FourierFilter" in json_dict.keys():
+        stog_dict["FourierFilter"] = True
+        stog_dict["Rmin"] = str(json_dict["FourierFilter"]["Cutoff"])
+    else:
+        stog_dict["FourierFilter"] = False
+    stog_dict["FaberZiman"] = str(json_dict["<b_coh>^2"])
+    stog_dict["Lorch"] = json_dict["LorchFlag"]
+    stog_dict["RealSpaceFunction"] = json_dict["RealSpaceFunction"]
+    if "RippleParams" in json_dict.keys():
+        if isinstance(json_dict["RippleParams"], str):
+            stog_dict["RippleParams"] = json_dict["RippleParams"]
+        elif isinstance(json_dict["RippleParams"], list):
+            str_tmp = ",".join([str(item) for item in json_dict["RippleParams"]])
+            stog_dict["RippleParams"] = str_tmp
+        else:
+            pass
+
+    return stog_dict
 
 
 def add_stog_data(main_window):

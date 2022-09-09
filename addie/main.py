@@ -298,7 +298,7 @@ class MainWindow(QMainWindow):
         ----------
         """
 
-        print("\nLaunching...This may take a while...\n")
+        print("Launching...This may take a while...")
 
         QMainWindow.__init__(self, parent)
 
@@ -417,6 +417,8 @@ class MainWindow(QMainWindow):
         calculategr_tab_events_handler.run(main_window=self)
 
         self.activate_reduction_tabs()
+
+        print("ADDIE successfully launched.")
 
     # main window
 
@@ -642,6 +644,18 @@ class MainWindow(QMainWindow):
 
     def open_and_load_workspaces(self):
         post_processing_m_event_handler.open_and_load_workspaces(main_window=self)
+
+    def save_mconfig(self):
+        post_processing_m_event_handler.save_mconfig(main_window=self)
+
+    def save_sconfig(self):
+        post_processing_m_event_handler.save_sconfig(main_window=self)
+
+    def load_sconfig(self):
+        post_processing_m_event_handler.load_sconfig(main_window=self)
+
+    def load_mconfig(self):
+        post_processing_m_event_handler.load_mconfig(main_window=self)
 
     def extract_button(self):
         post_processing_m_event_handler.extract_button(main_window=self)
