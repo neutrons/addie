@@ -561,6 +561,8 @@ def check_verify_stog(stog_dict):
             if key != "RealSpaceFunction":
                 try:
                     value = float(stog_dict[key])
+                    if not isinstance(value, float):
+                        return False
                 except ValueError:
                     return False
     return True
