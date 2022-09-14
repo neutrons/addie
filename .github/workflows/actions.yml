@@ -65,8 +65,8 @@ jobs:
           xvfb-run --auto-servernum pytest --mpl tests
 
       - name: Build python wheel # cannot be used without mantid
+        shell: bash -l {0}
         run: |
-          conda install -y build
           python -m build --wheel --no-isolation
           check-wheel-contents dist/addie-*.whl # currently bad package
 
