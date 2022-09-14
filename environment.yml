@@ -4,6 +4,7 @@ channels:
 - neutrons
 - mantid/label/nightly
 dependencies:
+- build
 - configparser
 - mantid-total-scattering-python-wrapper
 - mantidworkbench
