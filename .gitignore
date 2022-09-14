@@ -1,6 +1,7 @@
 # Created by https://www.gitignore.io/api/pydev,python,eclipse
 # Edit at https://www.gitignore.io/?templates=pydev,python,eclipse
 addie/_version.py
+conda.recipe/
 
 ### Eclipse ###
 .metadata
