@@ -77,7 +77,7 @@ jobs:
           conda install -y anaconda-client conda-build conda-verify
           cd conda.recipe
           conda build --output-folder . . -c neutrons -c mantid/label/nightly
-          conda verify addie*.tar.bz2
+          conda verify noarch/addie*.tar.bz2
 
       - name: Deploy to Anaconda
         shell: bash -l {0}
