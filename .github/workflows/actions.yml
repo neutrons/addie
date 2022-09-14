@@ -66,8 +66,9 @@ jobs:
 
       - name: Build python wheel # cannot be used without mantid
         run: |
+          conda install -y build
           python -m build --wheel --no-isolation
-          # check-wheel-contents dist/addie-*.whl # currently bad package
+          check-wheel-contents dist/addie-*.whl # currently bad package
 
       - name: Build conda libraray
         shell: bash -l {0}
