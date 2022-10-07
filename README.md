@@ -76,6 +76,25 @@ This will use the configuration in the `environment.yml` file for setting up the
 `addie` conda environment. If one needs to change the conda environment name,
 simply edit the `addie` to something else in the `environment.yml` file.
 
+An alternative way to set up a dev environment for ADDIE is to follow the steps
+below,
+
+```
+conda config --add channels conda-forge
+conda create -n addie_env
+conda activate addie_env
+conda install mantidworkbench -c mantid/label/nightly
+conda install -q -y -c neutrons mantid-total-scattering-python-wrapper
+pip install https://oncat.ornl.gov/packages/pyoncat-1.5.1-py3-none-any.whl
+```
+
+Then suppose one is located in the main directory of the ADDIE repo, executing
+the following command will start up ADDIE,
+
+```
+python addie/main.py
+```
+
 ### Uninstall
 
 ```
