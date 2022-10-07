@@ -1,4 +1,4 @@
-name: addie_dev_jackson
+name: addie
 channels:
 - conda-forge
 - neutrons
