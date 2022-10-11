@@ -32,27 +32,14 @@ project.
 
 Setup conda environment to install ADDIE into:
 ```
-conda config --add channels neutrons
-conda config --add channels mantid
-conda config --add channels conda-forge
 conda create -n addie-env
-source activate addie-env
+conda activate addie-env
 ```
 
 Install ADDIE in the conda environment:
 ```
-conda install -q -y -c conda-forge nexus==4.4.3
-conda install -q -y -c mantid poco==1.7.3
-conda install -q -y -c mantid mantidworkbench
-conda install -q -y -c neutrons mantid-total-scattering-python-wrapper
-conda install -q -y -c neutrons addie==${ADDIE_VERSION}
+conda install -c neutrons addie
 ```
-
-The install steps above have been found to create a reproducible install.
-If not done in this order, conda can identify different configurations that are NOT in a working state.
-
-NOTE: You may need to ensure some packages are not imported from the `defaults` channel. 
-As above, add them prior to installing ADDIE where the channel is set explicitly
 
 ## Uninstall
 
@@ -81,8 +68,31 @@ MANTIDPATH=/path/to/mantid/build/bin PATH=$MANTIDPATH:$PATH PYTHONPATH=$MANTIDPA
 ### Installation development environment using Conda
 ```
 conda env create
-source activate addie
-python setup.py install
+conda activate addie
+pip install -e .
+```
+
+This will use the configuration in the `environment.yml` file for setting up the
+`addie` conda environment. If one needs to change the conda environment name,
+simply edit the `addie` to something else in the `environment.yml` file.
+
+An alternative way to set up a dev environment for ADDIE is to follow the steps
+below,
+
+```
+conda config --add channels conda-forge
+conda create -n addie_env
+conda activate addie_env
+conda install mantidworkbench -c mantid/label/nightly
+conda install -q -y -c neutrons mantid-total-scattering-python-wrapper
+pip install https://oncat.ornl.gov/packages/pyoncat-1.5.1-py3-none-any.whl
+```
+
+Then suppose one is located in the main directory of the ADDIE repo, executing
+the following command will start up ADDIE,
+
+```
+python addie/main.py
 ```
 
 ### Uninstall
