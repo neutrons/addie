@@ -5,6 +5,14 @@ from qtpy.QtWidgets import QFileDialog, QMessageBox
 from h5py import File
 import addie.utilities.workspaces
 from pystog.stog import StoG
+from mantid.simpleapi import \
+    CreateWorkspace, \
+    FitPeaks, \
+    Fit, \
+    mtd, \
+    DeleteWorkspace
+import numpy as np
+from scipy.signal import argrelextrema
 
 
 def open_workspaces(main_window):
@@ -154,6 +162,8 @@ def save_mconfig(main_window):
                           "Qmax": main_window._bankDict[key]['Qmax'],
                           "Yoffset": main_window._bankDict[key]['Yoffset'],
                           "Yscale": main_window._bankDict[key]['Yscale'] }
+    remove_bkg = main_window.postprocessing_ui_m.checkBox_bkg_removal.isChecked()
+    dict_tmp["RemoveBkg"] = remove_bkg
     json.dump(dict_tmp, file_out, indent=2)
     file_out.close()
 
@@ -185,6 +195,8 @@ def load_mconfig(main_window):
                 main_window._bankDict[key]['Yoffset'] = mconfig_in[str(key)]['Yoffset']
             if 'Yscale' in mconfig_in[str(key)].keys():
                 main_window._bankDict[key]['Yscale'] = mconfig_in[str(key)]['Yscale']
+    if 'RemoveBkg' in mconfig_in.keys():
+        main_window.postprocessing_ui_m.checkBox_bkg_removal.setChecked(mconfig_in["RemoveBkg"])
 
 
 def open_and_load_workspaces(main_window):
@@ -270,8 +282,15 @@ def initiate_bank_data(main_window, item_list, workspace):
 def plot(main_window, item_list, banks, workspace, mode):
     for item in item_list:
         if mode == 'Merged':
-            x_list = main_window._merged_data[main_window._stem]['XList']
-            y_list = main_window._merged_data[main_window._stem]['YList']
+            if item[-7:] == "_raw.sq":
+                x_list = main_window._merged_data[main_window._stem]['XListRaw']
+                y_list = main_window._merged_data[main_window._stem]['YListRaw']
+            elif item[-7:] == "_bkg.sq":
+                x_list = main_window._merged_data[main_window._stem]['XList']
+                y_list = main_window._merged_data[main_window._stem]['Bkg']
+            else:
+                x_list = main_window._merged_data[main_window._stem]['XList']
+                y_list = main_window._merged_data[main_window._stem]['YList']
             main_window.postprocessing_ui_m.ppm_view.plot(item, x_list, y_list)
 
         elif mode == 'Raw':
@@ -338,6 +357,120 @@ def set_merge_values(main_window):
         bank_dict[current_bank]["Yscale"] = y_scale
 
 
+def bkg_finder(all_data: list,
+               all_range: list,
+               fudge_factor: list):
+    x_out = []
+    y_out = []
+    y_bkg_out = []
+    for bank, bank_data in enumerate(all_data):
+        if all_range[bank][1] != 0:
+            x_bank = bank_data[0]
+            y_bank = bank_data[1]
+
+            y_bank = np.asarray(y_bank)
+            if bank == 4:
+                x_left = []
+                x_max_init = np.arange(x_bank[0], x_bank[-1], 0.1)
+                for item in x_max_init:
+                    x_left.append(str(item - 0.1))
+                    x_left.append(str(item + 0.1))
+                x_max = [str(item) for item in x_max_init]
+            else:
+                x_max = argrelextrema(y_bank, np.greater, order=1)
+                x_left = []
+                for item in x_max[0]:
+                    x_left.append(str(x_bank[item] - 0.1))
+                    x_left.append(str(x_bank[item] + 0.1))
+                x_max = [str(x_bank[item]) for item in x_max[0]]
+
+            centers = ','.join(x_max)
+            boundary = ','.join(x_left)
+
+            ws_tmp = CreateWorkspace(x_bank, y_bank)
+
+            FitPeaks(InputWorkspace=ws_tmp,
+                     StartWorkspaceIndex=0,
+                     StopWorkspaceIndex=0,
+                     PeakCenters=centers,
+                     FitWindowBoundaryList=boundary,
+                     PeakFunction="Gaussian",
+                     BackgroundType="Quadratic",
+                     FitFromRight=True,
+                     HighBackground=False,
+                     OutputWorkspace="ws_tmp_out",
+                     OutputPeakParametersWorkspace="ws_tmp_param_out",
+                     FittedPeaksWorkspace="ws_tmp_fit")
+
+            x_bkg_pt = []
+            y_bkg_pt = []
+            for i in range(mtd['ws_tmp_param_out'].rowCount()):
+                a0_tmp = mtd['ws_tmp_param_out'].row(i)["A0"]
+                a1_tmp = mtd['ws_tmp_param_out'].row(i)["A1"]
+                a2_tmp = mtd['ws_tmp_param_out'].row(i)["A2"]
+
+                x_tmp = mtd['ws_tmp_param_out'].row(i)["PeakCentre"]
+                y_tmp = a0_tmp + a1_tmp * x_tmp + a2_tmp * x_tmp**2.
+
+                x_bkg_pt.append(x_tmp)
+                y_bkg_pt.append(y_tmp)
+
+            naughty_region_x = []
+            naughty_region_y = []
+            for count, x_e_tmp in enumerate(x_bank):
+                if x_e_tmp > float(x_max[-1]):
+                    naughty_region_x.append(x_e_tmp)
+                    naughty_region_y.append(y_bank[count])
+            bottom_tmp = argrelextrema(np.asarray(naughty_region_y), np.less, order=1)
+            for item in bottom_tmp[0]:
+                x_bkg_pt.append(naughty_region_x[item])
+                y_bkg_pt.append(naughty_region_y[item])
+
+            x_min = argrelextrema(np.asarray(y_bkg_pt), np.less, order=1)
+            y_min = [y_bkg_pt[item] for item in x_min[0]]
+            x_min = [x_bkg_pt[item] for item in x_min[0]]
+
+            min_min = argrelextrema(np.asarray(y_min), np.less, order=1)
+            y_min_min = [y_min[item] for item in min_min[0]]
+            x_min_min = [x_min[item] for item in min_min[0]]
+
+            ws_real_bkg = CreateWorkspace(x_min_min, y_min_min)
+
+            c_factor = [1., 10., 0.1, 0.05, 0.01, 0.001]
+            for c_factor_try in c_factor:
+                c_init = c_factor_try * 0.1
+                Fit(f"name=UserFunction, Formula=a-b*exp(-c*x*x), a=1, b=0.1, c={c_init}",
+                    ws_real_bkg,
+                    Output='ws_real_bkg_fitted')
+                c_err = mtd['ws_real_bkg_fitted_Parameters'].row(2)["Error"]
+                if c_err != 0.:
+                    break
+
+            a_init = mtd['ws_real_bkg_fitted_Parameters'].row(0)["Value"]
+            b_init = mtd['ws_real_bkg_fitted_Parameters'].row(1)["Value"]
+            c_init = mtd['ws_real_bkg_fitted_Parameters'].row(2)["Value"]
+            c_used = fudge_factor[bank] * c_init
+
+            y_bkg = [a_init - b_init * np.exp(-c_used * item**2.) for item in x_bank]
+            for i in range(len(x_bank)):
+                if all_range[bank][0] <= x_bank[i] < all_range[bank][1]:
+                    x_out.append(x_bank[i])
+                    y_out.append(y_bank[i] - y_bkg[i])
+                    y_bkg_out.append(y_bkg[i])
+
+    # Remove all workspaces
+    DeleteWorkspace(ws_tmp)
+    DeleteWorkspace("ws_tmp_param_out")
+    DeleteWorkspace("ws_tmp_fit")
+    DeleteWorkspace("ws_real_bkg")
+    DeleteWorkspace("ws_tmp_out")
+    DeleteWorkspace("ws_real_bkg_fitted_Workspace")
+    DeleteWorkspace("ws_real_bkg_fitted_Parameters")
+    DeleteWorkspace("ws_real_bkg_fitted_NormalisedCovarianceMatrix")
+
+    return x_out, y_out, y_bkg_out
+
+
 def merge_banks(main_window):
     if main_window._workspace_files is None or main_window._bankDict is None:
         return
@@ -347,45 +480,154 @@ def merge_banks(main_window):
         banks_x.append(main_window._bankDict[bank]['xList'])
         banks_y.append(main_window._bankDict[bank]['yList'])
 
-    x_merged = list()
-    y_merged = list()
-
+    qmin_list = list()
+    qmax_list = list()
+    qmax_max = 0.
+    qmax_max_bank = 0
+    valid_region = False
     for bank in range(len(main_window._bankDict)):
         qmin_tmp = main_window._bankDict[bank + 1]['Qmin']
         qmax_tmp = main_window._bankDict[bank + 1]['Qmax']
-        yoffset_tmp = main_window._bankDict[bank + 1]['Yoffset']
-        yscale_tmp = main_window._bankDict[bank + 1]['Yscale']
         if qmin_tmp.strip() == "" or qmax_tmp.strip() == "":
-            continue
+            qmin_list.append(0.)
+            qmax_list.append(0.)
         else:
             qmin_tmp = float(qmin_tmp)
             qmax_tmp = float(qmax_tmp)
             if qmin_tmp == qmax_tmp:
-                continue
+                qmin_list.append(0.)
+                qmax_list.append(0.)
             elif qmin_tmp > qmax_tmp:
-                print(f"[Error] Qmax smaller than Qmin for bank-{bank+1}. Please input valid values and try again.")
+                msg_p1 = f"[Error] Qmax smaller than Qmin for bank-{bank+1}. "
+                msg_p2 = "Please input valid values and try again."
+                print(msg_p1 + msg_p2)
                 return
             else:
-                pass
-        if yoffset_tmp.strip() == "":
-            yoffset_tmp = 0.0
-        if yscale_tmp.strip() == "":
-            yscale_tmp = 1.0
-        yoffset_tmp = float(yoffset_tmp)
-        yscale_tmp = float(yscale_tmp)
-        for i, x_val in enumerate(banks_x[bank]):
-            if qmin_tmp <= x_val < qmax_tmp:
-                x_merged.append(x_val)
-                y_merged.append(banks_y[bank][i] / yscale_tmp + yoffset_tmp)
+                valid_region = True
+                qmin_list.append(qmin_tmp)
+                qmax_list.append(qmax_tmp)
+                if qmax_tmp > qmax_max:
+                    qmax_max = qmax_tmp
+                    qmax_max_bank = bank
+
+    if not valid_region:
+        print("[Error] Qmin and Qmax values are all zero for all banks.")
+        print("[Error] Please input valid values and try again.")
+        return
+
+    remove_bkg = main_window.postprocessing_ui_m.checkBox_bkg_removal.isChecked()
+    if not remove_bkg:
+        x_merged = list()
+        y_merged = list()
+
+        for bank in range(len(main_window._bankDict)):
+            yoffset_tmp = main_window._bankDict[bank + 1]['Yoffset']
+            yscale_tmp = main_window._bankDict[bank + 1]['Yscale']
+            if yoffset_tmp.strip() == "":
+                yoffset_tmp = 0.0
+            if yscale_tmp.strip() == "":
+                yscale_tmp = 1.0
+            yoffset_tmp = float(yoffset_tmp)
+            yscale_tmp = float(yscale_tmp)
+            if bank == qmax_max_bank:
+                for i, x_val in enumerate(banks_x[bank]):
+                    if qmin_list[bank] <= x_val <= qmax_list[bank]:
+                        x_merged.append(x_val)
+                        y_merged.append(banks_y[bank][i] / yscale_tmp + yoffset_tmp)
+            else:
+                for i, x_val in enumerate(banks_x[bank]):
+                    if qmin_list[bank] <= x_val < qmax_list[bank]:
+                        x_merged.append(x_val)
+                        y_merged.append(banks_y[bank][i] / yscale_tmp + yoffset_tmp)
+    else:
+        bank_range = list()
+        yscale_list = list()
+        yoffset_list = list()
+        all_data = list()
+        x_merged_raw = list()
+        y_merged_raw = list()
+        # TODO: The hard coded `qmax_bkg_est` and `fudge_factor` needs to be
+        # updated to adapt to general way of grouping detectors into banks.
+        if len(main_window._bankDict) == 6:
+            qmax_bkg_est = [25., 25., 25., 25., 40., 0.]
+            fudge_factor = [1., 1., 0.1, 0.7, 0.7, 1.]
+        elif len(main_window._bankDict) == 1:
+            qmax_bkg_est = [40.]
+            fudge_factor = [0.7]
+        else:
+            qmax_bkg_est = [25. for _ in range(len(main_window._bankDict))]
+            qmax_bkg_est[-1] = 0.
+            qmax_bkg_est[-2] = 40.
+            fudge_factor = [1. for _ in range(len(main_window._bankDict))]
+        for bank in range(len(main_window._bankDict)):
+            bank_range.append([qmin_list[bank], qmax_list[bank]])
+            yoffset_tmp = main_window._bankDict[bank + 1]['Yoffset']
+            yscale_tmp = main_window._bankDict[bank + 1]['Yscale']
+            if yoffset_tmp.strip() == "":
+                yoffset_tmp = 0.0
+            if yscale_tmp.strip() == "":
+                yscale_tmp = 1.0
+            yscale_list.append(float(yscale_tmp))
+            yoffset_list.append(float(yoffset_tmp))
+            x_tmp = list()
+            y_tmp = list()
+            if bank == qmax_max_bank:
+                for i, x_val in enumerate(banks_x[bank]):
+                    if qmin_list[bank] <= x_val <= qmax_bkg_est[bank]:
+                        x_tmp.append(x_val)
+                        y_tmp.append(banks_y[bank][i])
+                    if qmin_list[bank] <= x_val <= qmax_list[bank]:
+                        x_merged_raw.append(x_val)
+                        y_merged_raw.append(banks_y[bank][i])
+
+            else:
+                for i, x_val in enumerate(banks_x[bank]):
+                    if qmin_list[bank] <= x_val < qmax_bkg_est[bank]:
+                        x_tmp.append(x_val)
+                        y_tmp.append(banks_y[bank][i])
+                    if qmin_list[bank] <= x_val < qmax_list[bank]:
+                        x_merged_raw.append(x_val)
+                        y_merged_raw.append(banks_y[bank][i])
+            all_data.append([x_tmp, y_tmp])
+
+        x_merged_init, y_merged_init, y_bkg_out = bkg_finder(all_data, bank_range, fudge_factor)
+        x_merged = x_merged_init
+        y_merged = list()
+        for i, x_val in enumerate(x_merged):
+            if i == len(x_merged) - 1:
+                for j, b_r in enumerate(bank_range):
+                    if x_val == b_r[1]:
+                        y_merged.append(y_merged_init[i] / yscale_list[j] + yoffset_list[j])
+            for j, b_r in enumerate(bank_range):
+                if b_r[0] <= x_val < b_r[1]:
+                    y_merged.append(y_merged_init[i] / yscale_list[j] + yoffset_list[j])
 
     if len(x_merged) == 0:
-        print("[Error] Qmin and Qmax values are all zero for all banks. Please input valid values and try again.")
+        print("[Error] Qmin and Qmax values are all zero for all banks.")
+        print("[Error] Please input valid values and try again.")
         return
+
+    main_window.ui.statusbar.setStyleSheet("color: blue")
+    main_window.ui.statusbar.showMessage("Banks merged successfully!",
+                                         main_window.statusbar_display_time)
 
     file_list = main_window.postprocessing_ui_m.frame_filelist_tree
     merged_data_ref = main_window._stem + '_merged.sq'
-    main_window._merged_data[main_window._stem] = {'Name': merged_data_ref, 'XList': x_merged, 'YList': y_merged}
+    if remove_bkg:
+        main_window._merged_data[main_window._stem] = {'Name': merged_data_ref,
+                                                       'XList': x_merged,
+                                                       'YList': y_merged,
+                                                       'XListRaw': x_merged_raw,
+                                                       'YListRaw': y_merged_raw,
+                                                       'Bkg': y_bkg_out
+                                                       }
+    else:
+        main_window._merged_data[main_window._stem] = {'Name': merged_data_ref,
+                                                       'XList': x_merged,
+                                                       'YList': y_merged}
 
+    file_list.add_merged_data(main_window._stem + '_merged_raw.sq')
+    file_list.add_merged_data(main_window._stem + '_bkg.sq')
     file_list.add_merged_data(merged_data_ref)
     initiate_stog_data(main_window)
 
@@ -409,36 +651,44 @@ def save_file_raw(main_window, file_name):
             new_file.write(str(x_bank[i]) + ' ' + str(y_bank[i]) + '\n')
 
 
-def save_file_merged(main_window, auto=False):
+def save_file_merged(main_window, file_name, auto=False):
     if auto:
         save_directory = main_window.output_folder
-        save_file = main_window._stem + '_merged.sq'
+        save_file = file_name
 
-        main_window._full_merged_path = save_directory + '/' + save_file
+        main_window._full_merged_path = os.path.join(save_directory, save_file)
 
     else:
-        save_directory_user = QFileDialog.getSaveFileName(main_window, 'Save Merged File',
-                                                          main_window.output_folder + '/' + main_window._stem + '_merged.sq',
+        if file_name[-7:] == "_raw.sq":
+            win_title = "Save Raw Merged File"
+        elif file_name[-7:] == "_bkg.sq":
+            win_title = "Save Background File"
+        else:
+            win_title = "Save Merged File"
+        save_directory_user = QFileDialog.getSaveFileName(main_window, win_title,
+                                                          os.path.join(main_window.output_folder, file_name),
                                                           '*.sq')
-                                                # QFileDialog.ShowDirsOnly
-                                                # | QFileDialog.DontResolveSymlinks)
-        # save_file = main_window._stem + '_merged.sq'
         if isinstance(save_directory_user, tuple):
             save_directory_user = save_directory_user[0]
         if save_directory_user is None or save_directory_user == '' or len(save_directory_user) == 0:
             return
-        save_file = save_directory_user.split('/')[-1]
-        # full_path = save_directory + '/' + save_file
         main_window._full_merged_path = save_directory_user
 
-    x_merged = main_window._merged_data[main_window._stem]['XList']
-    y_merged = main_window._merged_data[main_window._stem]['YList']
+    if file_name[-7:] == "_raw.sq":
+        x_merged = main_window._merged_data[main_window._stem]['XListRaw']
+        y_merged = main_window._merged_data[main_window._stem]['YListRaw']
+    elif file_name[-7:] == "_bkg.sq":
+        x_merged = main_window._merged_data[main_window._stem]['XList']
+        y_merged = main_window._merged_data[main_window._stem]['Bkg']
+    else:
+        x_merged = main_window._merged_data[main_window._stem]['XList']
+        y_merged = main_window._merged_data[main_window._stem]['YList']
 
     with open(main_window._full_merged_path, 'w') as new_file:
         new_file.write(str(len(x_merged)) + '\n')
         new_file.write('#\n')
         for i in range(len(x_merged)):
-            new_file.write(str(x_merged[i]) + ' ' + str(y_merged[i]) + '\n')
+            new_file.write("{0:10.3F}{1:20.6F}\n".format(x_merged[i], y_merged[i]))
 
 
 def save_file_stog(main_window, file_name):

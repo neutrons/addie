@@ -111,13 +111,16 @@ class FileListTree(base.CustomizedTreeView):
     def add_merged_data(self, merged_banks_ref):
         self.add_child_main_item('Merged Data', merged_banks_ref)
         # save the merged data file with the automated mode set true
-        event_handler.save_file_merged(self._main_window, auto=True)
+        event_handler.save_file_merged(self._main_window,
+                                       merged_banks_ref,
+                                       auto=True)
 
     def save_merge(self):
         # save the merged data file with the automated mode set false
         if len(self._selected_items) > 1:
             return
-        event_handler.save_file_merged(self._main_window)
+        event_handler.save_file_merged(self._main_window,
+                                       self._selected_items[0].text())
 
     def save_raw(self):
         if len(self._selected_items) > 1:

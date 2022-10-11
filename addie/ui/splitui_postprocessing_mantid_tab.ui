@@ -308,6 +308,22 @@
          </property>
         </widget>
        </item>
+       <item row="5" column="0" colspan="2">
+        <widget class="QCheckBox" name="checkBox_bkg_removal">
+         <property name="maximumSize">
+          <size>
+           <width>320</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Remove Bkg</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
        <item row="21" column="0" colspan="4">
         <widget class="QPushButton" name="pushButton_StoG">
          <property name="maximumSize">

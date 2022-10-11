@@ -298,7 +298,7 @@ class MainWindow(QMainWindow):
         ----------
         """
 
-        print("Launching...This may take a while...")
+        print("\n[Info] Launching ADDIE...\n")
 
         QMainWindow.__init__(self, parent)
 
@@ -418,7 +418,7 @@ class MainWindow(QMainWindow):
 
         self.activate_reduction_tabs()
 
-        print("ADDIE successfully launched.")
+        print("[Info] ADDIE successfully launched.\n")
 
     # main window
 

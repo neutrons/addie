@@ -26,5 +26,5 @@ class Step3GuiHandler(object):
         o_file_handler.retrieve_contain()
         text_contain = o_file_handler.file_contain
 
-        o_preview = PreviewAsciiWindow(parent=self.parent_no_ui, text=text_contain, filename=_ascii_file)
+        o_preview = PreviewAsciiWindow(parent=self.parent, text=text_contain, filename=_ascii_file)
         o_preview.show()
