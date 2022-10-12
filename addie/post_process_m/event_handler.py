@@ -188,13 +188,25 @@ def load_mconfig(main_window):
     for key in main_window._bankDict.keys():
         if str(key) in mconfig_in.keys():
             if 'Qmin' in mconfig_in[str(key)].keys():
-                main_window._bankDict[key]['Qmin'] = mconfig_in[str(key)]['Qmin']
+                qmin_tmp = mconfig_in[str(key)]['Qmin']
+                main_window._bankDict[key]['Qmin'] = qmin_tmp
+                if key == 1 and main_window.postprocessing_ui_m.comboBox_banks.currentText() == "1":
+                    main_window.postprocessing_ui_m.doubleSpinBox_Qmin.setValue(float(qmin_tmp))
             if 'Qmax' in mconfig_in[str(key)].keys():
-                main_window._bankDict[key]['Qmax'] = mconfig_in[str(key)]['Qmax']
+                qmax_tmp = mconfig_in[str(key)]['Qmax']
+                main_window._bankDict[key]['Qmax'] = qmax_tmp
+                if key == 1 and main_window.postprocessing_ui_m.comboBox_banks.currentText() == "1":
+                    main_window.postprocessing_ui_m.doubleSpinBox_Qmax.setValue(float(qmax_tmp))
             if 'Yoffset' in mconfig_in[str(key)].keys():
-                main_window._bankDict[key]['Yoffset'] = mconfig_in[str(key)]['Yoffset']
+                yoffset_tmp = mconfig_in[str(key)]['Yoffset']
+                main_window._bankDict[key]['Yoffset'] = yoffset_tmp
+                if key == 1 and main_window.postprocessing_ui_m.comboBox_banks.currentText() == "1":
+                    main_window.postprocessing_ui_m.lineEdit_Yoffset.setText(yoffset_tmp)
             if 'Yscale' in mconfig_in[str(key)].keys():
-                main_window._bankDict[key]['Yscale'] = mconfig_in[str(key)]['Yscale']
+                yscale_tmp = mconfig_in[str(key)]['Yscale']
+                main_window._bankDict[key]['Yscale'] = yscale_tmp
+                if key == 1 and main_window.postprocessing_ui_m.comboBox_banks.currentText() == "1":
+                    main_window.postprocessing_ui_m.lineEdit_Yscale.setText(yscale_tmp)
     if 'RemoveBkg' in mconfig_in.keys():
         main_window.postprocessing_ui_m.checkBox_bkg_removal.setChecked(mconfig_in["RemoveBkg"])
 
@@ -443,12 +455,13 @@ def bkg_finder(all_data: list,
                     ws_real_bkg,
                     Output='ws_real_bkg_fitted')
                 c_err = mtd['ws_real_bkg_fitted_Parameters'].row(2)["Error"]
-                if c_err != 0.:
+                if c_err != 0. and c_err != float("inf") and c_err != float("-inf"):
                     break
 
             a_init = mtd['ws_real_bkg_fitted_Parameters'].row(0)["Value"]
             b_init = mtd['ws_real_bkg_fitted_Parameters'].row(1)["Value"]
             c_init = mtd['ws_real_bkg_fitted_Parameters'].row(2)["Value"]
+
             c_used = fudge_factor[bank] * c_init
 
             y_bkg = [a_init - b_init * np.exp(-c_used * item**2.) for item in x_bank]
@@ -550,7 +563,7 @@ def merge_banks(main_window):
         # updated to adapt to general way of grouping detectors into banks.
         if len(main_window._bankDict) == 6:
             qmax_bkg_est = [25., 25., 25., 25., 40., 0.]
-            fudge_factor = [1., 1., 0.1, 0.7, 0.7, 1.]
+            fudge_factor = [1., 1., 1., 0.7, 0.7, 1.]
         elif len(main_window._bankDict) == 1:
             qmax_bkg_est = [40.]
             fudge_factor = [0.7]
