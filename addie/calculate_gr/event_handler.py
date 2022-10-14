@@ -169,6 +169,7 @@ def generate_gr_step1(main_window):
     generate_gr_step2(main_window,
                       sq_ws_name_list=sq_ws_name_list)
 
+    gr_widgets_status(main_window, True)
 
 def generate_gr_step2(main_window, sq_ws_name_list):
     """Generate G(r) from specified S(Q) workspaces
