@@ -80,6 +80,7 @@ class GofRTree(base.CustomizedTreeView):
                 print('[Error] Nodes of different levels are selected.')
 
         if leaf_level == 1:
+            self.removeAction(self._action_remove_plot)
             self.addAction(self._action_plot)
             self.addAction(self._action_ipython)
             self.addAction(self._action_delete)
@@ -205,7 +206,8 @@ class GofRTree(base.CustomizedTreeView):
         gr_exists = False
         for key in self._leafDict.keys():
             if key.startswith('G(r)'):
-                gr_exists = True
+                if len(self._leafDict[key]) > 0:
+                    gr_exists = True
         return not gr_exists
 
     def is_sofq_empty(self):
