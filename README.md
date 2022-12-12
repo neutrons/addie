@@ -83,6 +83,7 @@ below,
 conda config --add channels conda-forge
 conda create -n addie_env
 conda activate addie_env
+pip install -e .
 conda install mantidworkbench -c mantid/label/nightly
 conda install -q -y -c neutrons mantid-total-scattering-python-wrapper
 pip install https://oncat.ornl.gov/packages/pyoncat-1.5.1-py3-none-any.whl
