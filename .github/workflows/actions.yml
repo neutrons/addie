@@ -28,6 +28,7 @@ jobs:
           auto-update-conda: true
           mamba-version: "*"
           python-version: ${{ matrix.python-version }}
+          environment-file: environment.yml
           channels: neutrons,mantid/label/nightly,conda-forge
 
       - name: Apt install deps
