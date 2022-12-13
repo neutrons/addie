@@ -11,4 +11,4 @@ pytest-mpl
 pytest-qt<=3.3.0
 setuptools>=48
 typing
-versioningit>=1.1,<1.2
+versioningit
