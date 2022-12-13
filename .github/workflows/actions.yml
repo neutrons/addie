@@ -54,16 +54,16 @@ jobs:
         shell: bash -l {0}
         run: flake8 . --count
 
-      - name: Test
-        shell: bash -l {0}
-        run: |
-          pip install py
-          python -c "import mantid"
-          python -c "import qtpy"
-          python -c "import mantidqt"
-          xvfb-run --server-args="-screen 0 640x480x24" --auto-servernum mantidworkbench --help
-          echo "import time;time.sleep(5)" > workbenchshutdown.py
-          xvfb-run --auto-servernum pytest --mpl tests
+      # - name: Test
+      #   shell: bash -l {0}
+      #   run: |
+      #     pip install py
+      #     python -c "import mantid"
+      #     python -c "import qtpy"
+      #     python -c "import mantidqt"
+      #     xvfb-run --server-args="-screen 0 640x480x24" --auto-servernum mantidworkbench --help
+      #     echo "import time;time.sleep(5)" > workbenchshutdown.py
+      #     xvfb-run --auto-servernum pytest --mpl tests
 
       - name: Build python wheel # cannot be used without mantid
         shell: bash -l {0}
@@ -75,10 +75,6 @@ jobs:
       - name: Build conda libraray
         shell: bash -l {0}
         run: |
-          conda init --reverse
-          mkdir ~/conda-backup
-          mv ~/.condarc ~/conda-backup
-          mv ~/.conda ~/conda-backup
           conda install -y anaconda-client conda-build conda-verify
           cd conda.recipe
           conda build --output-folder . . -c neutrons -c mantid/label/nightly
