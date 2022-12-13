@@ -57,6 +57,7 @@ jobs:
       - name: Test
         shell: bash -l {0}
         run: |
+          pip install py
           python -c "import mantid"
           python -c "import qtpy"
           python -c "import mantidqt"
