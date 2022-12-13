@@ -22,6 +22,7 @@ requirements:
 
   build:
     - configparser
+    - mantid-total-scattering-python-wrapper
     - mantidworkbench
     - periodictable
     - psutil
@@ -33,6 +34,7 @@ requirements:
 
   run:
     - configparser
+    - mantid-total-scattering-python-wrapper
     - mantidworkbench
     - periodictable
     - psutil
