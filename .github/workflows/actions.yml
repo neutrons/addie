@@ -75,6 +75,10 @@ jobs:
       - name: Build conda libraray
         shell: bash -l {0}
         run: |
+          conda init --reverse
+          mkdir ~/conda-backup
+          mv ~/.condarc ~/conda-backup
+          mv ~/.conda ~/conda-backup
           conda install -y anaconda-client conda-build conda-verify
           cd conda.recipe
           conda build --output-folder . . -c neutrons -c mantid/label/nightly
