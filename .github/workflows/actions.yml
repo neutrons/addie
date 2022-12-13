@@ -37,7 +37,7 @@ jobs:
 
       - name: Conda install deps
         shell: bash -l {0}
-        run: mamba install mantidworkbench mantid-total-scattering-python-wrapper --file requirements-dev.txt
+        run: mamba install --file requirements-dev.txt
 
       - name: Mantid pre-requisites
         shell: bash -l {0}
@@ -75,9 +75,9 @@ jobs:
       - name: Build conda libraray
         shell: bash -l {0}
         run: |
-          conda install -y anaconda-client conda-build conda-verify
+          conda install -y anaconda-client conda-build conda-verify boa
           cd conda.recipe
-          conda build --output-folder . . -c neutrons -c mantid/label/nightly
+          conda mambabuild --output-folder . . -c neutrons -c mantid/label/nightly
           conda verify noarch/addie*.tar.bz2
 
       - name: Deploy to Anaconda
