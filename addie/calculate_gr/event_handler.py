@@ -480,12 +480,16 @@ def do_save_gr(main_window):
     gr_list = main_window.calculategr_ui.treeWidget_grWsList
     gr_name_list = gr_list.get_selected_items_of_level(
         2, excluded_parent='SofQ', return_item_text=True)
+    single_out = True
     if len(gr_name_list) != 1:
-        err_msg = 'ERROR: Only 1 workspace of G(r) can be selected.'
-        err_msg += '{0} are selected.\n Selection: {1}'
-        err_msg = err_msg.format(len(gr_name_list), str(gr_name_list))
-        QMessageBox.warning(main_window, 'Error', err_msg)
-        return
+        if len(gr_name_list) == 0:
+            err_msg = 'ERROR: Only 1 workspace of G(r) can be selected.'
+            err_msg += '{0} are selected.\n Selection: {1}'
+            err_msg = err_msg.format(len(gr_name_list), str(gr_name_list))
+            QMessageBox.warning(main_window, 'Error', err_msg)
+            return
+        else:
+            single_out = False
     else:
         gr_ws_name = gr_name_list[0]
 
@@ -493,24 +497,62 @@ def do_save_gr(main_window):
     default_dir = os.getcwd()
     caption = 'Save G(r)'
 
-    FILE_FILTERS = {'PDFgui (*.gr)': 'gr',
-                    'XYE (*.xye)': 'xye',
-                    'CSV XYE (*.csv)': 'csv',
-                    'RMCProfile (*.dat)': 'dat'}
+    if single_out:
+        FILE_FILTERS = {'PDFgui (*.gr)': 'gr',
+                        'XYE (*.xye)': 'xye',
+                        'CSV XYE (*.csv)': 'csv',
+                        'RMCProfile (*.dat)': 'dat'}
 
-    filename, filetype = get_save_file(
-        parent=main_window,
-        directory=default_dir,
-        caption=caption,
-        filter=FILE_FILTERS)
-    if not filename:  # user pressed cancel
-        return
+        filename, filetype = get_save_file(
+            parent=main_window,
+            directory=default_dir,
+            caption=caption,
+            filter=FILE_FILTERS)
+        if not filename:  # user pressed cancel
+            return
 
-    if filetype == 'dat':
-        filetype = 'rmcprofile'
+        if filetype == 'dat':
+            filetype = 'rmcprofile'
 
-    # save!
-    main_window._myController.save_ascii(gr_ws_name, filename, filetype)
+        # save!
+        main_window._myController.save_ascii(gr_ws_name, filename, filetype)
+        main_window.ui.statusbar.setStyleSheet("color: blue")
+        main_window.ui.statusbar.showMessage("File successfully saved.",
+                                             main_window.statusbar_display_time)
+    else:
+        options = QFileDialog.Options()
+        options |= QFileDialog.ShowDirsOnly
+        out_dir = QFileDialog.getExistingDirectory(main_window, caption,
+                                                   default_dir, options=options)
+
+        ext_dict = {
+            "xye": "xye",
+            "gr": "gr",
+            "csv": "csv",
+            "rmcprofile": "dat",
+            "dat": "dat"
+        }
+        if "xye" in out_dir.lower():
+            filetype = "xye"
+        elif "gr" in out_dir.lower():
+            filetype = "gr"
+        elif "csv" in out_dir.lower():
+            filetype = "csv"
+        elif "rmc" in out_dir.lower():
+            filetype = "rmcprofile"
+        elif "dat" in out_dir.lower():
+            filetype = "dat"
+        else:
+            filetype  = "gr"
+
+        for item in gr_name_list:
+            gr_ws_name = item
+            filename = gr_ws_name + "." + ext_dict[filetype]
+            filename = os.path.join(out_dir, filename)
+            main_window._myController.save_ascii(gr_ws_name, filename, filetype)
+        main_window.ui.statusbar.setStyleSheet("color: blue")
+        main_window.ui.statusbar.showMessage("Files successfully saved.",
+                                             main_window.statusbar_display_time)
 
 
 def do_save_sq(main_window):
