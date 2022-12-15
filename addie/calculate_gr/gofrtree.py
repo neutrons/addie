@@ -235,8 +235,11 @@ class GofRTree(base.CustomizedTreeView):
             if curr_level == -1:
                 curr_level = temp_level
             elif curr_level != temp_level:
-                raise RuntimeError(
-                    'Nodes of different levels are selected. It is not supported for deletion.')
+                err_msg = "Nodes of different levels are selected."
+                self.parent.ui.statusbar.setStyleSheet("color: red")
+                self.parent.ui.statusbar.showMessage(err_msg,
+                                                     self.parent.statusbar_display_time)
+                return
 
         # get item and delete
         if curr_level == 0:
@@ -316,6 +319,8 @@ class GofRTree(base.CustomizedTreeView):
             print('Unable to remove %s from canvas due to %s.' %
                   (leaf_node_name, str(ass_err)))
         # delete node
+        item_tmp = self.parent.calculategr_ui.comboBox_SofQ.findText(ws_item.text())
+        self.parent.calculategr_ui.comboBox_SofQ.removeItem(item_tmp)
         self.delete_node(ws_item)
 
     def do_plot(self):
