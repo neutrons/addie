@@ -1,5 +1,10 @@
+# load information from setup.cfg/setup.py
+{% set data = load_setup_py_data() %}
+{% set license = data.get('license') %}
+{% set description = data.get('description') %}
+{% set url = data.get('url') %}
 # this will reproduce the version from tags to match versioningit
-{% set version = environ.get('GIT_DESCRIBE_TAG', '0.0.0') %}
+{% set version = environ.get('VERSION') %}
 {% set version_number = environ.get('GIT_DESCRIBE_NUMBER', '0') | string %}
 
 package:
@@ -47,11 +52,11 @@ test:
     - addie
 
 about:
-  home: https://github.com/neutrons/addie
-  license: GPL (version 3)
-  license_family: GPL3
+  home: {{ url }}
+  license: {{ license }}
+  license_family: MIT
   license_file: ../LICENSE
-  summary: ADvanced DIffraction Environment
+  summary: {{ description }}
 
 extra:
   recipe-maintainers:
