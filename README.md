@@ -116,7 +116,7 @@ ImportError: First import of "._api" failed with "libGL.so.1: cannot open shared
 The test suite can be run using [pytest](https://docs.pytest.org/en/latest/)
 with the [pytest-qt](https://pytest-qt.readthedocs.io/en/latest/) plugin.
 ```bash
-$ pytest tests
+$ python -m pytest
 ```
 
 ### Developing using a local Mantid install
