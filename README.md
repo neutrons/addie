@@ -154,14 +154,3 @@ pipenv --two
 echo layout_pipenv > .envrc
 direnv allow
 ```
-
-## Creating RPMs
-
-Python generated `srpm` are not as flexible as they should be. To
-generate one that is run `buildrpm` and look for the files in the
-`dist` directory.
-```bash
-$ ./buildrpm
-```
- The `rpm`s are available on
-[copr](https://copr.fedorainfracloud.org/coprs/peterfpeterson/addie/).
