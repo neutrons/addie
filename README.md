@@ -1,7 +1,7 @@
 | CI     | Release | Other |
 |--------|---------|-------|
 | [![GitHub Actions](https://github.com/neutrons/addie/actions/workflows/actions.yml/badge.svg?branch=master)](https://github.com/neutrons/addie/actions/workflows/actions.yml) | [![Anaconda-Server Badge](https://anaconda.org/neutrons/addie/badges/version.svg)](https://anaconda.org/neutrons/addie) | [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT) |
-|  | [![Anaconda-Server Badge](https://anaconda.org/neutrons/addie/badges/platforms.svg)](https://anaconda.org/neutrons/addie) | 
+|  | [![Anaconda-Server Badge](https://anaconda.org/neutrons/addie/badges/platforms.svg)](https://anaconda.org/neutrons/addie) |
 
 
 
@@ -48,7 +48,7 @@ conda deactivate
 conda remove -n addie_env --all
 ```
 
-## Launch 
+## Launch
 
 To launch ADDIE, run the following from the command line:
 
@@ -66,8 +66,9 @@ MANTIDPATH=/path/to/mantid/build/bin PATH=$MANTIDPATH:$PATH PYTHONPATH=$MANTIDPA
 
 
 ### Installation development environment using Conda
-```
-conda env create
+
+```bash
+conda env create --file environment.yml
 conda activate addie
 pip install -e .
 ```
@@ -76,29 +77,22 @@ This will use the configuration in the `environment.yml` file for setting up the
 `addie` conda environment. If one needs to change the conda environment name,
 simply edit the `addie` to something else in the `environment.yml` file.
 
-An alternative way to set up a dev environment for ADDIE is to follow the steps
-below,
-
-```
-conda config --add channels conda-forge
-conda create -n addie_env
-conda activate addie_env
-pip install -e .
-conda install mantidworkbench -c mantid/label/nightly
-conda install -q -y -c neutrons mantid-total-scattering-python-wrapper
-pip install https://oncat.ornl.gov/packages/pyoncat-1.5.1-py3-none-any.whl
-```
-
 Then suppose one is located in the main directory of the ADDIE repo, executing
 the following command will start up ADDIE,
 
-```
+```bash
 python addie/main.py
+```
+
+or just
+
+```bash
+addie
 ```
 
 ### Uninstall
 
-```
+```bash
 conda deactivate
 conda remove -n addie --all
 ```
@@ -135,7 +129,7 @@ addie that way as well. After creating the virtual environment, run
 ```
 
 which will add a file, `mantid.pth` to your environment with the
-location of mantid. Then you need to setup for development: 
+location of mantid. Then you need to setup for development:
 
 ```bash
 python setup.py develop
@@ -160,16 +154,3 @@ pipenv --two
 echo layout_pipenv > .envrc
 direnv allow
 ```
-
-## Creating RPMs
-
-Python generated `srpm` are not as flexible as they should be. To
-generate one that is run `buildrpm` and look for the files in the
-`dist` directory.
-```bash
-$ ./buildrpm
-```
- The `rpm`s are available on
-[copr](https://copr.fedorainfracloud.org/coprs/peterfpeterson/addie/).
-
-

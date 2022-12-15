@@ -29,16 +29,11 @@ jobs:
           mamba-version: "*"
           python-version: ${{ matrix.python-version }}
           environment-file: environment.yml
-          channels: neutrons,mantid/label/nightly,conda-forge
 
       - name: Apt install deps
         run: |
           sudo apt update
           sudo apt-get install xvfb freeglut3-dev libglu1-mesa
-
-      - name: Conda install deps
-        shell: bash -l {0}
-        run: mamba install --file requirements-dev.txt
 
       - name: Mantid pre-requisites
         shell: bash -l {0}
@@ -58,7 +53,6 @@ jobs:
       - name: Test
         shell: bash -l {0}
         run: |
-          pip install py
           python -c "import mantid"
           python -c "import qtpy"
           python -c "import mantidqt"
@@ -77,11 +71,11 @@ jobs:
         shell: bash -l {0}
         run: |
           # set up environment
-          export VERSION=$(versioningit)
           conda install -y anaconda-client conda-build conda-verify boa
           cd conda.recipe
+          echo "versioningit $(versioningit ../)"
           # build the package
-          conda mambabuild --output-folder . . -c neutrons -c mantid/label/nightly
+          VERSION=$(versioningit ../) conda mambabuild --output-folder . . -c neutrons -c mantid/label/nightly
           conda verify noarch/addie*.tar.bz2
 
       - name: Deploy to Anaconda
