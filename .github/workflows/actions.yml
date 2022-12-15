@@ -76,8 +76,11 @@ jobs:
       - name: Build conda libraray
         shell: bash -l {0}
         run: |
+          # set up environment
+          export VERSION=$(versioningit)
           conda install -y anaconda-client conda-build conda-verify boa
           cd conda.recipe
+          # build the package
           conda mambabuild --output-folder . . -c neutrons -c mantid/label/nightly
           conda verify noarch/addie*.tar.bz2
 
