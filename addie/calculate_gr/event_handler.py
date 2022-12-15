@@ -150,20 +150,26 @@ def generate_gr_step1(main_window):
     :return:
     """
     # get S(Q) workspace
-    comboBox_SofQ = main_window.calculategr_ui.comboBox_SofQ
-    selected_sq = str(comboBox_SofQ.currentText())
-    if selected_sq == 'All':
-        sq_ws_name_list = list()
-        for index in range(comboBox_SofQ.count()):
-            item = str(comboBox_SofQ.itemText(index))
-            if item != 'All':
-                # add S(Q) name unless it is 'All'
-                sq_ws_name_list.append(item)
-            # END-IF
-        # END-FOR
+    gr_list = main_window.calculategr_ui.treeWidget_grWsList
+    sq_name_list = gr_list.get_selected_items_of_level(
+        2, excluded_parent='GofR', return_item_text=True)
+    if len(sq_name_list) == 0:
+        comboBox_SofQ = main_window.calculategr_ui.comboBox_SofQ
+        selected_sq = str(comboBox_SofQ.currentText())
+        if selected_sq == 'All':
+            sq_ws_name_list = list()
+            for index in range(comboBox_SofQ.count()):
+                item = str(comboBox_SofQ.itemText(index))
+                if item != 'All':
+                    # add S(Q) name unless it is 'All'
+                    sq_ws_name_list.append(item)
+                # END-IF
+            # END-FOR
+        else:
+            # selected S(Q) is a single S(Q) name
+            sq_ws_name_list = [selected_sq]
     else:
-        # selected S(Q) is a single S(Q) name
-        sq_ws_name_list = [selected_sq]
+        sq_ws_name_list = sq_name_list
 
     # generate G(r)
     generate_gr_step2(main_window,
