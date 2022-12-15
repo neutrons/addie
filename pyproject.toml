@@ -16,3 +16,8 @@ distance-dirty = "{next_version}.dev{distance}+d{build_date:%Y%m%d%H%M}"
 
 [tool.versioningit.write]
 file = "addie/_version.py"
+
+[tool.pytest.ini_options]
+pythonpath = [
+ '.'
+ ]
