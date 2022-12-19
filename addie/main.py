@@ -292,6 +292,8 @@ class MainWindow(QMainWindow):
 
     idl_modes = ("idl", "idl_dev")
 
+    sofq_type_in_mem = "S(Q)"
+
     def __init__(self, parent=None, processing_mode=None):
         """ Initialization
         Parameters
@@ -844,9 +846,6 @@ class MainWindow(QMainWindow):
 
     def do_edit_sq(self):
         calculategr_event_handler.do_edit_sq(self)
-
-    def do_generate_sq(self):
-        calculategr_event_handler.do_generate_sq(self)
 
     def do_set_gofr_color_marker(self):
         calculategr_event_handler.do_set_gofr_color_marker(self)

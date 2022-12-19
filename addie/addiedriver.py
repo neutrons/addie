@@ -26,23 +26,48 @@ class AddieDriver(object):
         self._grWsIndex = 0
         self._grWsNameDict = dict()
 
-    def calculate_sqAlt(self, ws_name, outputType):
+    def calculate_sqAlt(self, ws_name, initType, outputType):
+        if initType == "S(Q)":
+            pass  # don't do anything
+        elif initType == "S(Q)-1":
+            x_tmp = simpleapi.mtd[ws_name].readX(0)
+            y_tmp = simpleapi.mtd[ws_name].readY(0) + 1.0
+            simpleapi.CreateWorkspace(DataX=x_tmp,
+                                      DataY=y_tmp,
+                                      NSpec=1,
+                                      UnitX="MomentumTransfer",
+                                      OutputWorkspace=ws_name)
+        elif initType == "Q[S(Q)-1]":
+            simpleapi.PDConvertReciprocalSpace(
+                InputWorkspace=ws_name,
+                OutputWorkspace=ws_name,
+                From='F(Q)',
+                To='S(Q)')
+
         if outputType == 'S(Q)':  # don't do anything
             return ws_name
         elif outputType == 'Q[S(Q)-1]':
             outputType = 'F(Q)'
         else:
-            # PDConvertReciprocalSpace doesn't currently know how to convert to
-            # S(Q)-1
-            raise ValueError(
-                'Do not know how to convert to {}'.format(outputType))
+            outputType = 'S(Q)-1'
 
         outputName = '__{}Alt'.format(ws_name)  # should be hidden
-        simpleapi.PDConvertReciprocalSpace(
-            InputWorkspace=ws_name,
-            OutputWorkspace=outputName,
-            From='S(Q)',
-            To=outputType)
+
+        if outputType != 'S(Q)-1':
+            simpleapi.PDConvertReciprocalSpace(
+                InputWorkspace=ws_name,
+                OutputWorkspace=outputName,
+                From='S(Q)',
+                To=outputType)
+        else:
+            x_tmp = simpleapi.mtd[ws_name].readX(0)
+            y_tmp = simpleapi.mtd[ws_name].readY(0) - 1.0
+            simpleapi.CreateWorkspace(DataX=x_tmp,
+                                      DataY=y_tmp,
+                                      NSpec=1,
+                                      UnitX="MomentumTransfer",
+                                      OutputWorkspace=outputName)
+
         return outputName
 
     def calculate_gr(
@@ -464,7 +489,7 @@ class AddieDriver(object):
         Args:
             ws_name:
             file_name:
-            filetype: xye, csv, rmcprofile, dat
+            filetype: xye, csv, rmcprofile, dat, gr, gofr
             comment: user comment to the file
 
         Returns:
@@ -473,7 +498,7 @@ class AddieDriver(object):
         assert isinstance(
             filetype, str), 'GofR file type {0} must be a supported string.'.format(filetype)
 
-        if filetype == 'xye' or filetype == 'gr':
+        if filetype == 'xye' or filetype == 'gr' or filetype == 'gofr':
             x_val = simpleapi.mtd[ws_name].readX(0)[:-1]
             y_val = simpleapi.mtd[ws_name].readY(0)
             e_val = simpleapi.mtd[ws_name].readE(0)

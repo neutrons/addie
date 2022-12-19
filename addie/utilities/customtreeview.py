@@ -392,7 +392,7 @@ class CustomizedTreeView(QTreeView):
         has = False
 
         while not has and q_item is not None:
-            if q_item.text() == ancestor_name:
+            if ancestor_name.lower() == q_item.text().lower()[0:4]:
                 has = True
             else:
                 q_item = q_item.parent()

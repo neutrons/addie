@@ -46,7 +46,6 @@ def gr_widgets_status(main_window, gr_status):
     list_gr_ui = [main_window.calculategr_ui.pushButton_saveGR,
                   main_window.calculategr_ui.pushButton_rescaleGr,
                   main_window.calculategr_ui.pushButton_grColorStyle,
-                  main_window.calculategr_ui.pushButton_generateSQ,
                   main_window.calculategr_ui.pushButton_clearGrCanvas]
 
     for _ui in list_gr_ui:
@@ -135,7 +134,8 @@ def plot_sq(main_window, ws_name, color, clear_prev):
     # convert to the function to plot
     sq_type = str(main_window.calculategr_ui.comboBox_SofQType.currentText())
     plottable_name = main_window._myController.calculate_sqAlt(
-        ws_name, sq_type)
+        ws_name, main_window.sofq_type_in_mem, sq_type)
+    main_window.sofq_type_in_mem = sq_type
 
     main_window.calculategr_ui.graphicsView_sq.plot_sq(
         plottable_name,
@@ -152,7 +152,7 @@ def generate_gr_step1(main_window):
     # get S(Q) workspace
     gr_list = main_window.calculategr_ui.treeWidget_grWsList
     sq_name_list = gr_list.get_selected_items_of_level(
-        2, excluded_parent='GofR', return_item_text=True)
+        2, excluded_parent='G(R)', return_item_text=True)
     if len(sq_name_list) == 0:
         comboBox_SofQ = main_window.calculategr_ui.comboBox_SofQ
         selected_sq = str(comboBox_SofQ.currentText())
@@ -507,7 +507,8 @@ def do_save_gr(main_window):
         FILE_FILTERS = {'PDFgui (*.gr)': 'gr',
                         'XYE (*.xye)': 'xye',
                         'CSV XYE (*.csv)': 'csv',
-                        'RMCProfile (*.dat)': 'dat'}
+                        'RMCProfile (*.dat)': 'dat',
+                        'g(r) (*.gofr)': 'gofr'}
 
         filename, filetype = get_save_file(
             parent=main_window,
@@ -521,7 +522,13 @@ def do_save_gr(main_window):
             filetype = 'rmcprofile'
 
         # save!
-        main_window._myController.save_ascii(gr_ws_name, filename, filetype)
+        try:
+            main_window._myController.save_ascii(gr_ws_name, filename, filetype)
+        except RuntimeError as err:
+            main_window.ui.statusbar.setStyleSheet("color: red")
+            main_window.ui.statusbar.showMessage(err,
+                                                 main_window.statusbar_display_time)
+
         main_window.ui.statusbar.setStyleSheet("color: blue")
         main_window.ui.statusbar.showMessage("File successfully saved.",
                                              main_window.statusbar_display_time)
@@ -536,7 +543,8 @@ def do_save_gr(main_window):
             "gr": "gr",
             "csv": "csv",
             "rmcprofile": "dat",
-            "dat": "dat"
+            "dat": "dat",
+            "gofr": "gofr"
         }
         if "xye" in out_dir.lower():
             filetype = "xye"
@@ -548,6 +556,8 @@ def do_save_gr(main_window):
             filetype = "rmcprofile"
         elif "dat" in out_dir.lower():
             filetype = "dat"
+        elif "gofr" in out_dir.lower():
+            filetype = "gofr"
         else:
             filetype  = "gr"
 
@@ -621,29 +631,6 @@ def do_edit_sq(main_window):
 
     # show
     main_window._editSqDialog.show()
-
-
-def do_generate_sq(main_window):
-    """
-    generate S(Q) from G(r) by PDFFourierTransform
-    """
-    # TODO/ISSUE/NOW - Need to implement!
-    raise NotImplementedError(
-        'Dialog box for generating S(Q) has not been implemented yet.')
-    # get setup
-    min_r = float(main_window.calculategr_ui.doubleSpinBoxRmin.value())
-    max_r = float(main_window.calculategr_ui.doubleSpinBoxRmax.value())
-    min_q = main_window.calculategr_ui.doubleSpinBoxQmin.value()
-    max_q = main_window.calculategr_ui.doubleSpinBoxQmax.value()
-
-    # launch the dialog bo
-    if main_window._generateSofQDialog is None:
-        main_window._generateSofQDialog = None
-
-    main_window._generateSofQDialog.set_r_range(min_r, max_r)
-    main_window._generateSofQDialog.set_q_range(min_q, max_q)
-
-    main_window._generateSofQDialog.show()
 
 
 def _set_color_marker(main_window, graphicsView):
