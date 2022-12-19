@@ -11,7 +11,6 @@ def run(main_window=None):
     main_window.calculategr_ui.pushButton_clearGrCanvas.clicked.connect(main_window.do_clear_gr)
     main_window.calculategr_ui.pushButton_saveSQ.clicked.connect(main_window.do_save_sq)
     main_window.calculategr_ui.pushButton_editSofQ.clicked.connect(main_window.do_edit_sq)
-    main_window.calculategr_ui.pushButton_generateSQ.clicked.connect(main_window.do_generate_sq)
 
     main_window.calculategr_ui.doubleSpinBoxQmin.valueChanged.connect(main_window.evt_qmin_changed)
     main_window.calculategr_ui.doubleSpinBoxQmax.valueChanged.connect(main_window.evt_qmax_changed)
