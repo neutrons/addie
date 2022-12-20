@@ -118,6 +118,9 @@ with the [pytest-qt](https://pytest-qt.readthedocs.io/en/latest/) plugin.
 ```bash
 $ python -m pytest
 ```
+If it is complaining about not being able to find the `pytest` module, first we
+need to make sure we are in the activated conda environment created above. Then
+if the issue persists, we can run `pip install pytest` to install the module.
 
 ### Developing using a local Mantid install
 
