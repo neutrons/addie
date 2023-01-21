@@ -89,6 +89,9 @@ class FileListTree(base.CustomizedTreeView):
 
             if leaf_level == 1:
                 self.removeAction(self._action_plot)
+                self.removeAction(self._action_save_raw)
+                self.removeAction(self._action_save_merge)
+                self.removeAction(self._action_save_stog)
             if leaf_level == 2:
                 self.addAction(self._action_plot)
                 if item.parent().text() == 'Merged Data':
@@ -114,6 +117,8 @@ class FileListTree(base.CustomizedTreeView):
         event_handler.save_file_merged(self._main_window,
                                        merged_banks_ref,
                                        auto=True)
+    def clear_merged_tree(self):
+        self.delete_node_children('Merged Data')
 
     def save_merge(self):
         # save the merged data file with the automated mode set false
@@ -124,13 +129,21 @@ class FileListTree(base.CustomizedTreeView):
 
     def save_raw(self):
         if len(self._selected_items) > 1:
-            return
-        event_handler.save_file_raw(self._main_window, self._selected_items[0].text())
+            selected_files = list()
+            for item in self._selected_items:
+                selected_files.append(item.text())
+            event_handler.save_file_raw(self._main_window, selected_files)
+        else:
+            event_handler.save_file_raw(self._main_window, self._selected_items[0].text())
 
     def save_stog(self):
         if len(self._selected_items) > 1:
-            return
-        event_handler.save_file_stog(self._main_window, self._selected_items[0].text())
+            selected_files = list()
+            for item in self._selected_items:
+                selected_files.append(item.text())
+            event_handler.save_file_stog(self._main_window, selected_files)
+        else:
+            event_handler.save_file_stog(self._main_window, self._selected_items[0].text())
 
     def add_stog_data(self, file_name):
         # output = self._main_window.output_folder

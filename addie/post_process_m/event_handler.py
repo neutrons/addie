@@ -167,6 +167,10 @@ def save_mconfig(main_window):
     json.dump(dict_tmp, file_out, indent=2)
     file_out.close()
 
+    main_window.ui.statusbar.setStyleSheet("color: blue")
+    main_window.ui.statusbar.showMessage("Config file successfully saved!",
+                                         main_window.statusbar_display_time)
+
 
 def load_mconfig(main_window):
     mcofnig_file_name = open_config_file_r(main_window)
@@ -210,6 +214,10 @@ def load_mconfig(main_window):
     if 'RemoveBkg' in mconfig_in.keys():
         main_window.postprocessing_ui_m.checkBox_bkg_removal.setChecked(mconfig_in["RemoveBkg"])
 
+    main_window.ui.statusbar.setStyleSheet("color: blue")
+    main_window.ui.statusbar.showMessage("Config file successfully loaded!",
+                                         main_window.statusbar_display_time)
+
 
 def open_and_load_workspaces(main_window):
     workspace_files = open_workspaces(main_window)
@@ -227,6 +235,10 @@ def open_and_load_workspaces(main_window):
         if main_window.postprocessing_ui_m.checkBox_defaultWorkspace.isChecked():
             main_window.postprocessing_ui_m.pushButton_extract.setEnabled(True)
             main_window.postprocessing_ui_m.frame_workspaces_table.cur_wks = 'SQ_banks_normalized'
+
+        main_window.ui.statusbar.setStyleSheet("color: blue")
+        main_window.ui.statusbar.showMessage("NeXus file successfully loaded!",
+                                             main_window.statusbar_display_time)
 
 
 def extract_button(main_window):
@@ -253,6 +265,10 @@ def extract_button(main_window):
 
     main_window.postprocessing_ui_m.pushButton_loadmc.setEnabled(True)
     main_window.postprocessing_ui_m.pushButton_savemc.setEnabled(True)
+
+    main_window.ui.statusbar.setStyleSheet("color: blue")
+    main_window.ui.statusbar.showMessage("Workspace successfully extracted!",
+                                         main_window.statusbar_display_time)
 
 
 def extractor(main_window, nexus_file: str, num_banks: int, wks_name: str, out_dir: str):
@@ -381,102 +397,54 @@ def bkg_finder(all_data: list,
             y_bank = bank_data[1]
 
             y_bank = np.asarray(y_bank)
-            if bank == 4:
-                x_left = []
-                x_max_init = np.arange(x_bank[0], x_bank[-1], 0.1)
-                for item in x_max_init:
-                    x_left.append(str(item - 0.1))
-                    x_left.append(str(item + 0.1))
-                x_max = [str(item) for item in x_max_init]
+
+            x_min = argrelextrema(np.asarray(y_bank), np.less, order=5)
+            y_min = [y_bank[item] for item in x_min[0]]
+            x_min = [x_bank[item] for item in x_min[0]]
+
+            if len(x_min) > 3:
+                ws_real_bkg = CreateWorkspace(x_min, y_min)
+
+                c_factor = [1., 10., 0.1, 0.05, 0.01, 0.001]
+                for c_factor_try in c_factor:
+                    c_init = c_factor_try * 0.1
+                    Fit(f"name=UserFunction, Formula=a-b*exp(-c*x*x), a=1, b=0.1, c={c_init}",
+                        ws_real_bkg,
+                        Output='ws_real_bkg_fitted')
+                    c_err = mtd['ws_real_bkg_fitted_Parameters'].row(2)["Error"]
+                    if c_err != 0. and c_err != float("inf") and c_err != float("-inf"):
+                        break
+
+                a_init = mtd['ws_real_bkg_fitted_Parameters'].row(0)["Value"]
+                b_init = mtd['ws_real_bkg_fitted_Parameters'].row(1)["Value"]
+                c_init = mtd['ws_real_bkg_fitted_Parameters'].row(2)["Value"]
+                c_used = fudge_factor[bank] * c_init
+
+                cond_1 = abs(a_init) > 100. or abs(a_init) < 1.E-5
+                cond_2 = abs(b_init) > 100. or abs(b_init) < 1.E-5
+                cond_3 = abs(c_init) > 100. or abs(c_init) < 1.E-5
+
+                if not (cond_1 or cond_2 or cond_3):
+                    y_bkg = [a_init - b_init * np.exp(-c_used * item**2.) for item in x_bank]
+                else:
+                    y_bkg = [0 for _ in x_bank]
             else:
-                x_max = argrelextrema(y_bank, np.greater, order=1)
-                x_left = []
-                for item in x_max[0]:
-                    x_left.append(str(x_bank[item] - 0.1))
-                    x_left.append(str(x_bank[item] + 0.1))
-                x_max = [str(x_bank[item]) for item in x_max[0]]
+                y_bkg = [0 for _ in x_bank]
 
-            centers = ','.join(x_max)
-            boundary = ','.join(x_left)
-
-            ws_tmp = CreateWorkspace(x_bank, y_bank)
-
-            FitPeaks(InputWorkspace=ws_tmp,
-                     StartWorkspaceIndex=0,
-                     StopWorkspaceIndex=0,
-                     PeakCenters=centers,
-                     FitWindowBoundaryList=boundary,
-                     PeakFunction="Gaussian",
-                     BackgroundType="Quadratic",
-                     FitFromRight=True,
-                     HighBackground=False,
-                     OutputWorkspace="ws_tmp_out",
-                     OutputPeakParametersWorkspace="ws_tmp_param_out",
-                     FittedPeaksWorkspace="ws_tmp_fit")
-
-            x_bkg_pt = []
-            y_bkg_pt = []
-            for i in range(mtd['ws_tmp_param_out'].rowCount()):
-                a0_tmp = mtd['ws_tmp_param_out'].row(i)["A0"]
-                a1_tmp = mtd['ws_tmp_param_out'].row(i)["A1"]
-                a2_tmp = mtd['ws_tmp_param_out'].row(i)["A2"]
-
-                x_tmp = mtd['ws_tmp_param_out'].row(i)["PeakCentre"]
-                y_tmp = a0_tmp + a1_tmp * x_tmp + a2_tmp * x_tmp**2.
-
-                x_bkg_pt.append(x_tmp)
-                y_bkg_pt.append(y_tmp)
-
-            naughty_region_x = []
-            naughty_region_y = []
-            for count, x_e_tmp in enumerate(x_bank):
-                if x_e_tmp > float(x_max[-1]):
-                    naughty_region_x.append(x_e_tmp)
-                    naughty_region_y.append(y_bank[count])
-            bottom_tmp = argrelextrema(np.asarray(naughty_region_y), np.less, order=1)
-            for item in bottom_tmp[0]:
-                x_bkg_pt.append(naughty_region_x[item])
-                y_bkg_pt.append(naughty_region_y[item])
-
-            x_min = argrelextrema(np.asarray(y_bkg_pt), np.less, order=1)
-            y_min = [y_bkg_pt[item] for item in x_min[0]]
-            x_min = [x_bkg_pt[item] for item in x_min[0]]
-
-            min_min = argrelextrema(np.asarray(y_min), np.less, order=1)
-            y_min_min = [y_min[item] for item in min_min[0]]
-            x_min_min = [x_min[item] for item in min_min[0]]
-
-            ws_real_bkg = CreateWorkspace(x_min_min, y_min_min)
-
-            c_factor = [1., 10., 0.1, 0.05, 0.01, 0.001]
-            for c_factor_try in c_factor:
-                c_init = c_factor_try * 0.1
-                Fit(f"name=UserFunction, Formula=a-b*exp(-c*x*x), a=1, b=0.1, c={c_init}",
-                    ws_real_bkg,
-                    Output='ws_real_bkg_fitted')
-                c_err = mtd['ws_real_bkg_fitted_Parameters'].row(2)["Error"]
-                if c_err != 0. and c_err != float("inf") and c_err != float("-inf"):
-                    break
-
-            a_init = mtd['ws_real_bkg_fitted_Parameters'].row(0)["Value"]
-            b_init = mtd['ws_real_bkg_fitted_Parameters'].row(1)["Value"]
-            c_init = mtd['ws_real_bkg_fitted_Parameters'].row(2)["Value"]
-
-            c_used = fudge_factor[bank] * c_init
-
-            y_bkg = [a_init - b_init * np.exp(-c_used * item**2.) for item in x_bank]
             for i in range(len(x_bank)):
-                if all_range[bank][0] <= x_bank[i] < all_range[bank][1]:
-                    x_out.append(x_bank[i])
-                    y_out.append(y_bank[i] - y_bkg[i])
-                    y_bkg_out.append(y_bkg[i])
+                if bank == len(all_data) - 1:
+                    if all_range[bank][0] <= x_bank[i] <= all_range[bank][1]:
+                        x_out.append(x_bank[i])
+                        y_out.append(y_bank[i] - y_bkg[i])
+                        y_bkg_out.append(y_bkg[i])
+                else:
+                    if all_range[bank][0] <= x_bank[i] < all_range[bank][1]:
+                        x_out.append(x_bank[i])
+                        y_out.append(y_bank[i] - y_bkg[i])
+                        y_bkg_out.append(y_bkg[i])
 
     # Remove all workspaces
-    DeleteWorkspace(ws_tmp)
-    DeleteWorkspace("ws_tmp_param_out")
-    DeleteWorkspace("ws_tmp_fit")
     DeleteWorkspace("ws_real_bkg")
-    DeleteWorkspace("ws_tmp_out")
     DeleteWorkspace("ws_real_bkg_fitted_Workspace")
     DeleteWorkspace("ws_real_bkg_fitted_Parameters")
     DeleteWorkspace("ws_real_bkg_fitted_NormalisedCovarianceMatrix")
@@ -533,7 +501,12 @@ def merge_banks(main_window):
         x_merged = list()
         y_merged = list()
 
-        for bank in range(len(main_window._bankDict)):
+        range_tmp = list(range(len(main_window._bankDict)))
+        if len(main_window._bankDict) == 6:
+            range_tmp_last = range_tmp.pop(-1)
+            range_tmp.insert(0, range_tmp_last)
+
+        for bank in range_tmp:
             yoffset_tmp = main_window._bankDict[bank + 1]['Yoffset']
             yscale_tmp = main_window._bankDict[bank + 1]['Yscale']
             if yoffset_tmp.strip() == "":
@@ -562,17 +535,23 @@ def merge_banks(main_window):
         # TODO: The hard coded `qmax_bkg_est` and `fudge_factor` needs to be
         # updated to adapt to general way of grouping detectors into banks.
         if len(main_window._bankDict) == 6:
-            qmax_bkg_est = [25., 25., 25., 25., 40., 0.]
-            fudge_factor = [1., 1., 1., 0.7, 0.7, 1.]
+            qmax_bkg_est = [14., 25., 25., 25., 40., 6.]
+            fudge_factor = [1., 1., 1., 1., 1., 1.]
         elif len(main_window._bankDict) == 1:
             qmax_bkg_est = [40.]
-            fudge_factor = [0.7]
+            fudge_factor = [1.]
         else:
             qmax_bkg_est = [25. for _ in range(len(main_window._bankDict))]
             qmax_bkg_est[-1] = 0.
             qmax_bkg_est[-2] = 40.
             fudge_factor = [1. for _ in range(len(main_window._bankDict))]
-        for bank in range(len(main_window._bankDict)):
+
+        range_tmp = list(range(len(main_window._bankDict)))
+        if len(main_window._bankDict) == 6:
+            range_tmp_last = range_tmp.pop(-1)
+            range_tmp.insert(0, range_tmp_last)
+
+        for bank in range_tmp:
             bank_range.append([qmin_list[bank], qmax_list[bank]])
             yoffset_tmp = main_window._bankDict[bank + 1]['Yoffset']
             yscale_tmp = main_window._bankDict[bank + 1]['Yscale']
@@ -634,14 +613,16 @@ def merge_banks(main_window):
                                                        'YListRaw': y_merged_raw,
                                                        'Bkg': y_bkg_out
                                                        }
+        file_list.add_merged_data(main_window._stem + '_merged_raw.sq')
+        file_list.add_merged_data(main_window._stem + '_bkg.sq')
+        file_list.add_merged_data(merged_data_ref)
     else:
+        file_list.clear_merged_tree()
         main_window._merged_data[main_window._stem] = {'Name': merged_data_ref,
                                                        'XList': x_merged,
                                                        'YList': y_merged}
+        file_list.add_merged_data(merged_data_ref)
 
-    file_list.add_merged_data(main_window._stem + '_merged_raw.sq')
-    file_list.add_merged_data(main_window._stem + '_bkg.sq')
-    file_list.add_merged_data(merged_data_ref)
     initiate_stog_data(main_window)
 
     main_window.postprocessing_ui_m.pushButton_savesc.setEnabled(True)
@@ -649,19 +630,32 @@ def merge_banks(main_window):
 
 
 def save_file_raw(main_window, file_name):
-    x_bank = main_window._bankDict[int(file_name[-1])]['xList']
-    y_bank = main_window._bankDict[int(file_name[-1])]['yList']
-    save_directory = QFileDialog.getSaveFileName(main_window, 'Save Bank',
-                                                 main_window.output_folder + '/' + file_name + '.dat')
-    if isinstance(save_directory, tuple):
-        save_directory = save_directory[0]
-    if save_directory is None or save_directory == '' or len(save_directory) == 0:
-        return
-    with open(save_directory[0], 'w') as new_file:
-        new_file.write(str(len(x_bank)) + '\n')
-        new_file.write('#\n')
-        for i in range(len(x_bank)):
-            new_file.write(str(x_bank[i]) + ' ' + str(y_bank[i]) + '\n')
+    if type(file_name) == list:
+        save_directory = QFileDialog.getExistingDirectory(main_window, 'Save Banks')
+        for item in file_name:
+            x_bank = main_window._bankDict[int(item[-1])]['xList']
+            y_bank = main_window._bankDict[int(item[-1])]['yList']
+            if save_directory is None or save_directory == '' or len(save_directory) == 0:
+                return
+            with open(os.path.join(save_directory, item + ".dat"), 'w') as new_file:
+                new_file.write(str(len(x_bank)) + '\n')
+                new_file.write('#\n')
+                for i in range(len(x_bank)):
+                    new_file.write(str(x_bank[i]) + ' ' + str(y_bank[i]) + '\n')
+    else:
+        x_bank = main_window._bankDict[int(file_name[-1])]['xList']
+        y_bank = main_window._bankDict[int(file_name[-1])]['yList']
+        save_directory = QFileDialog.getSaveFileName(main_window, 'Save Bank',
+                                                     main_window.output_folder + '/' + file_name + '.dat')
+        if isinstance(save_directory, tuple):
+            save_directory = save_directory[0]
+        if save_directory is None or save_directory == '' or len(save_directory) == 0:
+            return
+        with open(save_directory, 'w') as new_file:
+            new_file.write(str(len(x_bank)) + '\n')
+            new_file.write('#\n')
+            for i in range(len(x_bank)):
+                new_file.write(str(x_bank[i]) + ' ' + str(y_bank[i]) + '\n')
 
 
 def save_file_merged(main_window, file_name, auto=False):
@@ -705,28 +699,50 @@ def save_file_merged(main_window, file_name, auto=False):
 
 
 def save_file_stog(main_window, file_name):
-    last_char = file_name[-2:]
-    if last_char == 'sq':
-        default = '*.sq;;*.fq;;*.gr;;All (*.*)'
-    elif last_char == 'fq':
-        default = '*.fq;;*.sq;;*.gr;;All (*.*)'
-    elif last_char == 'gr':
-        default = '*.gr;;*.fq;;*.sq;;All (*.*)'
-    save_file = QFileDialog.getSaveFileName(main_window, 'Save StoG File',
-                                            main_window.output_folder + '/' + file_name, default)
-    if isinstance(save_file, tuple):
-        save_file = save_file[0]
-    if save_file is None or save_file == '' or len(save_file) == 0:
-        return
+    if type(file_name) == list:
+        save_directory = QFileDialog.getExistingDirectory(main_window, 'Save StoG Files')
+        for item in file_name:
+            last_char = item[-2:]
+            if last_char == 'sq':
+                default = '*.sq;;*.fq;;*.gr;;All (*.*)'
+            elif last_char == 'fq':
+                default = '*.fq;;*.sq;;*.gr;;All (*.*)'
+            elif last_char == 'gr':
+                default = '*.gr;;*.fq;;*.sq;;All (*.*)'
+            if save_directory is None or save_directory == '' or len(save_directory) == 0:
+                return
 
-    x_stog = main_window._pystog_output_files[file_name]["xlist"]
-    y_stog = main_window._pystog_output_files[file_name]["ylist"]
+            x_stog = main_window._pystog_output_files[file_name]["xlist"]
+            y_stog = main_window._pystog_output_files[file_name]["ylist"]
 
-    with open(save_file, 'w') as new_file:
-        new_file.write(str(len(x_stog)) + '\n')
-        new_file.write('#\n')
-        for i in range(len(x_stog)):
-            new_file.write(str(x_stog[i]) + ' ' + str(y_stog[i]) + '\n')
+            with open(os.path.join(save_directory, item), 'w') as new_file:
+                new_file.write(str(len(x_stog)) + '\n')
+                new_file.write('#\n')
+                for i in range(len(x_stog)):
+                    new_file.write(str(x_stog[i]) + ' ' + str(y_stog[i]) + '\n')
+    else:
+        last_char = file_name[-2:]
+        if last_char == 'sq':
+            default = '*.sq;;*.fq;;*.gr;;All (*.*)'
+        elif last_char == 'fq':
+            default = '*.fq;;*.sq;;*.gr;;All (*.*)'
+        elif last_char == 'gr':
+            default = '*.gr;;*.fq;;*.sq;;All (*.*)'
+        save_file = QFileDialog.getSaveFileName(main_window, 'Save StoG File',
+                                                main_window.output_folder + '/' + file_name, default)
+        if isinstance(save_file, tuple):
+            save_file = save_file[0]
+        if save_file is None or save_file == '' or len(save_file) == 0:
+            return
+
+        x_stog = main_window._pystog_output_files[file_name]["xlist"]
+        y_stog = main_window._pystog_output_files[file_name]["ylist"]
+
+        with open(save_file, 'w') as new_file:
+            new_file.write(str(len(x_stog)) + '\n')
+            new_file.write('#\n')
+            for i in range(len(x_stog)):
+                new_file.write(str(x_stog[i]) + ' ' + str(y_stog[i]) + '\n')
 
 
 # TODO: Add checking of inputs
@@ -851,6 +867,10 @@ def execute_stog(main_window):
     add_stog_data(main_window)
     generate_final(main_window)
 
+    main_window.ui.statusbar.setStyleSheet("color: blue")
+    main_window.ui.statusbar.showMessage("pystog successfully executed!",
+                                         main_window.statusbar_display_time)
+
 
 def save_sconfig(main_window):
     pystog_inputs = main_window._pystog_inputs_collect
@@ -876,6 +896,10 @@ def save_sconfig(main_window):
     file_out.close()
     print("[Info] The json file is saved to ", scofnig_file_name)
 
+    main_window.ui.statusbar.setStyleSheet("color: blue")
+    main_window.ui.statusbar.showMessage("Config file successfully saved!",
+                                         main_window.statusbar_display_time)
+
 
 def load_sconfig(main_window):
     scofnig_file_name = open_config_file_r(main_window)
@@ -896,6 +920,10 @@ def load_sconfig(main_window):
 
     stog_format = convert_json_inverse(main_window, sconfig_in)
     set_stog_values_load(main_window, stog_format)
+
+    main_window.ui.statusbar.setStyleSheet("color: blue")
+    main_window.ui.statusbar.showMessage("Config file successfully loaded!",
+                                         main_window.statusbar_display_time)
 
 
 def convert_json(main_window, stog_dict):
