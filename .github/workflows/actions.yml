@@ -27,7 +27,7 @@ jobs:
         with:
           auto-update-conda: true
           mamba-version: "0.15.3"
-          miniconda-version: "22.11.1-1"
+          miniconda-version: "4.7.12"
           python-version: ${{ matrix.python-version }}
           environment-file: environment.yml
 
