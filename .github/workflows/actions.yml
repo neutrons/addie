@@ -26,8 +26,9 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v2
         with:
           auto-update-conda: true
-          mamba-version: "1.0.0"
+          mamba-version: "0.15.3"
           python-version: ${{ matrix.python-version }}
+          default_python: ${{ matrix.python-version }}
           environment-file: environment.yml
 
       - name: Apt install deps
