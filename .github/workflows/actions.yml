@@ -27,8 +27,8 @@ jobs:
         with:
           auto-update-conda: true
           mamba-version: "0.15.3"
+          miniconda-version: "4.12.0"
           python-version: ${{ matrix.python-version }}
-          default_python: ${{ matrix.python-version }}
           environment-file: environment.yml
 
       - name: Apt install deps
