@@ -117,6 +117,7 @@ class FileListTree(base.CustomizedTreeView):
         event_handler.save_file_merged(self._main_window,
                                        merged_banks_ref,
                                        auto=True)
+
     def clear_merged_tree(self):
         self.delete_node_children('Merged Data')
 

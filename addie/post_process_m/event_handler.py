@@ -7,7 +7,6 @@ import addie.utilities.workspaces
 from pystog.stog import StoG
 from mantid.simpleapi import \
     CreateWorkspace, \
-    FitPeaks, \
     Fit, \
     mtd, \
     DeleteWorkspace
