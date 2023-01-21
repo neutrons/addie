@@ -26,7 +26,7 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v2
         with:
           auto-update-conda: true
-          mamba-version: "*"
+          mamba-version: "0.15.3"
           python-version: ${{ matrix.python-version }}
           environment-file: environment.yml
 
