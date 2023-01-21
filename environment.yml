@@ -17,7 +17,7 @@ dependencies:
 - pytest-mpl
 - pytest-qt
 - qtpy
-- setuptools>=48
+- setuptools=47.0.0
 - simplejson
 - typing
 - versioningit
