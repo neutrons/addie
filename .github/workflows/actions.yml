@@ -77,7 +77,7 @@ jobs:
           cd conda.recipe
           echo "versioningit $(versioningit ../)"
           # build the package
-          VERSION=$(versioningit ../) conda mambabuild --output-folder . . -c neutrons -c mantid/label/nightly
+          VERSION=$(versioningit ../) conda mambabuild --output-folder . . -c neutrons -c mantid
           conda verify noarch/addie*.tar.bz2
 
       - name: Deploy to Anaconda
