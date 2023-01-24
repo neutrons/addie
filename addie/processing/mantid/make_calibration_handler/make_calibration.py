@@ -11,6 +11,7 @@ import numpy as np
 import os
 import simplejson
 import re
+import subprocess
 
 from addie.utilities.gui_handler import TableHandler
 
@@ -152,6 +153,24 @@ class MakeCalibrationWindow(QMainWindow):
             return [None, None]
 
     def run_entered(self, entry=""):
+        sample_type = "Calibration"
+        _file = self.master_list_ui[entry].calibration_value.text()
+
+        if _file and os.path.isfile(_file):
+            pass
+        elif _file and _file.isdigit():
+            process = subprocess.Popen(['finddata', 'NOM', _file],
+                                       stdout=subprocess.PIPE,
+                                       stderr=subprocess.PIPE)
+            _file, _ = process.communicate()
+            _file = str(_file, 'UTF-8').strip()
+        else:
+            return
+
+        base_nexus = os.path.basename(_file)
+        run_number = self.get_run_number_from_nexus_file_name(base_nexus_name=base_nexus)
+        self.master_list_value[entry]["calibration_browser"] = _file
+        self.master_list_ui[entry].calibration_browser_value.setText(str(run_number))
         self.check_run_calibration_status()
 
     def get_run_number_from_nexus_file_name(self, base_nexus_name=''):
@@ -299,7 +318,7 @@ class MakeCalibrationWindow(QMainWindow):
 
     def _check_local_column(self, run_value=None):
         _runs = str(run_value.text())
-        if _runs.strip() == "":
+        if _runs.strip() == "" or _runs.strip() == "N/A":
             return False
         else:
             return True
@@ -309,7 +328,7 @@ class MakeCalibrationWindow(QMainWindow):
         local_list_ui = self.master_list_ui[_entry]
 
         # Calibration column
-        if not self._check_local_column(run_value = local_list_ui.calibration_value):
+        if not self._check_local_column(run_value = local_list_ui.calibration_browser_value):
             return False
 
         # output dir
@@ -358,7 +377,7 @@ class MakeCalibrationWindow(QMainWindow):
             else:
                 instrument_name = calib_file.split("_")[0]
             calib_control_file = os.path.join('/SNS/', instrument_name,
-                                              'shared/CALIBRATION/Group_calib_scripts',
+                                              'shared/CALIBRATION/Group_calib_scripts/addie_cache',
                                               'control_' + calibrant + ".dat")
             with open(calib_control_file, "w") as calib_f:
                 calib_f.write("{0:<25s}:: {1:s}\n".format("diamond file", calib_file))
@@ -367,13 +386,16 @@ class MakeCalibrationWindow(QMainWindow):
                 calib_f.write("{0:<25s}:: {1:s}\n".format("date", calib_date))
                 calib_f.write("{0:<25s}:: {1:s}\n".format("sample environment",
                                                           calib_senv))
+                sdmsk = "shadow_mask_" + calib_senv + "_" + str(calibrant) + ".in"
+                calib_f.write("{0:<25s}:: {1:s}\n".format("generate mask",
+                                                          sdmsk))
                 calib_f.write("{0:<25s}:: {1:s}\n".format("output directory",
                                                           calib_outd))
             running_script = os.path.join('/SNS/', instrument_name,
                                           'shared/CALIBRATION/Group_calib_scripts',
-                                          'running')
+                                          'run_me')
             running_script += (" " + calib_control_file)
-            self.parent.launch_job_manager(job_name='MakeCalibration',
+            self.parent.launch_job_manager(job_name='MakeCalibration-' + str(calibrant),
                                            script_to_run=running_script)
 
     def closeEvent(self, c):
@@ -415,7 +437,8 @@ class MakeCalibrationDictionary:
             local_list_value = self.parent.master_list_value[_key]
 
             # calibration run number
-            cali_run_number = str(local_list_ui.calibration_value.text())
+            # cali_run_number = str(local_list_ui.calibration_value.text())
+            cali_run_number = str(local_list_ui.calibration_browser_value.text())
 
             # calibration full file name (if any)
             if str(local_list_ui.calibration_browser_value.text()) != "N/A":

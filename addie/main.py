@@ -530,7 +530,10 @@ class MainWindow(QMainWindow):
                                           thread_index=thread_index)
         job_handler.start()
 
-    def kill_job(self, row=-1):
+    def kill_job(self):
+        button = self.sender()
+        index_tmp = self.job_monitor_interface.ui.tableWidget.indexAt(button.pos())
+        row = index_tmp.row()
         job_row = self.job_list[row]
         parent = psutil.Process(job_row['pid'])
         for child in parent.children(recursive=True):
