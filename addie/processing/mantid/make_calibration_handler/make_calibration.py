@@ -153,7 +153,6 @@ class MakeCalibrationWindow(QMainWindow):
             return [None, None]
 
     def run_entered(self, entry=""):
-        sample_type = "Calibration"
         _file = self.master_list_ui[entry].calibration_value.text()
 
         if _file and os.path.isfile(_file):
