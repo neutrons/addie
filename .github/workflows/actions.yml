@@ -72,6 +72,7 @@ jobs:
         shell: bash -l {0}
         run: |
           # set up environment
+          python3 -m pip install setuptools==47.0.0
           conda install -y anaconda-client conda-build conda-verify boa
           cd conda.recipe
           echo "versioningit $(versioningit ../)"
