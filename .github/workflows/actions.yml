@@ -63,6 +63,7 @@ jobs:
       - name: Build python wheel # cannot be used without mantid
         shell: bash -l {0}
         run: |
+          python3 -m pip install setuptools==48.0.0
           pip install check-wheel-contents
           python -m build --wheel --no-isolation
           check-wheel-contents dist/addie-*.whl # currently bad package
