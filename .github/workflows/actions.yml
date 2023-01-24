@@ -26,8 +26,7 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v2
         with:
           auto-update-conda: true
-          mamba-version: "0.15.3"
-          miniconda-version: "4.7.12"
+          miniforge-version: latest
           python-version: ${{ matrix.python-version }}
           environment-file: environment.yml
 
@@ -64,7 +63,6 @@ jobs:
       - name: Build python wheel # cannot be used without mantid
         shell: bash -l {0}
         run: |
-          python3 -m pip install setuptools==48.0.0
           pip install check-wheel-contents
           python -m build --wheel --no-isolation
           check-wheel-contents dist/addie-*.whl # currently bad package
