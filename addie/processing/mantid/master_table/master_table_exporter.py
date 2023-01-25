@@ -68,7 +68,6 @@ _data = {"Facility": "SNS",
                                   "Output": "",
                                   },
                      },
-         "CacheDir": "./tmp",
          "OutputDir": "./output",
          "AlignAndFocusArgs": {},
          }
@@ -502,7 +501,6 @@ class TableFileExporter:
             'Normalization': _export_dictionary_normalization,
             'Calibration': {
                 "Filename": self.calibration},
-            'CacheDir': self.cachedir,
             'OutputDir': self.outputdir,
             "Merging": {
                 "QBinning": [self.QBin_min, self.QBin_del, self.QBin_max],

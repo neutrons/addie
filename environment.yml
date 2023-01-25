@@ -2,7 +2,7 @@ name: addie
 channels:
 - conda-forge
 - neutrons
-- mantid/label/nightly
+- mantid
 dependencies:
 - build
 - configparser

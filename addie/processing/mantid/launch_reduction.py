@@ -121,6 +121,8 @@ def run_mantid(parent):
                                                "Container": container_type}
 
             if final_validator(dict_out_tmp):
+                if "CacheDir" in dict_out_tmp:
+                    del dict_out_tmp["CacheDir"]
                 filename_to_run = os.path.join(os.path.expanduser('~'),
                                                '.mantid',
                                                'JSON_output',
@@ -179,7 +181,7 @@ def check_all_number(input_list):
 
 def final_validator(final_dict):
     must_keys = ["Facility", "Instrument", "Title", "Sample", "Normalization",
-                 "Calibration", "Merging", "CacheDir", "OutputDir"]
+                 "Calibration", "Merging", "OutputDir"]
 
     # Check all necessary keys and their non-empty entry.
     for key in must_keys:

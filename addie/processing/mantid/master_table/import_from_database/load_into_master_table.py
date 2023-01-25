@@ -16,7 +16,8 @@ class LoadIntoMasterTable:
         self.table_ui = parent.processing_ui.h3_table
 
         if ignore_conflicts:
-            self.load()
+            pass
+            # self.load()
         else:
             if with_conflict:
                 ConflictsSolverHandler(parent=self.parent,

@@ -206,6 +206,16 @@ class CustomizedTreeView(QTreeView):
             if parent_value in self._leafDict:
                 self._leafDict[parent_value].remove(node_value)
 
+    def delete_node_children(self, node_item):
+        """ Delete all children under a node in the tree
+        """
+        # check input
+        for i in range(self._mainNodeDict[node_item].rowCount()):
+            self._mainNodeDict[node_item].removeRow(i)
+
+        for item in self._leafDict[node_item]:
+            self._leafDict[node_item].remove(item)
+
     def init_setup(self, header_list):
         """
         To set up customized header

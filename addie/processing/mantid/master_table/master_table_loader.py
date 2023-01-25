@@ -329,7 +329,8 @@ class JsonLoader:
                 self.parent.facility = facility
 
                 # cache and output dir
-                cache_folder = str(_source_row_entry["CacheDir"])
+                # cache_folder = str(_source_row_entry["CacheDir"])
+                cache_folder = "./tmp"
                 self.parent.cache_folder = cache_folder
 
                 output_dir = str(_source_row_entry["OutputDir"])

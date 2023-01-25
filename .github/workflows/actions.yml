@@ -26,7 +26,7 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v2
         with:
           auto-update-conda: true
-          mamba-version: "*"
+          miniforge-version: latest
           python-version: ${{ matrix.python-version }}
           environment-file: environment.yml
 
@@ -63,6 +63,7 @@ jobs:
       - name: Build python wheel # cannot be used without mantid
         shell: bash -l {0}
         run: |
+          python3 -m pip install setuptools==48.0.0
           pip install check-wheel-contents
           python -m build --wheel --no-isolation
           check-wheel-contents dist/addie-*.whl # currently bad package
@@ -71,11 +72,12 @@ jobs:
         shell: bash -l {0}
         run: |
           # set up environment
+          python3 -m pip install setuptools==47.0.0
           conda install -y anaconda-client conda-build conda-verify boa
           cd conda.recipe
           echo "versioningit $(versioningit ../)"
           # build the package
-          VERSION=$(versioningit ../) conda mambabuild --output-folder . . -c neutrons -c mantid/label/nightly
+          VERSION=$(versioningit ../) conda mambabuild --output-folder . . -c neutrons -c mantid
           conda verify noarch/addie*.tar.bz2
 
       - name: Deploy to Anaconda
