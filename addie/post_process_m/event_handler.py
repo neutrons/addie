@@ -292,7 +292,7 @@ def initiate_bank_data(main_window, item_list, workspace):
         qmax_valid = [14., 25., 40., 40., 40., 6.]
     elif len(main_window._bankDict) == 1:
         qmin_valid = [0.]
-        qmax_valie = [40.]
+        qmax_valid = [40.]
     else:
         qmin_valid = [0. for _ in range(len(main_window._bankDict))]
         qmax_valid = [40. for _ in range(len(main_window._bankDict))]
@@ -486,7 +486,7 @@ def merge_banks(main_window):
         qmax_valid = [14., 25., 40., 40., 40., 6.]
     elif len(main_window._bankDict) == 1:
         qmin_valid = [0.]
-        qmax_valie = [40.]
+        qmax_valid = [40.]
     else:
         qmin_valid = [0. for _ in range(len(main_window._bankDict))]
         qmax_valid = [40. for _ in range(len(main_window._bankDict))]
@@ -506,7 +506,7 @@ def merge_banks(main_window):
                         qmax_to_compare = qmax_list[-(bank_tmp + 1)]
                         break
                 if qmin_tmp != qmax_to_compare:
-                    msg_p1 = f"[Error] Gap or overlap found in between banks. "
+                    msg_p1 = "[Error] Gap or overlap found in between banks. "
                     msg_p2 = "This is not supported."
                     print(msg_p1 + msg_p2)
                     return
