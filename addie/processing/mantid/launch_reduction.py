@@ -151,7 +151,7 @@ def run_mantid(parent):
             command_tmp = "bash /SNS/NOM/shared/scripts/mantidtotalscattering/run_mts_all.sh" + command_tmp
             all_commands.append(command_tmp.split())
 
-    parent.launch_job_manager_mts(job_name='MantidTotalScattering',
+    parent.launch_job_manager_mts(job_name='MTS',
                                   all_commands=all_commands)
 
 

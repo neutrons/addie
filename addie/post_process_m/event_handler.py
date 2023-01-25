@@ -285,6 +285,18 @@ def extractor(main_window, nexus_file: str, num_banks: int, wks_name: str, out_d
 
 
 def initiate_bank_data(main_window, item_list, workspace):
+    # TODO: The hard coded `qmin_valid` and `qmax_valid` needs to be
+    # updated to adapt to general way of grouping detectors into banks.
+    if len(main_window._bankDict) == 6:
+        qmin_valid = [0., 0., 0., 3., 4., 0.]
+        qmax_valid = [14., 25., 40., 40., 40., 6.]
+    elif len(main_window._bankDict) == 1:
+        qmin_valid = [0.]
+        qmax_valid = [40.]
+    else:
+        qmin_valid = [0. for _ in range(len(main_window._bankDict))]
+        qmax_valid = [40. for _ in range(len(main_window._bankDict))]
+
     for item in item_list:
         current_bank = int(item[-1])
         output_file = main_window.output_folder + "/" + workspace + "_bank" + str(int(item[len(item) - 1]) - 1) + ".dat"
@@ -299,8 +311,11 @@ def initiate_bank_data(main_window, item_list, workspace):
             line = file_in.readline()
             if line:
                 if line.split()[1] != "nan":
-                    x_list.append(float(line.split()[0]))
-                    y_list.append(float(line.split()[1]))
+                    x_tmp = float(line.split()[0])
+                    y_tmp = float(line.split()[1])
+                    if qmin_valid[current_bank - 1] <= x_tmp <= qmax_valid[current_bank - 1]:
+                        x_list.append(x_tmp)
+                        y_list.append(y_tmp)
         file_in.close()
         main_window._bankDict[current_bank]['xList'] = x_list
         main_window._bankDict[current_bank]['yList'] = y_list
@@ -464,6 +479,17 @@ def merge_banks(main_window):
     qmax_list = list()
     qmax_max = 0.
     qmax_max_bank = 0
+    # TODO: The hard coded `qmin_valid` and `qmax_valid` needs to be
+    # updated to adapt to general way of grouping detectors into banks.
+    if len(main_window._bankDict) == 6:
+        qmin_valid = [0., 0., 0., 3., 4., 0.]
+        qmax_valid = [14., 25., 40., 40., 40., 6.]
+    elif len(main_window._bankDict) == 1:
+        qmin_valid = [0.]
+        qmax_valid = [40.]
+    else:
+        qmin_valid = [0. for _ in range(len(main_window._bankDict))]
+        qmax_valid = [40. for _ in range(len(main_window._bankDict))]
     valid_region = False
     for bank in range(len(main_window._bankDict)):
         qmin_tmp = main_window._bankDict[bank + 1]['Qmin']
@@ -474,11 +500,26 @@ def merge_banks(main_window):
         else:
             qmin_tmp = float(qmin_tmp)
             qmax_tmp = float(qmax_tmp)
+            if bank > 0 and qmax_tmp > 0.:
+                for bank_tmp in range(bank):
+                    if qmax_list[-(bank_tmp + 1)] > 0.:
+                        qmax_to_compare = qmax_list[-(bank_tmp + 1)]
+                        break
+                if qmin_tmp != qmax_to_compare:
+                    msg_p1 = "[Error] Gap or overlap found in between banks. "
+                    msg_p2 = "This is not supported."
+                    print(msg_p1 + msg_p2)
+                    return
             if qmin_tmp == qmax_tmp:
                 qmin_list.append(0.)
                 qmax_list.append(0.)
             elif qmin_tmp > qmax_tmp:
                 msg_p1 = f"[Error] Qmax smaller than Qmin for bank-{bank+1}. "
+                msg_p2 = "Please input valid values and try again."
+                print(msg_p1 + msg_p2)
+                return
+            elif qmin_tmp < qmin_valid[bank] or qmax_tmp > qmax_valid[bank]:
+                msg_p1 = f"[Error] Qmin or Qmax out of the valid region for bank-{bank+1}. "
                 msg_p2 = "Please input valid values and try again."
                 print(msg_p1 + msg_p2)
                 return

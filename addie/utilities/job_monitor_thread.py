@@ -29,10 +29,12 @@ class JobMonitorThread(QThread):
         for _row, _job in enumerate(_job_list):
             _pid = _job['pid']
             process = psutil.Process(_pid)
-            if process is None:
+            if process is None or process.status() == "zombie":
                 self.job_monitor_interafce.ui.tableWidget.removeCellWidget(_row, 2)
                 _item = QTableWidgetItem("Done!")
                 self.job_monitor_interafce.ui.tableWidget.setItem(_row, 2, _item)
+                if process.status() == "zombie":
+                    process.kill()
             else:
                 if _job['status'] == 'killed':
                     self.job_monitor_interafce.ui.tableWidget.removeCellWidget(_row, 2)

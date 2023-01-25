@@ -3,6 +3,7 @@ from qtpy.QtWidgets import (QApplication)  # noqa
 
 import subprocess
 import time
+import os
 
 from addie.utilities.job_monitor_interface import JobMonitorInterface
 
@@ -79,7 +80,14 @@ class JobStatusHandlerMTS(object):
         for cmd in all_commands:
             p = subprocess.Popen(cmd)
 
-            new_job = {'job_name': job_name,
+            title_tmp = ""
+            if len(cmd[2:]) == 1:
+                title_tmp = "Row:" + str(int(os.path.basename(cmd[2]).split(".")[0][-1]) + 1)
+            else:
+                start_row = int(os.path.basename(cmd[2]).split(".")[0][-1]) + 1
+                stop_row = int(os.path.basename(cmd[-1]).split(".")[0][-1]) + 1
+                title_tmp = "Row:" + str(start_row) + "-" + str(stop_row)
+            new_job = {'job_name': job_name + ":" + title_tmp,
                        'time': self.get_launch_time(),
                        'status': 'processing',
                        'pid': p.pid,
