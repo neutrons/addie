@@ -246,11 +246,11 @@ def extract_button(main_window):
     wks = main_window.postprocessing_ui_m.frame_workspaces_table.get_current_workspace()
     out = main_window.output_folder
 
-    if not os.path.exists(out):
-        os.makedirs(out)
+    if not os.path.exists(os.path.join(out, "SofQ_raw")):
+        os.makedirs(os.path.join(out, "SofQ_raw"))
 
     try:
-        files = extractor(main_window, nxs, banks, wks, out)
+        files = extractor(main_window, nxs, banks, wks, os.path.join(out, "SofQ_raw"))
     except:
         return
 
@@ -279,6 +279,8 @@ def extractor(main_window, nexus_file: str, num_banks: int, wks_name: str, out_d
     for i in range(num_banks):
         stog.read_nexus_file_by_bank(nexus_file, i, wks_name)
         output_file = "{}_bank{}".format(tail.split(".")[0], i + 1)
+        os.rename(os.path.join(out_dir, f"{wks_name}_bank{i}.dat"),
+                  os.path.join(out_dir, f"{output_file}.dat"))
         all_files.append(output_file)
 
     return all_files
@@ -299,7 +301,9 @@ def initiate_bank_data(main_window, item_list, workspace):
 
     for item in item_list:
         current_bank = int(item[-1])
-        output_file = main_window.output_folder + "/" + workspace + "_bank" + str(int(item[len(item) - 1]) - 1) + ".dat"
+        output_file = os.path.join(main_window.output_folder,
+                                   "SofQ_raw",
+                                   item + ".dat")
         # read the file for this bank
         file_in = open(output_file, "r")
         line = file_in.readline()
@@ -671,7 +675,9 @@ def merge_banks(main_window):
 
 def save_file_raw(main_window, file_name):
     if type(file_name) == list:
-        save_directory = QFileDialog.getExistingDirectory(main_window, 'Save Banks')
+        save_directory = QFileDialog.getExistingDirectory(main_window,
+                                                          'Save Banks',
+                                                          main_window.current_folder)
         for item in file_name:
             x_bank = main_window._bankDict[int(item[-1])]['xList']
             y_bank = main_window._bankDict[int(item[-1])]['yList']
@@ -682,11 +688,16 @@ def save_file_raw(main_window, file_name):
                 new_file.write('#\n')
                 for i in range(len(x_bank)):
                     new_file.write(str(x_bank[i]) + ' ' + str(y_bank[i]) + '\n')
+
+        main_window.ui.statusbar.setStyleSheet("color: blue")
+        main_window.ui.statusbar.showMessage("Files saved successfully!",
+                                             main_window.statusbar_display_time)
     else:
         x_bank = main_window._bankDict[int(file_name[-1])]['xList']
         y_bank = main_window._bankDict[int(file_name[-1])]['yList']
+        out_file = os.path.join(main_window.output_folder, "SofQ_raw", file_name + '.dat')
         save_directory = QFileDialog.getSaveFileName(main_window, 'Save Bank',
-                                                     main_window.output_folder + '/' + file_name + '.dat')
+                                                     out_file)
         if isinstance(save_directory, tuple):
             save_directory = save_directory[0]
         if save_directory is None or save_directory == '' or len(save_directory) == 0:
@@ -697,10 +708,18 @@ def save_file_raw(main_window, file_name):
             for i in range(len(x_bank)):
                 new_file.write(str(x_bank[i]) + ' ' + str(y_bank[i]) + '\n')
 
+        main_window.ui.statusbar.setStyleSheet("color: blue")
+        main_window.ui.statusbar.showMessage("File saved successfully!",
+                                             main_window.statusbar_display_time)
+
 
 def save_file_merged(main_window, file_name, auto=False):
+    out_dir_tmp = os.path.join(main_window.output_folder, "SofQ_merged")
+    if not os.path.exists(out_dir_tmp):
+        os.makedirs(out_dir_tmp)
+
     if auto:
-        save_directory = main_window.output_folder
+        save_directory = out_dir_tmp
         save_file = file_name
 
         main_window._full_merged_path = os.path.join(save_directory, save_file)
@@ -713,7 +732,8 @@ def save_file_merged(main_window, file_name, auto=False):
         else:
             win_title = "Save Merged File"
         save_directory_user = QFileDialog.getSaveFileName(main_window, win_title,
-                                                          os.path.join(main_window.output_folder, file_name),
+                                                          os.path.join(out_dir_tmp,
+                                                                       file_name),
                                                           '*.sq')
         if isinstance(save_directory_user, tuple):
             save_directory_user = save_directory_user[0]
@@ -737,29 +757,32 @@ def save_file_merged(main_window, file_name, auto=False):
         for i in range(len(x_merged)):
             new_file.write("{0:10.3F}{1:20.6F}\n".format(x_merged[i], y_merged[i]))
 
+    main_window.ui.statusbar.setStyleSheet("color: blue")
+    main_window.ui.statusbar.showMessage("File saved successfully!",
+                                         main_window.statusbar_display_time)
+
 
 def save_file_stog(main_window, file_name):
     if type(file_name) == list:
-        save_directory = QFileDialog.getExistingDirectory(main_window, 'Save StoG Files')
-        for item in file_name:
-            last_char = item[-2:]
-            if last_char == 'sq':
-                default = '*.sq;;*.fq;;*.gr;;All (*.*)'
-            elif last_char == 'fq':
-                default = '*.fq;;*.sq;;*.gr;;All (*.*)'
-            elif last_char == 'gr':
-                default = '*.gr;;*.fq;;*.sq;;All (*.*)'
-            if save_directory is None or save_directory == '' or len(save_directory) == 0:
-                return
+        save_directory = QFileDialog.getExistingDirectory(main_window,
+                                                          'Save StoG Files',
+                                                          main_window.current_folder)
 
-            x_stog = main_window._pystog_output_files[file_name]["xlist"]
-            y_stog = main_window._pystog_output_files[file_name]["ylist"]
+        if save_directory is None or save_directory == '' or len(save_directory) == 0:
+            return
+
+        for item in file_name:
+            x_stog = main_window._pystog_output_files[item]["xlist"]
+            y_stog = main_window._pystog_output_files[item]["ylist"]
 
             with open(os.path.join(save_directory, item), 'w') as new_file:
                 new_file.write(str(len(x_stog)) + '\n')
                 new_file.write('#\n')
                 for i in range(len(x_stog)):
                     new_file.write(str(x_stog[i]) + ' ' + str(y_stog[i]) + '\n')
+        main_window.ui.statusbar.setStyleSheet("color: blue")
+        main_window.ui.statusbar.showMessage("Files saved successfully!",
+                                             main_window.statusbar_display_time)
     else:
         last_char = file_name[-2:]
         if last_char == 'sq':
@@ -768,8 +791,13 @@ def save_file_stog(main_window, file_name):
             default = '*.fq;;*.sq;;*.gr;;All (*.*)'
         elif last_char == 'gr':
             default = '*.gr;;*.fq;;*.sq;;All (*.*)'
-        save_file = QFileDialog.getSaveFileName(main_window, 'Save StoG File',
-                                                main_window.output_folder + '/' + file_name, default)
+        out_file = os.path.join(main_window.output_folder,
+                                "StoG",
+                                file_name)
+        save_file = QFileDialog.getSaveFileName(main_window,
+                                                'Save StoG File',
+                                                out_file,
+                                                default)
         if isinstance(save_file, tuple):
             save_file = save_file[0]
         if save_file is None or save_file == '' or len(save_file) == 0:
@@ -783,6 +811,9 @@ def save_file_stog(main_window, file_name):
             new_file.write('#\n')
             for i in range(len(x_stog)):
                 new_file.write(str(x_stog[i]) + ' ' + str(y_stog[i]) + '\n')
+        main_window.ui.statusbar.setStyleSheet("color: blue")
+        main_window.ui.statusbar.showMessage("File saved successfully!",
+                                             main_window.statusbar_display_time)
 
 
 # TODO: Add checking of inputs
@@ -899,6 +930,9 @@ def execute_stog(main_window):
         msg.exec()
         return
 
+    if not os.path.exists(os.path.join(main_window.output_folder, "StoG")):
+        os.makedirs(os.path.join(main_window.output_folder, "StoG"))
+
     json_format = convert_json(main_window, pystog_inputs)
     with open('pystog_input.json', 'w') as pystog_file:
         json.dump(json_format, pystog_file, indent=2)
@@ -910,6 +944,18 @@ def execute_stog(main_window):
     main_window.ui.statusbar.setStyleSheet("color: blue")
     main_window.ui.statusbar.showMessage("pystog successfully executed!",
                                          main_window.statusbar_display_time)
+
+    current_dir = main_window.current_folder
+    if os.path.isfile(os.path.join(current_dir, "ft.dat")):
+        os.rename(os.path.join(current_dir, "ft.dat"),
+                  os.path.join(main_window.output_folder,
+                               "StoG",
+                               "ft.dat"))
+    if os.path.isfile(os.path.join(current_dir, "pystog_input.json")):
+        os.rename(os.path.join(current_dir, "pystog_input.json"),
+                  os.path.join(main_window.output_folder,
+                               "StoG",
+                               "pystog_input.json"))
 
 
 def save_sconfig(main_window):
@@ -987,7 +1033,9 @@ def convert_json(main_window, stog_dict):
     json_dict["<b_coh>^2"] = float(stog_dict["FaberZiman"])
     json_dict["LorchFlag"] = stog_dict["Lorch"]
     json_dict["RippleParams"] = stog_dict["RippleParams"]
-    output = main_window.output_folder + "/" + main_window._stem
+    output = os.path.join(main_window.output_folder,
+                          "StoG",
+                          main_window._stem)
     json_dict["Outputs"] = {"StemName": output}
     return json_dict
 
@@ -1038,7 +1086,10 @@ def add_stog_data(main_window):
     data_list = [data_sq, data_gr, data_ft_sq, data_ft_gr, data_rmc_fq, data_rmc_gr]
 
     for file_name in data_list:
-        file_in = open(main_window.output_folder + "/" + file_name, "r")
+        file_tmp = os.path.join(main_window.output_folder,
+                                "StoG",
+                                file_name)
+        file_in = open(file_tmp, "r")
         line = file_in.readline()
         line = file_in.readline()
         x_list = []
@@ -1070,7 +1121,10 @@ def generate_final(main_window):
         else:
             y_vals_final.append(y_vals_init[count])
     final_file_name = main_window._stem + "_rmc_rr.gr"
-    file_final_out = open(main_window.output_folder + "/" + final_file_name, "w")
+    out_file = os.path.join(main_window.output_folder,
+                            "StoG",
+                            final_file_name)
+    file_final_out = open(out_file, "w")
     file_final_out.write("{0:d}\n".format(len(x_vals_final)))
     file_final_out.write("# pystog output with Fourier ripples removed\n")
     for count, item in enumerate(x_vals_final):

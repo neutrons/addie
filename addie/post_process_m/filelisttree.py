@@ -124,6 +124,7 @@ class FileListTree(base.CustomizedTreeView):
     def save_merge(self):
         # save the merged data file with the automated mode set false
         if len(self._selected_items) > 1:
+            print("[Warning] Save multiple files under merged tree is not supported!")
             return
         event_handler.save_file_merged(self._main_window,
                                        self._selected_items[0].text())
