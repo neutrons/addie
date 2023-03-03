@@ -100,7 +100,7 @@ jobs:
     if: ${{ github.ref_protected || github.ref_type == 'tag' }}
     steps:
       - name: Determine Environment
-        uses: neutrons/branch-mapper@main
+        uses: neutrons/branch-mapper@v2
         id: conda_env_name
         with:
           prefix: addie
