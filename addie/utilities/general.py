@@ -1,6 +1,7 @@
 import copy
 import getpass
 import random
+import os
 import mantid.simpleapi as mantid
 
 
@@ -36,3 +37,24 @@ def get_list_algo(algo_name):
     _alg.initialize()
     list_algo = [prop.name for prop in _alg.getProperties()]
     return list_algo
+
+
+def config_dir_to_use(parent_dir):
+    # Take full path of a parent directory as the input and figure out
+    # an alternative directory to use. For example, if the input
+    # is `.`, we will be searching through the directory `.` for 
+    # existing directories like `./output`, `./output_1`, `./output_2`, ...
+    # until a certain `./output_i` is not existing.
+
+    i = 0
+    while True:
+        if i == 0:
+            use_dir = os.path.join(parent_dir, 'output')
+        else:
+            use_dir = os.path.join(parent_dir, f'output_{i}')
+
+        dir_exists = os.path.exists(use_dir)
+        if dir_exists:
+            i += 1
+        else:
+            return use_dir
