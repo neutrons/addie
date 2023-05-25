@@ -1,7 +1,9 @@
 import copy
 import getpass
 import random
+import os
 import mantid.simpleapi as mantid
+import datetime
 
 
 def get_ucams():
@@ -36,3 +38,31 @@ def get_list_algo(algo_name):
     _alg.initialize()
     list_algo = [prop.name for prop in _alg.getProperties()]
     return list_algo
+
+
+def config_dir_to_use(parent_dir):
+    '''Take full path of a parent directory as the input and figure out
+    an alternative directory to use. For example, if the input
+    is `.`, we will be searching through the directory `.` for
+    the existing directory `./output_{current_date}`. If not existing, we will
+    return `./output_{current_date}` as the directory to use. If existing, we
+    will append continuous integer to the end like `./output_{current_date}_{i}`
+    iteratively until a certain directory does not exist when reaching a certain
+    `i`. Here, the `{current_date}` represents the current date in the format of
+    `mmddYYYY` such as `05252023`.
+    '''
+
+    i = 0
+    date_now = datetime.datetime.now()
+    date_now = date_now.strftime("%m%d%Y")
+    while True:
+        if i == 0:
+            use_dir = os.path.join(parent_dir, f'output_{date_now}')
+        else:
+            use_dir = os.path.join(parent_dir, f'output_{date_now}_{i}')
+
+        dir_exists = os.path.exists(use_dir)
+        if dir_exists:
+            i += 1
+        else:
+            return use_dir

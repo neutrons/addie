@@ -5,11 +5,19 @@ import numpy as np
 import os
 import pickle
 
-from qtpy.QtWidgets import QDialog, QTreeWidgetItem, QTableWidgetItem, QMenu, QFileDialog, QApplication
+from qtpy.QtWidgets import \
+    QDialog, \
+    QTreeWidgetItem, \
+    QTableWidgetItem, \
+    QMenu, \
+    QFileDialog, \
+    QApplication, \
+    QInputDialog
 from addie.utilities import load_ui
 from qtpy import QtCore, QtGui
 
 from addie.utilities.file_handler import FileHandler
+from addie.utilities.general import config_dir_to_use
 from addie.processing.mantid.master_table.tree_definition import TREE_DICT, COLUMN_DEFAULT_WIDTH, CONFIG_FILE
 from addie.processing.mantid.master_table.tree_definition import h1_COLUMNS_WIDTH, h2_COLUMNS_WIDTH, h3_COLUMNS_WIDTH
 from addie.processing.mantid.master_table.table_row_handler import TableRowHandler
@@ -492,6 +500,12 @@ class H3TableHandler:
 
         menu.addSeparator()
 
+        # Working directory
+        change_wd = menu.addAction("Change To Working Dir.")
+        ipts_ft_mantid = menu.addAction("Change to IPTS")
+
+        menu.addSeparator()
+
         # Cells
         cells = menu.addMenu("Cell(s)")
         cells.setEnabled(
@@ -649,6 +663,12 @@ class H3TableHandler:
             self.uncheck_all()
         elif action == activate_inverse:
             self.inverse_activated_rows()
+
+        # working directory
+        elif action == change_wd:
+            self.change_to_wd()
+        elif action == ipts_ft_mantid:
+            self.ipts_ftm_action()
 
         # cells
         elif action == cells_copy:
@@ -861,6 +881,101 @@ class H3TableHandler:
             if clear_table:
                 self.clear_table()
             # fixme
+
+    def change_to_wd(self, clear_table=True):
+        out_dir_tmp = self.main_window.output_folder
+        wd_tmp = os.path.dirname(os.path.abspath(out_dir_tmp))
+        _working_folder = QFileDialog.getExistingDirectory(caption="Select Working Folder ...",
+                                                           directory=wd_tmp,
+                                                           options=QFileDialog.ShowDirsOnly)
+
+        _output_folder_tmp = config_dir_to_use(_working_folder)
+        os.mkdir(_output_folder_tmp)
+        table_file = os.path.join(_working_folder, "auto_mtb.json")
+        if not (table_file and os.path.exists(table_file)):
+            table_file = os.path.join(_working_folder, "exp.json")
+        QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+
+        if table_file and os.path.exists(table_file):
+            if clear_table:
+                self.clear_table()
+
+            try:
+                o_dict = TableFileLoader(
+                    parent=self.main_window, filename=table_file)
+            except IOError as err:
+                self.main_window.ui.statusbar.setStyleSheet("color: red")
+                self.main_window.ui.statusbar.showMessage(
+                    err.message, self.main_window.statusbar_display_time)
+                QApplication.restoreOverrideCursor()
+                return
+
+            o_dict.display_dialog()
+
+        QApplication.restoreOverrideCursor()
+
+        self.main_window.current_folder = _working_folder
+        self.main_window.output_folder = _output_folder_tmp
+        self.main_window.cache_folder = os.path.join(_working_folder, "tmp")
+
+        self.main_window.ui.statusbar.setStyleSheet("color: blue")
+        self.main_window.ui.statusbar.showMessage(
+            f"Working directory changed to {_working_folder}")
+        print(f"[Info] Output directory changed to {_output_folder_tmp}")
+
+    def ipts_ftm_action(self, clear_table=True):
+        prompt_text = "Enter your instrument and IPTS (e.g., 'nom 99999' or 'NOM, 99999'):"
+        ipts_in, ok = QInputDialog.getText(self.main_window,
+                                           'User Input',
+                                           prompt_text)
+        if not (ok and ipts_in):
+            return
+        instr_name = ipts_in.strip().replace(",", "").split()[0].upper()
+        ipts_name = "IPTS-" + ipts_in.strip().replace(",", "").split()[1]
+        _working_folder = os.path.join("/SNS", instr_name, ipts_name,
+                                       "shared", "autoMTS")
+        if not os.path.exists(_working_folder):
+            err_msg = f"Working directory {_working_folder} not existing"
+            print("[Error] " + err_msg)
+            self.main_window.ui.statusbar.setStyleSheet("color: red")
+            self.main_window.ui.statusbar.showMessage(
+                err_msg, self.main_window.statusbar_display_time)
+            QApplication.restoreOverrideCursor()
+            return
+
+        _output_folder_tmp = config_dir_to_use(_working_folder)
+        os.mkdir(_output_folder_tmp)
+        table_file = os.path.join(_working_folder, "auto_mtb.json")
+        if not (table_file and os.path.exists(table_file)):
+            table_file = os.path.join(_working_folder, "exp.json")
+        QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
+
+        if table_file and os.path.exists(table_file):
+            if clear_table:
+                self.clear_table()
+
+            try:
+                o_dict = TableFileLoader(
+                    parent=self.main_window, filename=table_file)
+            except IOError as err:
+                self.main_window.ui.statusbar.setStyleSheet("color: red")
+                self.main_window.ui.statusbar.showMessage(
+                    err.message, self.main_window.statusbar_display_time)
+                QApplication.restoreOverrideCursor()
+                return
+
+            o_dict.display_dialog()
+
+        QApplication.restoreOverrideCursor()
+
+        self.main_window.current_folder = _working_folder
+        self.main_window.output_folder = _output_folder_tmp
+        self.main_window.cache_folder = os.path.join(_working_folder, "tmp")
+
+        self.main_window.ui.statusbar.setStyleSheet("color: blue")
+        self.main_window.ui.statusbar.showMessage(
+            f"Working directory changed to {_working_folder}")
+        print(f"[Info] Output directory changed to {_output_folder_tmp}")
 
     def _import_table_from_config(self, clear_table=True):
         _current_folder = self.main_window.current_folder
