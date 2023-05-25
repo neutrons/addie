@@ -4,7 +4,6 @@ from collections import OrderedDict
 import numpy as np
 import os
 import pickle
-import re
 
 from qtpy.QtWidgets import \
     QDialog, \
@@ -925,14 +924,13 @@ class H3TableHandler:
         print(f"[Info] Output directory changed to {_output_folder_tmp}")
 
     def ipts_ftm_action(self, clear_table=True):
-        out_dir_tmp = self.main_window.output_folder
-        prompt_text = "Enter your instrument and IPTS (e.g., 'NOM, 99999' or 'NOM 99999'):"
+        prompt_text = "Enter your instrument and IPTS (e.g., 'nom 99999' or 'NOM, 99999'):"
         ipts_in, ok = QInputDialog.getText(self.main_window,
                                            'User Input',
                                            prompt_text)
         if not (ok and ipts_in):
             return
-        instr_name = ipts_in.strip().replace(",", "").split()[0]
+        instr_name = ipts_in.strip().replace(",", "").split()[0].upper()
         ipts_name = "IPTS-" + ipts_in.strip().replace(",", "").split()[1]
         _working_folder = os.path.join("/SNS", instr_name, ipts_name,
                                        "shared", "autoMTS")
