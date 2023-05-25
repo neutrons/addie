@@ -926,15 +926,14 @@ class H3TableHandler:
 
     def ipts_ftm_action(self, clear_table=True):
         out_dir_tmp = self.main_window.output_folder
-        wd_tmp = os.path.dirname(os.path.abspath(out_dir_tmp))
         prompt_text = "Enter your instrument and IPTS (e.g., 'NOM, 99999' or 'NOM 99999'):"
         ipts_in, ok = QInputDialog.getText(self.main_window,
-                                          'User Input',
-                                          prompt_text)
+                                           'User Input',
+                                           prompt_text)
         if not (ok and ipts_in):
             return
-        instr_name = re.split('\s|\,', ipts_in.strip())[0]
-        ipts_name = "IPTS-" + re.split('\s|\,', ipts_in.strip())[1]
+        instr_name = ipts_in.strip().replace(",", "").split()[0]
+        ipts_name = "IPTS-" + ipts_in.strip().replace(",", "").split()[1]
         _working_folder = os.path.join("/SNS", instr_name, ipts_name,
                                        "shared", "autoMTS")
         if not os.path.exists(_working_folder):

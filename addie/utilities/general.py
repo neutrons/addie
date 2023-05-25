@@ -41,11 +41,16 @@ def get_list_algo(algo_name):
 
 
 def config_dir_to_use(parent_dir):
-    # Take full path of a parent directory as the input and figure out
-    # an alternative directory to use. For example, if the input
-    # is `.`, we will be searching through the directory `.` for 
-    # existing directories like `./output`, `./output_1`, `./output_2`, ...
-    # until a certain `./output_i` is not existing.
+    '''Take full path of a parent directory as the input and figure out
+    an alternative directory to use. For example, if the input
+    is `.`, we will be searching through the directory `.` for
+    the existing directory `./output_{current_date}`. If not existing, we will
+    return `./output_{current_date}` as the directory to use. If existing, we
+    will append continuous integer to the end like `./output_{current_date}_{i}`
+    iteratively until a certain directory does not exist when reaching a certain
+    `i`. Here, the `{current_date}` represents the current date in the format of
+    `mmddYYYY` such as `05252023`.
+    '''
 
     i = 0
     date_now = datetime.datetime.now()
@@ -54,7 +59,7 @@ def config_dir_to_use(parent_dir):
         if i == 0:
             use_dir = os.path.join(parent_dir, f'output_{date_now}')
         else:
-            use_dir = os.path.join(parent_dir, f'output_{i}_{date_now}')
+            use_dir = os.path.join(parent_dir, f'output_{date_now}_{i}')
 
         dir_exists = os.path.exists(use_dir)
         if dir_exists:
