@@ -478,20 +478,16 @@ class TableFileExporter:
         _export_dictionary_normalization["AbsMSParameters"] = {"ElementSize": ele_size_tmp[0]}
 
         if len(self.scattering_lower) > 0 and len(self.scattering_upper) > 0:
-            bank1_list = [self.scattering_lower[0], self.scattering_upper[0]]
-            bank2_list = [self.scattering_lower[1], self.scattering_upper[1]]
-            bank3_list = [self.scattering_lower[2], self.scattering_upper[2]]
-            bank4_list = [self.scattering_lower[3], self.scattering_upper[3]]
-            bank5_list = [self.scattering_lower[4], self.scattering_upper[4]]
-            bank6_list = [self.scattering_lower[5], self.scattering_upper[5]]
+            bank_list = list()
+            for bi in range(len(self.scattering_lower)):
+                bank_list.append([self.scattering_lower[bi], self.scattering_upper[bi]])
         else:
-            bank1_list = "N/A"
-            bank2_list = "N/A"
-            bank3_list = "N/A"
-            bank4_list = "N/A"
-            bank5_list = "N/A"
-            bank6_list = "N/A"
+            bank_list = ["N/A" for _ in range(6)]
 
+        sslc_dict = dict()
+        for bi, item in enumerate(bank_list):
+            key = f"Bank{bi + 1}"
+            sslc_dict[key] = item
         dictionary = {
             'Activate': activate,
             'Facility': self.facility,
@@ -512,14 +508,7 @@ class TableFileExporter:
                 },
             },
             'AlignAndFocusArgs': _key_value_dict,
-            'SelfScatteringLevelCorrection': {
-                "Bank1": bank1_list,
-                "Bank2": bank2_list,
-                "Bank3": bank3_list,
-                "Bank4": bank4_list,
-                "Bank5": bank5_list,
-                "Bank6": bank6_list
-                }
+            'SelfScatteringLevelCorrection': sslc_dict
         }
 
         #Checking for empty lists and values

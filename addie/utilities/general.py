@@ -3,6 +3,7 @@ import getpass
 import random
 import os
 import mantid.simpleapi as mantid
+import datetime
 
 
 def get_ucams():
@@ -47,11 +48,13 @@ def config_dir_to_use(parent_dir):
     # until a certain `./output_i` is not existing.
 
     i = 0
+    date_now = datetime.datetime.now()
+    date_now = date_now.strftime("%m%d%Y")
     while True:
         if i == 0:
-            use_dir = os.path.join(parent_dir, 'output')
+            use_dir = os.path.join(parent_dir, f'output_{date_now}')
         else:
-            use_dir = os.path.join(parent_dir, f'output_{i}')
+            use_dir = os.path.join(parent_dir, f'output_{i}_{date_now}')
 
         dir_exists = os.path.exists(use_dir)
         if dir_exists:

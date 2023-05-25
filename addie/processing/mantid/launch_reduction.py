@@ -3,7 +3,6 @@ import json
 import re
 
 from addie.processing.mantid.master_table.master_table_exporter import TableFileExporter as MantidTableExporter
-from addie.utilities.general import config_dir_to_use
 
 
 def run_mantid(parent):
@@ -24,7 +23,7 @@ def run_mantid(parent):
         pass
 
     _table_file = os.path.join(parent.output_folder, "exp.json")
-    _parent_out_dir = os.path.dirname(os.path.abspath(parent.output_folder))
+    _parent_out_dir = parent.current_folder
     _table_file_current = os.path.join(_parent_out_dir, "exp.json")
     exporter.export(_table_file)
     exporter.export(_table_file_current)

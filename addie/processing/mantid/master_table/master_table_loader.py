@@ -898,7 +898,7 @@ class FromDictionaryToTableUi:
             if entry["SelfScatteringLevelCorrection"]:
                 lower_list = []
                 upper_list = []
-                for i in range(6):
+                for i in range(len(entry["SelfScatteringLevelCorrection"])):
                     key_tmp = "Bank" + str(i + 1)
                     lower_list.append(entry["SelfScatteringLevelCorrection"][key_tmp][0])
                     upper_list.append(entry["SelfScatteringLevelCorrection"][key_tmp][1])
