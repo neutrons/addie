@@ -434,7 +434,7 @@ def do_load_gr(main_window):
         default_dir = get_default_dir(main_window, 'gofr')
 
     # pop out file
-    file_filter = 'Data Files (*.dat);; PDFgui (*.gr);;All Files (*.*)'
+    file_filter = 'PDF Files (*.gr);; Data Files (*.dat);; All Files (*.*)'
     g_file_name = QFileDialog.getOpenFileName(
         main_window, 'Open a G(r) file', default_dir, file_filter)
     if isinstance(g_file_name, tuple):
