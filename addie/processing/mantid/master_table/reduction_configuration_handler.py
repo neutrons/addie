@@ -415,7 +415,7 @@ class LoadReductionConfiguration:
                 pdf_r_range = data['pdf']['r_range']
 
             try:
-                f_tmp = grand_parent.reduction_configuration['pdf']['characterization_file'] 
+                f_tmp = grand_parent.reduction_configuration['pdf']['characterization_file']
             except KeyError:
                 f_tmp = data["pdf"]["characterization_file"]
             pdf_characterization_file = f_tmp

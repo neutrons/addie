@@ -3,7 +3,6 @@ import numpy as np
 import os
 import re
 import subprocess
-import sys
 from h5py import File
 from scipy.signal import argrelextrema
 from qtpy.QtWidgets import QFileDialog, QApplication, QMessageBox
