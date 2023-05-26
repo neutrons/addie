@@ -888,6 +888,8 @@ class H3TableHandler:
         _working_folder = QFileDialog.getExistingDirectory(caption="Select Working Folder ...",
                                                            directory=wd_tmp,
                                                            options=QFileDialog.ShowDirsOnly)
+        if not _working_folder:
+            return
 
         _output_folder_tmp = config_dir_to_use(_working_folder)
         os.mkdir(_output_folder_tmp)
@@ -924,14 +926,14 @@ class H3TableHandler:
         print(f"[Info] Output directory changed to {_output_folder_tmp}")
 
     def ipts_ftm_action(self, clear_table=True):
-        prompt_text = "Enter your instrument and IPTS (e.g., 'nom 99999' or 'NOM, 99999'):"
-        ipts_in, ok = QInputDialog.getText(self.main_window,
-                                           'User Input',
-                                           prompt_text)
+        instr_name = self.main_window.instrument["short_name"]
+        prompt_text = "Enter your IPTS:"
+        ipts_in, ok = QInputDialog.getInt(self.main_window,
+                                          'User Input',
+                                          prompt_text)
         if not (ok and ipts_in):
             return
-        instr_name = ipts_in.strip().replace(",", "").split()[0].upper()
-        ipts_name = "IPTS-" + ipts_in.strip().replace(",", "").split()[1]
+        ipts_name = f"IPTS-{ipts_in}"
         _working_folder = os.path.join("/SNS", instr_name, ipts_name,
                                        "shared", "autoMTS")
         if not os.path.exists(_working_folder):
@@ -944,7 +946,8 @@ class H3TableHandler:
             return
 
         _output_folder_tmp = config_dir_to_use(_working_folder)
-        os.mkdir(_output_folder_tmp)
+        if not os.path.exists(_output_folder_tmp):
+            os.mkdir(_output_folder_tmp)
         table_file = os.path.join(_working_folder, "auto_mtb.json")
         if not (table_file and os.path.exists(table_file)):
             table_file = os.path.join(_working_folder, "exp.json")

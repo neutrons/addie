@@ -62,7 +62,7 @@ def config_dir_to_use(parent_dir):
             use_dir = os.path.join(parent_dir, f'output_{date_now}_{i}')
 
         dir_exists = os.path.exists(use_dir)
-        if dir_exists:
+        if dir_exists and len(os.listdir(use_dir)) > 0:
             i += 1
         else:
             return use_dir

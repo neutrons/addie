@@ -388,10 +388,10 @@ class LoadReductionConfiguration:
     def __init__(self, parent=None, grand_parent=None):
 
         # list of sample environment
+        config_file = grand_parent.addie_config_file
+        with open(config_file) as f:
+            data = simplejson.load(f)
         if grand_parent.reduction_configuration == {}:
-            config_file = grand_parent.addie_config_file
-            with open(config_file) as f:
-                data = simplejson.load(f)
             pdf_q_range = data['pdf']['q_range']
             pdf_r_range = data['pdf']['r_range']
             pdf_characterization_file = data["pdf"]["characterization_file"]
@@ -404,17 +404,55 @@ class LoadReductionConfiguration:
             push_data_positive = data["advanced"]["push_data_positive"]
             abs_ms_ele_size = data["advanced"]["abs_ms_ele_size"]
         else:
-            pdf_q_range = grand_parent.reduction_configuration['pdf']['q_range']
-            pdf_r_range = grand_parent.reduction_configuration['pdf']['r_range']
-            pdf_characterization_file = grand_parent.reduction_configuration['pdf']['characterization_file']
+            try:
+                pdf_q_range = grand_parent.reduction_configuration['pdf']['q_range']
+            except KeyError:
+                pdf_q_range = data['pdf']['q_range']
 
-            bragg_characterization_file = grand_parent.reduction_configuration["bragg"]["characterization_file"]
-            bragg_number_of_bins = grand_parent.reduction_configuration["bragg"]["number_of_bins"]
-            bragg_wavelength = grand_parent.reduction_configuration["bragg"]["wavelength"]
+            try:
+                pdf_r_range = grand_parent.reduction_configuration['pdf']['r_range']
+            except KeyError:
+                pdf_r_range = data['pdf']['r_range']
+
+            try:
+                f_tmp = grand_parent.reduction_configuration['pdf']['characterization_file']
+            except KeyError:
+                f_tmp = data["pdf"]["characterization_file"]
+            pdf_characterization_file = f_tmp
+
+            try:
+                f_tmp = grand_parent.reduction_configuration["bragg"]["characterization_file"]
+            except KeyError:
+                f_tmp = data["bragg"]["characterization_file"]
+            bragg_characterization_file = f_tmp
+
+            try:
+                val_tmp = grand_parent.reduction_configuration["bragg"]["number_of_bins"]
+            except KeyError:
+                val_tmp = data["bragg"]["number_of_bins"]
+            bragg_number_of_bins = val_tmp
+
+            try:
+                val_tmp = grand_parent.reduction_configuration["bragg"]["wavelength"]
+            except KeyError:
+                val_tmp = data["bragg"]["wavelength"]
+            bragg_wavelength = val_tmp
 
             #calibration_file = grand_parent.reduction_configuration["pdf_bragg"]["calibration_file"]
-            push_data_positive = grand_parent.reduction_configuration["advanced"]["push_data_positive"]
-            abs_ms_ele_size = grand_parent.reduction_configuration["advanced"]["abs_ms_ele_size"]
+            try:
+                val_tmp = grand_parent.reduction_configuration["advanced"]["push_data_positive"]
+            except KeyError:
+                val_tmp = data["advanced"]["push_data_positive"]
+            push_data_positive = val_tmp
+
+            try:
+                val_tmp = grand_parent.reduction_configuration["advanced"]["abs_ms_ele_size"]
+            except KeyError:
+                val_tmp = data["advanced"]["abs_ms_ele_size"]
+            abs_ms_ele_size = val_tmp
+
+            grand_parent.reduction_configuration["initial"] = False
+            grand_parent.reduction_configuration["output"] = False
 
         # PDF and Bragg
         #self._set_text_value(ui=parent.ui.calibration_file, value=calibration_file)

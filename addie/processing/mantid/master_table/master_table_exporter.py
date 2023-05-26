@@ -89,10 +89,14 @@ class TableFileExporter:
         self.outputdir = self.parent.output_folder
         if not self.parent.reduction_configuration:
             SaveReductionConfiguration(parent.reduction_configuration_ui, grand_parent=parent)
+        if 'initial' not in self.parent.reduction_configuration:
+            self.parent.reduction_configuration['initial'] = False
         if not self.parent.reduction_configuration['initial']:
             self.intermediate_grouping_file = ''
         else:
             self.intermediate_grouping_file = self.parent.intermediate_grouping['filename']
+        if 'output' not in self.parent.reduction_configuration:
+            self.parent.reduction_configuration['output'] = False
         if not self.parent.reduction_configuration['output']:
             self.output_grouping_file = ''
         else:
@@ -465,7 +469,7 @@ class TableFileExporter:
             self.advanced_params = self.parent.reduction_configuration['advanced']
         except:
             self.QBin_min = 0
-            self.QBin_del = 0.02
+            self.QBin_del = 0.01
             self.QBin_max = 40
             self.advanced_params = {"push_data_positive": False,
                                     "abs_ms_ele_size": "1.0"}
