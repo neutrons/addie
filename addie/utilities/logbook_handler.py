@@ -22,7 +22,7 @@ class LogbookHandler(object):
         _number_of_log_files = self.max_number_of_log_files
 
         # get list of files that start by log
-        list_log_files = glob.glob(self.parent.current_folder + "/logs/log.*")
+        list_log_files = glob.glob(self.parent.output_folder + "/Logs/*.log")
         if list_log_files == []:
             return
 

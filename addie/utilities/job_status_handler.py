@@ -102,9 +102,12 @@ class JobStatusHandlerMTS(object):
 
     def get_local_time(self):
         local_hour_offset = time.timezone / 3600.
+        local_t_tmp = time.localtime()
+        daylight_offset = float(local_t_tmp.tm_isdst)
+        local_hour_offset -= daylight_offset
         _gmt_time = time.gmtime()
         [year, month, day, hour, minute, seconds, _wday, _yday, _isds] = _gmt_time
-        return [year, month, day, hour-local_hour_offset, minute, seconds]
+        return [year, month, day, hour - local_hour_offset, minute, seconds]
 
     def get_launch_time(self):
         local_time = self.get_local_time()
