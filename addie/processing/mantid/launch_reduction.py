@@ -533,7 +533,7 @@ def run_mantid(parent):
                     QApplication.restoreOverrideCursor()
                     return
 
-        print("[Info] PyStoG for all the selected rows...")
+        print("[Info] PyStoG for all the selected rows in progress...")
         for row in range(num_rows):
             dictionary, activate = exporter.retrieve_row_info(row)
             if activate is True:
