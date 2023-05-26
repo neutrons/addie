@@ -382,6 +382,17 @@ class JsonLoader:
                         ele_size_val = str(ele_size_val)
                     self.parent.advanced_dict["ele_size"] = ele_size_val
 
+                qmin_in = _source_row_entry["Merging"]["QBinning"][0]
+                delta_in = _source_row_entry["Merging"]["QBinning"][1]
+                qmax_in = _source_row_entry["Merging"]["QBinning"][2]
+                self.parent.reduction_configuration["pdf"] = {
+                    "q_range": {
+                        "min": qmin_in,
+                        "delta": delta_in,
+                        "max": qmax_in
+                    }
+                }
+
                 first_entry = False
 
         o_table_ui_loader = FromDictionaryToTableUi(parent=self.parent)

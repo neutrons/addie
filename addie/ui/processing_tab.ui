@@ -522,7 +522,12 @@
            </item>
            <item>
             <property name="text">
-             <string>Bragg</string>
+             <string>Merge</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>PyStog</string>
             </property>
            </item>
           </widget>
@@ -542,7 +547,7 @@
             </size>
            </property>
            <property name="text">
-            <string>Launch Reduction</string>
+            <string>Run</string>
            </property>
           </widget>
          </item>

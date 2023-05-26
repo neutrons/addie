@@ -1,7 +1,7 @@
 import os
 import json
 import subprocess
-from qtpy.QtWidgets import QFileDialog, QMessageBox
+from qtpy.QtWidgets import QFileDialog, QMessageBox, QApplication
 from h5py import File
 import addie.utilities.workspaces
 from pystog.stog import StoG
@@ -246,11 +246,11 @@ def extract_button(main_window):
     wks = main_window.postprocessing_ui_m.frame_workspaces_table.get_current_workspace()
     out = main_window.output_folder
 
-    if not os.path.exists(os.path.join(out, "SofQ_raw")):
-        os.makedirs(os.path.join(out, "SofQ_raw"))
+    if not os.path.exists(os.path.join(out, "SofQ_merged")):
+        os.makedirs(os.path.join(out, "SofQ_merged"))
 
     try:
-        files = extractor(main_window, nxs, banks, wks, os.path.join(out, "SofQ_raw"))
+        files = extractor(main_window, nxs, banks, wks, os.path.join(out, "SofQ_merged"))
     except:
         return
 
@@ -287,22 +287,26 @@ def extractor(main_window, nexus_file: str, num_banks: int, wks_name: str, out_d
 
 
 def initiate_bank_data(main_window, item_list, workspace):
-    # TODO: The hard coded `qmin_valid` and `qmax_valid` needs to be
-    # updated to adapt to general way of grouping detectors into banks.
-    if len(main_window._bankDict) == 6:
-        qmin_valid = [0., 0., 0., 3., 4., 0.]
-        qmax_valid = [14., 25., 40., 40., 40., 6.]
-    elif len(main_window._bankDict) == 1:
-        qmin_valid = [0.]
-        qmax_valid = [40.]
+    with open(main_window.addie_config_file, "r") as f:
+        config_j = json.load(f)
+    if "BankQMin" in config_j and "BankQMax" in config_j:
+        qmin_valid = config_j["BankQMin"]
+        qmax_valid = config_j["BankQMax"]
     else:
-        qmin_valid = [0. for _ in range(len(main_window._bankDict))]
-        qmax_valid = [40. for _ in range(len(main_window._bankDict))]
+        if len(main_window._bankDict) == 6:
+            qmin_valid = [0., 0., 0., 3., 4., 0.]
+            qmax_valid = [14., 25., 40., 40., 40., 6.]
+        elif len(main_window._bankDict) == 1:
+            qmin_valid = [0.]
+            qmax_valid = [40.]
+        else:
+            qmin_valid = [0. for _ in range(len(main_window._bankDict))]
+            qmax_valid = [40. for _ in range(len(main_window._bankDict))]
 
     for item in item_list:
         current_bank = int(item[-1])
         output_file = os.path.join(main_window.output_folder,
-                                   "SofQ_raw",
+                                   "SofQ_merged",
                                    item + ".dat")
         # read the file for this bank
         file_in = open(output_file, "r")
@@ -473,6 +477,9 @@ def bkg_finder(all_data: list,
 def merge_banks(main_window):
     if main_window._workspace_files is None or main_window._bankDict is None:
         return
+
+    print("[Info] Merging banks...")
+
     banks_x = []
     banks_y = []
     for bank in main_window._bankDict:
@@ -513,6 +520,10 @@ def merge_banks(main_window):
                     msg_p1 = "[Error] Gap or overlap found in between banks. "
                     msg_p2 = "This is not supported."
                     print(msg_p1 + msg_p2)
+                    main_window.ui.statusbar.setStyleSheet("color: red")
+                    main_window.ui.statusbar.showMessage(
+                        "Merge banks failed", main_window.statusbar_display_time)
+                    QApplication.restoreOverrideCursor()
                     return
             if qmin_tmp == qmax_tmp:
                 qmin_list.append(0.)
@@ -521,11 +532,19 @@ def merge_banks(main_window):
                 msg_p1 = f"[Error] Qmax smaller than Qmin for bank-{bank+1}. "
                 msg_p2 = "Please input valid values and try again."
                 print(msg_p1 + msg_p2)
+                main_window.ui.statusbar.setStyleSheet("color: red")
+                main_window.ui.statusbar.showMessage(
+                    "Merge banks failed", main_window.statusbar_display_time)
+                QApplication.restoreOverrideCursor()
                 return
             elif qmin_tmp < qmin_valid[bank] or qmax_tmp > qmax_valid[bank]:
                 msg_p1 = f"[Error] Qmin or Qmax out of the valid region for bank-{bank+1}. "
                 msg_p2 = "Please input valid values and try again."
                 print(msg_p1 + msg_p2)
+                main_window.ui.statusbar.setStyleSheet("color: red")
+                main_window.ui.statusbar.showMessage(
+                    "Merge banks failed", main_window.statusbar_display_time)
+                QApplication.restoreOverrideCursor()
                 return
             else:
                 valid_region = True
@@ -538,6 +557,10 @@ def merge_banks(main_window):
     if not valid_region:
         print("[Error] Qmin and Qmax values are all zero for all banks.")
         print("[Error] Please input valid values and try again.")
+        main_window.ui.statusbar.setStyleSheet("color: red")
+        main_window.ui.statusbar.showMessage(
+            "Merge banks failed", main_window.statusbar_display_time)
+        QApplication.restoreOverrideCursor()
         return
 
     remove_bkg = main_window.postprocessing_ui_m.checkBox_bkg_removal.isChecked()
@@ -672,6 +695,8 @@ def merge_banks(main_window):
     main_window.postprocessing_ui_m.pushButton_savesc.setEnabled(True)
     main_window.postprocessing_ui_m.pushButton_loadsc.setEnabled(True)
 
+    print("[Info] Banks successfully merged")
+
 
 def save_file_raw(main_window, file_name):
     if type(file_name) == list:
@@ -695,7 +720,7 @@ def save_file_raw(main_window, file_name):
     else:
         x_bank = main_window._bankDict[int(file_name[-1])]['xList']
         y_bank = main_window._bankDict[int(file_name[-1])]['yList']
-        out_file = os.path.join(main_window.output_folder, "SofQ_raw", file_name + '.dat')
+        out_file = os.path.join(main_window.output_folder, "SofQ_merged", file_name + '.dat')
         save_directory = QFileDialog.getSaveFileName(main_window, 'Save Bank',
                                                      out_file)
         if isinstance(save_directory, tuple):
@@ -934,15 +959,23 @@ def execute_stog(main_window):
         os.makedirs(os.path.join(main_window.output_folder, "StoG"))
 
     json_format = convert_json(main_window, pystog_inputs)
+    if json_format is None:
+        print("[Error] Invalid PyStoG input. Check the input params and the output directory.")
+        main_window.ui.statusbar.setStyleSheet("color: red")
+        main_window.ui.statusbar.showMessage("PyStoG execution failed!",
+                                             main_window.statusbar_display_time)
+        return
     with open('pystog_input.json', 'w') as pystog_file:
         json.dump(json_format, pystog_file, indent=2)
     print("[Info] The json file is created.")
+    print("[Info] PyStoG in progress...")
     subprocess.run(["pystog_cli", "--json", "pystog_input.json"])
+    print("[Info] PyStoG successfully executed")
     add_stog_data(main_window)
     generate_final(main_window)
 
     main_window.ui.statusbar.setStyleSheet("color: blue")
-    main_window.ui.statusbar.showMessage("pystog successfully executed!",
+    main_window.ui.statusbar.showMessage("PyStoG successfully executed!",
                                          main_window.statusbar_display_time)
 
     current_dir = main_window.current_folder
@@ -1015,6 +1048,8 @@ def load_sconfig(main_window):
 def convert_json(main_window, stog_dict):
     json_dict = dict()
 
+    if not os.path.exists(main_window._full_merged_path):
+        return
     json_dict["Files"] = [{"Filename": main_window._full_merged_path,
                            "ReciprocalFunction": "S(Q)",
                            "Qmin": stog_dict["Qmin"],
