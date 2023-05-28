@@ -5,7 +5,7 @@ import re
 import subprocess
 from h5py import File
 from scipy.signal import argrelextrema
-from qtpy.QtWidgets import QFileDialog, QApplication, QMessageBox
+from qtpy.QtWidgets import QFileDialog, QApplication  # , QMessageBox
 
 from addie.processing.mantid.master_table.master_table_exporter import \
     TableFileExporter as MantidTableExporter
@@ -404,22 +404,22 @@ def run_mantid(parent):
 
     selected_item = parent.processing_ui.comboBox.currentText()
     if selected_item == "Merge":
-        for row in range(num_rows):
-            dictionary, activate = exporter.retrieve_row_info(row)
-            if activate is True:
-                if row == 0:
-                    sam_title = dictionary["Title"]
-                else:
-                    if dictionary["Title"] != sam_title:
-                        msgBox = QMessageBox()
-                        msgBox.setIcon(QMessageBox.Warning)
-                        msgBox.setText("Different sample title found for selected rows! Continue?")
-                        msgBox.setWindowTitle("Warning!")
-                        msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        # for row in range(num_rows):
+        #     dictionary, activate = exporter.retrieve_row_info(row)
+        #     if activate is True:
+        #         if row == 0:
+        #             sam_title = dictionary["Title"]
+        #         else:
+        #             if dictionary["Title"] != sam_title:
+        #                 msgBox = QMessageBox()
+        #                 msgBox.setIcon(QMessageBox.Warning)
+        #                 msgBox.setText("Different sample title found for selected rows! Continue?")
+        #                 msgBox.setWindowTitle("Warning!")
+        #                 msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
 
-                        returnValue = msgBox.exec()
-                        if returnValue == QMessageBox.Cancel:
-                            return
+        #                 returnValue = msgBox.exec()
+        #                 if returnValue == QMessageBox.Cancel:
+        #                     return
 
         m_config_j, _ = QFileDialog.getOpenFileName(parent,
                                                     "Select Merge Config File",
@@ -453,7 +453,7 @@ def run_mantid(parent):
                     run_num_tmp = int(dictionary["Sample"]["Runs"].split("-")[0])
                     ipts_dir = GetIPTS(Instrument=instr_name, RunNumber=run_num_tmp)
                     check_file = os.path.join(ipts_dir, "shared",
-                                              "autoreduce", "multi_banks",
+                                              "autoreduce", "multi_banks_summed",
                                               "SofQ", f"{sam_title}.nxs")
                     if not os.path.isfile(check_file):
                         print(f"[Warning] No reduced SofQ data found for row-{row}.")
@@ -495,22 +495,22 @@ def run_mantid(parent):
 
         return
     elif selected_item == "PyStoG":
-        for row in range(num_rows):
-            dictionary, activate = exporter.retrieve_row_info(row)
-            if activate is True:
-                if row == 0:
-                    sam_title = dictionary["Title"]
-                else:
-                    if dictionary["Title"] != sam_title:
-                        msgBox = QMessageBox()
-                        msgBox.setIcon(QMessageBox.Warning)
-                        msgBox.setText("Different sample title found for selected rows! Continue?")
-                        msgBox.setWindowTitle("Warning!")
-                        msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        # for row in range(num_rows):
+        #     dictionary, activate = exporter.retrieve_row_info(row)
+        #     if activate is True:
+        #         if row == 0:
+        #             sam_title = dictionary["Title"]
+        #         else:
+        #             if dictionary["Title"] != sam_title:
+        #                 msgBox = QMessageBox()
+        #                 msgBox.setIcon(QMessageBox.Warning)
+        #                 msgBox.setText("Different sample title found for selected rows! Continue?")
+        #                 msgBox.setWindowTitle("Warning!")
+        #                 msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
 
-                        returnValue = msgBox.exec()
-                        if returnValue == QMessageBox.Cancel:
-                            return
+        #                 returnValue = msgBox.exec()
+        #                 if returnValue == QMessageBox.Cancel:
+        #                     return
 
         p_config_j, _ = QFileDialog.getOpenFileName(parent,
                                                     "Select PyStoG Config File",
