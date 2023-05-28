@@ -502,7 +502,7 @@ class H3TableHandler:
 
         # Working directory
         change_wd = menu.addAction("Change To Working Dir.")
-        ipts_ft_mantid = menu.addAction("Change to IPTS")
+        ipts_ft_mantid = menu.addAction("Change To IPTS")
 
         menu.addSeparator()
 
@@ -567,13 +567,13 @@ class H3TableHandler:
         table_import_from_config_append.setEnabled(
             self.main_window.master_table_right_click_buttons['import_from_config_append']['status'])
 
-        table_import_from_file = table.addMenu("Import from File(s)")
-        table_import_from_file_replace = table_import_from_file.addAction(
-            "Replace ...")
-        table_import_from_file_append = table_import_from_file.addAction(
-            "Append ...")
-        table_import_from_file_append.setEnabled(
-            self.main_window.master_table_right_click_buttons['import_from_file_append']['status'])
+        # table_import_from_file = table.addMenu("Import from File(s)")
+        # table_import_from_file_replace = table_import_from_file.addAction(
+        #     "Replace ...")
+        # table_import_from_file_append = table_import_from_file.addAction(
+        #     "Append ...")
+        # table_import_from_file_append.setEnabled(
+        #     self.main_window.master_table_right_click_buttons['import_from_file_append']['status'])
 
         table_export = table.addAction("Export ...")
         self.main_window.master_table_right_click_buttons['export']['ui'] = table_export
@@ -709,10 +709,10 @@ class H3TableHandler:
             self._import_table_from_database(clear_table=False)
         elif action == table_export:
             self._export_table()
-        elif action == table_import_from_file_replace:
-            self._import_table_from_file(clear_table=True)
-        elif action == table_import_from_file_append:
-            self._import_table_from_file(clear_table=False)
+        # elif action == table_import_from_file_replace:
+        #     self._import_table_from_file(clear_table=True)
+        # elif action == table_import_from_file_append:
+        #     self._import_table_from_file(clear_table=False)
 
         # configuration
         if action == configuration_save_as:
@@ -892,7 +892,8 @@ class H3TableHandler:
             return
 
         _output_folder_tmp = config_dir_to_use(_working_folder)
-        os.mkdir(_output_folder_tmp)
+        if not os.path.exists(_output_folder_tmp):
+            os.mkdir(_output_folder_tmp)
         table_file = os.path.join(_working_folder, "auto_mtb.json")
         if not (table_file and os.path.exists(table_file)):
             table_file = os.path.join(_working_folder, "exp.json")

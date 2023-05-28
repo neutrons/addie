@@ -453,7 +453,7 @@ def run_mantid(parent):
                     run_num_tmp = int(dictionary["Sample"]["Runs"].split("-")[0])
                     ipts_dir = GetIPTS(Instrument=instr_name, RunNumber=run_num_tmp)
                     check_file = os.path.join(ipts_dir, "shared",
-                                              "autoreduce", "multi_banks",
+                                              "autoreduce", "multi_banks_summed",
                                               "SofQ", f"{sam_title}.nxs")
                     if not os.path.isfile(check_file):
                         print(f"[Warning] No reduced SofQ data found for row-{row}.")
