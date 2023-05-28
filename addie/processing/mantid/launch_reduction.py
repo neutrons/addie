@@ -5,7 +5,7 @@ import re
 import subprocess
 from h5py import File
 from scipy.signal import argrelextrema
-from qtpy.QtWidgets import QFileDialog, QApplication, QMessageBox
+from qtpy.QtWidgets import QFileDialog, QApplication  # , QMessageBox
 
 from addie.processing.mantid.master_table.master_table_exporter import \
     TableFileExporter as MantidTableExporter
