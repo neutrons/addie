@@ -965,13 +965,13 @@ def execute_stog(main_window):
         main_window.ui.statusbar.showMessage("PyStoG execution failed!",
                                              main_window.statusbar_display_time)
         return
-    with open('pystog_input.json', 'w') as pystog_file:
-        json.dump(json_format, pystog_file, indent=2)
     print("[Info] The json file is created.")
     print("[Info] PyStoG in progress...")
     cwd = os.getcwd()
     path = os.path.join(os.path.expanduser('~'), '.mantid')
     os.chdir(path)
+    with open('pystog_input.json', 'w') as pystog_file:
+        json.dump(json_format, pystog_file, indent=2)
     subprocess.run(["pystog_cli", "--json", "pystog_input.json"])
     os.chdir(cwd)
     print("[Info] PyStoG successfully executed")
