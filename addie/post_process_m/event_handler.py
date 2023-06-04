@@ -975,7 +975,9 @@ def execute_stog(main_window):
     subprocess.run(["pystog_cli", "--json", "pystog_input.json"])
     os.chdir(cwd)
     print("[Info] PyStoG successfully executed")
-    add_stog_data(main_window)
+    added_stog = add_stog_data(main_window)
+    if added_stog is None:
+        return
     generate_final(main_window)
 
     main_window.ui.statusbar.setStyleSheet("color: blue")
@@ -1128,7 +1130,14 @@ def add_stog_data(main_window):
         file_tmp = os.path.join(main_window.output_folder,
                                 "StoG",
                                 file_name)
-        file_in = open(file_tmp, "r")
+        try:
+            file_in = open(file_tmp, "r")
+        except FileNotFoundError:
+            print(f"[Error] S(Q) data file {file_tmp} not found. Please check the output dir setting.")
+            main_window.ui.statusbar.setStyleSheet("color: red")
+            main_window.ui.statusbar.showMessage("S(Q) file loading error, see the terminal for more info!",
+                                                 main_window.statusbar_display_time)
+            return
         line = file_in.readline()
         line = file_in.readline()
         x_list = []
