@@ -512,10 +512,13 @@ def merge_banks(main_window):
             qmin_tmp = float(qmin_tmp)
             qmax_tmp = float(qmax_tmp)
             if bank > 0 and qmax_tmp > 0.:
+                qmax_to_compare = 0.
                 for bank_tmp in range(bank):
                     if qmax_list[-(bank_tmp + 1)] > 0.:
                         qmax_to_compare = qmax_list[-(bank_tmp + 1)]
                         break
+                if qmax_to_compare == 0.:
+                    qmax_to_compare = qmin_tmp
                 if qmin_tmp != qmax_to_compare:
                     msg_p1 = "[Error] Gap or overlap found in between banks. "
                     msg_p2 = "This is not supported."
