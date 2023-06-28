@@ -163,7 +163,7 @@ class ApplyRuleHandler:
         list_of_keys = list(global_rule_dict.keys())
         while True:
             if available_global_rule_index in list_of_keys:
-                available_global_rule_index = str(np.int(available_global_rule_index) + 1)
+                available_global_rule_index = str(np.int_(available_global_rule_index) + 1)
             else:
                 return available_global_rule_index
 

@@ -297,7 +297,7 @@ class JsonLoader:
 
             _source_row_entry = data[str(_row)]
 
-            _row = np.int(_row)
+            _row = np.int_(_row)
             _target_row_entry = copy.deepcopy(_default_empty_row)
 
             # _target_row_entry["activate"] = _source_row_entry['Activate']

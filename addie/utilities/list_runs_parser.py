@@ -47,7 +47,7 @@ class ListRunsParser(object):
         self.list_current_runs = new_list_current_runs
 
         # go from string to int
-        int_new_list_current_runs = [np.int(_run) for _run in new_list_current_runs]
+        int_new_list_current_runs = [np.int_(_run) for _run in new_list_current_runs]
 
         # sort them to prepare them for output format
         int_new_list_current_runs.sort()
