@@ -851,7 +851,9 @@ def initiate_stog_data(main_window):
     pystog_inputs["Qmin"] = main_window._merged_data[main_window._stem]['XList'][0]
     pystog_inputs["Qmax"] = main_window._merged_data[main_window._stem]['XList'][-1]
     pystog_inputs["Yoffset"] = main_window.postprocessing_ui_m.lineEdit_Yoffset_stog.text()
-    pystog_inputs["Yscale"] = main_window.postprocessing_ui_m.lineEdit_Yscale_stog.text()
+    ys_text_tmp = main_window.postprocessing_ui_m.lineEdit_Yscale_stog.text()
+    ys_text = "{0:5.3F}".format(1.0 / float(ys_text_tmp))
+    pystog_inputs["Yscale"] = ys_text
     pystog_inputs["Qoffset"] = main_window.postprocessing_ui_m.lineEdit_Qoffset.text()
     pystog_inputs["Rmax"] = str(main_window.postprocessing_ui_m.doubleSpinBox_Rmax.value())
     pystog_inputs["Rstep"] = str(main_window.postprocessing_ui_m.doubleSpinBox_Rstep.value())
@@ -869,7 +871,9 @@ def set_stog_values(main_window):
     pystog_inputs["Qmin"] = main_window._merged_data[main_window._stem]['XList'][0]
     pystog_inputs["Qmax"] = main_window._merged_data[main_window._stem]['XList'][-1]
     pystog_inputs["Yoffset"] = main_window.postprocessing_ui_m.lineEdit_Yoffset_stog.text()
-    pystog_inputs["Yscale"] = main_window.postprocessing_ui_m.lineEdit_Yscale_stog.text()
+    ys_text_tmp = main_window.postprocessing_ui_m.lineEdit_Yscale_stog.text()
+    ys_text = "{0:5.3F}".format(1.0 / (float(ys_text_tmp) + 1.E-20))
+    pystog_inputs["Yscale"] = ys_text
     pystog_inputs["Qoffset"] = main_window.postprocessing_ui_m.lineEdit_Qoffset.text()
     pystog_inputs["Rmax"] = str(main_window.postprocessing_ui_m.doubleSpinBox_Rmax.value())
     pystog_inputs["Rstep"] = str(main_window.postprocessing_ui_m.doubleSpinBox_Rstep.value())
@@ -890,7 +894,8 @@ def set_stog_values_load(main_window, stog_dict):
     pystog_inputs["Yoffset"] = stog_dict["Yoffset"]
     main_window.postprocessing_ui_m.lineEdit_Yoffset_stog.setText(stog_dict["Yoffset"])
     pystog_inputs["Yscale"] = stog_dict["Yscale"]
-    main_window.postprocessing_ui_m.lineEdit_Yscale_stog.setText(stog_dict["Yscale"])
+    ys_text = "{0:5.3F}".format(1. / float(pystog_inputs["Yscale"]))
+    main_window.postprocessing_ui_m.lineEdit_Yscale_stog.setText(ys_text)
     pystog_inputs["Qoffset"] = stog_dict["Qoffset"]
     main_window.postprocessing_ui_m.lineEdit_Qoffset.setText(stog_dict["Qoffset"])
     pystog_inputs["Rmax"] = stog_dict["Rmax"]
@@ -968,6 +973,7 @@ def execute_stog(main_window):
         main_window.ui.statusbar.showMessage("PyStoG execution failed!",
                                              main_window.statusbar_display_time)
         return
+
     print("[Info] The json file is created.")
     print("[Info] PyStoG in progress...")
     cwd = os.getcwd()
@@ -978,14 +984,15 @@ def execute_stog(main_window):
     subprocess.run(["pystog_cli", "--json", "pystog_input.json"])
     os.chdir(cwd)
     print("[Info] PyStoG successfully executed")
-    added_stog = add_stog_data(main_window)
-    if added_stog is None:
-        return
-    generate_final(main_window)
 
     main_window.ui.statusbar.setStyleSheet("color: blue")
     main_window.ui.statusbar.showMessage("PyStoG successfully executed!",
                                          main_window.statusbar_display_time)
+
+    added_stog = add_stog_data(main_window)
+    if added_stog is None:
+        return
+    generate_final(main_window)
 
     current_dir = main_window.current_folder
     if os.path.isfile(os.path.join(current_dir, "ft.dat")):
@@ -1059,7 +1066,7 @@ def convert_json(main_window, stog_dict):
 
     if not os.path.exists(main_window._full_merged_path):
         return
-    json_dict["Files"] = [{"Filename": main_window._full_merged_path,
+    json_dict["Files"] = [{"Filename": os.path.abspath(main_window._full_merged_path),
                            "ReciprocalFunction": "S(Q)",
                            "Qmin": stog_dict["Qmin"],
                            "Qmax": stog_dict["Qmax"],
@@ -1080,7 +1087,7 @@ def convert_json(main_window, stog_dict):
     output = os.path.join(main_window.output_folder,
                           "StoG",
                           main_window._stem)
-    json_dict["Outputs"] = {"StemName": output}
+    json_dict["Outputs"] = {"StemName": os.path.abspath(output)}
     return json_dict
 
 
