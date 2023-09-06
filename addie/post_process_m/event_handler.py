@@ -702,7 +702,7 @@ def merge_banks(main_window):
 
 
 def save_file_raw(main_window, file_name):
-    if type(file_name) == list:
+    if file_name.isinstance(list):
         save_directory = QFileDialog.getExistingDirectory(main_window,
                                                           'Save Banks',
                                                           main_window.current_folder)
@@ -791,7 +791,7 @@ def save_file_merged(main_window, file_name, auto=False):
 
 
 def save_file_stog(main_window, file_name):
-    if type(file_name) == list:
+    if file_name.isinstance(list):
         save_directory = QFileDialog.getExistingDirectory(main_window,
                                                           'Save StoG Files',
                                                           main_window.current_folder)

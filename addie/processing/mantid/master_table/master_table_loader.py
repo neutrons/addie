@@ -376,7 +376,7 @@ class JsonLoader:
 
                 if "AbsMSParameters" in _source_row_entry["Sample"]:
                     ele_size_val = _source_row_entry["Sample"]["AbsMSParameters"]["ElementSize"]
-                    if type(ele_size_val) == list:
+                    if ele_size_val.isinstance(list):
                         ele_size_val = ",".join([str(item) for item in ele_size_val])
                     else:
                         ele_size_val = str(ele_size_val)
