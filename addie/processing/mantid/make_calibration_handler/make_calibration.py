@@ -364,36 +364,44 @@ class MakeCalibrationWindow(QMainWindow):
     def run_calibration_button_clicked(self):
         instr_dict = {"NOM": "NOMAD",
                       "PG3": "PG3}"}
+        sam_env_dict = {
+            "Cryostream": "shifter",
+            "cryostream": "shifter",
+            "Shifter": "shifter",
+            "shifter": "shifter",
+            "Cryostat": "cryostat",
+            "cryostat": "cryostat",
+            "Furnace": "furnace",
+            "furnace": "furnace",
+        }
         o_dict = MakeCalibrationDictionary(parent=self)
         for calibrant in o_dict.dictionary['Calibrants'].keys():
             calib_tmp_dict = o_dict.dictionary['Calibrants'][calibrant]
             calib_file = calib_tmp_dict['Filename']
             calib_date = calib_tmp_dict['Date'].replace("_", "-")
-            calib_senv = calib_tmp_dict['SampleEnvironment']
+            calib_senv = sam_env_dict[calib_tmp_dict['SampleEnvironment']]
             calib_outd = calib_tmp_dict['CalDirectory']
             if "/" in calib_file:
                 instrument_name = calib_file.split("/")[2]
             else:
                 instrument_name = calib_file.split("_")[0]
             calib_control_file = os.path.join('/SNS/', instrument_name,
-                                              'shared/CALIBRATION/Group_calib_scripts/addie_cache',
-                                              'control_' + calibrant + ".dat")
-            with open(calib_control_file, "w") as calib_f:
-                calib_f.write("{0:<25s}:: {1:s}\n".format("diamond file", calib_file))
-                calib_f.write("{0:<25s}:: {1:s}\n".format("instrument",
-                                                          instr_dict[instrument_name]))
-                calib_f.write("{0:<25s}:: {1:s}\n".format("date", calib_date))
-                calib_f.write("{0:<25s}:: {1:s}\n".format("sample environment",
-                                                          calib_senv))
-                sdmsk = "shadow_mask_" + calib_senv + "_" + str(calibrant) + ".in"
-                calib_f.write("{0:<25s}:: {1:s}\n".format("generate mask",
-                                                          sdmsk))
-                calib_f.write("{0:<25s}:: {1:s}\n".format("output directory",
-                                                          calib_outd))
+                                              'shared/CALIBRATION/cal_config.json')
+            with open(calib_control_file, "r") as f:
+                cal_config_dict = json.load(f)
+                cal_config_dict["Diamond"] = calib_file
+                cal_config_dict["Date"] = calib_date
+                cal_config_dict["SampleEnv"] = calib_senv
+                cal_config_dict["OutputDir"] = calib_outd
+                if "GenShadowMask" in cal_config_dict:
+                    sm_name = f"shadow_mask_{calib_senv}_{run_num}.in"
+                    cal_config_dict["GenShadowMask"] = sm_name
+            with open(calib_control_file, "w") as f:
+                json.dump(cal_config_dict, f, indent=4)
+
             running_script = os.path.join('/SNS/', instrument_name,
-                                          'shared/CALIBRATION/Group_calib_scripts',
-                                          'run_me')
-            running_script += (" " + calib_control_file)
+                                          'shared/CALIBRATION/nom_cal')
+
             self.parent.launch_job_manager(job_name='MakeCalibration-' + str(calibrant),
                                            script_to_run=running_script)
 
