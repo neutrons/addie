@@ -12,6 +12,7 @@ import os
 import simplejson
 import re
 import subprocess
+import json
 
 from addie.utilities.gui_handler import TableHandler
 
@@ -362,8 +363,6 @@ class MakeCalibrationWindow(QMainWindow):
         self.ui.run_calibration_button.setEnabled(_status)
 
     def run_calibration_button_clicked(self):
-        instr_dict = {"NOM": "NOMAD",
-                      "PG3": "PG3}"}
         sam_env_dict = {
             "Cryostream": "shifter",
             "cryostream": "shifter",
@@ -375,7 +374,7 @@ class MakeCalibrationWindow(QMainWindow):
             "furnace": "furnace",
         }
         o_dict = MakeCalibrationDictionary(parent=self)
-        for calibrant in o_dict.dictionary['Calibrants'].keys():
+        for calibrant in list(o_dict.dictionary['Calibrants'].keys())[0]:
             calib_tmp_dict = o_dict.dictionary['Calibrants'][calibrant]
             calib_file = calib_tmp_dict['Filename']
             calib_date = calib_tmp_dict['Date'].replace("_", "-")
@@ -394,7 +393,7 @@ class MakeCalibrationWindow(QMainWindow):
                 cal_config_dict["SampleEnv"] = calib_senv
                 cal_config_dict["OutputDir"] = calib_outd
                 if "GenShadowMask" in cal_config_dict:
-                    sm_name = f"shadow_mask_{calib_senv}_{run_num}.in"
+                    sm_name = f"shadow_mask_{calib_senv}_{calibrant}.in"
                     cal_config_dict["GenShadowMask"] = sm_name
             with open(calib_control_file, "w") as f:
                 json.dump(cal_config_dict, f, indent=4)
