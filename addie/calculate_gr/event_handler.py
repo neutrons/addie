@@ -10,6 +10,7 @@ from addie.widgets.filedialog import get_save_file
 from mantid.api import AnalysisDataService
 import mantid.simpleapi as simpleapi
 from pystog import Transformer, FourierFilter
+import numpy as np
 
 
 def check_widgets_status(main_window, enable_gr_widgets=False):
@@ -259,6 +260,17 @@ def generate_gr_step2(main_window, sq_ws_name_list):
                 rho=rho0)
 
             new_sq_wks = sq_ws_name + "_ff_rcutoff_" + r_cutoff_ff_text.replace(".", "p")
+
+            q_func = main_window.calculategr_ui.comboBox_SofQType.currentText()
+            if q_func == "S(Q)-1":
+                sq_out_tmp = [val_tmp - 1. for val_tmp in sq_out]
+                sq_out = np.array(sq_out_tmp)
+            elif q_func == "Q[S(Q)-1]":
+                sq_out_tmp = [val_tmp / q_out[count] + 1. for count, val_tmp in enumerate(sq_out)]
+                sq_out = np.array(sq_out_tmp)
+            else:
+                pass
+
             simpleapi.CreateWorkspace(
                 DataX=q_out,
                 DataY=sq_out,
