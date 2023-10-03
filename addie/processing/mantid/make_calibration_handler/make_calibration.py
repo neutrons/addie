@@ -344,7 +344,8 @@ class MakeCalibrationWindow(QMainWindow):
         if nbr_row == 0:
             return False
 
-        for _row in np.arange(nbr_row):
+        # for _row in np.arange(nbr_row):
+        for _row in [0]:
             _status_row = self._check_status_of_row(row=_row)
             if _status_row:
                 continue
@@ -374,7 +375,7 @@ class MakeCalibrationWindow(QMainWindow):
             "furnace": "furnace",
         }
         o_dict = MakeCalibrationDictionary(parent=self)
-        for calibrant in list(o_dict.dictionary['Calibrants'].keys())[0]:
+        for calibrant in [list(o_dict.dictionary['Calibrants'].keys())[0]]:
             calib_tmp_dict = o_dict.dictionary['Calibrants'][calibrant]
             calib_file = calib_tmp_dict['Filename']
             calib_date = calib_tmp_dict['Date'].replace("_", "-")
@@ -450,7 +451,11 @@ class MakeCalibrationDictionary:
             if str(local_list_ui.calibration_browser_value.text()) != "N/A":
                 cali_filename = str(local_list_value["calibration_browser"])
             else:
-                cali_filename = None
+                if cali_run_number.isdigit():
+                    inst_name = parent.instrument["short_name"]
+                    cali_filename = f"{inst_name}_{cali_run_number}"
+                else:
+                    cali_filename = None
 
             # local date
             _date = local_list_ui.date.date()

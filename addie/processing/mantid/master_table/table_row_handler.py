@@ -841,6 +841,8 @@ class TableRowHandler:
         _layout.addStretch()
 
         align_and_focus_args = self.add_global_key_value_to_local_key_value(align_and_focus_args)
+        for key in align_and_focus_args.keys():
+            align_and_focus_args[key] = str(align_and_focus_args[key])
         _master_table_row_ui['align_and_focus_args_infos'] = align_and_focus_args
 
         # column 26 - Self Scattering levels

@@ -51,4 +51,4 @@ def test_get_selected_items(qtbot, custom_tree_view):
     items = custom_tree_view.get_selected_items()
     items_list = [str(item.text()) for item in items]
     assert items_list == [main_item]
-    assert items.isinstance(list)
+    assert isinstance(items, list)
