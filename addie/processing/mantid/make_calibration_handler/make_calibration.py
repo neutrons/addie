@@ -452,7 +452,7 @@ class MakeCalibrationDictionary:
                 cali_filename = str(local_list_value["calibration_browser"])
             else:
                 if cali_run_number.isdigit():
-                    inst_name = parent.instrument["short_name"]
+                    inst_name = self.parent.instrument["short_name"]
                     cali_filename = f"{inst_name}_{cali_run_number}"
                 else:
                     cali_filename = None
