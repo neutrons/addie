@@ -266,7 +266,7 @@ class MainWindow(QMainWindow):
 
     logbook_thread = LogbookThread()
     number_of_last_log_files_to_display = 10
-    previous_list_of_log_files = []
+    # previous_list_of_log_files = []
 
     _run_thread = RunThread()
     job_monitor_thread = JobMonitorThread()
