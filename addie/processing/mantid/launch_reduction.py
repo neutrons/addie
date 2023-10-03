@@ -459,6 +459,7 @@ def run_mantid(parent):
                         print(f"[Warning] No reduced SofQ data found for row-{row}.")
                         print(f"[Warning] Check the directory {os.path.dirname(check_file)}")
                         continue
+
                 # Extract row
                 m_out_dir = os.path.join(os.path.dirname(os.path.dirname(check_file)),
                                          "SofQ_merged")
@@ -478,7 +479,8 @@ def run_mantid(parent):
                                            merge_config=merge_config,
                                            stem_name=sam_title)
                     if m_return:
-                        proc_msg = f"Banks merged successfully for row-{row}"
+                        proc_msg = f"Banks merged successfully for row-{row}\n"
+                        proc_msg += f"[Info] Merged S(Q) files can be found at {m_out_dir}"
                     else:
                         proc_msg = f"Merging banks failed for row-{row}"
                     print("[Info] " + proc_msg)
@@ -489,7 +491,7 @@ def run_mantid(parent):
         parent.ui.statusbar.showMessage(
             "Jon done for all selected rows. Check the terminal for status of each row",
             parent.statusbar_display_time)
-        print("[Info] All selected rows processed. Check the status above status for each row")
+        print("[Info] All selected rows processed. Check the printout status for each row")
 
         QApplication.restoreOverrideCursor()
 
@@ -542,11 +544,19 @@ def run_mantid(parent):
                                           "SofQ_merged",
                                           f"{sam_title}_merged.sq")
                 if not os.path.isfile(check_file):
-                    print(f"[Warning] No merged SofQ data found for row-{row}.")
-                    print(f"[Warning] Check the directory {os.path.dirname(check_file)}")
-                    continue
+                    instr_name = dictionary["Instrument"].upper()
+                    run_num_tmp = int(dictionary["Sample"]["Runs"].split("-")[0])
+                    ipts_dir = GetIPTS(Instrument=instr_name, RunNumber=run_num_tmp)
+                    check_file = os.path.join(ipts_dir, "shared",
+                                              "autoreduce", "multi_banks_summed",
+                                              "SofQ_merged",
+                                              f"{sam_title}_merged.sq")
+                    if not os.path.isfile(check_file):
+                        print(f"[Warning] No merged SofQ data found for row-{row}.")
+                        print(f"[Warning] Check the directory {os.path.dirname(check_file)}")
+                        continue
 
-                p_out_dir = os.path.join(parent.output_folder,
+                p_out_dir = os.path.join(os.path.dirname(os.path.dirname(check_file)),
                                          "StoG")
                 if not os.path.exists(p_out_dir):
                     os.mkdir(p_out_dir)
@@ -564,6 +574,7 @@ def run_mantid(parent):
                 os.chdir(cwd)
                 success_msg = f"PyStoG job done for row-{row}. If failed, see info above."
                 print("[Info] " + success_msg)
+                print("[Info] PyStoG files can be found at", p_out_dir)
 
         parent.ui.statusbar.setStyleSheet("color: blue")
         parent.ui.statusbar.showMessage(
