@@ -672,7 +672,7 @@ def run_mantid(parent):
                 elif "AlignAndFocusArgs" in key:
                     af_tmp = {}
                     for key_af, item_af in item.items():
-                        if item_af.isinstance(list):
+                        if isinstance(item_af, list):
                             try:
                                 list_tmp = [float(entry_tmp) for entry_tmp in item_af]
                             except ValueError:
@@ -743,8 +743,8 @@ def check_all_decimal(input_list):
 
 def check_all_number(input_list):
     for item in input_list:
-        cond1 = item.isinstance(int)
-        cond2 = type.isinstance(float)
+        cond1 = isinstance(item, int)
+        cond2 = isinstance(item, float)
         if not (cond1 or cond2):
             return False
     return True
@@ -775,7 +775,7 @@ def final_validator(final_dict):
 
     # Check 'Sample' entry.
     if "Runs" in final_dict["Sample"]:
-        if final_dict["Sample"]["Runs"].isinstance(str):
+        if isinstance(final_dict["Sample"]["Runs"], str):
             run_num_tmp = re.split("-|,| ", final_dict["Sample"]["Runs"])
             if not check_all_decimal(run_num_tmp):
                 log_error(2, '["Sample"]["Run"]')
@@ -788,7 +788,7 @@ def final_validator(final_dict):
         return False
     if "Background" in final_dict["Sample"]:
         if "Runs" in final_dict["Sample"]["Background"] and "Background" in final_dict["Sample"]["Background"]:
-            if final_dict["Sample"]["Background"]["Runs"].isinstance(str):
+            if isinstance(final_dict["Sample"]["Background"]["Runs"], str):
                 bkg_run_num = re.split("-|,| ", final_dict["Sample"]["Background"]["Runs"])
                 if not check_all_decimal(bkg_run_num):
                     log_error(2, '["Sample"]["Background"]["Runs"]')
@@ -796,7 +796,7 @@ def final_validator(final_dict):
             else:
                 log_error(2, '["Sample"]["Background"]["Runs"]')
                 return False
-            if final_dict["Sample"]["Background"]["Background"].isinstance(dict):
+            if isinstance(final_dict["Sample"]["Background"]["Background"], dict):
                 if "Runs" in final_dict["Sample"]["Background"]["Background"]:
                     bkg_run_num = re.split("-|,| ", final_dict["Sample"]["Background"]["Background"]["Runs"])
                     if not check_all_decimal(bkg_run_num):
@@ -817,7 +817,7 @@ def final_validator(final_dict):
     else:
         if "Background" in final_dict["Normalization"]:
             if "Runs" in final_dict["Normalization"]["Background"]:
-                if final_dict["Normalization"]["Background"]["Runs"].isinstance(str):
+                if isinstance(final_dict["Normalization"]["Background"]["Runs"], str):
                     bkg_run_num = re.split("-|,| ", final_dict["Normalization"]["Background"]["Runs"])
                     if not check_all_decimal(bkg_run_num):
                         log_error(2, '["Normalization"]["Background"]["Runs"]')
@@ -834,15 +834,15 @@ def final_validator(final_dict):
         log_error(1, '["Sample"]["Background"]')
         return False
     if "Material" in final_dict["Sample"]:
-        if not final_dict["Sample"]["Material"].isinstance(str):
+        if not isinstance(final_dict["Sample"]["Material"], str):
             log_error(2, '["Sample"]["Material"]')
             return False
     else:
         log_error(1, '["Sample"]["Material"]')
     if "MassDensity" in final_dict["Sample"]:
         cond1 = final_dict["Sample"]["MassDensity"]
-        cond2 = final_dict["Sample"]["MassDensity"].isinstance(int)
-        cond3 = final_dict["Sample"]["MassDensity"].isinstance(float)
+        cond2 = isinstance(final_dict["Sample"]["MassDensity"], int)
+        cond3 = isinstance(final_dict["Sample"]["MassDensity"], float)
         if not (cond1 and (cond2 or cond3)):
             log_error(2, '["Sample"]["MassDensity"]')
             return False
@@ -850,8 +850,8 @@ def final_validator(final_dict):
         log_error(1, '["Sample"]["MassDensity"]')
     if "PackingFraction" in final_dict["Sample"]:
         cond1 = final_dict["Sample"]["PackingFraction"]
-        cond2 = final_dict["Sample"]["PackingFraction"].isinstance(int)
-        cond3 = final_dict["Sample"]["PackingFraction"].isinstance(float)
+        cond2 = isinstance(final_dict["Sample"]["PackingFraction"], int)
+        cond3 = isinstance(final_dict["Sample"]["PackingFraction"], float)
         if not (cond1 and (cond2 or cond3)):
             log_error(2, '["Sample"]["PackingFraction"]')
             return False
@@ -860,14 +860,14 @@ def final_validator(final_dict):
     if "Geometry" in final_dict["Sample"]:
         if "Radius" in final_dict["Sample"]["Geometry"] and "Height" in final_dict["Sample"]["Geometry"]:
             cond1 = final_dict["Sample"]["Geometry"]["Radius"]
-            cond2 = final_dict["Sample"]["Geometry"]["Radius"].isinstance(int)
-            cond3 = final_dict["Sample"]["Geometry"]["Radius"].isinstance(float)
+            cond2 = isinstance(final_dict["Sample"]["Geometry"]["Radius"], int)
+            cond3 = isinstance(final_dict["Sample"]["Geometry"]["Radius"], float)
             if not (cond1 and (cond2 or cond3)):
                 log_error(2, '["Sample"]["Geometry"]["Radius"]')
                 return False
             cond1 = final_dict["Sample"]["Geometry"]["Height"]
-            cond2 = final_dict["Sample"]["Geometry"]["Height"].isinstance(int)
-            cond3 = final_dict["Sample"]["Geometry"]["Height"].isinstance(float)
+            cond2 = isinstance(final_dict["Sample"]["Geometry"]["Height"], int)
+            cond3 = isinstance(final_dict["Sample"]["Geometry"]["Height"], float)
             if not (cond1 and (cond2 or cond3)):
                 log_error(2, '["Sample"]["Geometry"]["Height"]')
                 return False
@@ -883,7 +883,7 @@ def final_validator(final_dict):
 
     # Check 'Normalization' entry.
     if "Runs" in final_dict["Normalization"]:
-        if final_dict["Normalization"]["Runs"].isinstance(str):
+        if isinstance(final_dict["Normalization"]["Runs"], str):
             run_num_tmp = re.split("-|,| ", final_dict["Normalization"]["Runs"])
             if not check_all_decimal(run_num_tmp):
                 log_error(2, '["Normalization"]["Run"]')
@@ -896,7 +896,7 @@ def final_validator(final_dict):
         return False
     if "Background" in final_dict["Normalization"]:
         if "Runs" in final_dict["Normalization"]["Background"]:
-            if final_dict["Normalization"]["Background"]["Runs"].isinstance(str):
+            if isinstance(final_dict["Normalization"]["Background"]["Runs"], str):
                 bkg_run_num = re.split("-|,| ", final_dict["Normalization"]["Background"]["Runs"])
                 if not check_all_decimal(bkg_run_num):
                     log_error(2, '["Normalization"]["Background"]["Runs"]')
@@ -911,15 +911,15 @@ def final_validator(final_dict):
         log_error(1, '["Normalization"]["Background"]')
         return False
     if "Material" in final_dict["Normalization"]:
-        if not final_dict["Normalization"]["Material"].isinstance(str):
+        if not isinstance(final_dict["Normalization"]["Material"], str):
             log_error(2, '["Normalization"]["Material"]')
             return False
     else:
         log_error(1, '["Normalization"]["Material"]')
     if "MassDensity" in final_dict["Normalization"]:
         cond1 = final_dict["Normalization"]["MassDensity"]
-        cond2 = final_dict["Normalization"]["MassDensity"].isinstance(int)
-        cond3 = final_dict["Normalization"]["MassDensity"].isinstance(float)
+        cond2 = isinstance(final_dict["Normalization"]["MassDensity"], int)
+        cond3 = isinstance(final_dict["Normalization"]["MassDensity"], float)
         if not (cond1 and (cond2 or cond3)):
             log_error(2, '["Normalization"]["MassDensity"]')
             return False
@@ -927,8 +927,8 @@ def final_validator(final_dict):
         log_error(1, '["Normalization"]["MassDensity"]')
     if "PackingFraction" in final_dict["Normalization"]:
         cond1 = final_dict["Normalization"]["PackingFraction"]
-        cond2 = final_dict["Normalization"]["PackingFraction"].isinstance(int)
-        cond3 = final_dict["Normalization"]["PackingFraction"].isinstance(float)
+        cond2 = isinstance(final_dict["Normalization"]["PackingFraction"], int)
+        cond3 = isinstance(final_dict["Normalization"]["PackingFraction"], float)
         if not (cond1 and (cond2 or cond3)):
             log_error(2, '["Normalization"]["PackingFraction"]')
             return False
@@ -937,14 +937,14 @@ def final_validator(final_dict):
     if "Geometry" in final_dict["Normalization"]:
         if "Radius" in final_dict["Normalization"]["Geometry"] and "Height" in final_dict["Normalization"]["Geometry"]:
             cond1 = final_dict["Normalization"]["Geometry"]["Radius"]
-            cond2 = final_dict["Normalization"]["Geometry"]["Radius"].isinstance(int)
-            cond3 = final_dict["Normalization"]["Geometry"]["Radius"].isinstance(float)
+            cond2 = isinstance(final_dict["Normalization"]["Geometry"]["Radius"], int)
+            cond3 = isinstance(final_dict["Normalization"]["Geometry"]["Radius"], float)
             if not (cond1 and (cond2 or cond3)):
                 log_error(2, '["Normalization"]["Geometry"]["Radius"]')
                 return False
             cond1 = final_dict["Normalization"]["Geometry"]["Height"]
-            cond2 = final_dict["Normalization"]["Geometry"]["Height"].isinstance(int)
-            cond3 = final_dict["Normalization"]["Geometry"]["Height"].isinstance(float)
+            cond2 = isinstance(final_dict["Normalization"]["Geometry"]["Height"], int)
+            cond3 = isinstance(final_dict["Normalization"]["Geometry"]["Height"], float)
             if not (cond1 and (cond2 or cond3)):
                 log_error(2, '["Normalization"]["Geometry"]["Height"]')
                 return False
@@ -960,7 +960,7 @@ def final_validator(final_dict):
 
     # Check "Merging" entry
     if "QBinning" in final_dict["Merging"]:
-        if final_dict["Merging"]["QBinning"].isinstance(list):
+        if isinstance(final_dict["Merging"]["QBinning"], list):
             cond1 = len(final_dict["Merging"]["QBinning"]) == 3
             cond2 = check_all_number(final_dict["Merging"]["QBinning"])
             if not (cond1 and cond2):
