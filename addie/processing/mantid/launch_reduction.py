@@ -497,23 +497,6 @@ def run_mantid(parent):
 
         return
     elif selected_item == "PyStoG":
-        # for row in range(num_rows):
-        #     dictionary, activate = exporter.retrieve_row_info(row)
-        #     if activate is True:
-        #         if row == 0:
-        #             sam_title = dictionary["Title"]
-        #         else:
-        #             if dictionary["Title"] != sam_title:
-        #                 msgBox = QMessageBox()
-        #                 msgBox.setIcon(QMessageBox.Warning)
-        #                 msgBox.setText("Different sample title found for selected rows! Continue?")
-        #                 msgBox.setWindowTitle("Warning!")
-        #                 msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-
-        #                 returnValue = msgBox.exec()
-        #                 if returnValue == QMessageBox.Cancel:
-        #                     return
-
         p_config_j, _ = QFileDialog.getOpenFileName(parent,
                                                     "Select PyStoG Config File",
                                                     parent.output_folder,
