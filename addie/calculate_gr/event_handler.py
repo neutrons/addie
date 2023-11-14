@@ -266,7 +266,7 @@ def generate_gr_step2(main_window, sq_ws_name_list):
                 sq_out_tmp = [val_tmp - 1. for val_tmp in sq_out]
                 sq_out = np.array(sq_out_tmp)
             elif q_func == "Q[S(Q)-1]":
-                sq_out_tmp = [val_tmp / q_out[count] + 1. for count, val_tmp in enumerate(sq_out)]
+                sq_out_tmp = [q_out[count] * (val_tmp - 1.) for count, val_tmp in enumerate(sq_out)]
                 sq_out = np.array(sq_out_tmp)
             else:
                 pass
