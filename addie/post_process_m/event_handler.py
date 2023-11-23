@@ -12,6 +12,17 @@ from mantid.simpleapi import \
     DeleteWorkspace
 import numpy as np
 from scipy.signal import argrelextrema
+from datetime import datetime
+
+weekdays = [
+    'Mon',
+    'Tue',
+    'Wed',
+    'Thu',
+    'Fri',
+    'Sat',
+    'Sun'
+]
 
 
 def open_workspaces(main_window):
@@ -231,6 +242,8 @@ def open_and_load_workspaces(main_window):
         main_window.postprocessing_ui_m.pushButton_loadsc.setEnabled(False)
         main_window.postprocessing_ui_m.pushButton_savemc.setEnabled(False)
         main_window.postprocessing_ui_m.pushButton_savesc.setEnabled(False)
+        main_window.postprocessing_ui_m.pushButton_mergeBanks.setEnabled(False)
+        main_window.postprocessing_ui_m.pushButton_StoG.setEnabled(False)
         if main_window.postprocessing_ui_m.checkBox_defaultWorkspace.isChecked():
             main_window.postprocessing_ui_m.pushButton_extract.setEnabled(True)
             main_window.postprocessing_ui_m.frame_workspaces_table.cur_wks = 'SQ_banks_normalized'
@@ -264,6 +277,7 @@ def extract_button(main_window):
 
     main_window.postprocessing_ui_m.pushButton_loadmc.setEnabled(True)
     main_window.postprocessing_ui_m.pushButton_savemc.setEnabled(True)
+    main_window.postprocessing_ui_m.pushButton_mergeBanks.setEnabled(True)
 
     main_window.ui.statusbar.setStyleSheet("color: blue")
     main_window.ui.statusbar.showMessage("Workspace successfully extracted!",
@@ -697,6 +711,7 @@ def merge_banks(main_window):
 
     main_window.postprocessing_ui_m.pushButton_savesc.setEnabled(True)
     main_window.postprocessing_ui_m.pushButton_loadsc.setEnabled(True)
+    main_window.postprocessing_ui_m.pushButton_StoG.setEnabled(True)
 
     print("[Info] Banks successfully merged")
 
@@ -791,6 +806,10 @@ def save_file_merged(main_window, file_name, auto=False):
 
 
 def save_file_stog(main_window, file_name):
+    rc = main_window._pystog_inputs_collect["RippleParams"][0]
+    rx = main_window._pystog_inputs_collect["RippleParams"][2]
+    rn = main_window._pystog_inputs_collect["RippleParams"][1]
+
     if isinstance(file_name, list):
         save_directory = QFileDialog.getExistingDirectory(main_window,
                                                           'Save StoG Files',
@@ -803,11 +822,43 @@ def save_file_stog(main_window, file_name):
             x_stog = main_window._pystog_output_files[item]["xlist"]
             y_stog = main_window._pystog_output_files[item]["ylist"]
 
-            with open(os.path.join(save_directory, item), 'w') as new_file:
-                new_file.write(str(len(x_stog)) + '\n')
-                new_file.write('#\n')
-                for i in range(len(x_stog)):
-                    new_file.write(str(x_stog[i]) + ' ' + str(y_stog[i]) + '\n')
+            if "pdffit.gr" in item:
+                current_time = datetime.now()
+                current_timezone = datetime.now().astimezone().strftime("%Z")
+                current_weekday = current_time.weekday()
+                time_stamp = weekdays[current_weekday] + " "
+                time_stamp += current_time.strftime("%m-%d-%Y %H:%M:%S") + " "
+                time_stamp += current_timezone
+                kt = "Qmax"
+                ts_qmax = float(main_window._pystog_inputs_collect[kt])
+                with open(os.path.join(save_directory, item), 'w') as f:
+                    f.write(f"# {len(x_stog)}\n")
+                    f.write("# Pair Distribution Function (PDF)\n")
+                    f.write(f"# created: {time_stamp}\n")
+                    str_tmp = f"# comment: neutron, Qmax={ts_qmax}, "
+                    str_tmp += "Qdamp=0.017659, Qbroad=0.0191822\n"
+                    kt = "FourierFilter"
+                    ft_sel = main_window._pystog_inputs_collect[kt]
+                    if ft_sel:
+                        kt = "Rmin"
+                        ft_rmin = float(main_window._pystog_inputs_collect[kt])
+                        str_tmp += f"# comment: Fourier filtered, rcut={ft_rmin} \n"
+                    str_tmp += "# comment: Ripple removed, "
+                    str_tmp += f"Rcutoff, 1st peak min, max = {rc}, {rn}, {rx}\n"
+                    f.write(str_tmp)
+                    for count, r_val in enumerate(x_stog):
+                        if count == len(x_stog) - 1:
+                            f.write("{0:16.12F}{1:18.12F}".format(r_val,
+                                                                  y_stog[count]))
+                        else:
+                            f.write("{0:16.12F}{1:18.12F}\n".format(r_val,
+                                                                    y_stog[count]))
+            else:
+                with open(os.path.join(save_directory, item), 'w') as new_file:
+                    new_file.write(str(len(x_stog)) + '\n')
+                    new_file.write('#\n')
+                    for i in range(len(x_stog)):
+                        new_file.write(str(x_stog[i]) + ' ' + str(y_stog[i]) + '\n')
         main_window.ui.statusbar.setStyleSheet("color: blue")
         main_window.ui.statusbar.showMessage("Files saved successfully!",
                                              main_window.statusbar_display_time)
@@ -834,11 +885,44 @@ def save_file_stog(main_window, file_name):
         x_stog = main_window._pystog_output_files[file_name]["xlist"]
         y_stog = main_window._pystog_output_files[file_name]["ylist"]
 
-        with open(save_file, 'w') as new_file:
-            new_file.write(str(len(x_stog)) + '\n')
-            new_file.write('#\n')
-            for i in range(len(x_stog)):
-                new_file.write(str(x_stog[i]) + ' ' + str(y_stog[i]) + '\n')
+        if "pdffit.gr" in file_name:
+            current_time = datetime.now()
+            current_timezone = datetime.now().astimezone().strftime("%Z")
+            current_weekday = current_time.weekday()
+            time_stamp = weekdays[current_weekday] + " "
+            time_stamp += current_time.strftime("%m-%d-%Y %H:%M:%S") + " "
+            time_stamp += current_timezone
+            kt = "Qmax"
+            ts_qmax = float(main_window._pystog_inputs_collect[kt])
+            with open(save_file, 'w') as f:
+                f.write(f"# {len(x_stog)}\n")
+                f.write("# Pair Distribution Function (PDF)\n")
+                f.write(f"# created: {time_stamp}\n")
+                str_tmp = f"# comment: neutron, Qmax={ts_qmax}, "
+                str_tmp += "Qdamp=0.017659, Qbroad=0.0191822\n"
+                kt = "FourierFilter"
+                ft_sel = main_window._pystog_inputs_collect[kt]
+                if ft_sel:
+                    kt = "Rmin"
+                    ft_rmin = float(main_window._pystog_inputs_collect[kt])
+                    str_tmp += f"# comment: Fourier filtered, rcut={ft_rmin} \n"
+                str_tmp += "# comment: Ripple removed, "
+                str_tmp += f"Rcutoff, 1st peak min, max = {rc}, {rn}, {rx}\n"
+                f.write(str_tmp)
+                for count, r_val in enumerate(x_stog):
+                    if count == len(x_stog) - 1:
+                        f.write("{0:16.12F}{1:18.12F}".format(r_val,
+                                                              y_stog[count]))
+                    else:
+                        f.write("{0:16.12F}{1:18.12F}\n".format(r_val,
+                                                                y_stog[count]))
+        else:
+            with open(save_file, 'w') as new_file:
+                new_file.write(str(len(x_stog)) + '\n')
+                new_file.write('#\n')
+                for i in range(len(x_stog)):
+                    new_file.write(str(x_stog[i]) + ' ' + str(y_stog[i]) + '\n')
+
         main_window.ui.statusbar.setStyleSheet("color: blue")
         main_window.ui.statusbar.showMessage("File saved successfully!",
                                              main_window.statusbar_display_time)
@@ -981,7 +1065,7 @@ def execute_stog(main_window):
     os.chdir(path)
     with open('pystog_input.json', 'w') as pystog_file:
         json.dump(json_format, pystog_file, indent=2)
-    subprocess.run(["pystog_cli", "--json", "pystog_input.json"])
+    subprocess.check_call(["pystog_cli", "--json", "pystog_input.json"])
     os.chdir(cwd)
     print("[Info] PyStoG successfully executed")
 
@@ -1133,21 +1217,106 @@ def add_stog_data(main_window):
     data_ft_gr = stem + "_ft.gr"
     data_rmc_fq = stem + "_rmc.fq"
     data_rmc_gr = stem + "_rmc.gr"
+    data_pdffit_gr = stem + "_pdffit.gr"
 
-    data_list = [data_sq, data_gr, data_ft_sq, data_ft_gr, data_rmc_fq, data_rmc_gr]
+    data_list = [
+        data_sq,
+        data_gr,
+        data_ft_sq,
+        data_ft_gr,
+        data_rmc_fq,
+        data_rmc_gr,
+        data_pdffit_gr
+    ]
 
     for file_name in data_list:
+        if file_name == data_pdffit_gr:
+            file_tmp = os.path.join(
+                main_window.output_folder,
+                "StoG",
+                data_rmc_gr
+            )
+            file_out_tmp = os.path.join(
+                main_window.output_folder,
+                "StoG",
+                data_pdffit_gr
+            )
+            try:
+                file_in = open(file_tmp, "r")
+            except FileNotFoundError:
+                err_msg = f"[Error] S(Q) data file {file_tmp} not found. "
+                err_msg += "Please check the output dir setting."
+                print(err_msg)
+                main_window.ui.statusbar.setStyleSheet("color: red")
+                main_window.ui.statusbar.showMessage(
+                    "S(Q) file loading error, see the terminal for more info!",
+                    main_window.statusbar_display_time
+                )
+                return
+
+            line = file_in.readline()
+            line = file_in.readline()
+            x_list = []
+            y_list = []
+            while line:
+                line = file_in.readline()
+                if line:
+                    if line.split()[1] != "nan":
+                        x_val = float(line.split()[0])
+                        x_list.append(x_val)
+                        y_val = float(line.split()[1])
+                        kt = "NumberDensity"
+                        rho_val = float(main_window._pystog_inputs_collect[kt])
+                        kt = "FaberZiman"
+                        fz_val = float(main_window._pystog_inputs_collect[kt])
+                        y_val *= (4. * np.pi * x_val * rho_val / fz_val)
+                        y_list.append(y_val)
+            file_in.close()
+
+            with open(file_out_tmp, "w") as f:
+                current_time = datetime.now()
+                current_timezone = datetime.now().astimezone().strftime("%Z")
+                current_weekday = current_time.weekday()
+                time_stamp = weekdays[current_weekday] + " "
+                time_stamp += current_time.strftime("%m-%d-%Y %H:%M:%S") + " "
+                time_stamp += current_timezone
+                kt = "Qmax"
+                ts_qmax = float(main_window._pystog_inputs_collect[kt])
+                f.write(f"# {len(x_list)}\n")
+                f.write("# Pair Distribution Function (PDF)\n")
+                f.write(f"# created: {time_stamp}\n")
+                str_tmp = f"# comment: neutron, Qmax={ts_qmax}, "
+                str_tmp += "Qdamp=0.017659, Qbroad=0.0191822\n"
+                f.write(str_tmp)
+                for count, r_val in enumerate(x_list):
+                    if count == len(x_list) - 1:
+                        f.write("{0:16.12F}{1:18.12F}".format(r_val,
+                                                              y_list[count]))
+                    else:
+                        f.write("{0:16.12F}{1:18.12F}\n".format(r_val,
+                                                                y_list[count]))
+
+            main_window._pystog_output_files[file_name] = {"xlist": x_list, "ylist": y_list}
+            file_list_tree.add_stog_data(file_name)
+
+            continue
+
         file_tmp = os.path.join(main_window.output_folder,
                                 "StoG",
                                 file_name)
         try:
             file_in = open(file_tmp, "r")
         except FileNotFoundError:
-            print(f"[Error] S(Q) data file {file_tmp} not found. Please check the output dir setting.")
+            err_msg = f"[Error] S(Q) data file {file_tmp} not found. "
+            err_msg += "Please check the output dir setting."
+            print(err_msg)
             main_window.ui.statusbar.setStyleSheet("color: red")
-            main_window.ui.statusbar.showMessage("S(Q) file loading error, see the terminal for more info!",
-                                                 main_window.statusbar_display_time)
+            main_window.ui.statusbar.showMessage(
+                "S(Q) file loading error, see the terminal for more info!",
+                main_window.statusbar_display_time
+            )
             return
+
         line = file_in.readline()
         line = file_in.readline()
         x_list = []
@@ -1163,6 +1332,8 @@ def add_stog_data(main_window):
         main_window._pystog_output_files[file_name] = {"xlist": x_list, "ylist": y_list}
         file_list_tree.add_stog_data(file_name)
 
+    return True
+
 
 def generate_final(main_window):
     x_vals_final = main_window._pystog_output_files[main_window._stem + "_rmc.gr"]["xlist"]
@@ -1175,7 +1346,7 @@ def generate_final(main_window):
     faber_ziman = float(main_window._pystog_inputs_collect["FaberZiman"])
     for count, item in enumerate(x_vals_final):
         if (item <= rcut_final) and (item >= rmax_final or item <= rmin_final):
-            y_vals_final.append(faber_ziman)
+            y_vals_final.append(-faber_ziman)
         else:
             y_vals_final.append(y_vals_init[count])
     final_file_name = main_window._stem + "_rmc_rr.gr"
@@ -1189,5 +1360,59 @@ def generate_final(main_window):
         file_final_out.write("{0:10.4F}{1:15.6F}\n".format(item, y_vals_final[count]))
     file_final_out.close()
 
-    main_window._pystog_output_files[final_file_name] = {"xlist": x_vals_final, "ylist": y_vals_final}
+    main_window._pystog_output_files[final_file_name] = {
+        "xlist": x_vals_final,
+        "ylist": y_vals_final
+    }
     main_window.postprocessing_ui_m.frame_filelist_tree.add_stog_data(final_file_name)
+
+    final_file_pdffit = main_window._stem + "_rr_pdffit.gr"
+    kt = "NumberDensity"
+    rho_val = float(main_window._pystog_inputs_collect[kt])
+    x_final_pdffit = x_vals_final
+    y_final_pdffit = list()
+    for count, item in enumerate(x_final_pdffit):
+        yt = y_vals_final[count] * 4. * np.pi * item * rho_val / faber_ziman
+        y_final_pdffit.append(yt)
+
+    out_file = os.path.join(
+        main_window.output_folder,
+        "StoG",
+        final_file_pdffit
+    )
+    with open(out_file, "w") as f:
+        current_time = datetime.now()
+        current_timezone = datetime.now().astimezone().strftime("%Z")
+        current_weekday = current_time.weekday()
+        time_stamp = weekdays[current_weekday] + " "
+        time_stamp += current_time.strftime("%m-%d-%Y %H:%M:%S") + " "
+        time_stamp += current_timezone
+        kt = "Qmax"
+        ts_qmax = float(main_window._pystog_inputs_collect[kt])
+        f.write(f"# {len(x_final_pdffit)}\n")
+        f.write("# Pair Distribution Function (PDF)\n")
+        f.write(f"# created: {time_stamp}\n")
+        str_tmp = f"# comment: neutron, Qmax={ts_qmax}, "
+        str_tmp += "Qdamp=0.017659, Qbroad=0.0191822\n"
+        kt = "FourierFilter"
+        ft_sel = main_window._pystog_inputs_collect[kt]
+        if ft_sel:
+            kt = "Rmin"
+            ft_rmin = float(main_window._pystog_inputs_collect[kt])
+            str_tmp += f"# comment: Fourier filtered, rcut={ft_rmin} \n"
+        str_tmp += "# comment: Ripple removed, "
+        str_tmp += f"Rcutoff, 1st peak min, max = {rcut_final}, {rmin_final}, {rmax_final}\n"
+        f.write(str_tmp)
+        for count, r_val in enumerate(x_final_pdffit):
+            if count == len(x_final_pdffit) - 1:
+                f.write("{0:16.12F}{1:18.12F}".format(r_val,
+                                                      y_final_pdffit[count]))
+            else:
+                f.write("{0:16.12F}{1:18.12F}\n".format(r_val,
+                                                        y_final_pdffit[count]))
+
+    main_window._pystog_output_files[final_file_pdffit] = {
+        "xlist": x_final_pdffit,
+        "ylist": y_final_pdffit
+    }
+    main_window.postprocessing_ui_m.frame_filelist_tree.add_stog_data(final_file_pdffit)

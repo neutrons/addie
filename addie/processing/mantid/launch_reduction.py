@@ -17,6 +17,17 @@ from mantid.simpleapi import \
     mtd, \
     DeleteWorkspace
 from pystog.stog import StoG
+from datetime import datetime
+
+weekdays = [
+    'Mon',
+    'Tue',
+    'Wed',
+    'Thu',
+    'Fri',
+    'Sat',
+    'Sun'
+]
 
 
 def extractor(nexus_file: str, wks_name: str, out_dir: str, dir_name=None):
@@ -554,7 +565,57 @@ def run_mantid(parent):
                 cwd = os.getcwd()
                 os.chdir(p_out_dir)
                 subprocess.run(["pystog_cli", "--json", f"{sam_title}_pystog.json"])
+                if os.path.exists("ft.dat"):
+                    os.remove("ft.dat")
                 os.chdir(cwd)
+                with open(pystog_config["Outputs"]["StemName"] + "_rmc.gr", "r") as f:
+                    lines = f.readlines()
+                x_vals = [float(line.strip().split()[0]) for line in lines[3:] if line]
+                y_vals_t = [float(line.strip().split()[1]) for line in lines[3:] if line]
+                y_vals = list()
+                for count, item in enumerate(x_vals):
+                    y_t = y_vals_t[count] * 4. * np.pi * item
+                    y_t *= pystog_config["NumberDensity"]
+                    y_t /= pystog_config["<b_coh>^2"]
+                    y_vals.append(y_t)
+
+                with open(pystog_config["Outputs"]["StemName"] + "_pdffit.gr", "w") as f:
+                    current_time = datetime.now()
+                    current_timezone = datetime.now().astimezone().strftime("%Z")
+                    current_weekday = current_time.weekday()
+                    time_stamp = weekdays[current_weekday] + " "
+                    time_stamp += current_time.strftime("%m-%d-%Y %H:%M:%S") + " "
+                    time_stamp += current_timezone
+                    ts_qmax = pystog_config["Files"][0]["Qmax"]
+                    f.write(f"# {len(x_vals)}\n")
+                    f.write("# Pair Distribution Function (PDF)\n")
+                    f.write(f"# created: {time_stamp}\n")
+                    str_tmp = f"# comment: neutron, Qmax={ts_qmax}, "
+                    str_tmp += "Qdamp=0.017659, Qbroad=0.0191822\n"
+
+                    if "FourierFilter" in pystog_config:
+                        ft_sel = pystog_config["FourierFilter"]["Cutoff"]
+                    else:
+                        ft_sel = 0.
+                    if ft_sel > 0.:
+                        str_tmp += f"# comment: Fourier filtered, rcut={ft_sel} \n"
+
+                    if "RippleParams" in pystog_config:
+                        rc = pystog_config["RippleParams"][0]
+                        rn = pystog_config["RippleParams"][1]
+                        rx = pystog_config["RippleParams"][2]
+                        str_tmp += "# comment: Ripple removed, "
+                        str_tmp += f"Rcutoff, 1st peak min, max = {rc}, {rn}, {rx}\n"
+                        f.write(str_tmp)
+
+                    for count, r_val in enumerate(x_vals):
+                        if count == len(x_vals) - 1:
+                            f.write("{0:16.12F}{1:18.12F}".format(r_val,
+                                                                  y_vals[count]))
+                        else:
+                            f.write("{0:16.12F}{1:18.12F}\n".format(r_val,
+                                                                    y_vals[count]))
+
                 success_msg = f"PyStoG job done for row-{row}. If failed, see info above."
                 print("[Info] " + success_msg)
                 print("[Info] PyStoG files can be found at", p_out_dir)
