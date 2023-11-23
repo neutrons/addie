@@ -843,7 +843,7 @@ def save_file_stog(main_window, file_name):
                         kt = "Rmin"
                         ft_rmin = float(main_window._pystog_inputs_collect[kt])
                         str_tmp += f"# comment: Fourier filtered, rcut={ft_rmin} \n"
-                    str_tmp += f"# comment: Ripple removed, "
+                    str_tmp += "# comment: Ripple removed, "
                     str_tmp += f"Rcutoff, 1st peak min, max = {rc}, {rn}, {rx}\n"
                     f.write(str_tmp)
                     for count, r_val in enumerate(x_stog):
@@ -906,7 +906,7 @@ def save_file_stog(main_window, file_name):
                     kt = "Rmin"
                     ft_rmin = float(main_window._pystog_inputs_collect[kt])
                     str_tmp += f"# comment: Fourier filtered, rcut={ft_rmin} \n"
-                str_tmp += f"# comment: Ripple removed, "
+                str_tmp += "# comment: Ripple removed, "
                 str_tmp += f"Rcutoff, 1st peak min, max = {rc}, {rn}, {rx}\n"
                 f.write(str_tmp)
                 for count, r_val in enumerate(x_stog):
@@ -1267,7 +1267,7 @@ def add_stog_data(main_window):
                         y_val = float(line.split()[1])
                         kt = "NumberDensity"
                         rho_val = float(main_window._pystog_inputs_collect[kt])
-                        key_tmp = "FaberZiman"
+                        kt = "FaberZiman"
                         fz_val = float(main_window._pystog_inputs_collect[kt])
                         y_val *= (4. * np.pi * x_val * rho_val / fz_val)
                         y_list.append(y_val)
@@ -1400,7 +1400,7 @@ def generate_final(main_window):
             kt = "Rmin"
             ft_rmin = float(main_window._pystog_inputs_collect[kt])
             str_tmp += f"# comment: Fourier filtered, rcut={ft_rmin} \n"
-        str_tmp += f"# comment: Ripple removed, "
+        str_tmp += "# comment: Ripple removed, "
         str_tmp += f"Rcutoff, 1st peak min, max = {rcut_final}, {rmin_final}, {rmax_final}\n"
         f.write(str_tmp)
         for count, r_val in enumerate(x_final_pdffit):

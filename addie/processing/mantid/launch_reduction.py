@@ -604,7 +604,7 @@ def run_mantid(parent):
                         rc = pystog_config["RippleParams"][0]
                         rn = pystog_config["RippleParams"][1]
                         rx = pystog_config["RippleParams"][2]
-                        str_tmp += f"# comment: Ripple removed, "
+                        str_tmp += "# comment: Ripple removed, "
                         str_tmp += f"Rcutoff, 1st peak min, max = {rc}, {rn}, {rx}\n"
                         f.write(str_tmp)
 
