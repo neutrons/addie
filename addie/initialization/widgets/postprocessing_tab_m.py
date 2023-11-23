@@ -12,6 +12,8 @@ def run(main_window=None):
     main_window.postprocessing_ui_m.pushButton_savesc.setEnabled(False)
     main_window.postprocessing_ui_m.pushButton_loadmc.setEnabled(False)
     main_window.postprocessing_ui_m.pushButton_loadsc.setEnabled(False)
+    main_window.postprocessing_ui_m.pushButton_mergeBanks.setEnabled(False)
+    main_window.postprocessing_ui_m.pushButton_StoG.setEnabled(False)
     main_window.postprocessing_ui_m.comboBox_pdfform.addItems(['g(r)', 'G(r)'])
 
    # setup the plot view
