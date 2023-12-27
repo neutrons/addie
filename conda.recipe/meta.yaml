@@ -46,6 +46,7 @@ requirements:
     - python
     - pystog
     - simplejson
+    - pyoncat
 
 test:
   imports:
