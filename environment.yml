@@ -13,7 +13,6 @@ dependencies:
 - mock
 - periodictable
 - psutil
-- pystog
 - pytest
 - pytest-mpl
 - pytest-qt
@@ -23,3 +22,6 @@ dependencies:
 - typing
 - versioningit
 - pyoncat
+- pip
+- pip:
+  - git+https://github.com/neutrons/pystog@v0.4.4#egg=pystog # conda package is broken
