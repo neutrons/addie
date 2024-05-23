@@ -308,7 +308,8 @@ class FigureCanvas(FigureCanvasQTAgg):
                 continue
             if isinstance(plot, tuple) is False:
                 try:
-                    self.axes.lines.remove(plot)
+                    line = self.axes.lines[ikey]
+                    line.remove()
                 except ValueError as e:
                     print(
                         "[Error] Plot %s is not in axes.lines which has %d lines. Error mesage: %s" %
