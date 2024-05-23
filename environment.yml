@@ -3,6 +3,7 @@ channels:
 - conda-forge
 - neutrons
 - mantid
+- oncat
 dependencies:
 - build
 - configparser
@@ -21,6 +22,4 @@ dependencies:
 - simplejson
 - typing
 - versioningit
-- pip
-- pip:
-    - https://oncat.ornl.gov/packages/pyoncat-1.5.1-py3-none-any.whl
+- pyoncat
