@@ -455,7 +455,7 @@ class AddieDriver(object):
             simpleapi.ConvertToPointData(
                 InputWorkspace=sq_ws_name,
                 OutputWorkspace=sq_ws_name)  # TODO REMOVE THIS LINE
-        elif ext == 'DAT' or ext == 'txt':
+        elif ext == 'DAT' or ext == 'TXT':
             try:
                 simpleapi.LoadAscii(
                     Filename=file_name,
@@ -468,6 +468,16 @@ class AddieDriver(object):
             # the workspace
             out_ws = AnalysisDataService.retrieve(sq_ws_name)
             out_ws += 1
+        elif ext == 'SQ':
+            try:
+                simpleapi.LoadAscii(
+                    Filename=file_name,
+                    OutputWorkspace=sq_ws_name,
+                    Unit='MomentumTransfer',
+                    SkipNumLines=2)
+            except RuntimeError:
+                sq_ws_name, q_min, q_max = "InvalidInput", 0, 0
+                return sq_ws_name, q_min, q_max
 
         assert AnalysisDataService.doesExist(
             sq_ws_name), 'Unable to load S(Q) file %s.' % file_name
