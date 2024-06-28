@@ -308,7 +308,7 @@ class FigureCanvas(FigureCanvasQTAgg):
                 continue
             if isinstance(plot, tuple) is False:
                 try:
-                    line = self.axes.lines[ikey]
+                    line = self.axes.lines[0]
                     line.remove()
                 except ValueError as e:
                     print(
