@@ -494,11 +494,34 @@ def merge_banks(main_window):
 
     print("[Info] Merging banks...")
 
+    bk_range_init = list()
+    for bank in range(len(main_window._bankDict)):
+        try:
+            qmin_tmp = float(main_window._bankDict[bank + 1]['Qmin'])
+        except ValueError:
+            qmin_tmp = 0.
+        try:
+            qmax_tmp = float(main_window._bankDict[bank + 1]['Qmax'])
+        except ValueError:
+            qmax_tmp = 0.
+        bk_range_init.append((qmin_tmp, qmax_tmp))
+
+    bk_range_sti = sorted(enumerate(bk_range_init), key=lambda x: x[1])
+    bk_st_dict = dict()
+    for count, item in enumerate(bk_range_sti):
+        bk_st_dict[count] = item[0]
+    bk_range_st = [item[1] for item in bk_range_sti]
+    st_index = [item[0] for item in bk_range_sti]
+    if sorted(st_index) == st_index:
+        prob_nom_phys_bank = True
+    else:
+        prob_nom_phys_bank = False
+
     banks_x = []
     banks_y = []
-    for bank in main_window._bankDict:
-        banks_x.append(main_window._bankDict[bank]['xList'])
-        banks_y.append(main_window._bankDict[bank]['yList'])
+    for bank in range(len(main_window._bankDict)):
+        banks_x.append(main_window._bankDict[bk_st_dict[bank] + 1]['xList'])
+        banks_y.append(main_window._bankDict[bk_st_dict[bank] + 1]['yList'])
 
     qmin_list = list()
     qmax_list = list()
@@ -506,70 +529,70 @@ def merge_banks(main_window):
     qmax_max_bank = 0
     # TODO: The hard coded `qmin_valid` and `qmax_valid` needs to be
     # updated to adapt to general way of grouping detectors into banks.
-    if len(main_window._bankDict) == 6:
-        qmin_valid = [0., 0., 0., 3., 4., 0.]
-        qmax_valid = [14., 25., 40., 40., 40., 6.]
-    elif len(main_window._bankDict) == 1:
-        qmin_valid = [0.]
-        qmax_valid = [40.]
+    if prob_nom_phys_bank:
+        if len(main_window._bankDict) == 6:
+            qmin_valid = [0., 0., 0., 3., 4., 0.]
+            qmax_valid = [14., 25., 40., 40., 40., 6.]
+        elif len(main_window._bankDict) == 1:
+            qmin_valid = [0.]
+            qmax_valid = [40.]
+        else:
+            qmin_valid = [0. for _ in range(len(main_window._bankDict))]
+            qmax_valid = [40. for _ in range(len(main_window._bankDict))]
     else:
         qmin_valid = [0. for _ in range(len(main_window._bankDict))]
         qmax_valid = [40. for _ in range(len(main_window._bankDict))]
+
     valid_region = False
     for bank in range(len(main_window._bankDict)):
-        qmin_tmp = main_window._bankDict[bank + 1]['Qmin']
-        qmax_tmp = main_window._bankDict[bank + 1]['Qmax']
-        if qmin_tmp.strip() == "" or qmax_tmp.strip() == "":
+        qmin_tmp = bk_range_st[bank][0]
+        qmax_tmp = bk_range_st[bank][1]
+
+        if bank > 0 and qmax_tmp > 0.:
+            qmax_to_compare = 0.
+            for bank_tmp in range(bank):
+                if qmax_list[-(bank_tmp + 1)] > 0.:
+                    qmax_to_compare = qmax_list[-(bank_tmp + 1)]
+                    break
+            if qmax_to_compare == 0.:
+                qmax_to_compare = qmin_tmp
+            if qmin_tmp != qmax_to_compare:
+                msg_p1 = "[Error] Gap or overlap found in between banks. "
+                msg_p2 = "This is not supported."
+                print(msg_p1 + msg_p2)
+                main_window.ui.statusbar.setStyleSheet("color: red")
+                main_window.ui.statusbar.showMessage(
+                    "Merge banks failed", main_window.statusbar_display_time)
+                QApplication.restoreOverrideCursor()
+                return
+        if qmin_tmp == qmax_tmp:
             qmin_list.append(0.)
             qmax_list.append(0.)
+        elif qmin_tmp > qmax_tmp:
+            msg_p1 = f"[Error] Qmax smaller than Qmin for bank-{bank+1}. "
+            msg_p2 = "Please input valid values and try again."
+            print(msg_p1 + msg_p2)
+            main_window.ui.statusbar.setStyleSheet("color: red")
+            main_window.ui.statusbar.showMessage(
+                "Merge banks failed", main_window.statusbar_display_time)
+            QApplication.restoreOverrideCursor()
+            return
+        elif qmin_tmp < qmin_valid[bank] or qmax_tmp > qmax_valid[bank]:
+            msg_p1 = f"[Error] Qmin or Qmax out of the valid region for bank-{bank+1}. "
+            msg_p2 = "Please input valid values and try again."
+            print(msg_p1 + msg_p2)
+            main_window.ui.statusbar.setStyleSheet("color: red")
+            main_window.ui.statusbar.showMessage(
+                "Merge banks failed", main_window.statusbar_display_time)
+            QApplication.restoreOverrideCursor()
+            return
         else:
-            qmin_tmp = float(qmin_tmp)
-            qmax_tmp = float(qmax_tmp)
-            if bank > 0 and qmax_tmp > 0.:
-                qmax_to_compare = 0.
-                for bank_tmp in range(bank):
-                    if qmax_list[-(bank_tmp + 1)] > 0.:
-                        qmax_to_compare = qmax_list[-(bank_tmp + 1)]
-                        break
-                if qmax_to_compare == 0.:
-                    qmax_to_compare = qmin_tmp
-                if qmin_tmp != qmax_to_compare:
-                    msg_p1 = "[Error] Gap or overlap found in between banks. "
-                    msg_p2 = "This is not supported."
-                    print(msg_p1 + msg_p2)
-                    main_window.ui.statusbar.setStyleSheet("color: red")
-                    main_window.ui.statusbar.showMessage(
-                        "Merge banks failed", main_window.statusbar_display_time)
-                    QApplication.restoreOverrideCursor()
-                    return
-            if qmin_tmp == qmax_tmp:
-                qmin_list.append(0.)
-                qmax_list.append(0.)
-            elif qmin_tmp > qmax_tmp:
-                msg_p1 = f"[Error] Qmax smaller than Qmin for bank-{bank+1}. "
-                msg_p2 = "Please input valid values and try again."
-                print(msg_p1 + msg_p2)
-                main_window.ui.statusbar.setStyleSheet("color: red")
-                main_window.ui.statusbar.showMessage(
-                    "Merge banks failed", main_window.statusbar_display_time)
-                QApplication.restoreOverrideCursor()
-                return
-            elif qmin_tmp < qmin_valid[bank] or qmax_tmp > qmax_valid[bank]:
-                msg_p1 = f"[Error] Qmin or Qmax out of the valid region for bank-{bank+1}. "
-                msg_p2 = "Please input valid values and try again."
-                print(msg_p1 + msg_p2)
-                main_window.ui.statusbar.setStyleSheet("color: red")
-                main_window.ui.statusbar.showMessage(
-                    "Merge banks failed", main_window.statusbar_display_time)
-                QApplication.restoreOverrideCursor()
-                return
-            else:
-                valid_region = True
-                qmin_list.append(qmin_tmp)
-                qmax_list.append(qmax_tmp)
-                if qmax_tmp > qmax_max:
-                    qmax_max = qmax_tmp
-                    qmax_max_bank = bank
+            valid_region = True
+            qmin_list.append(qmin_tmp)
+            qmax_list.append(qmax_tmp)
+            if qmax_tmp > qmax_max:
+                qmax_max = qmax_tmp
+                qmax_max_bank = bank
 
     if not valid_region:
         print("[Error] Qmin and Qmax values are all zero for all banks.")
@@ -586,13 +609,9 @@ def merge_banks(main_window):
         y_merged = list()
 
         range_tmp = list(range(len(main_window._bankDict)))
-        if len(main_window._bankDict) == 6:
-            range_tmp_last = range_tmp.pop(-1)
-            range_tmp.insert(0, range_tmp_last)
-
         for bank in range_tmp:
-            yoffset_tmp = main_window._bankDict[bank + 1]['Yoffset']
-            yscale_tmp = main_window._bankDict[bank + 1]['Yscale']
+            yoffset_tmp = main_window._bankDict[bk_st_dict[bank] + 1]['Yoffset']
+            yscale_tmp = main_window._bankDict[bk_st_dict[bank] + 1]['Yscale']
             if yoffset_tmp.strip() == "":
                 yoffset_tmp = 0.0
             if yscale_tmp.strip() == "":
@@ -618,12 +637,18 @@ def merge_banks(main_window):
         y_merged_raw = list()
         # TODO: The hard coded `qmax_bkg_est` and `fudge_factor` needs to be
         # updated to adapt to general way of grouping detectors into banks.
-        if len(main_window._bankDict) == 6:
-            qmax_bkg_est = [14., 25., 25., 25., 40., 6.]
-            fudge_factor = [1., 1., 1., 1., 1., 1.]
-        elif len(main_window._bankDict) == 1:
-            qmax_bkg_est = [40.]
-            fudge_factor = [1.]
+        if prob_nom_phys_bank:
+            if len(main_window._bankDict) == 6:
+                qmax_bkg_est = [14., 25., 25., 25., 40., 6.]
+                fudge_factor = [1., 1., 1., 1., 1., 1.]
+            elif len(main_window._bankDict) == 1:
+                qmax_bkg_est = [40.]
+                fudge_factor = [1.]
+            else:
+                qmax_bkg_est = [25. for _ in range(len(main_window._bankDict))]
+                qmax_bkg_est[-1] = 0.
+                qmax_bkg_est[-2] = 40.
+                fudge_factor = [1. for _ in range(len(main_window._bankDict))]
         else:
             qmax_bkg_est = [25. for _ in range(len(main_window._bankDict))]
             qmax_bkg_est[-1] = 0.
@@ -631,14 +656,10 @@ def merge_banks(main_window):
             fudge_factor = [1. for _ in range(len(main_window._bankDict))]
 
         range_tmp = list(range(len(main_window._bankDict)))
-        if len(main_window._bankDict) == 6:
-            range_tmp_last = range_tmp.pop(-1)
-            range_tmp.insert(0, range_tmp_last)
-
         for bank in range_tmp:
             bank_range.append([qmin_list[bank], qmax_list[bank]])
-            yoffset_tmp = main_window._bankDict[bank + 1]['Yoffset']
-            yscale_tmp = main_window._bankDict[bank + 1]['Yscale']
+            yoffset_tmp = main_window._bankDict[bk_st_dict[bank] + 1]['Yoffset']
+            yscale_tmp = main_window._bankDict[bk_st_dict[bank] + 1]['Yscale']
             if yoffset_tmp.strip() == "":
                 yoffset_tmp = 0.0
             if yscale_tmp.strip() == "":
@@ -666,7 +687,11 @@ def merge_banks(main_window):
                         y_merged_raw.append(banks_y[bank][i])
             all_data.append([x_tmp, y_tmp])
 
-        x_merged_init, y_merged_init, y_bkg_out = bkg_finder(all_data, bank_range, fudge_factor)
+        x_merged_init, y_merged_init, y_bkg_out = bkg_finder(
+            all_data,
+            bank_range,
+            fudge_factor
+        )
         x_merged = x_merged_init
         y_merged = list()
         for i, x_val in enumerate(x_merged):
