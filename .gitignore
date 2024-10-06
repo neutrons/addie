@@ -206,6 +206,7 @@ dmypy.json
 
 # VSCode
 .vscode
+.linenoteplus
 
 # generated files
 MANIFEST

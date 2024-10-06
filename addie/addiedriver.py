@@ -2,6 +2,8 @@ from __future__ import (absolute_import, division, print_function)
 from mantid.api import AnalysisDataService
 import mantid.simpleapi as simpleapi
 
+from pystog import Transformer
+import numpy as np
 import os
 import addie.utilities
 
@@ -137,7 +139,29 @@ class AddieDriver(object):
                 print(
                     '[WARNING] PDF filter {0} is not supported.'.format(pdf_filter))
 
+        q_pystog = simpleapi.mtd[sq_ws_name].readX(0)
+        sq_pystog = simpleapi.mtd[sq_ws_name].readY(0)
+        if len(sq_pystog) != len(q_pystog):
+            sq_pystog = np.insert(sq_pystog, 0, sq_pystog[0])
+        transformer = Transformer()
+        r_pystog = np.arange(0, max_r + delta_r, delta_r)
+        print(q_pystog)
+        print(sq_pystog)
+        r_pystog, gr_pystog, _ = transformer.S_to_G(q_pystog, sq_pystog, r_pystog)
+        print(r_pystog)
+        print(gr_pystog)
+
         gr_ws_name = '%s(R)_%s_%d' % (prefix, self._currSqWsName, ws_seq_index)
+        simpleapi.CreateWorkspace(
+            OutputWorkspace=gr_ws_name,
+            DataX=r_pystog,
+            DataY=gr_pystog,
+            NSpec=1,
+            UnitX="AtomicDistance"
+        )
+        axis = simpleapi.mtd[gr_ws_name].getAxis(1)
+        axis.setUnit("Label").setLabel('PDF', '')
+
         kwargs = {'OutputWorkspace': gr_ws_name,
                   'Qmin': min_q,
                   'Qmax': max_q,
@@ -152,13 +176,13 @@ class AddieDriver(object):
         if 'rho0' in kwargs and pdf_type == "G(r)":
             print("WARNING: Modifying the density does not affect G(r) function")
 
-        # get the input unit
-        sofq_type = 'S(Q)'
+        # # get the input unit
+        # sofq_type = 'S(Q)'
 
-        # do the FFT
-        simpleapi.PDFFourierTransform(InputWorkspace=self._currSqWsName,
-                                      InputSofQType=sofq_type,
-                                      **kwargs)
+        # # do the FFT
+        # simpleapi.PDFFourierTransform(InputWorkspace=self._currSqWsName,
+        #                               InputSofQType=sofq_type,
+        #                               **kwargs)
 
         # check
         assert AnalysisDataService.doesExist(
