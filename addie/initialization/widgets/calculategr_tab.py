@@ -47,10 +47,15 @@ def run(main_window=None):
                                                                  as_current_index=False)
 
     main_window.calculategr_ui.comboBox_SofQType.clear()
-    main_window.calculategr_ui.comboBox_SofQType.addItem('S(Q)')
     main_window.calculategr_ui.comboBox_SofQType.addItem('S(Q)-1')
+    main_window.calculategr_ui.comboBox_SofQType.addItem('S(Q)')
     main_window.calculategr_ui.comboBox_SofQType.addItem('Q[S(Q)-1]')
     main_window.calculategr_ui.comboBox_SofQType.setCurrentIndex(0)
+    main_window.calculategr_ui.comboBox_inSofQType.clear()
+    main_window.calculategr_ui.comboBox_inSofQType.addItem('S(Q)')
+    main_window.calculategr_ui.comboBox_inSofQType.addItem('S(Q)-1')
+    main_window.calculategr_ui.comboBox_inSofQType.addItem('Q[S(Q)-1]')
+    main_window.calculategr_ui.comboBox_inSofQType.setCurrentIndex(0)
 
     main_window.calculategr_ui.comboBox_pdfType.addItems(['G(r)', 'g(r)', 'RDF(r)'])
 

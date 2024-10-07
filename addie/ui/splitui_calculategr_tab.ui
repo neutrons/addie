@@ -167,6 +167,32 @@
           <widget class="QComboBox" name="comboBox_SofQType">
            <item>
             <property name="text">
+             <string>S(Q)-1</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>S(Q)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Q[S(Q)-1]</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="labelConvertSofQ">
+           <property name="text">
+               <string>SQ Form to Present/Output</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QComboBox" name="comboBox_inSofQType">
+           <item>
+            <property name="text">
              <string>S(Q)</string>
             </property>
            </item>

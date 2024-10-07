@@ -1,6 +1,6 @@
 def run(main_window=None):
     main_window.calculategr_ui.pushButton_loadSQ.clicked.connect(main_window.do_load_sq)
-    main_window.calculategr_ui.comboBox_SofQType.currentIndexChanged.connect(main_window.evt_change_sq_type)
+    main_window.calculategr_ui.comboBox_inSofQType.currentIndexChanged.connect(main_window.evt_change_sq_type)
     main_window.calculategr_ui.pushButton_rescaleSq.clicked.connect(main_window.do_rescale_sofq)
     main_window.calculategr_ui.pushButton_rescaleGr.clicked.connect(main_window.do_rescale_gofr)
     main_window.calculategr_ui.pushButton_clearSofQ.clicked.connect(main_window.do_clear_sq)

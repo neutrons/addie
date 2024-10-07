@@ -82,6 +82,9 @@ def load_sq(main_window):
         os.path.abspath(sq_file_names[0]))[0]
     check_in_fixed_dir_structure(main_window, 'SofQ')
 
+    sq_type = str(main_window.calculategr_ui.comboBox_inSofQType.currentText())
+    main_window.sofq_type_in_mem = sq_type
+
     # load S(q)
     for sq_file_name in sq_file_names:
         sq_file_name = str(sq_file_name)
@@ -105,7 +108,13 @@ def load_sq(main_window):
         # plot S(Q) - TODO why is it getting the name again?
         ws_name = main_window._myController.get_current_sq_name()
 
-        plot_sq(main_window, ws_name, color=color, clear_prev=False)
+        plot_sq(
+            main_window,
+            ws_name,
+            color=color,
+            clear_prev=False,
+            is_load=True
+        )
 
         # calculate and calculate G(R)
         generate_gr_step1(main_window)
@@ -113,12 +122,17 @@ def load_sq(main_window):
     check_widgets_status(main_window)
 
 
-def plot_sq(main_window, ws_name, color, clear_prev):
+def plot_sq(main_window,
+            ws_name,
+            color,
+            clear_prev,
+            is_load=False):
     """
     Plot S(Q)
     :param ws_name:
     :param sq_color: S(Q) color (if None, find it from PDF color manager)
     :param clear_prev:
+    :param is_load: initially loaded data to plot or not
     :return:
     """
     # clear previous lines
@@ -133,10 +147,25 @@ def plot_sq(main_window, ws_name, color, clear_prev):
         color = main_window._pdfColorManager.add_sofq(ws_name)
 
     # convert to the function to plot
-    sq_type = str(main_window.calculategr_ui.comboBox_SofQType.currentText())
-    plottable_name = main_window._myController.calculate_sqAlt(
-        ws_name, main_window.sofq_type_in_mem, sq_type)
-    main_window.sofq_type_in_mem = sq_type
+    if is_load:
+        sq_type_in = str(
+            main_window.calculategr_ui.comboBox_SofQType.currentText()
+        )
+        sq_type = str(
+            main_window.calculategr_ui.comboBox_inSofQType.currentText()
+        )
+        plottable_name = main_window._myController.calculate_sqAlt(
+            ws_name, sq_type_in, sq_type
+        )
+        main_window.sofq_type_in_mem = sq_type
+    else:
+        sq_type = str(
+            main_window.calculategr_ui.comboBox_inSofQType.currentText()
+        )
+        plottable_name = main_window._myController.calculate_sqAlt(
+            ws_name, main_window.sofq_type_in_mem, sq_type
+        )
+        main_window.sofq_type_in_mem = sq_type
 
     main_window.calculategr_ui.graphicsView_sq.plot_sq(
         plottable_name,
@@ -616,8 +645,15 @@ def do_save_sq(main_window):
             # skip if the user cancel the operation on this S(Q)
             continue
 
+        sq_type = str(
+            main_window.calculategr_ui.comboBox_inSofQType.currentText()
+        )
+        plottable_name = main_window._myController.calculate_sqAlt(
+            sq_name, "S(Q)", sq_type,
+        )
+
         # save file
-        main_window._myController.save_ascii(sq_name, filename, filetype)
+        main_window._myController.save_ascii(plottable_name, filename, filetype)
 
 
 def do_edit_sq(main_window):

@@ -45,6 +45,12 @@ class AddieDriver(object):
                 OutputWorkspace=ws_name,
                 From='F(Q)',
                 To='S(Q)')
+            out_x_tmp = simpleapi.mtd[ws_name].readX(0)
+            out_y_tmp = simpleapi.mtd[ws_name].readY(0)
+            if abs(out_x_tmp[0]) < 1.E-5:
+                out_y_copy = out_y_tmp.copy()
+                out_y_copy[0] = out_y_copy[1]
+                simpleapi.mtd[ws_name].setY(0, out_y_copy)
 
         if outputType == 'S(Q)':  # don't do anything
             return ws_name
@@ -491,7 +497,7 @@ class AddieDriver(object):
             # The S(Q) file is in fact S(Q)-1 in sq file.  So need to add 1 to
             # the workspace
             out_ws = AnalysisDataService.retrieve(sq_ws_name)
-            out_ws += 1
+            # out_ws += 1
         elif ext == 'SQ':
             try:
                 simpleapi.LoadAscii(

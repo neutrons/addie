@@ -359,8 +359,16 @@ class GofRTree(base.CustomizedTreeView):
                     None, None, None, None, None,
                     auto=True)
 
+        self._mainWindow.calculategr_ui.comboBox_inSofQType.setCurrentIndex(0)
+        self._mainWindow.sofq_type_in_mem = "S(Q)"
         for sq_name in sq_list:
-            event_handler.plot_sq(self._mainWindow, sq_name, None, False)
+            event_handler.plot_sq(
+                self._mainWindow,
+                sq_name,
+                None,
+                False
+            )
+
 
     def do_remove_from_plot(self):
         """
