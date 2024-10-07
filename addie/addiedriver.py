@@ -453,7 +453,6 @@ class AddieDriver(object):
 
         return True, gr_ws_name
 
-
     def load_sq(self, file_name):
         """
         Load S(Q) to a numpy
