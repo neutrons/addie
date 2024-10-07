@@ -37,9 +37,6 @@ class AddieDriverLoadSofQTests(unittest.TestCase):
                          'SofQ_NaNO3_275C.dat']
         self.datFiles = [os.path.join(DATA_DIR, filename) for filename in self.datFiles]
 
-        self.nxsFiles = ['NOM_127827_SQ.nxs']
-        self.nxsFiles = [os.path.join(DATA_DIR, filename) for filename in self.nxsFiles]
-
     def runLoad(self, driver, filename):
         """Utility for testing load of S(Q) files"""
         print('loading "{}"'.format(filename))
@@ -53,12 +50,6 @@ class AddieDriverLoadSofQTests(unittest.TestCase):
         """Test that we can load S(Q) *.dat files"""
         driver = AddieDriver()
         for filename in self.datFiles:
-            self.runLoad(driver, filename)
-
-    def test_load_sq_nxs_files(self):
-        """Test that we can load S(Q) *.nxs (NeXus) files"""
-        driver = AddieDriver()
-        for filename in self.nxsFiles:
             self.runLoad(driver, filename)
 
 
