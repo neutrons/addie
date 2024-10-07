@@ -113,7 +113,9 @@ class GofRView(MplGraphicsView):
 
         line_id = self.add_plot_1d(ws_name, wkspindex=0, marker=marker,
                                    color=color, line_style=style, alpha=alpha,
-                                   label=label, x_label=r'r ($\AA$)', plotError=plotError)
+                                   label=label, x_label=r'r ($\AA$)',
+                                   y_label="PDF, G(r), ...",
+                                   plotError=plotError)
         self._colorIndex += 1
         self._grDict[str(plot_key)] = line_id
 

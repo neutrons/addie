@@ -29,7 +29,7 @@ class FigureCanvas(FigureCanvasQTAgg):
         self.fig.patch.set_facecolor('white')
 
         self.axes = self.fig.add_subplot(111, projection='mantid')
-        self.fig.subplots_adjust(bottom=0.15)
+        self.fig.subplots_adjust(bottom=0.2)
 
         # Initialize parent class and set parent
         FigureCanvasQTAgg.__init__(self, self.fig)
@@ -123,9 +123,9 @@ class FigureCanvas(FigureCanvasQTAgg):
 
         # set x-axis and y-axis label
         if x_label is not None:
-            self.axes.set_xlabel(x_label, fontsize=20)
+            self.axes.set_xlabel(x_label, fontsize=14)
         if y_label is not None:
-            self.axes.set_ylabel(y_label, fontsize=20)
+            self.axes.set_ylabel(y_label, fontsize=14)
 
         # set/update legend
         if show_legend:

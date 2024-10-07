@@ -67,7 +67,7 @@ def load_sq(main_window):
         default_dir = get_default_dir(main_window, sub_dir='SofQ')
 
     # get the file
-    ext = 'dat (*.dat);;nxs (*.nxs);;All (*.*)'
+    ext = 'dat (*.dat);;SofQ (*.sq);;All (*.*)'
     sq_file_names = QFileDialog.getOpenFileNames(main_window,
                                                  'Choose S(Q) File',
                                                  default_dir,
@@ -408,10 +408,6 @@ def plot_gr(main_window, ws_name, line_color, line_style,
     # check whether the workspace is on the figure
     graphicsView_gr = main_window.calculategr_ui.graphicsView_gr
     has_gr = graphicsView_gr.has_gr(ws_name)
-    current_grs = graphicsView_gr.get_current_grs()
-    msg = '[DB...BAT] G(r) graphic has plot {0} is {1}. Keys are {2}'
-    msg = msg.format(ws_name, has_gr, current_grs)
-    print(msg)
 
     if graphicsView_gr.has_gr(ws_name):
         # update G(r) value of an existing plot

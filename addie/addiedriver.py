@@ -151,11 +151,7 @@ class AddieDriver(object):
             sq_pystog = np.insert(sq_pystog, 0, sq_pystog[0])
         transformer = Transformer()
         r_pystog = np.arange(0, max_r + delta_r, delta_r)
-        print(q_pystog)
-        print(sq_pystog)
         r_pystog, gr_pystog, _ = transformer.S_to_G(q_pystog, sq_pystog, r_pystog)
-        print(r_pystog)
-        print(gr_pystog)
 
         gr_ws_name = '%s(R)_%s_%d' % (prefix, self._currSqWsName, ws_seq_index)
         simpleapi.CreateWorkspace(
@@ -457,6 +453,7 @@ class AddieDriver(object):
 
         return True, gr_ws_name
 
+
     def load_sq(self, file_name):
         """
         Load S(Q) to a numpy
@@ -472,20 +469,22 @@ class AddieDriver(object):
         # generate S(Q) workspace name
         sq_ws_name = os.path.basename(file_name).split('.')[0]
 
+        def count_header_lines(file_path):
+            header_characters = ['#', '%', '!', '-']
+            header_lines_count = 0
+
+            with open(file_path, 'r') as file:
+                for line in file:
+                    condt1 = line.strip().startswith(tuple(header_characters))
+                    condt2 = len(line.strip().split()) == 1
+                    if condt1 or condt2:
+                        header_lines_count += 1
+
+            return header_lines_count
+
         # call mantid LoadAscii
         ext = file_name.upper().split('.')[-1]
-        if ext == 'NXS':
-            simpleapi.LoadNexusProcessed(
-                Filename=file_name, OutputWorkspace=sq_ws_name)
-            simpleapi.ConvertUnits(
-                InputWorkspace=sq_ws_name,
-                OutputWorkspace=sq_ws_name,
-                EMode='Elastic',
-                Target='MomentumTransfer')
-            simpleapi.ConvertToPointData(
-                InputWorkspace=sq_ws_name,
-                OutputWorkspace=sq_ws_name)  # TODO REMOVE THIS LINE
-        elif ext == 'DAT' or ext == 'TXT':
+        if ext == 'DAT' or ext == 'TXT':
             try:
                 simpleapi.LoadAscii(
                     Filename=file_name,
@@ -494,17 +493,14 @@ class AddieDriver(object):
             except RuntimeError:
                 sq_ws_name, q_min, q_max = "InvalidInput", 0, 0
                 return sq_ws_name, q_min, q_max
-            # The S(Q) file is in fact S(Q)-1 in sq file.  So need to add 1 to
-            # the workspace
-            # out_ws = AnalysisDataService.retrieve(sq_ws_name)
-            # out_ws += 1
         elif ext == 'SQ':
+            num_hl = count_header_lines(file_name)
             try:
                 simpleapi.LoadAscii(
                     Filename=file_name,
                     OutputWorkspace=sq_ws_name,
                     Unit='MomentumTransfer',
-                    SkipNumLines=2)
+                    SkipNumLines=num_hl)
             except RuntimeError:
                 sq_ws_name, q_min, q_max = "InvalidInput", 0, 0
                 return sq_ws_name, q_min, q_max
