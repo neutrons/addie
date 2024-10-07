@@ -134,9 +134,9 @@ class BraggView(MplGraphicsView):
             if self._unitX == 'TOF':
                 self.setXYLimit(xmin=0, xmax=20000, ymin=None, ymax=None)
             elif self._unitX == 'MomentumTransfer':
-                self.setXYLimit(xmin=0, xmax=20, ymin=None, ymax=None)
+                self.setXYLimit(xmin=0, xmax=50, ymin=None, ymax=None)
             elif self._unitX == 'dSpacing':
-                self.setXYLimit(xmin=0, xmax=7, ymin=None, ymax=None)
+                self.setXYLimit(xmin=0, xmax=10, ymin=None, ymax=None)
             else:
                 raise RuntimeError('Unit %s unknown' % self._unitX)
 
@@ -332,8 +332,6 @@ class BraggView(MplGraphicsView):
                 self._gssDict[plot_key] = plot_id
                 self._plotScaleDict[plot_id] = addie.utilities.workspaces.get_y_range(
                     ws_name, bank_id - 1)  # is this needed?
-
-        # self.scale_auto()
 
     def plot_general_ws(self, ws_name):
         """

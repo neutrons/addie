@@ -407,7 +407,6 @@ def plot_gr(main_window, ws_name, line_color, line_style,
 
     # check whether the workspace is on the figure
     graphicsView_gr = main_window.calculategr_ui.graphicsView_gr
-    has_gr = graphicsView_gr.has_gr(ws_name)
 
     if graphicsView_gr.has_gr(ws_name):
         # update G(r) value of an existing plot

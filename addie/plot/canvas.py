@@ -447,8 +447,14 @@ class FigureCanvas(FigureCanvasQTAgg):
         """
         if plot_key in self._lineDict:
             try:
-                line = self.axes.lines[0]
-                line.remove()
+                i = 0
+                for key in self._lineDict:
+                    if plot_key == key:
+                        line = self.axes.lines[i]
+                        line.remove()
+                        break
+                    else:
+                        i += 1
             except ValueError as r_error:
                 error_message = 'Unable to remove to 1D line %s (ID=%d) due to %s.' % (
                     str(self._lineDict[plot_key]), plot_key, str(r_error))

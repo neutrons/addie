@@ -388,6 +388,10 @@ def switch_bragg_unit(main_window=None):
     for ws_group in ws_group_list:
         plot_data_dict[ws_group] = main_window._myController.get_bank_numbers(
             ws_group)
+        if len(bank_list) > 0:
+            plot_data_dict[ws_group] = [
+                item for item in plot_data_dict[ws_group] if item in bank_list
+            ]
 
     # plot
     main_window.rietveld_ui.graphicsView_bragg.plot_banks(
@@ -420,12 +424,12 @@ def reset_bragg_data_range(main_window, x_unit):
                                                               ymax=None)
     elif x_unit == 'MomentumTransfer':
         main_window.rietveld_ui.graphicsView_bragg.setXYLimit(xmin=0,
-                                                              xmax=20,
+                                                              xmax=50,
                                                               ymin=None,
                                                               ymax=None)
     elif x_unit == 'dSpacing':
         main_window.rietveld_ui.graphicsView_bragg.setXYLimit(xmin=0,
-                                                              xmax=7,
+                                                              xmax=10,
                                                               ymin=None,
                                                               ymax=None)
     else:
