@@ -496,7 +496,7 @@ class AddieDriver(object):
                 return sq_ws_name, q_min, q_max
             # The S(Q) file is in fact S(Q)-1 in sq file.  So need to add 1 to
             # the workspace
-            out_ws = AnalysisDataService.retrieve(sq_ws_name)
+            # out_ws = AnalysisDataService.retrieve(sq_ws_name)
             # out_ws += 1
         elif ext == 'SQ':
             try:

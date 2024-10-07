@@ -369,7 +369,6 @@ class GofRTree(base.CustomizedTreeView):
                 False
             )
 
-
     def do_remove_from_plot(self):
         """
         Remove the selected item from plot if it is plotted
