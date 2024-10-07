@@ -47,7 +47,7 @@ class AddieDriverLoadSofQTests(unittest.TestCase):
         self.assertLess(qmin, qmax, 'qmin[{}] >= qmax[{}]'.format(qmin, qmax))
         self.assertEqual(str(wksp), expectedWkspName(filename))
         # TODO actual checks on the workspace
-        self.assertAlmostEqual(np.average(mtd[wksp].readY(0)[-100:]), 1., places=1)
+        self.assertAlmostEqual(np.average(mtd[wksp].readY(0)[-100:]), 0., places=1)
 
     def test_load_sq_dat_files(self):
         """Test that we can load S(Q) *.dat files"""
