@@ -87,6 +87,9 @@ class GenerateSumthing(object):
         for _row in data:
             _row_split = _row.split(',')
 
+            if _row.strip()[0] == "#":
+                continue
+
             if len(_row_split) == 8:
                 temp_range = _row_split[7].replace("K", "").split('to')
                 from_temp = round(float(temp_range[0]))
