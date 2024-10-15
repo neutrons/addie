@@ -143,15 +143,43 @@ class AddieDriver(object):
             pdf_filter = True
             if pdf_filter != 'lorch':
                 print(
-                    '[WARNING] PDF filter {0} is not supported.'.format(pdf_filter))
+                    '[WARNING] PDF filter {0} is not supported.'.format(pdf_filter)
+                )
 
         q_pystog = simpleapi.mtd[sq_ws_name].readX(0)
         sq_pystog = simpleapi.mtd[sq_ws_name].readY(0)
         if len(sq_pystog) != len(q_pystog):
             sq_pystog = np.insert(sq_pystog, 0, sq_pystog[0])
+        q_pystog_f = list()
+        sq_pystog_f = list()
+        for qi, qv in enumerate(q_pystog):
+            if min_q <= qv <= max_q:
+                q_pystog_f.append(qv)
+                sq_pystog_f.append(sq_pystog[qi])
+        q_pystog_f = np.array(q_pystog_f)
+        sq_pystog_f = np.array(sq_pystog_f)
         transformer = Transformer()
         r_pystog = np.arange(0, max_r + delta_r, delta_r)
-        r_pystog, gr_pystog, _ = transformer.S_to_G(q_pystog, sq_pystog, r_pystog)
+        r_pystog, gr_pystog, _ = transformer.S_to_G(
+            q_pystog_f,
+            sq_pystog_f,
+            r_pystog
+        )
+
+        if pdf_type == "G(r)":
+            pass
+        else:
+            if rho0 is None:
+                warn_msg = "[Warning] No number density provided. "
+                warn_msg += "A dummy value of 1.0 will be used "
+                warn_msg += "for the conversion."
+                print(warn_msg)
+                rho0 = 1.
+
+            gr_pystog = gr_pystog / (4. * np.pi * rho0 * r_pystog) + 1.
+
+            if pdf_type == "RDF(r)":
+                gr_pystog = 4. * np.pi * rho0 * r_pystog**2. * gr_pystog
 
         gr_ws_name = '%s(R)_%s_%d' % (prefix, self._currSqWsName, ws_seq_index)
         simpleapi.CreateWorkspace(

@@ -104,6 +104,7 @@ def load_sq(main_window):
         # set the UI widgets
         main_window.calculategr_ui.doubleSpinBoxQmin.setValue(q_min)
         main_window.calculategr_ui.doubleSpinBoxQmax.setValue(q_max)
+        main_window.calculategr_ui.lineEdit_rho.setText("1.0")
 
         # plot S(Q) - TODO why is it getting the name again?
         ws_name = main_window._myController.get_current_sq_name()
