@@ -461,7 +461,9 @@ def run_mantid(parent):
                 check_file = os.path.join(parent.output_folder, "SofQ", f"{sam_title}.nxs")
                 if not os.path.isfile(check_file):
                     instr_name = dictionary["Instrument"].upper()
-                    run_num_tmp = int(dictionary["Sample"]["Runs"].split("-")[0])
+                    run_num_tmp = int(
+                        dictionary["Sample"]["Runs"].split("-")[0].split(",")[0]
+                    )
                     ipts_dir = GetIPTS(Instrument=instr_name, RunNumber=run_num_tmp)
                     check_file = os.path.join(ipts_dir, "shared",
                                               "autoreduce", "multi_banks_summed",
@@ -539,7 +541,9 @@ def run_mantid(parent):
                                           f"{sam_title}_merged.sq")
                 if not os.path.isfile(check_file):
                     instr_name = dictionary["Instrument"].upper()
-                    run_num_tmp = int(dictionary["Sample"]["Runs"].split("-")[0])
+                    run_num_tmp = int(
+                        dictionary["Sample"]["Runs"].split("-")[0].split(",")[0]
+                    )
                     ipts_dir = GetIPTS(Instrument=instr_name, RunNumber=run_num_tmp)
                     check_file = os.path.join(ipts_dir, "shared",
                                               "autoreduce", "multi_banks_summed",
