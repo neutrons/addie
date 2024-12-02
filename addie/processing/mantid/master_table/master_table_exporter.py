@@ -24,17 +24,17 @@ _element = {"Runs": "",
                                           },
                            },
             "Material": "",
-            "Density": {"MassDensity": np.NaN,
+            "Density": {"MassDensity": np.nan,
                         "UseMassDensity": True,
-                        "NumberDensity": np.NaN,
+                        "NumberDensity": np.nan,
                         "UseNumberDensity": False,
-                        "Mass": np.NaN,
+                        "Mass": np.nan,
                         "UseMass": False},
-            "PackingFraction": np.NaN,
+            "PackingFraction": np.nan,
             "Geometry": {"Shape": "",
-                         "Radius": np.NaN,
-                         "Radius2": np.NaN,
-                         "Height": np.NaN,
+                         "Radius": np.nan,
+                         "Radius2": np.nan,
+                         "Height": np.nan,
                          },
             "AbsorptionCorrection": {"Type": "",
                                      },
@@ -60,7 +60,7 @@ _data = {"Facility": "SNS",
          "Sample": copy.deepcopy(_element),
          "Normalization": copy.deepcopy(_element),
          "Calibration": {"Filename": ""},
-         "HighQLinearFitRange": np.NaN,
+         "HighQLinearFitRange": np.nan,
          "Merging": {"QBinning": [],
                      "SumBanks": [],
                      "Characterizations": "",
@@ -104,7 +104,7 @@ class TableFileExporter:
 
         self.calibration = str(self.parent.processing_ui.calibration_file.text())
 
-        self.NA_list = ["None", "N/A", "", np.NaN]
+        self.NA_list = ["None", "N/A", "", np.nan]
 
     def export(self, filename='', row=None):
         """create dictionary of all rows unless `row` argument is specified,
@@ -293,11 +293,11 @@ class TableFileExporter:
             radius2 = str(
                 self.parent.master_table_list_ui[key][element]['geometry']['radius2']['value'].text())
 
-        dict_element["Geometry"]["Radius"] = np.NaN if (
+        dict_element["Geometry"]["Radius"] = np.nan if (
             radius in self.__nan_list) else float(radius)
-        dict_element["Geometry"]["Radius2"] = np.NaN if (
+        dict_element["Geometry"]["Radius2"] = np.nan if (
             radius2 in self.__nan_list) else float(radius2)
-        dict_element["Geometry"]["Height"] = np.NaN if (
+        dict_element["Geometry"]["Height"] = np.nan if (
             height in self.__nan_list) else float(height)
 
         column += 1
@@ -613,20 +613,20 @@ class TableFileExporter:
         # key
 
         dictionary.pop('Density')
-        dictionary['MassDensity'] = np.NaN if (mass_density in self.__nan_list) else float(mass_density)
+        dictionary['MassDensity'] = np.nan if (mass_density in self.__nan_list) else float(mass_density)
 
         return dictionary
 
     def _remove_keys_from_with_nan_values(
             self, dictionary, selected_values=None):
-        """Remove keys in a dictionary if the value is NaN
+        """Remove keys in a dictionary if the value is nan
 
         :param dictionary: Dictionary with keys we want to check
         :type dictionary: dict
         :param selected_values: Dictionary with keys we want to check
         :type dictionary: dict
 
-        :return: Dictionary with keys removed where value is NaN
+        :return: Dictionary with keys removed where value is nan
         :rtype: dict
         """
         # Set default to check all keys unless selected_values defined
@@ -643,7 +643,7 @@ class TableFileExporter:
                 ",".join(dictionary.keys()))
             raise Exception(err_string)
 
-        # Remove keys with NaN values
+        # Remove keys with nan values
         for key in selected_values:
             try:
                 if np.isnan(dictionary[key]):
@@ -727,7 +727,7 @@ class TableFileExporter:
             print("No Geometry found, default geometry added:", geometry)
             return dictionary
 
-        # Remove all NaN values from Geometry
+        # Remove all nan values from Geometry
         dictionary['Geometry'] = self._remove_keys_from_with_nan_values(
             dictionary['Geometry'])
 

@@ -35,8 +35,8 @@ class MassDensityWindow(QMainWindow):
     chemical_formula_defined = False
     geometry_dimensions_defined = False
 
-    total_number_of_atoms = np.NaN
-    total_molecular_mass = np.NaN
+    total_number_of_atoms = np.nan
+    total_molecular_mass = np.nan
 
     column = 0
 

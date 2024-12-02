@@ -78,7 +78,7 @@ def oneAndOnlyOneTrue(iterable):
         raise
 
 
-def volume_of_cylinder(radius=np.NaN, height=np.NaN):
+def volume_of_cylinder(radius=np.nan, height=np.nan):
     """Computes volume of a cylinder
 
     :param radius: Radius of cylinder (in units of length)
@@ -92,7 +92,7 @@ def volume_of_cylinder(radius=np.NaN, height=np.NaN):
     return np.float(np.pi) * np.float(radius)**2 * np.float(height)
 
 
-def volume_of_sphere(radius=np.NaN):
+def volume_of_sphere(radius=np.nan):
     """Computes volume of a sphere
 
     :param radius: Radius of sphere (in units of length)
@@ -105,9 +105,9 @@ def volume_of_sphere(radius=np.NaN):
 
 
 def volume_of_hollow_cylinder(
-        inner_radius=np.NaN,
-        outer_radius=np.NaN,
-        height=np.NaN):
+        inner_radius=np.nan,
+        outer_radius=np.nan,
+        height=np.nan):
     """Computes volume of a hollow cylinder
 
     :param inner_radius: Inner radius of cylinder (in units of length)
