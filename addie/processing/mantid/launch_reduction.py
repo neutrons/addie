@@ -28,6 +28,7 @@ weekdays = [
     'Sat',
     'Sun'
 ]
+pystog_cli = "/SNS/users/y8z/miniconda/envs/pystog/bin/pystog_cli"
 
 
 def extractor(nexus_file: str, wks_name: str, out_dir: str, dir_name=None):
@@ -568,7 +569,7 @@ def run_mantid(parent):
                     json.dump(pystog_config, f, indent=2)
                 cwd = os.getcwd()
                 os.chdir(p_out_dir)
-                subprocess.run(["pystog_cli", "--json", f"{sam_title}_pystog.json"])
+                subprocess.run([pystog_cli, "--json", f"{sam_title}_pystog.json"])
                 if os.path.exists("ft.dat"):
                     os.remove("ft.dat")
                 os.chdir(cwd)

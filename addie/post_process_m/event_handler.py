@@ -23,6 +23,7 @@ weekdays = [
     'Sat',
     'Sun'
 ]
+pystog_cli = "/SNS/users/y8z/miniconda/envs/pystog/bin/pystog_cli"
 
 
 def open_workspaces(main_window):
@@ -1090,7 +1091,7 @@ def execute_stog(main_window):
     os.chdir(path)
     with open('pystog_input.json', 'w') as pystog_file:
         json.dump(json_format, pystog_file, indent=2)
-    subprocess.check_call(["pystog_cli", "--json", "pystog_input.json"])
+    subprocess.check_call([pystog_cli, "--json", "pystog_input.json"])
     os.chdir(cwd)
     print("[Info] PyStoG successfully executed")
 
