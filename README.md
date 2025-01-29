@@ -90,6 +90,11 @@ or just
 addie
 ```
 
+> N.B. If the drive mounting point on the operating system is changed, we may to
+rerun the setup above. Otherwise, even though the soft link may still point to
+the right locations, we may encounter the file permission issues when trying to
+launch the `ADDIE` GUI.
+
 ### Uninstall
 
 ```bash
