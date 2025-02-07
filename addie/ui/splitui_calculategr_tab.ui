@@ -442,7 +442,7 @@
                  <enum>Qt::LeftToRight</enum>
                 </property>
                 <property name="text">
-                 <string>rho0  </string>
+                <string>rho0 (/Å^3)</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

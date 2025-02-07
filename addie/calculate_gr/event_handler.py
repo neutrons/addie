@@ -104,7 +104,7 @@ def load_sq(main_window):
         # set the UI widgets
         main_window.calculategr_ui.doubleSpinBoxQmin.setValue(q_min)
         main_window.calculategr_ui.doubleSpinBoxQmax.setValue(q_max)
-        main_window.calculategr_ui.lineEdit_rho.setText("1.0")
+        main_window.calculategr_ui.lineEdit_rho.setText("0.05")
 
         # plot S(Q) - TODO why is it getting the name again?
         ws_name = main_window._myController.get_current_sq_name()
@@ -291,7 +291,7 @@ def generate_gr_step2(main_window, sq_ws_name_list):
 
             new_sq_wks = sq_ws_name + "_ff_rcutoff_" + r_cutoff_ff_text.replace(".", "p")
 
-            q_func = main_window.calculategr_ui.comboBox_SofQType.currentText()
+            q_func = main_window.calculategr_ui.comboBox_inSofQType.currentText()
             if q_func == "S(Q)-1":
                 sq_out_tmp = [val_tmp - 1. for val_tmp in sq_out]
                 sq_out = np.array(sq_out_tmp)
