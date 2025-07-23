@@ -1,0 +1,178 @@
+name: Tests, Package, and Deployment
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [next, qa, main]
+    tags: ['v*']
+
+env:
+  PKG_NAME: addie
+  MODULE_NAME: addie
+
+jobs:
+  tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Setup pixi
+        uses: prefix-dev/setup-pixi@v0.8.12
+        with:
+          pixi-version: v0.49.0
+          manifest-path: pyproject.toml
+
+      - name: Apt install deps
+        run: |
+          sudo apt update
+          sudo apt-get install xvfb freeglut3-dev libglu1-mesa
+
+      - name: Mantid pre-requisites
+        shell: bash -l {0}
+        run: |
+          /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
+          mkdir ~/.mantid
+          echo "CheckMantidVersion.OnStartup=0" > ~/.mantid/Mantid.user.properties
+          echo "UpdateInstrumentDefinitions.OnStartup=0" >> ~/.mantid/Mantid.user.properties
+          echo "usagereports.enabled=0" >> ~/.mantid/Mantid.user.properties
+          export DISPLAY=:99.0
+          sleep 3
+
+      - name: Lint
+        run: pixi run lint
+
+      - name: Test Basic imports
+        run: pixi run test-import
+
+      - name: Run unit tests
+        run: |
+          xvfb-run --server-args="-screen 0 640x480x24" --auto-servernum pixi run mantidworkbench --help
+          echo "import time;time.sleep(5)" > workbenchshutdown.py
+          xvfb-run --auto-servernum pixi run test
+
+      - name: Build pypi package
+        run: |
+          # build the package
+          VERSION=$(pixi run -- versioningit .)
+          pixi run pypi-build
+
+      # NOTE: Is Codecov a thing in the Addie repo?
+      # - name: Upload coverage to codecov
+      #   uses: codecov/codecov-action@v5
+      #   if: github.actor != 'dependabot[bot]'
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Dependency check
+        run: |
+          pixi run audit-deps
+
+  conda-build:
+    name: Build conda package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Setup pixi
+        uses: prefix-dev/setup-pixi@v0.8.12
+        with:
+          pixi-version: v0.49.0
+          manifest-path: pyproject.toml
+
+      - name: Build conda package
+        run: pixi run conda-build
+
+      - name: Upload conda package as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifact-conda-package
+          path: ${{ env.PKG_NAME }}-*.conda
+
+  conda-verify:
+    name: Verify conda package
+    needs: conda-build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - name: Setup micromamba
+        uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-name: test
+          init-shell: bash
+          create-args: >-
+            python=3.10
+
+      - name: Download conda package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: artifact-conda-package
+          path: /tmp/local-channel/linux-64
+
+      - name: Install the package
+        run: |
+          micromamba install --yes -c conda-forge conda-build conda-index
+          python -m conda_index /tmp/local-channel
+          micromamba install --strict-channel-priority --yes -c mantid -c /tmp/local-channel -c neutrons -c conda-forge ${{ env.PKG_NAME }}
+
+      - name: Verify the installation
+        run: |
+          pkg_version=$(micromamba list "${{ env.PKG_NAME }}" | awk -v pkg="${{ env.PKG_NAME }}" '$1 == pkg { print $2 }')
+          echo "Package version: $pkg_version"
+          module_version=$(python -c "import ${{ env.MODULE_NAME }}; print(${{ env.MODULE_NAME }}.__version__)")
+          filename=$(python -c "import ${{ env.MODULE_NAME }}; print(${{ env.MODULE_NAME }}.__file__)")
+          filetree=$(dirname "$filename")
+          echo "Module file tree: $filetree"
+          echo "Module file: $filename"
+          echo "Module version: $module_version"
+          if [ "$pkg_version" != "$module_version" ]; then
+            echo "Version mismatch!"
+            exit 1
+          else
+            echo "Versions match."
+          fi
+
+  publish:
+    name: Upload package to anaconda
+    runs-on: ubuntu-latest
+    needs: [tests, conda-build, conda-verify]
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Setup Pixi
+        uses: prefix-dev/setup-pixi@v0.8.12
+        with:
+          pixi-version: v0.49.0
+          manifest-path: pyproject.toml
+
+      - name: Download conda package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: artifact-conda-package
+
+      - name: Upload package to anaconda
+        env:
+          ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
+          IS_RC: ${{ contains(github.ref, 'rc') }}
+        run: |
+          # label is main or rc depending on the tag-name
+          CONDA_LABEL="main"
+          if [ "${IS_RC}" = "true" ]; then CONDA_LABEL="rc"; fi
+          echo pushing ${{ github.ref }} with label $CONDA_LABEL
+          pixi run anaconda upload --label $CONDA_LABEL --user neutrons ${{ env.PKG_NAME }}-*.conda

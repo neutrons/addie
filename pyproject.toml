@@ -1,23 +1,246 @@
+
+[project]
+name = "addie"
+dynamic = ["version"]
+description = "Need a description"
+readme = "README.md"
+license = { text = "The MIT License (MIT)" }
+authors = [
+    { name = "Dan", email = "oldsdp@ornl.gov" },
+    { name = "Wenduo", email = "zhou@ornl.gov" },
+    { name = "Jean", email = "bilheuxjm@ornl.gov" },
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+]
+dependencies = [
+    "periodictable",
+    "psutil",
+    "pystog",
+    "qtpy",
+    "simplejson",
+    "pyoncat",
+]
+
+[project.scripts]
+addie = "addie.main:main"
+
+[project.urls]
+"Bug Tracker" = "https://github.com/ornlneutronimaging/iMars3D/issues"
+Homepage = "http://github.com/neutrons/addie"
+
+
+####################
+### Build config ###
+####################
+
 [build-system]
-requires = ["setuptools >= 48", "versioningit", "wheel", "toml"]
-build-backend = "setuptools.build_meta"
+build-backend = "hatchling.build"
+requires = ["hatchling", "versioningit"]
+
+[tool.hatch.version]
+source = "versioningit"
+
+[tool.hatch.build.hooks.versioningit-onbuild]
+source-file = "addie/_version.py"
+build-file = "addie/_version.py"
+
+[tool.hatch.build]
+artifacts = [
+  "addie/_version.py",
+  "addie/**/*.yml",
+  "addie/**/*.yaml",
+  "addie/**/*.ini",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["addie/"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/addie",
+]
 
 [tool.versioningit.vcs]
 method = "git"
-default-tag = "5.0.0"
+default-tag = "0.1.0"
 
 [tool.versioningit.next-version]
 method = "minor"
 
 [tool.versioningit.format]
 distance = "{next_version}.dev{distance}"
-dirty = "{version}+d{build_date:%Y%m%d}"
-distance-dirty = "{next_version}.dev{distance}+d{build_date:%Y%m%d%H%M}"
+# Since pixi builds currently require the package version to be set statically in pyproject.toml,
+# and we solve that by temporarily changing pyproject.toml during build using the pixi tasks
+# sync-version and reset-version, then we need to ignore uncommitted changes in order for the wheel
+# version to be consistent with the package version
+dirty = "{version}"
+distance-dirty = "{next_version}.dev{distance}"
 
 [tool.versioningit.write]
 file = "addie/_version.py"
 
+
+
+###################
+### Pixi config ###
+###################
+
+[tool.pixi.workspace]
+preview = ["pixi-build"] # Required until the build feature becomes stable
+channels = [
+  "conda-forge",
+  "mantid",
+  "neutrons",
+  "https://prefix.dev/pixi-build-backends", # Required for pixi build
+]
+platforms = ["linux-64", "osx-arm64"] # add additional platforms as needed
+conda-pypi-map = { "conda-forge" = "pixi-mapping.json" }
+
+[tool.pixi.dependencies]
+# Conda package dependencies
+configparser = "*"
+mantid-total-scattering-python-wrapper = "*"
+mantidworkbench = ">=6.13.0,<7"
+pyqt="*"
+periodictable = "*"
+psutil = "*"
+pystog = "*"
+simplejson = "*"
+typing = "*"
+pytest="*"
+
+[tool.pixi.pypi-dependencies]
+# PyPI dependencies, including this package to allow local editable installs
+addie = { path = ".", editable = true }
+
+[tool.pixi.package.host-dependencies]
+hatchling = "*"
+versioningit = "*"
+
+[tool.pixi.package.run-dependencies]
+python = ">=3.10"
+qtpy = "*"
+configparser = "*"
+mantid-total-scattering-python-wrapper = "*"
+periodictable = "*"
+psutil = "*"
+pystog = "*"
+simplejson = "*"
+
+[tool.pixi.package]
+name = "addie"
+version = "0.0.0"     # placeholder, overwritten by sync-version
+
+[tool.pixi.package.build]
+backend = { name = "pixi-build-python", version = "0.1.*" }
+
+# Environments and Features
+
+[tool.pixi.environments]
+default = { features = [
+  "developer",
+  "package",
+  "test",
+], solve-group = "default" }
+
+[tool.pixi.feature.test.dependencies]
+pytest = "*"
+pytest-cov = "*"
+pytest-repeat = "*"
+pytest-xdist = "*"
+pytest-mpl = "*"
+mock = "*"
+
+[tool.pixi.feature.package.pypi-dependencies]
+toml-cli = "*"
+
+[tool.pixi.feature.package.dependencies]
+anaconda-client = ">=1.13.0,<2"
+twine = ">=6.1.0,<7"
+versioningit = "*"
+hatch = "*"
+
+[tool.pixi.feature.developer.dependencies]
+pip = "*"
+pip-audit = "*"
+pre-commit = "*"
+ruff = "*"
+versioningit = "*"
+flake8 = "*"
+
+
+[tool.pixi.tasks]
+# Testing
+test = { description = "Run the test suite with code coverage", cmd = "pytest" }
+test-import = { cmd = "python -c \"import mantid;import qtpy;import mantidqt\"", description = "Basic import test" }
+lint = { cmd = "flake8 . --count --ignore E114,E115,E116,E121,E123,E126,E133,E2,E704,E722,E741,E743,W503,F403,F405,F999 --exclude  addie/icons/icons_rc.py,.pixi/ --doctests --max-line-length 130", description = "Run ruff to check code style and linting" }
+# Packaging
+conda-build-command = { cmd = "pixi build", description = "Build the conda package command" }
+conda-build = { description = "Build the conda package", depends-on = [
+  "backup-toml",
+  "sync-version",
+  "conda-build-command",
+  "reset-toml"
+] }
+conda-publish = { cmd = "anaconda upload *.conda", description = "Publish the .conda package to anaconda.org", depends-on = [
+  "conda-build",
+] }
+pypi-build = { cmd = "hatch build", description = "Build the package for PyPI" }
+# Misc
+audit-deps = { cmd = "pip-audit --local -s osv", description = "Audit the package dependencies for vulnerabilities" }
+clean = { cmd = 'rm -rf .pytest_cache .ruff_cache **/*.egg-info **/dist **/__pycache__', description = "Clean up various caches and build artifacts" }
+clean-conda = { cmd = "rm -f *.conda", description = "Clean the local .conda build artifacts" }
+clean-docs = { cmd = "rm -rf docs/_build", description = "Clean up documentation build artifacts" }
+clean-all = { description = "Clean all artifacts", depends-on = [
+  "clean",
+  "clean-conda",
+  "clean-docs",
+] }
+sync-version = { cmd = 'version=$(python -m versioningit); toml set tool.pixi.package.version "$version" --toml-path pyproject.toml', description = "Sync pyproject.toml version with Git version" }
+backup-toml = { cmd = "cp pyproject.toml pyproject.toml.bak", description = "Backup the pyproject.toml file" }
+reset-toml = { cmd = "cp pyproject.toml.bak pyproject.toml; rm pyproject.toml.bak", description = "Reset the pyproject.toml file to the original state" }
+
+##############
+### Pytest ###
+##############
+
 [tool.pytest.ini_options]
-pythonpath = [
- '.'
- ]
+addopts = "--mpl -v --cov=addie --cov-report=term-missing"
+pythonpath = [".", "src", "scripts"]
+testpaths = ["tests"]
+python_files = ["test*.py"]
+norecursedirs = [
+  ".git",
+  "tmp*",
+  "_tmp*",
+  "__pycache__",
+  "*dataset*",
+  "*data_set*",
+]
+markers = ["mymarker: example markers goes here"]
+
+############
+### Ruff ###
+############
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+select = ["A", "ARG", "ASYNC", "BLE", "C90", "E", "F", "I", "N", "UP032", "W"]
+exclude = ["notebooks/**", "**/*.ipynb"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = []
+
+[tool.ruff.lint.isort]
+known-first-party = ["addie"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
