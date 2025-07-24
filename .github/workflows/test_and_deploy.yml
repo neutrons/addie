@@ -98,6 +98,12 @@ jobs:
           name: artifact-conda-package
           path: ${{ env.PKG_NAME }}-*.conda
 
+      - name: Set version environment variable
+        run: |
+         version=$(pixi run -- versioningit .)
+         echo "Setting version to $version"
+         echo "PKG_VERSION=$version" >> $GITHUB_ENV
+
   conda-verify:
     name: Verify conda package
     needs: conda-build
@@ -112,7 +118,7 @@ jobs:
           environment-name: test
           init-shell: bash
           create-args: >-
-            python=3.10
+            python=3.11
 
       - name: Download conda package artifact
         uses: actions/download-artifact@v4
@@ -124,7 +130,7 @@ jobs:
         run: |
           micromamba install --yes -c conda-forge conda-build conda-index
           python -m conda_index /tmp/local-channel
-          micromamba install --strict-channel-priority --yes -c mantid -c /tmp/local-channel -c neutrons -c conda-forge ${{ env.PKG_NAME }}
+          micromamba install --yes -c /tmp/local-channel -c mantid -c neutrons -c conda-forge ${{ env.PKG_NAME }}=${{ env.PKG_VERSION }}
 
       - name: Verify the installation
         run: |
