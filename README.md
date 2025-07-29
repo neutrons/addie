@@ -132,3 +132,13 @@ $ pixi run test
 If it is complaining about not being able to find the `pytest` module, first we
 need to make sure we have installed the pixi environment.
 
+### Some cheat sheet commands for running pixi
+
+```bash
+pixi shell  # activate the pixi shell, something analogous to `conda activate`
+addie  # the command is only available when pixi shell is active
+exit  # exit the pixi shell
+pixi run addie  # run application task without activating pixi shell
+pixi run link  # specifically defined link task
+pixi shell -e local-mantid  # activate the pixi shell with the `local-mantid` environment
+```

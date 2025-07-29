@@ -6,9 +6,10 @@ description = "Need a description"
 readme = "README.md"
 license = { text = "The MIT License (MIT)" }
 authors = [
-    { name = "Dan", email = "oldsdp@ornl.gov" },
-    { name = "Wenduo", email = "zhou@ornl.gov" },
-    { name = "Jean", email = "bilheuxjm@ornl.gov" },
+    { name = "Yuanpeng Zhang", email = "zhangy3@ornl.gov" },
+    { name = "Marshall McDonnell", email = "mcdonnellmt@ornl.gov" },
+    { name = "Daniel Olds", email = "dolds@bnl.gov" },
+    { name = "Jean Bilheux", email = "bilheuxjm@ornl.gov" },
 ]
 classifiers = [
     "License :: OSI Approved :: MIT License",
