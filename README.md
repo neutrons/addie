@@ -30,22 +30,33 @@ project.
 
 ## Install
 
-Setup conda environment to install ADDIE into:
+### Pre-requisite: Install Pixi
+
+Please follow the instructions provided at https://pixi.sh/latest/installation/
+
+### Install the Pixi Environment
+
+In the root of the repo:
+
 ```
-conda create -n addie-env
-conda activate addie-env
+pixi install
 ```
+
+If you would just like to import the package into your own conda environement
+then simply run the following instead.
 
 Install ADDIE in the conda environment:
 ```
-conda install -c neutrons addie
+mamba install -c neutrons addie
 ```
 
 ## Uninstall
 
+For Pixi simply delete the `.pixi` folder it generates in the repo root.
+
+For Conda:
 ```
-conda deactivate
-conda remove -n addie_env --all
+mamba remove addie
 ```
 
 ## Launch
@@ -53,41 +64,40 @@ conda remove -n addie_env --all
 To launch ADDIE, run the following from the command line:
 
 ```bash
-addie
+pixi run addie
 ```
 
-If you need to specify the path to Mantid build, use:
+If you need to specify the path to Mantid build.
+In the pyproject.toml file 
+update `MANTID_BUILD_DIR` to point to your build directory
+and  `MANTID_SRC_DIR` to point to your source directory.
 ```
-MANTIDPATH=/path/to/mantid/build/bin PATH=$MANTIDPATH:$PATH PYTHONPATH=$MANTIDPATH:$PATH addie
+pixi run addie-local-mantid
 ```
 
 
 ## Development
 
 
-### Installation development environment using Conda
+### Installation development environment using Pixi
 
 ```bash
-conda env create --file environment.yml
-conda activate addie
-pip install -e .
+pixi install
 ```
 
-This will use the configuration in the `environment.yml` file for setting up the
-`addie` conda environment. If one needs to change the conda environment name,
-simply edit the `addie` to something else in the `environment.yml` file.
+This will setup all the dependencies necessary to develop ADDIE.
 
 Then suppose one is located in the main directory of the ADDIE repo, executing
 the following command will start up ADDIE,
 
 ```bash
-python addie/main.py
+pixi run python addie/main.py
 ```
 
 or just
 
 ```bash
-addie
+pixi run addie
 ```
 
 > N.B. If the drive mounting point on the operating system is changed, we may to
@@ -97,10 +107,7 @@ launch the `ADDIE` GUI.
 
 ### Uninstall
 
-```bash
-conda deactivate
-conda remove -n addie --all
-```
+Simply delete the `.pixi` folder.
 
 **Notes**
 
@@ -118,47 +125,20 @@ ImportError: First import of "._api" failed with "libGL.so.1: cannot open shared
 
 ### Testing
 
-The test suite can be run using [pytest](https://docs.pytest.org/en/latest/)
-with the [pytest-qt](https://pytest-qt.readthedocs.io/en/latest/) plugin.
+The test suite can be run using [pytest](https://docs.pytest.org/en/latest/) through pixi.
 ```bash
-$ python -m pytest
+$ pixi run test
 ```
 If it is complaining about not being able to find the `pytest` module, first we
-need to make sure we are in the activated conda environment created above. Then
-if the issue persists, we can run `pip install pytest` to install the module.
+need to make sure we have installed the pixi environment.
 
-### Developing using a local Mantid install
-
-If you normally develop using `virtualenv` or friends, you can develop
-addie that way as well. After creating the virtual environment, run
+### Some cheat sheet commands for running pixi
 
 ```bash
-<MANTIDBUILDDIR>/bin/AddPythonPath.py
-```
-
-which will add a file, `mantid.pth` to your environment with the
-location of mantid. Then you need to setup for development:
-
-```bash
-python setup.py develop
-```
-
-will put the rest of addie into your environment so you only need to
-edit files and type `addie`.
-
-As an extra reference, use [direnv](https://github.com/direnv/direnv)
-to manange your virtual environments. For a python2 virtual
-environment the `.envrc` file should contain
-```
-layout python2 -- --system-site-packages
-```
-so the system wide packages installed for mantid are found.
-
-or with `pipenv` (which will use Pipfile),
-first setup the directory and then add the `.envrc` file:
-```
-cd addie
-pipenv --two
-echo layout_pipenv > .envrc
-direnv allow
+pixi shell  # activate the pixi shell, something analogous to `conda activate`
+addie  # the command is only available when pixi shell is active
+exit  # exit the pixi shell
+pixi run addie  # run application task without activating pixi shell
+pixi run link  # specifically defined link task
+pixi shell -e local-mantid  # activate the pixi shell with the `local-mantid` environment
 ```
