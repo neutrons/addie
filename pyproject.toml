@@ -21,7 +21,7 @@ dependencies = [
     "periodictable",
     "psutil",
     "pystog",
-    "qtpy",
+    "qtpy", # conda depends on mantidworkbench
     "simplejson",
     "pyoncat",
 ]
@@ -94,23 +94,23 @@ file = "addie/_version.py"
 preview = ["pixi-build"] # Required until the build feature becomes stable
 channels = [
   "conda-forge",
+  "mantid-ornl",
   "mantid",
   "neutrons",
   "https://prefix.dev/pixi-build-backends", # Required for pixi build
 ]
-platforms = ["linux-64", "osx-arm64"] # add additional platforms as needed
+platforms = ["linux-64"] # add additional platforms as needed
 conda-pypi-map = { "conda-forge" = "pixi-mapping.json" }
 
 [tool.pixi.dependencies]
 # Conda package dependencies
 python = ">=3.11"
-poco = ">=1.14.2,<1.14.3.0a0" 
 configparser = "*"
 mantid-total-scattering-python-wrapper = "*"
 pyqt="*"
 periodictable = "*"
 psutil = "*"
-pystog = "*"
+pystog = ">=0.5,<0.7"
 simplejson = "*"
 typing = "*"
 pytest="*"
@@ -125,12 +125,11 @@ versioningit = "*"
 
 [tool.pixi.package.run-dependencies]
 python = ">=3.11"
-qtpy = "*"
 mantidworkbench = ">=6.13.0,<7"
 mantid-total-scattering-python-wrapper = "*"
 periodictable = "*"
 psutil = "*"
-pystog = "*"
+pystog = ">=0.5,<0.7"
 simplejson = "*"
 
 [tool.pixi.package]
