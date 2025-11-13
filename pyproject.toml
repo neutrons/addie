@@ -160,7 +160,6 @@ pytest-xdist = "*"
 pytest-mpl = "*"
 mock = "*"
 mantidworkbench = ">=6.14.0,<7"
-brotli=">=1.2.0"
 
 [tool.pixi.feature.package.pypi-dependencies]
 toml-cli = "*"
