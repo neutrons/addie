@@ -125,7 +125,7 @@ versioningit = "*"
 
 [tool.pixi.package.run-dependencies]
 python = ">=3.11"
-mantidworkbench = ">=6.13.0,<7"
+mantidworkbench = ">=6.14.0,<7"
 mantid-total-scattering-python-wrapper = "*"
 periodictable = "*"
 psutil = "*"
