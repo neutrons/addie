@@ -34,7 +34,7 @@ jobs:
           title: Update pixi lockfile
           body-path: diff.md
           branch: update-pixi
-          base: main # change this to the default branch of your repository
+          base: next # change this to the default branch of your repository
           labels: pixi
           delete-branch: true
           add-paths: pixi.lock
