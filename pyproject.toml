@@ -125,12 +125,13 @@ versioningit = "*"
 
 [tool.pixi.package.run-dependencies]
 python = ">=3.11"
-mantidworkbench = ">=6.13.0,<7"
+mantidworkbench = ">=6.14.0,<7"
 mantid-total-scattering-python-wrapper = "*"
 periodictable = "*"
 psutil = "*"
 pystog = ">=0.5,<0.7"
 simplejson = "*"
+brotli=">=1.2.0"
 
 [tool.pixi.package]
 name = "addie"
@@ -158,7 +159,7 @@ pytest-repeat = "*"
 pytest-xdist = "*"
 pytest-mpl = "*"
 mock = "*"
-mantidworkbench = ">=6.13.0,<7"
+mantidworkbench = ">=6.14.0,<7"
 
 [tool.pixi.feature.package.pypi-dependencies]
 toml-cli = "*"
@@ -170,7 +171,7 @@ versioningit = "*"
 hatch = "*"
 
 [tool.pixi.feature.developer.dependencies]
-pip = "*"
+pip = ">=25.3"
 pip-audit = "*"
 pre-commit = "*"
 ruff = "*"
@@ -191,7 +192,7 @@ LD_LIBRARY_PATH = "${MANTID_BUILD_DIR}/lib:${MANTID_BUILD_DIR}/bin:${LD_LIBRARY_
 
 [tool.pixi.feature.local-mantid]
 channels = [ "conda-forge", "https://prefix.dev/pixi-build-backends", "mantid" ]
-dependencies = { mantid-developer =  ">=6.13,<7" }
+dependencies = { mantid-developer =  ">=6.14,<7" }
 
 [tool.pixi.tasks]
 # Testing
