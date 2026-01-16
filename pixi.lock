@@ -9,6 +9,8 @@ environments:
     - url: https://prefix.dev/pixi-build-backends/
     indexes:
     - https://pypi.org/simple
+    options:
+      pypi-prerelease-mode: if-necessary-or-explicit
     packages:
       linux-64:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/_libgcc_mutex-0.1-conda_forge.tar.bz2
@@ -462,11 +464,9 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstandard-0.25.0-py311haee01d2_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb8e6e7a_2.conda
       - pypi: https://files.pythonhosted.org/packages/31/b4/b9b800c45527aadd64d5b442f9b932b00648617eb5d63d2c7a6587b7cafc/jmespath-1.0.1-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/be/9c/92789c596b8df838baa98fa71844d84283302f7604ed565dafe5a6b5041a/oauthlib-3.3.1-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/5d/e1/d0531ae44e5b90a58ced82f831eb45289b3f817d68ca08de4e177f98c266/pyoncat-2.1-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/b4/38/fc287e3be2cd3023fbc5c3ecae67e2614ea2947b7514d2fec86db2076f66/pyoncat-2.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/4d/bf/f26e90f3c17cc5cd6676583f9d13faa0a1017249a09603a3ab4f63892845/pystog-0.6.1-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/fe/d0/c51d1e6a80eab11ef96a4cbad17fc0310cf68994fb01a7283276b7e5bbd6/regex-2025.9.18-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
-      - pypi: https://files.pythonhosted.org/packages/3b/5d/63d4ae3b9daea098d5d6f5da83984853c1bbacd5dc826764b249fe119d24/requests_oauthlib-2.0.0-py2.py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/a4/3c/87ca0a02736d16b6262921425e84b48984e77d8e4e572c9072ce96e66c30/regex-2026.1.15-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/d2/b8/f0b9b880c03a3db8eaff63d76ca751ac7d8e45483fb7a0bb9f8e5c6ce433/toml_cli-0.8.2-py3-none-any.whl
       - pypi: ./
   local-mantid:
@@ -478,6 +478,8 @@ environments:
     - url: https://conda.anaconda.org/neutrons/
     indexes:
     - https://pypi.org/simple
+    options:
+      pypi-prerelease-mode: if-necessary-or-explicit
     packages:
       linux-64:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/_libgcc_mutex-0.1-conda_forge.tar.bz2
@@ -894,10 +896,8 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zlib-1.3.1-hb9d3cd8_2.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstandard-0.25.0-py311haee01d2_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb8e6e7a_2.conda
-      - pypi: https://files.pythonhosted.org/packages/be/9c/92789c596b8df838baa98fa71844d84283302f7604ed565dafe5a6b5041a/oauthlib-3.3.1-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/5d/e1/d0531ae44e5b90a58ced82f831eb45289b3f817d68ca08de4e177f98c266/pyoncat-2.1-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/b4/38/fc287e3be2cd3023fbc5c3ecae67e2614ea2947b7514d2fec86db2076f66/pyoncat-2.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/4d/bf/f26e90f3c17cc5cd6676583f9d13faa0a1017249a09603a3ab4f63892845/pystog-0.6.1-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/3b/5d/63d4ae3b9daea098d5d6f5da83984853c1bbacd5dc826764b249fe119d24/requests_oauthlib-2.0.0-py2.py3-none-any.whl
       - pypi: ./
 packages:
 - conda: https://conda.anaconda.org/conda-forge/linux-64/_libgcc_mutex-0.1-conda_forge.tar.bz2
@@ -934,8 +934,8 @@ packages:
   timestamp: 1744137672556
 - pypi: ./
   name: addie
-  version: 5.4.0.dev5
-  sha256: 7d3b5b7fc20dd197be2f86a22631977ce78035af2210f06fb7e2bba3691e2237
+  version: 5.5.0.dev1
+  sha256: c0cc9d183459f534d1fe6f322c1d8e8b87a77d6ba3997924fe22e1caf15d9841
   requires_dist:
   - periodictable
   - psutil
@@ -943,7 +943,6 @@ packages:
   - pystog
   - qtpy
   - simplejson
-  editable: true
 - conda: https://conda.anaconda.org/conda-forge/noarch/adwaita-icon-theme-49.0-unix_0.conda
   sha256: a362b4f5c96a0bf4def96be1a77317e2730af38915eb9bec85e2a92836501ed7
   md5: b3f0179590f3c0637b7eb5309898f79e
@@ -5614,16 +5613,6 @@ packages:
   - pkg:pypi/numpy
   size: 8978113
   timestamp: 1730588531967
-- pypi: https://files.pythonhosted.org/packages/be/9c/92789c596b8df838baa98fa71844d84283302f7604ed565dafe5a6b5041a/oauthlib-3.3.1-py3-none-any.whl
-  name: oauthlib
-  version: 3.3.1
-  sha256: 88119c938d2b8fb88561af5f6ee0eec8cc8d552b7bb1f712743136eb7523b7a1
-  requires_dist:
-  - cryptography>=3.0.0 ; extra == 'rsa'
-  - cryptography>=3.0.0 ; extra == 'signedtoken'
-  - pyjwt>=2.0.0,<3 ; extra == 'signedtoken'
-  - blinker>=1.4.0 ; extra == 'signals'
-  requires_python: '>=3.8'
 - conda: https://conda.anaconda.org/conda-forge/linux-64/occt-7.9.1-novtk_h185fe95_102.conda
   sha256: ae4b3edfaee121da39d8d3aa2edd388d4bda469d05b9197225557364e8fe4d47
   md5: 5453353d22c61cea0daecbebe2ee6ea2
@@ -6405,14 +6394,12 @@ packages:
   - pkg:pypi/pygments
   size: 889287
   timestamp: 1750615908735
-- pypi: https://files.pythonhosted.org/packages/5d/e1/d0531ae44e5b90a58ced82f831eb45289b3f817d68ca08de4e177f98c266/pyoncat-2.1-py3-none-any.whl
+- pypi: https://files.pythonhosted.org/packages/b4/38/fc287e3be2cd3023fbc5c3ecae67e2614ea2947b7514d2fec86db2076f66/pyoncat-2.4-py3-none-any.whl
   name: pyoncat
-  version: '2.1'
-  sha256: 4bf742fca50ac5e10564c76fd226d50bb06a408e17e320fd4fb9e38cc98c0a28
+  version: '2.4'
+  sha256: 1c1bc6d0de9fa0434c6be6090e6ef03c61f3d2f82ebf9574904bb3512f2de987
   requires_dist:
-  - oauthlib
   - requests
-  - requests-oauthlib
   requires_python: '>=3.7,<4'
 - conda: https://conda.anaconda.org/conda-forge/noarch/pyparsing-3.2.5-pyhcf101f3_0.conda
   sha256: 6814b61b94e95ffc45ec539a6424d8447895fef75b0fec7e1be31f5beee883fb
@@ -7237,10 +7224,10 @@ packages:
   - pkg:pypi/referencing
   size: 51668
   timestamp: 1737836872415
-- pypi: https://files.pythonhosted.org/packages/fe/d0/c51d1e6a80eab11ef96a4cbad17fc0310cf68994fb01a7283276b7e5bbd6/regex-2025.9.18-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
+- pypi: https://files.pythonhosted.org/packages/a4/3c/87ca0a02736d16b6262921425e84b48984e77d8e4e572c9072ce96e66c30/regex-2026.1.15-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
   name: regex
-  version: 2025.9.18
-  sha256: f2f422214a03fab16bfa495cfec72bee4aaa5731843b771860a471282f1bf74f
+  version: 2026.1.15
+  sha256: d9ea2604370efc9a174c1b5dcc81784fb040044232150f7f33756049edfc9026
   requires_python: '>=3.9'
 - conda: https://conda.anaconda.org/conda-forge/noarch/requests-2.32.5-pyhd8ed1ab_0.conda
   sha256: 8dc54e94721e9ab545d7234aa5192b74102263d3e704e6d0c8aa7008f2da2a7b
@@ -7259,15 +7246,6 @@ packages:
   - pkg:pypi/requests
   size: 59263
   timestamp: 1755614348400
-- pypi: https://files.pythonhosted.org/packages/3b/5d/63d4ae3b9daea098d5d6f5da83984853c1bbacd5dc826764b249fe119d24/requests_oauthlib-2.0.0-py2.py3-none-any.whl
-  name: requests-oauthlib
-  version: 2.0.0
-  sha256: 7dd8a5c40426b779b0868c404bdef9768deccf22749cde15852df527e6269b36
-  requires_dist:
-  - oauthlib>=3.0.0
-  - requests>=2.0.0
-  - oauthlib[signedtoken]>=3.0.0 ; extra == 'rsa'
-  requires_python: '>=3.4'
 - conda: https://conda.anaconda.org/conda-forge/noarch/requests-toolbelt-1.0.0-pyhd8ed1ab_1.conda
   sha256: c0b815e72bb3f08b67d60d5e02251bbb0164905b5f72942ff5b6d2a339640630
   md5: 66de8645e324fda0ea6ef28c2f99a2ab

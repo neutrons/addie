@@ -188,7 +188,7 @@ jobs:
   # Trigger GitLab dev deploy pipeline
   deploy-dev:
     runs-on: ubuntu-latest
-    needs: build
+    needs: conda-build
     # if: github.ref == 'refs/heads/next'
     steps:
       - name: Get Environment Name
