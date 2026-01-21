@@ -5,7 +5,12 @@ on:
   pull_request:
   push:
     branches: [next, qa, main]
-    tags: ['v*']
+    tags: ["v*"]
+
+# cancel previous job if new commit is pushed
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   PKG_NAME: addie
@@ -17,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           fetch-tags: true
@@ -25,7 +30,6 @@ jobs:
       - name: Setup pixi
         uses: prefix-dev/setup-pixi@v0.9.3
         with:
-          pixi-version: v0.49.0
           manifest-path: pyproject.toml
 
       - name: Apt install deps
@@ -86,23 +90,22 @@ jobs:
       - name: Setup pixi
         uses: prefix-dev/setup-pixi@v0.9.3
         with:
-          pixi-version: v0.49.0
           manifest-path: pyproject.toml
 
       - name: Build conda package
         run: pixi run conda-build
 
       - name: Upload conda package as artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: artifact-conda-package
           path: ${{ env.PKG_NAME }}-*.conda
 
       - name: Set version environment variable
         run: |
-         version=$(pixi run -- versioningit .)
-         echo "Setting version to $version"
-         echo "PKG_VERSION=$version" >> $GITHUB_ENV
+          version=$(pixi run -- versioningit .)
+          echo "Setting version to $version"
+          echo "PKG_VERSION=$version" >> $GITHUB_ENV
 
   conda-verify:
     name: Verify conda package
@@ -121,7 +124,7 @@ jobs:
             python=3.11
 
       - name: Download conda package artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: artifact-conda-package
           path: /tmp/local-channel/linux-64
@@ -164,11 +167,10 @@ jobs:
       - name: Setup Pixi
         uses: prefix-dev/setup-pixi@v0.9.3
         with:
-          pixi-version: v0.49.0
           manifest-path: pyproject.toml
 
       - name: Download conda package artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: artifact-conda-package
 
@@ -182,3 +184,31 @@ jobs:
           if [ "${IS_RC}" = "true" ]; then CONDA_LABEL="rc"; fi
           echo pushing ${{ github.ref }} with label $CONDA_LABEL
           pixi run anaconda upload --label $CONDA_LABEL --user neutrons ${{ env.PKG_NAME }}-*.conda
+
+  # Trigger GitLab dev deploy pipeline
+  deploy-dev:
+    runs-on: ubuntu-latest
+    needs: conda-verify
+    if: github.ref == 'refs/heads/next'
+    steps:
+      - name: Get Environment Name
+        uses: neutrons/branch-mapper@main
+        id: env_name
+        with:
+          prefix: addie
+
+      - name: Trigger Dev Deploy
+        # use https://github.com/eic/trigger-gitlab-ci/pull/14 until merged
+        uses: eic/trigger-gitlab-ci@d984d8d53d871d2fdc1325639d94322da6e8747f
+        id: trigger
+        with:
+          url: https://code.ornl.gov
+          project_id: 17811
+          ref_name: main
+          token: ${{ secrets.GITLAB_DEPLOY_TOKEN }}
+
+      - name: Annotate commit
+        uses: peter-evans/commit-comment@v4
+        with:
+          body: |
+            GitLab pipeline for ${{ steps.env_name.outputs.name }} has been submitted for this commit: ${{ steps.trigger.outputs.web_url }}
