@@ -4,7 +4,7 @@ name = "addie"
 dynamic = ["version"]
 description = "Need a description"
 readme = "README.md"
-license = { text = "The MIT License (MIT)" }
+license = { text = "MIT" }
 authors = [
     { name = "Yuanpeng Zhang", email = "zhangy3@ornl.gov" },
     { name = "Marshall McDonnell", email = "mcdonnellmt@ornl.gov" },
