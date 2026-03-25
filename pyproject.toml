@@ -212,7 +212,8 @@ conda-publish = { cmd = "anaconda upload *.conda", description = "Publish the .c
 ] }
 pypi-build = { cmd = "hatch build", description = "Build the package for PyPI" }
 # Misc
-audit-deps = { cmd = "pip-audit --local -s osv", description = "Audit the package dependencies for vulnerabilities" }
+# Temporarily ignore pygments vuln, no currently fixed version
+audit-deps = { cmd = "pip-audit --local -s osv --ignore-vuln CVE-2026-4539", description = "Audit the package dependencies for vulnerabilities" }
 clean = { cmd = 'rm -rf .pytest_cache .ruff_cache **/*.egg-info **/dist **/__pycache__', description = "Clean up various caches and build artifacts" }
 clean-conda = { cmd = "rm -f *.conda", description = "Clean the local .conda build artifacts" }
 clean-docs = { cmd = "rm -rf docs/_build", description = "Clean up documentation build artifacts" }
