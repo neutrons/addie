@@ -9,8 +9,6 @@ environments:
     - url: https://prefix.dev/pixi-build-backends/
     indexes:
     - https://pypi.org/simple
-    options:
-      pypi-prerelease-mode: if-necessary-or-explicit
     packages:
       linux-64:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/_openmp_mutex-4.5-20_gnu.conda
@@ -496,8 +494,6 @@ environments:
     - url: https://conda.anaconda.org/neutrons/
     indexes:
     - https://pypi.org/simple
-    options:
-      pypi-prerelease-mode: if-necessary-or-explicit
     packages:
       linux-64:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/_openmp_mutex-4.5-20_gnu.conda
@@ -948,7 +944,7 @@ packages:
 - pypi: ./
   name: addie
   version: 5.5.0.dev7
-  sha256: 9f1dba312fd75b4fe2f1424214cac46537f4d2786d5ce40508bb3504b37020e7
+  sha256: 6f7c339ea464f9cc1b351db9510750982e4dd71fe69b08711a3d9d5994788fec
   requires_dist:
   - periodictable
   - psutil
@@ -956,6 +952,7 @@ packages:
   - pystog
   - qtpy
   - simplejson
+  editable: true
 - conda: https://conda.anaconda.org/conda-forge/noarch/adwaita-icon-theme-49.0-unix_0.conda
   sha256: a362b4f5c96a0bf4def96be1a77317e2730af38915eb9bec85e2a92836501ed7
   md5: b3f0179590f3c0637b7eb5309898f79e

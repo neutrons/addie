@@ -185,8 +185,8 @@ flake8 = "*"
 # Environment variables for local Mantid build
 [tool.pixi.feature.local-mantid.activation.env]
 # MUST be absolute path to your local Mantid build directory
-MANTID_BUILD_DIR = "/path/to/your/mantid/build"
-MANTID_SRC_DIR = "/path/to/your/mantid/"
+# MANTID_BUILD_DIR = "/path/to/your/mantid/build"
+# MANTID_SRC_DIR = "/path/to/your/mantid/"
 PYTHONPATH = "${MANTID_SRC_DIR}/Framework/PythonInterface:${MANTID_BUILD_DIR}/bin:${MANTID_BUILD_DIR}/qt/applications/workbench:${MANTID_SRC_DIR}/qt/applications/workbench:${MANTID_SRC_DIR}/qt/python/mantidqt:${MANTID_SRC_DIR}/qt/python/mantidqtinterfaces:${PYTHONPATH}"
 LD_LIBRARY_PATH = "${MANTID_BUILD_DIR}/lib:${MANTID_BUILD_DIR}/bin:${LD_LIBRARY_PATH}"
 
@@ -227,7 +227,7 @@ backup-toml = { cmd = "cp pyproject.toml pyproject.toml.bak", description = "Bac
 reset-toml = { cmd = "cp pyproject.toml.bak pyproject.toml; rm pyproject.toml.bak", description = "Reset the pyproject.toml file to the original state" }
 
 [tool.pixi.feature.local-mantid.tasks]
-addie-local-mantid = {cmd ="cd $MANTID_BUILD_DIR/bin; addie;", description = "Run ADDIE with local Mantid build" }
+addie-local-mantid = {cmd ="cd $MANTID_BUILD_DIR/bin; addie $ADDIE_ARGS;", description = "Run ADDIE with local Mantid build" }
 
 ##############
 ### Pytest ###
