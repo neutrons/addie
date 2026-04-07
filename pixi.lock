@@ -933,8 +933,8 @@ packages:
   timestamp: 1744137672556
 - pypi: ./
   name: addie
-  version: 5.5.0.dev9
-  sha256: 0d126356c1cc00ea83fc546d0c7df5fa43ae143e7146fe8791e5c8b2ae7fe2df
+  version: 5.5.0.dev10
+  sha256: 0c93c07f1e01903eab8e2af8da872caf99e48b484569e7333e2dbd521ff22c36
   requires_dist:
   - periodictable
   - psutil
