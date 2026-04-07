@@ -68,7 +68,7 @@ def extractor(nexus_file: str, wks_name: str, out_dir: str, dir_name=None):
     all_files = list()
 
     for i in range(num_banks):
-        stog.read_nexus_file_by_bank(nexus_file, i, wks_name)
+        stog.read_nexus_file_by_bank(nexus_file, i, wks_name, err=True)
         output_file = "{}_bank{}".format(tail.split(".")[0], i + 1)
         os.rename(os.path.join(out_dir, wks_name + "_bank" + str(i) + ".dat"),
                   os.path.join(out_dir, output_file + ".dat"))

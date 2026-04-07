@@ -292,7 +292,7 @@ def extractor(main_window, nexus_file: str, num_banks: int, wks_name: str, out_d
     all_files = list()
 
     for i in range(num_banks):
-        stog.read_nexus_file_by_bank(nexus_file, i, wks_name)
+        stog.read_nexus_file_by_bank(nexus_file, i, wks_name, err=True)
         output_file = "{}_bank{}".format(tail.split(".")[0], i + 1)
         os.rename(os.path.join(out_dir, f"{wks_name}_bank{i}.dat"),
                   os.path.join(out_dir, f"{output_file}.dat"))
@@ -325,23 +325,31 @@ def initiate_bank_data(main_window, item_list, workspace):
                                    item + ".dat")
         # read the file for this bank
         file_in = open(output_file, "r")
-        line = file_in.readline()
-        line = file_in.readline()
         x_list = []
         y_list = []
+        e_list = []
+        lines = file_in.readlines()[2:]
         #add to the list
-        while line:
-            line = file_in.readline()
-            if line:
-                if line.split()[1] != "nan":
-                    x_tmp = float(line.split()[0])
-                    y_tmp = float(line.split()[1])
-                    if qmin_valid[current_bank - 1] <= x_tmp <= qmax_valid[current_bank - 1]:
-                        x_list.append(x_tmp)
-                        y_list.append(y_tmp)
+        for line in lines:
+            if line.split()[1] != "nan":
+                x_tmp = float(line.split()[0])
+                y_tmp = float(line.split()[1])
+                if len(line.split()) > 2:
+                    err_avail = True
+                    e_tmp = float(line.split()[2])
+                else:
+                    err_avail = False
+
+                if qmin_valid[current_bank - 1] <= x_tmp <= qmax_valid[current_bank - 1]:
+                    x_list.append(x_tmp)
+                    y_list.append(y_tmp)
+                    if err_avail:
+                        e_list.append(e_tmp)
+
         file_in.close()
         main_window._bankDict[current_bank]['xList'] = x_list
         main_window._bankDict[current_bank]['yList'] = y_list
+        main_window._bankDict[current_bank]['eList'] = e_list
 
 
 def plot(main_window, item_list, banks, workspace, mode):
@@ -398,7 +406,11 @@ def initialize_banks(main_window, banks):
     bank_dict = dict()
     for bank in range(banks):
         # bank holds in order: Qmin, Qmax, Yoffset, Yscale
-        bank_dict[bank + 1] = {'Qmin': '0.0', 'Qmax': '0.0', 'Yoffset': '0.0', 'Yscale': '1.0', 'xList': [], 'yList': []}
+        bank_dict[bank + 1] = {
+            'Qmin': '0.0', 'Qmax': '0.0',
+            'Yoffset': '0.0', 'Yscale': '1.0',
+            'xList': [], 'yList': [], 'eList': []
+        }
 
     main_window._bankDict = bank_dict
     change_bank(main_window)
@@ -520,9 +532,11 @@ def merge_banks(main_window):
 
     banks_x = []
     banks_y = []
+    banks_e = []
     for bank in range(len(main_window._bankDict)):
         banks_x.append(main_window._bankDict[bk_st_dict[bank] + 1]['xList'])
         banks_y.append(main_window._bankDict[bk_st_dict[bank] + 1]['yList'])
+        banks_e.append(main_window._bankDict[bk_st_dict[bank] + 1]['eList'])
 
     qmin_list = list()
     qmax_list = list()
@@ -608,9 +622,11 @@ def merge_banks(main_window):
     if not remove_bkg:
         x_merged = list()
         y_merged = list()
+        e_merged = list()
 
         range_tmp = list(range(len(main_window._bankDict)))
         for bank in range_tmp:
+            err_avail = len(banks_e[bank]) > 0
             yoffset_tmp = main_window._bankDict[bk_st_dict[bank] + 1]['Yoffset']
             yscale_tmp = main_window._bankDict[bk_st_dict[bank] + 1]['Yscale']
             if yoffset_tmp.strip() == "":
@@ -624,11 +640,19 @@ def merge_banks(main_window):
                     if qmin_list[bank] <= x_val <= qmax_list[bank]:
                         x_merged.append(x_val)
                         y_merged.append(banks_y[bank][i] / yscale_tmp + yoffset_tmp)
+                        if err_avail:
+                            e_merged.append(banks_e[bank][i] / yscale_tmp)
+                        else:
+                            e_merged.append(0.0)
             else:
                 for i, x_val in enumerate(banks_x[bank]):
                     if qmin_list[bank] <= x_val < qmax_list[bank]:
                         x_merged.append(x_val)
                         y_merged.append(banks_y[bank][i] / yscale_tmp + yoffset_tmp)
+                        if err_avail:
+                            e_merged.append(banks_e[bank][i] / yscale_tmp)
+                        else:
+                            e_merged.append(0.0)
     else:
         bank_range = list()
         yscale_list = list()
@@ -636,6 +660,7 @@ def merge_banks(main_window):
         all_data = list()
         x_merged_raw = list()
         y_merged_raw = list()
+        e_merged = list()
         # TODO: The hard coded `qmax_bkg_est` and `fudge_factor` needs to be
         # updated to adapt to general way of grouping detectors into banks.
         if prob_nom_phys_bank:
@@ -658,6 +683,7 @@ def merge_banks(main_window):
 
         range_tmp = list(range(len(main_window._bankDict)))
         for bank in range_tmp:
+            err_avail = len(banks_e[bank]) > 0
             bank_range.append([qmin_list[bank], qmax_list[bank]])
             yoffset_tmp = main_window._bankDict[bk_st_dict[bank] + 1]['Yoffset']
             yscale_tmp = main_window._bankDict[bk_st_dict[bank] + 1]['Yscale']
@@ -677,7 +703,10 @@ def merge_banks(main_window):
                     if qmin_list[bank] <= x_val <= qmax_list[bank]:
                         x_merged_raw.append(x_val)
                         y_merged_raw.append(banks_y[bank][i])
-
+                        if err_avail:
+                            e_merged.append(banks_e[bank][i])
+                        else:
+                            e_merged.append(0.0)
             else:
                 for i, x_val in enumerate(banks_x[bank]):
                     if qmin_list[bank] <= x_val < qmax_bkg_est[bank]:
@@ -686,6 +715,10 @@ def merge_banks(main_window):
                     if qmin_list[bank] <= x_val < qmax_list[bank]:
                         x_merged_raw.append(x_val)
                         y_merged_raw.append(banks_y[bank][i])
+                        if err_avail:
+                            e_merged.append(banks_e[bank][i])
+                        else:
+                            e_merged.append(0.0)
             all_data.append([x_tmp, y_tmp])
 
         x_merged_init, y_merged_init, y_bkg_out = bkg_finder(
@@ -700,9 +733,11 @@ def merge_banks(main_window):
                 for j, b_r in enumerate(bank_range):
                     if x_val == b_r[1]:
                         y_merged.append(y_merged_init[i] / yscale_list[j] + yoffset_list[j])
+                        e_merged[i] /= yscale_list[j]
             for j, b_r in enumerate(bank_range):
                 if b_r[0] <= x_val < b_r[1]:
                     y_merged.append(y_merged_init[i] / yscale_list[j] + yoffset_list[j])
+                    e_merged[i] /= yscale_list[j]
 
     if len(x_merged) == 0:
         print("[Error] Qmin and Qmax values are all zero for all banks.")
@@ -716,21 +751,26 @@ def merge_banks(main_window):
     file_list = main_window.postprocessing_ui_m.frame_filelist_tree
     merged_data_ref = main_window._stem + '_merged.sq'
     if remove_bkg:
-        main_window._merged_data[main_window._stem] = {'Name': merged_data_ref,
-                                                       'XList': x_merged,
-                                                       'YList': y_merged,
-                                                       'XListRaw': x_merged_raw,
-                                                       'YListRaw': y_merged_raw,
-                                                       'Bkg': y_bkg_out
-                                                       }
+        main_window._merged_data[main_window._stem] = {
+            'Name': merged_data_ref,
+            'XList': x_merged,
+            'YList': y_merged,
+            'XListRaw': x_merged_raw,
+            'YListRaw': y_merged_raw,
+            'Bkg': y_bkg_out,
+            'EList': e_merged
+        }
         file_list.add_merged_data(main_window._stem + '_merged_raw.sq')
         file_list.add_merged_data(main_window._stem + '_bkg.sq')
         file_list.add_merged_data(merged_data_ref)
     else:
         file_list.clear_merged_tree()
-        main_window._merged_data[main_window._stem] = {'Name': merged_data_ref,
-                                                       'XList': x_merged,
-                                                       'YList': y_merged}
+        main_window._merged_data[main_window._stem] = {
+            'Name': merged_data_ref,
+            'XList': x_merged,
+            'YList': y_merged,
+            'EList': e_merged
+        }
         file_list.add_merged_data(merged_data_ref)
 
     initiate_stog_data(main_window)
@@ -750,13 +790,19 @@ def save_file_raw(main_window, file_name):
         for item in file_name:
             x_bank = main_window._bankDict[int(item[-1])]['xList']
             y_bank = main_window._bankDict[int(item[-1])]['yList']
+            e_bank = main_window._bankDict[int(item[-1])]['eList']
+            err_avail = len(e_bank) > 0
             if save_directory is None or save_directory == '' or len(save_directory) == 0:
                 return
             with open(os.path.join(save_directory, item + ".dat"), 'w') as new_file:
                 new_file.write(str(len(x_bank)) + '\n')
                 new_file.write('#\n')
-                for i in range(len(x_bank)):
-                    new_file.write(str(x_bank[i]) + ' ' + str(y_bank[i]) + '\n')
+                if err_avail:
+                    for i in range(len(x_bank)):
+                        new_file.write("{0:10.3F}{1:20.8F}{2:20.8F}\n".format(x_bank[i], y_bank[i], e_bank[i]))
+                else:
+                    for i in range(len(x_bank)):
+                        new_file.write("{0:10.3F}{1:20.8F}\n".format(x_bank[i], y_bank[i]))
 
         main_window.ui.statusbar.setStyleSheet("color: blue")
         main_window.ui.statusbar.showMessage("Files saved successfully!",
@@ -764,9 +810,13 @@ def save_file_raw(main_window, file_name):
     else:
         x_bank = main_window._bankDict[int(file_name[-1])]['xList']
         y_bank = main_window._bankDict[int(file_name[-1])]['yList']
+        e_bank = main_window._bankDict[int(file_name[-1])]['eList']
+        err_avail = len(e_bank) > 0
         out_file = os.path.join(main_window.output_folder, "SofQ_merged", file_name + '.dat')
-        save_directory = QFileDialog.getSaveFileName(main_window, 'Save Bank',
-                                                     out_file)
+        save_directory = QFileDialog.getSaveFileName(
+            main_window, 'Save Bank', out_file
+        )
+
         if isinstance(save_directory, tuple):
             save_directory = save_directory[0]
         if save_directory is None or save_directory == '' or len(save_directory) == 0:
@@ -774,8 +824,12 @@ def save_file_raw(main_window, file_name):
         with open(save_directory, 'w') as new_file:
             new_file.write(str(len(x_bank)) + '\n')
             new_file.write('#\n')
-            for i in range(len(x_bank)):
-                new_file.write(str(x_bank[i]) + ' ' + str(y_bank[i]) + '\n')
+            if err_avail:
+                for i in range(len(x_bank)):
+                    new_file.write("{0:10.3F}{1:20.8F}{2:20.8F}\n".format(x_bank[i], y_bank[i], e_bank[i]))
+            else:
+                for i in range(len(x_bank)):
+                    new_file.write("{0:10.3F}{1:20.8F}\n".format(x_bank[i], y_bank[i]))
 
         main_window.ui.statusbar.setStyleSheet("color: blue")
         main_window.ui.statusbar.showMessage("File saved successfully!",
@@ -820,11 +874,26 @@ def save_file_merged(main_window, file_name, auto=False):
         x_merged = main_window._merged_data[main_window._stem]['XList']
         y_merged = main_window._merged_data[main_window._stem]['YList']
 
+    e_merged = main_window._merged_data[main_window._stem]['EList']
+    err_avail = not all(ev == 0 for ev in e_merged)
+
     with open(main_window._full_merged_path, 'w') as new_file:
         new_file.write(str(len(x_merged)) + '\n')
         new_file.write('#\n')
-        for i in range(len(x_merged)):
-            new_file.write("{0:10.3F}{1:20.6F}\n".format(x_merged[i], y_merged[i]))
+        if err_avail and file_name[-7:] != "_bkg.sq":
+            for i in range(len(x_merged)):
+                new_file.write(
+                    "{0:10.3F}{1:20.8F}{2:20.8F}\n".format(
+                        x_merged[i], y_merged[i], e_merged[i]
+                    )
+                )
+        else:
+            for i in range(len(x_merged)):
+                new_file.write(
+                    "{0:10.3F}{1:20.8F}\n".format(
+                        x_merged[i], y_merged[i]
+                    )
+                )
 
     main_window.ui.statusbar.setStyleSheet("color: blue")
     main_window.ui.statusbar.showMessage("File saved successfully!",
