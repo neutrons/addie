@@ -170,3 +170,32 @@ jobs:
           package_name: ${{ env.PKG_NAME }}
           label: ${{ env.CONDA_LABEL }}
           keep: 5
+
+  deploy-dev:
+    runs-on: ubuntu-latest
+    needs: publish
+    if: github.ref == 'refs/heads/next'
+    steps:
+      - name: Get Environment Name
+        uses: neutrons/branch-mapper@main
+        id: env_name
+        with:
+          prefix: addie
+
+      - name: Trigger Dev Deploy
+        # use https://github.com/eic/trigger-gitlab-ci/pull/14 until merged
+        uses: eic/trigger-gitlab-ci@d984d8d53d871d2fdc1325639d94322da6e8747f
+        id: trigger
+        with:
+          url: https://code.ornl.gov
+          project_id: 17811
+          ref_name: main
+          token: ${{ secrets.GITLAB_DEPLOY_TOKEN }}
+
+      - name: Annotate commit
+        uses: peter-evans/commit-comment@v4
+
+        with:
+          body: |
+            GitLab pipeline for ${{ steps.env_name.outputs.name }} has been submitted for this commit: ${{ steps.trigger.outputs.web_url }}
+
