@@ -110,12 +110,12 @@ jobs:
           cp *.conda /tmp/local-channel/linux-64
 
       - name: Verify conda package
-        uses: neutrons/conda-actions/pkg-verify@main
+        uses: neutrons/conda-verify@main
         with:
           package-name: ${{ env.PKG_NAME }}
           module-name: ${{ env.MODULE_NAME }}
           local-channel: /tmp/local-channel
-          python-version: 3.11
+          python-version: 3.12
           extra-channels: conda-forge mantid neutrons
 
       - name: Upload conda package as artifact
