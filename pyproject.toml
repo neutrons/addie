@@ -125,7 +125,7 @@ versioningit = "*"
 
 [tool.pixi.package.run-dependencies]
 python = ">=3.11"
-mantidworkbench = ">=6.14.0,<7"
+mantidworkbench = ">=6.16.0,<6.17"
 mantid-total-scattering-python-wrapper = "*"
 periodictable = "*"
 psutil = "*"
@@ -159,7 +159,7 @@ pytest-repeat = "*"
 pytest-xdist = "*"
 pytest-mpl = "*"
 mock = "*"
-mantidworkbench = ">=6.14.0,<7"
+mantidworkbench = ">=6.16.0,<6.17"
 
 [tool.pixi.feature.package.pypi-dependencies]
 toml-cli = "*"
@@ -214,7 +214,7 @@ pypi-build = { cmd = "hatch build", description = "Build the package for PyPI" }
 # Misc
 # Temporarily ignore pygments vuln, no currently fixed version
 # audit-deps = { cmd = "pip-audit --local -s osv --ignore-vuln CVE-2026-4539", description = "Audit the package dependencies for vulnerabilities" }
-audit-deps = { cmd = "pip-audit --local -s osv --ignore-vuln CVE-2026-4539 --ignore-vuln CVE-2026-34073", description = "Audit the package dependencies for vulnerabilities" }
+audit-deps = { cmd = "pip-audit --local -s osv --ignore-vuln PYSEC-2026-3447", description = "Audit the package dependencies for vulnerabilities" }
 clean = { cmd = 'rm -rf .pytest_cache .ruff_cache **/*.egg-info **/dist **/__pycache__', description = "Clean up various caches and build artifacts" }
 clean-conda = { cmd = "rm -f *.conda", description = "Clean the local .conda build artifacts" }
 clean-docs = { cmd = "rm -rf docs/_build", description = "Clean up documentation build artifacts" }
