@@ -90,7 +90,7 @@ jobs:
       - name: Setup pixi
         uses: prefix-dev/setup-pixi@9dabb60412d3d2d967a8d682f7ce01317af40514 # v0.11.0
         with:
-          pixi-version: v0.62.2
+          pixi-version: v0.81.0
           manifest-path: pyproject.toml
           # Workaround: Dynamic versioning (versioningit) causes lock file version mismatch.
           # We skip the editable package install and do it separately with pip.
@@ -148,7 +148,7 @@ jobs:
       - name: Setup Pixi
         uses: prefix-dev/setup-pixi@9dabb60412d3d2d967a8d682f7ce01317af40514 # v0.11.0
         with:
-          pixi-version: v0.62.2
+          pixi-version: v0.81.0
           manifest-path: pyproject.toml
           # Workaround: Dynamic versioning (versioningit) causes lock file version mismatch.
           # We skip the editable package install and do it separately with pip.
